@@ -1,5 +1,90 @@
 # Plán — Úhradová vyhláška: zahrajte si na ministra (`vyhlaska.html`)
 
+## v3 — logika mezi kroky, relativní spravedlnost, projekce (říjen 2026)
+
+Zadání vlastníka (5. 10. 2026): (a) aby na hře vyskočil newsletter popup,
+(b) srozumitelná logika mezi kroky a vysvětlení, co se ovlivňuje, (c) tipy,
+jak hru udělat zábavnější a edukativnější pro studenty LF. **Nález před v3:**
+z 17 posuvníků tekly do aktů II/III jen dva (akutní + následná lůžková);
+efekty aktu I („čekání na specialistu klesá") se do cesty pacienta vůbec
+nepropisovaly; deficit vyhlášky neměl žádný následek; nálada byla čistě
+lokální (gap vůči vlastnímu požadavku); práh „nadprůměrně" byl neviditelný;
+hra je potají jednorozměrná (plné požadavky 48,9 mld, z toho nemocnice 21,9 —
+všech 16 ostatních se do obálky vejde za 27,0 a na nemocnice zbude 13,0).
+Newsletter popup mlčel od 23. 9. kvůli prioritě Týdnů zdraví
+(`page-shared.js`: Týden zdraví > vedra > newsletter), ne kvůli chybě.
+
+### Co v3 mění (modelové = označeno i v UI „Jak hra počítá")
+
+1. **Posuvník mluví.** Značka požadavku a zóny nálady (protest < d−4 ≤ bez
+   dohody < d−2 ≤ výhrady < d ≤ dohoda < d+2 ≤ rozšíření) přímo pod sliderem;
+   řádek `moodExplain()` — „Chybí 3 p. b. k požadavku → bez dohody".
+2. **Relativní spravedlnost** (`moodContext`, `fairnessEscalates`,
+   `FAIRNESS_RULE`): segment pod průměrem systému eskaluje o stupeň, když
+   jiný *vyjednávací* segment dostal boost (≥ +2 p. b.). Jen z grudging/no_deal;
+   zákonné položky (`dr_segment: false`) nikoho neprovokují. Důsledek doložený
+   testem: **reformní preset posílá nemocnice do protestu** (5 % vs. 9 %, praktici
+   +10 % vs. 8 %). `verdict()` nese `escalations` a `avgPct`.
+3. **Projekce „stejná vyhláška každý rok"**: `newShares(segments, alloc, years)`,
+   `structureProjection`, `yearsToShare` (definitorika, ne predikce). Status
+   quo 56,3 % navždy; reformní 55,8 → 50,7 % za 10 let, OECD (30 %) za 42 let;
+   nemocniční priorita 69,4 % za 10 let. UI přepínač 1 / 5 / 10 / 20 let.
+4. **Trilema** (`trilemma(v)`): dohody (bad = protest nebo < ⅔ dohod; good =
+   všichni), reforma (good = lůžkový blok −0,3 p. b. a víc; bad = roste
+   > 0,05), bilance (good = v obálce; mid ≤ 3 mld; bad = víc). Status quo =
+   samé „mid" (12/15 dohod přesně jako DR 2027). Prahy modelové.
+5. **„Co si odnést"** (`takeaways`, `demandSplit`): nejvýš tři věty podle
+   toho, co hráč udělal (DR 2027 zopakováno / setrvačnost / deficit → zálohy /
+   spravedlnost / precedent 2023 / tempo k OECD / „jedna páka"). Čísla z dat.
+6. **Deficit teče do aktu II**: `reditel-hra.json → handoff.deficit_haircut`
+   (0,1 p. b. růstu za 1 mld deficitu, strop 2 p. b.; koeficient modelový,
+   mechanismus doložený: uměle snížené zálohy pojišťoven nemocnicím,
+   `clanek-platba-statni-pojistenci-2027-tri-cisla.html`). `budgetFromMinistr`
+   vrací `haircutPct`/`deficitMld`; `vyhlaska.js` ukládá `deficit_mld`, hub ho
+   pro sdílené kódy dopočítává (`ministrState`).
+7. **Čekárny ambulancí tečou do aktu III**: `segmentWaitSignals()` (boost nebo
+   aktivní doložený pokles čekání → `kratsi`; protest → `delsi`; mapování
+   z vlastních eskalačních textů hry, modelové) + `step.segment` v
+   `pribeh-pacienta.json` (diabetologie → ambulantní specialisté, prohlídka →
+   praktici, rehabilitační lůžko → následná lůžková, dovyšetření → laboratoře
+   a radiodiagnostika; validátor hlídá existenci segmentu). Posuny z aktu II
+   a I se sčítají. UI: poznámka u kroku + banner nad cestou.
+8. **Newsletter na herních stránkách**: `renderModuleNav(id, { popups: 'manual' })`
+   = žádný časový popup (ani Týden zdraví); `hra-newsletter.js` vyvolá kartu
+   po prvním verdiktu + 15 s klidu; text z `vyhlaska-hra.json → newsletter_hook`
+   (do `valid_until` „skutečná vyhláška pro 2027 vyjde do konce října —
+   pošleme srovnání", po termínu fallback). `newsletter-popup.js` má varianty
+   (session limit per varianta, 30 dní a subscribed společné).
+9. **Glosář pro mediky**: 6 nových hesel (dohodovací řízení, úhradová
+   vyhláška, hodnota bodu, centrová léčba, odvratitelné hospitalizace, § 16);
+   `glossary-inline.js` přijímá `[data-gloss-scope]`; slovníček pod metodikou.
+10. **Mobil**: lepicí lišta (čerpání · dohody · protesty) pod 920 px.
+11. **Analytics** (GA4 přes `trackEvent`): `hra_verdikt{akt,persona?}`,
+    `hra_preset{preset}`, `hra_horizont{roky}`, `hra_pokracovat{z}`,
+    `hra_porovnani{n,neplatne}`, `hra_vysledovka{sdilena}`.
+12. **Seminární režim** `porovnani.html` + `src/hra-porovnani.js`: N kampaní
+    ze sdílecích kódů vedle sebe (alokace, verdikt, trilema, projekce, rok
+    ředitele, cesta pacienta), sdílitelné přes `?k=A&k=B`, bez backendu.
+13. **Hub**: blok „Co teklo mezi akty" (`flowSummary`), morálka přeformulovaná
+    na to, co opravdu teče; stepper popisek handoffu rozšířen.
+
+### Co v3 nedělá (a proč)
+
+- **Preset „jak to udělal skutečný ministr"** — nejedukativnější návrh, ale
+  v repu nejsou strojová data růstu po segmentech pro 432/2025 Sb. (článek
+  nese hodnoty bodu a lázně 102 %, `dohodovaci-rizeni.json` výsledky po
+  segmentech nemá). Doplnit až po vyhlášce pro 2027 (do 31. 10. 2026) jako
+  záznam `presets[]` se `source`; validátor presetů to už umí.
+- Multiplayer, odznaky, server — mimo rozsah (PLAN-TRI-ZIDLE.md § 9).
+
+### Testy v3
+
+`tests/vyhlaska.test.js` (spravedlnost, moodExplain, projekce, yearsToShare,
+trilema, takeaways, demandSplit, segmentWaitSignals, newsletter_hook),
+`tests/reditel.test.js` (haircut), `tests/pribeh-pacienta.test.js` (segmenty
+kroků), `tests/hra-newsletter.test.js` (copy podle data, session varianty,
+idle trigger), `tests/hra-porovnani.test.js` (parser, tabulka, značení).
+
 ## v2 — plná segmentace (červenec 2026)
 
 Hra přestavěna na **17 segmentů dle skutečného číselníku ZPP** („Struktura

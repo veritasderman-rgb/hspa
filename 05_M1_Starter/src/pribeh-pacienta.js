@@ -6,10 +6,13 @@
 // Modelová hra, ne predikce. Viz PLAN-TRI-ZIDLE.md.
 
 import './analytics.js';
+import { trackEvent } from './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState, renderRelatedTools } from './page-shared.js';
 import { journeyOutcome, bestCaseOutcome, waitingFromCampaign } from './pribeh-engine.js';
+import { segmentWaitSignals } from './vyhlaska-engine.js';
 import { loadState, saveAct } from './hra-stav.js';
 import { renderCampaignStepper } from './hra-stepper.js';
+import { armGameNewsletter } from './hra-newsletter.js';
 
 let DOC = null;
 let INDICATORS = new Map();
@@ -18,6 +21,28 @@ let PERSONA = null;
 let ROLE = 'pacient'; // pacient | lekar
 let WAITING = 'stejne';
 let DECISIONS = {}; // zdroj pravdy rozhodnutí — lékařský režim rozhodnutí jen čte
+let SEGMENT_WAITS = {}; // v3: signály čekání z aktu I (vyhlaska-engine.segmentWaitSignals)
+let SEGMENT_LABELS = new Map(); // id segmentu → label (vyhlaska-hra.json)
+let NL = null; // herní newsletter (po dokončené cestě, ne na časovač)
+let outcomeTracked = false;
+
+/** Poznámka u kroku: posun z vaší vyhlášky (akt I) na kroku tagovaném segmentem. */
+function segNote(s) {
+  const w = s.segment ? SEGMENT_WAITS[s.segment] : null;
+  if (!w) return '';
+  const label = SEGMENT_LABELS.get(s.segment) || s.segment;
+  const sign = w === 'delsi' ? '+' : '−';
+  const why = w === 'delsi' ? 'v protestu' : 'rozšiřuje kapacity';
+  return `<span class="pp-shift-note pp-shift-note-akt1">${sign}${DOC.waiting_shift_weeks} týd. — ${escapeHtml(label)} ${why} (vaše vyhláška, akt I)</span>`;
+}
+
+/** Banner nad cestou: které čekárny persony nastavila vyhláška z aktu I. */
+function akt1Banner() {
+  const hits = (PERSONA?.steps || []).filter(s => s.segment && SEGMENT_WAITS[s.segment]);
+  if (!hits.length) return '';
+  const parts = hits.map(s => `${SEGMENT_LABELS.get(s.segment) || s.segment} (${SEGMENT_WAITS[s.segment] === 'delsi' ? 'delší' : 'kratší'})`);
+  return `<p class="pp-wait-banner pp-wait-banner-akt1">Z vaší vyhlášky (akt I) se do čekáren propsalo: ${escapeHtml(parts.join(', '))}. <a href="vyhlaska.html">Akt I →</a></p>`;
+}
 
 const WAIT_BANNER = {
   kratsi: 'Vaše nemocnice z aktu II drží kratší objednací doby — kapacitně citlivé kroky se o 2 týdny zkracují.',
@@ -101,6 +126,7 @@ function renderJourney() {
       Rozhodnutí už padla v pohledu pacienta — tady vidíte jen jejich stopu v kartě.
       A u každého kroku i to, co lékař <em>nevidí vůbec</em>.</p>` : ''}
     ${WAIT_BANNER[WAITING] ? `<p class="pp-wait-banner">${escapeHtml(WAIT_BANNER[WAITING])} <a href="reditel.html">Akt II →</a></p>` : ''}
+    ${akt1Banner()}
     <form id="ppSteps">
       <ol class="pp-steps">
         ${p.steps.map(renderStep).join('')}
@@ -131,6 +157,7 @@ function renderStep(s, idx) {
   const foot = `
       <p class="pp-step-foot">
         ${shifted ? `<span class="pp-shift-note">${WAITING === 'delsi' ? `+${DOC.waiting_shift_weeks} týd. — stav vaší nemocnice (akt II)` : `−${DOC.waiting_shift_weeks} týd. — stav vaší nemocnice (akt II)`}</span>` : ''}
+        ${segNote(s)}
         ${chips ? `<span class="pp-ind-row">Data: ${chips}</span>` : ''}
         <span class="pp-src">Zdroje: ${s.sources.map(escapeHtml).join(' · ')}</span>
       </p>`;
@@ -212,16 +239,18 @@ function renderOutcome(decisions) {
     host.innerHTML = `<p class="pp-empty">Vyberte si nahoře personu — každá nese jinou lekci o tomtéž systému.</p>`;
     return;
   }
-  const o = journeyOutcome(PERSONA, decisions, WAITING, DOC.waiting_shift_weeks);
+  const o = journeyOutcome(PERSONA, decisions, WAITING, DOC.waiting_shift_weeks, SEGMENT_WAITS);
   const best = bestCaseOutcome(PERSONA);
   const monthsTxt = o.weeks >= 8 ? ` (~${czNum(o.weeks / 4.3, 1)} měs.)` : '';
+  const akt1Delsi = o.steps.some(s => s.segment_shift === 'delsi');
+  const akt1Kratsi = o.steps.some(s => s.segment_shift === 'kratsi');
   host.innerHTML = `
     <div class="pp-block">
       <h3 class="pp-block-h">Cesta v číslech</h3>
       <div class="pp-stat"><span class="pp-stat-lbl">Čas od začátku po stabilizaci</span><span class="pp-stat-val">${czNum(o.weeks)} týdnů${monthsTxt}</span></div>
       <div class="pp-stat"><span class="pp-stat-lbl">Zaplaceno z kapsy</span><span class="pp-stat-val">${czNum(o.oop_kc)} Kč</span></div>
       <div class="pp-stat"><span class="pp-stat-lbl">Nejhladší možný průchod</span><span class="pp-stat-val">${czNum(best.weeks)} týdnů</span></div>
-      ${o.weeks > best.weeks ? `<p class="pp-note">Rozdíl ${czNum(o.weeks - best.weeks)} týdnů jde za vašimi rozhodnutími${WAITING === 'delsi' ? ' a za stavem nemocnice z aktu II' : ''}.</p>` : `<p class="pp-note">Rychleji to systémem projít nešlo${WAITING === 'kratsi' ? ' — pomohla i nemocnice z aktu II' : ''}.</p>`}
+      ${o.weeks > best.weeks ? `<p class="pp-note">Rozdíl ${czNum(o.weeks - best.weeks)} týdnů jde za vašimi rozhodnutími${WAITING === 'delsi' ? ', za stavem nemocnice z aktu II' : ''}${akt1Delsi ? ' a za čekárnami ambulancí z vaší vyhlášky (akt I)' : ''}.</p>` : `<p class="pp-note">Rychleji to systémem projít nešlo${WAITING === 'kratsi' || akt1Kratsi ? ` — pomohl${WAITING === 'kratsi' && akt1Kratsi ? 'y' : 'a'} i ${WAITING === 'kratsi' ? 'nemocnice z aktu II' : ''}${WAITING === 'kratsi' && akt1Kratsi ? ' a ' : ''}${akt1Kratsi ? 'vaše vyhláška z aktu I' : ''}` : ''}.</p>`}
       ${o.complete ? '' : `<p class="pp-note">Zbývá rozhodnout ${o.totalDecisions - o.answered} z ${o.totalDecisions} situací.</p>`}
     </div>
     ${o.complete ? (ROLE === 'lekar' ? `
@@ -261,6 +290,13 @@ function renderOutcome(decisions) {
       outcome: { weeks: o.weeks, oop_kc: o.oop_kc, complete: o.complete, waiting: WAITING },
     });
   }
+  if (o.complete) {
+    if (!outcomeTracked) {
+      outcomeTracked = true;
+      trackEvent('hra_verdikt', { akt: 'pacient', persona: PERSONA.id });
+    }
+    NL?.verdictReady();
+  }
 }
 
 function refresh() {
@@ -273,24 +309,29 @@ function refresh() {
 // ---------------------------------------------------------------------------
 
 async function init() {
-  renderModuleNav('explainers');
+  renderModuleNav('explainers', { popups: 'manual' });
   renderMastheadDate();
   renderRelatedTools('tri-zidle');
 
   const host = document.getElementById('ppPicker');
   if (!host) return;
   try {
-    const [doc, cesta, inds] = await Promise.all([
+    const [doc, cesta, inds, vyh] = await Promise.all([
       fetch('data/pribeh-pacienta.json').then(r => r.json()),
       fetch('data/cesta-pacienta.json').then(r => r.json()),
       fetch('data/indicators.json').then(r => r.json()),
+      fetch('data/vyhlaska-hra.json').then(r => r.json()),
     ]);
     DOC = doc;
     PHASES = new Map((cesta.phases ?? []).map(p => [p.id, p]));
     INDICATORS = new Map((inds.indicators ?? []).map(i => [i.id, i]));
+    SEGMENT_LABELS = new Map((vyh.segments ?? []).map(s => [s.id, s.label]));
 
     const campaign = loadState();
     WAITING = waitingFromCampaign(campaign.reditel);
+    // v3: čekárny ambulancí z aktu I — jen když ministr vyhlášku podepsal
+    SEGMENT_WAITS = campaign.ministr?.alloc ? segmentWaitSignals(vyh.segments ?? [], campaign.ministr.alloc) : {};
+    NL = armGameNewsletter({ hook: vyh.newsletter_hook ?? null, activityEl: document.getElementById('ppJourney') });
 
     renderPicker();
 

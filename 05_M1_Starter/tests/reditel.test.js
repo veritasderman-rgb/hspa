@@ -122,3 +122,32 @@ test('engine: verdict — kompletnost, tóny dle pásem, kampaňový rozpočet s
   assert.ok(rich.axes.personal > poor.axes.personal, 'lakomá vyhláška sráží i startovní morálku');
   assert.equal(rich.complete, true);
 });
+
+// ---------------------------------------------------------------------------
+// v3 — deficit vyhlášky z aktu I krátí rozpočet nemocnice
+// ---------------------------------------------------------------------------
+
+test('engine v3: deficit z aktu I krátí růst rozpočtu (haircut) — koeficient, strop, propsání do bilance', () => {
+  const dh = doc.handoff.deficit_haircut;
+  assert.ok(dh && dh.note && dh.source, 'pravidlo je vysvětlené a mechanismus doložený');
+  const alloc = { akutni_luzkova: 9, nasledna_luzkova: 9 };
+  const clean = budgetFromMinistr({ alloc }, doc.handoff);
+  assert.equal(clean.haircutPct, 0);
+  assert.equal(clean.growthPct, 9);
+
+  const over = budgetFromMinistr({ alloc, deficit_mld: 10 }, doc.handoff);
+  assert.equal(over.haircutPct, Math.round(Math.min(dh.max_pct, 10 * dh.pct_per_mld) * 100) / 100);
+  assert.ok(over.growthPct < clean.growthPct, 'deficit → menší rozpočet');
+  assert.equal(over.deficitMld, 10);
+
+  const huge = budgetFromMinistr({ alloc, deficit_mld: 500 }, doc.handoff);
+  assert.equal(huge.haircutPct, dh.max_pct, 'strop max_pct');
+  assert.ok(huge.growthPct >= 0, 'růst nejde pod nulu');
+
+  assert.equal(budgetFromMinistr(null, doc.handoff).haircutPct, 0, 'bez kampaně žádný haircut');
+  assert.equal(budgetFromMinistr({ alloc, deficit_mld: -3 }, doc.handoff).haircutPct, 0, 'záporný deficit = žádný');
+
+  const v1 = verdict(doc, {}, { alloc });
+  const v2 = verdict(doc, {}, { alloc, deficit_mld: 20 });
+  assert.ok(v2.axes.hospodareni < v1.axes.hospodareni, 'deficit vyhlášky se propíše do bilance nemocnice');
+});

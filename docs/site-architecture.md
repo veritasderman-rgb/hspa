@@ -290,6 +290,27 @@ kapacit dlouhodobé péče do roku 2035).
   ostatních nástrojích), odkazy z `plneni-socialni-sluzby.html` a série článků
   „Kdo se o nás postará v roce 2035“ (`data/series.json`), sitemap.
 
+### `vyhlaska.html` · `reditel.html` · `pribeh-pacienta.html` · `hra.html` · `porovnani.html` — Tři židle (herní kampaň)
+
+| | |
+|---|---|
+| **Účel** | Jeden systém ze tří židlí: akt I ministr rozdělí 40 mld růstu úhrad mezi 17 segmentů (ZPP číselník, NRHZS 2023 škálované na 563 mld), akt II ředitel okresní nemocnice přežije rok s rozpočtem z aktu I, akt III pacient projde čekárnami, které nastavily akty I a II. Hub `hra.html` ukazuje postup, výsledovku a sdílecí kód; `porovnani.html` postaví N kampaní ze sdílecích kódů vedle sebe (seminární režim). |
+| **Cílový uživatel** | Studenti LF, novináři, poučená veřejnost; seminář (porovnání). |
+| **Fetchuje** | `data/vyhlaska-hra.json`, `data/reditel-hra.json`, `data/pribeh-pacienta.json`, `data/cesta-pacienta.json`, `data/indicators.json`, `data/glossary.json` (slovníček) |
+| **Enginy** | `src/vyhlaska-engine.js` (nálada vč. relativní spravedlnosti, trilema, projekce, takeaways, signály čekání), `src/reditel-engine.js` (rozpočet z aktu I vč. srážky za deficit), `src/pribeh-engine.js` (čas kroků: akt II + segmenty aktu I) — čisté, testované |
+| **JS moduly** | `src/vyhlaska.js`, `src/reditel.js`, `src/pribeh-pacienta.js`, `src/hra.js`, `src/hra-porovnani.js` → `hra-stav` (localStorage + base64url sdílecí kód jen se vstupy), `hra-stepper`, `hra-newsletter` (popup po verdiktu), `glossary-inline`, `page-shared` |
+| **CSS namespace** | `.vh-*`, `.rd-*`, `.pp-*`, `.hra-*`, `.hp-*` |
+
+**Co dělá jinak**
+
+- **Popupy**: `renderModuleNav(id, { popups: 'manual' })` — žádný časový
+  newsletter ani Týden zdraví; newsletter až po prvním verdiktu + 15 s klidu
+  s textem z `vyhlaska-hra.json → newsletter_hook` (docs/decisions-log.md).
+- **Verdikty se vždy přepočítávají** enginy z uložených VSTUPŮ; deficit
+  vyhlášky pro akt II se dopočítá (sdílený kód ho nenese).
+- Plán a modelová pravidla: `05_M1_Starter/PLAN-VYHLASKA-HRA.md` (v3),
+  `05_M1_Starter/PLAN-TRI-ZIDLE.md`.
+
 ### `strategie.html` — Národní strategie
 
 | | |

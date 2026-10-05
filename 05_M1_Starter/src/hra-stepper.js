@@ -22,7 +22,7 @@ export function stepperModel(state) {
       id: 'ministr', num: 'I', label: 'Ministr', sub: 'podepíšete vyhlášku',
       href: 'vyhlaska.html',
       status: ministrDone ? 'done' : 'todo',
-      handoff: 'předá se: rozpočet nemocnice',
+      handoff: 'předá se: rozpočet nemocnice (i deficit) + čekárny ambulancí',
     },
     {
       id: 'reditel', num: 'II', label: 'Ředitel', sub: 'přežijete s ní rok',

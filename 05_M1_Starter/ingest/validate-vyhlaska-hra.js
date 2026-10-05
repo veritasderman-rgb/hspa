@@ -28,6 +28,15 @@ export function validateVyhlaskaHra() {
   if (!Number.isFinite(doc.current_total_mld) || !doc.current_total_source) {
     errors.push('chybí current_total_mld nebo current_total_source (letošní objem systému)');
   }
+  // v3: volitelný newsletter hook herního popupu — je-li, musí být úplný,
+  // datovaný (valid_until) a mít fallback na dobu po termínu.
+  if (doc.newsletter_hook !== undefined) {
+    const h = doc.newsletter_hook || {};
+    for (const k of ['headline', 'lead', 'cta', 'fallback_headline', 'fallback_lead', 'source']) {
+      if (!h[k]) errors.push(`newsletter_hook: chybí ${k}`);
+    }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(h.valid_until || '')) errors.push('newsletter_hook: valid_until musí být YYYY-MM-DD');
+  }
   if (!Array.isArray(doc.segments) || doc.segments.length === 0) {
     errors.push('chybí neprázdné pole "segments"');
     return report(errors);

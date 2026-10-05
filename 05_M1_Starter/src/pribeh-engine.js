@@ -21,10 +21,23 @@ export function optionFor(step, decisions) {
 }
 
 /**
- * Čas kroku v týdnech: základ + delta zvolené option + posun z aktu II
- * na kapacitně citlivých krocích. Nikdy nejde pod nulu.
+ * Signál čekání z aktu I pro krok tagovaný segmentem (step.segment):
+ * 'kratsi' | 'delsi' | null. segmentWaits = výstup segmentWaitSignals()
+ * z vyhlaska-engine.js (jen segmenty, kde se čekání mění).
  */
-export function stepTimeWeeks(step, decisions, waiting = 'stejne', shiftWeeks = 0) {
+export function segmentWaitFor(step, segmentWaits) {
+  if (!step?.segment || !segmentWaits) return null;
+  const w = segmentWaits[step.segment];
+  return w === 'kratsi' || w === 'delsi' ? w : null;
+}
+
+/**
+ * Čas kroku v týdnech: základ + delta zvolené option + posun z aktu II
+ * na kapacitně citlivých krocích + (v3) posun z aktu I na krocích
+ * tagovaných segmentem vyhlášky. Oba posuny se sčítají (nemocnice i ambulance
+ * mohou být přetížené zároveň). Nikdy nejde pod nulu.
+ */
+export function stepTimeWeeks(step, decisions, waiting = 'stejne', shiftWeeks = 0, segmentWaits = {}) {
   let weeks = step.base_time_weeks;
   const opt = optionFor(step, decisions);
   if (opt) weeks += opt.time_weeks_delta || 0;
@@ -32,6 +45,9 @@ export function stepTimeWeeks(step, decisions, waiting = 'stejne', shiftWeeks = 
     if (waiting === 'delsi') weeks += shiftWeeks;
     if (waiting === 'kratsi') weeks -= shiftWeeks;
   }
+  const sw = segmentWaitFor(step, segmentWaits);
+  if (sw === 'delsi') weeks += shiftWeeks;
+  if (sw === 'kratsi') weeks -= shiftWeeks;
   return Math.max(0, weeks);
 }
 
@@ -40,7 +56,7 @@ export function stepTimeWeeks(step, decisions, waiting = 'stejne', shiftWeeks = 
  * rozhodnutí a rozpad po krocích (pro timeline v UI).
  * decisions = { stepId: optionId }.
  */
-export function journeyOutcome(persona, decisions, waiting = 'stejne', shiftWeeks = 0) {
+export function journeyOutcome(persona, decisions, waiting = 'stejne', shiftWeeks = 0, segmentWaits = {}) {
   let weeks = 0, oop = 0, answered = 0, totalDecisions = 0;
   const steps = [];
   for (const step of persona.steps) {
@@ -49,13 +65,14 @@ export function journeyOutcome(persona, decisions, waiting = 'stejne', shiftWeek
       totalDecisions += 1;
       if (opt) answered += 1;
     }
-    const w = stepTimeWeeks(step, decisions, waiting, shiftWeeks);
+    const w = stepTimeWeeks(step, decisions, waiting, shiftWeeks, segmentWaits);
     weeks += w;
     if (opt) oop += opt.cost_oop_kc || 0;
     steps.push({
       id: step.id,
       weeks: w,
       wait_shifted: Boolean(step.wait_sensitive) && waiting !== 'stejne',
+      segment_shift: segmentWaitFor(step, segmentWaits),
       option: opt?.id ?? null,
     });
   }

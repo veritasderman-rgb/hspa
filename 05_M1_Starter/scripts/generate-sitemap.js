@@ -90,6 +90,7 @@ export const STATIC_PAGES = [
   { loc: '/kalkulacka-pece-2035.html', priority: '0.7', changefreq: 'monthly' },
   { loc: '/reditel.html', priority: '0.6', changefreq: 'monthly' },
   { loc: '/pribeh-pacienta.html', priority: '0.6', changefreq: 'monthly' },
+  { loc: '/porovnani.html', priority: '0.5', changefreq: 'monthly' },
   { loc: '/legislativa.html', priority: '0.6', changefreq: 'weekly' },
   { loc: '/barometr.html', priority: '0.7', changefreq: 'weekly' },
   { loc: '/financovani.html', priority: '0.7', changefreq: 'weekly' },

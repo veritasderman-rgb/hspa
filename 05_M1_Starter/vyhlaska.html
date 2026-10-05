@@ -63,7 +63,7 @@
   <section class="ed-hero vh-hero">
     <p class="ed-kicker">ÚHRADOVÁ VYHLÁŠKA · HRA</p>
     <h1>Zahrajte si na ministra. Rozdělte 40 miliard — a ustůjte, co přijde</h1>
-    <p class="ed-lead">
+    <p class="ed-lead" data-gloss-scope>
       Úhradová vyhláška nerozděluje celý rozpočet zdravotnictví — rozděluje
       <strong>meziroční přírůstek</strong> nad setrvačnou základnou. Letos
       systémem proteče zhruba <strong>563 miliard korun</strong>; vy teď držíte
@@ -88,9 +88,9 @@
     <div class="hra-howto" role="note">
       <span class="hra-howto-h">Jak hrát</span>
       <ol class="hra-howto-steps">
-        <li>Táhněte posuvníky u segmentů — rozdělujete <strong>růst</strong> úhrad, ne celý rozpočet.</li>
-        <li>Sledujte obálku (40 mld) a reakce zástupců: kdo dostane málo, eskaluje.</li>
-        <li>Spokojeni? Vpravo dole pokračujte jako <strong>ředitel nemocnice</strong> — váš rozpočet už bude váš.</li>
+        <li>Táhněte posuvníky u segmentů — rozdělujete <strong>růst</strong> úhrad, ne celý rozpočet. Značka na posuvníku ukazuje, co segment žádá; řádek pod ním, kolik chybí a co z toho plyne.</li>
+        <li>Sledujte obálku (40 mld), <strong>trilema</strong> vpravo (dohody × reforma × bilance — všechno najednou nejde) a reakce zástupců: kdo dostane málo, eskaluje — a kdo vidí, že soused dostal víc, než žádal, eskaluje o stupeň výš.</li>
+        <li>Spokojeni? Pokračujte jako <strong>ředitel nemocnice</strong> — rozpočet (i případný deficit vyhlášky) a čekárny ambulancí si nesete s sebou.</li>
       </ol>
     </div>
   </section>
@@ -124,7 +124,7 @@
   </section>
 
   <section class="vh-section vh-method">
-    <details id="vhMethod">
+    <details id="vhMethod" data-gloss-scope>
       <summary>Jak hra počítá (a co je modelové)</summary>
       <p><strong>Doložené:</strong> úhrady po segmentech za poslední uzavřený
       rok 2023 z datového souhrnu ÚZIS <em>OIS-11-24 — Náklady zdravotních
@@ -149,7 +149,39 @@
       dáte-li segmentu výrazně víc, než žádá (≥ 2 p. b. nad požadavek),
       slíbí <strong>rozšíření péče</strong> — delší ordinační hodiny, nové
       kapacity či rychlejší vstup nových metod; směrem dolů eskalují přes
-      podpis s výhradami a „bez dohody" až po protest.</p>
+      podpis s výhradami a „bez dohody" až po protest. Prahy jsou v procentních
+      bodech vůči požadavku: ≥ +2 rozšíření, ≥ 0 dohoda, ≥ −2 výhrady, ≥ −4 bez
+      dohody, pod −4 protest — značka a zóny pod každým posuvníkem je ukazují.</p>
+      <p><strong>Relativní spravedlnost (modelové pravidlo v3).</strong> Segment,
+      který roste pod průměrem systému, zatímco jiný vyjednávací segment dostal
+      výrazně víc, než žádal (≥ 2 p. b. nad požadavek), eskaluje o jeden stupeň —
+      z výhrad na „bez dohody", z „bez dohody" na protest. Zákonné položky
+      (nevyjednávají) nikoho neprovokují. Koeficient je modelový; chování
+      („srovnání se sousedem je silnější než aritmetika") odpovídá logice
+      dohodovacího řízení, necituje konkrétní jednání.</p>
+      <p><strong>Trilema.</strong> Verdikt shrnuje tři cíle, které nejdou
+      maximalizovat najednou: <em>dohody</em> (v pořádku = všichni podepsali;
+      obětováno = protest nebo méně než dvě třetiny dohod), <em>reforma
+      struktury</em> (v pořádku = lůžkový blok klesl aspoň o 0,3 p. b. směrem
+      k OECD; obětováno = roste) a <em>bilance</em> (v pořádku = v obálce;
+      napjaté = deficit do 3 mld, zhruba půl procenta systému; obětováno = víc).
+      Prahy jsou modelové.</p>
+      <p><strong>Projekce „stejná vyhláška každý rok".</strong> Přepínač 1 / 5 /
+      10 / 20 let skládá tutéž alokaci opakovaně (definitorický přepočet
+      podílů, žádný model chování) — ukazuje, jak pomalu se struktura hýbe
+      a za kolik let by vaše tempo dohnalo průměr OECD. Není to predikce:
+      předpokládá, že by žádná další vyhláška nic nezměnila.</p>
+      <p><strong>Co teče do dalších aktů.</strong> Do aktu II (ředitel) jde
+      růst akutní a následné lůžkové péče jako rozpočet nemocnice a nově
+      i <em>deficit vyhlášky</em>: za každou miliardu nad obálkou ubude 0,1 p. b.
+      růstu, nejvýš 2 p. b. (modelový koeficient; mechanismus — uměle snížené
+      zálohy pojišťoven nemocnicím a dluh přenesený do dalšího roku — je
+      doložený, viz zdroje). Do aktu III (pacient) jdou <em>čekárny ambulancí</em>:
+      segment, který slíbil rozšíření péče nebo má aktivní doložený pokles
+      čekacích dob, zkrátí čekání na krocích, které k němu patří; segment
+      v protestu je prodlouží. Mapování vychází z vlastních eskalačních textů
+      hry a je modelové.</p>
+      <div id="vhGlossary" class="vh-glossary"></div>
       <ul id="vhSources" class="vh-sources"></ul>
     </details>
   </section>
@@ -168,6 +200,8 @@
   <section class="tool-siblings" id="toolSiblings" aria-label="Související nástroje"></section>
 
 </main>
+
+<div class="vh-mobile-bar" id="vhMobileBar" hidden aria-live="polite" aria-label="Stav vaší vyhlášky"></div>
 
 <footer class="bottom" id="siteFooter"></footer>
 

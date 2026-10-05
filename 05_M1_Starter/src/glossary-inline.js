@@ -24,8 +24,11 @@ export function enhanceInlineGlossary(terms, root) {
   if (typeof document === 'undefined') return;
   if (!Array.isArray(terms) || terms.length === 0) return;
   const scope = root ?? document;
-  // .article-body na clanek-*.html, .manifest-sub-prose na substránkách manifestu.
-  const body = scope.querySelector('.article-body, .manifest-sub-prose');
+  // .article-body na clanek-*.html, .manifest-sub-prose na substránkách
+  // manifestu, [data-gloss-scope] na nástrojích (herní stránky) — tam může
+  // být root rovnou ten označený element.
+  const SEL = '.article-body, .manifest-sub-prose, [data-gloss-scope]';
+  const body = typeof scope.matches === 'function' && scope.matches(SEL) ? scope : scope.querySelector(SEL);
   if (!body) return;
   if (body.dataset.glossInlineInit === '1') return;
   body.dataset.glossInlineInit = '1';

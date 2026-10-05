@@ -6,14 +6,18 @@
 // Modelová hra, ne predikce. Viz PLAN-TRI-ZIDLE.md.
 
 import './analytics.js';
+import { trackEvent } from './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState, renderRelatedTools } from './page-shared.js';
 import { budgetFromMinistr, verdict } from './reditel-engine.js';
 import { loadState, saveAct } from './hra-stav.js';
 import { renderCampaignStepper } from './hra-stepper.js';
+import { armGameNewsletter } from './hra-newsletter.js';
 
 let DOC = null;
 let INDICATORS = new Map();
 let MINISTR = null; // stav aktu I (nebo null → default vyhlášky)
+let NL = null; // herní newsletter (po dokončeném roce, ne na časovač)
+let verdictTracked = false;
 
 const AXIS_TONE_LABEL = { good: 'v pořádku', mid: 'napjaté', bad: 'kritické' };
 const WAIT_LABEL = {
@@ -43,9 +47,12 @@ function currentDecisions() {
 function renderHandoff() {
   const host = document.getElementById('rdHandoff');
   if (!host) return;
-  const { growthPct, fromCampaign } = budgetFromMinistr(MINISTR, DOC.handoff);
+  const { growthPct, fromCampaign, haircutPct, deficitMld } = budgetFromMinistr(MINISTR, DOC.handoff);
   const base = DOC.hospital.baseline_budget_mil;
   const extra = base * (growthPct / 100);
+  const haircut = haircutPct > 0
+    ? `<p class="rd-handoff-note rd-handoff-haircut">⚠ Vaše vyhláška byla ${czNum(deficitMld)} mld nad obálkou. Pojišťovny část dluhu přenesly na nemocnice: růst rozpočtu je o <strong>${czNum(haircutPct, 2)} p. b.</strong> nižší, než jste lůžkové péči přidělili (${czNum(base * haircutPct / 100, 0)} mil. Kč ročně). ${escapeHtml(DOC.handoff.deficit_haircut?.note || '')}</p>`
+    : '';
   host.innerHTML = `
     <div class="rd-handoff ${fromCampaign ? 'rd-handoff-campaign' : ''}">
       <span class="rd-handoff-label">${fromCampaign ? 'Rozpočet z vaší vyhlášky (akt I)' : 'Rozpočet podle reálné vyhlášky'}</span>
@@ -53,6 +60,7 @@ function renderHandoff() {
       <p class="rd-handoff-note">${fromCampaign
         ? 'Růst úhrad, který jste jako ministr přidělili akutní a následné lůžkové péči, teď určuje váš rozpočet. Vlastní rozhodnutí shora — vaše omezení zdola.'
         : `Bez odehraného aktu I počítáme s růstem +${czNum(DOC.handoff.default_growth_pct)} % dle reálné vyhlášky. <a href="vyhlaska.html">Zahrajte si nejdřív na ministra</a> a rozpočet si podepište sami.`}</p>
+      ${haircut}
     </div>`;
 }
 
@@ -162,6 +170,13 @@ function renderResults(decisions) {
       verdict: { axes: v.axes, tones: v.tones, waiting: v.waiting, complete: v.complete },
     });
   }
+  if (v.complete) {
+    if (!verdictTracked) {
+      verdictTracked = true;
+      trackEvent('hra_verdikt', { akt: 'reditel' });
+    }
+    NL?.verdictReady();
+  }
 }
 
 function renderSources() {
@@ -189,7 +204,7 @@ function refresh() {
 }
 
 async function init() {
-  renderModuleNav('financing');
+  renderModuleNav('financing', { popups: 'manual' });
   renderMastheadDate();
   renderRelatedTools('tri-zidle');
 
@@ -203,6 +218,7 @@ async function init() {
     DOC = doc;
     INDICATORS = new Map((inds.indicators ?? []).map(i => [i.id, i]));
     MINISTR = loadState().ministr;
+    NL = armGameNewsletter({ hook: null, activityEl: document.getElementById('rdControls') });
 
     renderHandoff();
     renderDecisions();

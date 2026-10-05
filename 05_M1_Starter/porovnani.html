@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tři židle: porovnání kampaní · HSPA Monitor</title>
+<meta name="description" content="Seminární režim herní kampaně Tři židle: vložte sdílecí odkazy spoluhráčů a postavte jejich vyhlášky, roky ředitele i cesty pacientů vedle sebe. Bez registrace, bez backendu — odkaz nese jen herní volby.">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/porovnani">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/porovnani">
+<meta property="og:title" content="Tři židle: porovnání kampaní · HSPA Monitor">
+<meta property="og:description" content="Vložte sdílecí odkazy spoluhráčů a postavte jejich vyhlášky, roky ředitele i cesty pacientů vedle sebe.">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Tři židle</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <section class="ed-hero hra-hero">
+    <p class="ed-kicker">TŘI ŽIDLE · SEMINÁRNÍ REŽIM</p>
+    <h1>Porovnejte kampaně vedle sebe</h1>
+    <p class="ed-lead">
+      Každý hráč odehraje <a href="hra.html">kampaň</a> a ve výsledovce zkopíruje
+      sdílecí odkaz. Vložte je sem po řádcích — tabulka postaví vedle sebe
+      <strong>vyhlášky</strong> (kdo komu kolik dal, co obětoval, kam se pohnula
+      struktura), <strong>roky ředitele</strong> i <strong>cesty pacientů</strong>.
+      Hodí se pro seminář, kroužek nebo jen hádku s kamarádem o tom, kdo by
+      byl lepší ministr.
+    </p>
+    <p class="hra-disclaimer" role="note">
+      <strong>Bez registrace a bez serveru.</strong> Odkazy nesou jen herní volby
+      (alokaci, rozhodnutí, personu); verdikty se přepočítávají ve vašem
+      prohlížeči stejnými enginy jako ve hře. Jména na řádcích se nikam neposílají
+      — do sdíleného odkazu porovnání se nepropisují.
+    </p>
+  </section>
+
+  <section class="hra-section" aria-label="Vstup kampaní">
+    <h2 class="hra-h">Kampaně</h2>
+    <label class="hp-note" for="hpInput">Jedna kampaň na řádek: <code>Jméno: odkaz-nebo-kód</code>. Jméno je nepovinné; odkaz je cokoli s <code>?k=…</code> (výsledovka i odkaz z aktu I).</label>
+    <textarea class="hp-input" id="hpInput" rows="5" spellcheck="false" placeholder="Jana: https://skorezdravotnictvi.cz/hra.html?k=…&#10;Petr: https://skorezdravotnictvi.cz/hra.html?k=…"></textarea>
+    <div class="hp-actions">
+      <button type="button" class="hp-btn" id="hpRender">Porovnat</button>
+      <button type="button" class="hp-btn hp-btn-sec" id="hpAddMine">Přidat moji kampaň z tohoto prohlížeče</button>
+      <span class="hp-note">Ctrl/⌘ + Enter porovná rovnou.</span>
+    </div>
+  </section>
+
+  <section class="hra-section" aria-label="Porovnání">
+    <h2 class="hra-h">Porovnání</h2>
+    <div id="hpTable" aria-live="polite"></div>
+  </section>
+
+  <section class="hra-section hra-context">
+    <details>
+      <summary>Jak tabulka počítá (a co je modelové)</summary>
+      <p>Každý sloupec je jedna kampaň dekódovaná z odkazu. Alokace po
+      segmentech je přesně to, co hráč nastavil; cena, bilance, dohody,
+      protesty a eskalace jsou verdikt enginu hry na ministra (vč. modelového
+      pravidla relativní spravedlnosti), lůžkový blok po 1 a 10 letech je
+      definitorický přepočet podílů při stejné vyhlášce každý rok, „let k OECD“
+      totéž do 100 let. Rok ředitele a cesta pacienta se přepočítají jen tam,
+      kde hráč akt odehrál — jinak je buňka prázdná. Prahy trilematu a tónů os
+      jsou modelové, viz <a href="vyhlaska.html#vhMethod">Jak hra počítá</a>.</p>
+    </details>
+    <p>Hrát: <a href="vyhlaska.html">akt I — ministr</a> ·
+    <a href="reditel.html">akt II — ředitel nemocnice</a> ·
+    <a href="pribeh-pacienta.html">akt III — pacient</a> ·
+    <a href="hra.html">hub a výsledovka</a>.</p>
+  </section>
+
+  <section class="tool-siblings" id="toolSiblings" aria-label="Související nástroje"></section>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/hra-porovnani.js"></script>
+</body>
+</html>
