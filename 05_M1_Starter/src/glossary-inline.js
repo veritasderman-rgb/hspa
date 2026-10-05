@@ -70,7 +70,10 @@ export function findFirstOccurrences(text, sortedTerms, used) {
   const occupied = []; // intervaly už zabrané delším matchem
 
   for (const term of sortedTerms) {
-    if (!term.key || used.has(term.key)) continue;
+    // `canonical` = klíč hesla, ke kterému patří alias (skloněný tvar);
+    // první výskyt se počítá per heslo, ne per tvar
+    const canon = term.canonical || term.key;
+    if (!term.key || used.has(canon)) continue;
     const re = wordBoundaryRegex(term.key);
     const m = re.exec(text);
     if (!m) continue;
@@ -78,7 +81,7 @@ export function findFirstOccurrences(text, sortedTerms, used) {
     const end = start + m[0].length;
     // Pokud overlap s delším termem zabraným dřív → skip
     if (occupied.some(([a, b]) => start < b && end > a)) continue;
-    used.add(term.key);
+    used.add(canon);
     occupied.push([start, end]);
     out.push({ start, end, term, match: m[0] });
   }

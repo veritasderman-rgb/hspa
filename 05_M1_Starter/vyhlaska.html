@@ -74,6 +74,7 @@
       eskalují</strong>. Přesně jako v reálném dohodovacím řízení, kde se pro
       rok 2027 dohodlo 12 z 15 segmentů.
     </p>
+    <div class="vh-hero-stats" id="vhHeroStats" aria-label="Klíčová čísla hry"></div>
     <p class="vh-disclaimer" role="note">
       <strong>Modelová hra na doložených datech — ne predikce ani záznam reálných jednání.</strong>
       Podíly segmentů (NRHZS 2023, datová podpora dohodovacího řízení ÚZIS),
@@ -96,6 +97,7 @@
   </section>
 
   <section class="vh-section" aria-label="Obálka a presety">
+    <div class="vh-console">
     <div class="vh-envelope" id="vhEnvelope">
       <div class="vh-envelope-head">
         <span class="vh-envelope-label">Rozděleno z obálky růstu</span>
@@ -106,19 +108,25 @@
       </div>
       <p class="vh-envelope-note" id="vhEnvelopeNote"></p>
     </div>
-    <div class="vh-presets" id="vhPresets" role="group" aria-label="Přednastavené scénáře"></div>
+    <div class="vh-presets-card">
+      <span class="vh-presets-label">Zkuste scénář</span>
+      <div class="vh-presets" id="vhPresets" role="group" aria-label="Přednastavené scénáře"></div>
+      <p class="vh-presets-hint">…a pak posuvníky dolaďte. Verdikt vpravo se přepočítává živě.</p>
+    </div>
+    </div>
   </section>
 
   <section class="vh-section" aria-label="Segmenty péče">
     <div class="vh-layout">
       <form class="vh-controls" id="vhControls" aria-label="Rozdělení růstu mezi segmenty">
         <h2 class="vh-h">Segmenty a jejich zástupci</h2>
-        <div id="vhSegmentsList"></div>
+        <nav class="vh-group-nav" id="vhGroupNav" aria-label="Skupiny segmentů"></nav>
+        <div id="vhSegmentsList" data-gloss-scope></div>
         <button type="reset" class="vh-reset" id="vhReset">Vynulovat vyhlášku</button>
       </form>
       <aside class="vh-results" id="vhResults" aria-live="polite" aria-label="Verdikt vaší vyhlášky">
         <h2 class="vh-h">Vaše vyhláška</h2>
-        <div id="vhResultsList"></div>
+        <div id="vhResultsList" data-gloss-scope></div>
       </aside>
     </div>
   </section>
@@ -191,9 +199,14 @@
       čekacích dob, zkrátí čekání na krocích, které k němu patří; segment
       v protestu je prodlouží. Mapování vychází z vlastních eskalačních textů
       hry a je modelové.</p>
-      <div id="vhGlossary" class="vh-glossary"></div>
       <ul id="vhSources" class="vh-sources"></ul>
     </details>
+  </section>
+
+  <section class="vh-section vh-glossary-section" aria-labelledby="vhGlossaryH">
+    <h2 class="vh-h" id="vhGlossaryH">Slovníček pojmů z této hry</h2>
+    <p class="vh-glossary-lead">Pojmy, bez kterých se vyhláška nedá číst. Najeďte na podtržené slovo kdekoli ve hře — vysvětlení se rozbalí rovnou u něj; tady je celý slovníček pohromadě.</p>
+    <div id="vhGlossary" class="vh-glossary"></div>
   </section>
 
   <section class="vh-section vh-context">

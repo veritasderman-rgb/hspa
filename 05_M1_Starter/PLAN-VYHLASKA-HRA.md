@@ -97,6 +97,39 @@ Oprava jedním modelem místo dvou koeficientů:
   rezervu (krátí). Takeaway „deficit" má nekrytou variantu (první v pořadí)
   a variantu „rezerva to letos unese, příští rok bez polštáře".
 
+### v3.2 — kabátek a glosář po najetí
+
+Zadání vlastníka: glosář má fungovat už během hry (najetí na klíčové slovo
+rozbalí vysvětlení) a na konci hry má být pohromadě; a hra si zaslouží
+novější vzhled. Posouzeno ze screenshotů v headless Chromiu (desktop,
+mobil), ne z představy.
+
+- **Glosář po najetí** — `src/glossary-popover.js`: karta u slova (heslo,
+  plný název, definice, odkaz do glosáře) po najetí, fokusu i ťuknutí
+  (klik připne); jedna karta na stránku, `positionFor` drží viewport
+  (testováno). Nativní `title` se u označených pojmů ruší. Zapnuto na
+  `[data-gloss-scope]`: hero, seznam segmentů, verdikt (re-označení po
+  každém přepočtu) i metodika.
+- **Skloněné tvary** — `glossary.json → aliases` (z reálných tvarů v textu
+  hry: „dohodovacím řízení", „centrových léků", „odvratitelných
+  hospitalizací", „paragraf 16"…) + automatická varianta s velkým
+  počátečním písmenem (`expandGlossaryAliases` ve `vyhlaska.js`);
+  `glossary-inline.js` počítá první výskyt per heslo (`canonical`), ne per
+  tvar. Nové heslo **kapitace**. Označení v herním textu: 17 → 34 výskytů.
+- **Slovníček na konci hry** — vlastní sekce `#vhGlossary` (karty hesel),
+  ne uvnitř sbalené metodiky.
+- **Kabátek** (jen CSS + drobný markup, tokeny webu, dark mode přes
+  tokeny): hero jednosloupcově s titulkem, leadem a **stat strip**
+  (563 mld · obálka 40 · rezerva 2,8 · 17 segmentů, z dat); **konzole**
+  obálka + „Zkuste scénář"; sticky **skupinové pilulky** (Lůžková 56 % …);
+  segmentová karta s **levým barevným okrajem a stavovým chipem** podle
+  nálady (Protest / Bez dohody / S výhradami / Dohoda / Rozšíření péče),
+  chip „žádá +9 %" u role, citace bez šedého boxu; **trojúhelník
+  trilematu** (vrcholy obarvené tónem) vedle chipů; panel verdiktu jako
+  karta; mobil: lišta nekoliduje s tlačítkem „nahoru".
+- Nedělá: změnu typografie/palety webu (hra zůstává součástí HSPA Monitoru),
+  animace navíc.
+
 ### Co v3 nedělá (a proč)
 
 - **Preset „jak to udělal skutečný ministr"** — nejedukativnější návrh, ale

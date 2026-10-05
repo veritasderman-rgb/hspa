@@ -298,7 +298,7 @@ kapacit dlouhodobé péče do roku 2035).
 | **Cílový uživatel** | Studenti LF, novináři, poučená veřejnost; seminář (porovnání). |
 | **Fetchuje** | `data/vyhlaska-hra.json`, `data/reditel-hra.json`, `data/pribeh-pacienta.json`, `data/cesta-pacienta.json`, `data/indicators.json`, `data/glossary.json` (slovníček) |
 | **Enginy** | `src/vyhlaska-engine.js` (nálada vč. relativní spravedlnosti, trilema, projekce, takeaways, signály čekání), `src/reditel-engine.js` (rozpočet z aktu I × krytí vyhlášky — deficit nad rezervu systému pojišťovny krátí), `src/pribeh-engine.js` (čas kroků: akt II + segmenty aktu I) — čisté, testované |
-| **JS moduly** | `src/vyhlaska.js`, `src/reditel.js`, `src/pribeh-pacienta.js`, `src/hra.js`, `src/hra-porovnani.js` → `hra-stav` (localStorage + base64url sdílecí kód jen se vstupy), `hra-stepper`, `hra-newsletter` (popup po verdiktu), `glossary-inline`, `page-shared` |
+| **JS moduly** | `src/vyhlaska.js`, `src/reditel.js`, `src/pribeh-pacienta.js`, `src/hra.js`, `src/hra-porovnani.js` → `hra-stav` (localStorage + base64url sdílecí kód jen se vstupy), `hra-stepper`, `hra-newsletter` (popup po verdiktu), `glossary-inline` + `glossary-popover` (vysvětlení pojmu po najetí; skloněné tvary přes `glossary.json → aliases`), `page-shared` |
 | **CSS namespace** | `.vh-*`, `.rd-*`, `.pp-*`, `.hra-*`, `.hp-*` |
 
 **Co dělá jinak**
