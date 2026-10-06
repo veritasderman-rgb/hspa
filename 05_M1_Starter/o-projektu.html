@@ -650,16 +650,26 @@
       </div>
     </section>
 
-    <section class="ed-about-block">
-      <h3>Governance a editorial policy</h3>
+    <section class="ed-about-block" id="kdo-rozhoduje">
+      <h3>Kdo tu rozhoduje — governance a editorial policy</h3>
       <p>
-        HSPA Monitor je osobní občanský projekt — autorem, provozovatelem a editorem je Josef Pavlovic.
-        Rozhodnutí o obsahu, výběru indikátorů a interpretacích jsou jeho vlastní a nejsou ovlivněna
-        zaměstnavatelem, VZP ani žádnou institucí.
+        HSPA Monitor je osobní občanský projekt fyzické osoby. <strong>Vydavatelem a odpovědnou osobou je Josef Pavlovic</strong>;
+        rozhodnutí o poslání, hranicích a rozpočtu jsou jeho vlastní a nejsou ovlivněna zaměstnavatelem, VZP ani žádnou institucí.
+        <strong>Provoz portálu vykonává umělá inteligence</strong> v oddělených rolích: autorka píše, nezávislý editor reviduje a schvaluje,
+        týdenní porada určuje priority, ombudsman vyřizuje opravy. Kdo text napsal, ten ho neschvaluje; kdo schvaluje, ten neopravuje.
       </p>
+      <ul>
+        <li><strong>Co rozhoduje AI sama</strong>: nové články a jejich revize, indikátory, registr tvrzení, údržba kódu a dat — vždy s primárním zdrojem a po nezávislé revizi druhou instancí.</li>
+        <li><strong>Co rozhoduje jen člověk</strong>: pravidla provozu, cokoli o konkrétních osobách (Barometr, střet zájmů), data pohotovostí, nové sekce webu, peníze, právo, osobní údaje a vnější závazky.</li>
+        <li><strong>Co se nemění nikdy</strong>: číslo bez primárního zdroje na web nejde, AI se nevydává za člověka, žádná lékařská doporučení jednotlivci, žádné osobní údaje čtenářů.</li>
+      </ul>
       <p>
-        Chyby v datech nebo sporné interpretace jsou opravovány průběžně po jejich nahlášení.
-        Opravy jsou zdokumentovány v <a href="https://github.com/veritasderman-rgb/hspa/commits/main" target="_blank" rel="noopener">historii commitů na GitHubu</a>.
+        Úplná pravidla jsou veřejná v <a href="https://github.com/veritasderman-rgb/hspa/blob/main/GOVERNANCE.md" target="_blank" rel="noopener">ústavě provozu (GOVERNANCE.md)</a>;
+        každá změna obsahu je dohledatelná v <a href="https://github.com/veritasderman-rgb/hspa/pulls?q=is%3Apr" target="_blank" rel="noopener">pull requestech</a>
+        a chyby, které se dostaly ke čtenáři, v <a href="https://github.com/veritasderman-rgb/hspa/blob/main/docs/incidents.md" target="_blank" rel="noopener">registru incidentů</a>.
+        Potvrzená věcná chyba se opravuje do 48 hodin; kdo je v textu zmíněn, má právo na zveřejnění své reakce.
+        Vydavatel může celý automatický provoz kdykoli pozastavit jedním krokem — aktuální stav:
+        <strong id="aiProvozStav" data-stav="bezi">běží</strong><span id="aiProvozDuvod"></span>.
       </p>
     </section>
 
@@ -888,6 +898,21 @@
   renderMastheadDate();
   const aboutSocial = document.getElementById('aboutSocial');
   if (aboutSocial) aboutSocial.innerHTML = socialLinksHtml();
+
+  // Stav kill switche AI provozu (GOVERNANCE.md § 5) — veřejný, čte se z data/ai-provoz.json.
+  // Při chybě sítě zůstane statický fallback „běží"; stránka na tom nezávisí.
+  fetch('data/ai-provoz.json', { cache: 'no-store' })
+    .then((r) => (r.ok ? r.json() : null))
+    .then((s) => {
+      const el = document.getElementById('aiProvozStav');
+      if (!el || !s) return;
+      const paused = s.stav !== 'bezi';
+      el.textContent = paused ? `pozastaveno od ${s.od}` : `běží (od ${s.od})`;
+      el.dataset.stav = paused ? 'pozastaveno' : 'bezi';
+      const d = document.getElementById('aiProvozDuvod');
+      if (d && paused && s.duvod) d.textContent = ` — důvod: ${s.duvod}`;
+    })
+    .catch(() => {});
 </script>
 </body>
 </html>

@@ -9,6 +9,7 @@ Inspirováno belgickým modelem **Healthy Belgium**.
 
 **Než začneš úkol, přečti:**
 
+0. **[`GOVERNANCE.md`](GOVERNANCE.md)** — ústava provozu: role AI (autorka · editor · porada · ombudsman), třídy změn A/B/C, kill switch, červené linie. Nadřazená všemu níže; mění ji jen vydavatel.
 1. **[`docs/quickref.md`](docs/quickref.md)** — kde co je, klíčové příkazy, datový kontrakt, stavová matice
 2. **[`docs/decisions-log.md`](docs/decisions-log.md)** — co bylo odstraněno nebo opraveno (nevracet zpět!)
 3. **[`docs/traps.md`](docs/traps.md)** — známé pasti (JSON escaping, CSS pravidla, test failures)
@@ -24,6 +25,8 @@ Inspirováno belgickým modelem **Healthy Belgium**.
 | Sitemap, per-page mapa JS modulů | [`docs/site-architecture.md`](docs/site-architecture.md) |
 | Plán Kvalita péče (PUK + INDIKO) | [`05_M1_Starter/PLAN-KVALITA-PECE.md`](05_M1_Starter/PLAN-KVALITA-PECE.md) |
 | Backlog, status auditu | [`BACKLOG.md`](BACKLOG.md), [`STATUS_AUDIT_*.md`](.) |
+| AI-first provoz: zavedení, checklist vydavatele, incidenty | [`docs/ai-first-rollout.md`](docs/ai-first-rollout.md), [`docs/incidents.md`](docs/incidents.md) |
+| Nezávislý editor (revize + merge PR tříd A/B) · týdenní porada (priority) · ombudsman (schránka) | [`PROMPT_EDITOR.md`](PROMPT_EDITOR.md), [`PROMPT_PORADA.md`](PROMPT_PORADA.md), [`PROMPT_OMBUDSMAN.md`](PROMPT_OMBUDSMAN.md) |
 | Rutina agenta (jeden běh denně: discovery → článek, legislativa, údržba, indikátor, Buffer, newsletter, Týdny zdraví, evidence-audit) | [`PROMPT_ROUTINE.md`](PROMPT_ROUTINE.md) |
 | Ověřit články a indikátory proti studiím (PubMed/Consensus) | [`05_M1_Starter/PROMPT_EVIDENCE_AUDIT.md`](05_M1_Starter/PROMPT_EVIDENCE_AUDIT.md) |
 
@@ -231,6 +234,8 @@ npm run build:css         # Minifikace styles.css → styles.min.css (NUTNÉ po 
 npm run build:generated   # Přegeneruje VŠECHNY generované artefakty (po každém merge/rebase)
 npm run setup:git         # Merge driver pro generované soubory (běží i sám po `npm install`)
 npm run validate:all      # Validuje indicators + strategies + explainers + prevention
+npm run pr:gate -- --base origin/main   # Třída PR (A/B/C) podle GOVERNANCE.md § 3 — co smí zmergovat editor a co čeká na vydavatele
+npm run ai:provoz -- check              # Kill switch: exit 1 = provoz pozastaveno, nic nepublikovat ani nemergovat
 npm run validate:evidence # Registr evidence-auditu (studie k tvrzením článků a indikátorů)
 npm run evidence:queue    # Fronta evidence-auditu (--status | --batch --articles 12 --indicators 8 | --hash soubor)
 npm run data:pohotovosti  # Celá pipeline pohotovostí (NRPZS + VZP + kraje → data/pohotovosti.json, ~10 min)
