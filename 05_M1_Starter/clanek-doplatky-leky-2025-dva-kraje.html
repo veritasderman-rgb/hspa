@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-10-06
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-10-06
+    creation_phase: rutina+indicator-add
+    primary_sources_count: 13
+    visual_elements_count: 6
+    notes: "Doprovodny clanek k novemu indikatoru doplatky_leky_na_obyvatele (Struktury · Financovani zdravotnictvi · Financni ochrana, framework monitoring, dimension spravedlnost, direction lower_is_better, signal neutral). Trigger: discovery 2026-10-06 — UZIS 5. 10. 2026 zverejnil Aktualni informace 'Lekarenska pece 2025' (c. 1/2026, record id=8470). KPI: 1 803 Kc doplatku na obyvatele (2025; souhrn str. 1 a kapitola o trzbach), celkem 19 680 074 tis. Kc (Tab. 13), +52,6 % proti 2024 (12 895 787 tis. Kc). RADA na obyvatele 2018–2025: 759 · 793 · 818 · 862 · 915 · 949 · 1 182 · 1 803 (souhrny rocenek 2018–2025). KRAJE (Tab. 7 rocenek 2024 a 2025): JMK 1 523 590 → 4 350 453 tis. Kc (+185,5 %), Zlinsky 611 382 → 2 590 226 (+323,7 %); oba = 70,8 % prirustku; bez nich +18,4 % (10 760 815 → 12 739 395). JMK verejne lekarny LP doplatky 1 185 300 → 4 012 450 tis. (Tab. 9; trzby od ZP 3 778 464); Zlin vydejny ZP doplatky 771 → 1 918 288 tis. (Tab. 12; trzby od ZP 79 993); Ustecky vydejny 4 176 → 259 522. Median trzeb za doplatky verejnych lekaren 3,84 (2024) → 3,44 mil. Kc (2025); prumer na ZJ +51,3 % (Tab. 13). Navratnost vykazu: lekarny 96,2 %, vydejny 78,4 %. UZIS str. 2: 'nekolik vykazu nevyplnenych nebo se zjevne vyplnenymi nespravnymi daty'. Vracene doplatky 2024 1 670,8 mil. Kc (rocenka 2024), 2025 rocenka neuvadi. LEGISLATIVA: zak. 48/1997 Sb. § 16b v aktualnim zneni (verze 93, ucinna od 1. 10. 2026; zakonyprolidi.cz stazeno 6. 10. 2026): limity 5 000 / 1 000 (deti do 18, 65+) / 500 Kc (70+, invalidita 3. st. a uznani invalidity 2. a 3. st. bez duchodu); odst. 6, 7, 9 — lekarna overi limit v eReceptu, po dosazeni zapocitatelny doplatek nevybira, uhradi pojistovna; odst. 2 zadost o prezkoumani 1. 1.–30. 6. nasledujiciho roku, uhrada do 90 dnu. VZP (ochranne limity, stazeno 6. 10. 2026): od 1. 1. 2025 sleduje limit SUKL v systemu eRecept. § 39c odst. 5: ve skupinach lecivych latek prilohy c. 2 alespon 1 pripravek plne hrazen. BENCH (narrative): Eurostat hlth_sha11_hchf HC51 × HF3 / TOT_HF (redakcni vypocet, aktualizovano 1. 10. 2026): CZ 41,2 % (2024), DE 16,4 %, AT 30,6 %, SK 35,2 %, PL 60,5 %, EU-27 28,5 % (2023) — vcetne volneho prodeje; kontrakt platba_z_kapsy_pct 13,6 % vs OECD 18 / EU 15; katastroficke_vydaje_zdravi 6 % (2023). EVIDENCE: Sinnott SJ et al., PLoS One 2013;8(5):e64914, DOI 10.1371/journal.pone.0064914, PMID 23724105 (OR nonadherence 1,11 [1,09–1,14], 7 studii, 199 996 osob, prumerny vek 71,75) — overeno v PubMed 6. 10. 2026. Consensus 6. 10. 2026 'effect of prescription drug cost sharing copayments on medication adherence' (systematic review/meta-analysis): Fusco 2022 JMCP (79 studii, vetsina: vyssi spoluucast = horsi adherence), Mann 2014 PLoS One, Goldman 2007 JAMA — obraz souhlasi. PubMed dotazy 2, Consensus 1. Pani Vera z Pardubic je ilustrativni postava. Ceka na schvaleni redakce."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1 803 korun za doplatky na hlavu. ÚZIS hlásí růst o polovinu, sedm desetin přírůstku ale přišlo ze dvou krajů · HSPA Monitor</title>
+<meta name="description" content="Lékárny a výdejny zdravotnických prostředků vybraly v roce 2025 na doplatcích k receptům a poukazům 19,7 miliardy korun, v průměru 1 803 Kč na obyvatele a o 52,6 % víc než rok předtím, uvádí nová ročenka ÚZIS. Sedm desetin přírůstku ale připadá na Jihomoravský a Zlínský kraj, jejichž hodnoty ÚZIS nevysvětlil; bez nich vzrostly doplatky o 18,4 %. Ročenka zároveň poprvé neuvádí, kolik za pacienty nad ochranný limit zaplatily pojišťovny. Nový indikátor HSPA Monitoru proto zůstává neutrální, dokud čísla nevysvětlí ten, kdo je sbírá.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="1 803 korun za doplatky na hlavu. ÚZIS hlásí růst o polovinu, sedm desetin přírůstku ale přišlo ze dvou krajů">
+<meta property="og:description" content="Doplatky v lékárnách 2025: 19,7 mld. Kč, 1 803 Kč na obyvatele, +52,6 %. Bez Jihomoravského a Zlínského kraje +18,4 %. Nový indikátor HSPA Monitoru z ročenky ÚZIS.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-doplatky-leky-2025-dva-kraje.html">
+<meta property="article:published_time" content="2026-10-07T06:00:00+02:00">
+<meta property="article:section" content="Léková politika">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-doplatky-leky-2025-dva-kraje.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "1 803 korun za doplatky na hlavu. ÚZIS hlásí růst o polovinu, sedm desetin přírůstku ale přišlo ze dvou krajů",
+  "description": "Lékárny a výdejny zdravotnických prostředků vybraly v roce 2025 na doplatcích k receptům a poukazům 19,7 miliardy korun, v průměru 1 803 Kč na obyvatele a o 52,6 % víc než rok předtím, uvádí nová ročenka ÚZIS. Sedm desetin přírůstku ale připadá na Jihomoravský a Zlínský kraj, jejichž hodnoty ÚZIS nevysvětlil; bez nich vzrostly doplatky o 18,4 %. Ročenka zároveň poprvé neuvádí, kolik za pacienty nad ochranný limit zaplatily pojišťovny. Nový indikátor HSPA Monitoru proto zůstává neutrální, dokud čísla nevysvětlí ten, kdo je sbírá.",
+  "datePublished": "2026-10-07T06:00:00+02:00",
+  "dateModified": "2026-10-06",
+  "inLanguage": "cs",
+  "articleSection": "Léková politika",
+  "author": { "@type": "Organization", "name": "Redakce HSPA Monitoru" },
+  "publisher": { "@type": "Organization", "name": "HSPA Monitor · Skóre zdravotnictví", "url": "https://skorezdravotnictvi.cz" },
+  "mainEntityOfPage": "https://skorezdravotnictvi.cz/clanek-doplatky-leky-2025-dva-kraje.html"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Léková politika</span>
+        <span class="article-tag article-tag-muted">doplatky · lékárny · ochranný limit · ÚZIS · kvalita dat</span>
+      </div>
+      <h1 class="article-title">1 803 korun za doplatky na hlavu. ÚZIS hlásí růst o polovinu, sedm desetin přírůstku ale přišlo ze dvou krajů</h1>
+      <p class="article-deck">
+        Lékárny a výdejny zdravotnických prostředků vybraly v roce 2025 na doplatcích k receptům a poukazům 19,7 miliardy korun, v průměru 1 803 Kč na obyvatele a o 52,6 % víc než rok předtím, uvádí nová ročenka ÚZIS. Sedm desetin přírůstku ale připadá na Jihomoravský a Zlínský kraj, jejichž hodnoty ÚZIS nevysvětlil; bez nich vzrostly doplatky o 18,4 %. Ročenka zároveň poprvé neuvádí, kolik za pacienty nad ochranný limit zaplatily pojišťovny. Nový indikátor HSPA Monitoru proto zůstává neutrální, dokud čísla nevysvětlí ten, kdo je sbírá.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">7. října 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">9 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Paní Věra z Pardubic, 63 let, si v lékárně vyzvedává tři léky na tlak a cholesterol a na každý doplácí. U jednoho existuje varianta bez doplatku, jenže zrovna není k dostání. Paní Věra je ilustrativní postava, čísla kolem ní ne. Ústav zdravotnických informací a statistiky (ÚZIS) 5. října zveřejnil ročenku Lékárenská péče 2025. Podle ní zaplatil každý obyvatel Česka loni na doplatcích k receptům a poukazům v průměru <strong>1 803 Kč</strong>, o rok dříve 1 182 Kč. Takový skok řada od roku 2018 nezažila. Když se ale podíváte, odkud se vzal, většina z něj vede do dvou krajů.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCntH">
+        <figcaption class="av-figure-h" id="avCntH">Doplatky v lékárnách a výdejnách zdravotnických prostředků: čtyři čísla (ÚZIS, 2025)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="1803" data-suffix=" Kč">1 803 Kč</span>
+            <span class="av-counter-label">doplatků na obyvatele za rok 2025</span>
+            <span class="av-counter-foot">2024: 1 182 Kč; 2018: 759 Kč</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="19.7" data-decimals="1" data-suffix=" mld. Kč">19,7 mld. Kč</span>
+            <span class="av-counter-label">doplatky celkem</span>
+            <span class="av-counter-foot">12,5 % tržeb lékáren a výdejen</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="52.6" data-decimals="1" data-prefix="+" data-suffix=" %">+52,6 %</span>
+            <span class="av-counter-label">meziroční růst celkové částky</span>
+            <span class="av-counter-foot">Tab. 13 ročenky; 2024: +23,5 %</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="18.4" data-decimals="1" data-prefix="+" data-suffix=" %">+18,4 %</span>
+            <span class="av-counter-label">růst bez Jihomoravského a Zlínského kraje</span>
+            <span class="av-counter-foot">Redakční výpočet z Tab. 7</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS ČR, Aktuální informace Lékárenská péče 2025 (5. 10. 2026), souhrn, Tab. 7 a Tab. 13; Lékárenská péče 2024, Tab. 7. Výpočet bez dvou krajů provedla redakce HSPA Monitoru.</p>
+      </figure>
+
+      <h3>Co indikátor měří</h3>
+      <p>
+        Nový indikátor <a href="indicator.html?id=doplatky_leky_na_obyvatele">Doplatky pacientů za léky a zdravotnické prostředky na obyvatele</a> přebírá číslo, které ÚZIS každý rok uvádí v souhrnu ročenky: kolik obyvatel v průměru zaplatil v lékárně na doplatcích k receptům a poukazům. Doplatek je rozdíl mezi cenou léku nebo pomůcky a úhradou, kterou stanoví Státní ústav pro kontrolu léčiv. Podkladem je statistický výkaz o lékárenské péči (A080), který odevzdávají nemocniční a veřejné lékárny, odloučená oddělení výdeje léčiv a výdejny zdravotnických prostředků.
+      </p>
+      <p>
+        Do čísla nepatří volný prodej bez receptu (v roce 2025 dalších 1 654 Kč na obyvatele), stomatologie ani regulační poplatky. A hlavně: ÚZIS v něm neodečítá, co pacientům vrátily nebo za ně zaplatily pojišťovny v rámci ročního ochranného limitu. Ročenky z let 2018 až 2022 to píšou výslovně. Indikátor tedy měří hrubou zátěž u lékárenského okénka, ne čistý výdaj domácností. Zařadili jsme ho do oblasti Struktury, domény Financování a podoblasti Finanční ochrana, vedle <a href="indicator.html?id=platba_z_kapsy_pct">přímých plateb pacientů</a> a <a href="indicator.html?id=katastroficke_vydaje_zdravi">katastrofických výdajů domácností</a>.
+      </p>
+
+      <h3>Sedm let pozvolna, pak skok</h3>
+
+      <figure class="av-trend" data-unit="Kč">
+        <figcaption class="av-trend-h">Doplatky na léky a zdravotnické prostředky na obyvatele, Česko 2018–2025 (ÚZIS, Lékárenská péče)</figcaption>
+        <div class="av-trend-chart"
+             data-points='[{"year":2018,"value":759},{"year":2019,"value":793},{"year":2020,"value":818},{"year":2021,"value":862},{"year":2022,"value":915},{"year":2023,"value":949},{"year":2024,"value":1182},{"year":2025,"value":1803}]'
+             data-min="600" data-max="1900"
+             data-break-year="2025" data-break-label="limit hlídá eRecept"></div>
+        <p class="av-trend-note">Zdroj: ÚZIS ČR, souhrny ročenek Lékárenská péče 2018–2025; hodnota bez odečtení vrácených doplatků. Od 1. 1. 2025 se ochranný limit sleduje v systému eRecept, proto přerušovaná čára.</p>
+      </figure>
+
+      <p>
+        Mezi lety 2018 a 2023 rostly doplatky na obyvatele pomalu, z 759 na 949 Kč, tedy o čtvrtinu za pět let. V roce 2024 přišel první výraznější skok na 1 182 Kč (+24,6 %), v roce 2025 druhý, na 1 803 Kč (+52,5 %). Celková částka podle souhrnné tabulky ročenky vzrostla z 12,9 na 19,7 miliardy korun. Podíl doplatků na tržbách lékáren a výdejen se zvýšil z 9,4 % na 12,5 %.
+      </p>
+      <p>
+        Pro srovnání: počet receptů vzrostl za rok jen o 1,1 % na 88,59 milionu, tedy 8,12 receptu na obyvatele. Tržby lékáren za léčivé přípravky stouply o 11,1 %. Doplatky tak rostly téměř pětkrát rychleji než tržby za léky. Taková změna by si zasloužila vysvětlení třeba v podobě nové úhradové politiky nebo zdražení velké skupiny léků. Ročenka ale žádné nenabízí, a když se data rozloží po krajích, ukáže se proč.
+      </p>
+
+      <h3>Dva kraje, sedm desetin přírůstku</h3>
+      <p>
+        Ročenka uvádí doplatky po krajích v absolutních částkách, podle sídla lékárny nebo výdejny. Ve dvanácti krajích vzrostly mezi lety 2024 a 2025 o 2,5 až 10,4 %, v Ústeckém o 38,8 % a v Praze o 47,0 %. V Jihomoravském kraji ale téměř na trojnásobek (+185,5 %) a ve Zlínském víc než na čtyřnásobek (+323,7 %). Tyto dva kraje dohromady tvoří <strong>70,8 % celostátního přírůstku</strong>, tedy 4,8 ze 6,8 miliardy korun.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTabH">
+        <figcaption class="av-figure-h" id="avTabH">Doplatky od pacientů podle krajů, 2024 a 2025, v tisících Kč (ÚZIS, Lékárenská péče, Tab. 7)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Kraj</th>
+                <th scope="col" class="av-num">2024</th>
+                <th scope="col" class="av-num">2025</th>
+                <th scope="col" class="av-num">Změna</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Hl. m. Praha</th><td class="av-num">2 241 134</td><td class="av-num">3 295 319</td><td class="av-num av-bad">+47,0 %</td></tr>
+              <tr><th scope="row">Středočeský</th><td class="av-num">1 423 621</td><td class="av-num">1 561 145</td><td class="av-num">+9,7 %</td></tr>
+              <tr><th scope="row">Jihočeský</th><td class="av-num">727 122</td><td class="av-num">782 663</td><td class="av-num">+7,6 %</td></tr>
+              <tr><th scope="row">Plzeňský</th><td class="av-num">703 077</td><td class="av-num">761 359</td><td class="av-num">+8,3 %</td></tr>
+              <tr><th scope="row">Karlovarský</th><td class="av-num">356 073</td><td class="av-num">375 996</td><td class="av-num">+5,6 %</td></tr>
+              <tr><th scope="row">Ústecký</th><td class="av-num">857 991</td><td class="av-num">1 191 221</td><td class="av-num av-bad">+38,8 %</td></tr>
+              <tr><th scope="row">Liberecký</th><td class="av-num">479 854</td><td class="av-num">511 959</td><td class="av-num">+6,7 %</td></tr>
+              <tr><th scope="row">Královéhradecký</th><td class="av-num">646 404</td><td class="av-num">710 346</td><td class="av-num">+9,9 %</td></tr>
+              <tr><th scope="row">Pardubický</th><td class="av-num">550 162</td><td class="av-num">607 129</td><td class="av-num">+10,4 %</td></tr>
+              <tr><th scope="row">Vysočina</th><td class="av-num">579 113</td><td class="av-num">593 422</td><td class="av-num">+2,5 %</td></tr>
+              <tr class="av-row-highlight"><th scope="row">Jihomoravský</th><td class="av-num">1 523 590</td><td class="av-num">4 350 453</td><td class="av-num av-bad">+185,5 %</td></tr>
+              <tr><th scope="row">Olomoucký</th><td class="av-num">781 538</td><td class="av-num">853 851</td><td class="av-num">+9,3 %</td></tr>
+              <tr class="av-row-highlight"><th scope="row">Zlínský</th><td class="av-num">611 382</td><td class="av-num">2 590 226</td><td class="av-num av-bad">+323,7 %</td></tr>
+              <tr><th scope="row">Moravskoslezský</th><td class="av-num">1 414 726</td><td class="av-num">1 494 985</td><td class="av-num">+5,7 %</td></tr>
+              <tr><th scope="row">Česko</th><td class="av-num">12 895 787</td><td class="av-num">19 680 074</td><td class="av-num av-bad">+52,6 %</td></tr>
+              <tr><th scope="row">Česko bez JMK a Zlínského kraje</th><td class="av-num">10 760 815</td><td class="av-num">12 739 395</td><td class="av-num">+18,4 %</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS ČR, Lékárenská péče 2024 a 2025, Tab. 7 (doplatky od pacientů, všechny typy zpravodajských jednotek, podle sídla zařízení). Změny a řádek bez dvou krajů spočítala redakce HSPA Monitoru. Krajské částky nejsou přepočtené na obyvatele, protože výkaz se váže k sídlu lékárny, ne k bydlišti pacienta.</p>
+      </figure>
+
+      <p>
+        V Jihomoravském kraji skok vznikl ve veřejných lékárnách u léčivých přípravků: doplatky tam vzrostly z 1,19 na 4,01 miliardy korun. Poprvé tak převýšily i to, co tytéž lékárny dostaly od zdravotních pojišťoven (3,78 miliardy). Celostátně přitom doplatky ve veřejných lékárnách tvoří zhruba 40 % tržeb od pojišťoven. Jihomoravské lékárny vykázaly vyšší doplatky než pražské (2,27 miliardy), přestože v Praze přijaly víc receptů. Ve Zlínském kraji vznikl skok ve výdejnách zdravotnických prostředků: jejich doplatky vzrostly ze 771 tisíc na 1,92 miliardy korun, zatímco od pojišťoven tyto výdejny dostaly 80 milionů. V Ústeckém kraji se doplatky ve výdejnách zvýšily ze 4,2 na 259,5 milionu korun.
+      </p>
+
+      <div class="article-callout-caveat" role="note">
+        <strong>Chyba, nebo nový jev? Zatím nevíme.</strong>
+        Data zveřejněná ÚZIS obsahují dvě krajské hodnoty, které se vymykají všemu ostatnímu. Nemáme doklad, že jde o chybu, a ÚZIS je v publikaci nevysvětluje. Několik věcí ale opatrnosti napovídá. Sám ÚZIS uvádí, že „stejně jako v minulých letech bylo odevzdáno několik výkazů nevyplněných nebo se zjevně vyplněnými nesprávnými daty“, a u výdejen, že „nerovnoměrnost ve vykazované výši tržeb u výdejen může být ovlivněna počtem odevzdaných výkazů“. Výkaz odevzdalo 96,2 % lékáren, ale jen 78,4 % výdejen zdravotnických prostředků. <strong>Medián</strong> tržeb za doplatky na jednu veřejnou lékárnu přitom mezi lety 2024 a 2025 klesl z 3,84 na 3,44 milionu korun, zatímco průměr na jednu zpravodajskou jednotku stoupl o 51,3 %. Takový rozdíl mezi průměrem a mediánem bývá otiskem několika málo extrémních hodnot, ne plošného zdražení.
+      </div>
+
+      <p>
+        Ani očištěné číslo není malé. Bez Jihomoravského a Zlínského kraje vzrostly doplatky o 18,4 %, rychleji než tržby lékáren za léky, a výrazně přispěla i Praha a Ústecký kraj. Jenže tady je druhý háček, pravidla ochranného limitu.
+      </p>
+
+      <h3>Ochranný limit: nový mechanismus, chybějící číslo</h3>
+      <p>
+        Zákon o veřejném zdravotním pojištění (č. 48/1997 Sb., § 16b) stanoví roční limit započitatelných doplatků: <strong>5 000 Kč</strong> pro většinu dospělých, <strong>1 000 Kč</strong> pro děti do 18 let a pojištěnce od 65 let a <strong>500 Kč</strong> pro pojištěnce od 70 let a pro lidi s invaliditou třetího stupně nebo uznané invalidní ve druhém či třetím stupni bez invalidního důchodu. Započitatelný je doplatek jen do výše doplatku nejlevnější dostupné varianty se stejnou léčivou látkou; kdo chce dražší přípravek, rozdíl platí dál.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avFlowH">
+        <figcaption class="av-figure-h" id="avFlowH">Jak od roku 2025 funguje ochranný limit doplatků (zákon č. 48/1997 Sb., § 16b, znění k 1. 10. 2026)</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Ověření v eReceptu</h4>
+            <p class="av-flow-desc">Lékárna před výdejem částečně hrazeného léku ověří stav limitu pojištěnce (odst. 6).</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Limit dosažen</h4>
+            <p class="av-flow-desc">Lékárna smí požadovat jen tu část doplatku, která se do limitu nezapočítává (odst. 7).</p>
+            <span class="av-flow-tag">5 000 / 1 000 / 500 Kč ročně</span>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Platí pojišťovna</h4>
+            <p class="av-flow-desc">Započitatelný doplatek uhradí lékárně zdravotní pojišťovna spolu s úhradou léku (odst. 9).</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Přezkoumání</h4>
+            <p class="av-flow-desc">Při nesrovnalosti žádost od 1. ledna do 30. června dalšího roku; pojišťovna rozhodne do 90 dnů (odst. 2).</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> zákon č. 48/1997 Sb., § 16b, aktuální znění (verze účinná od 1. 10. 2026), zakonyprolidi.cz, staženo 6. 10. 2026; VZP ČR, Ochranné limity (od 1. 1. 2025 sleduje limit SÚKL v systému eRecept), staženo 6. 10. 2026.</p>
+      </figure>
+
+      <p>
+        Až do konce roku 2024 pacient doplatky zaplatil a pojišťovna mu přeplatek vracela zpětně. Ročenky ÚZIS ten vrácený objem uváděly: 657,0 milionu korun v roce 2018, 1 152,6 milionu v roce 2023 a <strong>1 670,8 milionu v roce 2024</strong>, což bylo 13 % všech doplatků. Od 1. ledna 2025 podle VZP sleduje limit Státní ústav pro kontrolu léčiv v systému eRecept a po jeho dosažení pacient započitatelné doplatky v lékárně neplatí.
+      </p>
+      <p>
+        Ročenka za rok 2025 údaj o vrácených doplatcích neuvádí vůbec. A z publikace není poznat, jak lékárny ve výkazu zapsaly doplatky, které za pacienty s vyčerpaným limitem uhradila pojišťovna: zda jako „doplatky od pacientů“, nebo jako tržby od pojišťoven. Pokud jako doplatky, byla by část růstu 2025 účetní, nikoli skutečná zátěž pacientů. Nevíme to a ÚZIS by to měl říct. Tato nejistota se ovšem týká všech krajů stejně, takže skoky v Jihomoravském a Zlínském kraji nevysvětluje.
+      </p>
+      <p>
+        Druhou pojistkou je pravidlo pro úhrady. Zákon (§ 39c odst. 5) ukládá SÚKL, aby ve skupinách léčivých látek uvedených v příloze č. 2 zákona byl vždy aspoň jeden přípravek plně hrazený, a to ten nejméně nákladný. Mimo tyto skupiny nárok na lék bez doplatku nemá pacient žádný. A když plně hrazená varianta chybí v lékárně, jako u paní Věry, zaplatí dražší.
+      </p>
+
+      <h3>Mezinárodní srovnání: chybí měřítko, ne problém</h3>
+      <p>
+        Harmonizovaný ukazatel „doplatky na předepsané léky na obyvatele“ nepublikuje OECD ani Eurostat, protože doplatky jsou v každé zemi jinak nastavené. Indikátor proto nemá benchmark a jeho signál je neutrální. Nejbližším srovnatelným údajem jsou zdravotnické účty: kolik z výdajů na léky a zdravotnický spotřební materiál platí domácnosti přímo. Tento údaj ale zahrnuje i léky bez receptu, takže měří širší věc než nový indikátor.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avBarH">
+        <figcaption class="av-figure-h" id="avBarH">Podíl přímých plateb domácností na výdajích za léčiva a zdravotnický spotřební materiál (%), 2024 (Eurostat, hlth_sha11_hchf)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="70">
+          <li class="av-bar-row" data-value="16.4" data-label="Německo" data-display="16,4 %"></li>
+          <li class="av-bar-row" data-value="28.5" data-label="EU-27 (2023)" data-display="28,5 %"></li>
+          <li class="av-bar-row" data-value="30.6" data-label="Rakousko" data-display="30,6 %"></li>
+          <li class="av-bar-row" data-value="35.2" data-label="Slovensko" data-display="35,2 %"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="41.2" data-label="Česko" data-display="41,2 %"></li>
+          <li class="av-bar-row" data-value="60.5" data-label="Polsko" data-display="60,5 %"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat, hlth_sha11_hchf (HC51 Pharmaceuticals and other medical non-durable goods; HF3 Household out-of-pocket payment ÷ TOT_HF), aktualizováno 1. 10. 2026, staženo 6. 10. 2026; podíly spočítala redakce HSPA Monitoru. Zahrnuje volný prodej, proto nejde o benchmark indikátoru doplatků.</p>
+      </figure>
+
+      <p>
+        V tomto širším pohledu platí české domácnosti přímo 41,2 % výdajů na léčiva a spotřební materiál (2024), víc než Rakousko (30,6 %) a Slovensko (35,2 %), výrazně víc než Německo (16,4 %) a méně než Polsko (60,5 %). Průměr EU-27 za rok 2023 je 28,5 %. Celkově je ale Česko v přímých platbách na tom dobře: podle indikátoru <a href="indicator.html?id=platba_z_kapsy_pct">přímých plateb pacientů</a> tvoří 13,6 % výdajů na zdravotnictví (2024) proti průměru OECD 18 % a EU 15 %. Léky jsou tedy oblast, kde se přímé platby koncentrují. <a href="indicator.html?id=katastroficke_vydaje_zdravi">Katastrofické výdaje na zdraví</a> mělo podle WHO/Europe 6 % domácností (2023).
+      </p>
+      <p>
+        Proč na tom záleží, ukazuje literatura. Metaanalýza Sinnottové a kolegů z roku 2013 v časopise <em>PLoS One</em> (<a href="https://doi.org/10.1371/journal.pone.0064914" target="_blank" rel="noopener">doi.org ↗</a>) shrnula sedm studií s téměř 200 000 veřejně pojištěných lidí s průměrným věkem kolem 72 let: tam, kde museli za předepsané léky doplácet, měli o 11 % vyšší šanci, že je nebudou brát podle předpisu. Kontrolní vyhledávání v databázi Consensus našlo novější systematické přehledy, většinou z USA, se stejným směrem: čím vyšší spoluúčast, tím horší adherence. Studie z Česka mezi nimi není.
+      </p>
+
+      <h3>Co vývoj přináší</h3>
+      <p>
+        Ročenka ukazuje i širší pohyb lékárenského trhu. Celkové tržby lékáren a výdejen vzrostly o 14,7 % na 156,94 miliardy korun. Volný prodej bez receptu stoupl o 21 % na 18,05 miliardy, tedy 1 654 Kč na obyvatele. Léky s limitací „S“ pro specializovaná centra, tedy drahá centrová léčba, vyšly na 43,41 miliardy korun (+9,96 %). V lékárnách přitom ubylo personálu: v přepočtu na úvazky o 131 farmaceutů a o 721 zdravotnických pracovníků způsobilých k výkonu povolání bez odborného dohledu. Na jednu lékárnu připadá 4 038 obyvatel.
+      </p>
+      <p>
+        Pro pacienta z toho plyne, že platí víc za to, co si kupuje bez receptu, a podle oficiální statistiky i za to, co dostane na recept. Kolik z druhého růstu je skutečné, rozhodnou vysvětlení dvou krajských hodnot a údaj o doplatcích uhrazených v rámci limitu.
+      </p>
+
+      <h3>Co s tím</h3>
+      <p>
+        <strong>ÚZIS:</strong> vysvětlit nebo opravit hodnoty doplatků za Jihomoravský kraj (veřejné lékárny, léčivé přípravky) a Zlínský kraj (výdejny zdravotnických prostředků), případně i výdejny v Ústeckém kraji. Doplnit do ročenky údaj, kolik za pacienty s dosaženým limitem v roce 2025 uhradily pojišťovny, a uvést, ve kterém řádku výkazu ho lékárny vykazují. Bez toho řada 2024 a 2025 není srovnatelná.
+      </p>
+      <p>
+        <strong>Ministerstvo zdravotnictví a SÚKL:</strong> zveřejňovat z eReceptu agregovaný údaj o započitatelných doplatcích a o počtu lidí, kteří limit vyčerpali. Systém tato data od roku 2025 sbírá centrálně. Hlídat, aby plně hrazená varianta podle § 39c odst. 5 byla v lékárnách skutečně k dostání; když chybí, pacient zaplatí dražší přípravek.
+      </p>
+      <p>
+        <strong>Zdravotní pojišťovny:</strong> informovat pojištěnce, že od roku 2025 se limit hlídá v lékárně a že při nesrovnalosti mohou od ledna do konce června následujícího roku požádat o přezkoumání. Žádost nepodávají automaticky, musí ji podat pojištěnec.
+      </p>
+      <p>
+        <strong>Pro pacienty:</strong> ptejte se v lékárně na variantu bez doplatku nebo s nižším doplatkem. Do limitu se počítá jen doplatek nejlevnější varianty se stejnou látkou; za dražší lék zaplatíte rozdíl i po jeho dosažení.
+      </p>
+      <p>
+        <strong>HSPA Monitor:</strong> indikátor vedeme jako neutrální bez benchmarku. Hodnotu 1 803 Kč přebíráme tak, jak ji ÚZIS publikoval, a upozorňujeme na ni u indikátoru. Pokud ÚZIS krajské hodnoty opraví, aktualizujeme řadu i tento text.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=doplatky_leky_na_obyvatele"><strong>Doplatky pacientů za léky a zdravotnické prostředky na obyvatele</strong></a> — 1 803 Kč (2025, ÚZIS Lékárenská péče); 2024: 1 182 Kč · Struktury · signál neutral (bez benchmarku)</li>
+        <li><a href="indicator.html?id=platba_z_kapsy_pct"><strong>Přímé platby pacientů (% zdravotních výdajů)</strong></a> — 13,6 % (2024, ČSÚ zdravotnické účty) proti OECD 18 % a EU 15 %</li>
+        <li><a href="indicator.html?id=katastroficke_vydaje_zdravi"><strong>Katastrofické výdaje na zdraví (domácnosti)</strong></a> — 6 % domácností (2023, WHO/Europe)</li>
+        <li><a href="indicator.html?id=lekarny_per_100k"><strong>Hustota lékáren / 100 000 obyvatel</strong></a> — 25,07 (2026, SÚKL)</li>
+        <li><a href="indicator.html?id=nevydana_baleni_leku_pct"><strong>Nevydaná balení léků</strong></a> — 3,8 % (2025, SÚKL eRecept)</li>
+      </ul>
+      <p>Související články: <a href="clanek-katastroficke-vydaje-zdravi.html">Katastrofické výdaje na zdraví</a> · <a href="clanek-nevydana-baleni-leku.html">Nevydaná balení léků</a> · <a href="clanek-platba-z-kapsy.html">Přímé platby pacientů</a> · <a href="clanek-farmaceuti-pracovni-sila.html">Farmaceuti jako pracovní síla</a></p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární zdroje dat (ÚZIS ČR, řada Aktuální informace Lékárenská péče, výkaz A080; ověřeno 6. 10. 2026)</h5>
+        <ul class="article-sources-list">
+          <li><strong>Lékárenská péče 2025</strong> (Praha 5. 10. 2026) — souhrn, Tab. 7, 9, 12 a 13, návratnost výkazů, medián tržeb. <a href="https://www.uzis.cz/res/f/008470/ai-2026-01-lekarenska-pece-2025.pdf" target="_blank" rel="noopener">uzis.cz (PDF) ↗</a> · <a href="https://www.uzis.cz/index.php?pg=record&amp;id=8470" target="_blank" rel="noopener">záznam publikace a přílohy ↗</a></li>
+          <li><strong>Lékárenská péče 2024</strong> — doplatky na obyvatele, krajské tabulky 2024, vrácené doplatky 1 670,8 mil. Kč, medián 3,84 mil. Kč. <a href="https://www.uzis.cz/res/f/008466/ai-2025-01-lekarenska-pece-2024.pdf" target="_blank" rel="noopener">uzis.cz (PDF) ↗</a></li>
+          <li><strong>Lékárenská péče 2023</strong>. <a href="https://www.uzis.cz/res/f/008459/ai-2024-01-lekarenska-pece-2023.pdf" target="_blank" rel="noopener">uzis.cz (PDF) ↗</a></li>
+          <li><strong>Lékárenská péče 2022</strong>. <a href="https://www.uzis.cz/res/f/008457/ai-2023-01-lekarenska-pece-2022.pdf" target="_blank" rel="noopener">uzis.cz (PDF) ↗</a></li>
+          <li><strong>Lékárenská péče 2021</strong>. <a href="https://www.uzis.cz/res/f/008417/ai-2022-01-lekarenska-pece-2021.pdf" target="_blank" rel="noopener">uzis.cz (PDF) ↗</a></li>
+          <li><strong>Lékárenská péče 2020</strong>. <a href="https://www.uzis.cz/res/f/008371/ai-2021-03-lekarenska-pece-2020.pdf" target="_blank" rel="noopener">uzis.cz (PDF) ↗</a></li>
+          <li><strong>Lékárenská péče 2019</strong>. <a href="https://www.uzis.cz/res/f/008320/ai-2020-02-lekarenska-pece-2019.pdf" target="_blank" rel="noopener">uzis.cz (PDF) ↗</a></li>
+          <li><strong>Lékárenská péče 2018</strong>. <a href="https://www.uzis.cz/res/f/008273/ai-2019-05-lekarenska-pece-2018.pdf" target="_blank" rel="noopener">uzis.cz (PDF) ↗</a></li>
+          <li><strong>Eurostat — hlth_sha11_hchf</strong> (HC51 × HF3 a TOT_HF, MIO_EUR) a <strong>hlth_sha11_hf</strong> (HF3, PC_CHE); aktualizováno 1. 10. 2026, staženo přes API 6. 10. 2026. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_sha11_hchf/default/table" target="_blank" rel="noopener">databrowser ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Legislativa</h5>
+        <ul class="article-sources-list">
+          <li><strong>Zákon č. 48/1997 Sb., o veřejném zdravotním pojištění</strong> — § 16b (limity doplatků, ověření v eReceptu, úhrada pojišťovnou, přezkoumání) a § 39c odst. 5 (plně hrazený přípravek); aktuální znění účinné od 1. 10. 2026, staženo 6. 10. 2026. <a href="https://www.zakonyprolidi.cz/cs/1997-48#p16b" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>VZP ČR — Ochranné limity</strong> — od 1. 1. 2025 sleduje limit SÚKL v systému eRecept; lhůty pro žádost o přezkoumání. Staženo 6. 10. 2026. <a href="https://www.vzp.cz/pojistenci/informace-a-zivotni-situace/regulacni-poplatky-a-ochranne-limity/ochranne-limity" target="_blank" rel="noopener">vzp.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Evidence</h5>
+        <ul class="article-sources-list">
+          <li><strong>Sinnott SJ, Buckley C, O'Riordan D, Bradley C, Whelton H. The effect of copayments for prescriptions on adherence to prescription medicines in publicly insured populations; a systematic review and meta-analysis.</strong> <em>PLoS One</em> 2013;8(5):e64914. DOI 10.1371/journal.pone.0064914. PMID 23724105. Ověřeno v PubMed 6. 10. 2026. <a href="https://doi.org/10.1371/journal.pone.0064914" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Částka na obyvatele je hrubá, bez odečtení doplatků vrácených nebo uhrazených pojišťovnami nad ochranný limit. Celkové částky jsou z Tab. 13 ročenky 2025; souhrny starších ročenek uvádějí pro některé roky mírně odlišné částky, protože ÚZIS výkazy dodatečně doplňuje. Krajské hodnoty jsou podle sídla lékárny nebo výdejny. Růst bez dvou krajů a podíly přímých plateb za léčiva spočítala redakce HSPA Monitoru. Paní Věra z Pardubic je ilustrativní postava.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
