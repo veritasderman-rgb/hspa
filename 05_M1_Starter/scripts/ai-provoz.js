@@ -11,6 +11,10 @@
 //   node scripts/ai-provoz.js pause --duvod "…"  [--kdo "…"]
 //   node scripts/ai-provoz.js resume             [--kdo "…"]
 //
+// Proměnná AI_PROVOZ_STATE=<cesta> přesměruje CLI na jiný soubor stavu. Crony ji
+// používají, aby stav četly z main (git show origin/main:…) a ne z větve, kterou
+// někdo vybral při ručním spuštění workflow — jinak by se kill switch dal obejít.
+//
 // Skript je úmyslně bez závislostí a bez sítě: musí fungovat i když je rozbité
 // všechno ostatní.
 
@@ -64,21 +68,22 @@ function arg(name) {
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const cmd = process.argv[2] || 'check';
+  const file = process.env.AI_PROVOZ_STATE ? path.resolve(process.env.AI_PROVOZ_STATE) : STATE_FILE;
   try {
     if (cmd === 'check') {
-      const s = readState();
+      const s = readState(file);
       console.log(describe(s));
       if (!isRunning(s)) {
         console.log('→ Podle GOVERNANCE.md § 5 se nic nepublikuje, neposílá ani nemerguje. Obnovení: workflow ai-provoz.yml → obnovit.');
         process.exit(1);
       }
     } else if (cmd === 'status') {
-      console.log(JSON.stringify(readState(), null, 2));
+      console.log(JSON.stringify(readState(file), null, 2));
     } else if (cmd === 'pause') {
-      const s = setState(STATE_FILE, 'pozastaveno', { duvod: arg('--duvod') || '', kdo: arg('--kdo') || 'Josef Pavlovic' });
+      const s = setState(file, 'pozastaveno', { duvod: arg('--duvod') || '', kdo: arg('--kdo') || 'Josef Pavlovic' });
       console.log(describe(s));
     } else if (cmd === 'resume') {
-      const s = setState(STATE_FILE, 'bezi', { kdo: arg('--kdo') || 'Josef Pavlovic' });
+      const s = setState(file, 'bezi', { kdo: arg('--kdo') || 'Josef Pavlovic' });
       console.log(describe(s));
     } else {
       console.error(`Neznámý příkaz: ${cmd}. Použij check | status | pause --duvod "…" | resume`);

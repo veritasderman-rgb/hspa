@@ -1,18 +1,47 @@
 name: Deploy check
 
-# Spouští se na každý PR proti main, který se dotýká dashboardu.
-# Pouští testy + validuje datový kontrakt. Slouží jako pre-deploy gate
-# před Vercel preview deploy.
+# Spouští se na každý PR proti main. Pouští testy + validuje datový kontrakt.
+# Slouží jako pre-deploy gate před Vercel preview deploy.
+#
+# Job `check` je povinný check větve main (ruleset, docs/github-ruleset-main.json).
+# Proto workflow NEMÁ filtr `paths`: u PR, kde by se kvůli filtru vůbec
+# nespustil (jen docs/, prompty, GOVERNANCE.md), by povinný check zůstal
+# „Expected" navždy a PR by nešel zmergovat. Místo toho první job `zmeny`
+# zjistí dotčené cesty a `check` se přeskočí, když se PR dashboardu
+# nedotýká — přeskočený job GitHub u povinných checků počítá jako splněný.
+# (Dva workflows se stejným jménem jobu by byly nejednoznačné — nepoužívat.)
 
 on:
   pull_request:
     branches: [main]
-    paths:
-      - '05_M1_Starter/**'
-      - '.github/workflows/**'
 
 jobs:
+  zmeny:
+    name: Dotčené cesty (deploy check)
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    outputs:
+      dashboard: ${{ steps.filtr.outputs.dashboard }}
+    steps:
+      - name: Dotýká se PR dashboardu nebo workflows?
+        id: filtr
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          FILES=$(gh api "repos/$REPO/pulls/$PR/files" --paginate --jq '.[].filename')
+          if printf '%s\n' "$FILES" | grep -qE '^(05_M1_Starter/|\.github/workflows/)'; then
+            echo "dashboard=true" >> "$GITHUB_OUTPUT"
+            echo "PR mění dashboard nebo workflows — Deploy check poběží."
+          else
+            echo "dashboard=false" >> "$GITHUB_OUTPUT"
+            echo "PR se dashboardu (05_M1_Starter/) ani workflows nedotýká — Deploy check se přeskočí."
+          fi
+
   check:
+    needs: zmeny
+    if: needs.zmeny.outputs.dashboard == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     defaults:

@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { spawnSync } from 'node:child_process';
 import { readState, isRunning, setState, describe, STATE_FILE } from '../scripts/ai-provoz.js';
 
 function tmp(obj) {
@@ -35,4 +36,15 @@ test('pause vyžaduje důvod, resume důvod maže', () => {
   const r = setState(f, 'bezi', { today: new Date('2026-10-08T10:00:00Z') });
   assert.equal(r.duvod, '');
   assert.equal(isRunning(readState(f)), true);
+});
+
+test('CLI check čte soubor z AI_PROVOZ_STATE (crony ho berou z main, ne z vybrané větve)', () => {
+  const script = path.join(path.dirname(new URL(import.meta.url).pathname), '..', 'scripts', 'ai-provoz.js');
+  const run = file => spawnSync(process.execPath, [script, 'check'], { env: { ...process.env, AI_PROVOZ_STATE: file }, encoding: 'utf8' });
+  const paused = run(tmp({ stav: 'pozastaveno', od: '2026-10-07', duvod: 'zkouška', kdo: 'test' }));
+  assert.equal(paused.status, 1);
+  assert.match(paused.stdout, /POZASTAVENO .* zkouška/);
+  const running = run(tmp({ stav: 'bezi', od: '2026-10-07', duvod: '', kdo: 'test' }));
+  assert.equal(running.status, 0);
+  assert.match(running.stdout, /BĚŽÍ/);
 });

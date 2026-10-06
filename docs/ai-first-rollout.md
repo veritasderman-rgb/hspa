@@ -56,15 +56,18 @@ které z agentní session nejdou (proxy GitHubu zápis do nastavení repa nepou�
   skript je bez závislostí, kill switch musí fungovat i s rozbitým zbytkem repa.
 - [x] **Kill switch v cronech** — `publish-articles`, `social-generate`, `social-publish`,
   `newsletter-weekly`, `awareness-weekly`, `refresh`: krok `Kill switch AI provozu`
-  (`node scripts/ai-provoz.js check`) hned po `setup-node`, před instalací závislostí.
+  hned po `setup-node`, před instalací závislostí. Stav čte **vždy z `main`**
+  (`git show origin/main:…` → `AI_PROVOZ_STATE=… node scripts/ai-provoz.js check`), ne
+  z checkoutu — ruční spuštění workflow z jiné větve by jinak kill switch obešlo.
   Ověřeno lokálně: `pause` → `check` končí kódem 1, `resume` → 0, `pause` bez důvodu
   končí kódem 2 a stav nemění.
-- [x] **Doplňkové workflows `deploy-check-skip.yml` a `visual-a11y-skip.yml`** — nutná
-  podmínka pro povinné checky: `deploy-check.yml` a `visual-a11y.yml` mají filtr cest,
-  a u PR, kde se kvůli němu nespustí (jen docs/, prompty, GOVERNANCE.md), by povinný
-  check zůstal „Expected" navždy a PR by nešel zmergovat. Doplňky mají stejné jméno
-  workflow i jobu (`check`, `e2e`), běží na doplňkové cesty (`paths-ignore`) a hlásí
-  úspěch. Postup doporučený GitHubem („Handling skipped but required checks").
+- [x] **`deploy-check.yml` a `visual-a11y.yml` bez filtru cest** — nutná podmínka pro
+  povinné checky: u PR, kde by se workflow kvůli filtru `paths` vůbec nespustil (jen
+  docs/, prompty, GOVERNANCE.md), by povinný check zůstal „Expected" navždy a PR by
+  nešel zmergovat. Oba workflows teď běží na každý PR; první job `zmeny` zjistí dotčené
+  cesty přes API a job `check` / `e2e` se přeskočí, když se PR dashboardu nedotýká —
+  přeskočený job GitHub u povinných checků počítá jako splněný. (Dva workflows se
+  stejným jménem jobu — původní návrh — GitHub výslovně označuje za nejednoznačné.)
 - [ ] **Branch protection `main`** — **krok vydavatele.** Hotový ruleset je v
   [`docs/github-ruleset-main.json`](github-ruleset-main.json): GitHub → *Settings → Rules →
   Rulesets → New ruleset ▾ → Import a ruleset* → vybrat soubor → *Create*. Obsah:
