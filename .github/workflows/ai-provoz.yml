@@ -1,0 +1,98 @@
+name: AI provoz · kill switch
+
+# Kill switch AI provozu (GOVERNANCE.md § 5). Jedno kliknutí — i z mobilní
+# aplikace GitHubu: Actions → „AI provoz · kill switch" → Run workflow →
+# akce `pozastavit` + důvod, nebo `obnovit`.
+#
+# Přepne 05_M1_Starter/data/ai-provoz.json a commitne ho do main. Stav čtou
+# jako první krok všechny crony, které něco publikují, posílají nebo
+# commitují (publish-articles, social-*, newsletter-weekly, awareness-weekly,
+# refresh), a blok A každé rutiny (autorka, editor, porada, ombudsman).
+# Při `pozastaveno` skončí na prvním kroku kódem 1, dřív než cokoli udělají.
+#
+# Skript scripts/ai-provoz.js je bez závislostí — npm ci tu záměrně není,
+# kill switch musí fungovat i s rozbitým zbytkem repa.
+
+on:
+  workflow_dispatch:
+    inputs:
+      akce:
+        description: 'Co udělat s AI provozem'
+        type: choice
+        required: true
+        options:
+          - pozastavit
+          - obnovit
+      duvod:
+        description: 'Důvod pozastavení (povinný u „pozastavit", zapíše se veřejně do data/ai-provoz.json)'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+# Dva přepínače naráz se nesmí předběhnout.
+concurrency:
+  group: ai-provoz
+  cancel-in-progress: false
+
+jobs:
+  prepnout:
+    name: ${{ inputs.akce }} AI provoz
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: 05_M1_Starter
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      - name: Přepnout stav
+        env:
+          AKCE: ${{ inputs.akce }}
+          DUVOD: ${{ inputs.duvod }}
+          KDO: ${{ github.actor }}
+        run: |
+          echo "Před: $(node scripts/ai-provoz.js status | tr -d '\n')"
+          if [ "$AKCE" = "pozastavit" ]; then
+            # Bez důvodu skript skončí kódem 2 a stav se nezmění.
+            node scripts/ai-provoz.js pause --duvod "$DUVOD" --kdo "$KDO"
+          else
+            node scripts/ai-provoz.js resume --kdo "$KDO"
+          fi
+          node scripts/ai-provoz.js status | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit + push do main
+        env:
+          AKCE: ${{ inputs.akce }}
+          DUVOD: ${{ inputs.duvod }}
+          KDO: ${{ github.actor }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/ai-provoz.json
+          if git diff --cached --quiet; then
+            echo "Stav už byl „$AKCE" — nic ke commitu."
+            exit 0
+          fi
+          if [ "$AKCE" = "pozastavit" ]; then
+            git commit -m "chore(ai-provoz): pozastaveno — $DUVOD" -m "Kill switch GOVERNANCE.md § 5, přepnul $KDO přes .github/workflows/ai-provoz.yml."
+          else
+            git commit -m "chore(ai-provoz): obnoveno" -m "Kill switch GOVERNANCE.md § 5, přepnul $KDO přes .github/workflows/ai-provoz.yml."
+          fi
+          # Main se mezi checkoutem a pushem mohl pohnout — rebase a retry.
+          for i in 1 2 3 4 5; do
+            git push origin HEAD:main && exit 0
+            echo "Push selhal (pokus $i/5) — rebase na aktuální main a retry."
+            git fetch origin main
+            git rebase origin/main || { git rebase --abort; exit 1; }
+            sleep $((i * 2))
+          done
+          echo "::error::Kill switch se nepodařilo zapsat do main ani po 5 pokusech — zkuste workflow znovu nebo commitněte data/ai-provoz.json ručně."
+          exit 1

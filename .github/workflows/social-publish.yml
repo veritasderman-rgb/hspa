@@ -26,6 +26,12 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Kill switch AI provozu
+        # GOVERNANCE.md § 5: při stavu „pozastaveno" v data/ai-provoz.json skončí
+        # job tady kódem 1 — dřív než cokoli nainstaluje, pošle nebo commitne.
+        # Přepíná workflow ai-provoz.yml.
+        run: node scripts/ai-provoz.js check
+
       - name: Instalace závislostí
         run: npm ci
 

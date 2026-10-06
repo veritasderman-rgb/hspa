@@ -33,6 +33,12 @@ jobs:
 
       # Nutné pro generování náhledové grafiky publikovaného článku
       # (scripts/publish-scheduled.js → @resvg/resvg-js přes generate-article-cover.js).
+      - name: Kill switch AI provozu
+        # GOVERNANCE.md § 5: při stavu „pozastaveno" v data/ai-provoz.json skončí
+        # job tady kódem 1 — dřív než cokoli nainstaluje, pošle nebo commitne.
+        # Přepíná workflow ai-provoz.yml.
+        run: node scripts/ai-provoz.js check
+
       - name: Install dependencies
         run: npm ci
 

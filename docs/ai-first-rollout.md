@@ -39,37 +39,64 @@ mu zbývá, je nárazové: priority, vnější vztahy, rozhodnutí.
 - [x] `o-projektu.html` → blok „Kdo tu rozhoduje" se stavem provozu
 - [x] blok A rutiny: kill switch, převzetí PR se „změnami vyžadovány", čtení priorit týdne
 
-## Fáze 1 · týden 1–2: brána a kill switch živě (kroky vydavatele)
+## Fáze 1 · týden 1–2: brána a kill switch živě
 
-Tyto kroky sahají do nastavení GitHubu a plánovače, ke kterým agentní session nemá
-(a nemá mít) přístup. Dvě položky jsou soubory workflows — sandbox session je
-odmítl zapsat; jsou popsané přesně, aby je šlo založit ručně nebo v session s vaším
-souhlasem.
+Stav k 2026-10-06 (PR „workflows brány a kill switche"): soubory v repu jsou hotové,
+labely založené, Routine editora založená (vypnutá). Vydavateli zbývají dva kroky,
+které z agentní session nejdou (proxy GitHubu zápis do nastavení repa nepouští):
+**import rulesetu** a **zkouška kill switche** po merge tohoto PR.
 
-- [ ] **Workflow `pr-gate.yml`** (`on: pull_request` opened/synchronize/reopened/ready_for_review;
-  `permissions: pull-requests: write, issues: write`; checkout s `fetch-depth: 0`, Node 22;
-  krok v `05_M1_Starter`: `node scripts/pr-gate.js --base origin/<base_ref> --head HEAD --markdown >> $GITHUB_STEP_SUMMARY`
-  a `--label-only` → label; krok `gh label create brana-auto|brana-editor|brana-clovek --force`
-  a `gh pr edit <n> --add-label <label> --remove-label <ostatní dvě>`, `continue-on-error: true`
-  kvůli fork PR). Nic nemerguje.
-- [ ] **Workflow `ai-provoz.yml`** (`workflow_dispatch` se vstupy `akce: pozastavit|obnovit`
-  a `duvod`; `permissions: contents: write`; v `05_M1_Starter` spustí
-  `node scripts/ai-provoz.js pause --duvod "$DUVOD" --kdo "$GITHUB_ACTOR"` nebo `resume`,
-  commitne `data/ai-provoz.json` jako `chore(ai-provoz): …` a pushne do `main`;
-  `concurrency: ai-provoz`).
-- [ ] **Kill switch v cronech**: do `publish-articles.yml`, `social-generate.yml`,
-  `social-publish.yml`, `newsletter-weekly.yml`, `awareness-weekly.yml` a `refresh.yml`
-  přidat před instalaci závislostí krok
-  `- name: Kill switch AI provozu` / `run: node scripts/ai-provoz.js check`
-  (working-directory už je `05_M1_Starter`). Při pozastavení job skončí s kódem 1.
-- [ ] **Branch protection `main`**: required checks `Deploy check`, `Visual + a11y regression`,
-  `Brána PR`; zákaz force-push; „Require linear history" **ne** (repo merguje merge commitem).
-  Bez „require approvals" — schválení vyjadřuje editor mergem, člověk třídu C.
-- [ ] **Labely**: `rozhodnuti`, `incident` (brána si `brana-*` založí sama).
-- [ ] **Routine `HSPA – editor`** podle `PROMPT_EDITOR.md` § 7 (cron `0 5 * * *`, konektory GitHub + PubMed).
-  První týden spouštět **ručně** (`Run now`) a číst jeho závěrečné zprávy.
-- [ ] Zkouška kill switche: spustit `ai-provoz.yml` → pozastavit → ověřit, že `publish-articles`
-  ručně spuštěný skončí na prvním kroku → obnovit.
+- [x] **Workflow `pr-gate.yml`** — `on: pull_request` (opened/synchronize/reopened/ready_for_review),
+  job `Brána PR`: `scripts/pr-gate.js --markdown` do shrnutí běhu, `--label-only` → label
+  `brana-auto|brana-editor|brana-clovek` (labely si zakládá `gh label create --force`,
+  krok má `continue-on-error` kvůli fork PR). Nic nemerguje.
+- [x] **Workflow `ai-provoz.yml`** — `workflow_dispatch` se vstupy `akce` (`pozastavit|obnovit`,
+  výběr) a `duvod`; `scripts/ai-provoz.js pause|resume --kdo $GITHUB_ACTOR`, commit
+  `chore(ai-provoz): …` do `main` s retry přes rebase, `concurrency: ai-provoz`. Bez `npm ci` —
+  skript je bez závislostí, kill switch musí fungovat i s rozbitým zbytkem repa.
+- [x] **Kill switch v cronech** — `publish-articles`, `social-generate`, `social-publish`,
+  `newsletter-weekly`, `awareness-weekly`, `refresh`: krok `Kill switch AI provozu`
+  (`node scripts/ai-provoz.js check`) hned po `setup-node`, před instalací závislostí.
+  Ověřeno lokálně: `pause` → `check` končí kódem 1, `resume` → 0, `pause` bez důvodu
+  končí kódem 2 a stav nemění.
+- [x] **Doplňkové workflows `deploy-check-skip.yml` a `visual-a11y-skip.yml`** — nutná
+  podmínka pro povinné checky: `deploy-check.yml` a `visual-a11y.yml` mají filtr cest,
+  a u PR, kde se kvůli němu nespustí (jen docs/, prompty, GOVERNANCE.md), by povinný
+  check zůstal „Expected" navždy a PR by nešel zmergovat. Doplňky mají stejné jméno
+  workflow i jobu (`check`, `e2e`), běží na doplňkové cesty (`paths-ignore`) a hlásí
+  úspěch. Postup doporučený GitHubem („Handling skipped but required checks").
+- [ ] **Branch protection `main`** — **krok vydavatele.** Hotový ruleset je v
+  [`docs/github-ruleset-main.json`](github-ruleset-main.json): GitHub → *Settings → Rules →
+  Rulesets → New ruleset ▾ → Import a ruleset* → vybrat soubor → *Create*. Obsah:
+  - povinné checky `check` (Deploy check), `e2e` (Visual + a11y regression), `Brána PR` —
+    jména checků jsou **jména jobů**, ne workflows; bez „require branches up to date";
+  - zákaz force-push (`non_fast_forward`) a smazání větve; bez „require linear history"
+    (repo merguje merge commitem); bez „require approvals" (schválení = merge editora,
+    třídu C merguje člověk);
+  - **výjimka pro aplikaci GitHub Actions** (`Integration` 15368, bypass `always`): bez ní by
+    povinné checky zablokovaly i přímé pushe cronů do `main` s `GITHUB_TOKEN`
+    (publikace, newsletter, refresh, regenerace artefaktů, kill switch). Rulesety na
+    rozdíl od klasické branch protection tuhle výjimku umí, proto ruleset.
+  - Žádná výjimka pro adminy: editor pracuje účtem vydavatele přes MCP, výjimka pro
+    admina by bránu obešla. V nouzi ruleset vypne vydavatel v nastavení (`Disabled`).
+  - Po importu: otevřené PR bez nového pushe nemají check `Brána PR` — editor je srovná
+    `update_pull_request_branch` (merge mainu do větve spustí všechny checky).
+- [x] **Labely** `rozhodnuti`, `incident` založeny (`brana-*` si brána založí sama při prvním běhu).
+- [x] **Routine `HSPA – editor`** založena podle `PROMPT_EDITOR.md` § 7
+  (`trig_01RYcBtKT29MCRCpn6gQZ6Hs`, cron `0 5 * * *`, nová session na každé spuštění,
+  notifikace push + e-mail), **vypnutá** — zapne ji vydavatel po merge tohoto PR, až
+  brána labeluje; do té doby by editor podle § 0 („bez labelu nemerguj") jen psal
+  prázdné zprávy. První týden spouštět **ručně** (`Run now`) a číst závěrečné zprávy.
+  ⚠️ Agentní session nemůže Routine přidat konektory — v *Routines → HSPA – editor →
+  Connectors* zapnout `PubMed` (ověření citací § 3); bez něj editor citace neověří a
+  napíše to do zprávy.
+- [ ] **Zkouška kill switche** — **po merge** (workflow musí být na `main`): Actions →
+  *AI provoz · kill switch* → Run workflow → `pozastavit`, důvod „zkouška" → ověřit
+  commit `chore(ai-provoz): pozastaveno — zkouška` v `main` a stav na *O projektu* →
+  Actions → *Publish scheduled articles* → Run workflow → běh musí skončit **červeně na
+  kroku „Kill switch AI provozu"** (nic neinstaluje, nic nepublikuje) → *AI provoz · kill
+  switch* → `obnovit` → commit `chore(ai-provoz): obnoveno`. Celé do 5 minut.
+  Zkoušku lze zadat i agentní session (má `actions_run_trigger` na tohle repo).
 
 **Kritérium postupu do fáze 2**: editor zmergoval ≥ 10 PR tříd A/B, 0 incidentů S1,
 ≤ 1 S2, žádný PR třídy C zmergovaný editorem.

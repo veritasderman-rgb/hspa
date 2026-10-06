@@ -64,6 +64,10 @@ porada a ombudsman až po první fázi.
 | `HSPA – porada` | `Spusť týdenní poradu podle PROMPT_PORADA.md v kořeni repozitáře hspa: sesbírej metriky, přepiš sekci Priority týdne v 05_M1_Starter/PLAN-PRACE.md, otevři jeden PR a nejvýš jednu issue s rozhodnutími pro vydavatele.` | `30 5 * * 1` | GitHub · `Brevo` · `Buffer` | 2 |
 | `HSPA – ombudsman` | `Spusť běh ombudsmana podle PROMPT_OMBUDSMAN.md v kořeni repozitáře hspa v režimu uvedeném v § 6. Dodrž pojistky § 0 a skonči závěrečnou zprávou § 4.` | `0 6 * * 1-5` | `Gmail` · GitHub | 2 |
 
+Stav 2026-10-06: `HSPA – editor` je založená (`trig_01RYcBtKT29MCRCpn6gQZ6Hs`), zatím
+**vypnutá** — zapnout po merge brány (`pr-gate.yml`) a v jejím nastavení doplnit konektor
+`PubMed` (session, která ji založila, konektory předat nemohla). První týden `Run now`.
+
 Pořadí v ránu: autorka 01:00 → publikační cron 04:00 → editor 05:00 → (pondělí) porada
 05:30 → ombudsman 06:00. Každá rutina čte jako první krok kill switch
 (`node 05_M1_Starter/scripts/ai-provoz.js check`); workflow `ai-provoz.yml` ho přepíná.
