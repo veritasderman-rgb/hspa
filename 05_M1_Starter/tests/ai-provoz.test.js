@@ -17,7 +17,8 @@ test('commitnutý stav je platný a čitelný', () => {
   const s = readState(STATE_FILE);
   assert.ok(['bezi', 'pozastaveno'].includes(s.stav));
   assert.match(s.od, /^\d{4}-\d{2}-\d{2}$/);
-  assert.equal(s.kdo, 'Josef Pavlovic');
+  // `kdo` zapisuje workflow ai-provoz.yml jako GitHub login toho, kdo přepnul (github.actor).
+  assert.ok(typeof s.kdo === 'string' && s.kdo.trim().length > 0, 'kdo musí být vyplněno');
 });
 
 test('neznámý stav se čte jako pozastaveno (fail-safe)', () => {
