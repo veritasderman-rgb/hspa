@@ -23,6 +23,7 @@ Jednostránkový cheatsheet pro rychlou orientaci. Pro hloubku viz
 | Testy | `05_M1_Starter/tests/` (731 testů, 0 failures) |
 | Doložka (registr tvrzení) | `data/claims.json` → klikatelné doložky v článcích; engine `src/dolozka-engine.js`, UI `src/dolozka-inline.js`, statistiky `redakce.html#duveryhodnost` |
 | Dokumentace pro vývojáře | `docs/` (root level) |
+| Ústava provozu, brána PR, kill switch | `GOVERNANCE.md`; `scripts/pr-gate.js` (třída A/B/C), `data/ai-provoz.json` + `scripts/ai-provoz.js`; incidenty `docs/incidents.md` |
 
 ---
 

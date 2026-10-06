@@ -1,6 +1,7 @@
 # Naplánovaná session (Routine) — jak zapnout jedinou rutinu agenta
 
-> **Stav (2026-09-13):** projekt má **jednu** rutinu agenta. Její úplné znění je
+> **Stav (2026-10-06):** projekt má rutinu **autorky** a od AI-first provozu k ní přibývají editor, porada a ombudsman (§ 1b).
+> Původní text: projekt má **jednu** rutinu agenta. Její úplné znění je
 > [`PROMPT_ROUTINE.md`](../PROMPT_ROUTINE.md) v kořeni repozitáře — bloky A–L,
 > kalendář (§ 3) a pravidla šumu (§ 0). Dřívější rutiny (denní články, noční údržba,
 > indikátory, Social, Newsletter, Týdny zdraví) jsou v ní sloučené; jejich prompt
@@ -48,6 +49,27 @@
 i `newsletter-weekly.yml` (čtvrtek 07:33 UTC — páteční kontrola už vidí výsledek);
 2. den čtvrtletí vidí data z kvartálního `refresh.yml` (1. den 06:00 UTC). Cron je
 v UTC — po změně letního/zimního času se místní čas posune o hodinu, což nevadí.
+
+---
+
+## 1b. Další rutiny AI-first provozu (GOVERNANCE.md § 4)
+
+Stejný postup jako v § 1, jen jiný název, prompt, cron a konektory. Zakládají se
+postupně podle fází v [`ai-first-rollout.md`](ai-first-rollout.md) — editor hned,
+porada a ombudsman až po první fázi.
+
+| Routine | Prompt (jedna věta) | Cron (UTC) | Konektory | Fáze |
+|---|---|---|---|---|
+| `HSPA – editor` | `Spusť dnešní běh editora podle PROMPT_EDITOR.md v kořeni repozitáře hspa. Dodrž pojistky § 0, zpracuj otevřené PR z větví claude/* podle tříd brány a skonči závěrečnou zprávou § 6.` | `0 5 * * *` | GitHub · `PubMed` | 1 |
+| `HSPA – porada` | `Spusť týdenní poradu podle PROMPT_PORADA.md v kořeni repozitáře hspa: sesbírej metriky, přepiš sekci Priority týdne v 05_M1_Starter/PLAN-PRACE.md, otevři jeden PR a nejvýš jednu issue s rozhodnutími pro vydavatele.` | `30 5 * * 1` | GitHub · `Brevo` · `Buffer` | 2 |
+| `HSPA – ombudsman` | `Spusť běh ombudsmana podle PROMPT_OMBUDSMAN.md v kořeni repozitáře hspa v režimu uvedeném v § 6. Dodrž pojistky § 0 a skonči závěrečnou zprávou § 4.` | `0 6 * * 1-5` | `Gmail` · GitHub | 2 |
+
+Pořadí v ránu: autorka 01:00 → publikační cron 04:00 → editor 05:00 → (pondělí) porada
+05:30 → ombudsman 06:00. Každá rutina čte jako první krok kill switch
+(`node 05_M1_Starter/scripts/ai-provoz.js check`); workflow `ai-provoz.yml` ho přepíná.
+
+**Jedna session = jedna role.** Nikdy nespouštěj editora v session, která ten den
+psala jako autorka — smysl editora je čerstvý pohled.
 
 ---
 

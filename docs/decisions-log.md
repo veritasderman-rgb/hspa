@@ -212,3 +212,29 @@ mu škodí. Servisní značka bez watchdog kontextu se dá nabídnout krajům, Z
 **Nevracet:** shell samostatného webu nesmí importovat `page-shared.js` (popupy, newsletter, sdílená data) —
 v distu ho nahrazuje `src/pohotovosti-shell.js` se stejnými exporty (hlídá `tests/pohotovosti-site.test.js`).
 Přesměrování 301 z HSPA Monitoru se zapne až samostatným PR po ověření, že doména odpovídá (PLAN-POHOTOVOSTI-DOMENA.md).
+
+## 2026-10-06 — AI-first provoz: ústava, brána tříd A/B/C, kill switch, čtyři role
+
+**Rozhodnutí:** projekt přechází na provoz řízený AI v oddělených rolích (autorka · editor ·
+porada · ombudsman) pod odpovědností fyzické osoby Josefa Pavlovice. **Žádná právnická
+osoba nevzniká.** Nadřazeným dokumentem je `GOVERNANCE.md`; mění se jen PR, který merguje
+vydavatel osobně.
+
+**Mechanismy:** `scripts/pr-gate.js` zařazuje PR mechanicky podle cest do třídy A (auto),
+B (editor merguje po adversariální revizi), C (merguje jen vydavatel: ústava, prompty,
+workflows, osoby, pohotovosti, nové stránky, závislosti, soukromí). `data/ai-provoz.json`
++ `scripts/ai-provoz.js` je kill switch, který čtou crony i rutiny jako první krok.
+Incidenty S1/S2 jdou do `docs/incidents.md` do 24 h.
+
+**Proč:** z posledních 123 commitů bylo 72 od Claude, 33 od bota a 18 od vydavatele — všechny
+merge. Jediná denní lidská činnost bylo kliknutí na merge; zbytek lidské práce (priority,
+vnější vztahy, rozhodnutí) byl nárazový a nedokumentovaný.
+
+**Nevracet:** editor nikdy neopravuje obsah sám a nikdy nemerguje třídu C; autorka nikdy
+nemerguje; nikdo nenastavuje `published: true` ručně; rozšíření pravomocí (B → A) jen
+po 4 týdnech s ≤ 1 incidentem S2 a jen změnou ústavy + brány. Neznámá cesta v bráně
+= třída C, ne B.
+
+**Mimo repo (vydavatel):** workflows `pr-gate.yml` a `ai-provoz.yml` + kill-switch krok
+v šesti cronech (sandbox session je odmítl zapsat), branch protection, Routines editor /
+porada / ombudsman — checklist v `docs/ai-first-rollout.md`.

@@ -160,6 +160,7 @@ kolem 03:00 místního času, viz § 18).
 
 ```bash
 cd 05_M1_Starter
+node scripts/ai-provoz.js check          # kill switch (GOVERNANCE.md § 5): při „pozastaveno" běh končí jednou zprávou, nic dalšího
 git fetch origin main && git checkout -B claude/rutina-$(date -u +%Y-%m-%d) origin/main
 npm ci --no-audit --no-fund 2>/dev/null || npm install
 node scripts/nightly-scan.js            # → reports/nightly-audit-RRRR-MM-DD.{md,json} (gitignored)
@@ -167,9 +168,21 @@ npm run verify:freshness:report          # stav čerstvosti dat (warn > 7 d, fai
 npm run evidence:queue -- --status       # jen v neděli (blok I)
 ```
 
+0. **Kill switch**: je-li `data/ai-provoz.json` ve stavu `pozastaveno`, běh končí
+   závěrečnou zprávou „provoz pozastaveno od … (důvod)" — žádná větev, žádný Buffer,
+   žádný PR. Obnovit ho smí jen vydavatel (`GOVERNANCE.md` § 5).
 1. **Recovery**: existuje-li vzdálená větev `claude/rutina-*` z předchozích dnů **bez
    otevřeného PR** (předchozí běh spadl před uzávěrkou), otevři pro ni PR jako první
    krok (title podle jejích commitů) a teprve pak pokračuj. Nikdy ji nemaž.
+1b. **Změny vyžadovány editorem**: má-li některý otevřený PR `claude/rutina-*` review
+   `REQUEST_CHANGES` od editora (`PROMPT_EDITOR.md`) a od ní nebyl push, vezmi si ho
+   **před** obsahem dne: checkout té větve, oprav přesně vyjmenované nálezy (nic navíc),
+   validace, push. Teprve pak nová větev dne. Dva takové PR = oprav oba, článek dne
+   může odpadnout (napiš to do PR). Nikdy neodpovídej editorovi komentářem — odpověď
+   je push.
+1c. **Priority týdne**: přečti sekci „Priority týdne" v `PLAN-PRACE.md` (přepisuje ji
+   porada, `PROMPT_PORADA.md`). Při routingu v bloku E je to první kritérium po HOT
+   nálezech — pokud priorita neporušuje stropy § 0 ani zdrojová pravidla § 2.
 2. Spočítej kalendářní flagy (§ 3) a **dní od posledního nového článku** (viz E).
 3. Zjisti stav publikační fronty: počet `published: false` záznamů v `data/articles.json`
    a nejzazší `scheduled_for` (potřebné pro E).
@@ -891,6 +904,12 @@ Jedna Routine v Claude Code on the web (zakládá vlastník; přesný postup v
 | **Cron (UTC)** | `0 1 * * *` — 03:00 CEST / 02:00 CET: po půlnočních změnách, před `publish-articles.yml` (04:00 UTC), `awareness-weekly.yml` (po 04:00 UTC) i `newsletter-weekly.yml` (čt 07:33 UTC); 2. den čtvrtletí už vidí data z `refresh.yml` (1. den 06:00 UTC). |
 | **Konektory** | GitHub · `PubMed` · `Consensus` · `hlidac_statu` · `Buffer` · `Brevo` |
 | **Repo / větev** | `veritasderman-rgb/hspa`, `main` (rutina si větev zakládá sama) |
+
+Vedle autorky běží od AI-first provozu (`GOVERNANCE.md` § 4) ještě tři rutiny
+s vlastními soubory: **editor** (`PROMPT_EDITOR.md`, 05:00 UTC — reviduje a merguje
+PR tříd A/B), **porada** (`PROMPT_PORADA.md`, pondělí 05:30 UTC — priority týdne)
+a **ombudsman** (`PROMPT_OMBUDSMAN.md`, pracovní dny 06:00 UTC — schránka). Autorka
+s nimi nekomunikuje jinak než přes PR, labely a `PLAN-PRACE.md`.
 
 Dřívější Routines (`HSPA - clánky`, `HSPA - indikatory`, `Social HSPA`, `Kontrola HSPA`,
 `HSPA Newsletter`) se **vypnou nebo smažou** — jejich prompt soubory byly z repa

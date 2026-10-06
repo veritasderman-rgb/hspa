@@ -36,6 +36,30 @@
 
 ---
 
+## Priority týdne — zavedení (porada zatím neproběhla; sekci vlastní `PROMPT_PORADA.md`)
+
+> Tuto sekci přepisuje každé pondělí porada (GOVERNANCE.md § 4, § 12). Autorka ji čte
+> v bloku A a při routingu v bloku E ji bere jako první kritérium. Dokud první porada
+> neproběhla, platí tyto výchozí priority.
+
+| Metrika | Hodnota | Cíl | Trend |
+|---|---|---|---|
+| Hodiny vydavatele / týden | bez dat | ≤ 1 | — |
+| PR zmergováno editorem (A+B) | 0 % (editor ještě neběží) | ≥ 80 % | — |
+| Opravy po zveřejnění (S1+S2) / 30 d | bez dat | ≤ 2 | — |
+| PR → live medián (A/B) | bez dat | ≤ 24 h | — |
+| Rozhodnutí starší 7 d | 0 | 0 | — |
+| Nový obsah (články · indikátory) | kvóta rutiny | kvóta | — |
+| Dosah (návštěvy · odběratelé · reakce) | bez dat | kontext | — |
+
+**Priority pro autorku (bloky E/F/G rutiny):**
+1. Beze změny proti dosavadnímu routingu (§ 8.1 rutiny) — do první porady.
+
+**Čeká na vydavatele:** kroky fáze 1 v `docs/ai-first-rollout.md` · **Rozhodnutí v issue:** —
+**Trvalé body:** vnější lidský audit — nedomluven; změny pravomocí — žádné.
+
+---
+
 ## 0. Stav původní sady U1–U30 (z v1, 6. 7. 2026)
 
 **Hotovo (PR #740, #741, #746–#748, #759):** U1 freshness gate + smoke log ·
