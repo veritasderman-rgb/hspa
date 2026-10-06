@@ -26,12 +26,46 @@ on:
         default: false
   pull_request:
     branches: [main]
-    paths:
-      - '05_M1_Starter/**'
-      - '.github/workflows/visual-a11y.yml'
+
+# Job `e2e` je povinný check větve main (ruleset, docs/github-ruleset-main.json),
+# proto workflow nemá filtr `paths` — viz vysvětlení v deploy-check.yml. Job
+# `zmeny` zjistí dotčené cesty a `e2e` se přeskočí, když PR frontend nemění;
+# přeskočený job se u povinných checků počítá jako splněný. Ruční spuštění
+# (workflow_dispatch) běží vždy.
 
 jobs:
+  zmeny:
+    name: Dotčené cesty (visual + a11y)
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    outputs:
+      frontend: ${{ steps.filtr.outputs.frontend }}
+    steps:
+      - name: Dotýká se PR frontendu?
+        id: filtr
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+          EVENT: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT" != "pull_request" ]; then
+            echo "frontend=true" >> "$GITHUB_OUTPUT"
+            echo "Ruční spuštění — testy poběží."
+            exit 0
+          fi
+          FILES=$(gh api "repos/$REPO/pulls/$PR/files" --paginate --jq '.[].filename')
+          if printf '%s\n' "$FILES" | grep -qE '^(05_M1_Starter/|\.github/workflows/visual-a11y\.yml$)'; then
+            echo "frontend=true" >> "$GITHUB_OUTPUT"
+            echo "PR mění frontend — vizuální a a11y regrese poběží."
+          else
+            echo "frontend=false" >> "$GITHUB_OUTPUT"
+            echo "PR frontend (05_M1_Starter/) nemění — vizuální a a11y regrese se přeskočí."
+          fi
+
   e2e:
+    needs: zmeny
+    if: needs.zmeny.outputs.frontend == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
