@@ -68,7 +68,9 @@ které z agentní session nejdou (proxy GitHubu zápis do nastavení repa nepou�
   cesty přes API a job `check` / `e2e` se přeskočí, když se PR dashboardu nedotýká —
   přeskočený job GitHub u povinných checků počítá jako splněný. (Dva workflows se
   stejným jménem jobu — původní návrh — GitHub výslovně označuje za nejednoznačné.)
-- [ ] **Branch protection `main`** — **krok vydavatele.** Hotový ruleset je v
+- [ ] **Branch protection `main`** — **krok vydavatele.** (Agentní session ho založit nemůže:
+  proxy GitHubu zápis do nastavení repa nepouští a bezpečnostní klasifikátor session bere
+  výjimku pro GitHub Actions jako udělení oprávnění.) Hotový ruleset je v
   [`docs/github-ruleset-main.json`](github-ruleset-main.json): GitHub → *Settings → Rules →
   Rulesets → New ruleset ▾ → Import a ruleset* → vybrat soubor → *Create*. Obsah:
   - povinné checky `check` (Deploy check), `e2e` (Visual + a11y regression), `Brána PR` —
@@ -93,13 +95,15 @@ které z agentní session nejdou (proxy GitHubu zápis do nastavení repa nepou�
   ⚠️ Agentní session nemůže Routine přidat konektory — v *Routines → HSPA – editor →
   Connectors* zapnout `PubMed` (ověření citací § 3); bez něj editor citace neověří a
   napíše to do zprávy.
-- [ ] **Zkouška kill switche** — **po merge** (workflow musí být na `main`): Actions →
-  *AI provoz · kill switch* → Run workflow → `pozastavit`, důvod „zkouška" → ověřit
-  commit `chore(ai-provoz): pozastaveno — zkouška` v `main` a stav na *O projektu* →
-  Actions → *Publish scheduled articles* → Run workflow → běh musí skončit **červeně na
-  kroku „Kill switch AI provozu"** (nic neinstaluje, nic nepublikuje) → *AI provoz · kill
-  switch* → `obnovit` → commit `chore(ai-provoz): obnoveno`. Celé do 5 minut.
-  Zkoušku lze zadat i agentní session (má `actions_run_trigger` na tohle repo).
+- [x] **Zkouška kill switche** proběhla 2026-10-06 naživo: `ai-provoz.yml` → `pozastavit`
+  (run 37474178110, commit `chore(ai-provoz): pozastaveno — zkouška kill switche`) → ruční
+  *Publish scheduled articles* (run 37474358711) skončil červeně na kroku 4 „Kill switch AI
+  provozu", instalace, publikace i commit přeskočeny → `obnovit` (run 37474451468, commit
+  `chore(ai-provoz): obnoveno`). První pokus odhalil českou uvozovku v shellu (PR #1255);
+  všechny `run:` bloky workflows od té doby procházejí `bash -n`. Pole `kdo` nese GitHub
+  login toho, kdo přepnul (`github.actor`).
+  Postup pro příště: Actions → *AI provoz · kill switch* → Run workflow → `pozastavit` + důvod
+  → ověřit commit v `main` a stav na *O projektu* → `obnovit`.
 
 **Kritérium postupu do fáze 2**: editor zmergoval ≥ 10 PR tříd A/B, 0 incidentů S1,
 ≤ 1 S2, žádný PR třídy C zmergovaný editorem.
