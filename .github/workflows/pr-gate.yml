@@ -1,0 +1,79 @@
+name: Brána PR
+
+# Vydavatelská brána (GOVERNANCE.md § 3): každý PR mechanicky zařadí do třídy
+# A · auto / B · editor / C · člověk podle dotčených cest
+# (05_M1_Starter/scripts/pr-gate.js) a výsledek zapíše jako label
+# brana-auto / brana-editor / brana-clovek + tabulku do shrnutí běhu.
+#
+# Nic nemerguje. Merge dělá editor (třídy A/B, PROMPT_EDITOR.md) nebo
+# vydavatel (třída C). Job je povinný check větve main — když brána
+# spadne, PR nejde zmergovat.
+#
+# Label se nastavuje s continue-on-error: PR z forku má token jen pro čtení,
+# tam zůstane výsledek aspoň ve shrnutí běhu a PR bez labelu editor podle
+# PROMPT_EDITOR.md § 0 nemerguje (= bezpečná strana).
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: pr-gate-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  brana:
+    name: Brána PR
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: 05_M1_Starter
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # Celá historie: brána porovnává merge commit PR proti základní větvi.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      - name: Zařadit PR do třídy
+        id: trida
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          git fetch --no-tags origin "$BASE_REF"
+          node scripts/pr-gate.js --base "origin/$BASE_REF" --head HEAD --markdown >> "$GITHUB_STEP_SUMMARY"
+          LABEL=$(node scripts/pr-gate.js --base "origin/$BASE_REF" --head HEAD --label-only | tail -n 1)
+          case "$LABEL" in
+            brana-auto|brana-editor|brana-clovek) ;;
+            *) echo "::error::Brána nevrátila platný label: '$LABEL'"; exit 1 ;;
+          esac
+          echo "Třída PR → label $LABEL"
+          echo "label=$LABEL" >> "$GITHUB_OUTPUT"
+
+      - name: Nastavit label brány
+        # PR z forku: token bez práva zápisu → krok selže, ale brána ne.
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+          LABEL: ${{ steps.trida.outputs.label }}
+        run: |
+          gh label create brana-auto   --repo "$REPO" --force --color 0E8A16 --description "Brána: třída A — merge po zelené CI (editor, bez obsahové revize)"
+          gh label create brana-editor --repo "$REPO" --force --color 1D76DB --description "Brána: třída B — adversariální revize nezávislým editorem, pak merge"
+          gh label create brana-clovek --repo "$REPO" --force --color B60205 --description "Brána: třída C — merguje jen vydavatel (GOVERNANCE.md § 3)"
+          REMOVE=""
+          for L in brana-auto brana-editor brana-clovek; do
+            [ "$L" = "$LABEL" ] || REMOVE="$REMOVE --remove-label $L"
+          done
+          # shellcheck disable=SC2086
+          gh pr edit "$PR" --repo "$REPO" --add-label "$LABEL" $REMOVE

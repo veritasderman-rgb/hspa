@@ -1,0 +1,49 @@
+{
+  "name": "main — vydavatelská brána (GOVERNANCE.md § 3)",
+  "target": "branch",
+  "enforcement": "active",
+  "conditions": {
+    "ref_name": {
+      "include": [
+        "refs/heads/main"
+      ],
+      "exclude": []
+    }
+  },
+  "bypass_actors": [
+    {
+      "actor_id": 15368,
+      "actor_type": "Integration",
+      "bypass_mode": "always"
+    }
+  ],
+  "rules": [
+    {
+      "type": "deletion"
+    },
+    {
+      "type": "non_fast_forward"
+    },
+    {
+      "type": "required_status_checks",
+      "parameters": {
+        "strict_required_status_checks_policy": false,
+        "do_not_enforce_on_create": false,
+        "required_status_checks": [
+          {
+            "context": "check",
+            "integration_id": 15368
+          },
+          {
+            "context": "e2e",
+            "integration_id": 15368
+          },
+          {
+            "context": "Brána PR",
+            "integration_id": 15368
+          }
+        ]
+      }
+    }
+  ]
+}
