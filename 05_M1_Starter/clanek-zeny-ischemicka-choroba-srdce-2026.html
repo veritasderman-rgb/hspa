@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-10-07
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-10-07
+    creation_phase: rutina+article-write
+    primary_sources_count: 9
+    visual_elements_count: 6
+    notes: "Vytvoreno z discovery 2026-10-07: PubMed trigger Bugiardini R et al., Lancet Reg Health Eur 2026;70:101846, DOI 10.1016/j.lanepe.2026.101846, PMID 42820227, PMCID PMC13626789, typ Journal Article (ne retrakce/erratum/preprint) - overeno v PubMed 2026-10-07, plny text PMC precten. KPI: pomer MPR (mortality-to-prevalence ratio, ASMR/ASPR, GBD 2023) zeny/muzi CR 2023 = 1,14 (plny text, Results 'Mortality normalised for prevalence'); Z-skore rozdilu zeny vs muzi CR 2011 = 4,39, 2023 = 2,18 (abstrakt + plny text). Dalsi zeme 2023: Chorvatsko Z 5,55 / pomer 1,46; Srbsko Z 2,55 / 1,38; Polsko Z -2,55 / 0,84; Slovensko 1,15, Cerna Hora 1,14, S. Makedonie 1,12, BaH 1,11, Bulharsko 0,98. GNI vs MPR r = -0,76, p = 0,003. Slovinsko MPR zeny 2,54 %, muzi 2,53 %. Region 2023: 6,71 mil. prevalentnich pripadu, 3,01 mil. (44,8 %) zeny; umrti 150 575 muzi / 156 663 zeny. CR: v r. 2011 signif. zensky nadbytek CFI pro vysoky TK, 2023 mensi a nesignifikantni; CR chudoba cca 9,5 %; nedostatek orechu a seminek u zen. NESOULAD VE STUDII: abstrakt uvadi regionalni MPR 2011->2023 muzi 4,49->4,37 %, zeny 4,59->4,42 %, plny text 5,32->4,32 % a 5,84->4,48 % (a relativni poklesy 2,6/3,7 % prirazuje ASMR) - regionalni MPR proto v textu necitujeme ciselne; absolutni MPR za CR v textu studie neni. BENCH: Eurostat hlth_cd_asdr2 (I20-I25, TOTAL, RT, standardizovano), API stazeno 2026-10-07, update datasetu 2026-06-08: CZ 2023 zeny 147,93 / muzi 260,97 / celkem 193,59; CZ 2011 zeny 304,45 / muzi 459,21; EU27_2020 2023 zeny 72,15 / muzi 138,22; DE 81,88/174,88; AT 92,29/184,67; PL 149,35/237,68; SK 294,34/397,35. Redakcni vypocty: CZ zeny -51,4 %, muzi -43,2 % (2011-2023); CZ/EU zeny 2,05x, muzi 1,89x. EU27 2011 nepouzito (agregat nesrovnatelny). Eurostat hlth_ehis_pe2e (EHIS 2019, MN_GE150, ISCED TOTAL, age TOTAL=15+, update 2024-01-03, stazeno 2026-10-07): CZ T 25,1 / M 31,1 / F 19,5 %; EU27 T 32,7 / M 37,3 / F 28,5 % (T sedi s kontraktem); mezera F 9,0 b., M 6,2 b. Kontrakt: mortalita_kardiovaskularni 463,75 (2023) vs EU 312,95; kontrola_hypertenze 68 % (2024, SZU EHES); pohybova_aktivita_dospeli 25,1 % (2019) vs EU 32,7; mortalita_inhosp_ami 4,57 % (2024) vs OECD 6,5. EVIDENCE (Consensus 2 dotazy, kazda prace overena v PubMed 2026-10-07): van Oosterhout REM et al., J Am Heart Assoc 2020;9(9):e014733, DOI 10.1161/JAHA.119.014733, PMID 32363989; Bugiardini R et al., J Am Heart Assoc 2017;6(8):e005968, DOI 10.1161/JAHA.117.005968, PMID 28862963; Cenko E et al., Eur Heart J Qual Care Clin Outcomes 2025;11(6):719-729, DOI 10.1093/ehjqcco/qcae035, PMID 38714331. Consensus kontrola: obraz souhlasi (meta-analyzy STEMI Xi 2022, Pancholy 2014 - vyssi kratkodoba mortalita zen, po adjustaci zeslabena). PubMed dotazy 6, Consensus 2. Bez ilustrativni postavy. Ceka na schvaleni redakce."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O 14 % horší poměr. Česko patří mezi tři středoevropské země, kde na ischemickou chorobu srdeční relativně víc umírají ženy · HSPA Monitor</title>
+<meta name="description" content="Česko patří podle nové analýzy dat Global Burden of Disease 2023 v časopise Lancet Regional Health – Europe ke třem ze 13 středoevropských zemí, kde ženy s ischemickou chorobou srdeční umírají vzhledem k počtu nemocných statisticky významně častěji než muži: poměr úmrtnosti k prevalenci mají o 14 % vyšší. Rozdíl se od roku 2011 zmenšil, nezmizel. V absolutních číslech umírají ženy na tuto nemoc méně než muži, standardizovaná úmrtnost českých žen 147,93 na 100 000 obyvatel (Eurostat, 2023) je ale zhruba dvojnásobkem průměru EU. Autoři jako hlavní ženská rizika jmenují vysoký krevní tlak a nedostatek pohybu; jde o modelovaná data, ne o záznamy z nemocnic.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="O 14 % horší poměr. Česko patří mezi tři středoevropské země, kde na ischemickou chorobu srdeční relativně víc umírají ženy">
+<meta property="og:description" content="Studie GBD 2023 v Lancet Regional Health – Europe: české ženy s ischemickou chorobou srdeční mají o 14 % vyšší poměr úmrtnosti k prevalenci než muži. Eurostat: úmrtnost žen 147,93 na 100 000, dvojnásobek EU.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-zeny-ischemicka-choroba-srdce-2026.html">
+<meta property="article:published_time" content="2026-10-08T06:00:00+02:00">
+<meta property="article:section" content="Kardiovaskulární zdraví">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-zeny-ischemicka-choroba-srdce-2026.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "O 14 % horší poměr. Česko patří mezi tři středoevropské země, kde na ischemickou chorobu srdeční relativně víc umírají ženy",
+  "description": "Česko patří podle nové analýzy dat Global Burden of Disease 2023 v časopise Lancet Regional Health – Europe ke třem ze 13 středoevropských zemí, kde ženy s ischemickou chorobou srdeční umírají vzhledem k počtu nemocných statisticky významně častěji než muži: poměr úmrtnosti k prevalenci mají o 14 % vyšší. Rozdíl se od roku 2011 zmenšil, nezmizel. V absolutních číslech umírají ženy na tuto nemoc méně než muži, standardizovaná úmrtnost českých žen 147,93 na 100 000 obyvatel (Eurostat, 2023) je ale zhruba dvojnásobkem průměru EU. Autoři jako hlavní ženská rizika jmenují vysoký krevní tlak a nedostatek pohybu; jde o modelovaná data, ne o záznamy z nemocnic.",
+  "datePublished": "2026-10-08T06:00:00+02:00",
+  "dateModified": "2026-10-07",
+  "inLanguage": "cs",
+  "articleSection": "Kardiovaskulární zdraví",
+  "author": { "@type": "Organization", "name": "Redakce HSPA Monitoru" },
+  "publisher": { "@type": "Organization", "name": "HSPA Monitor · Skóre zdravotnictví", "url": "https://skorezdravotnictvi.cz" },
+  "mainEntityOfPage": "https://skorezdravotnictvi.cz/clanek-zeny-ischemicka-choroba-srdce-2026.html"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Kardiovaskulární zdraví</span>
+        <span class="article-tag article-tag-muted">ischemická choroba srdeční · ženy · Global Burden of Disease · krevní tlak · pohyb</span>
+      </div>
+      <h1 class="article-title">O 14 % horší poměr. Česko patří mezi tři středoevropské země, kde na ischemickou chorobu srdeční relativně víc umírají ženy</h1>
+      <p class="article-deck">
+        Česko patří podle nové analýzy dat Global Burden of Disease 2023 v časopise Lancet Regional Health – Europe ke třem ze 13 středoevropských zemí, kde ženy s ischemickou chorobou srdeční umírají vzhledem k počtu nemocných statisticky významně častěji než muži: poměr úmrtnosti k prevalenci mají o 14 % vyšší. Rozdíl se od roku 2011 zmenšil, nezmizel. V absolutních číslech umírají ženy na tuto nemoc méně než muži, standardizovaná úmrtnost českých žen 147,93 na 100 000 obyvatel (Eurostat, 2023) je ale zhruba dvojnásobkem průměru EU. Autoři jako hlavní ženská rizika jmenují vysoký krevní tlak a nedostatek pohybu; jde o modelovaná data, ne o záznamy z nemocnic.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">8. října 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">9 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Ischemická choroba srdeční, tedy nemoc zúžených věnčitých tepen, kterou známe hlavně podle infarktu, se v Česku pořád považuje za „mužskou“ nemoc. Statistika úmrtí tomu dává zčásti za pravdu: muži na ni umírají častěji. Mezinárodní tým kardiologů a epidemiologů vedený Raffaelem Bugiardinim z Boloňské univerzity ale položil jinou otázku. Ne kolik lidí na nemoc umírá, ale kolik jich umírá <strong>vzhledem k tomu, kolik jich s ní žije</strong>. A v tomto pohledu vychází Česko jako jedna ze tří zemí střední Evropy, kde jsou na tom ženy statisticky významně hůř než muži.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCntH">
+        <figcaption class="av-figure-h" id="avCntH">Ischemická choroba srdeční v Česku podle pohlaví: čtyři čísla (Bugiardini et al., GBD 2023; Eurostat 2023)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="1.14" data-decimals="2">1,14</span>
+            <span class="av-counter-label">poměr MPR ženy / muži, Česko 2023</span>
+            <span class="av-counter-foot">ženy o 14 % vyšší úmrtnost vzhledem k prevalenci</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="2.18" data-decimals="2">2,18</span>
+            <span class="av-counter-label">Z-skóre rozdílu ženy vs. muži, 2023</span>
+            <span class="av-counter-foot">2011: 4,39; práh významnosti 1,96</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="147.93" data-decimals="2">147,93</span>
+            <span class="av-counter-label">úmrtí žen na 100 000 (standardizováno), 2023</span>
+            <span class="av-counter-foot">EU-27: 72,15; muži v ČR: 260,97</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="51.4" data-decimals="1" data-prefix="−" data-suffix=" %">−51,4 %</span>
+            <span class="av-counter-label">pokles úmrtnosti žen 2011–2023</span>
+            <span class="av-counter-foot">muži −43,2 %; redakční výpočet</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Bugiardini R. et al., Lancet Regional Health – Europe 2026, data Global Burden of Disease 2023 (poměr MPR, Z-skóre); Eurostat hlth_cd_asdr2, MKN-10 I20–I25, staženo 7. 10. 2026 (úmrtnost). Procentní poklesy spočítala redakce HSPA Monitoru.</p>
+      </figure>
+
+      <h3>Co studie měří a co z ní vyšlo pro Česko</h3>
+      <p>
+        Studie vyšla v srpnu 2026 v časopise <em>The Lancet Regional Health – Europe</em> (<a href="https://doi.org/10.1016/j.lanepe.2026.101846" target="_blank" rel="noopener">doi.org ↗</a>). Autoři pracovali s odhady projektu Global Burden of Disease (GBD) 2023 pro 13 zemí, které GBD řadí do střední Evropy: od Polska, Česka, Slovenska a Maďarska po Slovinsko, Chorvatsko, Srbsko, Bosnu a Hercegovinu, Černou Horu, Severní Makedonii, Albánii, Rumunsko a Bulharsko. Porovnali dva roky, 2011 a 2023.
+      </p>
+      <p>
+        Hlavním ukazatelem je <strong>poměr úmrtnosti k prevalenci</strong> (MPR, mortality-to-prevalence ratio): věkově standardizovaná úmrtnost na ischemickou chorobu srdeční vydělená věkově standardizovaným počtem lidí, kteří s ní žijí. Autoři ho používají jako populační náhradu za smrtnost, tedy za to, jak často nemoc končí smrtí. Sami ale zdůrazňují, že nejde o skutečnou smrtnost jednotlivých pacientů ani o odhad přežití.
+      </p>
+      <p>
+        Pro Česko vychází poměr MPR žen k MPR mužů v roce 2023 na <strong>1,14</strong>. Ženy s ischemickou chorobou srdeční tedy umírají vzhledem k počtu nemocných zhruba o 14 % častěji než muži. Statistickou významnost rozdílu autoři měří Z-skóre, které musí přesáhnout 1,96. V roce 2011 dosahovalo v Česku 4,39, v roce 2023 už jen <strong>2,18</strong>. Rozdíl se zmenšil, ale zůstal nad prahem. Kromě Česka platí totéž jen pro Chorvatsko (Z = 5,55) a Srbsko (Z = 2,55). Opačný obraz má Polsko, kde jsou na tom hůř muži (Z = −2,55).
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-good">
+          <span class="av-counter" data-value="0.76" data-decimals="2" data-prefix="r = −">r = −0,76</span>
+          <span class="av-counter-label">korelace národního důchodu na obyvatele a poměru MPR, 13 zemí</span>
+          <span class="av-counter-foot">p = 0,003; Bugiardini et al., GBD 2023</span>
+        </div>
+      </aside>
+      <p>
+        Dobrá zpráva je, že poměr úmrtnosti k prevalenci v Česku mezi lety 2011 a 2023 významně klesl u obou pohlaví, a to podle autorů nejstrměji v regionu spolu se Slovinskem a Slovenskem. Bohatší země mají obecně nižší MPR: korelace s hrubým národním důchodem na obyvatele činí r = −0,76 (p = 0,003). Česko je ale podle autorů zajímavé právě tím, že se do tohoto vysvětlení nevejde. Je to země s vysokými příjmy a nízkou chudobou (autoři uvádějí zhruba 9,5 %), a přesto má ženy statisticky významně v nevýhodě. U Chorvatska a Srbska autoři ženskou nevýhodu spojují i s vysokou mírou chudoby; u Česka takové vysvětlení nefunguje.
+      </p>
+      <div class="av-aside-clear"></div>
+
+      <h3>Absolutní čísla: ženy umírají méně, ale pořád dvakrát víc než v EU</h3>
+      <p>
+        Aby bylo jasno: studie netvrdí, že na ischemickou chorobu srdeční umírá víc žen než mužů. Podle Eurostatu zemřelo v Česku v roce 2023 na ischemickou chorobu srdeční (diagnózy MKN-10 I20–I25) <strong>147,93 žen na 100 000</strong> obyvatel a 260,97 mužů na 100 000, po standardizaci na stejnou věkovou strukturu. Úmrtnost žen je tedy zhruba 0,57násobkem úmrtnosti mužů. Od roku 2011, kdy činila 304,45 u žen a 459,21 u mužů, klesla u žen o 51,4 % a u mužů o 43,2 %.
+      </p>
+      <p>
+        Ve srovnání s Evropou je ale obraz méně příznivý. Průměr EU-27 činil v roce 2023 u žen 72,15 a u mužů 138,22 na 100 000. České ženy tak umírají na ischemickou chorobu srdeční zhruba <strong>2,05krát</strong> častěji než průměrná Evropanka, čeští muži 1,89krát častěji než průměrný Evropan. Relativní odstup od Evropy je u žen o něco větší.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTabH">
+        <figcaption class="av-figure-h" id="avTabH">Standardizovaná úmrtnost na ischemickou chorobu srdeční (I20–I25) na 100 000 obyvatel podle pohlaví, 2023 (Eurostat, hlth_cd_asdr2)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Země</th>
+                <th scope="col" class="av-num">Ženy</th>
+                <th scope="col" class="av-num">Muži</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">EU-27</th><td class="av-num">72,15</td><td class="av-num">138,22</td></tr>
+              <tr><th scope="row">Německo</th><td class="av-num">81,88</td><td class="av-num">174,88</td></tr>
+              <tr><th scope="row">Rakousko</th><td class="av-num">92,29</td><td class="av-num">184,67</td></tr>
+              <tr class="av-row-highlight"><th scope="row">Česko</th><td class="av-num av-bad">147,93</td><td class="av-num av-bad">260,97</td></tr>
+              <tr><th scope="row">Polsko</th><td class="av-num">149,35</td><td class="av-num">237,68</td></tr>
+              <tr><th scope="row">Slovensko</th><td class="av-num">294,34</td><td class="av-num">397,35</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat, Causes of death – standardised death rate (hlth_cd_asdr2), MKN-10 I20–I25, všechny věkové skupiny, aktualizace datasetu 8. 6. 2026, staženo přes API 7. 10. 2026.</p>
+      </figure>
+
+      <p>
+        Mezi sousedy je na tom hůř jen Slovensko. Polské ženy mají úmrtnost téměř stejnou jako české (149,35), polští muži nižší (237,68), což sedí s tím, že studie v Polsku našla nevýhodu na straně mužů. Úmrtnost a poměr MPR ale měří dvě různé věci: první říká, kolik lidí na nemoc umírá v populaci, druhý, jak často umírají ti, kdo nemoc mají.
+      </p>
+
+      <div class="article-callout-caveat" role="note">
+        <strong>Co tato čísla neumějí.</strong>
+        Poměr MPR je modelovaný ukazatel. GBD odhaduje prevalenci ischemické choroby srdeční z průzkumů, registrů a dat pojišťoven a při tom z části vychází právě z úmrtnosti, takže čitatel a jmenovatel nejsou na sobě nezávislé. Autoři výslovně píšou, že MPR není smrtnost jednotlivých pacientů ani pravděpodobnost přežití a že jejich design neumožňuje závěry o příčinách na úrovni jednotlivce. Z-testy berou jako průzkumné a na mnohočetné srovnávání je nekorigovali. Studie navíc není vnitřně úplně konzistentní: regionální průměry MPR za roky 2011 a 2023 se v abstraktu a ve výsledcích liší, proto je v tomto článku neuvádíme. Absolutní hodnotu MPR pro Česko text studie neuvádí. Čísla Eurostatu jsou z jiného zdroje a jiné metodiky (registrovaná úmrtí, standardizace na evropskou populaci), s odhady GBD se proto nesčítají ani přímo neporovnávají.
+      </div>
+
+      <h3>Proč ženy dopadají hůř: tlak, pohyb, strava</h3>
+      <p>
+        Autoři zkoumali, jaký podíl úmrtnosti připadá na jednotlivé rizikové faktory, opět vztažený k počtu nemocných. V abstraktu shrnují, že k nadměrné úmrtnosti žen nejvíc přispíval <strong>vysoký systolický krevní tlak</strong> a <strong>fyzická nečinnost</strong>, zatímco kouření dopadalo nepoměrně víc na muže. Pro Česko je výsledek u krevního tlaku zajímavý: v roce 2011 patřilo mezi země s významně vyšší ženskou zátěží z vysokého tlaku, v roce 2023 už rozdíl zůstal menší a statisticky nevýznamný. Nedostatek pohybu nesli podle studie hůř ženy ve všech zemích, výrazně hlavně na Balkáně.
+      </p>
+      <p>
+        Data HSPA Monitoru ukazují, že obě rizika jsou v Česku živá. Indikátor <a href="indicator.html?id=kontrola_hypertenze">kontrolované hypertenze</a> vykazuje <strong>68 %</strong> (2024, SZÚ, studie EHES): u necelých sedmi z deseti dospělých s diagnostikovaným vysokým tlakem byl při posledním měření pod 140/90 mmHg. Doporučenou <a href="indicator.html?id=pohybova_aktivita_dospeli">pohybovou aktivitu</a> podle WHO, tedy aspoň 150 minut středně intenzivního pohybu týdně, splňovalo v roce 2019 jen <strong>25,1 %</strong> lidí od 15 let, proti 32,7 % v EU (Eurostat). Za tímto průměrem se skrývá velký rozdíl mezi pohlavími: podle téhož šetření Eurostatu (EHIS 2019) splňovalo doporučení <strong>19,5 % žen</strong> a 31,1 % mužů, v EU 28,5 % žen a 37,3 % mužů. Česká mezera proti Evropě je tedy u žen (9 procentních bodů) větší než u mužů (6,2 bodu). Indikátor kontrolované hypertenze rozdělený podle pohlaví nemáme.
+      </p>
+      <p>
+        Třetí složkou je strava. U Česka autoři našli široký deficit celozrnných obilovin, vlákniny a ořechů a semínek u obou pohlaví, přičemž ženy měly hlubší nedostatek právě ořechů a semínek. Nízký příjem ořechů a semínek byl podle studie jediným stravovacím faktorem spojeným s významnou ženskou nevýhodou ve všech třech zemích s největším rozdílem, tedy v Chorvatsku, Srbsku i Česku. Odhady stravy v GBD jsou ale nejistější než ostatní, autoři je proto porovnávali se Slovinskem jako referenční zemí.
+      </p>
+
+      <h3>Co se děje v nemocnici a cestou do ní</h3>
+      <p>
+        Studie GBD nevidí, co se děje s konkrétní pacientkou. To ukazují klinické registry, a ty se v jednom shodují: ženy s infarktem se k léčbě dostávají později a dopadají hůř. Metaanalýza van Oosterhoutové, de Boerové a kolegů z roku 2020 (<em>Journal of the American Heart Association</em>, <a href="https://doi.org/10.1161/JAHA.119.014733" target="_blank" rel="noopener">doi.org ↗</a>) shrnula 27 studií. Ženy s akutním koronárním syndromem měly častěji bolest mezi lopatkami (poměr šancí 2,15), nevolnost nebo zvracení (1,64) a dušnost (1,34), méně často bolest na hrudi (0,70). Bolest na hrudi ale byla nejčastějším příznakem u obou pohlaví, u 79 % mužů a 74 % žen. Autoři proto doporučují přestat ženské příznaky nazývat „atypickými“.
+      </p>
+      <p>
+        Druhou roli hraje čas. Tým téhož Raffaela Bugiardiniho v roce 2017 analyzoval 6 022 pacientů s infarktem typu STEMI ze 41 nemocnic v registru ISACS-TC, který sbírá data v transformujících se zemích střední a jihovýchodní Evropy (<a href="https://doi.org/10.1161/JAHA.117.005968" target="_blank" rel="noopener">doi.org ↗</a>). Od prvních příznaků po příjezd do nemocnice uplynulo u žen v mediánu 270 minut, u mužů 240 minut. Ženské pohlaví bylo spojeno s vyšším rizikem úmrtí do 30 dnů (poměr šancí 1,58). U pacientů, kteří dorazili do hodiny od příznaků, se rozdíl mezi pohlavími neprojevil.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avFlowH">
+        <figcaption class="av-figure-h" id="avFlowH">Kde ženy s infarktem ztrácejí čas a šance: co ukazují klinické studie (van Oosterhout et al. 2020; Bugiardini et al. 2017; Cenko et al. 2025)</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Příznaky</h4>
+            <p class="av-flow-desc">Bolest na hrudi u 74 % žen; častěji bolest mezi lopatkami, nevolnost, dušnost.</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Cesta do nemocnice</h4>
+            <p class="av-flow-desc">Medián od příznaků k příjezdu 270 minut u žen proti 240 u mužů (STEMI, ISACS-TC).</p>
+            <span class="av-flow-tag">do 1 hodiny bez rozdílu</span>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Léčba</h4>
+            <p class="av-flow-desc">I po revaskularizaci 30denní úmrtnost žen 5,6 % proti 2,6 % u mužů (STEMI, země s vysokými příjmy).</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Výsledek</h4>
+            <p class="av-flow-desc">Ženské pohlaví spojeno s vyšším rizikem úmrtí do 30 dnů, poměr šancí 1,58 (ISACS-TC).</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> van Oosterhout REM et al., J Am Heart Assoc 2020 (metaanalýza 27 studií); Bugiardini R et al., J Am Heart Assoc 2017 (6 022 pacientů se STEMI); Cenko E et al., Eur Heart J Qual Care Clin Outcomes 2025 (22 087 pacientů s infarktem, 12 evropských zemí). Ověřeno v PubMed 7. 10. 2026.</p>
+      </figure>
+
+      <p>
+        Samotná rychlá léčba ale nestačí. Novější práce Edíny Cenkové a kolegů (<em>European Heart Journal – Quality of Care and Clinical Outcomes</em>, 2025, <a href="https://doi.org/10.1093/ehjqcco/qcae035" target="_blank" rel="noopener">doi.org ↗</a>) sledovala 22 087 pacientů s infarktem z 12 evropských zemí. Ve skupině zemí s vysokými příjmy zemřelo do 30 dnů po infarktu typu STEMI 6,8 % žen a 5,1 % mužů. I mezi těmi, kdo podstoupili revaskularizaci, tedy obnovení průtoku tepnou, to bylo 5,6 % žen proti 2,6 % mužů. Autoři z toho vyvozují, že rozdíl nejde vysvětlit jen nerovným přístupem k zákrokům a že roli hrají i přidružené nemoci a sociální faktory. Podobně v nové studii GBD: Chorvatsko má v regionu jednu z nejvyšších kapacit pro revaskularizaci, a přesto největší nevýhodu žen.
+      </p>
+
+      <h3>Mezinárodní srovnání: Slovinsko ukazuje, že to jde</h3>
+
+      <figure class="av-figure" aria-labelledby="avBarH">
+        <figcaption class="av-figure-h" id="avBarH">Poměr MPR žen k MPR mužů u ischemické choroby srdeční, 2023 (Bugiardini et al., GBD 2023; hodnoty nad 1 = horší pro ženy)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="1.6">
+          <li class="av-bar-row av-bar-row-bad" data-value="1.46" data-label="Chorvatsko" data-display="1,46" data-note="Z = 5,55"></li>
+          <li class="av-bar-row av-bar-row-bad" data-value="1.38" data-label="Srbsko" data-display="1,38" data-note="Z = 2,55"></li>
+          <li class="av-bar-row" data-value="1.15" data-label="Slovensko" data-display="1,15"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="1.14" data-label="Česko" data-display="1,14" data-note="Z = 2,18"></li>
+          <li class="av-bar-row" data-value="1.14" data-label="Černá Hora" data-display="1,14"></li>
+          <li class="av-bar-row" data-value="1.12" data-label="Severní Makedonie" data-display="1,12"></li>
+          <li class="av-bar-row" data-value="1.11" data-label="Bosna a Hercegovina" data-display="1,11"></li>
+          <li class="av-bar-row" data-value="0.98" data-label="Bulharsko" data-display="0,98"></li>
+          <li class="av-bar-row av-bar-row-good" data-value="0.84" data-label="Polsko" data-display="0,84" data-note="Z = −2,55, nevýhoda mužů"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Bugiardini R. et al., Lancet Regional Health – Europe 2026;70:101846, oddíl Results; data Global Burden of Disease 2023. Statisticky významné (|Z| ≥ 1,96) jen Chorvatsko, Srbsko, Česko a Polsko. Ostatní země studie uvádí jen v tabulkách, proto je graf nezobrazuje.</p>
+      </figure>
+
+      <p>
+        Slovensko má poměr dokonce o setinu vyšší než Česko (1,15), rozdíl tam ale podle autorů nedosáhl statistické významnosti. Jako vzor autoři používají <strong>Slovinsko</strong>: má nejnižší úmrtnost na ischemickou chorobu srdeční v regionu a jeho MPR, 2,54 % u žen a 2,53 % u mužů, se statisticky neliší od zakládajících zemí EU, s výjimkou mírně horšího výsledku mužů proti Francii. Postkomunistická země se srovnatelným zdravotnickým modelem tedy dosáhla západoevropské úrovně u obou pohlaví. Česko má díky síti kardiocenter výbornou akutní péči: nemocniční úmrtnost po infarktu podle indikátoru <a href="indicator.html?id=mortalita_inhosp_ami">mortality po akutním infarktu</a> činí 4,57 % (2024, ÚZIS) proti 6,5 % v OECD. Tento indikátor ale pohlaví nerozlišuje.
+      </p>
+
+      <h3>Co vývoj přináší</h3>
+      <p>
+        Trend je dobrý: úmrtnost na ischemickou chorobu srdeční v Česku od roku 2011 klesla u žen o víc než polovinu a Z-skóre rozdílu mezi pohlavími v poměru MPR kleslo zhruba na polovinu. Celkově ale Česko zůstává v kardiovaskulární úmrtnosti vysoko: <a href="indicator.html?id=mortalita_kardiovaskularni">standardizovaná úmrtnost na nemoci oběhové soustavy</a> činila 463,75 na 100 000 (2023) proti 312,95 v EU (Eurostat). Nová studie k tomu přidává pohled, který v datech HSPA Monitoru chybí. Úmrtnost podle pohlaví zveřejňuje Eurostat, ale ukazatel, jak často umírají ženy a muži, kteří už nemoc mají, v našem kontraktu nemáme.
+      </p>
+      <p>
+        Autoři doporučují sledovat smrtnost odděleně pro ženy a muže a zacílit prevenci podle rizik, která v dané zemi převažují. Pro Česko to podle nich znamená hlavně krevní tlak, pohyb a stravu u žen, u mužů dál tabák.
+      </p>
+
+      <h3>Co s tím</h3>
+      <p>
+        <strong>ÚZIS a odborné společnosti:</strong> zveřejňovat ukazatele akutní kardiologické péče odděleně pro ženy a muže, tedy nemocniční a 30denní úmrtnost po infarktu, dobu od příznaků k příjezdu a podíl revaskularizovaných. Jen tak se ověří, zda modelový nález GBD odpovídá tomu, co se děje v českých nemocnicích.
+      </p>
+      <p>
+        <strong>Zdravotnická záchranná služba a praktičtí lékaři:</strong> zahrnout do protokolů a vzdělávání příznaky, které ženy hlásí častěji: bolest mezi lopatkami, nevolnost, dušnost. Bolest na hrudi zůstává nejčastějším příznakem i u žen, její nepřítomnost ale infarkt nevylučuje.
+      </p>
+      <p>
+        <strong>Ministerstvo zdravotnictví a pojišťovny:</strong> v programech prevence se zaměřit na kontrolu krevního tlaku a na pohyb a vyhodnocovat jejich výsledky podle pohlaví. Pohybu se to týká nejvíc: doporučení WHO dnes splňuje jen pětina českých žen.
+      </p>
+      <p>
+        <strong>Pro čtenářky a čtenáře:</strong> při podezření na infarkt volejte 155, i když příznaky nejsou „učebnicové“. Studie ISACS-TC ukázala, že u pacientů, kteří se do nemocnice dostali do hodiny, rozdíl mezi ženami a muži zmizel. Kdo má vysoký tlak, ať ho nechá pravidelně měřit a léčit.
+      </p>
+      <p>
+        <strong>HSPA Monitor:</strong> studii bereme jako signál, ne jako hotový důkaz. Pokud ÚZIS zveřejní data akutní péče podle pohlaví, doplníme je k indikátorům a tento text aktualizujeme.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=mortalita_kardiovaskularni"><strong>Mortalita na kardiovaskulární nemoci (standardizovaná)</strong></a> — 463,75 na 100 000 (2023, Eurostat) proti EU 312,95</li>
+        <li><a href="indicator.html?id=kontrola_hypertenze"><strong>Kontrolovaná hypertenze (TK &lt; 140/90 mmHg)</strong></a> — 68 % (2024, SZÚ, EHES)</li>
+        <li><a href="indicator.html?id=pohybova_aktivita_dospeli"><strong>Doporučená pohybová aktivita (15+)</strong></a> — 25,1 % (2019, Eurostat) proti EU 32,7 %; ženy 19,5 %, muži 31,1 %</li>
+        <li><a href="indicator.html?id=mortalita_inhosp_ami"><strong>Nemocniční úmrtnost po akutním infarktu myokardu</strong></a> — 4,57 % (2024, ÚZIS NRH) proti OECD 6,5 %</li>
+      </ul>
+      <p>Související články: <a href="clanek-kardiovaskularni-mortalita.html">Český kardiovaskulární paradox</a> · <a href="clanek-akutni-infarkt.html">Co Česko v péči o akutní infarkt zvládlo</a> · <a href="clanek-pohyb.html">Pohyb</a></p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Studie, ze které článek vychází</h5>
+        <ul class="article-sources-list">
+          <li><strong>Bugiardini R, Rahaman T, Badimon L, Cenko E, Anand SS, Manfrini O, Merkely B, Milicic D, Townsend N, Vaccarino V, Gulati M, Gale CP. Contributions of diet and lifestyle to sex differences in ischaemic heart disease burden in Central Europe: an analysis of the Global Burden of Disease Study 2023.</strong> <em>Lancet Reg Health Eur</em> 2026;70:101846. DOI 10.1016/j.lanepe.2026.101846. PMID 42820227. Ověřeno v PubMed 7. 10. 2026 (plný text v PMC). <a href="https://doi.org/10.1016/j.lanepe.2026.101846" target="_blank" rel="noopener">doi.org ↗</a> · <a href="https://pubmed.ncbi.nlm.nih.gov/42820227/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární zdroje dat</h5>
+        <ul class="article-sources-list">
+          <li><strong>Eurostat — hlth_cd_asdr2</strong> (Causes of death – standardised death rate), MKN-10 I20–I25, podle pohlaví, CZ, EU-27, DE, AT, PL, SK, roky 2011 a 2023; aktualizace datasetu 8. 6. 2026, staženo přes API 7. 10. 2026. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_asdr2/default/table" target="_blank" rel="noopener">ec.europa.eu ↗</a></li>
+          <li><strong>Datový kontrakt HSPA Monitoru</strong> — indikátory mortalita_kardiovaskularni (Eurostat), kontrola_hypertenze (SZÚ, EHES), pohybova_aktivita_dospeli (Eurostat, EHIS), mortalita_inhosp_ami (ÚZIS, NRH). <a href="hspa-prehled.html">hspa-prehled ↗</a></li>
+          <li><strong>Eurostat — hlth_ehis_pe2e</strong> (EHIS 2019, aerobní pohybová aktivita mimo práci aspoň 150 minut týdně, 15+, podle pohlaví; CZ: ženy 19,5 %, muži 31,1 %, celkem 25,1 %; EU-27: 28,5 %, 37,3 %, 32,7 %), staženo přes API 7. 10. 2026. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_ehis_pe2e/default/table" target="_blank" rel="noopener">ec.europa.eu ↗</a></li>
+          <li><strong>SZÚ — European Health Examination Survey (EHES)</strong> — zdroj indikátoru kontrolované hypertenze. <a href="https://szu.gov.cz/tema/podpora-zdravi/ehes/" target="_blank" rel="noopener">szu.gov.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Evidence (vyhledáno v databázi Consensus, ověřeno v PubMed 7. 10. 2026)</h5>
+        <ul class="article-sources-list">
+          <li><strong>van Oosterhout REM, de Boer AR, Maas AHEM, Rutten FH, Bots ML, Peters SAE. Sex Differences in Symptom Presentation in Acute Coronary Syndromes: A Systematic Review and Meta-analysis.</strong> <em>J Am Heart Assoc</em> 2020;9(9):e014733. DOI 10.1161/JAHA.119.014733. PMID 32363989. Ověřeno v PubMed 7. 10. 2026. <a href="https://doi.org/10.1161/JAHA.119.014733" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Bugiardini R, Ricci B, Cenko E, Vasiljevic Z, Kedev S, Davidovic G, et al. Delayed Care and Mortality Among Women and Men With Myocardial Infarction.</strong> <em>J Am Heart Assoc</em> 2017;6(8):e005968. DOI 10.1161/JAHA.117.005968. PMID 28862963. Ověřeno v PubMed 7. 10. 2026. <a href="https://doi.org/10.1161/JAHA.117.005968" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Cenko E, Yoon J, Bergami M, Gale CP, Vasiljevic Z, Vavlukis M, et al. Coronary revascularization and sex differences in cardiovascular mortality after myocardial infarction in 12 high and middle-income European countries.</strong> <em>Eur Heart J Qual Care Clin Outcomes</em> 2025;11(6):719–729. DOI 10.1093/ehjqcco/qcae035. PMID 38714331. Ověřeno v PubMed 7. 10. 2026. <a href="https://doi.org/10.1093/ehjqcco/qcae035" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Poměry MPR a Z-skóre jsou modelované odhady studie z dat Global Burden of Disease 2023, ne pozorovaná smrtnost pacientů. Úmrtnost podle Eurostatu je registrovaná a standardizovaná na evropskou populaci; obě metodiky nelze přímo porovnávat. Procentní poklesy 2011–2023 a násobky proti EU spočítala redakce HSPA Monitoru z dat Eurostatu. Klinické studie o příznacích a zpoždění léčby pracují s mezinárodními soubory pacientů; pro Česko je bude třeba ověřit na domácích datech. Podíly pohybově aktivních žen a mužů jsou z Eurostatu, hlth_ehis_pe2e (EHIS 2019, 15+, aerobní aktivita aspoň 150 minut týdně).
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
