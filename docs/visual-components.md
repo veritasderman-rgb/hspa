@@ -315,6 +315,7 @@ mobilu řešen horizontálním scrollem v `.av-data-table-wrap`.
 - Mezinárodní srovnání s 3+ sloupci
 - RACI / odpovědnostní matrix (kdo × co × kdy)
 - Scénáře s parametry (cesta A/B/C × dopady)
+- **Ne** pro buňky s celými větami — na to je `.av-stack` (§ 7); první sloupec tabulky má `nowrap` a na mobilu přeteče
 
 ---
 
@@ -474,6 +475,53 @@ minimální bod; ostatní body jen tečku.
 
 Pure geometrie je exportovaná jako `trendGeometry(points, {min, max})`
 (testovatelná bez DOM, `tests/article-visuals.test.js`).
+
+## 7. `.av-stack` — stohované karty pro textové srovnání
+
+Pro srovnání, kde buňky nesou **věty, ne čísla**: tvrzení × zdroj × verdikt,
+téma × kdo × citát, varianta × dopad. `.av-data-table` je na to špatně —
+první sloupec má `white-space: nowrap` a na mobilu celá tabulka scrolluje,
+takže dlouhý text přeteče mimo obrazovku (zjištěno v článku
+`obcan-v-siti-ochrana-verejneho-zdravi-2026`). Karty se stohují pod sebe,
+na viewportu ≥ 640 px volitelně do dvou sloupců.
+
+### Markup
+
+```html
+<figure class="av-figure">
+  <figcaption class="av-figure-h">Tvrzení z měsíčníku vedle indikátorů</figcaption>
+  <ol class="av-stack">
+    <li class="av-stack-item av-stack-item-good">
+      <h4 class="av-stack-h">293 nových diagnóz HIV v roce 2025 (Fošum, Dlouhý)</h4>
+      <p class="av-stack-meta"><a href="indikator-hiv_nove_diagnozy.html">Nově diagnostikované případy HIV</a> · 2,7 na 100 000 (2025) · EU 5,3</p>
+      <p class="av-stack-body"><strong class="av-good">Sedí.</strong> 2,7 na 100 000 odpovídá 293 případům…</p>
+    </li>
+    <li class="av-stack-item">
+      <h4 class="av-stack-h">Roztříštěnost 17 organizací</h4>
+      <p class="av-stack-meta">Vepřek · Fošum · Smejkal</p>
+      <blockquote class="av-stack-quote">„Covid jsme zvládli výjimkami, dočasnými zákony a obrovským nasazením lidí, ne systémem.“ <cite>Matyáš Fošum</cite></blockquote>
+    </li>
+  </ol>
+  <p class="av-figure-note">Zdroj: …</p>
+</figure>
+```
+
+### Části karty
+- `av-stack-h` — titulek (serif, 1 řádek až 2)
+- `av-stack-meta` — malý muted řádek: autoři, indikátor s hodnotou, datum (odkazy dědí barvu)
+- `av-stack-body` — věta/dvě sans; úvodní verdikt zvýrazni `<strong class="av-good|av-warn|av-bad|av-mut">`
+- `av-stack-quote` — doslovný citát (serif kurzíva) s `<cite>` autora
+
+### Modifikátory
+- `av-stack-item-good | -warn | -bad | -neutral` — barva levé linky (verdikt)
+- `av-stack-cols` na `<ol>` — dva sloupce od 640 px (vhodné pro 4–6 krátkých karet)
+
+### Kdy použít
+- Tvrzení vs. indikátor (verdikt + zdůvodnění)
+- „Kdo co říká“ — téma × jména × citát
+- Jakékoli srovnání se 2+ větami v buňce; pro čísla zůstává `.av-data-table`
+
+---
 
 ## Migrace z existujících patternů
 

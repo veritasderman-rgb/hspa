@@ -9513,6 +9513,87 @@ body.nl-popup-open .scroll-top-btn {
   .av-data-table tbody th { font-size: 13.5px; }
 }
 
+/* --- .av-stack — stohované karty pro textové srovnání ------------------
+   Pro srovnání, kde buňky nesou věty (tvrzení × zdroj × verdikt, téma × kdo
+   × citát). .av-data-table je stavěná na čísla: první sloupec má nowrap a na
+   mobilu scrolluje — dlouhý text v ní přeteče. Karty se stohují pod sebe,
+   na širším viewportu volitelně do dvou sloupců (.av-stack-cols). */
+.av-stack {
+  list-style: none;
+  margin: 8px 0 4px;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+.av-stack-item {
+  padding: 14px 16px 13px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--ink);
+  min-width: 0;
+}
+.av-stack-item-good    { border-left-color: var(--good); }
+.av-stack-item-warn    { border-left-color: var(--warn); }
+.av-stack-item-bad     { border-left-color: var(--bad); }
+.av-stack-item-neutral { border-left-color: var(--rule2); }
+.av-stack-h {
+  font-family: var(--serif);
+  font-size: 15.5px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ink);
+  margin: 0 0 6px;
+}
+.av-stack-who {
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 12.5px;
+  color: var(--ink-mut);
+  white-space: nowrap;
+}
+.av-stack-meta {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  color: var(--ink-mut);
+  margin: 0 0 8px;
+}
+.av-stack-meta a { color: inherit; text-decoration-color: var(--rule2); }
+.av-stack-meta a:hover { color: var(--ink); }
+.av-stack-body {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 0;
+}
+.av-stack-body .av-good { color: var(--good); font-weight: 700; }
+.av-stack-body .av-warn { color: var(--warn); font-weight: 700; }
+.av-stack-body .av-bad  { color: var(--bad); font-weight: 700; }
+.av-stack-body .av-mut  { color: var(--ink-mut); font-weight: 700; }
+.av-stack-quote {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 14.5px;
+  line-height: 1.45;
+  color: var(--ink);
+  margin: 0;
+  padding: 0;
+}
+.av-stack-quote cite {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: 12px;
+  color: var(--ink-mut);
+}
+@media (min-width: 640px) {
+  .av-stack-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 /* --- .av-flow ---------------------------------------------------- */
 .av-flow {
   list-style: none;
