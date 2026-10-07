@@ -521,6 +521,21 @@ na viewportu ≥ 640 px volitelně do dvou sloupců.
 - „Kdo co říká“ — téma × jména × citát
 - Jakékoli srovnání se 2+ větami v buňce; pro čísla zůstává `.av-data-table`
 
+### Sourozenec: `.av-quote` — samostatný citát v toku textu
+
+Pro doslovný výrok mimo kartu (referát „co kdo říká“, rozhovor, stanovisko).
+Serif kurzíva s červenou levou linkou a `<cite>` s autorem a zdrojem.
+
+```html
+<blockquote class="av-quote">
+  <p>„Připravenost se nekupuje za pochodu. Laboratoře, data a vyškolení lidé musejí existovat dřív, než hrozba přijde.“</p>
+  <cite>Matyáš Fošum, Občan v síti 9/2026</cite>
+</blockquote>
+```
+
+Pravidlo: citát je **doslovný** (ověřitelný ve zdroji), zkrácení značí „…“, autor
+a zdroj jsou vždy v `<cite>`. Max 2–3 věty; delší pasáž patří do prózy s uvozovkami.
+
 ---
 
 ## Migrace z existujících patternů
