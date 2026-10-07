@@ -129,6 +129,12 @@ const MANIFEST = {
     claim: 'českých dospělých je obézních. Průměr EU je 16,3 %.',
     context: 'Vysokoškoláci: 13,9 % proti 12,6 % v EU.',
   },
+  'clanek-umrtnost-diabetes-dvojnasobek-eu-2026': {
+    kicker: 'Výsledky · úmrtnost na diabetes 2023', signal: 'bad',
+    stat: '49,4',
+    claim: 'úmrtí na diabetes na 100 000 obyvatel. Průměr EU je 23,5.',
+    context: 'Řada se zlomila v roce 2013 s novým Listem o prohlídce zemřelého.',
+  },
   'clanek-metodika-zachyt-ledvin-vestnik-12-2026': {
     kicker: 'Prevence · metodika záchytu nemoci ledvin', signal: 'warn',
     stat: '1', statSuffix: ' měsíc',
