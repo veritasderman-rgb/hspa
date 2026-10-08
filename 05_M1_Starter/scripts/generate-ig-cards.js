@@ -129,6 +129,12 @@ const MANIFEST = {
     claim: 'českých dospělých je obézních. Průměr EU je 16,3 %.',
     context: 'Vysokoškoláci: 13,9 % proti 12,6 % v EU.',
   },
+  'clanek-dve-cisla-vydaje-2024-csu-eurostat': {
+    kicker: 'Finance · výdaje na zdravotnictví 2024', signal: 'neutral',
+    stat: '15,3', statSuffix: ' mld. Kč',
+    claim: 'rozdíl mezi ČSÚ (696,8\u00a0mld.) a Eurostatem (681,5\u00a0mld.) za tentýž rok 2024.',
+    context: 'Stejná definice, jiný okamžik zpracování dat.',
+  },
   'clanek-umrtnost-diabetes-dvojnasobek-eu-2026': {
     kicker: 'Výsledky · úmrtnost na diabetes 2023', signal: 'bad',
     stat: '49,4',
