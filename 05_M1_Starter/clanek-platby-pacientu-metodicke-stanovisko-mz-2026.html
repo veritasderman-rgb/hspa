@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-10-09
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-10-09
+    creation_phase: rutina+article-write
+    primary_sources_count: 6
+    evidence_sources_count: 0
+    visual_elements_count: 5
+    notes: "Vytvoreno z discovery 2026-10-09: MZ zverejnilo 8. 10. 2026 Metodicke stanovisko k platbam pacientu v ramci poskytovani zdravotnich sluzeb (stranka https://mzd.gov.cz/metodicke-stanovisko-k-platbam-pacientu-v-ramci-poskytovani-zdravotnich-sluzeb/, vytvoreno 8. 10. 2026). Precteno vsech 9 PDF (stazeno 9. 10. 2026, pdftotext): obecna cast c. j. MZDR 25582/2026-1/DZP (11 s., podepsano 6. 10. 2026) + kazuistiky 1-8 (c. j. MZDR 25582/2026-2 az -9/DZP; 1-5 podepsany 25. 9. 2026, 6 25. 9., 7 a 8 6. 10. 2026). Kazuistika 2 (objednani) je jako jedina 'platna do 31. prosince 2026'. Text § 48 odst. 6 zak. 372/2011 Sb. overen doslova na zakonyprolidi.cz (verze 39) 9. 10. 2026; zak. 290/2025 Sb. ucinnost od 01.01.2026 overena na zakonyprolidi.cz; § 16a odst. 1 zak. 48/1997 Sb. (regulacni poplatek 90 Kc) a odst. 2 pism. b) a d) overeno na zakonyprolidi.cz. KPI: 8 kazuistik / 13 temat prehledu (stranka MZ); 90 Kc regulacni poplatek (§ 16a); 60 dnu na stiznost u KU (obecna cast s. 9); 572 Kc uhrada OD 00031/00032 v akutni luzkove peci 2026 (kazuistika 8). DATA: CSU Vydaje na zdravotni peci (zverejneno 24. 9. 2026, overeno 9. 10. 2026): vydaje domacnosti 2024 94,5 mld. Kc, celkove vydaje 696,8 mld. Kc, z penezenek domacnosti 8 681 Kc na obyvatele; indikator platba_z_kapsy_pct 13,6 % (2024) = 94,5/696,8 souhlasi (vlastni kontrola 13,56 %). Benchmark OECD 18 / EU 15 v kontraktu je seed bez overeni - v textu NEPOUZIT. doplatky_leky_na_obyvatele 1 803 Kc (2025, UZIS, verified 2026-10-06). unmet_need_medical 0,3 % (2025) vs EU 2,4 % (Eurostat hlth_silc_08, verified). Zadna studie necitovana (pravni explainer; PubMed/Consensus nepouzit). Instituce v 'Co s tim' jen ty, ktere jmenuje stanovisko: poskytovatel (stiznost), krajsky urad / Magistrat hl. m. Prahy (podnet k prestupku, stiznost do 60 dnu), zdravotni pojistovna, SUKL (eRecept, kazuistika 5), Specializovany financni urad (cena v rozporu s cenovym vymerem). Ceka na schvaleni redakce."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Za registraci ani eRecept se neplatí, 90 korun na pohotovosti ano. Ministerstvo vyložilo, co smí lékař po pacientovi chtít · HSPA Monitor</title>
+<meta name="description" content="Ministerstvo zdravotnictví 8. října 2026 zveřejnilo metodické stanovisko k § 48 odst. 6 zákona o zdravotních službách, který od 1. ledna 2026 zakazuje chtít po pacientovi platbu za péči hrazenou z pojištění a podmiňovat péči platbou. V osmi kazuistikách vykládá, že registrační poplatek smluvní lékař vybírat nesmí, za přednostní termín ani za eRecept nesmí platbu chtít žádný lékař, pokutu za nedostavení jen s předem daným souhlasem pacienta a 90 Kč na pohotovosti platí dál. Domácnosti přitom v roce 2024 zaplatily za zdravotní péči 94,5 mld. Kč.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Za registraci ani eRecept se neplatí, 90 korun na pohotovosti ano. Ministerstvo vyložilo, co smí lékař po pacientovi chtít">
+<meta property="og:description" content="Metodické stanovisko MZ z 8. října 2026 rozebírá osm typů plateb: registrační poplatek, placené objednání, pokutu za nedostavení, pohotovost, eRecept, dentální hygienu, druhou zubní prohlídku a doprovod. Co je zakázané, co dovolené a kam si stěžovat.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-platby-pacientu-metodicke-stanovisko-mz-2026.html">
+<meta property="article:published_time" content="2026-10-10T06:00:00+02:00">
+<meta property="article:section" content="Nárok pojištěnce">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-platby-pacientu-metodicke-stanovisko-mz-2026.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "Za registraci ani eRecept se neplatí, 90 korun na pohotovosti ano. Ministerstvo vyložilo, co smí lékař po pacientovi chtít",
+  "description": "Ministerstvo zdravotnictví 8. října 2026 zveřejnilo metodické stanovisko k § 48 odst. 6 zákona o zdravotních službách, který od 1. ledna 2026 zakazuje chtít po pacientovi platbu za péči hrazenou z pojištění a podmiňovat péči platbou. V osmi kazuistikách vykládá, že registrační poplatek smluvní lékař vybírat nesmí, za přednostní termín ani za eRecept nesmí platbu chtít žádný lékař, pokutu za nedostavení jen s předem daným souhlasem pacienta a 90 Kč na pohotovosti platí dál. Domácnosti přitom v roce 2024 zaplatily za zdravotní péči 94,5 mld. Kč.",
+  "datePublished": "2026-10-10T06:00:00+02:00",
+  "dateModified": "2026-10-09",
+  "inLanguage": "cs",
+  "articleSection": "Nárok pojištěnce",
+  "author": { "@type": "Organization", "name": "Redakce HSPA Monitoru" },
+  "publisher": { "@type": "Organization", "name": "HSPA Monitor · Skóre zdravotnictví", "url": "https://skorezdravotnictvi.cz" },
+  "mainEntityOfPage": "https://skorezdravotnictvi.cz/clanek-platby-pacientu-metodicke-stanovisko-mz-2026.html"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Nárok pojištěnce</span>
+        <span class="article-tag article-tag-muted">platby pacientů · § 48 odst. 6 · registrační poplatek · eRecept · pohotovost · zákon 290/2025 Sb.</span>
+      </div>
+      <h1 class="article-title">Za registraci ani eRecept se neplatí, 90 korun na pohotovosti ano. Ministerstvo vyložilo, co smí lékař po pacientovi chtít</h1>
+      <p class="article-deck">
+        Ministerstvo zdravotnictví 8. října 2026 zveřejnilo metodické stanovisko k § 48 odst. 6 zákona o zdravotních službách, který od 1. ledna 2026 zakazuje chtít po pacientovi platbu za péči hrazenou z pojištění a podmiňovat péči platbou. V osmi kazuistikách vykládá, že registrační poplatek smluvní lékař vybírat nesmí, za přednostní termín ani za eRecept nesmí platbu chtít žádný lékař, pokutu za nedostavení jen s předem daným souhlasem pacienta a 90 Kč na pohotovosti platí dál. Domácnosti přitom v roce 2024 zaplatily za zdravotní péči 94,5 mld. Kč.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">10. října 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">8 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        „Roční administrativní poplatek“, placené objednání přes aplikaci, poplatek za recept poslaný esemeskou, povinná placená dentální hygiena před první prohlídkou u zubaře. Takové platby ministerstvo řadí mezi nejčastější, které poskytovatelé po pacientech chtějí. Novela zákona o zdravotních službách č.&nbsp;290/2025&nbsp;Sb. od 1. ledna 2026 výslovně vyjmenovala, co poskytovatel po pacientovi chtít nesmí. Teď k tomu ministerstvo zdravotnictví vydalo výklad: obecnou část a osm kazuistik, které berou nejčastější platby jednu po druhé. Je určen hlavně krajským úřadům, které přestupky lékařů projednávají, ale podle ministerstva má sloužit i pacientům jako opora při hájení vlastních práv.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCntH">
+        <figcaption class="av-figure-h" id="avCntH">Platby pacientů: čtyři čísla k metodickému stanovisku (MZ ČR 8. 10. 2026; zákon č. 48/1997 Sb.; ČSÚ 24. 9. 2026)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="8">8</span>
+            <span class="av-counter-label">kazuistik k typovým platbám</span>
+            <span class="av-counter-foot">plus obecná část; MZ je může rozšiřovat</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="90" data-suffix=" Kč">90&nbsp;Kč</span>
+            <span class="av-counter-label">regulační poplatek na pohotovosti</span>
+            <span class="av-counter-foot">zákonná výjimka ze zákazu; urgentní příjem je bez poplatku</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="60" data-suffix=" dní">60&nbsp;dní</span>
+            <span class="av-counter-label">na stížnost ke krajskému úřadu</span>
+            <span class="av-counter-foot">od doručení vyřízení stížnosti poskytovatelem</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="94.5" data-decimals="1" data-suffix=" mld. Kč">94,5&nbsp;mld.&nbsp;Kč</span>
+            <span class="av-counter-label">zaplatily domácnosti za zdravotní péči v roce 2024</span>
+            <span class="av-counter-foot">8 681 Kč na obyvatele; legální i nelegální platby dohromady</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> MZ ČR, Metodické stanovisko k platbám pacientů (obecná část č. j. MZDR 25582/2026-1/DZP a kazuistiky 1–8), zveřejněno 8. 10. 2026; § 16a odst. 1 zákona č. 48/1997 Sb.; ČSÚ, Výdaje na zdravotní péči, rok 2024, zveřejněno 24. 9. 2026.</p>
+      </figure>
+
+      <h3>Tři zákazy, jeden ceník</h3>
+      <p>
+        Jádrem je § 48 odst. 6 zákona č.&nbsp;372/2011&nbsp;Sb., jak ho od 1. ledna 2026 zní po novele 290/2025&nbsp;Sb. Nestanoví-li jiný předpis jinak, poskytovatel, kterého si pacient zvolil, nemůže (a) požadovat úhradu za zdravotní služby nebo služby související v rozsahu, ve kterém je hradí veřejné zdravotní pojištění, (b) požadovat úhradu za nehrazenou nebo částečně hrazenou službu, která v době, kdy pacienta informoval o ceně, nebyla v jeho ceníku, a (c) podmínit přijetí pacienta do péče ani pokračování péče platbou, jiným prospěchem nebo nákupem zboží či služeb, které pro péči nejsou nezbytné.
+      </p>
+      <p>
+        Stanovisko z toho vyvozuje několik věcí, které se v ordinacích často přehlížejí. Za plně hrazenou službu nesmí smluvní poskytovatel chtít platbu vůbec, za částečně hrazenou jen doplatek nad úhradu pojišťovny. Zákaz platí už pro samotné <strong>požádání</strong> o platbu, bez ohledu na to, zda ji pacient nakonec zaplatí. A na označení nezáleží: registrační, administrativní, roční nebo „administrativně-technický“ poplatek se posuzuje podle skutečné povahy a účelu, ne podle názvu.
+      </p>
+      <p>
+        Ceník je podle stanoviska pro poskytovatele <strong>závazný</strong>. Kdo nabízí nehrazené nebo částečně hrazené služby, musí mít ceník na přístupném místě, typicky v čekárně, a pacienta musí o ceně informovat předem. Službu, která v ceníku není, pacient zaplatit nemusí. Za zaplacené služby musí dostat účet.
+      </p>
+      <p>
+        Klíčové je rozlišení smluvního a nesmluvního poskytovatele. Smluvní poskytovatel má smlouvu s pojišťovnou, u které je pacient pojištěn, a na něj dopadají zákazy v plné šíři. Nesmluvní poskytovatel smí za péči účtovat, ale ne za neodkladnou péči a další zákonem vyjmenované situace. Posuzuje se to vždy vůči konkrétnímu pacientovi: tatáž ordinace může být pro pojištěnce jedné pojišťovny smluvní a pro jiného nesmluvní. Kdo má s kým smlouvu, ukazují weby pojišťoven a orientačně Národní registr poskytovatelů zdravotních služeb.
+      </p>
+
+      <h3>Osm kazuistik: co smí a co ne</h3>
+      <p>
+        Kazuistická část bere jednotlivé typové platby a ke každé říká, kdy jde o porušení zákona. Tabulka shrnuje závěry; podrobnosti a výjimky jsou v textu pod ní.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTabH">
+        <figcaption class="av-figure-h" id="avTabH">Osm typů plateb podle metodického stanoviska MZ (kazuistiky 1–8, č. j. MZDR 25582/2026-2 až -9/DZP, zveřejněno 8. 10. 2026)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Platba</th>
+                <th scope="col">Nesmí</th>
+                <th scope="col">Smí</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-highlight"><th scope="row">1 · Registrace</th><td class="av-bad">Smluvní poskytovatel podmínit registraci či péči jakkoli nazvanou platbou, ani „prémiovou péčí“ nebo poplatkem za recepci či e-mailové výsledky</td><td>Nabídnout doplňkové služby, jen pokud jsou dobrovolnou volbou pacienta</td></tr>
+              <tr><th scope="row">2 · Přednostní termín</th><td class="av-bad">Smluvní ani nesmluvní poskytovatel brát platbu za dřívější termín</td><td>—</td></tr>
+              <tr><th scope="row">2 · Způsob objednání</th><td class="av-bad">Smluvní poskytovatel mít jen placené objednání; placená cesta nesmí vést ke kratší čekací době</td><td>Placená online rezervace vedle bezplatné cesty (telefon, e-mail) se srovnatelnými termíny</td></tr>
+              <tr><th scope="row">3 · Nedostavení se</th><td class="av-bad">Vybírat pokutu, kterou jen zveřejnil na webu, v čekárně nebo v SMS</td><td>Pokuta sjednaná předem, s výslovným a prokazatelným souhlasem pacienta</td></tr>
+              <tr><th scope="row">4 · Pohotovost a urgentní příjem</th><td class="av-bad">Poplatek za urgentní příjem ani za triáž; lékárenský příplatek za hrazený lék</td><td>90 Kč regulační poplatek na lékařské a zubní pohotovosti; lékárenský příplatek u nehrazeného léku</td></tr>
+              <tr><th scope="row">5 · eRecept</th><td class="av-bad">Smluvní ani nesmluvní poskytovatel chtít platbu za předání nebo zaslání eReceptu (SMS, e-mail), ani jednorázovou, ani roční</td><td>—</td></tr>
+              <tr><th scope="row">6 · Dentální hygiena</th><td class="av-bad">Smluvní zubař podmínit ošetření nebo registraci placenou hygienou</td><td>Nesmluvní zubař ji požadovat jako podmínku jiné než neodkladné péče, jen předem oznámenou, přiměřenou a odborně zdůvodněnou</td></tr>
+              <tr><th scope="row">7 · Druhá zubní prohlídka</th><td class="av-bad">Účtovat ji dětem do 18 let, těhotným, ani dospělým, u nichž ji zubař sám uzná za zdravotně odůvodněnou</td><td>Účtovat ji dospělému, který si ji vyžádá bez zdravotního důvodu</td></tr>
+              <tr><th scope="row">8 · Doprovod</th><td class="av-bad">Zpoplatnit přítomnost doprovodu nebo ji podmínit nákupem; účtovat pobyt doprovodu u dítěte do 6 let a u průvodce schváleného pojišťovnou</td><td>Přiměřenou náhradu účelně vynaložených nákladů; pobyt doprovodu u ostatních pacientů</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> MZ ČR, Metodické stanovisko k platbám pacientů v rámci poskytování zdravotních služeb, kazuistická část 1–8, zveřejněno 8. 10. 2026. Zjednodušené shrnutí redakce HSPA Monitoru; právně rozhodující je plné znění.</p>
+      </figure>
+
+      <p>
+        <strong>Objednání.</strong> Pořadí pacientů se podle stanoviska musí řídit zdravotním stavem, ne tím, kdo zaplatil. Ministerstvo i konkretizuje, co znamená „srovnatelný“ bezplatný termín u plánované péče: rozdíl v řádu hodin či jednotek dnů ano, nabídka placených termínů za pár dní a bezplatných za několik týdnů či měsíců ne. Platí to i tehdy, když poplatek vybírá provozovatel rezervačního systému, a ne sama ordinace. Tato kazuistika jako jediná nese poznámku, že platí do 31. prosince 2026.
+      </p>
+      <p>
+        <strong>Pohotovost.</strong> Tady jde o zákonnou výjimku. Podle § 16a zákona č.&nbsp;48/1997&nbsp;Sb. pojištěnec platí za lékařskou nebo zubní pohotovostní službu 90&nbsp;Kč a poskytovatel je podle stanoviska povinen je vybrat. Neplatí se mimo jiné tehdy, když lékař shledá, že pacient potřebuje hospitalizaci, nebo když se pacient prokáže dávkou pomoci v hmotné nouzi. Urgentní příjem ani samotná triáž poplatku nepodléhají: kdo je po triáži poslán na urgentní příjem, neplatí nic, kdo na pohotovost, platí 90&nbsp;Kč. Jak se pohotovosti od letoška přeskupily kolem urgentních příjmů, popisuje článek <a href="clanek-reforma-pohotovosti-290-2025.html">Pohotovosti přešly na pojišťovny</a>. Lékárenský „pohotovostní příplatek“ žádný předpis neupravuje; lékárna ho smí vybrat jen u léku či pomůcky, kterou pojištění nehradí ani částečně, například u hormonální antikoncepce.
+      </p>
+      <p>
+        <strong>eRecept.</strong> Stanovisko cituje § 80 odst. 4 zákona o léčivech: identifikátor eReceptu se pacientovi předává bezplatně, a to i když si zvolí zaslání SMS nebo e-mailem. Poplatek nelze obhájit tím, že vystavení bylo zdarma a platí se jen „za zaslání“, ani příspěvkem na provoz informačního systému. Nepřípustné je i to, aby lékař pacienty, kteří nezaplatili, nutil k osobní návštěvě nebo jim recept posílal později.
+      </p>
+      <p>
+        <strong>Doprovod.</strong> Přítomnost zákonného zástupce nebo blízké osoby při vyšetření, hospitalizaci či porodu zpoplatnit nelze a nesmí se podmiňovat ani nákupem, třeba dezinfekce. Poskytovatel smí účtovat přiměřenou náhradu účelně vynaložených nákladů, například za jednorázový ochranný oděv. Pobyt doprovodu s lůžkem a stravou musí být zdarma u dítěte do 6 let a u staršího pacienta, jemuž ho schválila pojišťovna. U ostatních ho lze zpoplatnit; za rámcově přiměřenou cenu stanovisko považuje úhradu, kterou za den pobytu doprovodu platí pojišťovny. V akutní lůžkové péči je to pro rok 2026 572&nbsp;Kč.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-neutral">
+          <span class="av-counter" data-value="572" data-suffix=" Kč">572&nbsp;Kč</span>
+          <span class="av-counter-label">rámcově přiměřená cena dne pobytu doprovodu v akutní lůžkové péči, 2026</span>
+          <span class="av-counter-foot">úhrada za ošetřovací den 00031/00032 podle úhradové vyhlášky; kazuistika 8</span>
+        </div>
+      </aside>
+      <p>
+        <strong>Zubní péče.</strong> Dentální hygiena je podle stanoviska zpravidla nehrazená služba, kterou poskytují hlavně nesmluvní dentální hygienistky. Pro žádné zubní ošetření ale obvykle není nezbytná. Pokud zubní kámen výjimečně opravdu brání výkonu, jeho odstranění je součástí hrazeného výkonu, a smluvní zubař ho proto účtovat nesmí. U preventivních prohlídek mají děti do 18 let a těhotné nárok na dvě hrazené prohlídky, dospělí na jednu ročně. Druhá je hrazená i dospělému, pokud ji zubař odůvodní zdravotním stavem, například vysokou kazivostí.
+      </p>
+      <div class="av-aside-clear"></div>
+
+      <h3>Kolik Češi platí z vlastní kapsy</h3>
+      <p>
+        Stanovisko neobsahuje žádný odhad, kolik peněz pacienti na sporných poplatcích platí, a ČSÚ ani ÚZIS je v publikacích, ze kterých vycházíme, samostatně neuvádějí. Celkový rámec ale známe. Podle zdravotnických účtů ČSÚ, zveřejněných 24. září 2026, vydaly domácnosti v roce 2024 na zdravotní péči <strong>94,5&nbsp;mld.&nbsp;Kč</strong> z celkových 696,8&nbsp;mld. Kč, v průměru 8&nbsp;681&nbsp;Kč na obyvatele. To odpovídá 13,6&nbsp;% všech výdajů, hodnotě, kterou sleduje indikátor <a href="indicator.html?id=platba_z_kapsy_pct">přímých plateb pacientů</a>. Z čeho se přímé platby skládají a koho zatěžují nejvíc, rozebírá článek <a href="clanek-platba-z-kapsy.html">Čtrnáct procent z kapsy</a>.
+      </p>
+      <p>
+        Největší legální složky známe zvlášť. Na doplatcích k receptům a poukazům zaplatil podle ÚZIS každý obyvatel v roce 2025 v průměru 1&nbsp;803&nbsp;Kč (indikátor <a href="indicator.html?id=doplatky_leky_na_obyvatele">doplatků za léky</a>); stomatologie podle stanoviska patří mezi hlavní oblasti částečně hrazené péče. Registrační a rezervační poplatky se v datech neobjevují samostatně.
+      </p>
+
+      <div class="article-callout-caveat" role="note">
+        <strong>Co data neřeknou.</strong>
+        Výdaje domácností podle ČSÚ zahrnují legální doplatky, nehrazenou péči i samoléčbu; nelegální poplatky z nich oddělit nelze. Ani indikátor <a href="indicator.html?id=unmet_need_medical">nesplněné potřeby lékařské péče</a>, který pro Česko v roce 2025 ukazuje 0,3&nbsp;% dospělých proti 2,4&nbsp;% v EU (Eurostat), nerozlišuje, zda péči odradila cena, vzdálenost nebo čekání. Jak časté jsou platby, které stanovisko označuje za nepřípustné, se z dat, která HSPA Monitor sleduje, zjistit nedá. Stanovisko navíc není zákon: je to výklad ministerstva určený hlavně krajským úřadům; o konkrétním případu rozhoduje příslušný úřad.
+      </div>
+
+      <h3>Co vývoj přináší</h3>
+      <p>
+        Zákaz přijmout od pojištěnce úhradu za hrazené služby obsahoval už zákon o veřejném zdravotním pojištění (§ 11 odst. 1 písm. d). Novela 290/2025&nbsp;Sb. od letoška výslovně vymezila zakázané platby i v zákoně o zdravotních službách a navázala na ně přestupky v § 117: požadování úhrady za hrazené služby, úhrady mimo ceník i odmítnutí nebo ukončení péče v rozporu se zákazem podmiňování. Stanovisko teď krajským úřadům doporučuje postup krok za krokem: zjistit, u které pojišťovny je pacient pojištěn, zda má poskytovatel danou službu se pojišťovnou smluvně zajištěnou, zda je hrazena plně nebo částečně a zda odpovídal ceník a informace o ceně.
+      </p>
+      <p>
+        Ministerstvo zároveň píše, že kazuistiky může podle praxe rozšiřovat a aktualizovat. Text o objednání má výslovně omezenou platnost do konce roku 2026. Jak se pravidla propíšou do skutečnosti, ukáže až praxe krajských úřadů; počty podnětů ani projednaných přestupků stanovisko neuvádí. Širší otázku, co přesně patří do „nároku“ a kde začíná nadstandard, rozebírá série <a href="clanek-narok-pojistence-1-co-to-je.html">Co dnes skutečně máte nárok?</a>
+      </p>
+
+      <h3>Co s tím</h3>
+      <p>
+        Pokud po vás lékař nebo jiný poskytovatel chce platbu, kterou podle stanoviska chtít nesmí, nabízí obecná část stanoviska tyto cesty. Nejde o právní radu pro konkrétní případ.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avFlowH">
+        <figcaption class="av-figure-h" id="avFlowH">Kam se obrátit při neoprávněném požadavku na platbu (MZ ČR, Metodické stanovisko k platbám pacientů, obecná část, kap. 2–4, 8. 10. 2026)</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Ověřte, o co jde</h4>
+            <p class="av-flow-desc">Je služba v ceníku? Je poskytovatel smluvní pro vaši pojišťovnu? Chtějte účet; při odmítnutí péče písemnou zprávu s důvodem, kterou je poskytovatel povinen vydat.</p>
+            <span class="av-flow-tag">§ 45, § 48 odst. 5</span>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Stížnost poskytovateli</h4>
+            <p class="av-flow-desc">Podává se přímo tomu, proti komu směřuje.</p>
+            <span class="av-flow-tag">§ 93 a násl.</span>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Krajský úřad / Magistrát hl. m. Prahy</h4>
+            <p class="av-flow-desc">Stížnost do 60 dnů od doručení vyřízení; také podnět k prošetření přestupku. Projednává přestupky poskytovatelů v kraji, kde je zařízení.</p>
+            <span class="av-flow-tag">§ 117, § 118</span>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Zdravotní pojišťovna</h4>
+            <p class="av-flow-desc">U smluvního poskytovatele musí zajistit jiného, který péči poskytne bez platby; může případ prověřit a dát podnět krajskému úřadu.</p>
+            <span class="av-flow-tag">§ 46 a § 40 z. 48/1997</span>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Zvláštní případy</h4>
+            <p class="av-flow-desc">Platba za eRecept: přestupek projednává SÚKL. Cena v rozporu s cenovým výměrem MZ: podnět Specializovanému finančnímu úřadu.</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> MZ ČR, Metodické stanovisko k platbám pacientů, obecná část, kap. 2 a 4 (s. 5–9), a kazuistika 5 (eRecept), zveřejněno 8. 10. 2026. Paragrafy bez označení zákona = zákon č. 372/2011 Sb.</p>
+      </figure>
+
+      <p>
+        <strong>Pro pacienty:</strong> platbu, kterou poskytovatel nemá v ceníku, nebo platbu za hrazenou službu můžete odmítnout. Smluvní lékař vás kvůli tomu zpravidla nesmí odmítnout ani ukončit péči. Pokud tak učiní, nechte si vydat písemnou zprávu s důvodem. Dobrovolný dar nebo nadstandardní služba zůstávají možné, ale musí jít o vaši volbu, ne o podmínku péče.
+      </p>
+      <p>
+        <strong>Pro poskytovatele:</strong> stanovisko je zároveň kontrolní seznam. Ceník v čekárně, informace o ceně předem, bezplatná cesta k objednání se srovnatelnými termíny, pokuta za nedostavení jen s prokazatelně sjednaným souhlasem a eRecept zdarma ve všech podobách.
+      </p>
+      <p>
+        <strong>Pro ministerstvo a kraje:</strong> aby šlo poznat, zda zákaz funguje, pomohla by pravidelně zveřejňovaná statistika podnětů a projednaných přestupků podle § 117 po krajích. Bez ní zůstane stanovisko návodem bez zpětné vazby.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=platba_z_kapsy_pct"><strong>Přímé platby pacientů (% zdravotních výdajů)</strong></a> — 13,6 % (2024, ČSÚ Zdravotnické účty; 94,5 z 696,8 mld. Kč)</li>
+        <li><a href="indicator.html?id=doplatky_leky_na_obyvatele"><strong>Doplatky pacientů za léky a zdravotnické prostředky na obyvatele</strong></a> — 1 803 Kč na obyvatele a rok (2025, ÚZIS, Lékárenská péče 2025)</li>
+        <li><a href="indicator.html?id=unmet_need_medical"><strong>Nesplněná potřeba lékařské péče</strong></a> — 0,3 % populace 16+ (2025, Eurostat EU-SILC) proti 2,4 % v EU</li>
+      </ul>
+      <p>Související články: <a href="clanek-platba-z-kapsy.html">Čtrnáct procent z kapsy</a> · <a href="clanek-reforma-pohotovosti-290-2025.html">Pohotovosti přešly na pojišťovny. Co zákon 290/2025 Sb. skutečně mění</a> · <a href="clanek-narok-pojistence-1-co-to-je.html">Co dnes skutečně máte nárok?</a> · <a href="clanek-nadstandardy-3-cesky-narok.html">Co by nadstandardy udělaly s českým nárokem</a></p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární zdroje</h5>
+        <ul class="article-sources-list">
+          <li><strong>MZ ČR — Metodické stanovisko k platbám pacientů v rámci poskytování zdravotních služeb</strong> (stránka s přehledem kazuistik a přílohami, vytvořeno 8. 10. 2026). <a href="https://mzd.gov.cz/metodicke-stanovisko-k-platbam-pacientu-v-ramci-poskytovani-zdravotnich-sluzeb/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+          <li><strong>MZ ČR — obecná část stanoviska</strong> (č. j. MZDR 25582/2026-1/DZP, 11 stran): zákazy podle § 48 odst. 6, ceník, smluvní a nesmluvní poskytovatelé, možnosti pacienta, doporučený postup krajských úřadů. Staženo 9. 10. 2026. <a href="https://mzd.gov.cz/wp-content/uploads/2026/10/Metodicke_stanovisko_k_platbam_pacientu_obecna_cast.pdf" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+          <li><strong>MZ ČR — kazuistiky 1–8</strong> (č. j. MZDR 25582/2026-2 až -9/DZP): <a href="https://mzd.gov.cz/wp-content/uploads/2026/10/Metodicke_stanovisko_k_platbam_pacientu_kazuisticka_cast_1_Platba_za_registraci.pdf" target="_blank" rel="noopener">registrace</a>, <a href="https://mzd.gov.cz/wp-content/uploads/2026/10/Metodicke_stanovisko_k_platbam_pacientu_kazuisticka_cast_2_Platby_za_objednani.pdf" target="_blank" rel="noopener">objednání</a>, <a href="https://mzd.gov.cz/wp-content/uploads/2026/10/Metodicke_stanovisko_k_platbam_pacientu_kazuisticka_cast_3_Platba_za_nedodrzeni_terminu_objednani.pdf" target="_blank" rel="noopener">nedodržení termínu</a>, <a href="https://mzd.gov.cz/wp-content/uploads/2026/10/Metodicke_stanovisko_k_platbam_pacientu_kazuisticka_cast_4_Platba_za_pohotovost_nebo_urgentni_prijem.pdf" target="_blank" rel="noopener">pohotovost a urgentní příjem</a>, <a href="https://mzd.gov.cz/wp-content/uploads/2026/10/Metodicke_stanovisko_k_platbam_pacientu_kazuisticka_cast_5_Platba_za_eRecept.pdf" target="_blank" rel="noopener">eRecept</a>, <a href="https://mzd.gov.cz/wp-content/uploads/2026/10/Metodicke_stanovisko_k_platbam_pacientu_kazuisticka_cast_6_Platba_za_dentalni_hygienu.pdf" target="_blank" rel="noopener">dentální hygiena</a>, <a href="https://mzd.gov.cz/wp-content/uploads/2026/10/Metodicke_stanovisko_k_platbam_pacientu_kazuisticka_cast_7_Platba_za_druhou_zubni_preventivni_prohlidku.pdf" target="_blank" rel="noopener">druhá zubní prohlídka</a>, <a href="https://mzd.gov.cz/wp-content/uploads/2026/10/Metodicke_stanovisko_k_platbam_pacientu_kazuisticka_cast_8_Platba_za_pritomnost_nebo_pobyt_doprovodu.pdf" target="_blank" rel="noopener">doprovod</a>. Staženo 9. 10. 2026.</li>
+          <li><strong>Zákon č. 372/2011 Sb., o zdravotních službách</strong> — § 48 odst. 6 v účinném znění, ověřeno 9. 10. 2026. <a href="https://www.zakonyprolidi.cz/cs/2011-372" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Zákon č. 290/2025 Sb.</strong>, kterým se mění zákon o zdravotních službách a některé související zákony; účinnost od 1. 1. 2026. <a href="https://www.zakonyprolidi.cz/cs/2025-290" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Zákon č. 48/1997 Sb., o veřejném zdravotním pojištění</strong> — § 16a (regulační poplatek 90 Kč za pohotovostní službu a výjimky). <a href="https://www.zakonyprolidi.cz/cs/1997-48" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>ČSÚ — Výdaje na zdravotní péči</strong>: výdaje domácností 94,5 mld. Kč, celkové výdaje 696,8 mld. Kč, 8 681 Kč na obyvatele z peněženek domácností (rok 2024, zveřejněno 24. 9. 2026). <a href="https://csu.gov.cz/vydaje-na-zdravotni-peci" target="_blank" rel="noopener">csu.gov.cz ↗</a></li>
+          <li><strong>ÚZIS ČR — Aktuální informace: Lékárenská péče 2025</strong>: průměrné doplatky k receptům a poukazům na obyvatele. <a href="https://www.uzis.cz/res/f/008470/ai-2026-01-lekarenska-pece-2025.pdf" target="_blank" rel="noopener">uzis.cz ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Tabulka a postup v textu zjednodušují závěry metodického stanoviska; právně rozhodující je jeho plné znění a zákon. Stanovisko vychází z právní úpravy účinné k 1. 1. 2026, kazuistika o objednání je platná do 31. 12. 2026. Údaj o výdajích domácností nerozlišuje legální a nelegální platby.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
