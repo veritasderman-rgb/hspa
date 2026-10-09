@@ -135,6 +135,12 @@ const MANIFEST = {
     claim: 'rozdíl mezi ČSÚ (696,8\u00a0mld.) a Eurostatem (681,5\u00a0mld.) za tentýž rok 2024.',
     context: 'Stejná definice, jiný okamžik zpracování dat.',
   },
+  'clanek-obcan-v-siti-ochrana-verejneho-zdravi-2026': {
+    kicker: 'Veřejné zdraví · Občan v síti 9/2026', signal: 'warn',
+    stat: '17',
+    claim: 'samostatných organizací ochrany veřejného zdraví se 17 rozpočty.',
+    context: 'Jedenáct hlasů k zákonu o Národním institutu veřejného zdraví.',
+  },
   'clanek-umrtnost-diabetes-dvojnasobek-eu-2026': {
     kicker: 'Výsledky · úmrtnost na diabetes 2023', signal: 'bad',
     stat: '49,4',
