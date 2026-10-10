@@ -59,3 +59,16 @@ test('HTML se escapuje (žádná injekce z názvu)', () => {
   assert.doesNotMatch(h, /<img src=x/);
   assert.match(h, /&lt;img/);
 });
+
+test('benchmark.other s popiskem vykreslí vlastní bar (ne EU/OECD)', () => {
+  const h = indicatorCardHtml({ ...IND, benchmark: { other: 11 }, benchmark_labels: { other: 'HBSC' } });
+  const bars = h.match(/class="bm-row"/g) ?? [];
+  assert.equal(bars.length, 2, 'očekávány 2 bary: ČR, HBSC');
+  assert.match(h, /class="bm-key" title="Průměr HBSC">HBSC</);
+  assert.doesNotMatch(h, /Průměr EU|Průměr OECD/);
+});
+
+test('benchmark.other bez popisku se nevykreslí', () => {
+  const h = indicatorCardHtml({ ...IND, benchmark: { other: 11 } });
+  assert.doesNotMatch(h, /class="bm-row"/);
+});

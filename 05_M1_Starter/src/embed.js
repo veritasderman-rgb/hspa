@@ -55,6 +55,9 @@ export function renderEmbedCard(ind) {
   const benchParts = [];
   if (benchmark.oecd != null) benchParts.push(`OECD ⌀ ${fmtNumber(benchmark.oecd)}`);
   if (benchmark.eu != null) benchParts.push(`EU ⌀ ${fmtNumber(benchmark.eu)}`);
+  if (benchmark.other != null && typeof ind.benchmark_labels?.other === 'string' && ind.benchmark_labels.other.trim()) {
+    benchParts.push(`${escapeHtml(ind.benchmark_labels.other.trim())} ⌀ ${fmtNumber(benchmark.other)}`);
+  }
   const detailUrl = `${SITE_BASE}/indikator-${encodeURIComponent(ind.id)}.html`;
 
   return `

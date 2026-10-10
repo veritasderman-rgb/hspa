@@ -57,8 +57,11 @@ export function buildTakeaway(ind) {
 
   // 1) Pozice vůči benchmarku (OECD preferováno, jinak EU).
   const b = ind.benchmark || {};
+  const otherLabel = typeof ind.benchmark_labels?.other === 'string' && ind.benchmark_labels.other.trim()
+    ? ind.benchmark_labels.other.trim() : null;
   const ref = b.oecd != null ? { v: Number(b.oecd), label: 'OECD' }
     : b.eu != null ? { v: Number(b.eu), label: 'EU' }
+    : (b.other != null && otherLabel) ? { v: Number(b.other), label: otherLabel }
     : null;
   let benchClause = '';
   if (ref && Number.isFinite(ref.v) && ref.v !== 0) {

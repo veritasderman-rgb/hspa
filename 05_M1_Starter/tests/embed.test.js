@@ -43,3 +43,13 @@ test('renderEmbedCard: escapuje název (XSS guard)', () => {
   assert.ok(!html.includes('<script>alert(1)</script>'));
   assert.match(html, /&lt;script&gt;/);
 });
+
+test('renderEmbedCard: benchmark.other se popíše vlastním popiskem, ne jako EU', () => {
+  const html = mod.renderEmbedCard({
+    id: 'bar', name: 'Sítě', area: 'Výsledky', value: 8.3, unit: '%', year: 2022, signal: 'good',
+    benchmark: { other: 11 }, benchmark_labels: { other: 'HBSC' }, source: { name: 'HBSC' },
+    trend: [{ year: 2018, value: 5 }, { year: 2022, value: 8.3 }],
+  });
+  assert.match(html, /HBSC ⌀ 11/);
+  assert.doesNotMatch(html, /EU ⌀/);
+});

@@ -86,3 +86,16 @@ test('chybějící / nečíselná hodnota → prázdný verdikt', () => {
   assert.deepEqual(buildTakeaway({ value: 'n/a' }), { text: '', tone: 'neutral' });
   assert.deepEqual(buildTakeaway(null), { text: '', tone: 'neutral' });
 });
+
+test('benchmark.other s popiskem — verdikt mluví o průměru dané sítě, ne EU', () => {
+  const ind = {
+    value: 8.3, unit: '%',
+    benchmark: { other: 11 }, benchmark_labels: { other: 'HBSC' },
+    direction: 'lower_is_better', signal: 'good',
+    trend: [{ year: 2018, value: 5 }, { year: 2022, value: 8.3 }],
+  };
+  const { text, tone } = buildTakeaway(ind);
+  assert.equal(tone, 'good');
+  assert.match(text, /pod průměrem HBSC/);
+  assert.doesNotMatch(text, /průměrem EU|průměrem OECD/);
+});

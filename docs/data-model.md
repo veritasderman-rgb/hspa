@@ -53,10 +53,14 @@ Frontend čte tento soubor pro skoro vše, co zobrazuje.
         {"year": 2023, "value": 79.7},
         {"year": 2024, "value": 79.9}
       ],
-      "benchmark": {                        // mezinárodní srovnání (oba nepovinné)
+      "benchmark": {                        // mezinárodní srovnání (všechny klíče nepovinné)
         "oecd": 81.1,
-        "eu": 80.9
+        "eu": 80.9,
+        "other": 11                         // průměr jiné sítě než OECD/EU (HBSC, ESPAD…) — jen se seedem
       },
+      "benchmark_labels": { "other": "HBSC" },  // POVINNÉ, je-li benchmark.other: krátký token (≤ 16 znaků),
+                                            // UI z něj skládá „HBSC průměr“ / „průměrem HBSC“; detail (44 zemí, rok)
+                                            // patří do benchmark_source.note metodické karty. Validuje ingest/validate.js
       "signal": "warn",                     // good | warn | bad | neutral (vypočteno transformem)
       "direction": "higher_is_better",      // higher_is_better | lower_is_better | context_dependent
       "source": {

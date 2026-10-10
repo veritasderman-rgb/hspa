@@ -65,3 +65,10 @@ test('vygenerované indikator-*.html mají validní JSON-LD', () => {
     assert.match(html, /<link rel="canonical"/, `${f} má canonical`);
   }
 });
+
+test('buildPage: benchmark.other dostane řádek s vlastním popiskem, ne „EU ⌀“', () => {
+  const ind = { ...verifiedInd, benchmark: { other: 11 }, benchmark_labels: { other: 'HBSC' } };
+  const { html } = buildPage(ind, card);
+  assert.match(html, /<th scope="row">HBSC ⌀<\/th>/);
+  assert.doesNotMatch(html, /EU ⌀|OECD ⌀/);
+});
