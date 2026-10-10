@@ -66,6 +66,9 @@ function benchmarkRows(ind) {
   const rows = [['Česko', ind.value]];
   if (b.oecd != null) rows.push([`OECD ⌀${yr('oecd')}`, b.oecd]);
   if (b.eu != null) rows.push([`EU ⌀${yr('eu')}`, b.eu]);
+  const otherLabel = typeof ind.benchmark_labels?.other === 'string' && ind.benchmark_labels.other.trim()
+    ? ind.benchmark_labels.other.trim() : null;
+  if (b.other != null && otherLabel) rows.push([`${otherLabel} ⌀${yr('other')}`, b.other]);
   if (b.oecd_best != null) rows.push([`OECD nejlepší${yr('oecd_best')}`, b.oecd_best]);
   return rows.map(([label, val]) =>
     `<tr><th scope="row">${esc(label)}</th><td>${cz(val)} ${esc(ind.unit || '')}</td></tr>`

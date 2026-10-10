@@ -44,6 +44,19 @@ function validate() {
     if (ind.trend && !Array.isArray(ind.trend)) {
       errors.push(`indicator[${i}] (${ind.id}): trend must be array`);
     }
+    // Obecný komparátor `benchmark.other` (průměr jiné sítě než OECD/EU, např. HBSC,
+    // ESPAD) smí existovat jen s krátkým popiskem `benchmark_labels.other` — jinak by
+    // ho UI nemělo jak pojmenovat a čtenář by ho zaměnil za EU/OECD.
+    const other = ind.benchmark?.other;
+    if (other != null) {
+      if (typeof other !== 'number' || !Number.isFinite(other)) {
+        errors.push(`indicator[${i}] (${ind.id}): benchmark.other must be a finite number`);
+      }
+      const label = ind.benchmark_labels?.other;
+      if (typeof label !== 'string' || !label.trim() || label.trim().length > 16) {
+        errors.push(`indicator[${i}] (${ind.id}): benchmark.other requires benchmark_labels.other (short label, max 16 chars, e.g. "HBSC")`);
+      }
+    }
     // Method card existence
     if (ind.method_card_url) {
       const cardPath = path.join(ROOT, ind.method_card_url);

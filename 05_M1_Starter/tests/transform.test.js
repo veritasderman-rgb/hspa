@@ -452,3 +452,32 @@ test('extractFromNrh: bez cache vrátí null', () => {
 test('extractFromNrh: neznámé indicator id vrátí null', () => {
   assert.equal(extractFromNrh('neexistujici_id'), null);
 });
+
+// ===== benchmark.other — obecný komparátor s popiskem (HBSC, ESPAD…) =====
+
+test('extractBenchmark: seed benchmark.other projde, nečíselný se zahodí', () => {
+  const out = extractBenchmark('foo', null, null, { benchmark: { other: 11 } });
+  assert.deepEqual(out, { other: 11 });
+  const bad = extractBenchmark('foo', null, null, { benchmark: { other: 'x' } });
+  assert.deepEqual(bad, {});
+});
+
+test('buildIndicator: benchmark.other počítá signál a propaguje benchmark_labels ze seedu', () => {
+  const card = {
+    id: 'other_ind', name: 'Other', area: 'Výsledky', domain: 'Zdravotní rizika', subdomain: 'X',
+    unit: '%', direction: 'lower_is_better', signal_thresholds: { good: 5, warn: 15 },
+    data_source: { primary: { type: 'hbsc_cz' } }, _method_card_path: 'indicators/other_ind.json',
+  };
+  const seed = {
+    value: 8.3, year: 2022, trend: [{ year: 2018, value: 5 }, { year: 2022, value: 8.3 }],
+    benchmark: { other: 11 }, benchmark_labels: { other: 'HBSC' },
+    source: { fetched_at: '2026-10-10T00:00:00Z' },
+  };
+  const out = buildIndicator(card, { seed });
+  assert.deepEqual(out.benchmark, { other: 11 });
+  assert.deepEqual(out.benchmark_labels, { other: 'HBSC' });
+  assert.equal(out.signal, 'good'); // 8,3 vs 11, lower_is_better → +24,5 % → good
+  // bez popisku se benchmark_labels nepropaguje (validátor takový seed odmítne)
+  const noLabel = buildIndicator(card, { seed: { ...seed, benchmark_labels: undefined } });
+  assert.equal(noLabel.benchmark_labels, undefined);
+});

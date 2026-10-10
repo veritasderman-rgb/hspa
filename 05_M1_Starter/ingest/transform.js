@@ -663,6 +663,10 @@ export function extractBenchmark(id, oecdSummary, eurostatSummary, seed) {
   // Doplň ze seed, co chybí
   if (out.oecd == null && seed?.benchmark?.oecd != null) out.oecd = seed.benchmark.oecd;
   if (out.eu == null && seed?.benchmark?.eu != null) out.eu = seed.benchmark.eu;
+  // Třetí, obecný komparátor (`other`) má jen seed/karta — žádný live zdroj. Popisek
+  // nese sourozenec `benchmark_labels.other` (krátký token, např. „HBSC“, „ESPAD“),
+  // aby ho renderery nikdy nepopsaly jako EU/OECD průměr.
+  if (seed?.benchmark?.other != null && Number.isFinite(Number(seed.benchmark.other))) out.other = seed.benchmark.other;
   return out;
 }
 
@@ -743,7 +747,7 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
 
   const benchmark = extractBenchmark(card.id, oecdSummary, eurostatSummary, seed);
 
-  const refValue = benchmark.oecd ?? benchmark.eu ?? null;
+  const refValue = benchmark.oecd ?? benchmark.eu ?? benchmark.other ?? null;
   const signal = computeSignal(value, refValue, card.direction, card.signal_thresholds);
 
   // Zdroj (name/url): preferuj per-indikátor zdroj z live extraktu (např. ECDC Atlas
@@ -790,6 +794,9 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
     year,
     trend,
     benchmark,
+    ...(benchmark.other != null && typeof seed?.benchmark_labels?.other === 'string'
+      ? { benchmark_labels: { other: seed.benchmark_labels.other } }
+      : {}),
     signal,
     direction: card.direction ?? 'context_dependent',
     source: {

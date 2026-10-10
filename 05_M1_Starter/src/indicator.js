@@ -403,15 +403,23 @@ function wireEmbedShare(id) {
 
 function renderBenchmarks(ind) {
   const b = ind.benchmark || {};
-  if (b.oecd == null && b.eu == null && b.oecd_best == null) {
+  const otherLabel = benchmarkOtherLabel(ind);
+  if (b.oecd == null && b.eu == null && b.oecd_best == null && (b.other == null || !otherLabel)) {
     return `<p class="ind-no-bench">Pro tento indikátor nejsou k dispozici srovnatelné mezinárodní benchmarky.</p>`;
   }
   const rows = [];
   rows.push(benchRow('ČR', ind.value, ind.unit, ind.signal, true));
   if (b.oecd != null) rows.push(benchRow('OECD průměr', b.oecd, ind.unit, 'oecd'));
   if (b.eu != null) rows.push(benchRow('EU průměr', b.eu, ind.unit, 'eu'));
+  if (b.other != null && otherLabel) rows.push(benchRow(`${otherLabel} průměr`, b.other, ind.unit, 'other'));
   if (b.oecd_best != null) rows.push(benchRow('Top OECD', b.oecd_best, ind.unit, 'best'));
   return `<table class="ind-bench-table">${rows.join('')}</table>`;
+}
+
+/** Popisek obecného komparátoru `benchmark.other` (např. „HBSC“); bez popisku se nevykreslí. */
+export function benchmarkOtherLabel(ind) {
+  const l = ind?.benchmark_labels?.other;
+  return typeof l === 'string' && l.trim() ? l.trim() : null;
 }
 
 function benchRow(label, value, unit, kind, primary = false) {
@@ -458,6 +466,14 @@ function renderTrendChart(ind) {
       label: 'EU průměr',
       data: labels.map(() => ind.benchmark.eu),
       borderColor: '#E69138', borderDash: [3, 3],
+      borderWidth: 1.5, pointRadius: 0, fill: false, backgroundColor: 'transparent',
+    });
+  }
+  if (ind.benchmark?.other != null && benchmarkOtherLabel(ind)) {
+    datasets.push({
+      label: `${benchmarkOtherLabel(ind)} průměr`,
+      data: labels.map(() => ind.benchmark.other),
+      borderColor: '#7F6AA8', borderDash: [4, 3],
       borderWidth: 1.5, pointRadius: 0, fill: false, backgroundColor: 'transparent',
     });
   }

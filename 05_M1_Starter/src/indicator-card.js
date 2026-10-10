@@ -30,9 +30,12 @@ function benchmarkBarsHtml(ind) {
   const oecd = b.oecd != null ? Number(b.oecd) : null;
   const eu = b.eu != null ? Number(b.eu) : null;
   const best = b.oecd_best != null ? Number(b.oecd_best) : null;
-  if (oecd == null && eu == null && best == null) return '';
+  const otherLabel = typeof ind.benchmark_labels?.other === 'string' && ind.benchmark_labels.other.trim()
+    ? ind.benchmark_labels.other.trim() : null;
+  const other = b.other != null && otherLabel ? Number(b.other) : null;
+  if (oecd == null && eu == null && best == null && other == null) return '';
 
-  const refs = [cz, oecd, eu, best].filter(v => v != null && Number.isFinite(v));
+  const refs = [cz, oecd, eu, best, other].filter(v => v != null && Number.isFinite(v));
   const maxVal = Math.max(...refs);
   if (!Number.isFinite(maxVal) || maxVal === 0) return '';
 
@@ -48,6 +51,7 @@ function benchmarkBarsHtml(ind) {
   let rows = row('ČR', cz, color);
   if (oecd != null) rows += row('OECD', oecd, '#4A90D9', 'Průměr OECD');
   if (eu != null) rows += row('EU', eu, '#E69138', 'Průměr EU');
+  if (other != null) rows += row(escapeHtml(otherLabel), other, '#7F6AA8', `Průměr ${escapeHtml(otherLabel)}`);
   if (best != null) rows += row('Top', best, '#16A34A', 'Nejlepší OECD');
   return rows;
 }
