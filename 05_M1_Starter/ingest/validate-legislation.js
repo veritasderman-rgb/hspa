@@ -11,7 +11,10 @@ const ROOT = path.resolve(__dirname, '..');
 
 export const REQUIRED = ['id', 'veklep_id', 'title', 'title_short', 'type', 'submitter', 'phase', 'veklep_status', 'veklep_url', 'annotation'];
 export const VALID_TYPES = ['zakon', 'vyhlaska', 'narizeni_vlady'];
-export const VALID_PHASES = ['pripominky', 'vyporadani', 'vlada', 'parlament', 'dokonceno'];
+// 'stazeno' = předkladatel nebo vláda materiál stáhli z projednávání (doloženo
+// mimo VeKLEP, např. Legislativním newsletterem MZ); kód registru se přitom nemění,
+// proto se fáze nastavuje ručně s phase_note a zdrojem.
+export const VALID_PHASES = ['pripominky', 'vyporadani', 'vlada', 'parlament', 'dokonceno', 'stazeno'];
 
 // ===== Legislativní plán MZ (plan_meta + plan_items) =====
 export const REQUIRED_PLAN_META = ['usneseni', 'schvaleno', 'zdroj_nazev', 'zdroj_url'];

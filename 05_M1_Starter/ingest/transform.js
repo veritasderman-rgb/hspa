@@ -797,6 +797,10 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
     ...(benchmark.other != null && typeof seed?.benchmark_labels?.other === 'string'
       ? { benchmark_labels: { other: seed.benchmark_labels.other } }
       : {}),
+    // Rok benchmarku, liší-li se od roku české hodnoty (čte scripts/generate-indicator-pages.js).
+    ...(seed?.benchmark_years && typeof seed.benchmark_years === 'object'
+      ? { benchmark_years: seed.benchmark_years }
+      : {}),
     signal,
     direction: card.direction ?? 'context_dependent',
     source: {

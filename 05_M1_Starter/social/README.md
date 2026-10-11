@@ -44,6 +44,25 @@ npm run social:publish            # publikace schválených
 npm run social:report             # týdenní souhrn
 ```
 
+## Atribuce (UTM)
+
+Každý odkaz na článek, který odchází na sítě, nese UTM (`config.js` → `utmUrl`):
+`utm_source=<facebook|instagram|linkedin|x>`, `utm_medium=social`,
+`utm_campaign=<pipeline>` — `notion-fronta` (tento systém), `rutina-buffer`
+(denní rutina, PROMPT_ROUTINE.md blok B), `linkedin-tydenni` (týdenní LinkedIn draft).
+Generátor dává modelu přesnou URL pro danou síť (Instagram bez odkazu, CTA „odkaz
+v biu“), publisher ji dává i do náhledu (`media[link]`). GA4 pak ukazuje návštěvy ze sítí
+v `sessionSource` / `sessionMedium` (`scripts/fetch-ga4-stats.js` → `data/analytics-public.json`,
+`traffic_sources`), odkud je čte týdenní porada (PROMPT_PORADA.md). Idempotentní: URL,
+která už `utm_source` má, se nemění.
+
+**LinkedIn** je v generátoru připravený (`generators/prompts/linkedin.js`,
+`BUFFER_PROFILE_LINKEDIN`), ale Buffer Free má strop 3 kanálů (FB, IG, X), takže
+LinkedIn kanál připojený není a řádek LinkedIn v Notionu skončí jako „přeskočeno:
+kanál nemá nakonfigurovaný BUFFER_PROFILE_…“. Týdenní LinkedIn text pro profil
+vydavatele proto připravuje rutina jako Buffer **Idea** (ne post), viz PROMPT_ROUTINE.md
+blok B krok 6.
+
 ## Konfigurace (env / GitHub Secrets)
 
 `ANTHROPIC_API_KEY`, `NOTION_API_KEY`, `NOTION_DATABASE_ID`,

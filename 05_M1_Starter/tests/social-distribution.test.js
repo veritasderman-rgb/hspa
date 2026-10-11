@@ -144,7 +144,7 @@ test('publishArticleToBuffer: X vlákno → samostatné updaty, obrázek u prvn�
   assert.equal(calls[0].get('media[photo]'), 'https://s/img.png'); // obrázek jen první
   assert.equal(calls[1].get('media[photo]'), null);
   assert.equal(calls[0].get('media[link]'), null);                 // odkaz jen poslední
-  assert.equal(calls[1].get('media[link]'), 'https://e/a');
+  assert.equal(calls[1].get('media[link]'), 'https://e/a?utm_source=x&utm_medium=social&utm_campaign=notion-fronta'); // odkaz nese UTM sítě
 });
 
 test('publishArticleToBuffer: selhání jednoho kanálu neshodí už odeslaný (P1)', async () => {
@@ -168,4 +168,45 @@ test('NETWORKS: definuje právě 4 sítě s neprázdným zadáním', () => {
   for (const net of Object.values(NETWORKS)) {
     assert.ok(net.taskSpec.length > 0, `${net.key} má taskSpec`);
   }
+});
+
+// ===== UTM atribuce (config.js utmUrl) =====
+
+import { utmUrl, UTM_CAMPAIGNS } from '../social/config.js';
+import { networkLinkSpec } from '../social/generators/summary-generator.js';
+
+test('utmUrl: doplní utm_source/medium/campaign podle sítě a pipeline', () => {
+  const u = new URL(utmUrl('https://skorezdravotnictvi.cz/clanek-x', { source: 'facebook' }));
+  assert.equal(u.searchParams.get('utm_source'), 'facebook');
+  assert.equal(u.searchParams.get('utm_medium'), 'social');
+  assert.equal(u.searchParams.get('utm_campaign'), UTM_CAMPAIGNS.notion);
+  assert.equal(u.pathname, '/clanek-x');
+});
+
+test('utmUrl: je idempotentní a nechá prázdnou/nevalidní URL být', () => {
+  const once = utmUrl('https://skorezdravotnictvi.cz/clanek-x', { source: 'x', campaign: 'rutina-buffer' });
+  assert.equal(utmUrl(once, { source: 'facebook' }), once, 'podruhé se nic nepřidá');
+  assert.equal(utmUrl(null, { source: 'x' }), null);
+  assert.equal(utmUrl('nic-takoveho', { source: 'x' }), 'nic-takoveho');
+  assert.equal(utmUrl('https://e/a'), 'https://e/a', 'bez source beze změny');
+});
+
+test('networkLinkSpec: sítě s klikacím odkazem dostanou přesnou UTM URL, Instagram nic', () => {
+  const art = { url: 'https://skorezdravotnictvi.cz/clanek-y' };
+  assert.match(networkLinkSpec(art, 'linkedin'), /utm_source=linkedin&utm_medium=social&utm_campaign=notion-fronta/);
+  assert.match(networkLinkSpec(art, 'x'), /ODKAZ NA ČLÁNEK PRO TUTO SÍŤ/);
+  assert.equal(networkLinkSpec(art, 'instagram'), '');
+  assert.equal(networkLinkSpec({}, 'facebook'), '');
+});
+
+test('publishArticleToBuffer: odkaz v náhledu (media[link]) nese UTM dané sítě', async () => {
+  const bodies = [];
+  const fakeFetch = async (_url, opts) => { bodies.push(new URLSearchParams(opts.body)); return { ok: true, async text() { return JSON.stringify({ updates: [{ id: 'u1' }] }); } }; };
+  const rows = [{ network: 'facebook', text: 'ahoj', imageUrl: null, articleUrl: 'https://skorezdravotnictvi.cz/clanek-z' }];
+  const r = await publishArticleToBuffer(rows, { site: 'https://skorezdravotnictvi.cz', profiles: { facebook: 'fb1' }, opts: { token: 't', fetchImpl: fakeFetch } });
+  assert.equal(r.sent.length, 1);
+  const link = new URL(bodies[0].get('media[link]'));
+  assert.equal(link.pathname, '/clanek-z');
+  assert.equal(link.searchParams.get('utm_source'), 'facebook');
+  assert.equal(link.searchParams.get('utm_campaign'), 'notion-fronta');
 });

@@ -34,6 +34,8 @@
 | Návštěvnost | `data/ga4-stats.json` pokud existuje (plní `ga4-stats.yml`), jinak „bez dat" | lokálně |
 | Newsletter | poslední kampaň: odesláno, open, click | MCP `Brevo` (`get_email_campaigns`) |
 | Sociální sítě | agregované metriky za 7 dní per kanál | MCP `Buffer` (`get_aggregated_post_metrics`) |
+| Sítě — co zabralo | 3 nejlepší odeslané příspěvky za 7 dní (kanál · článek · reakce/kliky) a 1 nejslabší; stav LinkedIn draftu (Idea `LinkedIn ·` z minulého týdne: publikován = přesunut do „Done“/smazán, nebo leží) | MCP `Buffer` (`list_posts` `status: ["sent"]`, `includeMetrics: true`, 7 dní; `list_ideas`) |
+| Sítě → web | návštěvy s `utm_medium=social` za 7 dní podle `utm_source` (facebook · instagram · x · linkedin) a podíl na celku | `data/analytics-public.json` → `traffic_sources` (`sessionMedium`/`sessionSource`); prázdné nebo `generated_at` starší 10 dní = „bez dat (GA4 nejede)“ |
 | Hodiny vydavatele | odhad z GitHubu: počet ručních merge × 10 min + komentáře v issues × 5 min + odpovědi na rozhodnutí × 15 min | výpočet, uveď vzorec |
 
 Chybí-li konektor, napiš „bez dat" — nikdy nedoplňuj z paměti ani neodhaduj.
@@ -54,6 +56,12 @@ Chybí-li konektor, napiš „bez dat" — nikdy nedoplňuj z paměti ani neodha
 6. **Trvalé body**, dokud nejsou vyřešené: vnější lidský audit (§ 11) — kdo a kdy;
    otevřené PR třídy C starší 7 dní; rozhodnutí starší 14 dní (aplikuj konzervativní
    variantu a napiš to).
+7. **Rešeršní řádek ze sítí** (jediný vstup publika do redakce; dosah zůstává kontext,
+   ne cíl): z tabulky „co zabralo“ a „sítě → web“ napiš **jednu větu** pro autorku —
+   které téma nebo formát (číslo v háku, srovnání se zahraničím, legislativní termín…)
+   přivedlo čtenáře na web, a které ne. Žádné „dělej víc virálního“; věta smí jen posunout
+   pořadí v evergreen backlogu nebo navrhnout formát AV prvku. Komentáře a zprávy
+   z sítí porada nečte ani neodpovídá (PROMPT_OMBUDSMAN.md řeší jen schránku).
 
 ## 3. Zápis do `PLAN-PRACE.md`
 
@@ -78,6 +86,8 @@ historie je v gitu. Šablona:
 2. …
 3. …
 
+**Sítě minulý týden:** nejlépe … (kanál, článek, reakce/kliky) · nejhůř … · návštěvy ze sítí … (fb … · ig … · x … · li …; podíl … %) · LinkedIn draft: {publikován / leží od DD.MM. / nebyl} · **věta pro autorku:** …
+
 **Čeká na vydavatele:** #… (od …), #… · **Rozhodnutí v issue:** #…
 **Minulý týden:** splněno … · trvá … · zrušeno …
 **Trvalé body:** vnější audit — …; změny pravomocí — …
@@ -85,6 +95,8 @@ historie je v gitu. Šablona:
 
 Autorka sekci čte v bloku A a při routingu v bloku E ji bere jako první kritérium
 (před evergreen backlogem), pokud priorita neodporuje jejím stropům a zdrojovým pravidlům.
+Řádek „Sítě minulý týden“ je pro ni kontext k pořadí evergreen backlogu a k výběru
+kandidáta pro LinkedIn Idea (blok B krok 6), ne nová kvóta.
 
 ## 4. Issue pro vydavatele
 

@@ -14,6 +14,7 @@ import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import Anthropic from '@anthropic-ai/sdk';
 import { SYSTEM_PROMPT } from './prompts/base.js';
+import { utmUrl, UTM_CAMPAIGNS } from '../config.js';
 import facebook from './prompts/facebook.js';
 import instagram from './prompts/instagram.js';
 import linkedin from './prompts/linkedin.js';
@@ -85,6 +86,17 @@ export function splitThread(text) {
     .filter(Boolean);
 }
 
+/**
+ * Odkaz s UTM pro danou síť — doplněk k zadání sítě. Instagram odkaz v textu
+ * nemá (není klikací, CTA je „odkaz v biu“), ostatní sítě dostanou přesnou URL,
+ * aby model nevymýšlel vlastní a atribuce v GA4 fungovala (config.js utmUrl).
+ */
+export function networkLinkSpec(article, networkKey) {
+  if (networkKey === 'instagram' || !article?.url) return '';
+  const url = utmUrl(article.url, { source: networkKey, campaign: UTM_CAMPAIGNS.notion });
+  return `\n\nODKAZ NA ČLÁNEK PRO TUTO SÍŤ (vlož přesně takto, bez úprav): ${url}`;
+}
+
 /** Vygeneruje jednu verzi (jedna síť). */
 export async function generateSummary(article, networkKey, { client, model = MODEL }) {
   const net = NETWORKS[networkKey];
@@ -101,7 +113,7 @@ export async function generateSummary(article, networkKey, { client, model = MOD
         // Kontext článku — identický napříč sítěmi → cache_control.
         { type: 'text', text: buildArticleContext(article), cache_control: { type: 'ephemeral' } },
         // Síťově specifické zadání — liší se, proto až za cachovaným blokem.
-        { type: 'text', text: net.taskSpec },
+        { type: 'text', text: net.taskSpec + networkLinkSpec(article, networkKey) },
       ],
     }],
   });
