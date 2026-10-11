@@ -99,6 +99,18 @@ const OUT_DIRS = {
 //   headline    — fallback bez čísla (velký serif nadpis).
 // Žádná nová čísla z paměti — vše vychází z dříve schválených headline.
 const MANIFEST = {
+  'clanek-platby-pacientu-metodicke-stanovisko-mz-2026': {
+    kicker: 'Práva pacientů · platby u lékaře', signal: 'neutral',
+    stat: '90', statSuffix: ' Kč',
+    claim: 'na pohotovosti platí dál. Za přednostní termín ani eRecept lékař platbu chtít nesmí.',
+    context: 'Metodické stanovisko MZ z 8. října 2026.',
+  },
+  'clanek-konopi-lecebne-390-kilogramu': {
+    kicker: 'Léky · konopí na recept', signal: 'neutral',
+    stat: '390', statSuffix: ' kg',
+    claim: 'konopí pro léčebné použití vydaly lékárny v roce 2025, o 48 % víc než rok předtím.',
+    context: 'Téměř šestkrát víc než v roce 2020, kdy začala úhrada. Data SÚKL.',
+  },
   'clanek-komari-infekce-evropa-2026': {
     kicker: 'Infekce · komáři', signal: 'warn',
     stat: '1 569', statSuffix: ' případů',
