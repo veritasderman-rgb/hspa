@@ -102,7 +102,7 @@ const MANIFEST = {
   'clanek-platby-pacientu-metodicke-stanovisko-mz-2026': {
     kicker: 'Práva pacientů · platby u lékaře', signal: 'neutral',
     stat: '90', statSuffix: ' Kč',
-    claim: 'na pohotovosti platí dál. Za přednostní termín ani eRecept lékař platbu chtít nesmí.',
+    claim: 'na pohotovosti platí dál. Za eRecept ani dřívější termín se neplatí.',
     context: 'Metodické stanovisko MZ z 8. října 2026.',
   },
   'clanek-konopi-lecebne-390-kilogramu': {
