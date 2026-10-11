@@ -69,6 +69,7 @@ druhé nech do článku.
 | **Facebook** | ideálně < 600 znaků | **klikací v textu** | cover (na šířku OK) | hák na 1. řádek (mobil ořezává ~2 řádky) |
 | **Instagram** | caption < 2200, ale poutej v prvních ~125 znacích | **neklikací** → `🔗 odkaz v biu` | **povinný** (cover/portrét) | hashtagy klidně na konec |
 | **X / Twitter** | **≤ 280 znaků** (Free) | klikací, **počítá se jako 23** | cover ano | piš stručně, raději 250 než 279 |
+| **LinkedIn** (profil vydavatele, ručně) | 200–400 slov | klikací, **až v posledním řádku** | landscape karta nebo bez | 0 emoji, ≤ 2 hashtagy, teze v 1. řádku, číslo ve 2. odstavci; rutina připraví draft jako Buffer Idea, publikuje člověk (MARKETING-PLAN.md § A) |
 
 Hák funguje napříč sítěmi — měň jen délku a CTA, ne sdělení.
 
@@ -123,8 +124,12 @@ z karty `assets/social/ig-story/<slug>.png`. Text proto drž na minimu:
 
 ## 7. CTA — výzva k akci
 
-- Facebook/X: `👉 skorezdravotnictvi.cz/<slug>` (klikací).
-- Instagram: `🔗 odkaz v biu` (do textu URL nedávej, není klikací).
+- Facebook/X: `👉 skorezdravotnictvi.cz/<slug>?utm_source=<facebook|x>&utm_medium=social&utm_campaign=rutina-buffer` (klikací).
+  **UTM je povinné** — bez něj porada nevidí, kolik návštěv přišlo ze sítí (GA4 `sessionSource`/`sessionMedium`).
+  `utm_source` = síť, `utm_medium` = `social`, `utm_campaign` = pipeline (`rutina-buffer` denní rutina,
+  `notion-fronta` nedělní generátor, `linkedin-tydenni` LinkedIn draft). Konvence a helper: `social/config.js` → `utmUrl`.
+- Instagram: `🔗 odkaz v biu` (do textu URL nedávej, není klikací); Story dostane odkaz v samolepce (`metadata.instagram.link`) s `utm_source=instagram`.
+- LinkedIn (ručně z profilu vydavatele): plná URL s `utm_source=linkedin&utm_campaign=linkedin-tydenni` až v posledním řádku.
 - Sloveso + hodnota: „Celý rozbor i s grafy →", „Kde ztrácíme nejvíc →",
   „Proč je to jinak →". Ne jen „více zde".
 
@@ -136,7 +141,7 @@ z karty `assets/social/ig-story/<slug>.png`. Text proto drž na minimu:
 - [ ] Každé číslo je **doložené** z článku/dat (nic z paměti).
 - [ ] Jedna myšlenka, jeden hák.
 - [ ] Délka sedí na síť (X ≤ 280; FB hák na 1. řádku; IG `odkaz v biu`).
-- [ ] CTA + správný odkaz; IG bez URL v textu.
+- [ ] CTA + správný odkaz **s UTM** (`utm_source` = síť); IG bez URL v textu.
 - [ ] 3–6 hashtagů, 1–4 emoji, odstavce krátké.
 - [ ] Cover ověřen (HTTP 200) a má `altText`; IG bez obrázku nezařazuj.
 - [ ] Žádný hodnotící soud bez čísla, žádný clickbait.

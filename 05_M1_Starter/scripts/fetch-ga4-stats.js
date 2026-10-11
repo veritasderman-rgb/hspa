@@ -162,6 +162,27 @@ async function fetchAll(client, propertyId) {
     limit: 10,
   });
 
+  // Sítě → web (porada, PROMPT_PORADA.md): relace s medium = social podle zdroje,
+  // bez limitu řádků, plus celkový počet relací jako jmenovatel podílu. Záměrně
+  // samostatný dotaz — traffic_sources je top 10 podle uživatelů a nejde z něj
+  // sčítat (uživatel může být ve více zdrojích, menší zdroje chybí).
+  const socialRows = await runReport(client, propertyId, {
+    dateRanges: [{ startDate: from, endDate: to }],
+    dimensions: [{ name: 'sessionSource' }],
+    metrics: [{ name: 'sessions' }],
+    dimensionFilter: {
+      filter: {
+        fieldName: 'sessionMedium',
+        stringFilter: { matchType: 'EXACT', value: 'social', caseSensitive: false },
+      },
+    },
+    orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
+  });
+  const totalSessionRows = await runReport(client, propertyId, {
+    dateRanges: [{ startDate: from, endDate: to }],
+    metrics: [{ name: 'sessions' }],
+  });
+
   // Share breakdown (Úroveň 2)
   const shareRows = await runReport(client, propertyId, {
     dateRanges: [{ startDate: from, endDate: to }],
@@ -207,13 +228,15 @@ async function fetchAll(client, propertyId) {
     articleRows,
     termRows,
     sourceRows,
+    socialRows,
+    totalSessionRows,
     shareRows,
     externalRows,
     trendRows,
   };
 }
 
-function shapeOutput({ from, to, indicatorRows, articleRows, termRows, sourceRows, shareRows, externalRows, trendRows }) {
+function shapeOutput({ from, to, indicatorRows, articleRows, termRows, sourceRows, socialRows = [], totalSessionRows = [], shareRows, externalRows, trendRows }) {
   // Helper: získá string z prvního dimensionValue, číslo z první metricValue
   const dimVal = (row, i = 0) => row.dimensionValues?.[i]?.value ?? null;
   const metVal = (row, i = 0) => {
@@ -258,6 +281,23 @@ function shapeOutput({ from, to, indicatorRows, articleRows, termRows, sourceRow
         medium: dimVal(r, 1),
         users: metVal(r) ?? 0,
       })),
+
+    // Sítě → web pro poradu: relace z medium=social podle zdroje + celkový počet
+    // relací (jmenovatel podílu). Bez limitu, bez překryvu — na rozdíl od
+    // traffic_sources jde sčítat a dělit.
+    social_traffic: (() => {
+      const bySource = socialRows
+        .filter(r => dimVal(r))
+        .map(r => ({ source: dimVal(r), sessions: metVal(r) ?? 0 }));
+      const socialSessions = bySource.reduce((a, b) => a + b.sessions, 0);
+      const totalSessions = totalSessionRows.length ? (metVal(totalSessionRows[0]) ?? 0) : null;
+      return {
+        total_sessions: totalSessions,
+        social_sessions: socialSessions,
+        social_share_pct: totalSessions ? Math.round(socialSessions / totalSessions * 1000) / 10 : null,
+        by_source: bySource,
+      };
+    })(),
 
     share_breakdown: shareRows
       .filter(r => dimVal(r))

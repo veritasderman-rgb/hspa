@@ -69,3 +69,31 @@ export const env = {
   bufferProfileLinkedin: process.env.BUFFER_PROFILE_LINKEDIN || '',
   bufferProfileX: process.env.BUFFER_PROFILE_X || '',
 };
+
+// ---------------------------------------------------------------------------
+// Atribuce: každý odkaz na článek, který odchází na sociální sítě, nese UTM.
+// GA4 (scripts/fetch-ga4-stats.js) sbírá sessionSource/sessionMedium, porada
+// (PROMPT_PORADA.md) z toho čte „návštěvy ze sítí“ bez hádání. Konvence:
+//   utm_source   = síť (facebook | instagram | linkedin | x)
+//   utm_medium   = social
+//   utm_campaign = pipeline (notion-fronta | rutina-buffer | linkedin-tydenni)
+// Stejnou konvenci používá rutina (PROMPT_ROUTINE.md, blok B) a copywriting
+// manuál (docs/social-copywriting-manual.md § 7).
+export const UTM_MEDIUM = 'social';
+export const UTM_CAMPAIGNS = { notion: 'notion-fronta', rutina: 'rutina-buffer', linkedin: 'linkedin-tydenni' };
+
+/**
+ * Přidá UTM parametry k URL článku. Idempotentní: URL, která už utm_source
+ * nese, se nemění (aby se parametry nezdvojily při opakovaném průchodu).
+ * Prázdná nebo nevalidní URL se vrací beze změny.
+ */
+export function utmUrl(url, { source, campaign = UTM_CAMPAIGNS.notion, medium = UTM_MEDIUM } = {}) {
+  if (!url || !source) return url ?? null;
+  let u;
+  try { u = new URL(url); } catch { return url; }
+  if (u.searchParams.has('utm_source')) return url;
+  u.searchParams.set('utm_source', String(source));
+  u.searchParams.set('utm_medium', medium);
+  u.searchParams.set('utm_campaign', campaign);
+  return u.toString();
+}

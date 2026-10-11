@@ -621,7 +621,7 @@ zdravotního systému. Automatickou aktualizaci řeší úkol U20 (denní rutina
       "title_short": "Novela zákona o elektronizaci zdravotnictví",
       "type": "zakon",                                  // zakon | vyhlaska | narizeni_vlady
       "submitter": "Ministerstvo zdravotnictví",        // předkladatel
-      "phase": "pripominky",                            // pripominky | vyporadani | vlada | parlament | dokonceno
+      "phase": "pripominky",                            // pripominky | vyporadani | vlada | parlament | dokonceno | stazeno
       "veklep_status": "2 - v připomínkovém řízení",    // stav materiálu ve VeKLEP (raw)
       "veklep_url": "https://odok.cz/portal/veklep/material/ALBSDVLDLD32/",
       "annotation": "...",                              // redakční anotace (co návrh mění a proč je důležitý)
@@ -647,6 +647,7 @@ Fáze (`phase`) je redakční zjednodušení stavů VeKLEP pro filtr v UI:
 | `vlada` | `8` | zařazeno na jednání vlády |
 | `parlament` | `CE`, `D` | zaevidováno / projednáváno v PSP |
 | `dokonceno` | `A`, `B`, `SZ` | zapracovány změny / signováno / odesláno do Sbírky |
+| `stazeno` | — (ručně, s `phase_note` a zdrojem) | předkladatel nebo vláda materiál stáhli z projednávání; kód VeKLEP zůstává (např. `7`), doklad je mimo registr (Legislativní newsletter MZ, usnesení vlády) |
 
 Validátor: `npm run validate:legislation` (`ingest/validate-legislation.js`) —
 ENUM `type`/`phase`, povinná pole, unikátní `id` + `veklep_id`, formát dat

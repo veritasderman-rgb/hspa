@@ -262,7 +262,9 @@ FB `Skóre zdravotnictví Česko` `6a26b01d8f1d11f9b263c41b`, IG `skorezdravotni
    `verified` mimo cooldown, od nejdéle nepropagovaných / nejmladších. Nová částka
    Věstníku MZ (`data/vestniky.json`, `datum` za poslední týden) je kandidát na věcný post
    s odkazem na `/vestniky-mz` (ne, když už fronta post o té částce má).
-3. **Texty** — společné: CTA `https://skorezdravotnictvi.cz/<slug>`; `assets[0].image`
+3. **Texty** — společné: CTA `https://skorezdravotnictvi.cz/<slug>?utm_source=<facebook|x>&utm_medium=social&utm_campaign=rutina-buffer`
+   (UTM povinné — stejná konvence jako `social/config.js` → `utmUrl`; IG odkaz v textu nemá, Story
+   dostane `utm_source=instagram` v `metadata.instagram.link`); `assets[0].image`
    + povinný `altText` („Čtvercová grafika článku … na portálu HSPA Monitor."); hashtagy
    3–6 (oborové + `#zdravícesko`); emoji 1–4. **Facebook** (`metadata.facebook.type: "post"`):
    hook + 2–4 věty + 1 číslo + klikací odkaz. **Instagram** (`metadata.instagram:
@@ -281,16 +283,33 @@ FB `Skóre zdravotnictví Česko` `6a26b01d8f1d11f9b263c41b`, IG `skorezdravotni
    nevyužitý slot se jen nahlásí v reportu („Story vynechána — strop plánu 10/10“).
    Odpadne to samo, až bude plán placený (pak Story sloty běží zvlášť a pravidlo se vrátí
    k původnímu znění). Story = výchozí: IG
-   `metadata.instagram = { type: "story", shouldShareToFeed: false, link: "<URL článku>" }`,
+   `metadata.instagram = { type: "story", shouldShareToFeed: false, link: "<URL článku s UTM utm_source=instagram>" }`,
    FB `metadata.facebook = { type: "story" }`. Reel jen když existuje video
    (`assets/social/reels/<slug>.mp4`). Caption ultra-stručně. Bez kandidáta slot vynech
    a nahlas „chybí vertikální karta".
 5. **Zařazení** `create_post` v pořadí priority; po kanálu zkontroluj, že `scheduledCount`
    nepřekročil 10.
+6. **LinkedIn — týdenní draft pro profil vydavatele** (jen **pondělí**, nebo první běh v týdnu,
+   když pondělní běh nebyl). LinkedIn je podle `MARKETING-PLAN.md` kanál č. 1, ale Buffer Free má
+   strop 3 kanálů (FB, IG, X), takže LinkedIn **není připojený kanál** a text publikuje vlastník
+   ručně ze svého profilu. Rutina proto připraví **jeden** draft jako Buffer **Idea**
+   (`create_idea`, `services: ["linkedin"]`, `title: "LinkedIn · RRRR-MM-DD · <slug>"`), nikdy
+   `create_post`. **Idempotence nejdřív**: `list_ideas` → existuje-li Idea s title `LinkedIn · <datum pondělí
+   tohoto týdne>` (nebo jakákoli `LinkedIn ·` Idea vytvořená od pondělí 00:00), krok **přeskoč** a nahlas
+   „LinkedIn: Idea tohoto týdne už existuje“ — opakovaný běh v týdnu nikdy nevytvoří druhou. Teprve pak
+   kandidát = nejlepší článek týdne podle priority z kroku 2 (news hook, pak nejnovější), mimo slugy,
+   které už LinkedIn Idea za posledních 30 dní má (tamtéž, hledej `LinkedIn ·` v title).
+   Text podle šablony `MARKETING-PLAN.md` § A a `docs/social-copywriting-manual.md` § 4: 200–400 slov,
+   teze v 1. řádku, konkrétní číslo ve 2. odstavci (jen z článku/kontraktu), otázka k debatě na konec,
+   0 emoji, ≤ 2 hashtagy, odkaz **až v posledním řádku**:
+   `https://skorezdravotnictvi.cz/<slug>?utm_source=linkedin&utm_medium=social&utm_campaign=linkedin-tydenni`.
+   Idea je draft textu (GOVERNANCE § 3: třída B) — vydavatel ho upraví a pošle, nebo smaže; rutina
+   Ideas needituje ani nemaže. Když Idea z minulého týdne stále leží v „To Do“, novou nepřidávej
+   a napiš to do reportu („LinkedIn: minulý draft nepublikován“).
 
 **Výstup do těla PR** (nebo do závěrečné zprávy, když PR nevzniká): tabulka per kanál
 (bylo → přidáno → teď, nejbližší/poslední slot), seznam přidaných (kanál · článek · důvod),
-přeskočení s důvodem.
+přeskočení s důvodem, řádek LinkedIn (Idea vytvořena · slug / minulý draft nepublikován / není pondělí).
 
 ---
 
@@ -362,6 +381,10 @@ porovnej fázi u:
 **Fáze postoupila** → radar: `stav`/`fáze` + odkaz VeKLEP (mechanická změna, anotaci
 věcně nepřepisuj); článek: aktualizuj formulaci, `audit-status: review-pending`, do
 `audit:` komentáře zdroj + datum; vždy cituj konkrétní VeKLEP záznam na hlidacstatu.cz.
+**Materiál stažen z projednávání** (doloženo mimo registr — Legislativní newsletter MZ, usnesení
+vlády; kód VeKLEP se přitom nemění) → radar: `phase: stazeno` + `phase_note` se zdrojem a datem,
+`verified_at`; dotčené články ARTICLE-REVISE (formulace, `review-pending`). Vrátí-li se materiál
+na program, fáze se vrací podle data schůze vlády.
 **Nejisté / záznam nedohledatelný** → beze změny, bod do „K rozhodnutí" (issue jen když
 se to dotýká publikovaného článku).
 
@@ -831,7 +854,7 @@ git status --short                          # žádné generované artefakty, ž
 - Obsah dne: {ARTICLE-WRITE | EVERGREEN-WRITE | INDICATOR-ADD | ARTICLE-REVISE | FALLBACK-AUDIT | žádný} — {slug} (KPI: …) · dní od posledního nového článku: N · týdenní kvóta X/3
 - Indikátor: {id / —} · Legislativa: N posunů · Barometr: N změn stavů, N verdiktů
 - Údržba: N auto-fix, N revizí (kvartální okno: ano/ne) · Týdny zdraví: {id / —} · Evidence-audit: {run_id / —}
-- Buffer: FB a→b, IG a→b, X a→b (+ Story FB/IG) · Newsletter: {ověřeno / fallback / —}
+- Buffer: FB a→b, IG a→b, X a→b (+ Story FB/IG) · LinkedIn Idea: {slug / — } · Newsletter: {ověřeno / fallback / —}
 - Přeskočené bloky a proč: …
 
 ### K rozhodnutí redakce
@@ -867,7 +890,8 @@ Závěrečná zpráva session = odkaz na PR (nebo „bez změn v repu") + tři �
 
 - 1 větev, ≤ 1 PR, ≤ 1 issue, 0 souborů-reportů v repu, 0 komentářů na GitHubu.
 - ≤ 1 nový článek; ≤ 1 nový indikátor; ≤ 5 obsahových revizí (jen kvartální okno);
-  ≤ 1 verdikt Ověřovny; evidence-audit ≤ 10 položek; Buffer ≤ 10 feed postů/kanál.
+  ≤ 1 verdikt Ověřovny; evidence-audit ≤ 10 položek; Buffer ≤ 10 feed postů/kanál;
+  ≤ 1 LinkedIn Idea/týden (nikdy post).
 - Nikdy `published: true`, `audit-status: verified`, merge, `shareNow`, okamžité odeslání
   newsletteru, mazání cizí fronty, `number` u článku, bump počtů v HTML.
 - Obsah se mění jen s primárním zdrojem; jinak bod „K rozhodnutí". Při nejistotě

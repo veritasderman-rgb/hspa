@@ -15,7 +15,7 @@
 // Profile_ids zjistíš jednorázově: GET {BASE}/profiles.json?access_token=… nebo
 // pomocným skriptem `node social/publisher/buffer-list-profiles.js`.
 
-import { env } from '../config.js';
+import { env, utmUrl, UTM_CAMPAIGNS } from '../config.js';
 import { splitThread } from '../generators/summary-generator.js';
 
 const DEFAULT_BASE = 'https://api.bufferapp.com/1';
@@ -99,6 +99,9 @@ export async function publishArticleToBuffer(rows, { scheduleAt = null, site, pr
       continue;
     }
     const segments = row.network === 'x' ? splitThread(row.text) : [row.text];
+    // Odkaz v náhledu nese UTM dané sítě (config.js) — bez něj GA4 nevidí, odkud
+    // návštěva přišla. Text příspěvku už UTM odkaz dostal od generátoru.
+    const trackedUrl = utmUrl(row.articleUrl, { source: row.network, campaign: UTM_CAMPAIGNS.notion });
     try {
       const ids = [];
       for (const [i, text] of segments.entries()) {
@@ -106,7 +109,7 @@ export async function publishArticleToBuffer(rows, { scheduleAt = null, site, pr
           profileId,
           text,
           imageUrl: i === 0 ? row.imageUrl : null,            // obrázek jen u prvního tweetu
-          articleUrl: i === segments.length - 1 ? row.articleUrl : null, // odkaz až v posledním
+          articleUrl: i === segments.length - 1 ? trackedUrl : null, // odkaz až v posledním
           scheduledAt: scheduleAt,
           site,
         }, opts);

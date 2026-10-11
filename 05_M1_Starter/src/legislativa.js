@@ -12,6 +12,7 @@ export const PHASE_LABELS = {
   vlada: { label: 'Na jednání vlády', cls: 'leg-ph-vlada' },
   parlament: { label: 'V Parlamentu', cls: 'leg-ph-parlament' },
   dokonceno: { label: 'Proces dokončen', cls: 'leg-ph-dokonceno' },
+  stazeno: { label: 'Staženo z projednávání', cls: 'leg-ph-stazeno' },
 };
 
 export const TYPE_LABELS = {
@@ -21,7 +22,7 @@ export const TYPE_LABELS = {
 };
 
 // Pořadí fází v tabulce = postup legislativního procesu.
-export const PHASE_ORDER = ['pripominky', 'vyporadani', 'vlada', 'parlament', 'dokonceno'];
+export const PHASE_ORDER = ['pripominky', 'vyporadani', 'vlada', 'parlament', 'dokonceno', 'stazeno'];
 
 // ── Legislativní plán MZ (plan_items / plan_meta) ──────────────────────────
 // Samostatná sekce nad radarem: plánované předpisy podle plánu legislativních
