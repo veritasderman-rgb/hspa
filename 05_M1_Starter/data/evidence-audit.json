@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-10-04T00:00:00Z",
+  "generated_at": "2026-10-11T00:00:00Z",
   "_doc": "Registr evidence-auditu (PROMPT_EVIDENCE_AUDIT.md): pro každý ověřený článek / indikátor seznam tvrzení, které studie z PubMed/Consensus je řeší, a verdikt (supported / partial / contradicted / no-evidence / not-applicable / unclear). Zapisuje jen orchestrace (Sonnet hledá, Opus rozhoduje), mění se výhradně commitem. content_hash = sha1 souboru v době kontroly; scripts/evidence-audit-queue.js podle něj pozná, že se obsah změnil (stale). Consensus i PubMed jsou nástroje, ne zdroje — do registru patří jen ověřené studie s PMID/DOI, nikdy provozní texty nástrojů.",
   "items": [
     {
@@ -10726,6 +10726,2066 @@
       ],
       "followup": "Tvrzení 1 (WHO 10–15 %): abstrakt prohlášení WHO 2015 (Betrán et al., BJOG 2016;123:667, PMID 26681211) nečtený, vyčerpaný strop volání. Tvrzení 3: infekce a tromboembolismus po SC nejsou doloženy žádným ověřeným abstraktem, vyčerpaný strop volání.",
       "notes": "Karta cituje jen NICE NG192 (jako politickou páku), bez studií, takže found_via article se nepoužilo. PubMed: 8 volání vyčerpáno (5 hledání, 3 metadata); 40679824 a 39884567 jsou irelevantní (PAS guidelines/management), vyřazeny. Consensus: 1 dotaz (bez 429), kandidáti Keag 2018, Sandall 2018, Souza 2010 nebyli ověřeni v PubMed kvůli stropu, proto nejsou v evidence a třetí tvrzení je unclear. Doporučení pro Opus: ověřit tyto tři DOI v PubMed a případně povýšit tvrzení 3 na partial/supported; u tvrzení 1 a 2 navrhnout upřesnění method_notes (WHO 1985, ekologický práh 9–16 %, jen mortalita). Nad rámec: Chen 2018 Cochrane (PMID 30264405, DOI 10.1002/14651858.CD005528.pub3) ověřen: guidelines + druhý názor / audit se zpětnou vazbou mírně snižují míru SC bez rozdílu v mateřské a novorozenecké mortalitě/morbiditě, relevantní kontext k politickým pákám (NG192, audit per nemocnice), ale není to claim z karty. | Adjudikace (Opus), 3 volání PubMed:\n1. převod tří DOI na PMID,\n2. metadata s abstrakty (Keag 2018 = PMID 29360829, Sandall 2018 = PMID 30322585, Souza 2010 = PMID 21067593),\n3. vyhledání prohlášení WHO 2015 podle citace (Betrán et al., BJOG 2016;123:667, PMID 26681211).\n\nVerdikty:\n- Tvrzení 1 (WHO 10–15 %): partial. Rozmezí je z WHO 1985 a ekologický práh je 9–16 %. Formulace „doporučuje jako optimální“ zní jako aktuální cíl, a to abstrakt nepotvrzuje.\n- Tvrzení 2 (nad 20 % bez přínosu): partial. Platí jen pro úmrtnost, číslo 20 % v abstraktu není, morbidita nehodnocena.\n- Tvrzení 3 (rizika pro matku): povýšeno z unclear na partial. Dokládají ho tři ověřené studie z Consensu (Keag, Sandall, Souza). Infekce a tromboembolismus zůstávají nedoložené.\n\nŽádný verdikt není contradicted, takže flagged ani issue nejsou potřeba.\n\nFOLLOWUP:\n- Abstrakt prohlášení WHO 2015 (PMID 26681211) jsem nečetl, protože došel strop volání. Je kandidátem k tvrzení 1.\n- Infekce a tromboembolismus po SC (tvrzení 3) zůstávají neověřené.\n\nPro redakci (mimo audit):\n- V patient_story je text „mírně nad WHO doporučeným optimem 10–15 %“ u hodnoty 28,3 %, což je asi dvojnásobek horní hranice. Má stejnou vadu jako tvrzení 1.\n- Chen 2018 Cochrane (PMID 30264405, ověřil Sonnet) je relevantní kontext k politickým pákám: doporučené postupy a audit se zpětnou vazbou mírně snižují míru SC. Do literature jsem ho nedal, protože se netýká auditovaného tvrzení."
+    },
+    {
+      "id": "clanek-metodika-zachyt-ledvin-vestnik-12-2026.html",
+      "type": "article",
+      "checked_at": "2026-10-11",
+      "run_id": "ea-2026-10-11-01",
+      "content_hash": "9e6f8f594b76f95a15063bbb00545f1203d4d24e",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 7,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Konference KDIGO o časné identifikaci CKD dospěla ke shodě, že záchyt spojený se stratifikací rizika a léčbou je potřeba zavést hned u lidí s vysokým rizikem, ideálně v primární péči a s přizpůsobením místním podmínkám (Shlipak et al. 2021, Kidney International, PubMed 33127436).",
+          "location": "Mezinárodní kontext a co říká evidence",
+          "kind": "policy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "33127436",
+              "doi": "10.1016/j.kint.2020.10.012",
+              "title": "The case for early identification and intervention of chronic kidney disease: conclusions from a KDIGO Controversies Conference",
+              "year": 2020,
+              "journal": "Kidney International",
+              "study_type": "guideline",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno z rešerše: abstrakt uvádí konsenzus, že screening CKD spojený se stratifikací rizika a léčbou má být zaveden okamžitě u osob s vysokým rizikem, ideálně v primární/komunitní péči s přizpůsobením místnímu kontextu. Jde o konsenzus konference, ne o výsledek klinické studie; článek ho tak popisuje. Rok 2021 v článku odpovídá číslu svazku (online 2020). Studie je ve zdrojích článku už citována."
+        },
+        {
+          "claim_id": "",
+          "text": "Ve studii EMPA-KIDNEY dostalo 6 609 lidí s CKD empagliflozin nebo placebo. Zahrnovala lidi s filtrací od 20 ml/min ... Progrese onemocnění ledvin nebo kardiovaskulární úmrtí nastaly u 13,1 % léčených proti 16,9 % na placebu (poměr rizik 0,72), shodně u lidí s diabetem i bez něj.",
+          "location": "Mezinárodní kontext a co říká evidence",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "36331190",
+              "doi": "10.1056/NEJMoa2204233",
+              "title": "Empagliflozin in Patients with Chronic Kidney Disease",
+              "year": 2022,
+              "journal": "New England Journal of Medicine",
+              "study_type": "rct",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno z rešerše: abstrakt uvádí 6 609 randomizovaných, 432/3 304 (13,1 %) vs 558/3 305 (16,9 %), HR 0,72 (95% CI 0,64–0,82), konzistentně s diabetem i bez; dolní hranice zařazení eGFR 20 ml/min (eGFR 45–<90 jen při uACR ≥ 200 mg/g). Věta článku se týká jen dolní hranice, ta je správně. Rok 2023 v článku odpovídá svazku 388 (online 2022). Citováno ve zdrojích."
+        },
+        {
+          "claim_id": "",
+          "text": "Metaanalýza 13 studií (Nuffield Department of Population Health Renal Studies Group 2022, Lancet, PubMed 36351458) ukázala snížení rizika progrese o 37 %.",
+          "location": "Mezinárodní kontext a co říká evidence",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "36351458",
+              "doi": "10.1016/S0140-6736(22)02074-8",
+              "title": "Impact of diabetes on the effects of sodium glucose co-transporter-2 inhibitors on kidney outcomes: collaborative meta-analysis of large placebo-controlled trials",
+              "year": 2022,
+              "journal": "Lancet",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno z rešerše: 13 studií, 90 413 účastníků, SGLT2i snížily riziko progrese onemocnění ledvin o 37 % (RR 0,63; 95% CI 0,58–0,69), podobně s diabetem i bez. Citováno ve zdrojích."
+        },
+        {
+          "claim_id": "",
+          "text": "americký odhad 86 300 dolarů za získaný rok v plné kvalitě při jednorázovém testu v 55 letech (Cusick et al. 2023, Annals of Internal Medicine, PubMed 37216661)",
+          "location": "Mezinárodní kontext a co říká evidence",
+          "kind": "other",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "37216661",
+              "doi": "10.7326/M22-3228",
+              "title": "Population-Wide Screening for Chronic Kidney Disease: A Cost-Effectiveness Analysis",
+              "year": 2023,
+              "journal": "Annals of Internal Medicine",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno z rešerše: abstrakt uvádí ICER 86 300 USD/QALY pro jednorázový screening v 55 letech (Markovův kohortní model, diskont 3 %). Jde o modelovou studii nákladové efektivity, ne o klinickou studii; výsledek je citlivý na účinnost SGLT2i. Článek číslo uvádí jako americký odhad a na ČR ho nepřenáší. Citováno ve zdrojích."
+        },
+        {
+          "claim_id": "",
+          "text": "Německý simulační model S-GASM (Kairys et al. 2022, PLoS One, PubMed 34986199) spočítal, že testování albuminurie u všech diabetiků každé dva roky sníží celoživotní výskyt náhrady funkce ledvin z 2,5 % na 2,3 %. Testování všech diabetiků a hypertoniků ho sníží na 2,2 % a plošný screening populace na 1,8 %. Všechny tři scénáře vyšly v nediskontovaném výpočtu včetně ušetřených nákladů na dialýzu jako úsporné.",
+          "location": "Mezinárodní kontext a co říká evidence",
+          "kind": "other",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "34986199",
+              "doi": "10.1371/journal.pone.0262227",
+              "title": "Development of the simulation-based German albuminuria screening model (S-GASM) and its application",
+              "year": 2022,
+              "journal": "PLoS One",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno z rešerše: abstrakt uvádí pokles z 2,5 % na 2,3 % / 2,2 % / 1,8 % a v nediskontovaném výpočtu se započtením nákladů na dialýzu záporné náklady na QALY ve všech třech scénářích. Simulace, ne klinická studie; článek ji výslovně označuje jako model. Citováno ve zdrojích."
+        },
+        {
+          "claim_id": "",
+          "text": "Pozvání přes praktického lékaře přijalo 40,1 % lidí, přes lékárnu 21,8 %. Zvýšená albuminurie se potvrdila u 8,7 % účastníků z praxí.",
+          "location": "Časný záchyt není screening",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "40247889",
+              "doi": "10.1016/j.eclinm.2025.103185",
+              "title": "Effectiveness of a systematic home-based albuminuria screening programme to detect chronic kidney disease in high-risk individuals in primary care (SALINE): a cross-sectional screening study",
+              "year": 2025,
+              "journal": "eClinicalMedicine",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "verified_in_pubmed": true,
+              "relation": "supports"
+            }
+          ],
+          "note": "Adjudikace ověřila abstrakt znovu: účast 40,1 % (1 524/3 802) přes praktiky vs 21,8 % (562/2 578) přes lékárny, potvrzená albuminurie (ACR ≥ 3 mg/mmol) u 8,7 % účastníků z praxí (133/1 524); 10 praxí a 5 lékáren v Nizozemsku, věk 45–80. Abstrakt také výslovně uvádí financování AstraZeneca Netherlands, takže věta článku o financování je doložená (rešerše ji měla za neověřitelnou). Citováno ve zdrojích."
+        },
+        {
+          "claim_id": "",
+          "text": "Že oportunní záchyt nestačí ani tam, kde ho doporučení výslovně chtějí, ukazuje nizozemská studie SALINE (van Mil et al. 2025, eClinicalMedicine, PubMed 40247889). Autoři v úvodu konstatují, že záchyt u lidí s diabetem, hypertenzí nebo nemocí srdce zůstává „suboptimální“.",
+          "location": "Časný záchyt není screening",
+          "kind": "policy",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "40247889",
+              "doi": "10.1016/j.eclinm.2025.103185",
+              "title": "Effectiveness of a systematic home-based albuminuria screening programme to detect chronic kidney disease in high-risk individuals in primary care (SALINE): a cross-sectional screening study",
+              "year": 2025,
+              "journal": "eClinicalMedicine",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "verified_in_pubmed": true,
+              "relation": "partial"
+            }
+          ],
+          "note": "Druhá věta je doslova doložena: abstrakt začíná konstatováním, že doporučení chtějí oportunní screening CKD u lidí s diabetem, hypertenzí nebo kardiovaskulární nemocí, ale ten u nich zůstává „suboptimal“. Tvrzení, že studie „ukazuje“, že oportunní záchyt nestačí, je jen nepřímo podložené. Studie neměla srovnávací rameno s oportunním záchytem. Měřila účast a výtěžnost systematického programu přidaného k běžnému oportunnímu záchytu. V závěru autoři uvádějí, že program odhalil dosud neznámou albuminurii a 40 % pozitivních z praxí mělo nově zjištěný rizikový faktor. Výsledek tedy ukazuje stejným směrem jako článek, jde ale o jednu průřezovou nizozemskou studii financovanou výrobcem SGLT2i. Přenositelnost na český oportunní záchyt při prohlídce od 50 let je omezená. Rozsah věty není tak očividně širší než evidence, aby to vyžadovalo zásah do textu, protože článek hned uvádí, co studie skutečně dělala. Bez změny prózy, výhrada patří jen do registru."
+        },
+        {
+          "claim_id": "",
+          "text": "CKD podle ní „postihuje každého desátého dospělého obyvatele vyspělých zemí“. To je tvrzení metodiky o vyspělých zemích obecně, ne české číslo.",
+          "location": "Co metodika říká",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "27383068",
+              "doi": "10.1371/journal.pone.0158765",
+              "title": "Global Prevalence of Chronic Kidney Disease - A Systematic Review and Meta-Analysis",
+              "year": 2016,
+              "journal": "PLoS One",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Věta přisuzuje tvrzení metodice, jejíž text ověřil redakční audit, ne literatura. K odbornému obsahu: systematický přehled a metaanalýza 100 studií (6,9 mil. osob) uvádí globální prevalenci CKD 13,4 % (stadia 1–5) a 10,6 % (stadia 3–5), shrnuto jako konzistentně 11–13 %. Řád „každý desátý“ tím je potvrzen, spíše jako konzervativní spodní hranice. Abstrakt ale neuvádí odhad zvlášť pro vyspělé země (populace se liší: globální × vyspělé země), proto nejvýš partial. Článek už sám výslovně uvádí, že nejde o české číslo, upřesňující věta tedy není potřeba. Hill et al. 2016 doplněn do zdrojů jako literatura k tomuto číslu."
+        }
+      ],
+      "summary": {
+        "supported": 6,
+        "partial": 2,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Hill NR et al. 2016, PLoS One (PMID 27383068, DOI 10.1371/journal.pone.0158765) doplněn do article-sources, skupina Recenzovaná literatura (za Kairys 2022), k tvrzení metodiky „každý desátý dospělý“ v oddílu Co metodika říká.",
+          "ref": "27383068"
+        },
+        {
+          "type": "none",
+          "detail": "Ostatních 7 studií (33127436, 36331190, 36351458, 37216661, 40247889, 34986199, 38490803) článek už cituje v textu i ve zdrojích, další source-added nepřidány. V data/claims.json tento článek nemá záznamy, claim-note odpadá. Žádné contradicted: bez flagu a issue, audit-status zůstává review-pending, próza beze změny. Do hlavičky audit: připojena věta evidence-audit 2026-10-11; articles.json nemá u článku objekt audit, poznámka proto jen v HTML (jako u dřívějších záznamů bez objektu audit).",
+          "ref": ""
+        }
+      ],
+      "notes": "PubMed: rešerše 5 volání (dávkové get_article_metadata pro 7 PMID, search, nepovedený lookup_article_by_citation kvůli chybnému parametru, search Hill 2016, get_article_metadata 27383068), adjudikace 2 volání (get_article_metadata 40247889 a 27383068). Consensus nepoužit, PubMed dal studie pro všechna tvrzení. Finální verdikty: 6 supported, 2 partial (SALINE „oportunní záchyt nestačí“ a „každý desátý dospělý“), žádné contradicted ani unclear; próza beze změny. Oprava rešerše: abstrakt SALINE výslovně uvádí financování AstraZeneca Netherlands, věta článku o financování je doložená. Rozdíl roku u Shlipaka (online 2020, svazek 2021) a EMPA-KIDNEY (online 2022, svazek 2023) není chyba, článek cituje podle svazku. Mimo rozsah evidence-auditu: klinické prahy a cíle metodiky (systolický TK ~120 mmHg, eGFR 0,33 a 0,5 ml/s u SGLT2i/metforminu, 150 min pohybu týdně) jsou atribucí metodiky ověřenou redakčním auditem proti Věstníku 12/2026; administrativa a legislativa (výkony 81900/81902/81904, vyhlášky, účast 52,6 % z NZIS) se neověřuje. KDIGO 2024 (PMID 38490803) existuje jako Practice Guideline bez abstraktu v PubMed; článek ho cituje jen jako existující guideline bez čísla, matice G × A z abstraktu nedoložitelná. Volitelně lze klinické prahy a KDIGO 2024 ověřit proti plnému textu guideline, bude-li v PMC."
+    },
+    {
+      "id": "clanek-umrtnost-diabetes-dvojnasobek-eu-2026.html",
+      "type": "article",
+      "checked_at": "2026-10-11",
+      "run_id": "ea-2026-10-11-01",
+      "content_hash": "7831c47daed973e78b5cdce29eb5ed9b68e0473e",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 5,
+        "consensus": 1
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Australská analýza 1,77 milionu úmrtí z let 2006–2017 (Bishop et al. 2023, International Journal of Epidemiology) ukázala, že míra úmrtnosti podle jakékoli zmínky diabetu na certifikátu je 3,5krát vyšší než podle základní příčiny.",
+          "location": "Co indikátor měří",
+          "kind": "measurement",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "35984318",
+              "doi": "10.1093/ije/dyac167",
+              "title": "Quantifying cause-related mortality in Australia, incorporating multiple causes: observed patterns, trends and practical considerations.",
+              "year": 2023,
+              "journal": "International Journal of Epidemiology",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje rešerši: 1 773 399 úmrtí, poměr ASRAM/ASRUC 3,5 u diabetu je v abstraktu. Australská data, článek je používá jen ilustrativně. Drobnost: sekce „Co tenhle ukazatel nedokáže“ parafrázuje tentýž poměr jako „všechna úmrtí diabetiků 3,5krát četnější“ — přesněji jde o úmrtí s diabetem kdekoli na listu; nepřesnost je malá a nemění smysl, k zvážení redakcí."
+        },
+        {
+          "claim_id": "",
+          "text": "Goldberger a kolegové (2015) spočítali, že v Izraeli připadá na jedno úmrtí se základní příčinou diabetes 2,7 úmrtí s diabetem kdekoli na certifikátu, zatímco v USA, Francii, Itálii, Austrálii a Česku 3,0–3,5.",
+          "location": "Co z toho plyne a co ne",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "26430506",
+              "doi": "10.1186/s13584-015-0027-6",
+              "title": "High Israeli mortality rates from diabetes and renal failure - Can international comparison of multiple causes of death reflect differences in choice of underlying cause?",
+              "year": 2015,
+              "journal": "Israel Journal of Health Policy Research",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno: SRMU 2,7 (Izrael) vs 3,0–3,5 (USA, Francie, Itálie, Austrálie, ČR) jsou v abstraktu doslova; data za rok 2009. Česko je ve studii přímo zahrnuto."
+        },
+        {
+          "claim_id": "",
+          "text": "Metaanalýza 40 randomizovaných studií se 100 354 účastníky (Emdin et al. 2015, JAMA) ukázala, že každé snížení systolického tlaku o 10 mm Hg u lidí s diabetem 2. typu snižuje riziko úmrtí o 13 % (relativní riziko 0,87), riziko mrtvice o 27 % a riziko kardiovaskulárních příhod o 11 %.",
+          "location": "Co říká evidence: tlak a lipidy rozhodují víc než glykémie",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "25668264",
+              "doi": "10.1001/jama.2014.18574",
+              "title": "Blood pressure lowering in type 2 diabetes: a systematic review and meta-analysis.",
+              "year": 2015,
+              "journal": "JAMA",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno: mortalita RR 0,87, mrtvice RR 0,73, kardiovaskulární příhody RR 0,89 na 10 mm Hg STK; 40 studií, 100 354 účastníků — vše v abstraktu."
+        },
+        {
+          "claim_id": "",
+          "text": "Metaanalýza individuálních dat z 51 studií (Nazarzadeh et al. 2022, Lancet Diabetes & Endocrinology; 103 325 osob s diabetem) potvrdila, že snížení tlaku o 5 mm Hg snižuje riziko velkých kardiovaskulárních příhod i u diabetiků (HR 0,94); relativní účinek je u nich o něco slabší než u lidí bez diabetu (HR 0,89), absolutní přínos je ale podobný.",
+          "location": "Co říká evidence: tlak a lipidy rozhodují víc než glykémie",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "35878651",
+              "doi": "10.1016/S2213-8587(22)00172-3",
+              "title": "Blood pressure-lowering treatment for prevention of major cardiovascular diseases in people with and without type 2 diabetes: an individual participant-level data meta-analysis.",
+              "year": 2022,
+              "journal": "Lancet Diabetes & Endocrinology",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno: 51 RCT, 358 533 účastníků, z toho 103 325 s T2D; HR 0,94 vs 0,89, absolutní snížení rizika podobné — v abstraktu."
+        },
+        {
+          "claim_id": "",
+          "text": "Systematický přehled 14 studií s 28 614 pacienty (Hemmingsen et al. 2011, BMJ) nenašel vliv na celkovou úmrtnost (RR 1,02) ani na úmrtnost kardiovaskulární, riziko nefatálního infarktu možná snížil (RR 0,85; sekvenční analýza to nepotvrdila), ale zvýšil riziko těžké hypoglykemie na 2,4násobek.",
+          "location": "Co říká evidence: tlak a lipidy rozhodují víc než glykémie",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "22115901",
+              "doi": "10.1136/bmj.d6898",
+              "title": "Intensive glycaemic control for patients with type 2 diabetes: systematic review with meta-analysis and trial sequential analysis of randomised clinical trials.",
+              "year": 2011,
+              "journal": "BMJ",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt znovu přečten (PubMed 11. 10. 2026): 14 RCT, 28 614 účastníků; celková mortalita RR 1,02 (0,91–1,13), kardiovaskulární 1,11 (0,92–1,35, nevýznamné), nefatální IM RR 0,85 nepotvrzen v TSA, těžká hypoglykemie RR 2,39 (1,71–3,34). Bodový odhad 2,4násobek odpovídá; autoři v závěru uvádějí konzervativnější TSA-podložený nárůst o 30 %. Formulace „nenašel vliv … na úmrtnost kardiovaskulární“ je přesnější jako „neprokázal“ (TSA: data nedostatečná), smysl ale sedí."
+        },
+        {
+          "claim_id": "",
+          "text": "Čtvrtý řádek dává lékaři víc místa popsat řetězec nemocí — a chronická nemoc jako diabetes se tak může častěji dostat na místo, odkud ji kódovací pravidla vyberou jako příčinu výchozí. (Zlom v české řadě v roce 2013 časově souvisí se zavedením nového Listu o prohlídce zemřelého.)",
+          "location": "Rok 2013: číslo se zlomilo, zdraví ne",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "31046741",
+              "doi": "10.1186/s12889-019-6748-7",
+              "title": "Changes in proportional mortality from diabetes and circulatory disease in Mauritius and Fiji: possible effects of coding and certification.",
+              "year": 2019,
+              "journal": "BMC Public Health",
+              "study_type": "other",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "39621642",
+              "doi": "10.1371/journal.pone.0311106",
+              "title": "Introduction of electronic death notification in Norway-Impact on diabetes mortality registration.",
+              "year": 2024,
+              "journal": "PLoS ONE",
+              "study_type": "other",
+              "found_via": "consensus",
+              "relation": "context",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "26430506",
+              "doi": "10.1186/s13584-015-0027-6",
+              "title": "High Israeli mortality rates from diabetes and renal failure - Can international comparison of multiple causes of death reflect differences in choice of underlying cause?",
+              "year": 2015,
+              "journal": "Israel Journal of Health Policy Research",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Tvrzení o ČR opřené jen o zahraniční evidenci → partial. Obecný princip, že změna certifikace/kódování skokově mění podíl diabetu jako základní příčiny, doložen: Morrell 2019 (Mauricius 2005, Fidži 2001 — náhlé skoky podílu diabetu z 4–9 % na 20–25 %, resp. z 3 % na 15–20 %, časově shodné se zavedením MKN-10; autoři mluví o artefaktech kódování a certifikace). Eng 2024 (Norsko, elektronické hlášení) ukazuje vliv formy listu na kvalitu záznamu diabetu (méně nespecifikovaných diagnóz), ne na četnost diabetu jako základní příčiny — jen kontext. Žádná studie nezkoumá českou změnu 2013 ani konkrétně čtvrtý řádek části I; přenositelnost mechanismu je nepřímá. Článek to sám výslovně říká a formuluje podmíněně („může“), rozsah tvrzení tedy evidenci nepřesahuje — upřesňující věta není potřeba."
+        }
+      ],
+      "summary": {
+        "supported": 5,
+        "partial": 1,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Morrell S et al. BMC Public Health 2019;19(1):481 (PMID 31046741, DOI 10.1186/s12889-019-6748-7) do article-sources, skupina „Evidence“ (ekvivalent Recenzované literatury) — k větě o čtvrtém řádku Listu a zlomu 2013; doklad obecného principu, ne česká data.",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Ostatních 5 tvrzení supported; všech 5 citovaných studií (Bishop, Goldberger, Emdin, Nazarzadeh, Hemmingsen) článek už cituje. data/claims.json nemá pro článek záznamy → žádná claim-note. Žádné contradicted → bez flagged/issue. Poznámka připojena do HTML hlavičky audit: (evidence_audit_2026-10-11) a do articles.json audit.notes (objekt audit založen jen s notes, last_reviewed nezaložen). audit-status zůstává review-pending, prose beze změny.",
+          "ref": ""
+        }
+      ],
+      "notes": "Claims.json nemá pro článek záznamy, claim_id prázdné. Vybráno 6 odborných tvrzení; administrativní statistika (Eurostat, ČSÚ, vyhlášky 297/2012 a 70/2012, IRIS, ÚZIS NR-06-36) a prevalence/OECD hodnoty neověřovány (mimo rozsah evidence-auditu). Všech 5 studií citovaných v article-sources ověřeno v PubMed (DOI/PMID sedí, bez retrakce v metadatech). Adjudikace (Opus): 1 volání PubMed; finál 5× supported/high, 1× partial/medium (mechanismus 4. řádku Listu 2013 — jen zahraniční nepřímá evidence, článek to sám přiznává a formuluje podmíněně, proto bez prose_change). Eng 2024 jen kontext, do zdrojů nepřidán. Redakční drobnosti (ne akce auditu): parafráze Bishopa v „Co tenhle ukazatel nedokáže“ (úmrtí s diabetem na listu, ne „všechna úmrtí diabetiků“) a Hemmingsen „nenašel vliv“ u KV mortality přesněji „neprokázal“."
+    },
+    {
+      "id": "clanek-polypragmazie-senioru.html",
+      "type": "article",
+      "checked_at": "2026-10-11",
+      "run_id": "ea-2026-10-11-01",
+      "content_hash": "5e1f55e5f4d243821b58b992b9f1e05d6a25c6cf",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 11,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "polypragmazie-senioru--01",
+          "text": "Téměř polovina českých seniorů 65 let a více — 46,6 % podle recenzované analýzy dat SHARE Wave 9 (2021–22) — užívá dlouhodobě pět a více různých účinných léčivých látek souběžně.",
+          "location": "perex",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "40004860",
+              "doi": "10.3390/jcm14041330",
+              "title": "Polypharmacy Prevalence Among Older Adults Based on the Survey of Health, Ageing and Retirement in Europe: An Update.",
+              "year": 2025,
+              "journal": "J Clin Med",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "verified_in_pubmed": true,
+              "relation": "partial"
+            }
+          ],
+          "note": "Číslo potvrzeno v open-access plném textu (PMC11856818, Diskuse): Česká republika 39,9 % (W6) → 46,6 % (W9), osoby 65+. Výhrada k definici: SHARE měří self-report otázkou „Do you take at least five different drugs on a typical day?“ včetně volně prodejných léků a doplňků stravy (vitaminy, minerály). Formulace „dlouhodobě pět a více různých účinných léčivých látek“ je tedy užší/přesnější, než co studie měří (≥ 5 přípravků v typický den, vč. doplňků, bez kritéria dlouhodobosti). Prose beze změny; k posouzení redakcí při doauditu."
+        },
+        {
+          "claim_id": "polypragmazie-senioru--03",
+          "text": "Průměr činí 36,2 procenta, s rozpětím od 25,0 procenta (Slovinsko) po 51,8 procenta (Polsko).",
+          "location": "Mezinárodní srovnání",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "40004860",
+              "doi": "10.3390/jcm14041330",
+              "title": "Polypharmacy Prevalence Among Older Adults Based on the Survey of Health, Ageing and Retirement in Europe: An Update.",
+              "year": 2025,
+              "journal": "J Clin Med",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "verified_in_pubmed": true,
+              "relation": "supports"
+            }
+          ],
+          "note": "Abstrakt: celková prevalence 36,2 %, rozpětí 25,0–51,8 %. Plný text: Slovinsko 25,0 % (nejnižší), Polsko 51,8 % (nejvyšší). Doslova doloženo."
+        },
+        {
+          "claim_id": "polypragmazie-senioru--06",
+          "text": "V šesté vlně SHARE (data z roku 2015) činila prevalence polypragmazie 65+ v ČR 39,9 %",
+          "location": "Trend 2019–2024",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "40004860",
+              "doi": "10.3390/jcm14041330",
+              "title": "Polypharmacy Prevalence Among Older Adults Based on the Survey of Health, Ageing and Retirement in Europe: An Update.",
+              "year": 2025,
+              "journal": "J Clin Med",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "verified_in_pubmed": true,
+              "relation": "supports"
+            },
+            {
+              "pmid": "30015057",
+              "doi": "10.1016/j.archger.2018.06.018",
+              "title": "Polypharmacy prevalence among older adults based on the survey of health, ageing and retirement in Europe.",
+              "year": 2018,
+              "journal": "Arch Gerontol Geriatr",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Plný text Bonanno 2025 (PMC11856818) výslovně: „the Czech Republic (6.7% increase, 39.9% to 46.6%)“ mezi SHARE W6 (sběr ukončen 11/2015) a W9, s odkazem na Midão et al. 2018; abstrakt Midão 2018 uvádí rozpětí 26,3–39,9 % a ČR mezi zeměmi s nejvyšší prevalencí. Srovnání W6 (17 zemí + Izrael) a W9 (27 + Izrael) je pro ČR metodicky konzistentní (stejná otázka SHARE)."
+        },
+        {
+          "claim_id": "polypragmazie-senioru--07",
+          "text": "Česká republika se 46,6 procenta patří do horní třetiny — jednoznačně nad průměrem, ale pod nejvyššími hodnotami Polska (51,8 %), Izraele (51,5 %) a Portugalska (51,3 %)",
+          "location": "Mezinárodní srovnání",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "40004860",
+              "doi": "10.3390/jcm14041330",
+              "title": "Polypharmacy Prevalence Among Older Adults Based on the Survey of Health, Ageing and Retirement in Europe: An Update.",
+              "year": 2025,
+              "journal": "J Clin Med",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "verified_in_pubmed": true,
+              "relation": "partial"
+            }
+          ],
+          "note": "Plný text doslova potvrzuje ČR 46,6 %, Polsko 51,8 %, Izrael 51,5 %, Portugalsko 51,3 % a průměr 36,2 % (ČR tedy nad průměrem a pod trojicí nejvyšších). Pořadí ČR mezi 28 zeměmi („horní třetina“) a hodnoty Rumunska 48,0 % a Maďarska 47,6 % v textu nejsou (jen v obrázku/tabulce, které nástroj nevrací) → partial. Estonsko 33,5 % a Itálie 32,7 % z navazující věty plný text potvrzuje."
+        },
+        {
+          "claim_id": "polypragmazie-senioru--05",
+          "text": "klinicky významná interakce nastává v 80 a více procentech případů (Hanlon et al. 2014; AGS Beers Criteria 2023)",
+          "location": "Co měříme / databox (counter „80 %“)",
+          "kind": "effect",
+          "verdict": "contradicted",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "24073682",
+              "doi": "10.1517/14740338.2013.827660",
+              "title": "Clinical consequences of polypharmacy in elderly.",
+              "year": 2014,
+              "journal": "Expert Opin Drug Saf",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "40004860",
+              "doi": "10.3390/jcm14041330",
+              "title": "Polypharmacy Prevalence Among Older Adults Based on the Survey of Health, Ageing and Retirement in Europe: An Update.",
+              "year": 2025,
+              "journal": "J Clin Med",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "verified_in_pubmed": true,
+              "relation": "context"
+            }
+          ],
+          "note": "Citovaná studie neexistuje v uvedené podobě: PMID 25241369 uvedené u „Hanlon JT et al. (2014) — Multidrug therapy in older adults: a complex problem“ patří nesouvisející práci (Mazzon et al., bolest při hysteroskopii, Fertil Steril 2014); dotaz na práce Hanlon JT 2013–2015 k polypragmazii/interakcím (4 záznamy) titul nevrátil. Nejbližší Hanlonova práce z 2014 (Maher, Hanlon, Hajjar, Expert Opin Drug Saf, přehled) v abstraktu číslo 80 % neuvádí. Úvod Bonanno 2025 zmiňuje 80% prevalenci POTENCIÁLNÍCH interakcí přes cytochrom u hospitalizovaných seniorů s ≥ 5 léky — jiný konstrukt (potenciální, ne klinicky významné; ≥ 5, ne ≥ 10 látek; hospitalizovaní). AGS Beers Criteria nejsou kvantifikace pravděpodobnosti interakcí. Rozhodnuto podle pravidla „neexistence citované studie“ → contradicted; text beze změny, flag + issue, o formulaci rozhoduje redakce."
+        },
+        {
+          "claim_id": "",
+          "text": "Evropská studie ADRED 2020 odhadla, že 15 až 20 procent akutních hospitalizací osob 65+ v EU je iniciováno ADR, a z těchto případů je přibližně 60 procent preventabilních.",
+          "location": "Klinický dopad: pády, hospitalizace, deliria",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "12061133",
+              "doi": "10.1023/a:1015570104121",
+              "title": "Hospitalisations caused by adverse drug reactions (ADR): a meta-analysis of observational studies.",
+              "year": 2002,
+              "journal": "Pharm World Sci",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Citovaná „ADRED (Bouvy ML et al., 2020)“ nemá ve zdrojích DOI/PMID (odkaz jen na úvodní stránku EMA) a nebyla v tomto běhu cíleně dohledána — neexistence neprokázána, proto ne contradicted. Nezávislá metaanalýza Beijer & de Blaey 2002: u starších osob 16,6 % hospitalizací souvisejících s ADR (vs. 4,1 % u mladších) — v rozpětí 15–20 % z textu; podíl preventabilních u starších však 88 %, ne ~60 %. Starší, převážně nizozemská data; přenositelnost na ČR omezená. Odvozený odhad 100–140 tis. hospitalizací v ČR je extrapolace redakce."
+        },
+        {
+          "claim_id": "",
+          "text": "Studie ze stockholmských pilotních programů 2021 prokázala redukci hospitalizací pro nežádoucí lékové reakce o 21 procent v intervenční skupině. … Hodnocení po pěti letech (DREES 2019) prokázalo redukci akutních hospitalizací cílové skupiny o 14 procent.",
+          "location": "Mezinárodní srovnání reformních modelů (Švédsko Mavalin, Francie PAERPA)",
+          "kind": "efficacy",
+          "verdict": "unclear",
+          "confidence": "low",
+          "evidence": [
+            {
+              "pmid": "31941489",
+              "doi": "10.1186/s12913-019-4728-3",
+              "title": "Effectiveness of pharmacist home visits for individuals at risk of medication-related problems: a systematic review and meta-analysis of randomised controlled trials.",
+              "year": 2020,
+              "journal": "BMC Health Serv Res",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "K posouzení redakcí. Čísla −21 % (Mavalin) a −14 % (PAERPA) pocházejí z regionálních/administrativních hodnocení mimo PubMed a zdroje odkazují jen na úvodní stránky institucí. Nejbližší recenzovaná syntéza (SR+MA 12 RCT, farmaceutické domácí návštěvy u rizikových osob) nenašla snížení hospitalizací (RR 1,01; 95% CI 0,86–1,20) — jde ale o jiný typ intervence než farmaceut integrovaný v ordinaci, takže nejde o přímý protiklad. Nelze rozhodnout; doporučeno dohledat primární hodnocení obou programů a Cochrane přehled medication review."
+        },
+        {
+          "claim_id": "",
+          "text": "Polypragmazie … je nezávislým prediktorem hospitalizace pro nežádoucí lékovou reakci (ADR — adverse drug reaction). … Pády jsou statisticky nejčastěji asociovány s benzodiazepiny, hypnotiky, antipsychotiky a kombinací antihypertenziv s ortostatickou hypotenzí",
+          "location": "Klinický dopad: pády, hospitalizace, deliria",
+          "kind": "mechanism",
+          "verdict": "no-evidence",
+          "confidence": "low",
+          "evidence": [],
+          "note": "Dotazy rešerše: „polypharmacy[Title] AND falls[Title] AND (systematic[sb] OR meta-analysis[pt])“ → 0; „polypharmacy AND (falls OR adverse drug events) AND older adults AND (systematic review OR meta-analysis)“ → 166, kandidáti (PMID 36324472, 37433427, 35854209, 37582482, 36042657, 38822740) neověřeni (strop volání). Plný text Bonanno 2025 zmiňuje polypragmazii a ADR hospitalizace jen v univariačních analýzách citovaných prací (ne „nezávislý prediktor“) a vztah k pádům jen obecně, bez lékových tříd. Konkrétní třídy léků nedoloženy."
+        }
+      ],
+      "summary": {
+        "supported": 2,
+        "partial": 3,
+        "contradicted": 1,
+        "no_evidence": 1,
+        "not_applicable": 0,
+        "unclear": 1
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Midão L, Giardini A, Menditto E et al. Arch Gerontol Geriatr 2018;78:213–220 (PMID 30015057, DOI 10.1016/j.archger.2018.06.018) do article-sources, nová skupina „Recenzovaná literatura“ — výchozí bod trendu SHARE Wave 6 (ČR 39,9 %).",
+          "ref": "polypragmazie-senioru--06"
+        },
+        {
+          "type": "source-added",
+          "detail": "Beijer HJ, de Blaey CJ. Pharm World Sci 2002;24(2):46–54 (PMID 12061133, DOI 10.1023/a:1015570104121) do skupiny „Recenzovaná literatura“ — k podílu hospitalizací starších osob souvisejících s ADR (16,6 %; preventabilita 88 % vs. ~60 % v textu).",
+          "ref": ""
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u polypragmazie-senioru--01 doplněn o PMID:40004860 / DOI:10.3390/jcm14041330, ověřeno 2026-10-11 (plný text PMC11856818; definice SHARE ≥ 5 přípravků v typický den vč. OTC a doplňků).",
+          "ref": "polypragmazie-senioru--01"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u polypragmazie-senioru--03 doplněn o PMID:40004860 / DOI:10.3390/jcm14041330, ověřeno 2026-10-11 (abstrakt: průměr 36,2 %, rozpětí 25,0–51,8 %).",
+          "ref": "polypragmazie-senioru--03"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u polypragmazie-senioru--06 doplněn o PMID:40004860 / DOI:10.3390/jcm14041330 (plný text ČR 39,9 % → 46,6 %) a PMID:30015057 / DOI:10.1016/j.archger.2018.06.018, ověřeno 2026-10-11.",
+          "ref": "polypragmazie-senioru--06"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u polypragmazie-senioru--07 doplněn o PMID:40004860 / DOI:10.3390/jcm14041330, ověřeno 2026-10-11 (pořadí „horní třetina“ a RO/HU jen v obrázku, neověřeno).",
+          "ref": "polypragmazie-senioru--07"
+        },
+        {
+          "type": "flagged",
+          "detail": "audit-status review-pending → partial (articles.json audit-status + audit.status, <meta name=\"article:audit-status\">, hlavička audit:) kvůli contradicted u polypragmazie-senioru--05 (neexistující citace Hanlon 2014 / PMID 25241369 patří Mazzon et al., Fertil Steril 2014). published, date, number ani audit.last_reviewed beze změny; prose beze změny.",
+          "ref": "polypragmazie-senioru--05"
+        },
+        {
+          "type": "issue",
+          "detail": "Issue #1266 (label evidence-audit): polypragmazie-senioru--05 — „80 % klinicky významných interakcí při 10+ látkách (Hanlon 2014; AGS Beers 2023)“; citace neexistuje v uvedené podobě, návrh odstranit chybné PMID a číslo doložit nebo přeformulovat (potenciální interakce u hospitalizovaných s ≥ 5 léky, cit. dle Bonanno 2025).",
+          "ref": "https://github.com/veritasderman-rgb/hspa/issues/1266"
+        }
+      ],
+      "followup": "Neověřeno (strop volání PubMed vyčerpán, Consensus nepoužit): (1) kandidáti PMID pro pády a lékové třídy / polypragmazii jako nezávislý prediktor ADR hospitalizace (36324472, 37433427, 35854209, 37582482, 36042657, 38822740) — vybrat a ověřit SR/MA; (2) ADRED (Bouvy ML et al., 2020) — citace bez DOI/PMID, dohledat EU epidemiologii ADR a preventabilitu ~60 %; (3) Cochrane přehled medication review a primární hodnocení Mavalin (−21 %) a PAERPA/DREES 2019 (−14 %); (4) pořadí ČR v SHARE W9 a hodnoty RO 48,0 % / HU 47,6 % (jen v obrázku/tabulce Bonanno 2025); (5) adherence 50–70 % (WHO 2003) nehledána kvůli stropu.",
+      "notes": "PubMed 11 volání (rešerše 8 + adjudikace Opus 3: plný text PMC11856818, search Hanlon JT 2013–2015, metadata Maher/Hanlon/Hajjar 2014 a dalších), Consensus dostupný, 0 dotazů. Klíčové zjištění: PMID 25241369 uvedené v článku u „Hanlon 2014“ patří studii o bolesti při hysteroskopii (Mazzon et al., Fertil Steril 2014) → contradicted podle pravidla neexistence citované studie, status partial + issue #1266. Plný text Bonanno 2025 vyřešil --06 (ČR 39,9 % ve W6 výslovně → supported) a potvrdil čísla --01/--07; --07 partial jen kvůli pořadí „horní třetina“ a hodnotám RO/HU. prose_change záměrně prázdný: definiční výhrada u --01 (SHARE = self-report ≥ 5 přípravků v typický den vč. OTC a doplňků, ne „dlouhodobě účinné látky“) jen v note/claim-note k posouzení redakcí. Bonanno 2025 článek již cituje (Datové zdroje), proto nepřidán znovu. Vyřazená administrativní/ilustrativní tvrzení (nepočítají se): 2,2 mil. seniorů (ČSÚ), 720 000 hospitalizací (ÚZIS), VZP 5,2×/2,4×, 280 klinických farmaceutů, krajský rozpad 44,6–55,7 %, adopce LZP 78/64 %, odhad 800–1000 úvazků (model redakce), zákony a vyhlášky."
+    },
+    {
+      "id": "clanek-sebevrazdy-validace-policejni-data.html",
+      "type": "article",
+      "checked_at": "2026-10-11",
+      "run_id": "ea-2026-10-11-01",
+      "content_hash": "5f0257e4b12ad3787d59f3898a349581cd297153",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 5,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Kanadská práce Auger et al. (2016) prošla data 2 735 152 obyvatel za roky 1991–2001 a zjistila, že po připočtení úmrtí nezjištěného úmyslu „suicide rates increased by up to 26.5% for men and 37.7% for women“ — a že se tím změnilo pořadí provincií.",
+          "location": "Co o tom ví literatura — včetně toho, co jí odporuje",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "26157108",
+              "doi": "10.1136/injuryprev-2015-041613",
+              "title": "Suicide in Canada: impact of injuries with undetermined intent on regional rankings.",
+              "year": 2016,
+              "journal": "Injury Prevention",
+              "study_type": "cohort",
+              "found_via": "article",
+              "verified_in_pubmed": true,
+              "relation": "supports"
+            }
+          ],
+          "note": "Adjudikace potvrdila v PubMed: abstrakt doslova uvádí 2 735 152 Canadians followed 1991–2001, nárůst až o 26,5 % (muži) a 37,7 % (ženy) a posun provinčního pořadí. Epub 2015-07, tištěné číslo Inj Prev 2016;22(1):76–8, citace v článku sedí."
+        },
+        {
+          "claim_id": "",
+          "text": "Snowdon (2021) srovnal Španělsko s Anglií a Walesem a našel míru úmrtí nezjištěného úmyslu 0,09 proti 1,74 — tedy stejný typ propasti, jaký je vidět v datech Eurostatu dodnes.",
+          "location": "Co o tom ví literatura — včetně toho, co jí odporuje",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "32918553",
+              "doi": "10.1007/s00127-020-01948-z",
+              "title": "Spain's suicide statistics: do we believe them?",
+              "year": 2021,
+              "journal": "Social Psychiatry and Psychiatric Epidemiology",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Míry 0,09 vs 1,74 (2014–2018) jsou v abstraktu doslova. Srovnání s dnešními daty Eurostatu je administrativní statistika mimo rozsah auditu."
+        },
+        {
+          "claim_id": "",
+          "text": "Skandinávská validační studie Tøllefsen et al. (2015) nechala osm odborníků z každé ze tří zemí přehodnotit 1 800 úmrtí a došla k opačnému závěru: „reclassification did not increase the overall official suicide statistics of the 3 Scandinavian countries“ — třebaže i tam bylo 21 % švédských úmrtí nezjištěného úmyslu překlasifikováno na sebevraždu.",
+          "location": "Co o tom ví literatura — včetně toho, co jí odporuje",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "26608638",
+              "doi": "10.1136/bmjopen-2015-009120",
+              "title": "Are suicide deaths under-reported? Nationwide re-evaluations of 1800 deaths in Scandinavia.",
+              "year": 2015,
+              "journal": "BMJ Open",
+              "study_type": "other",
+              "found_via": "article",
+              "verified_in_pubmed": true,
+              "relation": "supports"
+            }
+          ],
+          "note": "Validation Study; citát, 1 800 úmrtí, 8 expertů na zemi i 21 % švédských úmrtí nezjištěného úmyslu jsou v abstraktu (21 % po druhé reklasifikaci s doplňujícími informacemi)."
+        },
+        {
+          "claim_id": "",
+          "text": "Práce Schmeckenbecher et al. (2024) v European Journal of Epidemiology, která analyzovala čtyřicet let mortalitních statistik a pitevnosti v Evropě a Severní Americe, uvádí dokonce, že „suicides do not seem to be misclassified as undetermined deaths or ill-defined deaths“; podle ní se navzájem zaměňují spíš sebevraždy a nehody.",
+          "location": "Co o tom ví literatura — včetně toho, co jí odporuje",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "39044107",
+              "doi": "10.1007/s10654-024-01142-4",
+              "title": "Autopsy rates and the misclassification of suicide and accident deaths.",
+              "year": 2024,
+              "journal": "European Journal of Epidemiology",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "verified_in_pubmed": true,
+              "relation": "supports"
+            }
+          ],
+          "note": "Citát i závěr o vzájemné záměně sebevražd a nehod jsou v abstraktu. Abstrakt navíc uvádí záměnu s úmrtími na užívání drog, kterou článek nezmiňuje, ale nezkresluje."
+        },
+        {
+          "claim_id": "",
+          "text": "Podezření, že se sebevraždy schovávají v kategorii nezjištěného úmyslu, je v odborné literatuře staré a vyzkoušené na několika zemích. Z toho plyne střízlivý závěr: obecné pravidlo neexistuje. Míra podhodnocení je věcí konkrétní země, konkrétní certifikační praxe a konkrétního roku.",
+          "location": "Co o tom ví literatura — včetně toho, co jí odporuje",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "22333684",
+              "doi": "10.1186/1471-244X-12-9",
+              "title": "The reliability of suicide statistics: a systematic review.",
+              "year": 2012,
+              "journal": "BMC Psychiatry",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "26157108",
+              "doi": "10.1136/injuryprev-2015-041613",
+              "title": "Suicide in Canada: impact of injuries with undetermined intent on regional rankings.",
+              "year": 2016,
+              "journal": "Injury Prevention",
+              "study_type": "cohort",
+              "found_via": "article",
+              "verified_in_pubmed": true,
+              "relation": "supports"
+            },
+            {
+              "pmid": "26608638",
+              "doi": "10.1136/bmjopen-2015-009120",
+              "title": "Are suicide deaths under-reported? Nationwide re-evaluations of 1800 deaths in Scandinavia.",
+              "year": 2015,
+              "journal": "BMJ Open",
+              "study_type": "other",
+              "found_via": "article",
+              "verified_in_pubmed": true,
+              "relation": "supports"
+            },
+            {
+              "pmid": "39044107",
+              "doi": "10.1007/s10654-024-01142-4",
+              "title": "Autopsy rates and the misclassification of suicide and accident deaths.",
+              "year": 2024,
+              "journal": "European Journal of Epidemiology",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "verified_in_pubmed": true,
+              "relation": "supports"
+            }
+          ],
+          "note": "Adjudikace dohledala jediný systematický přehled (Tøllefsen, Hem, Ekeberg 2012; 31 studií 1963–2009), který článek do tohoto auditu necitoval. Ten potvrzuje velkou heterogenitu (od fairly reliable po poor suicide statistics; 13 studií podhodnocení 0–10 %), tedy že míra se liší podle země a studie. Zároveň ale 52 % studií našlo podhodnocení nad 10 %, 39 % nad 30 % a autoři závěr formulují jako „The findings support the general under-reporting of suicide“. Formulace „obecné pravidlo neexistuje“ obstojí pro míru podhodnocení, ne pro jeho směr. Článek stavěl literaturu jako vyrovnanou (2 studie pro, 2 proti), nejsilnější typ evidence se přiklání k podhodnocení. Proto partial; přehled doplněn do zdrojů a vložena jedna upřesňující věta. Přehled pokrývá literaturu jen do roku 2010, novější Schmeckenbecher 2024 je proti, takže nejde o contradicted."
+        },
+        {
+          "claim_id": "",
+          "text": "srovnání krajů podle sebevražednosti měří vedle duševního strádání obyvatel také rozdíly v praxi soudního lékařství a policejního šetření — a u Střední Moravy je ta druhá složka nepřehlédnutelná.",
+          "location": "Proč to mění i mapu republiky",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "26157108",
+              "doi": "10.1136/injuryprev-2015-041613",
+              "title": "Suicide in Canada: impact of injuries with undetermined intent on regional rankings.",
+              "year": 2016,
+              "journal": "Injury Prevention",
+              "study_type": "cohort",
+              "found_via": "article",
+              "verified_in_pubmed": true,
+              "relation": "partial"
+            }
+          ],
+          "note": "Přenositelnost: obecný mechanismus (zahrnutí úmrtí nezjištěného úmyslu mění regionální pořadí) dokládá jen zahraniční studie z Kanady. České specifikum Střední Moravy stojí na administrativních datech (ÚZIS tab. 2, Eurostat NUTS2) mimo rozsah auditu a recenzovanou studií ověřeno není. Totéž platí pro větu v sekci literatury „To je přesně mechanismus, který u nás popisuje rozdíl mezi Střední Moravou a Jihozápadem“. Text je už opatrný (krajský rozpad oprav ÚZIS nezveřejnil), proto bez zásahu do prózy."
+        },
+        {
+          "claim_id": "",
+          "text": "To je to, co WHO ve svém textu o české práci popisuje větou, že mnoho mladých lidí zemřelých na kolejích bylo vedeno jako nehoda, ačkoli šlo o sebevraždu.",
+          "location": "Odkud těch 294 úmrtí přišlo",
+          "kind": "other",
+          "verdict": "not-applicable",
+          "confidence": "medium",
+          "evidence": [],
+          "note": "Atribuovaná parafráze tiskové zprávy WHO Europe. Podkladové číslo (40 úmrtí V05 přeřazených z nehody na sebevraždu) je administrativní statistika ÚZIS. Recenzovaná literatura tu není správný soudce, proto vyřazeno jako neodborné tvrzení. Rešerše tvrzení předběžně hodnotila jako partial/low, adjudikace ho přeřadila."
+        }
+      ],
+      "summary": {
+        "supported": 4,
+        "partial": 2,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 1,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Tøllefsen IM, Hem E, Ekeberg Ø. The reliability of suicide statistics: a systematic review. BMC Psychiatry 2012;12:9 (PMID 22333684, DOI 10.1186/1471-244X-12-9) do article-sources, existující skupina „Recenzovaná literatura (ověřeno v PubMed 11. 9. 2026)“ — k závěru „obecné pravidlo neexistuje“ v sekci Co o tom ví literatura. Současně vložena jedna upřesňující věta s citací přehledu na konec odstavce s Tøllefsen 2015 a Schmeckenbecher 2024 (před „Z toho plyne střízlivý závěr“); článek zůstává review-pending (articles.json audit-status + audit.status, hlavička audit: status, meta article:audit-status — všude už byl review-pending). Sebeomezení (8) v hlavičce zůstává v platnosti.",
+          "ref": "22333684"
+        },
+        {
+          "type": "none",
+          "detail": "Žádné tvrzení článku není v data/claims.json, takže claim-note se nepoužije. Žádný verdikt contradicted, takže ani flagged či issue. published, date, number ani audit.last_reviewed beze změny; čísla beze změny.",
+          "ref": ""
+        }
+      ],
+      "notes": "PubMed dostupný, rešerše (Sonnet) 3 volání (1x metadata 4 PMID, 2x search), adjudikace (Opus) 2 volání (1 hledání systematického přehledu, 1 načtení metadat PMID 22333684 a 26157108); plný text nebyl potřeba. Consensus nepoužit: článek už cituje 4 studie ověřené v PubMed. Žádné tvrzení v data/claims.json pro tento článek (claim_id prázdný). Vyřazeno jako administrativní statistika (ÚZIS, ČSÚ, Eurostat, zákony), nepočítá se mezi auditovaná tvrzení: čísla 1 561 / 1 253, 294 oprav, tabulky 1–4, krajské míry, Eurostat míry. Citace všech 4 článkových studií odpovídají metadatům PubMed (autoři, časopis, svazek, strany, DOI); žádná retrakce ani erratum. Hlavní nález: článek necitoval jediný dohledaný systematický přehled (Tøllefsen et al. 2012, BMC Psychiatry), jehož závěr („support the general under-reporting of suicide“) je k vyrovnanému rámování literatury (2 nálezy pro, 2 proti) v částečném napětí; doplněn do zdrojů a jednou upřesňující větou, kterou musí schválit redakce."
+    },
+    {
+      "id": "clanek-napoje-1-tekuty-cukr.html",
+      "type": "article",
+      "checked_at": "2026-10-11",
+      "run_id": "ea-2026-10-11-01",
+      "content_hash": "c3e6ec83b24f17cd8ac6112442eb38b476b9b99e",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 11,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Velká meta-analýza sedmnácti dlouhodobých studií publikovaná v BMJ v roce 2015 zjistila, že každá denní porce slazeného nápoje navíc je spojená s přibližně osmnáctiprocentně vyšším rizikem cukrovky 2. typu.",
+          "location": "Co to dělá v populačních datech (1. odstavec)",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "26199070",
+              "doi": "10.1136/bmj.h3576",
+              "title": "Consumption of sugar sweetened beverages, artificially sweetened beverages, and fruit juice and incidence of type 2 diabetes: systematic review, meta-analysis, and estimation of population attributable fraction",
+              "year": 2015,
+              "journal": "BMJ",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno z abstraktu (PubMed, ověřeno při adjudikaci): 17 kohort, 38 253 případů, +18 % na porci/den (95% CI 9–28 %), I2 = 89 %. Formulace „spojená s“ je správně pozorovací. Vysokou heterogenitu článek neuvádí, verdikt to nemění."
+        },
+        {
+          "claim_id": "",
+          "text": "Klíčové je, že efekt na cukrovku zůstává i po statistickém očištění o tělesnou hmotnost (kolem třinácti procent).",
+          "location": "Co to dělá v populačních datech (1. odstavec) + graf „nezávisle na hmotnosti“",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "26199070",
+              "doi": "10.1136/bmj.h3576",
+              "title": "Consumption of sugar sweetened beverages, artificially sweetened beverages, and fruit juice and incidence of type 2 diabetes: systematic review, meta-analysis, and estimation of population attributable fraction",
+              "year": 2015,
+              "journal": "BMJ",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: +13 % (6–21 %, I2 = 79 %) po očištění o adipozitu; závěr autorů „independently of adiposity“. Navazující věta „mají na metabolismus vliv i samy o sobě“ je kauzálnější než pozorovací data, ale odpovídá závěru autorů. Potvrzuji."
+        },
+        {
+          "claim_id": "napoje-1-tekuty-cukr--01",
+          "text": "+27 % vyšší riziko cukrovky 2. typu na každou denní porci slazeného nápoje",
+          "location": "counter „Slazené nápoje v číslech“",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "34444794",
+              "doi": "10.3390/nu13082636",
+              "title": "Sugar- and Artificially Sweetened Beverages Consumption Linked to Type 2 Diabetes, Cardiovascular Diseases, and All-Cause Mortality: A Systematic Review and Dose-Response Meta-Analysis of Prospective Cohort Studies",
+              "year": 2021,
+              "journal": "Nutrients",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt (Meng Y et al., 34 kohort): SSB T2D RR 1,27 (95% CI 1,15–1,41), I2 80,8 %. Číslo v counteru sedí. Tvrzení odpovídá záznamu claims.json napoje-1-tekuty-cukr--01, kterému se doplní PMID/DOI."
+        },
+        {
+          "claim_id": "",
+          "text": "Novější dávkově-závislá meta-analýza prospektivních kohort z roku 2021 došla k odhadu ještě vyššímu — kolem dvaceti sedmi procent na porci, a navíc o devět procent vyšší riziko kardiovaskulárních nemocí a o deset procent vyšší celkovou úmrtnost.",
+          "location": "Co to dělá v populačních datech (1. odstavec) + graf „Co přidá jedna porce slazeného nápoje denně“",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "34444794",
+              "doi": "10.3390/nu13082636",
+              "title": "Sugar- and Artificially Sweetened Beverages Consumption Linked to Type 2 Diabetes, Cardiovascular Diseases, and All-Cause Mortality: A Systematic Review and Dose-Response Meta-Analysis of Prospective Cohort Studies",
+              "year": 2021,
+              "journal": "Nutrients",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "T2D +27 % a CVD +9 % (1,07–1,12) sedí. Celková úmrtnost: RR 1,10 má 95% CI 0,97–1,26 (I2 86,3 %), takže odhad není statisticky významný. Článek ho v textu (tučně) i v grafu (červený sloupec 10 %) podává jako zjištěný nárůst, a tím tvrdí víc, než evidence dovoluje. Navržena jedna upřesňující věta. Sloupec grafu „Celková úmrtnost“ nechává audit beze změny, rozhodne redakce (např. poznámka „nevýznamné“ v data-note)."
+        },
+        {
+          "claim_id": "",
+          "text": "Novější meta-analýza navíc i u uměle slazených nápojů našla vyšší riziko cukrovky (kolem třinácti procent na porci) i kardiovaskulárních nemocí.",
+          "location": "A „dietní“ nápoje to nezachrání (1. odstavec)",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "34444794",
+              "doi": "10.3390/nu13082636",
+              "title": "Sugar- and Artificially Sweetened Beverages Consumption Linked to Type 2 Diabetes, Cardiovascular Diseases, and All-Cause Mortality: A Systematic Review and Dose-Response Meta-Analysis of Prospective Cohort Studies",
+              "year": 2021,
+              "journal": "Nutrients",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: ASB T2D +13 % (1,03–1,25), CVD RR 1,08 (1,04–1,11). Sedí. Úmrtnost u ASB (1,07; 0,91–1,25, nevýznamná) článek neuvádí, a to správně."
+        },
+        {
+          "claim_id": "",
+          "text": "Autoři proto výslovně uzavírají, že ani uměle slazené nápoje, ani ovocná šťáva nejsou prokazatelně zdravou alternativou ke slazeným nápojům.",
+          "location": "A „dietní“ nápoje to nezachrání (1. odstavec)",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "26199070",
+              "doi": "10.1136/bmj.h3576",
+              "title": "Consumption of sugar sweetened beverages, artificially sweetened beverages, and fruit juice and incidence of type 2 diabetes: systematic review, meta-analysis, and estimation of population attributable fraction",
+              "year": 2015,
+              "journal": "BMJ",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova: „both artificially sweetened beverages and fruit juice were unlikely to be healthy alternatives to sugar sweetened beverages“. Autoři zároveň píší, že u obou nálezů jde pravděpodobně o zkreslení (ASB: publikační bias a reziduální záměna; šťáva: +5 % (−1 až 11 %) nevýznamné před očištěním a nevýznamné ve studiích s objektivním zjištěním T2D). Věta předtím, že BMJ studie našla „u obou pozitivní souvislost“, platí u šťávy jen po očištění o adipozitu (+7 %, 1–14 %). Následující odstavec článku zkreslení u ASB přiznává. Nuance ponechávám redakci, verdikt supported."
+        },
+        {
+          "claim_id": "",
+          "text": "autoři BMJ studie odhadli, že kdyby se ve Spojených státech nepilo tolik slazených nápojů, dalo by se během deseti let předejít zhruba každému dvanáctému novému případu cukrovky 2. typu (asi 1,8 milionu případů).",
+          "location": "Co to dělá v populačních datech (odstavec pod grafem)",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "26199070",
+              "doi": "10.1136/bmj.h3576",
+              "title": "Consumption of sugar sweetened beverages, artificially sweetened beverages, and fruit juice and incidence of type 2 diabetes: systematic review, meta-analysis, and estimation of population attributable fraction",
+              "year": 2015,
+              "journal": "BMJ",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: z 20,9 mil. předpokládaných případů T2D za 10 let v USA připadá 1,8 mil. na SSB (PAF 8,7 %, 95% CI 3,9–12,9 %), tedy zhruba 1 z 11–12. Čísla sedí. Autoři je ale výslovně podmiňují předpokladem kauzality („Under assumption of causality“), kdežto článek píše „dalo by se předejít“ bez tohoto upozornění a bez intervalu. Přiřaditelná frakce se běžně čte jako počet případů, kterým lze předejít, proto verdikt supported a confidence medium. Upozornění na předpoklad kauzality k posouzení redakcí."
+        },
+        {
+          "claim_id": "",
+          "text": "Tekutý cukr nic z toho nemá. Vstřebá se rychle, prakticky bez pocitu sytosti, a tělo si ho „nezapočítá“: po slazeném nápoji nesníme o nic míň jídla, jen jsme přidali kalorie navíc.",
+          "location": "Proč tekutý cukr není totéž co cukr v jídle (1. odstavec) + schéma „Kalorie navíc, ne místo jídla“",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "22252107",
+              "doi": "10.1038/ejcn.2011.223",
+              "title": "Satiety scores and satiety hormone response after sucrose-sweetened soft drink compared with isocaloric semi-skimmed milk and with non-caloric soft drink: a controlled trial",
+              "year": 2012,
+              "journal": "European Journal of Clinical Nutrition",
+              "study_type": "rct",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "33352724",
+              "doi": "10.3390/nu12123893",
+              "title": "Effects of Consuming Sugar-Sweetened Beverages for 2 Weeks on 24-h Circulating Leptin Profiles, Ad Libitum Food Intake and Body Weight in Young Adults",
+              "year": 2020,
+              "journal": "Nutrients",
+              "study_type": "rct",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "19339405",
+              "doi": "10.3945/ajcn.2008.27240",
+              "title": "Reduction in consumption of sugar-sweetened beverages is associated with weight loss: the PREMIER trial",
+              "year": 2009,
+              "journal": "American Journal of Clinical Nutrition",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Směr tvrzení (neúplná kompenzace tekutých kalorií) podporují jen malé krátké studie: crossover s jednorázovou dávkou 0,5 l nápoje (n = 24) bez kompenzace u dalšího jídla a dvoutýdenní RCT (n = 131), kde ad libitum příjem rostl o 8–14 % oproti aspartamu. Absolutní formulace „prakticky bez pocitu sytosti“ a „nesníme o nic míň“ (ve schématu „zhruba stejně jako bez něj“) jdou nad rámec evidence. Systematický přehled ke kompenzaci tekutých kalorií jsem v rozpočtu nenašel. Jediná povolená upřesňující věta šla k úmrtnosti (závažnější: nevýznamný výsledek podaný jako zjištění), zmírnění této formulace proto navrhuji redakci, ne jako prose_change. Abstrakty 22252107 a 33352724 ověřila rešerše, při adjudikaci jsem je znovu nečetl."
+        },
+        {
+          "claim_id": "",
+          "text": "Fruktóza míří do jater: Opakovaná nálož cukru podporuje ukládání tuku v játrech a postupně i sníženou citlivost na inzulin (inzulinovou rezistenci).",
+          "location": "schéma „Co se v těle děje po sklenici slazeného nápoje“ (4. krok)",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "35889803",
+              "doi": "10.3390/nu14142846",
+              "title": "Important Food Sources of Fructose-Containing Sugars and Non-Alcoholic Fatty Liver Disease: A Systematic Review and Meta-Analysis of Controlled Trials",
+              "year": 2022,
+              "journal": "Nutrients",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "24569542",
+              "doi": "10.1038/ejcn.2014.8",
+              "title": "Effect of fructose on markers of non-alcoholic fatty liver disease (NAFLD): a systematic review and meta-analysis of controlled feeding trials",
+              "year": 2014,
+              "journal": "European Journal of Clinical Nutrition",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Lee et al. 2022 (51 kontrolovaných studií, n = 2059, GRADE): energie navíc ze slazených nápojů vede k velkému nárůstu tuku v játrech (IHCL, vysoká jistota) a k malému nárůstu ALT. Při výměně fruktózových cukrů za jiné živiny se stejnou energií ani ve studiích ad libitum efekt nebyl. Chiu et al. 2014 uzavírají, že účinek extrémních dávek „may be more attributable to excess energy than fructose“. Část „nálož cukru → tuk v játrech“ je tedy podložená, když jde o kalorie navíc (což schéma v předchozím kroku popisuje). Nadpis „Fruktóza míří do jater“ ale naznačuje specifický účinek fruktózy, který kontrolované studie nepotvrzují. Část o inzulinové rezistenci těmito abstrakty ověřena není (followup). Schéma je v článku označeno jako zjednodušené."
+        }
+      ],
+      "summary": {
+        "supported": 6,
+        "partial": 3,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Lee D, Chiavaroli L, Ayoub-Charette S, et al. Nutrients 2022;14(14):2846 (PMID 35889803, DOI 10.3390/nu14142846) připojen do existující skupiny „Primární — recenzovaná literatura (PubMed)“ za položku Nutrients 2021 — ke schématu „Fruktóza míří do jater“.",
+          "ref": "PMID:35889803"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u napoje-1-tekuty-cukr--01 doplněn o „PMID:34444794 / DOI:10.3390/nu13082636, ověřeno 2026-10-11“.",
+          "ref": "napoje-1-tekuty-cukr--01"
+        },
+        {
+          "type": "none",
+          "detail": "Jedna upřesňující věta (Opus, partial) za větu o +10 % celkové úmrtnosti v sekci „Co to dělá v populačních datech“: odhad není statisticky průkazný (RR 1,10; 95% CI 0,97–1,26), citace Meng et al., Nutrients 2021, PMID 34444794. Kvůli vložené formulaci audit-status verified → review-pending (articles.json audit-status + audit.status, hlavička audit: status, <meta name=\"article:audit-status\">).",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Imamura 2015 (PMID 26199070) a Meng 2021 (PMID 34444794) článek už cituje, nová položka se nezakládá. Pozn. pro redakci (bez zásahu auditu): u položky Nutrients 2021 ve zdrojích chybí autoři (Meng Y, Li S, Khan J, et al.) a u obou chybí PMID.",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Žádné contradicted, takže žádný flag ani issue.",
+          "ref": ""
+        }
+      ],
+      "followup": "Neověřeno: inzulinová rezistence jako důsledek opakované nálože cukru/fruktózy (4. krok schématu); chybí systematický přehled ke kompenzaci energie z tekutých kalorií (sytost) — abstrakty 22252107/33352724/19339405 ověřila jen rešerše; vyčerpaný strop PubMed u mechanismu fruktóza–játra v rešerši. Vynecháno z rozpočtu: tvrzení o kazu a dětské obezitě v ČR a trend spotřeby limonád u školáků (HBSC). Návrhy pro redakci: data-note „nevýznamné“ u sloupce Celková úmrtnost (graf i cover_viz), zmírnit „prakticky bez pocitu sytosti“ / „nesníme o nic míň“ / „zhruba stejně jako bez něj“, nadpis „Fruktóza míří do jater“, předpoklad kauzality u PAF 1,8 mil., kauzální perex „zvyšuje riziko … zhruba o čtvrtinu“.",
+      "notes": "Rešerše: z článku vybráno 8 odborných tvrzení, 8 volání PubMed (strop), Consensus nepoužit (0 volání), protože PubMed pro hlavní tvrzení dal studie. Doporučení WHO k volným cukrům (<10 % / <5 % energie, policy 2015) a čísla ČSÚ, WHO COSI, OECD/ÚZIS, KPE, obsah cukru na obalu a spotřeba cukru jsou administrativní data/policy mimo rozsah evidence-auditu a nepočítají se mezi ověřená tvrzení. Adjudikace ea-2026-10-11-01 (Opus), 3 volání PubMed: metadata 34444794 + 26199070, vyhledávání fruktóza–jaterní tuk (SR/MA), metadata 24569542 + 35889803 + 33973269 (poslední je zvířecí model, nepoužit). Finální verdikty: 9 tvrzení, 6 supported, 3 partial, 0 contradicted. Nejdůležitější nález: celková úmrtnost +10 % (Nutrients 2021) je statisticky nevýznamná (CI 0,97–1,26), ale v textu je tučně a v grafu jako červený sloupec — proto upřesňující věta a review-pending. Graf auditor neupravuje."
+    },
+    {
+      "id": "clanek-mamograf-rakovina-prsu.html",
+      "type": "article",
+      "checked_at": "2026-10-11",
+      "run_id": "ea-2026-10-11-01",
+      "content_hash": "8eed84f32b339529917fcfe4ffad9116aea430da",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 11,
+        "consensus": 1
+      },
+      "claims": [
+        {
+          "claim_id": "mamograf-rakovina-prsu--08",
+          "text": "strojové předčtení snímků sníží pracovní zátěž radiologů o cca 44 %, aniž by zhoršilo záchyt rakoviny",
+          "location": "Reformní debaty, třetí téma (AI ve čtení mamografů) + tabulka reformních posunů",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "37541274",
+              "doi": "10.1016/S1470-2045(23)00298-X",
+              "title": "Artificial intelligence-supported screen reading versus standard double reading in the Mammography Screening with Artificial Intelligence trial (MASAI): a clinical safety analysis of a randomised, controlled, non-inferiority, single-blinded, screening accuracy study",
+              "year": 2023,
+              "journal": "The Lancet. Oncology",
+              "study_type": "rct",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "39904652",
+              "doi": "10.1016/S2589-7500(24)00267-X",
+              "title": "Screening performance and characteristics of breast cancer detected in the Mammography Screening with Artificial Intelligence trial (MASAI): a randomised, controlled, parallel-group, non-inferiority, single-blinded, screening accuracy study",
+              "year": 2025,
+              "journal": "The Lancet. Digital health",
+              "study_type": "rct",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt Lancet Oncol 2023 (interim, 80 033 žen): zátěž čtení −44,3 %, detekce 6,1 vs. 5,1 na 1 000 (nezhoršená). Plná kohorta (Lancet Digit Health 2025, 105 934 žen) potvrzuje −44,2 % zátěže a vyšší detekci. Potvrzeno ve švédském prostředí (Transpara, dvojí čtení jako kontrola); přenositelnost na ČR vyžaduje lokální validaci, kterou článek sám zmiňuje."
+        },
+        {
+          "claim_id": "",
+          "text": "naopak interim analýza zaznamenala vyšší detekci o cca 29 % bez nárůstu falešně pozitivních nálezů",
+          "location": "Reformní debaty, třetí téma (AI ve čtení mamografů) + tabulka reformních posunů (+29 % detekce)",
+          "kind": "efficacy",
+          "verdict": "partial",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "39904652",
+              "doi": "10.1016/S2589-7500(24)00267-X",
+              "title": "Screening performance and characteristics of breast cancer detected in the Mammography Screening with Artificial Intelligence trial (MASAI): a randomised, controlled, parallel-group, non-inferiority, single-blinded, screening accuracy study",
+              "year": 2025,
+              "journal": "The Lancet. Digital health",
+              "study_type": "rct",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "37541274",
+              "doi": "10.1016/S1470-2045(23)00298-X",
+              "title": "Artificial intelligence-supported screen reading versus standard double reading in the Mammography Screening with Artificial Intelligence trial (MASAI): a clinical safety analysis of a randomised, controlled, non-inferiority, single-blinded, screening accuracy study",
+              "year": 2023,
+              "journal": "The Lancet. Oncology",
+              "study_type": "rct",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Číslo i výrok jsou doslova doložitelné, ale z jiné publikace, než ke které je článek přiřazuje: +29 % pochází z analýzy plné kohorty (Hernström et al., Lancet Digit Health 2025; 105 934 žen; detekce 6,4 vs. 5,0 na 1 000, poměr 1,29, 95% CI 1,09–1,51; p=0,0021; míra falešně pozitivních poměr 1,01, 95% CI 0,91–1,11, tj. bez nárůstu). Interim/bezpečnostní analýza citovaná v textu (Lancet Oncol 2023, 80 033 žen) uváděla 6,1 vs. 5,1 na 1 000 (poměr 1,2; p=0,052, nevýznamné). Označení „interim analýza“ je tedy nepřesné; doplnění zdroje Hernström 2025 do article-sources čtenáři umožní dohledat správný původ čísla. Případnou úpravu atribuce v textu (interim → plná kohorta 2025) ponechává audit redakci."
+        },
+        {
+          "claim_id": "",
+          "text": "Plné výsledky publikoval The Lancet 29. ledna 2026 (12% snížení intervalových karcinomů v rameni s AI)",
+          "location": "Reformní debaty, třetí téma (AI ve čtení mamografů) + tabulka reformních posunů (−12 % intervalových ca)",
+          "kind": "efficacy",
+          "verdict": "partial",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "41620232",
+              "doi": "10.1016/S0140-6736(25)02464-X",
+              "title": "Interval cancer, sensitivity, and specificity comparing AI-supported mammography screening with standard double reading without AI in the MASAI study: a randomised, controlled, non-inferiority, single-blinded, population-based, screening-accuracy trial",
+              "year": 2026,
+              "journal": "The Lancet",
+              "study_type": "rct",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Ověřeno v PubMed (PMID 41620232, DOI shodné s citací v článku; Lancet 2026;407(10527):505–514). Intervalové karcinomy 1,55 vs. 1,76 na 1 000, poměr 0,88 (95% CI 0,65–1,18; p=0,41) = prokázaná neinferiorita (primární cíl, marže 20 %), nikoli statisticky významné snížení. 12 % odpovídá jen bodovému odhadu; formulace „12% snížení“ je silnější než data. Významně vyšší byla senzitivita (80,5 vs. 73,8 %; p=0,031) při shodné specificitě 98,5 %; méně invazivních/T2+/non-luminal A intervalových karcinomů je jen deskriptivní. Drobnost: prvním autorem publikace je Gommers J (Lång K je korespondující autorka), článek ji v zdrojích uvádí jako „Lång K. et al.“. Vložena jedna upřesňující věta."
+        },
+        {
+          "claim_id": "",
+          "text": "Mezinárodní zkušenost — Nizozemsko, severské země — ukazuje, že přiřazený termín s možností jednoduchého přesunu zvedá účast o jednotky procentních bodů.",
+          "location": "Čím účast vázne, první důvod (dynamika pozvánky)",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "23663511",
+              "doi": "10.1186/1471-2458-13-464",
+              "title": "Methods to increase participation in organised screening programs: a systematic review",
+              "year": 2013,
+              "journal": "BMC public health",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "35311110",
+              "doi": "10.3389/fonc.2022.817222",
+              "title": "Determinants of Non-Participation in Population-Based Breast Cancer Screening: A Systematic Review and Meta-Analysis",
+              "year": 2022,
+              "journal": "Frontiers in oncology",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Systematický přehled organizovaných screeningových programů (Camilloni et al., BMC Public Health 2013; 69 studií, 26 u prsu) uvádí pro mamografii „scheduled appointment instead of open appointment“ RR 1,26 (95% CI 1,02–1,55). Směr tvrzení je tedy doložen. Velikost v procentních bodech abstrakt neuvádí (jde o relativní riziko; při výchozí účasti kolem 60 % by RR 1,26 odpovídalo spíše vyššímu než „jednotkovému“ nárůstu, interval je ale široký), přehled se nevztahuje specificky na Nizozemsko a severské země a srovnává pevný termín vs. otevřenou pozvánku, nikoli „termín s jednoduchým přesunem“. Přenositelnost na český opt-in model s pozvánkou od pojišťovny je odhad. Ferroni et al. 2012 (PMID 23064024) potvrzuje jen obecně, že aktivní pozvánka zvyšuje účast oproti spontánnímu přístupu (RR 1,60 u prsu)."
+        },
+        {
+          "claim_id": "",
+          "text": "Akreditovaná pracoviště jsou koncentrovaná do krajských měst a nemocnic vyšší úrovně ... cesta z menší obce na nejbližší mamograf [není] otázkou desítek minut, ale půldne.",
+          "location": "Čím účast vázne, druhý důvod (dostupnost)",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "35311110",
+              "doi": "10.3389/fonc.2022.817222",
+              "title": "Determinants of Non-Participation in Population-Based Breast Cancer Screening: A Systematic Review and Meta-Analysis",
+              "year": 2022,
+              "journal": "Frontiers in oncology",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Odborná část tvrzení (vzdálenost od pracoviště snižuje účast) je doložena metaanalýzou registrových dat (29 studií, 20,4 mil. žen): větší vzdálenost OR neúčasti 1,15 (95% CI 1,07–1,24), efekt je však umírněný a srovnatelný s příjmem (OR 1,20) či vzděláním (OR 1,18). Rozmístění českých pracovišť a dojezd „půl dne“ jsou české administrativní/geografické údaje, které literatura neověřuje (krajská data NSC ÚZIS mimo rozsah auditu). Jen zahraniční evidence → přenositelnost na ČR nejistá."
+        },
+        {
+          "claim_id": "",
+          "text": "Rozdíl mezi šedesátkou a osmdesátkou zní jako technikálie. V populaci, kde má rakovinu prsu během života zhruba každá osmá žena, se ale překládá na stovky pozdě diagnostikovaných nálezů ročně.",
+          "location": "Šedesát versus osmdesát",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "low",
+          "evidence": [
+            {
+              "pmid": "31932175",
+              "doi": "10.1016/j.ejca.2019.12.010",
+              "title": "Evidence for reducing cancer-specific mortality due to screening for breast cancer in Europe: A systematic review",
+              "year": 2020,
+              "journal": "European journal of cancer",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "38878837",
+              "doi": "10.1016/j.jclinepi.2024.111426",
+              "title": "Effect of screening mammography on the risk of breast cancer deaths and of all-cause deaths: a systematic review with meta-analysis of cohort studies",
+              "year": 2024,
+              "journal": "Journal of clinical epidemiology",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Směr (vyšší účast v organizovaném screeningu → víc časně zachycených nádorů a nižší mortalita) je v souladu s evropským systematickým přehledem 31932175 (snížení mortality u pozvaných 4–31 %, u účastnic 33–45 %). Kvantifikace „stovky pozdě diagnostikovaných nálezů ročně“ je redakční odhad pro ČR bez citace; žádný abstrakt ji nedokládá. Řádově je odhad věrohodný, ale nebyl ověřen. Kontext: metaanalýza kohort 38878837 (Autier et al. 2024) ukazuje, že srovnání účastnic a neúčastnic je silně zkreslené výběrem (RR 0,55 pro úmrtí na karcinom prsu a 0,54 pro úmrtí ze všech příčin), takže přepočty přínosu vyšší účasti z observačních dat je třeba brát opatrně. Výpočet odhadu k posouzení redakcí."
+        }
+      ],
+      "summary": {
+        "supported": 1,
+        "partial": 5,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Hernström V et al., Lancet Digit Health 2025;7(3):e175–e183 (PMID 39904652, DOI 10.1016/S2589-7500(24)00267-X) do article-sources — nová skupina Recenzovaná literatura; k +29 % detekce (plná kohorta) a −44 % zátěže",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "Camilloni L et al., BMC Public Health 2013;13:464 (PMID 23663511, DOI 10.1186/1471-2458-13-464) do skupiny Recenzovaná literatura; k větě o přiřazeném termínu (RR 1,26)",
+          "ref": ""
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u mamograf-rakovina-prsu--08 doplněn o PMID:37541274 / DOI:10.1016/S1470-2045(23)00298-X, ověřeno 2026-10-11",
+          "ref": "mamograf-rakovina-prsu--08"
+        },
+        {
+          "type": "none",
+          "detail": "Vložena jedna upřesňující věta za větu o Lancetu 2026 (třetí téma reformních debat): pokles intervalových karcinomů 0,88 (95% CI 0,65–1,18) není statisticky významný, prokázána neinferiorita a vyšší senzitivita (Gommers et al., Lancet 2026, PMID 41620232); audit-status review-pending ověřen ve všech třech místech (articles.json, audit.status, meta article:audit-status)",
+          "ref": ""
+        },
+        {
+          "type": "claim-note",
+          "detail": "Audit poznámka do hlavičky audit: (HTML komentář) a articles.json audit.notes: evidence-audit 2026-10-11: 6 tvrzení, 1 supported, 5 partial; viz data/evidence-audit.json (audit.last_reviewed beze změny)",
+          "ref": ""
+        }
+      ],
+      "followup": "Metaanalýza 35311110 (determinanty neúčasti) je v registru ověřena, ale do article-sources nepřidána (chybí jména autorů) — doplnit v příštím běhu. Neověřeno pro strop volání: „každá osmá žena“ (celoživotní riziko) a věková hranice ECIBC 45–74 / 40–44. Kvantifikace „stovky pozdě diagnostikovaných nálezů ročně“ je redakční odhad bez citace — k posouzení redakcí. K redakci: atribuce „interim analýza … 29 %“ (správně plná kohorta, Hernström 2025), řádek av-data-table „−12 % intervalových ca“ sladit s vloženou větou, první autor Lancet 2026 je Gommers J (ne Lång K).",
+      "notes": "Vyřazeno jako administrativní/mimo rozsah: claims --01 až --07 a --09 (NOR, NSC ÚZIS, EU Country Cancer Profile, WHO cíl, OECD benchmarky, kraje); nepočítají se mezi ověřená. PubMed: rešerše 8 volání (strop vyčerpán) + adjudikace 3 volání; Consensus 1 dotaz. PMID 41620232 (finální MASAI, Lancet 2026) ověřen v PubMed až v adjudikaci. Původ čísla +29 % dohledán v Hernström et al., Lancet Digit Health 2025 (plná kohorta 105 934 žen), ne v interim analýze Lancet Oncol 2023 (poměr 1,2; p=0,052). Kandidáti 23663511, 23064024 a 38878837 ověřeni metadaty; 22418841 (italská HTA zpráva) do evidence nezařazen. Žádný verdikt contradicted → žádný flag ani issue."
+    },
+    {
+      "id": "indicator:mortalita_inhosp_ami",
+      "type": "indicator",
+      "checked_at": "2026-10-11",
+      "run_id": "ea-2026-10-11-01",
+      "content_hash": "3b3790bac68d3e7287ca6b888b9dc74560c08f36",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 10,
+        "consensus": 2
+      },
+      "claims": [
+        {
+          "text": "Podíl úmrtí během hospitalizace pro akutní infarkt myokardu (MKN-10 I21–I22) z celkového počtu hospitalizací pro tuto diagnózu. Proxy pro 30denní mortalitu, kterou NRH dlouhodobá řada bez propojení s LPZ neobsahuje.",
+          "location": "definition (karta indikátoru); obdobně patient_story, poslední věta",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "20978451",
+              "doi": "10.1097/MLR.0b013e3181ef9d53",
+              "title": "Comparison of in-hospital versus 30-day mortality assessments for selected medical conditions.",
+              "year": 2010,
+              "journal": "Medical care",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "27491907",
+              "doi": "10.1016/j.jacc.2016.05.049",
+              "title": "Predicting In-Hospital Mortality in Patients With Acute Myocardial Infarction.",
+              "year": 2016,
+              "journal": "Journal of the American College of Cardiology",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "20031870",
+              "doi": "10.1161/CIRCOUTCOMES.109.883256",
+              "title": "Patterns of hospital performance in acute myocardial infarction and heart failure 30-day mortality and readmission.",
+              "year": 2009,
+              "journal": "Circulation. Cardiovascular quality and outcomes",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "22093186",
+              "doi": "10.1111/j.1945-1474.2011.00173.x",
+              "title": "Prediction of hospital acute myocardial infarction and heart failure 30-day mortality rates using publicly reported performance measures.",
+              "year": 2011,
+              "journal": "Journal for healthcare quality",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Borzecki 2010 (ověřeno v PubMed při adjudikaci): VA, 119 pracovišť, 2004–2007, šest diagnóz včetně AMI; nemocniční a 30denní O/E korelovaly vysoce (medián r = 0,78), hodnocení pracovišť bylo podobné; 30denní míra má lepší face validity a volba má záviset na možnostech propojení dat, což přesně odpovídá situaci NRH bez LPZ. Používání nemocniční úmrtnosti jako proxy je tedy podložené, ale: (1) evidence je zahraniční (US VA), přenositelnost na ČR jen částečná; (2) shoda platí pro rizikově adjustované O/E, kontraktový indikátor je surový podíl (McNamara 2016 zdůrazňuje rizikovou adjustaci); (3) korelace konkrétně pro AMI v abstraktu není, jen medián napříč diagnózami. Proto partial."
+        },
+        {
+          "text": "Tyto definice nejsou srovnatelné 1:1 — reálná mezera mezi ČR a nejlepšími zeměmi OECD je pravděpodobně menší než přímý rozdíl hodnot.",
+          "location": "method_notes (karta indikátoru)",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "low",
+          "evidence": [
+            {
+              "pmid": "20978451",
+              "doi": "10.1097/MLR.0b013e3181ef9d53",
+              "title": "Comparison of in-hospital versus 30-day mortality assessments for selected medical conditions.",
+              "year": 2010,
+              "journal": "Medical care",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "20847971",
+              "doi": "10.1016/s0828-282x(10)70415-3",
+              "title": "Thirty-day in-hospital revascularization and mortality rates after acute myocardial infarction in seven Canadian provinces.",
+              "year": 2010,
+              "journal": "The Canadian journal of cardiology",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "První část (definice nejsou zaměnitelné) podpírá Borzecki 2010: nemocniční a 30denní mortalita jsou odlišná měřítka, 30denní má lepší face validity. Druhá část (směr a velikost mezery) je logická úvaha (úmrtí po propuštění v nemocniční míře chybí), kterou žádný ověřený abstrakt pro ČR nekvantifikuje. K posouzení redakcí: OECD publikuje AMI 30denní mortalitu ve dvou variantách (admission-based z nepropojených dat = úmrtí ve stejné nemocnici do 30 dnů, a patient-based z propojených dat); pokud benchmark v kontraktu odpovídá admission-based variantě, je srovnatelnost s českým in-hospital ukazatelem vyšší, než method_notes uvádí, a směr úvahy o mezeře se oslabuje. Zahraniční evidence, přenositelnost částečná."
+        },
+        {
+          "text": "Trend dlouhodobě klesající (2020: 5,5 %, 2024: 4,6 %) — důsledek systematické centralizace akutní kardiologické péče od konce 90. let.",
+          "location": "patient_story (karta indikátoru), 2. odstavec; navazuje věta o síti kardiocenter jako modelovém případu úspěšné centralizace",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "12559941",
+              "doi": "10.1016/s0195-668x(02)00468-2",
+              "title": "Long distance transport for primary angioplasty vs immediate thrombolysis in acute myocardial infarction. Final results of the randomized national multicentre trial--PRAGUE-2.",
+              "year": 2003,
+              "journal": "European heart journal",
+              "study_type": "rct",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "17442424",
+              "doi": "10.1016/j.ijcard.2007.02.036",
+              "title": "The incidence, treatment strategies and outcomes of acute coronary syndromes in the \"reperfusion network\" of different hospital types in the Czech Republic: results of the Czech evaluation of acute coronary syndromes in hospitalized patients (CZECH) registry.",
+              "year": 2007,
+              "journal": "International journal of cardiology",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Česká evidence (ověřeno v PubMed při adjudikaci) podporuje mechanismus: PRAGUE-2 (RCT, 850 pacientů se STEMI) ukázal, že převoz do PCI centra je bezpečný; 30denní mortalita 6,8 % vs 10,0 % (ITT, P = 0,12, nevýznamné), u pacientů > 3 h od začátku příznaků 6 % vs 15,3 % (P < 0,02); studie byla podkladem celostátní změny doporučení. Registr CZECH: nemocniční mortalita ACS 5,1 %, primární PCI u 83 % STEMI, celostátní strategie primární PCI je proveditelná. Žádná studie ale nedokládá, že pokles 5,5 % → 4,6 % v letech 2020–2024 je důsledkem centralizace z 90. let: čísla trendu v abstraktech nejsou (jde o data NRH), řada je krátká a výchozí rok 2020 je zatížen pandemií covidu-19; může jít i o změny case-mixu a kódování. Kauzální atribuce je interpretace redakce, proto partial."
+        }
+      ],
+      "summary": {
+        "supported": 0,
+        "partial": 3,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "indicators/mortalita_inhosp_ami.json → literature: Borzecki 2010, Med Care, PMID 20978451, DOI 10.1097/MLR.0b013e3181ef9d53 (doklad k definici/proxy a method_notes: nemocniční vs. 30denní mortalita)",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/mortalita_inhosp_ami.json → literature: Widimský 2003 (PRAGUE-2), Eur Heart J, PMID 12559941, DOI 10.1016/s0195-668x(02)00468-2 (doklad k patient_story: centralizace akutní kardiologie, převoz do PCI centra)",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/mortalita_inhosp_ami.json → literature: Widimský 2007 (registr CZECH), Int J Cardiol, PMID 17442424, DOI 10.1016/j.ijcard.2007.02.036 (doklad k patient_story: síť kardiocenter, registry CZECH)",
+          "ref": ""
+        },
+        {
+          "type": "card-note",
+          "detail": "indicators/mortalita_inhosp_ami.json → limitations: připojena jedna věta k measurement verdiktu (definice/proxy, Borzecki 2010, PMID 20978451): „Studie VA (Borzecki et al., Med Care 2010, PMID 20978451) ukázala vysokou shodu rizikově adjustované nemocniční a 30denní úmrtnosti při hodnocení pracovišť (medián korelace r = 0,78 napříč šesti diagnózami včetně AMI), 30denní míra má ale lepší zjevnou validitu a pro surový, neadjustovaný podíl tato shoda doložena není.“",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Žádný verdikt contradicted, takže flagged ani issue nejsou potřeba. definition, method_notes a patient_story beze změny (karta připouští jen literature a větu do limitations); kauzální atribuce trendu centralizaci zůstává partial s poznámkou v registru.",
+          "ref": ""
+        }
+      ],
+      "followup": "(1) Ověřit, kterou variantu OECD AMI30DAYS (admission-based in-hospital z nepropojených dat vs. patient-based z propojených dat) používá benchmark v kontraktu; mění závěr method_notes o velikosti mezery (tvrzení 2). (2) Atribuce poklesu 2020–2024 centralizaci nemá doklad v ověřené literatuře, rok 2020 je zatížen pandemií covidu-19 (tvrzení 3), k posouzení redakcí. (3) Kandidáti z Consensu Saia 2008, Chung 2014 (Lancet, Švédsko vs. UK) a Motovska 2025 (abstrakt o mimonemocniční mortalitě v ČR) nebyli v PubMed ověřeni, vyčerpaný strop volání.",
+      "notes": "Rešerše (Sonnet): karta neodkazuje na žádnou literaturu (found_via article se nepoužilo). PubMed 8 volání vyčerpáno (5 hledání, 3 metadata); dotazy na systematické přehledy a české téma vrátily většinou nerelevantní práce (nezahrnuty). Consensus: 2 dotazy. Ověřený zahraniční kontext: McNamara 2016, Krumholz 2009, Aaronson 2011, Johansen 2010. Další tvrzení karty (směr lower_is_better, prahy 2/5 %) se neopírají o literaturu, nezařazena. | Adjudikace (Opus): 2 volání PubMed (lookup_article_by_citation + get_article_metadata), Consensus nevolán. V PubMed ověřeni Borzecki 2010 (PMID 20978451), PRAGUE-2 (PMID 12559941) a registr CZECH (PMID 17442424); Saia 2008 a Motovska 2025 neověřovány a nepoužity. Verdikty: definice/proxy partial (medium), protože evidence je zahraniční, rizikově adjustovaná a bez AMI-specifické korelace v abstraktu; method_notes „mezera menší“ partial (low), protože nesrovnatelnost je doložena, velikost a směr mezery ne; trend 2020–2024 jako důsledek centralizace partial (medium), české studie podporují mechanismus (primární PCI v síti), ne atribuci konkrétního poklesu. | Zápis (Opus): 3 objekty do literature, 1 věta do limitations."
+    },
+    {
+      "id": "indicator:mortalita_inhosp_cmp",
+      "type": "indicator",
+      "checked_at": "2026-10-11",
+      "run_id": "ea-2026-10-11-01",
+      "content_hash": "f189594a411b096c7b4855cbd7ec681e3215da5e",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 7,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "text": "Český indikátor měří nemocniční úmrtnost (úmrtí během hospitalizace, zdroj NRC/ÚZIS). OECD benchmark udává 30denní případovou úmrtnost (case-fatality; všechna úmrtí do 30 dnů po přijetí, včetně po propuštění). Tyto definice nejsou srovnatelné 1:1 — reálná mezera mezi ČR a nejlepšími zeměmi OECD je pravděpodobně menší než přímý rozdíl hodnot.",
+          "location": "method_notes (zrcadlově patient_story, 2. odstavec)",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "36220181",
+              "doi": "10.9778/cmajo.20210264",
+              "title": "Use of linked data to assess the impact of including out-of-hospital deaths on 30-day in-hospital mortality indicators: a retrospective cohort study.",
+              "year": 2022,
+              "journal": "CMAJ Open",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "29021333",
+              "doi": "10.1161/CIRCOUTCOMES.117.003748",
+              "title": "Is Risk-Standardized In-Hospital Stroke Mortality an Adequate Proxy for Risk-Standardized 30-Day Stroke Mortality Data? Findings From Get With The Guidelines-Stroke.",
+              "year": 2017,
+              "journal": "Circ Cardiovasc Qual Outcomes",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "První část (nesrovnatelnost nemocniční a 30denní úmrtnosti) doloženo dvěma nezávislými kohortami: Kanada (9 provincií, propojení s registrem zemřelých) – úmrtí mimo nemocnici do 30 dnů tvořila u CMP 1,9–2,0 % kohorty, trendy v čase shodné; USA (GWTG-Stroke × Medicare, 535 332 ischemických CMP) – průměrná rizikově standardizovaná nemocniční úmrtnost 6,0 % vs. 30denní 14,6 %, korelace jen 0,53 (hospicová propuštění). Závěr o směru („mezera pravděpodobně menší“) abstrakty nepodporují: při definici benchmarku, kterou uvádí method_notes (všechna úmrtí do 30 dnů vč. po propuštění), obě studie ukazují, že nemocniční úmrtnost 30denní podhodnocuje, takže mezera by byla spíš větší. Při nepropojené admission-based variantě OECD (jak ji uvádí patient_story) může český údaj naopak mírně nadhodnocovat (úmrtí po 30. dni hospitalizace), ale to z literatury doložit nelze. Karta tak v method_notes a patient_story uvádí dvě odlišné definice benchmarku – k posouzení redakcí (definice OECD STR30DAYS je administrativní fakt mimo dosah evidence-auditu). Contradicted nelze: evidence je zahraniční (USA s odlišnou hospicovou praxí, Kanada), přenositelnost na ČR omezená a směr závisí na tom, která varianta benchmarku se srovnává."
+        },
+        {
+          "text": "Trombektomie u vybraných pacientů až 24 hodin (na základě perfuzní/DWI selekce, dle DAWN 2018 a DEFUSE-3 2018 studií).",
+          "location": "patient_story, 3. odstavec",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "29129157",
+              "doi": "10.1056/NEJMoa1706442",
+              "title": "Thrombectomy 6 to 24 Hours after Stroke with a Mismatch between Deficit and Infarct.",
+              "year": 2017,
+              "journal": "N Engl J Med",
+              "study_type": "rct",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "29364767",
+              "doi": "10.1056/NEJMoa1713973",
+              "title": "Thrombectomy for Stroke at 6 to 16 Hours with Selection by Perfusion Imaging.",
+              "year": 2018,
+              "journal": "N Engl J Med",
+              "study_type": "rct",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "30688974",
+              "doi": "10.1001/jamaneurol.2018.4587",
+              "title": "Association of Thrombectomy With Stroke Outcomes Among Patient Subgroups: Secondary Analyses of the DEFUSE 3 Randomized Clinical Trial.",
+              "year": 2019,
+              "journal": "JAMA Neurol",
+              "study_type": "rct",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno: DAWN (okno 6–24 h, selekce nesouladem klinického deficitu a objemu infarktu; 90denní funkční nezávislost 49 % vs. 13 %) a DEFUSE 3 (6–16 h, perfuzní selekce; funkční nezávislost 45 % vs. 17 %). Horní hranici 24 h pokrývá jen DAWN; DAWN vyšel online 11/2017, tiskem NEJM 2018. Pozdní trombektomie zlepšuje funkční výsledek, ne primárně mortalitu (DAWN 90denní mortalita 19 % vs. 18 %), takže ve vztahu k tomuto indikátoru jde o kontext, ne o doklad poklesu nemocniční úmrtnosti."
+        }
+      ],
+      "summary": {
+        "supported": 1,
+        "partial": 1,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "indicators/mortalita_inhosp_cmp.json → literature (pole založeno): CMAJ Open 2022, PMID 36220181, DOI 10.9778/cmajo.20210264 (doklad k method_notes: nemocniční vs. 30denní úmrtnost, Kanada, propojená data)",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/mortalita_inhosp_cmp.json → literature: Reeves 2017, Circ Cardiovasc Qual Outcomes, PMID 29021333, DOI 10.1161/CIRCOUTCOMES.117.003748 (doklad k method_notes: nemocniční vs. 30denní úmrtnost po ischemické CMP, GWTG-Stroke × Medicare)",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/mortalita_inhosp_cmp.json → literature: DAWN (Nogueira 2018), N Engl J Med, PMID 29129157, DOI 10.1056/NEJMoa1706442 (doklad k patient_story: trombektomie až 24 h)",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/mortalita_inhosp_cmp.json → literature: DEFUSE 3 (Albers 2018), N Engl J Med, PMID 29364767, DOI 10.1056/NEJMoa1713973 (doklad k patient_story: perfuzní selekce, 6–16 h)",
+          "ref": ""
+        },
+        {
+          "type": "card-note",
+          "detail": "indicators/mortalita_inhosp_cmp.json → limitations: připojena jedna věta k measurement verdiktu (PMID 36220181, 29021333): „Zahraniční studie s propojením na registr zemřelých ukazují, že úmrtnost během hospitalizace je nižší než 30denní úmrtnost ze všech míst úmrtí (Kanada: úmrtí mimo nemocnici 1,9–2,0 % kohorty s CMP, PMID 36220181; USA, ischemická CMP: 6,0 % vs. 14,6 %, PMID 29021333), takže vůči propojenému 30dennímu benchmarku by český údaj mezeru spíš podhodnocoval a směr rozdílu vůči nepropojenému benchmarku OECD z literatury nevyplývá.“ method_notes ani patient_story beze změny.",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Žádný verdikt contradicted, flagged ani issue nejsou potřeba. Nekonzistence definice benchmarku v kartě (method_notes: propojená 30denní úmrtnost vč. úmrtí po propuštění × patient_story: admission-based unlinked) a směr závěru „mezera pravděpodobně menší“ předány redakci k posouzení (viz followup).",
+          "ref": ""
+        }
+      ],
+      "followup": "(1) Redakce: sjednotit definici benchmarku OECD STR30DAYS v method_notes (propojená 30denní úmrtnost vč. úmrtí po propuštění) a patient_story (admission-based unlinked) a podle ní posoudit formulaci „mezera pravděpodobně menší“ (tvrzení 1, partial). (2) Neověřena tvrzení patient_story o síti 13 KIC / 32 IC a trombolýze do 4,5 h (ESO guidelines) — strop 3 tvrzení na indikátor.",
+      "notes": "Rešerše (Sonnet): karta neměla odkaz na literaturu (DAWN/DEFUSE-3 jen v textu bez PMID/DOI, dohledány přes PubMed). 4 volání PubMed (3 search, 1 metadata), Consensus nepoužit (PubMed dal použitelné výsledky). Tvrzení o směru a prazích vyřazeno (karta se u nich na literaturu neodvolává); nerelevantní položky z metadata dávky (PMID 33990211, 33242615, 32872208) nepoužity. | Adjudikace (Opus): 3 volání PubMed (2× search, 1× metadata); tvrzení 1 partial potvrzen a posílen druhou nezávislou kohortou (Reeves 2017, PMID 29021333; 32067876, 32014803, 27258944 nerelevantní), contradicted nelze (jen zahraniční evidence, směr závisí na variantě benchmarku – administrativní fakt OECD mimo rozsah auditu); tvrzení 2 supported/high (24 h pokrývá jen DAWN, DAWN online 2017). | Zápis (Opus): 4 objekty do literature (pole založeno), 1 věta do limitations."
+    },
+    {
+      "id": "indicator:pouzivani_antidepresiv",
+      "type": "indicator",
+      "checked_at": "2026-10-11",
+      "run_id": "ea-2026-10-11-01",
+      "content_hash": "1b8ee8e27ba0b41730b5947f8d3bb31ad199ea15",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 11,
+        "consensus": 1
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Indikátor preskripce, ne automaticky kvality — interpretace je kontextová (nízká hodnota může znamenat podléčenou depresi).",
+          "location": "definition",
+          "kind": "measurement",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "26159603",
+              "doi": "10.1192/bjp.bp.114.156786",
+              "title": "Antidepressant use in 27 European countries: associations with sociodemographic, cultural and economic factors",
+              "year": 2015,
+              "journal": "The British Journal of Psychiatry",
+              "study_type": "cross-sectional",
+              "found_via": "consensus",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "34801129",
+              "doi": "10.1016/S2215-0366(21)00292-3",
+              "title": "Psychotropic medicine consumption in 65 countries and regions, 2008-19: a longitudinal study",
+              "year": 2021,
+              "journal": "The Lancet Psychiatry",
+              "study_type": "cohort",
+              "found_via": "consensus",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "38575574",
+              "doi": "10.1038/s41398-024-02894-z",
+              "title": "Utilization of antidepressants, anxiolytics, and hypnotics during the COVID-19 pandemic",
+              "year": 2024,
+              "journal": "Translational Psychiatry",
+              "study_type": "review",
+              "found_via": "consensus",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Metadata všech tří studií ověřena v PubMed (PMID↔DOI sedí). Lewer 2015 (Eurobarometer, 27 zemí EU): předepisování antidepresiv se mezi zeměmi výrazně liší bez doložitelného rozdílu v prevalenci afektivních poruch a souvisí s výdaji na zdravotnictví a postoji k duševním nemocem, tedy spotřeba není přímou mírou kvality ani potřeby. Brauer 2021 (IQVIA-MIDAS, 65 zemí): spotřebu v DDD/1000/den používá jako ukazatel dostupnosti psychotropních léků (WHO Mental Health Action Plan) a velmi nízkou spotřebu v zemích s vysokou prevalencí duševních poruch vykládá jako nedostatek dostupnosti (finance, kultura, málo předepisujících), což podporuje část věty o nízké hodnotě jako možné podléčenosti. Tiger 2024 (přehled): většina studií neobsahuje údaje o prevalenci indikovaných poruch, takže nelze říct, jak dobře preskripce odpovídá potřebě populace. Tvrzení je opatrné („může znamenat“), evidence je s ním v souladu; směr context_dependent je tím podložen."
+        },
+        {
+          "claim_id": "",
+          "text": "Strukturálně rostoucí spotřeba odráží kombinaci: skutečně rostoucí prevalence depresivní poruchy (mladí, postpandemická vrstva), zlepšenou diagnostiku v primární péči, ale i overprescribing.",
+          "location": "patient_story, odst. 3",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "19833707",
+              "doi": "10.1136/bmj.b3999",
+              "title": "Explaining the rise in antidepressant prescribing: a descriptive study using the general practice research database",
+              "year": 2009,
+              "journal": "BMJ",
+              "study_type": "cohort",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "22152736",
+              "doi": "10.3399/bjgp11X593848",
+              "title": "Trends in primary care antidepressant prescribing 1995-2007: a longitudinal population database analysis",
+              "year": 2011,
+              "journal": "The British Journal of General Practice",
+              "study_type": "cohort",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "38575574",
+              "doi": "10.1038/s41398-024-02894-z",
+              "title": "Utilization of antidepressants, anxiolytics, and hypnotics during the COVID-19 pandemic",
+              "year": 2024,
+              "journal": "Translational Psychiatry",
+              "study_type": "review",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "39347894",
+              "doi": "10.1007/s11126-024-10093-8",
+              "title": "Prevalence of Antidepressant Prescriptions for Community-Dwelling Adults Diagnosed with Depressive Disorder in the UK: A Systematic Review",
+              "year": 2024,
+              "journal": "The Psychiatric Quarterly",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Směr (růst spotřeby) evidence potvrzuje, ale skladba příčin je jiná, než karta uvádí. Moore 2009 (GPRD, UK, 1993–2005): incidence nových případů deprese rostla jen u mladých žen, jinde mírně klesla; podíl nově diagnostikovaných s antidepresivem stabilní (79,4 %); téměř zdvojnásobení předpisů vysvětlují hlavně malé změny v podílu dlouhodobě léčených. Lockhart a Guthrie 2011 (Tayside, 1995–2007): trojnásobný objem nejdřív díky více pacientům a delší léčbě, později hlavně delší léčbě a vyšším denním dávkám. Delší trvání léčby a vyšší dávky, tedy nejlépe doložené faktory, karta neuvádí. Tiger 2024 (přehled): v pozdějších fázích pandemie malé nárůsty nad očekávaný trend, nejvíc u mladých, ale bez údajů o prevalenci poruch, takže „postpandemická vrstva“ je doložena jen pro preskripci, ne pro prevalenci. Francia 2024 (SR, UK): antidepresiva se stále častěji předepisují i u subprahové a mírné deprese, což je nepřímá opora pro složku overprescribing. „Zlepšená diagnostika v primární péči“ ve zdrojích doložena není. Všechny studie jsou zahraniční (UK, přehled převážně z high-income zemí); přenositelnost na ČR nejistá, domácí studie nebyla v rozpočtu volání prověřena."
+        },
+        {
+          "claim_id": "",
+          "text": "praktik nemá kam poslat pacienta na CBT terapii — proto začíná farmakoterapii. Psychoterapeutická péče je v ČR limitovaná a častěji samoplatební, takže farmakologická intervence je často default.",
+          "location": "patient_story, odst. 3",
+          "kind": "mechanism",
+          "verdict": "unclear",
+          "confidence": "low",
+          "evidence": [
+            {
+              "pmid": "26159603",
+              "doi": "10.1192/bjp.bp.114.156786",
+              "title": "Antidepressant use in 27 European countries: associations with sociodemographic, cultural and economic factors",
+              "year": 2015,
+              "journal": "The British Journal of Psychiatry",
+              "study_type": "cross-sectional",
+              "found_via": "consensus",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "K posouzení redakcí. Kauzální vazba „chybí dostupná CBT → praktik volí farmakoterapii“ nebyla v ověřených abstraktech doložena ani vyvrácena. Lewer 2015 vysvětluje mezinárodní rozdíly výdaji na zdravotnictví a postoji k duševním nemocem, dostupnost psychoterapie nezkoumá (jen kontext). Adjudikační dotaz v PubMed na dostupnost psychoterapie a preskripci v primární péči vrátil 69 záznamů, ty ale v rozpočtu volání nebyly prověřeny, proto ne no-evidence. Druhá věta (psychoterapie v ČR limitovaná, často samoplatební) je tvrzení o uspořádání systému ČR, které je potřeba doložit spíš administrativním zdrojem (úhrady ZP, kapacity klinické psychologie) než literaturou. Odkaz na indikátor psychiatri_per_100k jako doklad dostupnosti CBT je nepřesný: psychiatři nejsou totéž co poskytovatelé psychoterapie / CBT."
+        }
+      ],
+      "summary": {
+        "supported": 1,
+        "partial": 1,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 1
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "indicators/pouzivani_antidepresiv.json → literature: Antidepressant use in 27 European countries: associations with sociodemographic, cultural and economic factors (Br J Psychiatry 2015), PMID 26159603, DOI 10.1192/bjp.bp.114.156786, ověřeno v PubMed 2026-10-11",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/pouzivani_antidepresiv.json → literature: Psychotropic medicine consumption in 65 countries and regions, 2008-19: a longitudinal study (Lancet Psychiatry 2021), PMID 34801129, DOI 10.1016/S2215-0366(21)00292-3, ověřeno v PubMed 2026-10-11",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/pouzivani_antidepresiv.json → literature: Utilization of antidepressants, anxiolytics, and hypnotics during the COVID-19 pandemic (Transl Psychiatry 2024), PMID 38575574, DOI 10.1038/s41398-024-02894-z, ověřeno v PubMed 2026-10-11",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/pouzivani_antidepresiv.json → literature: Explaining the rise in antidepressant prescribing: a descriptive study using the general practice research database (BMJ 2009), PMID 19833707, DOI 10.1136/bmj.b3999, ověřeno v PubMed 2026-10-11",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/pouzivani_antidepresiv.json → literature: Trends in primary care antidepressant prescribing 1995-2007: a longitudinal population database analysis (Br J Gen Pract 2011), PMID 22152736, DOI 10.3399/bjgp11X593848, ověřeno v PubMed 2026-10-11",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/pouzivani_antidepresiv.json → literature: Prevalence of Antidepressant Prescriptions for Community-Dwelling Adults Diagnosed with Depressive Disorder in the UK: A Systematic Review (Psychiatr Q 2024), PMID 39347894, DOI 10.1007/s11126-024-10093-8, ověřeno v PubMed 2026-10-11",
+          "ref": ""
+        },
+        {
+          "type": "card-note",
+          "detail": "indicators/pouzivani_antidepresiv.json → limitations: připojena jedna věta s citací (Moore 2009, PMID 19833707; Lockhart a Guthrie 2011, PMID 22152736) o tom, že objem v DDD nerozliší přírůstek léčených od delší léčby a vyšších dávek. Opírá se o partial verdikt tvrzení o příčinách růstu (patient_story, odst. 3) a o metodickou povahu DDD (measurement). Prose patient_story beze změny; věta čeká na kontrolu redakce v PR.",
+          "ref": ""
+        }
+      ],
+      "followup": "Vyčerpaný strop volání: (a) 15 českých PMID z adjudikačního dotazu na antidepresiva × Czech Republic/Czechia × spotřeba/trendy (37353584, 35698594, 18613856, 18594194, 34886164, 39008529, 22832187, 24485281, 37157822, 23353864, 40485926, 17091729, 11294131, 36932431, 41286864) nebylo prověřeno — mohou doložit trend nebo příčiny růstu spotřeby v ČR a přepnout tvrzení o příčinách růstu z čistě zahraniční evidence; (b) 69 záznamů z dotazu na dostupnost psychoterapie × preskripci v primární péči neprověřeno — tvrzení CBT → farmakoterapie zůstává unclear, k posouzení redakcí; druhou větu (psychoterapie v ČR limitovaná a často samoplatební) doložit administrativním zdrojem (úhrady klinické psychologie / psychoterapie ZP).",
+      "notes": "PubMed 8 volání v rešerši (3 úvodní dotazy, 2 dotazy na obecné trendy a ČR, 1 metadata 8 PMID, 1 dotaz na psychoterapii/overprescribing, 1 dotaz podle DOI pro ověření kandidátů z Consensu); filtrované dotazy (systematic[sb], OECD, Czech DDD, overprescribing) vrátily 0 výsledků kvůli příliš přísné automatické konjunkci. Consensus 1 dotaz (medical_mode, bez preprintů). Karta neobsahovala žádnou citaci literatury, proto žádná studie found_via article; pole literature zápis zakládá. Neověřené a nepoužité kandidáty z rešerše: Jureidini 2006 (CNS Drugs), Mojtabai 2008, Furukawa 2019, Brišnik 2024. Směr (context_dependent) a prahy (good 10 / warn 30) karta z literatury neodvozuje, proto nejsou tvrzením. | Adjudikace (Opus), 3 volání PubMed: metadata 6 PMID potvrdila přiřazení PMID↔DOI (34801129 Brauer 2021, 38575574 Tiger 2024 Review, 26159603 Lewer 2015, 19833707 Moore 2009, 22152736 Lockhart 2011, 39347894 Francia 2024 SR), bez retrakce, errata či komentáře; Brauer 2021 přeřazen z other na cohort (longitudinální trendová studie), Tiger 2024 je dle PubMed Review. Verdikty: supported 1, partial 1, unclear 1; contradicted 0, takže žádný flag ani issue. Mimo rozsah evidence-auditu (administrativní statistika, patří do claims.json / drift-checku): „~900 000 Čechů / 8,4 % dospělé populace“, „Česko mělo největší nárůst v Evropě“, „z ~45 DDD (2010)“ — neověřeno ani zde, ani v method_notes. Indikátor nemá audit-status, review-pending se neuplatní; doplněná věta v limitations čeká na kontrolu redakce v PR. | Zápis (Opus): literature 6 studií, limitations +1 věta s citací; čísla, prose patient_story a ostatní pole karty beze změny."
+    },
+    {
+      "id": "indicator:predcasne_porody_pct",
+      "type": "indicator",
+      "checked_at": "2026-10-11",
+      "run_id": "ea-2026-10-11-01",
+      "content_hash": "b36a273c34558ddfd3b188810529632005545a7d",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 11,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "text": "Předčasný porod je celosvětově hlavní příčinou novorozenecké úmrtnosti a dlouhodobé morbidity (respirační, neurologické a vývojové komplikace).",
+          "location": "importance",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "24853593",
+              "doi": "10.1016/S0140-6736(14)60496-7",
+              "title": "Every Newborn: progress, priorities, and potential beyond survival.",
+              "year": 2014,
+              "journal": "Lancet",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace: rešerše navrhla supported, finálně partial. Abstrakt Lawn et al. 2014 (narativní přehled v Lancet Series, ne systematický přehled) doslova dokládá první polovinu věty: ze 2,9 mil. ročních novorozeneckých úmrtí připadá 1,0 mil. na komplikace předčasného porodu, což je největší ze tří hlavních příčin. Dokládá také vysoké riziko dlouhodobého neurovývojového postižení, zvláště před 32. týdnem. Že jde o „hlavní příčinu dlouhodobé morbidity“, ani respirační komplikace abstrakt neuvádí, proto nejde o plné supported. Údaje jsou globální k roku 2014, ne za ČR. Text karty se nemění, výhrada platí jen pro rozšíření o morbiditu."
+        },
+        {
+          "text": "Že se narodil v centru, a ne v okresní porodnici, statisticky výrazně zvýšilo jeho šanci přežít bez vážného postižení (koncentrace velmi předčasných porodů do perinatologických center a in utero převoz).",
+          "location": "patient_story (odstavec 1 a 3)",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "31619384",
+              "doi": "10.1136/bmj.l5678",
+              "title": "Association of early postnatal transfer and birth outside a tertiary hospital with mortality and severe brain injury in extremely preterm infants: observational cohort study with propensity score matching.",
+              "year": 2019,
+              "journal": "BMJ",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace: rešerše měla no-evidence, cíleným vyhledáním nalezena a v PubMed ověřena národní kohorta z Anglie (Helenius et al. 2019, BMJ). Šlo o 17 577 extrémně předčasně narozených dětí (< 28 t. g.) z let 2008–2015, porovnané párováním podle propensity skóre. Proti porodu v terciárním centru měly děti narozené v neterciární porodnici vyšší šanci úmrtí (OR 1,34; 95% CI 1,02–1,77). Děti převezené po porodu (do 48 h) měly vyšší šanci těžkého poškození mozku (OR 2,32) a nižší šanci přežití bez těžkého poškození mozku (OR 0,60; 0,47–0,76). Autoři doporučují porod extrémně nezralých dětí v terciárním centru místo postnatálního převozu. Směr tvrzení (porod v centru, resp. převoz in utero, je lepší) je tím doložen. Výhrady: (1) populace < 28 t. g., kdežto příběh popisuje porod ve 30. týdnu; (2) u dětí narozených a ponechaných v neterciární porodnici nebyl rozdíl v přežití bez těžkého poškození mozku proti centru statisticky významný (OR 0,82; 0,64–1,05). Formulace „výrazně zvýšilo šanci přežít bez vážného postižení“ je tedy doložena jen pro srovnání s postnatálním převozem; (3) jde o jednu observační studii z Anglie, přenositelnost na systém PCIP v ČR je nepřímá. Číslo 85,9 % je administrativní (NRRZ) a neověřuje se. Kandidát pro příští běh: metaanalýza Lasswell et al., JAMA 2010;304:992 (PMID 20810377). Shoda citace byla nalezena přes lookup_article_by_citation, ale abstrakt nebyl v tomto běhu načten (strop volání), proto není zařazena do evidence."
+        },
+        {
+          "text": "Přechod k selektivnímu přenosu jednoho embrya (SET) při IVF snižuje počet vícečetných těhotenství, která jsou hlavním biologickým motorem prematurity.",
+          "location": "patient_story (odstavec 3)",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "35086551",
+              "doi": "10.1186/s12958-022-00899-1",
+              "title": "Comparisons of benefits and risks of single embryo transfer versus double embryo transfer: a systematic review and meta-analysis.",
+              "year": 2022,
+              "journal": "Reprod Biol Endocrinol",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "21177530",
+              "doi": "10.1136/bmj.c6945",
+              "title": "Clinical effectiveness of elective single versus double embryo transfer: meta-analysis of individual patient data from randomised trials.",
+              "year": 2010,
+              "journal": "BMJ",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "19446809",
+              "doi": "10.1016/j.fertnstert.2009.04.003",
+              "title": "The likelihood of live birth and multiple birth after single versus double embryo transfer at the cleavage stage: a systematic review and meta-analysis.",
+              "year": 2009,
+              "journal": "Fertil Steril",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje partial. Část „SET snižuje počet vícečetných těhotenství“ je silně doložena třemi metaanalýzami: Ma 2022 (vícečetné těhotenství OR 0,05, předčasný porod OR 0,25; 0,21–0,30), McLernon 2010 IPD (vícečetný porod 2 % vs 29 %) a Gelbaya 2009 (RR 0,06). Že jsou vícečetná těhotenství „hlavním biologickým motorem prematurity“ v celé populaci, abstrakty nedokládají. Hovoří jen o populaci IVF, ne o podílu vícečetných gravidit na všech předčasných porodech. Formulace je proto širší než evidence. SET ve čerstvém cyklu snižuje šanci na živorození (McLernon 27 % vs 42 %), kumulativně po dalším zmrazeném přenosu se rozdíl vyrovnává. Studie jsou zahraniční, dopad SET na míru předčasných porodů v ČR z nich nelze odvodit."
+        }
+      ],
+      "summary": {
+        "supported": 0,
+        "partial": 3,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "indicators/predcasne_porody_pct.json → literature: Lawn et al. 2014, Lancet (PMID 24853593, DOI 10.1016/S0140-6736(14)60496-7) — doklad k importance"
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/predcasne_porody_pct.json → literature: Helenius et al. 2019, BMJ (PMID 31619384, DOI 10.1136/bmj.l5678) — doklad k patient_story (porod v perinatologickém centru)"
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/predcasne_porody_pct.json → literature: Ma et al. 2022, Reprod Biol Endocrinol (PMID 35086551, DOI 10.1186/s12958-022-00899-1) — doklad k patient_story (SET)"
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/predcasne_porody_pct.json → literature: McLernon et al. 2010, BMJ (PMID 21177530, DOI 10.1136/bmj.c6945) — doklad k patient_story (SET)"
+        }
+      ],
+      "followup": "Neověřeno (vyčerpaný strop PubMed): abstrakt metaanalýzy Lasswell et al., JAMA 2010;304:992 (PMID 20810377, perinatální regionalizace u VLBW/velmi předčasně narozených) k tvrzení o porodu v perinatologickém centru; chybí evropská nebo česká data o porodech v centru vs. mimo něj ve 28.–31. t. g. (příběh popisuje 30. týden, doložená kohorta je < 28 t. g.); Consensus nevolán; neověřen populační podíl vícečetných těhotenství na předčasných porodech (tvrzení „hlavní biologický motor prematurity“) a respirační/dlouhodobá morbidita v importance.",
+      "notes": "PubMed dostupný, vyčerpán strop 8 volání (3 vyhledávání v první dávce, 2 metadata+1 vyhledávání, další metadata a závěrečné vyhledávání/metadata). Consensus nevolán: PubMed pro tvrzení o perinatologických centrech nic použitelného nedal, ale strop PubMed byl vyčerpán a kandidáty z Consensu by nebylo možné ověřit v PubMed (verified_in_pubmed), proto byl krok vynechán (consensus: skipped, ne rate-limit). Karta nemá pole literature ani odkazy na literaturu, takže nebylo co ověřovat found_via article; tvrzení o směru a prahech signálu (good 5 / warn 15) se na literaturu neodvolávají. Administrativní čísla (6,4 %, 7,4 %, 85,9 %, trend 7,7→6,4) nejsou tvrzení k ověření. Doporučený followup: cílený dotaz na regionalizaci perinatální péče (inborn vs outborn velmi předčasných, pokud možno evropské/česká data) a ověřit v PubMed. Studie 28410573, 28398697, 33058208, 37428872 z vyhledávání na outborn/tertiary byly irelevantní (NEC, oxygen targeting, CPAP, FGR) a nejsou zařazeny; 32562647, 26794078, 23245604, 42776528, 42750010, 42637238 rovněž nezařazeny. | Adjudikace (Opus) použila 3 volání PubMed. (1) search_articles na regionalizaci a inborn/outborn s filtrem systematic/meta-analysis: 211 výsledků, prvních 10 nerelevantních, nepoužito. (2) get_article_metadata: PMID 20736471, zkoušený jako kandidát na metaanalýzu regionalizace, je ve skutečnosti RCT o KBT u ADHD, nepoužito; PMID 31619384 (Helenius 2019 BMJ) ověřen a zařazen. (3) lookup_article_by_citation pro Lasswell JAMA 2010;304:992 našel PMID 20810377, abstrakt už nebyl načten (strop). Finální verdikty: 3× partial (importance: mortalita doložena, morbidita a respirační složka ne; perinatologická centra: směr doložen jednou anglickou kohortou < 28 t. g., výhrady k populaci a k výsledku „bez vážného postižení“; SET: snížení vícečetných gravidit silně doloženo, „hlavní motor prematurity“ širší než evidence). Žádné contradicted, takže žádný flag ani issue. prose_change prázdné: zásahy by mířily do patient_story, kam audit u karty indikátoru větu nevkládá (u measurement verdiktu jen do limitations), a rozsah u importance není očividně širší než evidence. Followup pro zápis: ověřit abstrakt Lasswell et al. 2010 JAMA (PMID 20810377, metaanalýza perinatální regionalizace u VLBW/velmi předčasně narozených) a případně doplnit evropská nebo česká data o porodech v centrech versus mimo ně u 28.–31. t. g.; rozsah literatury k tvrzení „vícečetná těhotenství jako hlavní motor prematurity“ (populační podíl) zůstává neověřen. Administrativní čísla (6,4 %, 7,4 %, 85,9 %, trend 7,7→6,4) se neověřují; v data/claims.json jsou jen administrativní tvrzení článků, claim-note se proto nenavrhuje. | Zápis (Opus): do karty přidáno pole literature se 4 studiemi (Lawn 2014, Helenius 2019, Ma 2022, McLernon 2010); Gelbaya 2009 (PMID 19446809) zůstává jen v evidenci registru, karta ji necituje. limitations ani jiná prose karty se nemění."
     }
   ]
 }

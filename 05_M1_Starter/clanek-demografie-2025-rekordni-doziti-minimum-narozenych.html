@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-10-11
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-10-11
+    creation_phase: rutina+article-write
+    primary_sources_count: 9
+    visual_elements_count: 5
+    notes: "Vytvoreno z discovery 2026-10-11: TZ CSU 9. 10. 2026 'Cesko melo v roce 2025 rekordni pocet obyvatel, ale minimum narozenych' (kod 131004-26, stazeno 11. 10. 2026) + publikace CSU Vyvoj obyvatelstva Ceske republiky 2025 (kod 130069-26, 9. 10. 2026; PDF Uvod, kap. 1 Obyvatelstvo podle veku, kap. 4 Porodnost, kap. 5 Umrtnost stazeny a prectene 11. 10. 2026). Doslova z CSU: 10 915 839 obyvatel k 31. 12. 2025; prirustek 6 339 (nejnizsi za desetileti); prirozeny prirustek -35 701 (nejhlubsi); saldo stehovani 42 040; 65+ 2,273 mil. (+16,9 tis.; temer 21 %); 0-14 1,647 mil. (-44,1 tis.; 15 %); 15-64 6,996 mil.; prumerny vek 43,3, median 44,5; index stari 138; 75-79 let +63 % (+205,0 tis.) a 80-84 let +37 % (+86,0 tis.) od pocatku 2016; 65-69 let -101,4 tis.; zive narozeni 77 636 (nejmene od 1785; -6,7 tis., -8 % mezirocne; -35,2 tis., -31 % proti 2016); uhrnna plodnost 1,28 (uroven 2005); prumerny vek matky 30,6, prvorodicky 29,2; zemreli 113 337 (+1 126, +1,0 %); 65+ 96 113 = 84,8 % umrti; prumerny vek pri umrti 77,2; nadeje doziti 77,5 muzi (+0,3) / 83,2 zeny (+0,1), 2024 CSU 77,2 / 83,1; rozdil pohlavi 5,7 (nejnizsi od pocatku 60. let); e65 2025 muzi 17,1 / zeny 20,8; kojenecka umrtnost 2,5 promile (2024: 2,3), 195 zemrelych kojencu (2024: 196). KPI: CSU nadeje doziti 2025 = 77,5 / 83,2. BENCH: Eurostat demo_mlexpec (aktualizace 25. 9. 2026, API stazeno 11. 10. 2026), rok 2024: CZ 80,1 / muzi 77,1 / zeny 83,0; EU27 81,5 / 78,9 / 84,1. Eurostat hlth_hlye (aktualizace 17. 7. 2026), rok 2024: HLY 65 CZ 8,0 (M 7,8, F 8,2), EU 10,3 (M 10,0, F 10,5); LE 65 CZ 18,9 / EU 20,2; podil HLY/LE v 65 CZ 42,3 % (M 46,2, F 39,7), EU 50,9 % (M 54,4, F 48,2); HLY 0 CZ 62,4 / EU 65,2; EU HLY65 2023 9,4. CAVEAT: CSU 2025 vs Eurostat 2024 jen s vyslovnou vyhradou; CSU a Eurostat pocitaji tabulky umrtnosti mirne odlisne (2024 muzi CSU 77,2 vs Eurostat 77,1). KONTRAKT: nadeje_doziti_total 80,1 (2024, EU 81,5, Eurostat live), nadeje_doziti_zeny 83 (2024, EU 84,1), nadeje_doziti_zdravi_65 8 (2024, EU 10,3, OECD 10,2), luzka_dlouhodobe_pece_65plus 35,1 (2024, EU 46; 2014 37,8; OECD DF_HEALTH_LTCR_BED, verified), pracovnici_ltc_per_100_65plus 2,5 (2024, OECD 5,6; OECD DF_HEALTH_LTCR_WORKER live), neuspokojene_zadosti_pobytove_pece_seniori 172,9 (2024; 2021 109,9; CSU Vybrane udaje o soc. zabezpeceni 2024, seed), mortalita_kojenecka 2,3 (2024, EU 3,5, Eurostat live). Komise MZ pro transformaci pece o tehotnou zenu: dekret 32/2026/ZDM z 22. 5. 2026 dle odpovedi MZ na zadost o informace z 15. 6. 2026 (prevzato z overeneho clanku clanek-komise-porodnictvi). REDAKCNI VYPOCTY: 35,1 vs 46 = o 24 % mene (zhruba ctvrtina); 2,5 vs 5,6 = mene nez polovina. Multimorbidita 65+ (seed SHARE) zamerne nepouzita. Bez PubMed evidence - clanek je ciste datovy, bez kauzalnich tvrzeni o ucinku intervenci. Ceka na schvaleni redakce."
+    audit_k: "2026-10-11 nezavisly audit (blok K): vsechna cisla CSU (TZ 131004-26, Uvod, kap. 1, 4, 5 vc. 1785) a Eurostat (demo_mlexpec, hlth_hlye vc. HLY_LE_Y65_PC 42,3/50,9) overena doslova; OECD LTCR BED 35,1 a WORKER 2,5 (2024) overeny pres SDMX API; 172,9 = (70 209 + 37 849) / lozka DS+DZR, CSU 190029-25 tab. 5.16. Opraveno: benchmark luzek 46 neni prumer EU (prumer 6 zemi Eurostat 2019/2020) - preformulovano v perexu, flow, textu, databoxu a pozn.; odstraneno srovnani CSU 2025 vs Eurostat 2024 v rozporu s ramcem; 404 odkaz CSU 190029-25 nahrazen; prirozeny ubytek 'nejvic za posledni deset let' dle zneni CSU."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rekordní dožití, nejméně narozených od roku 1785. Co rok 2025 vzkazuje zdravotnictví · HSPA Monitor</title>
+<meta name="description" content="Česko mělo na konci roku 2025 podle ČSÚ 10 915 839 obyvatel, nejvíc od konce druhé světové války. Naděje dožití vystoupala na historická maxima 77,5 roku u mužů a 83,2 roku u žen, narodilo se ale jen 77 636 dětí, nejméně od začátku statistiky v roce 1785. Za Evropou Česko zaostává hlavně v letech prožitých ve zdraví: z 18,9 roku, které podle Eurostatu za rok 2024 čekají pětašedesátiletého, je bez omezení jen 8,0, v EU 10,3. Seniorů je 2,273 milionu a nejrychleji přibývá lidí po pětasedmdesátce, zatímco lůžek i pracovníků dlouhodobé péče připadá na seniora výrazně méně než v mezinárodním srovnání.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Rekordní dožití, nejméně narozených od roku 1785. Co rok 2025 vzkazuje zdravotnictví">
+<meta property="og:description" content="Muži 77,5 roku, ženy 83,2 roku, 77 636 narozených dětí. Po pětašedesátce ale Češi prožijí ve zdraví jen 8,0 roku, Evropané 10,3.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-demografie-2025-rekordni-doziti-minimum-narozenych.html">
+<meta property="article:published_time" content="2026-10-12T06:00:00+02:00">
+<meta property="article:section" content="Mortalita a zátěž nemocí">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-demografie-2025-rekordni-doziti-minimum-narozenych.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "Rekordní dožití, nejméně narozených od roku 1785. Co rok 2025 vzkazuje zdravotnictví",
+  "description": "Česko mělo na konci roku 2025 podle ČSÚ 10 915 839 obyvatel, nejvíc od konce druhé světové války. Naděje dožití vystoupala na historická maxima 77,5 roku u mužů a 83,2 roku u žen, narodilo se ale jen 77 636 dětí, nejméně od začátku statistiky v roce 1785. Za Evropou Česko zaostává hlavně v letech prožitých ve zdraví: z 18,9 roku, které podle Eurostatu za rok 2024 čekají pětašedesátiletého, je bez omezení jen 8,0, v EU 10,3. Seniorů je 2,273 milionu a nejrychleji přibývá lidí po pětasedmdesátce, zatímco lůžek i pracovníků dlouhodobé péče připadá na seniora výrazně méně než v mezinárodním srovnání.",
+  "datePublished": "2026-10-12T06:00:00+02:00",
+  "dateModified": "2026-10-11",
+  "inLanguage": "cs",
+  "articleSection": "Mortalita a zátěž nemocí",
+  "author": { "@type": "Organization", "name": "Redakce HSPA Monitoru" },
+  "publisher": { "@type": "Organization", "name": "HSPA Monitor · Skóre zdravotnictví", "url": "https://skorezdravotnictvi.cz" },
+  "mainEntityOfPage": "https://skorezdravotnictvi.cz/clanek-demografie-2025-rekordni-doziti-minimum-narozenych.html"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Mortalita a zátěž nemocí</span>
+        <span class="article-tag article-tag-muted">demografie 2025 · naděje dožití · zdravé roky · dlouhodobá péče · porodnost · ČSÚ · Eurostat</span>
+      </div>
+      <h1 class="article-title">Rekordní dožití, nejméně narozených od roku 1785. Co rok 2025 vzkazuje zdravotnictví</h1>
+      <p class="article-deck">
+        Česko mělo na konci roku 2025 podle ČSÚ 10 915 839 obyvatel, nejvíc od konce druhé světové války. Naděje dožití vystoupala na historická maxima 77,5 roku u mužů a 83,2 roku u žen, narodilo se ale jen 77 636 dětí, nejméně od začátku statistiky v roce 1785. Za Evropou Česko zaostává hlavně v letech prožitých ve zdraví: z 18,9 roku, které podle Eurostatu za rok 2024 čekají pětašedesátiletého, je bez omezení jen 8,0, v EU 10,3. Seniorů je 2,273 milionu a nejrychleji přibývá lidí po pětasedmdesátce, zatímco lůžek i pracovníků dlouhodobé péče připadá na seniora výrazně méně než v mezinárodním srovnání.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">12. října 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">8 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Český statistický úřad 9.&nbsp;října zveřejnil definitivní demografickou bilanci roku 2025. Titulky se pochopitelně chytly dvou rekordů, které jdou proti sobě: nejvíc obyvatel od konce druhé světové války a nejméně narozených dětí v historii měření. Pro zdravotnictví jsou ale podstatnější jiné řádky téže zprávy. Říkají, jak dlouho Češi žijí, kolik z toho prožijí ve zdraví, kdo bude za pět let potřebovat péči a jak se změní péče v zemi, kde se rodí o třetinu méně dětí než před deseti lety. Tento text čte bilanci ČSÚ optikou hodnocení výkonnosti zdravotního systému.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCntH">
+        <figcaption class="av-figure-h" id="avCntH">Demografický rok 2025 ve čtyřech číslech (ČSÚ, Vývoj obyvatelstva České republiky 2025, zveřejněno 9. 10. 2026)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="83.2" data-decimals="1" data-suffix=" roku">83,2 roku</span>
+            <span class="av-counter-label">naděje dožití žen při narození</span>
+            <span class="av-counter-foot">historické maximum, meziročně +0,1 roku</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="77.5" data-decimals="1" data-suffix=" roku">77,5 roku</span>
+            <span class="av-counter-label">naděje dožití mužů při narození</span>
+            <span class="av-counter-foot">historické maximum, meziročně +0,3 roku</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="77636">77 636</span>
+            <span class="av-counter-label">živě narozených dětí</span>
+            <span class="av-counter-foot">nejméně od začátku měření v roce 1785; úhrnná plodnost 1,28</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="2.273" data-decimals="3" data-suffix=" mil.">2,273 mil.</span>
+            <span class="av-counter-label">obyvatel ve věku 65 a více let</span>
+            <span class="av-counter-foot">téměř 21 % populace; dětí do 15 let je 1,647 milionu</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Český statistický úřad, tisková zpráva „Česko mělo v roce 2025 rekordní počet obyvatel, ale minimum narozených“ (9. 10. 2026) a publikace Vývoj obyvatelstva České republiky 2025 (kód 130069-26), kapitoly 1, 4 a 5; stav k 31. 12. 2025.</p>
+      </figure>
+
+      <h3>Populace roste už jen díky migraci</h3>
+      <p>
+        K 31.&nbsp;prosinci 2025 žilo v Česku podle bilance ČSÚ <strong>10&nbsp;915&nbsp;839 lidí</strong>. Za rok přibylo jen 6&nbsp;339 obyvatel, nejméně za poslední desetiletí. Přirozenou měnou, tedy rozdílem mezi narozenými a zemřelými, Česko ztratilo 35&nbsp;701 lidí, nejvíc za posledních deset let. Celý přírůstek obstarala zahraniční migrace se saldem 42&nbsp;040 osob. ČSÚ k tomu připomíná, že zatímco v letech 2020 a 2021 stál za přirozeným úbytkem hlavně vysoký počet zemřelých, od roku 2022 je jeho hlavní příčinou nízký počet narozených.
+      </p>
+      <p>
+        Věková struktura se tím dál posouvá. Seniorů ve věku 65 a více let přibylo 16,9 tisíce na 2,273 milionu, tedy téměř 21&nbsp;% obyvatel. Dětí do 15&nbsp;let naopak ubylo 44,1 tisíce na 1,647 milionu a jejich podíl klesl na 15&nbsp;%. Na sto dětí tak připadá 138 seniorů, průměrný věk obyvatel vzrostl na 43,3 roku. Pro zdravotnictví to znamená dvojí posun najednou: víc pacientů s chronickými nemocemi a potřebou dlouhodobé péče, méně dětských pacientů a méně porodů.
+      </p>
+
+      <h3>Rekord, který Evropu zatím nedohání</h3>
+      <p>
+        Naděje dožití při narození dosáhla podle ČSÚ v roce 2025 <strong>77,5 roku u mužů</strong> (o 0,3 roku víc než v roce 2024) a <strong>83,2 roku u žen</strong> (o 0,1 roku víc). Od roku 2016 se u obou pohlaví prodloužila shodně o 1,4 roku. Rozdíl mezi muži a ženami se zúžil na 5,7 roku, tak nízký byl naposledy na počátku šedesátých let. Ze zemřelých tvořili lidé nad 65&nbsp;let 84,8&nbsp;% a průměrný věk při úmrtí vzrostl na 77,2 roku.
+      </p>
+      <p>
+        Rekord je ale rekordem jen vůči české minulosti. Srovnatelná evropská data jsou zatím za rok 2024 a podle Eurostatu tehdy činila naděje dožití v Česku 80,1 roku proti 81,5 roku v průměru EU. Muži 77,1 proti 78,9, ženy 83,0 proti 84,1. Kolik z této mezery česká maxima roku 2025 umazala, ukáže až srovnatelná evropská statistika za rok 2025; hodnoty z různých roků a zdrojů vedle sebe neodečítáme, viz rámeček níže. Hodnoty Eurostatu vede HSPA Monitor v indikátorech <a href="indicator.html?id=nadeje_doziti_total">naděje dožití při narození</a> a <a href="indicator.html?id=nadeje_doziti_zeny">naděje dožití žen</a>. Jak velké jsou rozdíly uvnitř Česka, jsme ukázali v článku <a href="clanek-regionalni-nuzky-nadeje-doziti.html">Muž z Ústecka umírá skoro o čtyři roky dřív než Pražan</a>.
+      </p>
+
+      <div class="article-callout-caveat" role="note">
+        <strong>Dvě statistiky, dva roky.</strong>
+        Hodnoty ČSÚ za rok 2025 a hodnoty Eurostatu za rok 2024 nelze přímo odečítat. Eurostat zatím rok 2025 nezveřejnil a obě instituce počítají úmrtnostní tabulky mírně odlišně: za rok 2024 uvádí ČSÚ u mužů 77,2 roku, Eurostat 77,1. Srovnání s EU proto v tomto textu děláme jen za stejný rok a z jednoho zdroje.
+      </div>
+
+      <h3>Delší život, ne o tolik delší zdraví</h3>
+      <p>
+        Pro výkonnost zdravotního systému je důležitější než samotná délka života to, kolik let z ní lidé prožijí bez omezení. Eurostat to měří ukazatelem zdravých let života, který vychází z otázky v šetření EU-SILC, zda člověka zdravotní problém dlouhodobě omezuje v běžných činnostech. Pětašedesátiletý Čech měl v roce 2024 před sebou v průměru 18,9 roku života, z toho jen <strong>8,0 roku bez omezení</strong>. V EU to bylo 20,2 roku, z toho 10,3 zdravých.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTabH">
+        <figcaption class="av-figure-h" id="avTabH">Naděje dožití a zdravá léta života: Česko a průměr EU, rok 2024 (Eurostat, demo_mlexpec a hlth_hlye, staženo 11. 10. 2026)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Ukazatel (rok 2024)</th>
+                <th scope="col" class="av-num">Česko</th>
+                <th scope="col" class="av-num">EU-27</th>
+                <th scope="col" class="av-num">Rozdíl</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Naděje dožití při narození</th><td class="av-num">80,1</td><td class="av-num">81,5</td><td class="av-num av-warn">−1,4</td></tr>
+              <tr><th scope="row">Zdravá léta života při narození</th><td class="av-num">62,4</td><td class="av-num">65,2</td><td class="av-num av-warn">−2,8</td></tr>
+              <tr><th scope="row">Naděje dožití ve věku 65 let</th><td class="av-num">18,9</td><td class="av-num">20,2</td><td class="av-num av-warn">−1,3</td></tr>
+              <tr class="av-row-highlight"><th scope="row">Zdravá léta života ve věku 65 let</th><td class="av-num">8,0</td><td class="av-num">10,3</td><td class="av-num av-bad">−2,3</td></tr>
+              <tr><th scope="row">Podíl zdravých let ze zbývajícího života v 65 letech (%)</th><td class="av-num">42,3</td><td class="av-num">50,9</td><td class="av-num av-bad">−8,6 p. b.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat, Life expectancy by age and sex (demo_mlexpec, aktualizace 25. 9. 2026) a Healthy life years by sex (hlth_hlye, aktualizace 17. 7. 2026), rok 2024, staženo přes API Eurostatu 11. 10. 2026. Hodnoty v letech, není-li uvedeno jinak; rozdíly spočítala redakce.</p>
+      </figure>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-bad">
+          <span class="av-counter" data-value="42.3" data-decimals="1" data-suffix=" %">42,3 %</span>
+          <span class="av-counter-label">zbývajícího života po 65. roce prožije Čech bez omezení</span>
+          <span class="av-counter-foot">EU 50,9 %; Eurostat hlth_hlye, rok 2024</span>
+        </div>
+      </aside>
+      <p>
+        Mezera je tedy u zdravých let téměř dvakrát větší než u celkové délky života: v pětašedesáti 2,3 roku proti 1,3 roku. Ještě výmluvnější je podíl. Z času, který mu po pětašedesátce zbývá, prožije Čech bez omezení <strong>42,3&nbsp;%</strong>, průměrný Evropan 50,9&nbsp;%. U českých žen je to 39,7&nbsp;% proti 48,2&nbsp;% v EU, u mužů 46,2&nbsp;% proti 54,4&nbsp;%. Ženy žijí déle, ale delší část stáří prožijí s omezením. Sleduje to indikátor <a href="indicator.html?id=nadeje_doziti_zdravi_65">naděje dožití ve zdraví v 65 letech</a>.
+      </p>
+      <p>
+        Prodlužování života, které ČSÚ eviduje, se tedy do systému promítá hlavně jako delší období, kdy lidé potřebují péči. Proč je metrika zdravých let křehká a jak by vypadala s jinou otázkou v dotazníku, rozebírá článek <a href="clanek-zdrave-roky-dve-metriky.html">Osm let, nebo čtrnáct a půl?</a>, o politickém cíli přidat zdravá léta píšeme v textu <a href="clanek-zdrave-roky-cil-pet-let.html">Pět let navíc</a>.
+      </p>
+      <div class="av-aside-clear"></div>
+
+      <h3>Seniorská vlna se přesouvá k pětasedmdesátce</h3>
+      <p>
+        Číslo 2,273 milionu seniorů skrývá posun, který je pro plánování péče důležitější než celkový součet. Podle ČSÚ jediná seniorská skupina, která se za posledních deset let zmenšila, jsou 65–69letí, ubylo jich 101,4 tisíce. Silné ročníky ze čtyřicátých let se mezitím přesunuly výš: lidí ve věku 75–79&nbsp;let je o <strong>63&nbsp;% víc</strong> než na začátku roku 2016 (o 205,0 tisíce), ve věku 80–84&nbsp;let o 37&nbsp;% víc (o 86,0 tisíce).
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avFlowH">
+        <figcaption class="av-figure-h" id="avFlowH">Od demografie ke kapacitě dlouhodobé péče (ČSÚ, Vývoj obyvatelstva ČR 2025; OECD Health Statistics, rok 2024; ČSÚ, Vybrané údaje o sociálním zabezpečení 2024)</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Starší senioři přibývají</h4>
+            <p class="av-flow-desc">Lidí ve věku 75–79 let je o 63 % víc než na začátku roku 2016.</p>
+            <span class="av-flow-tag">ČSÚ, k 31. 12. 2025</span>
+          </li>
+          <li class="av-flow-step av-flow-step-bad">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Lůžek na seniora ubývá</h4>
+            <p class="av-flow-desc">35,1 lůžka dlouhodobé péče na 1 000 lidí nad 65 let; v roce 2014 to bylo 37,8. Srovnatelné evropské systémy mají kolem 46.</p>
+            <span class="av-flow-tag">OECD, 2024</span>
+          </li>
+          <li class="av-flow-step av-flow-step-bad">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Málo rukou</h4>
+            <p class="av-flow-desc">2,5 pracovníka formální dlouhodobé péče na 100 lidí nad 65 let, průměr OECD 5,6.</p>
+            <span class="av-flow-tag">OECD, 2024</span>
+          </li>
+          <li class="av-flow-step av-flow-step-bad">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Fronta roste</h4>
+            <p class="av-flow-desc">172,9 neuspokojené žádosti o domov pro seniory nebo se zvláštním režimem na 100 lůžek; v roce 2021 to bylo 109,9.</p>
+            <span class="av-flow-tag">ČSÚ / MPSV, 2024</span>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ČSÚ, Vývoj obyvatelstva České republiky 2025, kap. 1; OECD Health Statistics, Long-term care beds in facilities a Long-term care workers (rok 2024); ČSÚ, Vybrané údaje o sociálním zabezpečení 2024 (data MPSV). Hodnoty z datového kontraktu HSPA Monitoru.</p>
+      </figure>
+
+      <p>
+        Kapacita péče s demografií nedrží krok. Lůžek dlouhodobé péče v pobytových zařízeních připadá podle OECD na tisíc lidí nad 65&nbsp;let <strong>35,1</strong>, zhruba o čtvrtinu méně než orientační evropský benchmark kolem 46 (průměr šesti srovnatelných zemí podle Eurostatu za roky 2019/2020; souhrnný průměr EU Eurostat pro tento ukazatel nezveřejňuje), a od roku 2014 jich na hlavu seniora mírně ubylo. Pracovníků formální dlouhodobé péče má Česko 2,5 na sto seniorů, méně než polovinu průměru OECD. A na sto lůžek v domovech pro seniory a domovech se zvláštním režimem připadalo v roce 2024 téměř 173 neuspokojených žádostí, o víc než polovinu víc než o tři roky dřív (109,9). Podrobně o lůžkách píšeme v článku <a href="clanek-luzka-dlouhodobe-pece.html">Místo pro stáří se ztrácí</a>, o tom, kdo péči zaplatí a kdo ji poskytne, v textech <a href="clanek-reforma-dlouhodobe-pece-2026.html">Dlouhodobá péče v Česku: tichá strukturální krize</a> a <a href="clanek-narok-pojistence-2-demograficky-tlak.html">Nárok narazí na demografii</a>. Co se stane, když se kapacity do roku 2035 nepostaví, si můžete sami nastavit v <a href="kalkulacka-pece-2035.html">kalkulačce Kdo se o nás postará v roce 2035</a>.
+      </p>
+
+      <h3>Méně porodů: porodnice a dětská péče na nová čísla</h3>
+      <p>
+        Na opačném konci věkové pyramidy je pohyb stejně rychlý. Živě narozených dětí bylo v roce 2025 <strong>77&nbsp;636</strong>, o 6,7 tisíce (8&nbsp;%) méně než rok předtím a o 35,2 tisíce (31&nbsp;%) méně než v roce 2016. Pokles trvá čtvrtý rok v řadě, úhrnná plodnost 1,28 dítěte na ženu odpovídá úrovni roku 2005. Průměrný věk matky při narození dítěte vzrostl na 30,6 roku, u prvorodiček na 29,2 roku. Co s porodností může a nemůže udělat zdravotnictví, včetně úhrad léčby neplodnosti, jsme rozebrali v článku <a href="clanek-porodnost-milion-nebo-848-korun.html">Milion za druhé dítě, nebo 848 korun dvakrát ročně?</a>
+      </p>
+      <p>
+        Pro síť péče znamená o třetinu méně narozených dětí za deset let méně porodů na jedno pracoviště a otázku, jak udržet zkušenost týmů a dostupnost zároveň. Ministerstvo zdravotnictví zřídilo 22.&nbsp;května 2026 Mezioborovou komisi pro přípravu transformace komplexní péče o těhotnou ženu, matku a dítě. Její složení jsme popsali v článku <a href="clanek-komise-porodnictvi.html">Šestnáct lidí bude přestavovat porodnictví</a>. Data ČSÚ o porodnosti jsou pro její práci výchozím bodem.
+      </p>
+      <p>
+        Jedno číslo z bilance si zaslouží opatrné čtení. Kojenecká úmrtnost podle ČSÚ vzrostla z 2,3 na <strong>2,5 promile</strong>, oproti předchozím pěti letům tedy stoupla. Zemřelých kojenců ale bylo 195, o jednoho méně než v roce 2024. Vyšší míra je tedy hlavně důsledkem menšího počtu narozených, ne většího počtu úmrtí. Česko zůstává pod průměrem EU: indikátor <a href="indicator.html?id=mortalita_kojenecka">kojenecké úmrtnosti</a> vede za rok 2024 hodnotu 2,3 promile proti 3,5 v EU (Eurostat). U tak malých čísel může jednoletý výkyv vzniknout náhodou; trend bude jasný až z dalších let.
+      </p>
+
+      <div class="article-callout-caveat" role="note">
+        <strong>Co tato čísla neumějí.</strong>
+        Naděje dožití je průřezový ukazatel: říká, jak dlouho by žil člověk, kdyby po celý život platila úmrtnost roku 2025, nikoli jak dlouho skutečně bude žít. Zdravá léta života stojí na sebehodnocení v dotazníku EU-SILC a citlivě reagují na znění otázky; průměr EU vzrostl mezi lety 2023 a 2024 z 9,4 na 10,3 roku, česká hodnota ze 7,7 na 8,0. Údaje o lůžkách a pracovnících dlouhodobé péče pocházejí z OECD a závisejí na tom, co jednotlivé země do dlouhodobé péče započítávají. Neuspokojené žádosti o pobytovou službu nejsou počet čekajících lidí: jeden člověk může žádat ve více zařízeních.
+      </div>
+
+      <h3>Co s tím</h3>
+      <p>
+        <strong>Ministerstvo zdravotnictví a MPSV:</strong> rekordní naděje dožití je dobrá zpráva, cílem zdravotní politiky by ale měla být zdravá léta, ne jen roky. Zdravých let po pětašedesátce má Česko o 2,3 roku méně než průměr EU. Ukazatel zdravých let by měl být měřítkem, podle kterého se hodnotí prevence i péče o chronicky nemocné, a měl by se sledovat po krajích.
+      </p>
+      <p>
+        <strong>Kraje a obce:</strong> skupina 75–79letých je o 63&nbsp;% větší než před deseti lety a během příštích let se přesune nad osmdesátku. Kapacity pobytových i terénních služeb se plánují na roky dopředu. Kraje, které dnes evidují nejdelší fronty do domovů pro seniory, potřebují plán investic a hlavně personálu, nejen lůžek.
+      </p>
+      <p>
+        <strong>Zdravotní pojišťovny a poskytovatelé:</strong> s méně porody a víc staršími pacienty se mění i to, kde má systém mít kapacity. Síť porodnic a dětských oddělení by se měla přizpůsobovat podle dat o porodnosti a dostupnosti, ne podle historického rozložení. Pokud se kapacity v porodnictví a pediatrii uvolní, zejména personál, je na místě zvážit jejich využití v péči o seniory, například v geriatrii a dlouhodobé ošetřovatelské péči.
+      </p>
+      <p>
+        <strong>Pro čtenáře:</strong> nejčastější příčinou smrti zůstávají podle ČSÚ nemoci oběhové soustavy (42,2 tisíce zemřelých v roce 2025) a novotvary (28,4 tisíce). Na obě skupiny nemocí míří preventivní prohlídky u praktického lékaře a screeningy hrazené z veřejného pojištění, které jsou nejbližším nástrojem, jak si přidat zdravá léta. Péči o stárnoucí rodiče se vyplatí plánovat dřív, než ji vyžádá akutní situace; s orientací v sociálních službách pomůže sociální odbor obce.
+      </p>
+      <p>
+        <strong>HSPA Monitor:</strong> hodnoty naděje dožití v indikátorech aktualizujeme, jakmile Eurostat zveřejní srovnatelná data za rok 2025. Ukážeme pak, zda se česká mezera vůči EU zmenšila, nebo jen posunula spolu s evropským průměrem.
+      </p>
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=nadeje_doziti_total"><strong>Naděje dožití při narození</strong></a> — 80,1 roku (2024, Eurostat); EU 81,5</li>
+        <li><a href="indicator.html?id=nadeje_doziti_zeny"><strong>Naděje dožití při narození (ženy)</strong></a> — 83,0 roku (2024, Eurostat); EU 84,1</li>
+        <li><a href="indicator.html?id=nadeje_doziti_zdravi_65"><strong>Naděje dožití ve zdraví (65 let)</strong></a> — 8,0 roku (2024, Eurostat); EU 10,3, OECD 10,2</li>
+        <li><a href="indicator.html?id=luzka_dlouhodobe_pece_65plus"><strong>Lůžka dlouhodobé péče na 1 000 obyvatel 65+</strong></a> — 35,1 (2024, OECD Health Statistics); benchmark 46 (průměr šesti evropských zemí, Eurostat 2019/2020)</li>
+        <li><a href="indicator.html?id=pracovnici_ltc_per_100_65plus"><strong>Pracovníci formální dlouhodobé péče na 100 osob 65+</strong></a> — 2,5 (2024, OECD Health Statistics); OECD 5,6</li>
+        <li><a href="indicator.html?id=neuspokojene_zadosti_pobytove_pece_seniori"><strong>Neuspokojené žádosti o domov pro seniory na 100 lůžek</strong></a> — 172,9 (2024, ČSÚ, data MPSV)</li>
+        <li><a href="indicator.html?id=mortalita_kojenecka"><strong>Kojenecká úmrtnost</strong></a> — 2,3 na 1 000 živě narozených (2024, Eurostat); EU 3,5</li>
+      </ul>
+      <p>Související: <a href="clanek-regionalni-nuzky-nadeje-doziti.html">Regionální nůžky v naději dožití</a> · <a href="clanek-nadeje-doziti-zdravi.html">Sedm a tři čtvrtě roku ve zdraví</a> · <a href="clanek-zdrave-roky-dve-metriky.html">Osm let, nebo čtrnáct a půl?</a> · <a href="clanek-luzka-dlouhodobe-pece.html">Místo pro stáří se ztrácí</a> · <a href="clanek-porodnost-milion-nebo-848-korun.html">Milion za druhé dítě</a> · <a href="kalkulacka-pece-2035.html">Kalkulačka péče 2035</a></p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární zdroje dat</h5>
+        <ul class="article-sources-list">
+          <li><strong>Český statistický úřad — tisková zpráva „Česko mělo v roce 2025 rekordní počet obyvatel, ale minimum narozených“</strong> (9. 10. 2026, kód 131004-26, staženo 11. 10. 2026): počet obyvatel, věková struktura, narození, zemřelí, migrace, naděje dožití. <a href="https://csu.gov.cz/produkty/cesko-melo-v-roce-2025-rekordni-pocet-obyvatel-ale-minimum-narozenych" target="_blank" rel="noopener">csu.gov.cz ↗</a></li>
+          <li><strong>Český statistický úřad — Vývoj obyvatelstva České republiky 2025</strong> (kód 130069-26, 9. 10. 2026): Úvod (tab. A, přírůstky 2016–2025), kap. 1 Obyvatelstvo podle věku (tab. 1.1, index stáří, seniorské věkové skupiny), kap. 4 Porodnost, kap. 5 Úmrtnost (tab. 5.4 kojenecká úmrtnost, tab. 5.5 naděje dožití). <a href="https://csu.gov.cz/produkty/vyvoj-obyvatelstva-ceske-republiky-2025" target="_blank" rel="noopener">csu.gov.cz ↗</a></li>
+          <li><strong>ČSÚ — Vývoj obyvatelstva ČR 2025, kapitola 5 Úmrtnost</strong> (PDF). <a href="https://csu.gov.cz/docs/107508/1d669c1a-34db-1f18-a082-b6d07b02f7f4/1300692605.pdf?version=1.0" target="_blank" rel="noopener">csu.gov.cz ↗</a></li>
+          <li><strong>ČSÚ — Vývoj obyvatelstva ČR 2025, kapitola 1 Obyvatelstvo podle věku a rodinného stavu</strong> (PDF). <a href="https://csu.gov.cz/docs/107508/b289981d-9b73-5675-d94f-c4a679d9bddf/1300692601.pdf?version=1.0" target="_blank" rel="noopener">csu.gov.cz ↗</a></li>
+          <li><strong>Eurostat — Life expectancy by age and sex (demo_mlexpec)</strong>, aktualizace 25. 9. 2026, rok 2024, Česko a EU-27, staženo přes API 11. 10. 2026. <a href="https://ec.europa.eu/eurostat/databrowser/view/demo_mlexpec/default/table" target="_blank" rel="noopener">ec.europa.eu ↗</a></li>
+          <li><strong>Eurostat — Healthy life years by sex (hlth_hlye)</strong>, aktualizace 17. 7. 2026, roky 2023 a 2024, Česko a EU-27, staženo přes API 11. 10. 2026. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_hlye/default/table" target="_blank" rel="noopener">ec.europa.eu ↗</a></li>
+          <li><strong>OECD Health Statistics — Long-term care resources and utilisation</strong>: lůžka v zařízeních dlouhodobé péče (DF_HEALTH_LTCR_BED) a pracovníci dlouhodobé péče (DF_HEALTH_LTCR_WORKER), rok 2024. <a href="https://data-explorer.oecd.org/vis?df[ds]=dsDisseminateFinalDMZ&amp;df[id]=DSD_HEALTH_LTCR%40DF_HEALTH_LTCR_BED" target="_blank" rel="noopener">data-explorer.oecd.org ↗</a></li>
+          <li><strong>ČSÚ — Vybrané údaje o sociálním zabezpečení 2024</strong> (kód 190029-25, data MPSV): neuspokojené žádosti o umístění v domovech pro seniory a domovech se zvláštním režimem. <a href="https://csu.gov.cz/produkty/vybrane-udaje-o-socialnim-zabezpeceni-ybayjxd3m5" target="_blank" rel="noopener">csu.gov.cz ↗</a></li>
+          <li><strong>Ministerstvo zdravotnictví ČR — odpověď na žádost o informace ze dne 15. 6. 2026</strong>: zřízení Mezioborové komise pro přípravu transformace komplexní péče o těhotnou ženu, matku a dítě dekretem č. 32/2026/ZDM z 22. 5. 2026. <a href="https://mzd.gov.cz/zadost-o-informace-ze-dne-15-6-2026-2/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+          <li><strong>Datový kontrakt HSPA Monitoru</strong> — indikátory nadeje_doziti_total, nadeje_doziti_zeny, nadeje_doziti_zdravi_65, luzka_dlouhodobe_pece_65plus, pracovnici_ltc_per_100_65plus, neuspokojene_zadosti_pobytove_pece_seniori, mortalita_kojenecka. <a href="hspa-prehled.html">hspa-prehled ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Rozdíly mezi Českem a EU v tabulce a srovnání „zhruba o čtvrtinu méně lůžek“ (35,1 proti 46) a „méně než polovina pracovníků“ (2,5 proti 5,6) spočítala redakce HSPA Monitoru. Hodnoty ČSÚ za rok 2025 a Eurostatu za rok 2024 se v textu vzájemně neodečítají; srovnání naděje dožití a zdravých let s EU je vždy za stejný rok a z téhož zdroje. Výjimkou jsou benchmarky dlouhodobé péče z datového kontraktu HSPA Monitoru: u lůžek jde o orientační průměr šesti evropských zemí (Německo, Nizozemsko, Francie, Slovensko, Rakousko, Polsko) z Eurostatu za roky 2019/2020, protože agregát EU pro tento ukazatel neexistuje; u pracovníků o nevážený průměr zemí OECD, které data vykazují. Obě srovnání jsou proto jen orientační.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+  </article>
+</main>
+<footer class="bottom" id="siteFooter"></footer>
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
