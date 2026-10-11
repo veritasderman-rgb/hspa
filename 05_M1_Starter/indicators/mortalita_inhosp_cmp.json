@@ -36,10 +36,52 @@
     "NRC"
   ],
   "method_notes": "Český indikátor měří nemocniční úmrtnost (úmrtí během hospitalizace, zdroj NRC/ÚZIS). OECD benchmark udává 30denní případovou úmrtnost (case-fatality; všechna úmrtí do 30 dnů po přijetí, včetně po propuštění). Tyto definice nejsou srovnatelné 1:1 — reálná mezera mezi ČR a nejlepšími zeměmi OECD je pravděpodobně menší než přímý rozdíl hodnot. Přesná 30denní mortalita by vyžadovala propojení NRH × Listu o prohlídce zemřelého (LPZ), které NRH dlouhodobá řada neumožňuje.",
-  "limitations": "Zahrnuje pouze hospitalizované pacienty. Pacienti zemřelí mimo nemocnici nejsou v jmenovateli.",
+  "limitations": "Zahrnuje pouze hospitalizované pacienty. Pacienti zemřelí mimo nemocnici nejsou v jmenovateli. Zahraniční studie s propojením na registr zemřelých ukazují, že úmrtnost během hospitalizace je nižší než 30denní úmrtnost ze všech míst úmrtí (Kanada: úmrtí mimo nemocnici 1,9–2,0 % kohorty s CMP, PMID 36220181; USA, ischemická CMP: 6,0 % vs. 14,6 %, PMID 29021333), takže vůči propojenému 30dennímu benchmarku by český údaj mezeru spíš podhodnocoval a směr rozdílu vůči nepropojenému benchmarku OECD z literatury nevyplývá.",
   "patient_story": "Ústí nad Labem, iktové centrum, čtvrtek dopoledne. Paní Nováková (72) přijata pro náhlou pravostrannou hemiparézu před 90 minutami. CT angio, perfuzní MRI, indikace mechanické trombektomie. Operace zahájena 142 minut od počátku symptomů. Tahle scéna je standard české péče o cévní mozkovou příhodu (CMP) — ale výsledky jsou horší než u AMI.\n\nIn-hospital mortalita po ischemické CMP (MKN-10 I63) v ČR je 9,9 % (ÚZIS NRH, 2024). OECD průměr 7,7, EU 8,5 — Česko signal bad. Trend pomalu klesající (2020: 12,4 %; 2024: 9,9 %). POZOR: ÚZIS NRH měří úmrtí během hospitalizace, OECD H@G 2025 30denní case-fatality admission-based (unlinked). Metodicky NEsrovnatelné 1:1 — mezera mezi ČR a OECD je pravděpodobně menší než přímý rozdíl 9,9 vs. 7,7 %.\n\nStrukturálně český systém má síť 13 komplexních iktových center (KIC) a 32 iktových center (IC), pokrytí relativně dobré. Trombolýza 4,5 hodiny od počátku symptomů, trombektomie u vybraných pacientů až 24 hodin (na základě perfuzní/DWI selekce, dle DAWN 2018 a DEFUSE-3 2018 studií). RES-Q registr přináší kvalitativní audit. Mezery: prevence (kontrola hypertenze, FA detekce, statiny v primární prevenci); rehabilitace po CMP (limitovaná kapacita); sekundární prevence (adherence k léčbě).\n\nCílem není sám trombolytický výkon — cílem je pacient bez doživotního handikepu. Politické páky: udržení standardu KIC/IC; rozšíření populačního screeningu fibrilace síní (model UK NHS FAST programu); rozšíření kardiorehabilitace a neurorehabilitace; tobacco a alcohol control (snížení rizikových faktorů); aktualizace ESO Guidelines IV thrombolysis 2021 + Mechanical Thrombectomy 2019 v české klinické praxi. Indikátor v HSPA dashboardu sleduje CMP mortalitu jako klíčový ukazatel kvality akutní neurokardio-vaskulární péče.",
   "framework": "hspa",
   "dimension": "kvalita",
   "verification_status": "verified",
-  "verified_at": "2026-06-01"
+  "verified_at": "2026-06-01",
+  "literature": [
+    {
+      "pmid": "36220181",
+      "doi": "10.9778/cmajo.20210264",
+      "title": "Use of linked data to assess the impact of including out-of-hospital deaths on 30-day in-hospital mortality indicators: a retrospective cohort study",
+      "year": 2022,
+      "journal": "CMAJ Open",
+      "study_type": "cohort",
+      "note": "Kanada, 9 provincií, propojení s registrem zemřelých: úmrtí mimo nemocnici do 30 dnů tvořila u CMP 1,9-2,0 % kohorty, trendy v čase shodné pro nemocniční i všechna úmrtí. Podklad pro výhradu nesrovnatelnosti nemocniční a 30denní úmrtnosti; pro ČR není zdrojem čísla.",
+      "verified_at": "2026-10-11"
+    },
+    {
+      "pmid": "29021333",
+      "doi": "10.1161/CIRCOUTCOMES.117.003748",
+      "title": "Is Risk-Standardized In-Hospital Stroke Mortality an Adequate Proxy for Risk-Standardized 30-Day Stroke Mortality Data? Findings From Get With The Guidelines-Stroke",
+      "year": 2017,
+      "journal": "Circ Cardiovasc Qual Outcomes",
+      "study_type": "cohort",
+      "note": "USA, 535 332 ischemických CMP (GWTG-Stroke × Medicare): průměrná rizikově standardizovaná nemocniční úmrtnost 6,0 % vs. 30denní 14,6 %, korelace 0,53; shoda se zlepší po započtení propuštění do hospicové péče. Ukazuje, že nemocniční úmrtnost 30denní úmrtnost podhodnocuje; přenositelnost na ČR omezená (odlišná praxe propouštění).",
+      "verified_at": "2026-10-11"
+    },
+    {
+      "pmid": "29129157",
+      "doi": "10.1056/NEJMoa1706442",
+      "title": "Thrombectomy 6 to 24 Hours after Stroke with a Mismatch between Deficit and Infarct",
+      "year": 2017,
+      "journal": "N Engl J Med",
+      "study_type": "rct",
+      "note": "DAWN: trombektomie 6-24 h od počátku symptomů u pacientů vybraných podle nesouladu klinického deficitu a objemu infarktu; 90denní funkční nezávislost 49 % vs. 13 %, mortalita bez rozdílu. Podklad pro větu o okně až 24 h v patient_story (online 2017, tiskem 2018).",
+      "verified_at": "2026-10-11"
+    },
+    {
+      "pmid": "29364767",
+      "doi": "10.1056/NEJMoa1713973",
+      "title": "Thrombectomy for Stroke at 6 to 16 Hours with Selection by Perfusion Imaging",
+      "year": 2018,
+      "journal": "N Engl J Med",
+      "study_type": "rct",
+      "note": "DEFUSE 3: trombektomie 6-16 h při perfuzní selekci; funkční nezávislost 45 % vs. 17 %. Podklad pro perfuzní selekci v patient_story; okno 24 h pokrývá jen DAWN.",
+      "verified_at": "2026-10-11"
+    }
+  ]
 }
