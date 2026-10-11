@@ -138,3 +138,26 @@ test('loadConfig — odhalí chybějící private_key / client_email', () => {
   process.env.GA_SERVICE_ACCOUNT_KEY = oldKey ?? '';
   process.env.GA_PROPERTY_ID = oldId ?? '';
 });
+
+test('shapeOutput — social_traffic: relace ze sítí podle zdroje, celkový jmenovatel a podíl', () => {
+  const raw = {
+    from: '2026-10-04', to: '2026-10-11',
+    indicatorRows: [], articleRows: [], termRows: [], sourceRows: [], shareRows: [], externalRows: [], trendRows: [],
+    socialRows: [
+      { dimensionValues: [{ value: 'facebook' }], metricValues: [{ value: '30' }] },
+      { dimensionValues: [{ value: 'linkedin' }], metricValues: [{ value: '10' }] },
+      { dimensionValues: [{ value: '' }], metricValues: [{ value: '5' }] },
+    ],
+    totalSessionRows: [{ dimensionValues: [], metricValues: [{ value: '400' }] }],
+  };
+  const out = shapeOutput(raw);
+  assert.deepEqual(out.social_traffic.by_source, [{ source: 'facebook', sessions: 30 }, { source: 'linkedin', sessions: 10 }]);
+  assert.equal(out.social_traffic.social_sessions, 40);
+  assert.equal(out.social_traffic.total_sessions, 400);
+  assert.equal(out.social_traffic.social_share_pct, 10);
+});
+
+test('shapeOutput — social_traffic bez dotazů (starší raw) nespadne a dá null podíl', () => {
+  const out = shapeOutput({ from: 'a', to: 'b', indicatorRows: [], articleRows: [], termRows: [], sourceRows: [], shareRows: [], externalRows: [], trendRows: [] });
+  assert.deepEqual(out.social_traffic, { total_sessions: null, social_sessions: 0, social_share_pct: null, by_source: [] });
+});

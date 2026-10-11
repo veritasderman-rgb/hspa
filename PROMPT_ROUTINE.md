@@ -294,8 +294,11 @@ FB `Skóre zdravotnictví Česko` `6a26b01d8f1d11f9b263c41b`, IG `skorezdravotni
    strop 3 kanálů (FB, IG, X), takže LinkedIn **není připojený kanál** a text publikuje vlastník
    ručně ze svého profilu. Rutina proto připraví **jeden** draft jako Buffer **Idea**
    (`create_idea`, `services: ["linkedin"]`, `title: "LinkedIn · RRRR-MM-DD · <slug>"`), nikdy
-   `create_post`. Kandidát = nejlepší článek týdne podle priority z kroku 2 (news hook, pak nejnovější),
-   mimo slugy, které už LinkedIn Idea za posledních 30 dní má (`list_ideas`, hledej `LinkedIn ·` v title).
+   `create_post`. **Idempotence nejdřív**: `list_ideas` → existuje-li Idea s title `LinkedIn · <datum pondělí
+   tohoto týdne>` (nebo jakákoli `LinkedIn ·` Idea vytvořená od pondělí 00:00), krok **přeskoč** a nahlas
+   „LinkedIn: Idea tohoto týdne už existuje“ — opakovaný běh v týdnu nikdy nevytvoří druhou. Teprve pak
+   kandidát = nejlepší článek týdne podle priority z kroku 2 (news hook, pak nejnovější), mimo slugy,
+   které už LinkedIn Idea za posledních 30 dní má (tamtéž, hledej `LinkedIn ·` v title).
    Text podle šablony `MARKETING-PLAN.md` § A a `docs/social-copywriting-manual.md` § 4: 200–400 slov,
    teze v 1. řádku, konkrétní číslo ve 2. odstavci (jen z článku/kontraktu), otázka k debatě na konec,
    0 emoji, ≤ 2 hashtagy, odkaz **až v posledním řádku**:

@@ -35,7 +35,7 @@
 | Newsletter | poslední kampaň: odesláno, open, click | MCP `Brevo` (`get_email_campaigns`) |
 | Sociální sítě | agregované metriky za 7 dní per kanál | MCP `Buffer` (`get_aggregated_post_metrics`) |
 | Sítě — co zabralo | 3 nejlepší odeslané příspěvky za 7 dní (kanál · článek · reakce/kliky) a 1 nejslabší; stav LinkedIn draftu (Idea `LinkedIn ·` z minulého týdne: publikován = přesunut do „Done“/smazán, nebo leží) | MCP `Buffer` (`list_posts` `status: ["sent"]`, `includeMetrics: true`, 7 dní; `list_ideas`) |
-| Sítě → web | návštěvy s `utm_medium=social` za 7 dní podle `utm_source` (facebook · instagram · x · linkedin) a podíl na celku | `data/analytics-public.json` → `traffic_sources` (`sessionMedium`/`sessionSource`); prázdné nebo `generated_at` starší 10 dní = „bez dat (GA4 nejede)“ |
+| Sítě → web | relace (sessions) s `sessionMedium = social` za 7 dní podle `sessionSource` (facebook · instagram · x · linkedin) a podíl na všech relacích webu | `data/analytics-public.json` → `social_traffic` (`total_sessions`, `social_sessions`, `by_source[]`; samostatný dotaz GA4 filtrovaný na medium social, bez limitu řádků — `scripts/fetch-ga4-stats.js`). Podíl = `social_sessions / total_sessions`; `traffic_sources` (top 10 zdrojů podle uživatelů) k tomu **nepoužívej**. Chybí-li klíč, je prázdný nebo `generated_at` starší 10 dní = „bez dat (GA4 nejede)“ |
 | Hodiny vydavatele | odhad z GitHubu: počet ručních merge × 10 min + komentáře v issues × 5 min + odpovědi na rozhodnutí × 15 min | výpočet, uveď vzorec |
 
 Chybí-li konektor, napiš „bez dat" — nikdy nedoplňuj z paměti ani neodhaduj.
