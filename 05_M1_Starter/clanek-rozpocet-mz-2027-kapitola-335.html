@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-10-12
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-10-12
+    creation_phase: zadani-uzivatele
+    primary_sources_count: 6
+    visual_elements_count: 13
+    notes: "Vytvořeno na přímé zadání vlastníka 12. 10. 2026 („napiš mi článek o tom rozpočtu a udělej tabulky,
+      organigramy a grafy, jak se to vyvíjí“); vlastník nahrál do kořene repa primární dokument
+      KAPITOLNÍ SEŠIT 2027 final s PID s podpisem PM.pdf (commit 40c51ec, 174 stran, OCR ABBYY FineReader).
+      PRIMÁRNÍ ZDROJE:
+      (1) MZ — Návrh rozpočtu na rok 2027 kapitoly 335 – Ministerstvo zdravotnictví, podklad pro jednání Výboru
+          pro zdravotnictví PS PČR, PID MZDRX022B6RS, elektronicky podepsal ministr Adam Vojtěch 12. 10. 2026
+          10:05:53. Text vytažen pdftotext -layout (7 690 řádků). Odtud: souhrnné ukazatele 1 607 055 066 /
+          13 041 240 751 Kč; šest specifických ukazatelů 2027; běžné 9 172 870 159 (70,34 %) a kapitálové
+          3 868 370 592 (29,66 %); rozpad podle finančních míst (ÚO 6 487,3 běžné + 3 748,0 kapitálové; SÚKL 216,5;
+          14 KHS; ÚZIS 388,3 + 120; NLK 54,8; KST 20,0; AZV 26,0); skupiny ÚO 10 235 325 610 / SÚKL+KHS
+          2 196 747 380 / ostatní OSS 609 167 761 (součet = 13 041 240 751, ověřeno); platy 2 227 781 473,
+          3 249,67 + 448 (SZÚ) = 3 697,67 úvazků; valorizace +4 000 Kč (ÚO, SÚKL) a +5 000 Kč (KHS, OOSS, SZÚ);
+          VaVaITZ 2 130 004 835 (inst. 740 101 837, účel. 1 330 351 558, syst. 56 551 440), úspěšnost soutěží 20–21 %;
+          LZS 649 387 773; očkovací látky 30 000 000; SZÚ a ZÚ 547 351 189; ZZS kraje 109 500 000; ČČK 34 650 000;
+          protidrogová politika 500 000 000 (85/180/137/52/34/12 mil.); HIV + další programy 82 mil. (na str. 21
+          sešit uvádí 81 mil. bez ocenění — používáme 82 mil. ze str. 6 a 25); rezidence lékaři 736 736 611
+          (kmen 111 mil., specializace 625 736 611), dotace 50 000 (pediatrie 57 000) → 70 000 Kč měsíčně, VPL
+          140 → 200 míst, 300 nových + 590 pokračujících míst, kmen ~370 + 670; nelékaři 70 mil., historie míst
+          610/525/526/613 (2020–2023) a 304 za 2025+2026; univerzity 91 mil. + atestace nelékařů 5 mil.; EU/FM
+          tabulka kap. 7 (1 848 470 000 = SR 361 500 000 + EU/FM 1 486 970 000); kap. 8 národní programy
+          2 612 000 000 (+1 609 000 000 proti 2026), graf 2017–2027 (hodnoty odečteny z popisků grafu na str. 47
+          sešitu = str. 52 PDF, vykresleno pdftoppm a přečteno: 630,0 / 902,8 / 1 130,0 / 980,0 / 1 630,0 / 249,1 /
+          2 229,0 / 1 310,0 / 2 958,9 / 1 002,9 / 2 612,0 mil. Kč); příloha 10 (výhled akcí 2028–2029); příloha 9
+          (vývojová řada 2022–2025 skutečnost, SR 2026, návrh 2027); příloha 8 (rozpočet nákladů a výnosů
+          příspěvkových organizací 2025–2029); příloha 7 (seznam 44 organizací); příloha 4 (úvazky 2025–2026);
+          tabulka 2.x (NPO granty 2026: 282 429 306 + 268 645 196 + 61 832 500 + 626 654 899 + 21 574 293 =
+          1 261 136 194 Kč); závěr (nekrytá rizika: sterilizace, odškodnění po očkování, covidové spory).
+      (2) MZ — Ukazatele kapitoly 335 pro rozpočtové období 2026–2028 (schválený rozpočet 2026 a SDV),
+          mzd.gov.cz, PDF staženo curlem 12. 10. 2026: výdaje 2026 12 681 846 408; SDV 2027 8 497 004 328;
+          šest specifických ukazatelů 2026; průřezové ukazatele 2026 (platy 1 911 459 940; očkování 514 000 000;
+          EU 4 066 485 935, z toho SR 2 199 150 000 a EU 1 867 335 935; FM 39 000 000; EDS/SMVS 5 046 678 764).
+      (3) MF — TZ Vláda se dohodla na podobě rozpočtu, MF nyní připraví finální dokumentaci, 21. 9. 2026 (akt.
+          30. 9. 2026): příjmy 2 198 649 791 455, výdaje 2 584 649 791 455, schodek 386 mld; příjmy v.z.p. +50 mld
+          na 605 mld; kapitola MZ 2026 12 681 846 408 → 2027 13 041 240 751; citace „Rekordní peníze poputují do
+          zdravotnictví.“
+      (4) MF — srpnový návrh (TZ 31. 8. 2026, přetištěno zakazka.cz 1. 9. 2026): kapitola MZ 12 680 998 832 Kč,
+          schodek 389 mld.
+      (5) psp.cz historie tisku 324 (stav ke dni 12. 10. 2026): předloženo 30. 9. 2026, rozesláno jako tisk 324/0,
+          přikázáno rozpočtovému výboru, rozpočtový výbor 12. 10. 2026 (24. schůze), navrženo na pořad 34. schůze
+          od 13. 10. 2026.
+      (6) zdravezpravy.cz (ČTK) 2. 9. 2026 + newstream.cz 30. 9. 2026: citace ministra Vojtěcha „reálně bude mít
+          ministerstvo o zhruba 2,2 miliardy korun více“ (shoda obou zdrojů); ČTK: rozpočet počítá s navýšením
+          platby za státní pojištěnce o 18 mld, tisk 235 o 21 mld.
+      VÝPOČTY REDAKCE (v textu označeny): rozdíly a procenta 2026/2027 po ukazatelích; +359,4 mil. (+2,8 %) proti
+      SR 2026; +360,2 mil. proti srpnovému návrhu MF; +4 544,2 mil. proti SDV 2027; podíl kapitoly na výdajích SR
+      0,50 %; výdaje mimo programy EU/FM (vč. kofinancování) 8 576,4 → 11 249,8 mil. (+2 673,4 mil.); NPO 2026
+      1 261,1 mil.; platba za státní pojištěnce 2026 ≈ 2 188 × 12 × 6,016 mil. = 158,0 mld (stejný postup jako
+      v článku clanek-platba-statni-pojistenci-2027-tri-cisla); poměr nákladů PO 174,1 mld ku kapitole 13,04 mld
+      = 13,3×; součet běžných výdajů 14 hygienických stanic 1 979,8 mil.
+      SEBEOMEZENÍ: (a) newstream.cz 30. 9. uvádí „+114 milionů proti letošku“ — z primárních čísel vychází +359,4 mil.,
+      proto se 114 mil. nepoužívá; (b) ČTK/ZD 2. 9. uvádí rezidentní dotaci 55 → 75 tis. Kč; kapitolní sešit
+      (primární, novější) uvádí 50 (57) → 70 tis. Kč — používá se sešit; (c) pokles průřezového ukazatele očkování
+      514 → 30 mil. sešit nevysvětluje — text to říká a důvod nedomýšlí; (d) příloha 7 uvádí ÚZIS mezi příspěvkovými
+      organizacemi, sešit jej jinde vede jako organizační složku státu (finanční místo 3350004) — v organigramu je
+      ÚZIS u organizačních složek, počet příspěvkových organizací je 43 (44 položek přílohy minus ÚZIS); (e) roky
+      2022–2025 ve vývojové řadě jsou skutečnost, 2026 schválený rozpočet, 2027 návrh — nejsou to stejné veličiny
+      a text je tak nesrovnává; (f) přesnou výši platby za státní pojištěnce pro rok 2027 rozpočtová dokumentace
+      v dostupných zdrojích neuvádí — text pracuje jen s letošní sazbou a s navýšením, které uvádí ČTK; (g) organigram
+      zobrazuje rozpočtovou (finanční) strukturu kapitoly podle sešitu, ne vnitřní organizační řád ministerstva.
+      Publikace: published:false, audit-status draft — publikovatelný cronem podle politiky fronty. topical_until
+      2026-11-30: návrh rozpočtu projednává sněmovna od 13. 10. 2026, téma je aktuální po dobu projednávání."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>13,04 miliardy. Rozpočet ministerstva zdravotnictví na rok 2027 se skoro nehne — evropské peníze z něj mizí a stát místo nich staví nemocnice · HSPA Monitor</title>
+<meta name="description" content="Kapitola 335 – Ministerstvo zdravotnictví má v návrhu rozpočtu na rok 2027 výdaje 13,04 miliardy korun, o 359 milionů víc než letos. Pod stabilním součtem se mění skoro všechno: z kapitoly mizí 1,26 miliardy z Národního plánu obnovy, národní investice do fakultních nemocnic rostou na 2,61 miliardy a nově do ní patří 500 milionů na protidrogovou politiku. Tabulky, organigram a grafy z kapitolního sešitu, který ministr podepsal 12. října.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="13,04 miliardy. Rozpočet ministerstva zdravotnictví na rok 2027 se skoro nehne — evropské peníze z něj mizí a stát místo nich staví nemocnice">
+<meta property="og:description" content="Návrh kapitoly 335 na rok 2027: 13,04 mld Kč (+2,8 %). Zdravotnické programy −1,77 mld, lůžková péče +1,19 mld, národní investice 2,61 mld. Organigram resortu, tabulky a grafy vývoje z kapitolního sešitu MZ.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-rozpocet-mz-2027-kapitola-335.html">
+<meta property="article:published_time" content="2026-10-12T06:00:00+02:00">
+<meta property="article:section" content="Financování">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-rozpocet-mz-2027-kapitola-335.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Financování</span>
+        <span class="article-tag article-tag-muted">Státní rozpočet 2027 · Kapitola 335 · Investice · Rezidence · EU fondy</span>
+      </div>
+      <h1 class="article-title">13,04 miliardy. Rozpočet ministerstva zdravotnictví na rok 2027 se skoro nehne — evropské peníze z něj mizí a stát místo nich staví nemocnice</h1>
+      <p class="article-deck">
+        Ministr Adam Vojtěch podepsal <strong>12. října 2026</strong> kapitolní sešit, se kterým jde rozpočet ministerstva zdravotnictví před sněmovní výbor. Výdaje kapitoly 335 mají v roce 2027 činit <strong>13,04 miliardy korun</strong>, o 359 milionů víc než letos. Pod skoro stejným součtem se ale přeskupuje většina položek. Z kapitoly mizí <strong>1,26 miliardy</strong> z Národního plánu obnovy, zdravotnické programy klesají o 1,77 miliardy a národní investice do fakultních nemocnic rostou na <strong>2,61 miliardy</strong>. Přibývá také 500 milionů na protidrogovou politiku, která přešla z Úřadu vlády. A ještě jedno měřítko: přímo řízené nemocnice a ústavy ministerstva vydají v příštím roce podle stejného sešitu <strong>174 miliard</strong>, tedy třináctkrát víc, než má celá kapitola.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">12. října 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">14 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        O zdravotnictví ve státním rozpočtu se většinou mluví jedním číslem. Ministerstvo financí ho v září shrnulo větou „Rekordní peníze poputují do zdravotnictví.“ a doplnilo, že příjmy veřejného zdravotního pojištění vzrostou o víc než 50 miliard na 605 miliard korun. Většina těch peněz ale ministerstvem zdravotnictví neprochází. Jdou přes platbu za státní pojištěnce do zdravotních pojišťoven a od nich k nemocnicím a lékařům. Vlastní rozpočet ministerstva, kapitola 335, je mnohem menší a slouží k něčemu jinému. Platí z něj hygienické stanice, lékovou agenturu SÚKL, státní statistiku zdravotnictví, rezidenční místa pro mladé lékaře, zdravotnický výzkum, leteckou záchrannou službu a hlavně stavby ve fakultních nemocnicích. Kapitolní sešit na rok 2027 má 174 stran a je to nejpodrobnější dostupný popis toho, kam tahle část peněz půjde.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avRzHeroH">
+        <figcaption class="av-figure-h" id="avRzHeroH">Kapitola 335 – Ministerstvo zdravotnictví v návrhu rozpočtu na rok 2027</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="13.04" data-decimals="2" data-suffix=" mld Kč">13,04 mld Kč</span>
+            <span class="av-counter-label">výdaje kapitoly celkem</span>
+            <span class="av-counter-foot">o 359 mil. Kč (2,8 %) víc než schválený rozpočet 2026; je to 0,5 % výdajů státního rozpočtu</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="1.77" data-decimals="2" data-prefix="−" data-suffix=" mld Kč">−1,77 mld Kč</span>
+            <span class="av-counter-label">pokles ukazatele „Zdravotnické programy“</span>
+            <span class="av-counter-foot">z 4,16 na 2,39 mld Kč; v roce 2027 už v kapitole nejsou granty z Národního plánu obnovy (letos 1,26 mld)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="2.61" data-decimals="2" data-suffix=" mld Kč">2,61 mld Kč</span>
+            <span class="av-counter-label">národní programy reprodukce majetku</span>
+            <span class="av-counter-foot">o 1,61 mld Kč víc než letos; 78 % jde na pět velkých akcí ve fakultních nemocnicích zahájených v minulých letech</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="174.1" data-decimals="1" data-suffix=" mld Kč">174,1 mld Kč</span>
+            <span class="av-counter-label">náklady příspěvkových organizací ministerstva</span>
+            <span class="av-counter-foot">nemocnice a ústavy hospodaří převážně s penězi zdravotních pojišťoven; 13,3× víc, než má celá kapitola</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> MZ, Návrh rozpočtu na rok 2027 kapitoly 335 – Ministerstvo zdravotnictví (kapitolní sešit, 12. 10. 2026), souhrnné ukazatele, kap. 7 a 8, příloha č. 8; MZ, Ukazatele kapitoly 335 pro období 2026–2028; MF, TZ 21. 9. 2026. Rozdíly a podíly jsou výpočet redakce.</p>
+      </figure>
+
+      <h2>Kudy tečou peníze: kapitola ministerstva a peníze pojišťoven</h2>
+
+      <p>
+        Než se pustíme do jednotlivých položek, je potřeba vědět, co kapitola 335 vůbec pokrývá. Nejčastější omyl je zaměňovat ji s výdaji na zdravotnictví. Návrh státního rozpočtu na rok 2027, který vláda schválila 21. září, počítá s výdaji <strong>2 584,6 miliardy korun</strong> a schodkem 386 miliard. Ministerstvo zdravotnictví z toho dostane 13,04 miliardy, tedy půl procenta. Zdravotní péče se ale platí hlavně z veřejného zdravotního pojištění. To má podle ministerstva financí v roce 2027 vybrat 605 miliard.
+      </p>
+
+      <p>
+        Most mezi státním rozpočtem a pojištěním tvoří <strong>platba za státní pojištěnce</strong>, tedy za děti, důchodce, studenty, nezaměstnané a další skupiny, za které pojistné odvádí stát. Rozpočtově nepatří pod ministerstvo zdravotnictví, ale pod ministerstvo financí. Letos stát posílá 2 188 korun měsíčně za každého z přibližně šesti milionů státních pojištěnců, za rok tedy zhruba 158 miliard korun (výpočet redakce). Samotná tahle platba je přes dvanáctkrát větší než celý rozpočet ministerstva. Pro rok 2027 s ní vládní návrh počítá vyšší o 18 miliard. O její konečné výši rozhoduje sněmovna v novele zákona o pojistném (tisk 235); podrobně jsme ji rozebrali v článku <a href="clanek-platba-statni-pojistenci-2027-tri-cisla.html">Jedna platba, čtyři čísla</a>.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avRzTokH">
+        <figcaption class="av-figure-h" id="avRzTokH">Dvě cesty peněz do zdravotnictví v roce 2027</figcaption>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;font-family:var(--sans);font-size:0.86rem;line-height:1.45;">
+          <div style="border:1px solid var(--rule);border-top:3px solid var(--ink);padding:12px 14px;background:var(--paper);">
+            <div style="font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-mut);">Cesta A · kapitola 335</div>
+            <div style="font-weight:700;margin:4px 0 8px;">Státní rozpočet → ministerstvo zdravotnictví</div>
+            <ol style="margin:0;padding-left:1.1em;">
+              <li><strong>Státní rozpočet</strong>: výdaje 2 584,6 mld Kč</li>
+              <li><strong>Kapitola 335 – MZ</strong>: 13,04 mld Kč (0,5 %)</li>
+              <li>Úřady resortu (hygiena, SÚKL, ÚZIS…), rezidence, výzkum, dotace, letecká záchranka</li>
+              <li><strong>Investice</strong> do fakultních nemocnic a příspěvky na provoz přímo řízených organizací</li>
+            </ol>
+          </div>
+          <div style="border:1px solid var(--rule);border-top:3px solid var(--red);padding:12px 14px;background:var(--paper);">
+            <div style="font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-mut);">Cesta B · veřejné zdravotní pojištění</div>
+            <div style="font-weight:700;margin:4px 0 8px;">Pojistné → zdravotní pojišťovny → poskytovatelé</div>
+            <ol style="margin:0;padding-left:1.1em;">
+              <li><strong>Pojistné</strong> zaměstnanců, zaměstnavatelů a OSVČ + <strong>platba státu</strong> za státní pojištěnce (letos ≈ 158 mld Kč, pro rok 2027 vláda počítá s +18 mld Kč)</li>
+              <li><strong>Zdravotní pojišťovny</strong>: příjmy 605 mld Kč (+50 mld Kč)</li>
+              <li><strong>Poskytovatelé péče</strong> podle úhradové vyhlášky a smluv</li>
+              <li>Z toho 43 přímo řízených organizací MZ: výnosy z prodeje služeb 156,8 mld Kč</li>
+            </ol>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> MF, TZ 21. 9. 2026 (výdaje státního rozpočtu, příjmy veřejného zdravotního pojištění); MZ, kapitolní sešit 2027 (kapitola 335, příloha č. 8 — rozpočet nákladů a výnosů příspěvkových organizací); ČTK 2. 9. 2026 (navýšení platby v návrhu rozpočtu). Roční platba za státní pojištěnce 2026 je výpočet redakce (2 188 Kč × 12 × 6,016 mil. pojištěnců). Schéma je zjednodušené: pojišťovny platí všem poskytovatelům, nejen přímo řízeným organizacím.</p>
+      </figure>
+
+      <h2>Organigram: kdo z kapitoly 335 žije</h2>
+
+      <p>
+        Kapitola se dělí na tři vrstvy. Nahoře je <strong>ústřední orgán</strong>, tedy samotné ministerstvo. Jeho rozpočet 10,24 miliardy vypadá velký, ale většina z něj jen protéká dál: na stavby v nemocnicích, výzkumné granty, rezidenční místa a dotace. Na vlastní chod úřadu včetně 530 úvazků připadá 1,13 miliardy. Druhou vrstvou jsou <strong>organizační složky státu</strong>, tedy úřady bez vlastní právní subjektivity, které rozpočet přímo čerpají. Patří sem 14 hygienických stanic, SÚKL, ÚZIS, Národní lékařská knihovna, Koordinační středisko transplantací a Agentura pro zdravotnický výzkum. Třetí vrstvou jsou <strong>příspěvkové organizace</strong>, hlavně fakultní nemocnice a specializované ústavy. Ty hospodaří samostatně a z kapitoly dostávají jen příspěvky a investice.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avRzOrgH">
+        <figcaption class="av-figure-h" id="avRzOrgH">Organigram resortu podle rozpočtu 2027 — výdaje kapitoly a úvazky</figcaption>
+        <div style="font-family:var(--sans);font-size:0.84rem;line-height:1.4;" role="group" aria-label="Organigram kapitoly 335">
+          <div style="max-width:440px;margin:0 auto;border:2px solid var(--ink);padding:10px 14px;text-align:center;background:var(--paper);">
+            <div style="font-size:0.7rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-mut);">Ústřední orgán státní správy</div>
+            <div style="font-weight:700;font-size:1rem;">Ministerstvo zdravotnictví</div>
+            <div>výdaje <strong>10,24 mld Kč</strong> · 530 úvazků</div>
+            <div style="color:var(--ink-mut);font-size:0.78rem;">z toho vlastní státní správa 1,13 mld Kč; zbytek tvoří transfery: investice, výzkum, rezidence, dotace, EU projekty</div>
+          </div>
+          <div aria-hidden="true" style="width:2px;height:16px;background:var(--ink);margin:0 auto;"></div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:0;">
+
+            <div style="border-top:2px solid var(--ink);padding-top:10px;">
+              <div style="font-weight:700;">Správní úřady</div>
+              <div style="color:var(--ink-mut);font-size:0.76rem;margin-bottom:6px;">organizační složky státu, vykonávají státní správu · 2,20 mld Kč</div>
+              <div style="border:1px solid var(--rule);padding:8px 10px;margin-bottom:6px;">
+                <strong>14 hygienických stanic</strong> (13 krajských + HS hl. m. Prahy)<br>
+                1 980,2 mil. Kč · 2 114 úvazků
+              </div>
+              <div style="border:1px solid var(--rule);padding:8px 10px;">
+                <strong>Státní ústav pro kontrolu léčiv</strong><br>
+                216,5 mil. Kč · 314 úvazků
+              </div>
+            </div>
+
+            <div style="border-top:2px solid var(--ink);padding-top:10px;">
+              <div style="font-weight:700;">Ostatní organizační složky</div>
+              <div style="color:var(--ink-mut);font-size:0.76rem;margin-bottom:6px;">bez výkonu státní správy · 609,2 mil. Kč · 291 úvazků</div>
+              <div style="border:1px solid var(--rule);padding:8px 10px;margin-bottom:6px;">
+                <strong>ÚZIS ČR</strong> — správce Národního zdravotnického informačního systému<br>
+                388,3 mil. Kč běžné + 120 mil. Kč investice
+              </div>
+              <div style="border:1px solid var(--rule);padding:8px 10px;margin-bottom:6px;">
+                <strong>Národní lékařská knihovna</strong> · 54,8 mil. Kč
+              </div>
+              <div style="border:1px solid var(--rule);padding:8px 10px;margin-bottom:6px;">
+                <strong>Agentura pro zdravotnický výzkum</strong> · 26,0 mil. Kč
+              </div>
+              <div style="border:1px solid var(--rule);padding:8px 10px;">
+                <strong>Koordinační středisko transplantací</strong> · 20,0 mil. Kč
+              </div>
+            </div>
+
+            <div style="border-top:2px solid var(--red);padding-top:10px;">
+              <div style="font-weight:700;">Příspěvkové organizace (43)</div>
+              <div style="color:var(--ink-mut);font-size:0.76rem;margin-bottom:6px;">samostatné hospodaření, hlavně z úhrad pojišťoven · náklady 174,1 mld Kč · 67 422 úvazků</div>
+              <div style="border:1px solid var(--rule);padding:8px 10px;margin-bottom:6px;">
+                <strong>11 fakultních a dalších nemocnic</strong><br>
+                <span style="color:var(--ink-mut);font-size:0.78rem;">VFN, FN Motol a Homolka, FN Královské Vinohrady, Thomayerova, Bulovka, FN Brno, u sv. Anny, Olomouc, Ostrava, Plzeň, Hradec Králové</span>
+              </div>
+              <div style="border:1px solid var(--rule);padding:8px 10px;margin-bottom:6px;">
+                <strong>11 specializovaných ústavů a léčeben</strong><br>
+                <span style="color:var(--ink-mut);font-size:0.78rem;">IKEM, MOÚ, ÚHKT, ÚPMD, CKTCH, Endokrinologický a Revmatologický ústav, Kladruby, Janov, Košumberk, Lázně Kynžvart</span>
+              </div>
+              <div style="border:1px solid var(--rule);padding:8px 10px;margin-bottom:6px;">
+                <strong>16 psychiatrických zařízení</strong><br>
+                <span style="color:var(--ink-mut);font-size:0.78rem;">10 psychiatrických nemocnic, 2 léčebny, 3 dětské psychiatrické nemocnice, Národní ústav duševního zdraví</span>
+              </div>
+              <div style="border:1px solid var(--rule);padding:8px 10px;margin-bottom:6px;">
+                <strong>3 ústavy veřejného zdraví</strong><br>
+                <span style="color:var(--ink-mut);font-size:0.78rem;">Státní zdravotní ústav (448 úvazků, jediný v regulaci zaměstnanosti), zdravotní ústavy Ostrava a Ústí nad Labem</span>
+              </div>
+              <div style="border:1px solid var(--rule);padding:8px 10px;">
+                <strong>2 vzdělávací instituce</strong><br>
+                <span style="color:var(--ink-mut);font-size:0.78rem;">IPVZ, Národní centrum ošetřovatelství a nelékařských zdravotnických oborů</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> MZ, kapitolní sešit 2027 — kap. 3 až 6, tabulky běžných výdajů podle finančních míst, příloha č. 7 (seznam příspěvkových organizací) a č. 8 (rozpočet nákladů a výnosů příspěvkových organizací, úvazky v celoročním vyjádření). Úvazky organizačních složek jsou závazný limit pro rok 2027. Výdaje ministerstva, správních úřadů a ostatních složek dávají dohromady celou kapitolu (10 235,3 + 2 196,7 + 609,2 = 13 041,2 mil. Kč). Náklady příspěvkových organizací nejsou výdaji kapitoly. <strong>Pozn.:</strong> příloha č. 7 uvádí ve výčtu i ÚZIS, který sešit jinde vede jako organizační složku státu. Zde je zařazen podle finančního místa. Organigram ukazuje rozpočtovou strukturu, ne vnitřní organizační řád ministerstva.</p>
+      </figure>
+
+      <p>
+        Nejvíc úřednických míst mají <strong>hygienické stanice</strong>: 2 114 z 3 250 úvazků v organizačních složkách. Jejich rozpočet se liší podle velikosti kraje. Středočeská, moravskoslezská a jihomoravská stanice mají každá přes 218 milionů, karlovarská 64 milionů.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avRzKhsH">
+        <figcaption class="av-figure-h" id="avRzKhsH">Běžné výdaje hygienických stanic v návrhu rozpočtu 2027 (mil. Kč)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="230" data-unit=" mil.">
+          <li class="av-bar-row" data-value="221.1" data-label="Moravskoslezský kraj" data-display="221,1 mil."></li>
+          <li class="av-bar-row" data-value="220.6" data-label="Středočeský kraj" data-display="220,6 mil."></li>
+          <li class="av-bar-row" data-value="218.9" data-label="Jihomoravský kraj" data-display="218,9 mil."></li>
+          <li class="av-bar-row" data-value="212.3" data-label="Hl. m. Praha" data-display="212,3 mil."></li>
+          <li class="av-bar-row" data-value="163.2" data-label="Ústecký kraj" data-display="163,2 mil."></li>
+          <li class="av-bar-row" data-value="125.1" data-label="Olomoucký kraj" data-display="125,1 mil."></li>
+          <li class="av-bar-row" data-value="122.4" data-label="Jihočeský kraj" data-display="122,4 mil."></li>
+          <li class="av-bar-row" data-value="117.5" data-label="Plzeňský kraj" data-display="117,5 mil."></li>
+          <li class="av-bar-row" data-value="110.2" data-label="Zlínský kraj" data-display="110,2 mil."></li>
+          <li class="av-bar-row" data-value="108.2" data-label="Královéhradecký kraj" data-display="108,2 mil."></li>
+          <li class="av-bar-row" data-value="106.4" data-label="Kraj Vysočina" data-display="106,4 mil."></li>
+          <li class="av-bar-row" data-value="99.6" data-label="Pardubický kraj" data-display="99,6 mil."></li>
+          <li class="av-bar-row" data-value="90.0" data-label="Liberecký kraj" data-display="90,0 mil."></li>
+          <li class="av-bar-row" data-value="64.2" data-label="Karlovarský kraj" data-display="64,2 mil."></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> MZ, kapitolní sešit 2027, kap. 2.2.2 — běžné výdaje podle finančních míst. Součet 1 979,8 mil. Kč; jihomoravská stanice má navíc 0,4 mil. Kč kapitálových výdajů z IROP.</p>
+      </figure>
+
+      <h2>Jak se kapitola vyvíjí: covidové roky, propad a návrat k třinácti miliardám</h2>
+
+      <p>
+        Sešit obsahuje i vývojovou řadu od roku 2022. Je v ní potřeba odlišit dvě věci. Roky 2022 až 2025 ukazují <strong>skutečně vyčerpané</strong> výdaje, rok 2026 <strong>schválený rozpočet</strong> a rok 2027 <strong>návrh</strong>. Skutečnost bývá vyšší než schválený rozpočet, protože se během roku přidávají rozpočtová opatření a nevyčerpané peníze z minulých let. U let 2022 a 2023 sešit sám poznamenává, že skutečnost ovlivnila pandemie.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avRzRadaH">
+        <figcaption class="av-figure-h" id="avRzRadaH">Výdaje kapitoly 335 v letech 2022–2027 (mld Kč)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="24" data-unit=" mld Kč">
+          <li class="av-bar-row" data-value="22.72" data-label="2022 · skutečnost" data-display="22,72 mld Kč" data-note="ovlivněno pandemií covidu-19"></li>
+          <li class="av-bar-row" data-value="21.47" data-label="2023 · skutečnost" data-display="21,47 mld Kč" data-note="ovlivněno pandemií covidu-19"></li>
+          <li class="av-bar-row" data-value="12.48" data-label="2024 · skutečnost" data-display="12,48 mld Kč"></li>
+          <li class="av-bar-row" data-value="18.23" data-label="2025 · skutečnost" data-display="18,23 mld Kč"></li>
+          <li class="av-bar-row" data-value="12.68" data-label="2026 · schválený rozpočet" data-display="12,68 mld Kč"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="13.04" data-label="2027 · návrh" data-display="13,04 mld Kč"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> MZ, kapitolní sešit 2027, příloha č. 9 — přehled plnění příjmů a čerpání výdajů kapitoly 335 (skutečnost k 31. 12. 2022–2025, schválený rozpočet 2026, návrh 2027). Skutečnost a rozpočet nejsou stejné veličiny.</p>
+      </figure>
+
+      <p>
+        Jedno srovnání ukazuje, jak málo vypovídá samotný střednědobý výhled. Střednědobý výhled, který ministerstvo zveřejnilo spolu se schváleným rozpočtem na rok 2026, počítal pro rok 2027 s výdaji kapitoly <strong>8,50 miliardy korun</strong>. Návrh je o <strong>4,54 miliardy</strong> vyšší (výpočet redakce). Srpnový návrh ministerstva financí dal kapitole 12,68 miliardy. Na jednání vlády ministerstvo získalo dalších 360 milionů a skončilo na 13,04 miliardy.
+      </p>
+
+      <h2>Šest ukazatelů: co roste a co klesá</h2>
+
+      <p>
+        Sněmovna schvaluje kapitolu ve <strong>specifických ukazatelích</strong>, tedy v šesti velkých položkách podle odvětvového třídění rozpočtové skladby. Teprve jejich srovnání s letoškem ukazuje, jak velký přesun se pod stabilním součtem odehrává.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avRzUkazH">
+        <figcaption class="av-figure-h" id="avRzUkazH">Specifické ukazatele výdajů kapitoly 335: schválený rozpočet 2026 a návrh 2027 (mil. Kč)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Ukazatel</th>
+                <th scope="col" class="av-num">2026 schváleno</th>
+                <th scope="col" class="av-num">2027 návrh</th>
+                <th scope="col" class="av-num">Změna</th>
+                <th scope="col" class="av-num">Změna %</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Výdaje na státní správu</th>
+                <td class="av-num">2 559,0</td>
+                <td class="av-num">3 329,7</td>
+                <td class="av-num av-good">+770,6</td>
+                <td class="av-num">+30,1 %</td>
+              </tr>
+              <tr>
+                <th scope="row">Výzkum a vývoj ve zdravotnictví</th>
+                <td class="av-num">2 044,4</td>
+                <td class="av-num">2 130,0</td>
+                <td class="av-num av-good">+85,6</td>
+                <td class="av-num">+4,2 %</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">Lůžková péče</th>
+                <td class="av-num">1 048,1</td>
+                <td class="av-num">2 240,1</td>
+                <td class="av-num av-good">+1 192,0</td>
+                <td class="av-num">+113,7 %</td>
+              </tr>
+              <tr>
+                <th scope="row">Zvláštní zdravotnická zařízení a služby</th>
+                <td class="av-num">2 105,5</td>
+                <td class="av-num">1 885,3</td>
+                <td class="av-num av-bad">−220,2</td>
+                <td class="av-num">−10,5 %</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">Zdravotnické programy</th>
+                <td class="av-num">4 157,2</td>
+                <td class="av-num">2 389,1</td>
+                <td class="av-num av-bad">−1 768,1</td>
+                <td class="av-num">−42,5 %</td>
+              </tr>
+              <tr>
+                <th scope="row">Ostatní činnosti ve zdravotnictví</th>
+                <td class="av-num">767,6</td>
+                <td class="av-num">1 067,0</td>
+                <td class="av-num av-good">+299,4</td>
+                <td class="av-num">+39,0 %</td>
+              </tr>
+              <tr>
+                <th scope="row"><strong>Celkem</strong></th>
+                <td class="av-num"><strong>12 681,8</strong></td>
+                <td class="av-num"><strong>13 041,2</strong></td>
+                <td class="av-num"><strong>+359,4</strong></td>
+                <td class="av-num"><strong>+2,8 %</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> MZ, Ukazatele kapitoly 335 pro rozpočtové období 2026–2028 (schválený rozpočet 2026); MZ, kapitolní sešit 2027, příloha č. 1 (závazné ukazatele 2027). Změny jsou výpočet redakce.</p>
+      </figure>
+
+      <p>
+        <strong>Lůžková péče</strong> se víc než zdvojnásobuje, ale nejde o peníze na provoz nemocnic. Ze 2,24 miliardy připadá 2,135 miliardy na investiční programy, tedy na stavby. Na provozní příspěvky nemocnicím a ústavům zbývá 105 milionů. <strong>Zdravotnické programy</strong> naopak ztrácejí skoro polovinu, protože v nich byly evropské projekty a ty končí. <strong>Státní správa</strong> roste o 771 milionů. Přispívají k tomu vyšší platy, přesun protidrogové agendy z Úřadu vlády a 347 milionů kapitálových výdajů, z velké části na informační systémy ministerstva. <strong>Ostatní činnosti</strong> rostou hlavně kvůli rezidenčním místům.
+      </p>
+
+      <h2>Evropské peníze odcházejí</h2>
+
+      <p>
+        Největší změnou roku 2027 je konec Národního plánu obnovy. Letos kapitola obsahuje pět grantů z tohoto nástroje za <strong>1,26 miliardy korun</strong>. Největší z nich je onkologická prevence a péče s 627 miliony, dále digitalizace a modernizace služeb. Pro rok 2027 už v návrhu žádný grant z NPO není. Klesají i celkové příjmy z rozpočtu EU, z 1,87 na 1,39 miliardy. Ještě výraznější je pokles výdajů na projekty spolufinancované z EU, které musí stát dorovnávat ze svého. Letos jich bylo 4,07 miliardy, z toho 2,2 miliardy ze státního rozpočtu. Pro rok 2027 je to 1,68 miliardy a z toho jen 288 milionů ze státního rozpočtu.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avRzEuH">
+        <figcaption class="av-figure-h" id="avRzEuH">Programy EU a finančních mechanismů v kapitole 335 pro rok 2027 (mil. Kč)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Nástroj</th>
+                <th scope="col" class="av-num">Státní rozpočet</th>
+                <th scope="col" class="av-num">EU / FM</th>
+                <th scope="col" class="av-num">Celkem</th>
+                <th scope="col">Na co</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">IROP 2021–2027</th>
+                <td class="av-num">140,8</td>
+                <td class="av-num">769,0</td>
+                <td class="av-num">909,8</td>
+                <td>urgentní příjmy, psychiatrie, paliativní a následná péče, kyberbezpečnost, eHealth</td>
+              </tr>
+              <tr>
+                <th scope="row">OP Zaměstnanost+</th>
+                <td class="av-num">88,0</td>
+                <td class="av-num">335,0</td>
+                <td class="av-num">423,0</td>
+                <td>akutní psychiatrie, geriatrie, centra duševního zdraví, screeningy ÚZIS</td>
+              </tr>
+              <tr>
+                <th scope="row">Modernizační fond</th>
+                <td class="av-num">80,0</td>
+                <td class="av-num">200,0</td>
+                <td class="av-num">280,0</td>
+                <td>předfinancování energetických úspor</td>
+              </tr>
+              <tr>
+                <th scope="row">OP Životní prostředí</th>
+                <td class="av-num">0,0</td>
+                <td class="av-num">80,0</td>
+                <td class="av-num">80,0</td>
+                <td>energetická účinnost budov</td>
+              </tr>
+              <tr>
+                <th scope="row">EHP/Norsko 4</th>
+                <td class="av-num">9,0</td>
+                <td class="av-num">51,0</td>
+                <td class="av-num">60,0</td>
+                <td>nový program Zdraví2: duševní zdraví dětí, zdraví žen, AMR</td>
+              </tr>
+              <tr>
+                <th scope="row">Švýcarsko-česká spolupráce 2</th>
+                <td class="av-num">7,2</td>
+                <td class="av-num">47,5</td>
+                <td class="av-num">54,6</td>
+                <td>Program domácí péče (projekty KOPEC a KOMPAS)</td>
+              </tr>
+              <tr>
+                <th scope="row">Horizont Evropa a EUDA</th>
+                <td class="av-num">36,5</td>
+                <td class="av-num">4,5</td>
+                <td class="av-num">41,0</td>
+                <td>evropská výzkumná partnerství, drogová agentura EU</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">Národní plán obnovy</th>
+                <td class="av-num">—</td>
+                <td class="av-num">—</td>
+                <td class="av-num av-bad">0,0</td>
+                <td>letos 1 261,1 mil. Kč; v návrhu 2027 už žádný grant</td>
+              </tr>
+              <tr>
+                <th scope="row"><strong>Celkem</strong></th>
+                <td class="av-num"><strong>361,5</strong></td>
+                <td class="av-num"><strong>1 487,0</strong></td>
+                <td class="av-num"><strong>1 848,5</strong></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> MZ, kapitolní sešit 2027, kap. 7 (rozpočtovaný limit EU/FM); u NPO tabulky rozpisu rozpočtu 2026 (pět grantů NPO: 282,4 + 268,6 + 61,8 + 626,7 + 21,6 mil. Kč, součet je výpočet redakce). Hodnoty zaokrouhleny na desetiny milionu. U IROP sešit odhaduje skutečné výdaje v roce 2027 na 1 592 mil. Kč, rozdíl mají pokrýt nevyčerpané peníze z minulých let.</p>
+      </figure>
+
+      <p>
+        Tady se dá vysvětlit i sporné „2,2 miliardy navíc“. Ministr Vojtěch už od srpna namítá, že srovnání celkových částek nevystihuje skutečný prostor ministerstva. Podle něj „reálně bude mít ministerstvo o zhruba 2,2 miliardy korun více“. Pokud se od celkových výdajů odečtou programy EU a finančních mechanismů včetně státního spolufinancování, zbude letos 8,58 miliardy a v návrhu 2027 11,25 miliardy. Rozdíl je <strong>2,67 miliardy</strong> (výpočet redakce z ukazatelů obou let). Ministrova formulace tedy sedí, pokud se počítá jen s národními penězi. Neznamená to ale, že by resort jako celek měl víc. Evropské projekty mizí a s nimi i služby a investice, které se z nich platily.
+      </p>
+
+      <h2>Místo evropských peněz státní stavby</h2>
+
+      <p>
+        Druhou velkou změnou je návrat státních investic. <strong>Národní programy reprodukce majetku</strong>, tedy investice placené čistě ze státního rozpočtu, mají v roce 2027 dostat 2,612 miliardy. Je to o 1,609 miliardy víc než letos. Sešit k tomu přikládá graf za jedenáct let. Ukazuje, že stát investuje do svých nemocnic nepravidelně: střídají se roky kolem 2–3 miliard s propady pod jednu miliardu.
+      </p>
+
+      <figure class="av-trend">
+        <figcaption class="av-trend-h">Rozpočet národních programů reprodukce majetku kapitoly 335, 2017–2027 (mil. Kč)</figcaption>
+        <div class="av-trend-chart"
+             data-points='[{"year":2017,"value":630.0},{"year":2018,"value":902.8},{"year":2019,"value":1130.0},{"year":2020,"value":980.0},{"year":2021,"value":1630.0},{"year":2022,"value":249.1},{"year":2023,"value":2229.0},{"year":2024,"value":1310.0},{"year":2025,"value":2958.9},{"year":2026,"value":1002.9},{"year":2027,"value":2612.0}]'
+             data-min="0" data-max="3300"></div>
+        <p class="av-trend-note">Zdroj: MZ, kapitolní sešit 2027, kap. 8, graf „Trend rozpočtu výdajů na programové financování za období 2017–2027“. Hodnoty redakce převzala z popisků grafu v sešitu; vrchol řady je rok 2025 s 2 958,9 mil. Kč. Jde o rozpočtované částky, ne o skutečně proinvestované peníze.</p>
+      </figure>
+
+      <p>
+        Na pokračování akcí zahájených v minulých letech jde 2,04 miliardy, tedy <strong>78,1 %</strong> investic z národních programů. Jde o pět velkých akcí ve fakultních nemocnicích. Nejvíc peněz pro rok 2027 dostane nový pavilon B ve FN Olomouc a modernizace chirurgie ve FN Hradec Králové. Ve výhledu na roky 2028 a 2029 přibývá peněz hlavně pro Plzeň a Brno. U brněnské porodnice sešit uvádí, že je „pozastaveno zahájení vlastní stavby původně plánované na 1. 6. 2026; je prováděna revize projektu“.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avRzInvH">
+        <figcaption class="av-figure-h" id="avRzInvH">Hlavní investiční akce a programy: návrh 2027 a výhled 2028–2029 (mil. Kč, státní rozpočet)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Akce / program</th>
+                <th scope="col" class="av-num">2027</th>
+                <th scope="col" class="av-num">2028</th>
+                <th scope="col" class="av-num">2029</th>
+                <th scope="col">Stav podle sešitu</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">FN Olomouc — nová budova B</th>
+                <td class="av-num">767,7</td>
+                <td class="av-num">518,5</td>
+                <td class="av-num">0,0</td>
+                <td>stavba probíhá podle harmonogramu</td>
+              </tr>
+              <tr>
+                <th scope="row">FN Hradec Králové — chirurgie</th>
+                <td class="av-num">609,1</td>
+                <td class="av-num">680,5</td>
+                <td class="av-num">72,4</td>
+                <td>stavba probíhá podle harmonogramu</td>
+              </tr>
+              <tr>
+                <th scope="row">Thomayerova nem. — urgentní příjem</th>
+                <td class="av-num">323,9</td>
+                <td class="av-num">142,6</td>
+                <td class="av-num">289,7</td>
+                <td>dotace 7/2026, stavba zahájena 8/2026</td>
+              </tr>
+              <tr>
+                <th scope="row">FN Brno — gynekologie a porodnictví</th>
+                <td class="av-num">174,2</td>
+                <td class="av-num">200,0</td>
+                <td class="av-num">319,8</td>
+                <td class="av-bad">zahájení stavby pozastaveno, revize projektu</td>
+              </tr>
+              <tr>
+                <th scope="row">FN Plzeň — pavilon chirurgie</th>
+                <td class="av-num">165,0</td>
+                <td class="av-num">660,0</td>
+                <td class="av-num">667,6</td>
+                <td>stavba zahájena 6/2026</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">Nový program elektronizace zdravotnictví (335 52)</th>
+                <td class="av-num">412,0</td>
+                <td class="av-num">—</td>
+                <td class="av-num">—</td>
+                <td>program teprve půjde ke schválení na MF; ve výhledu bez peněz</td>
+              </tr>
+              <tr>
+                <th scope="row">Obnova fakultních a státních nemocnic (335 12)</th>
+                <td class="av-num">54,6</td>
+                <td class="av-num">33,4</td>
+                <td class="av-num">900,0</td>
+                <td>akce se rozepíší po schválení rozpočtu</td>
+              </tr>
+              <tr>
+                <th scope="row">Krizová připravenost zdravotnických zařízení (335 81)</th>
+                <td class="av-num">40,5</td>
+                <td class="av-num">45,0</td>
+                <td class="av-num">45,0</td>
+                <td>započítáno do výdajů na obranu</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> MZ, kapitolní sešit 2027, kap. 8 a příloha č. 10 (detailní rozpis RISPF). Částky jsou podíl státního rozpočtu. Velké stavby financují nemocnice zčásti i z vlastních zdrojů a úvěrů; v programu 135 09 dávají příjemci podle přílohy č. 11 pro rok 2027 vlastních 719,4 mil. Kč.</p>
+      </figure>
+
+      <p>
+        Za pozornost stojí řádek elektronizace. Na <strong>„Rozvoj centrálních služeb elektronizace zdravotnictví“</strong> je pro rok 2027 vyčleněno 412 milionů. Podle sešitu jde ale o „nově připravovaný program reprodukce majetku, který bude předložen Ministerstvu financí ke schválení“, a pro roky 2028 a 2029 v něm peníze zajištěné nejsou. Souvisí to s otázkou, kdo převezme provoz e-zdravotnictví po vyčerpání evropských peněz. Tu jsme rozebírali v článku <a href="clanek-ncez-financovani-2027.html">o financování NCEZ</a>.
+      </p>
+
+      <h2>Lidé: platy úředníků a rezidenční místa</h2>
+
+      <p>
+        Na platy a ostatní platby za práci v organizačních složkách navrhuje ministerstvo <strong>2,228 miliardy</strong>, o 316 milionů víc než letos (výpočet redakce). Součástí jsou valorizace o 4 000 korun měsíčně na zaměstnance na ministerstvu a v SÚKL a o 5 000 korun v hygienických stanicích, ostatních složkách a Státním zdravotním ústavu. Dále přesun protidrogové agendy z Úřadu vlády, 13 nových míst v SÚKL pro regulaci úhrad zvlášť účtovaných prostředků a 114 milionů na pracovníky evropských projektů. Limit zaměstnanců kapitoly včetně SZÚ stoupá z 3 663 na <strong>3 698 úvazků</strong>.
+      </p>
+
+      <p>
+        Pro zdravotnictví mimo úřady je důležitější položka <strong>rezidenčních míst</strong>, tedy státních dotací na specializační vzdělávání. Na lékaře jde 736,7 milionu. Měsíční dotace na celé specializační vzdělávání se má zvýšit z 50 000 korun (v pediatrii 57 000) na <strong>70 000 korun</strong>. V oboru všeobecné praktické lékařství se má vyhlásit 200 míst místo dosavadních 140. Celkem ministerstvo plánuje 300 nových rezidenčních míst a dalších 590 rezidentů bude pokračovat ve vzdělávání z minulých let. Sešit navýšení popisuje „jako reakce na suboptimální dostupnost primární péče v některých regionech“ a dodává, že menší praxe nemohou mladým lékařům nabídnout stejné mzdy jako velké nemocnice.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avRzRezH">
+        <figcaption class="av-figure-h" id="avRzRezH">Dotace na specializační vzdělávání lékařů: návrh 2027 a výhled (mil. Kč)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="760" data-unit=" mil.">
+          <li class="av-bar-row av-bar-row-highlight" data-value="736.7" data-label="2027 · návrh" data-display="736,7 mil." data-note="300 nových míst, dotace 70 000 Kč měsíčně"></li>
+          <li class="av-bar-row" data-value="580.7" data-label="2028 · výhled" data-display="580,7 mil."></li>
+          <li class="av-bar-row av-bar-row-bad" data-value="419.7" data-label="2029 · výhled" data-display="419,7 mil."></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> MZ, kapitolní sešit 2027, kap. 3.2.6 a příloha č. 10 (dotační titul „Specializační vzdělávání lékaři — dotace na celé specializační vzdělávání“). Stejně klesá výhled u rezidenčních míst nelékařů (70 → 40 → 30 mil. Kč) a u dotací univerzitám (91 → 75 → 50 mil. Kč).</p>
+      </figure>
+
+      <p>
+        Výhled tu ale jde proti slibu. Rezidence je víceletý závazek: rezident nastoupený v roce 2027 dostává dotaci i v dalších letech. Rozpočtový výhled přitom na tento titul počítá s poklesem na 581 milionů v roce 2028 a na 420 milionů v roce 2029. Sešit to nekomentuje. Střednědobé výhledy se sice každý rok přepisují, jak ukázal i rozdíl 8,5 a 13,0 miliardy u celé kapitoly. Pro mladého lékaře, který se rozhoduje, jestli jít do praktického lékařství, to ale jistota není. U nelékařských oborů sešit připomíná pokles z 613 vyhlášených rezidenčních míst v roce 2023 na <strong>304 míst za roky 2025 a 2026 dohromady</strong>. Navrhovaných 70 milionů má počet míst opět zvýšit, hlavně v dětské psychiatrii a u psychologů ve zdravotnictví.
+      </p>
+
+      <h2>Co je v kapitole nového a co z ní mizí</h2>
+
+      <div class="av-stack">
+        <div class="av-stack-card">
+          <h4 class="av-stack-h">Nově: protidrogová politika — 500 mil. Kč</h4>
+          <p>Financování adiktologických služeb přešlo s agendou z Úřadu vlády na ministerstvo. Peníze jsou rozdělené takto: 180 mil. na služby snižování rizik, 137 mil. na ambulantní léčbu, 85 mil. na prevenci, 52 mil. na pobytovou léčbu, 34 mil. na následnou péči a 12 mil. na výzkum a metodiku. Sešit uvádí, že dostupnost substituční léčby pro závislé na opioidech „pokrývá pouze cca 50 % klientů“.</p>
+        </div>
+        <div class="av-stack-card">
+          <h4 class="av-stack-h">Výzkum: 2,13 mld. Kč, o 4,2 % víc</h4>
+          <p>Účelová podpora na granty je 1,33 mld. Kč a institucionální podpora 19 výzkumných organizací resortu 740 mil. Kč. Úspěšnost návrhů ve veřejných soutěžích se podle sešitu drží na 20–21 %. Ministerstvo samo píše, že výše účelové podpory „je dlouhodobě nedostačující a má klesající tendenci“.</p>
+        </div>
+        <div class="av-stack-card">
+          <h4 class="av-stack-h">Letecká záchranná služba — 649,4 mil. Kč</h4>
+          <p>Smlouva s provozovateli platí do roku 2028. Z deseti stanovišť provozuje šest společnost DSA, dvě slovenská Air Transport Europe a dvě stát: v Praze Letecká služba Policie ČR, v Plzni armáda.</p>
+        </div>
+        <div class="av-stack-card">
+          <h4 class="av-stack-h">Očkovací látky — z 514 na 30 mil. Kč</h4>
+          <p>Průřezový ukazatel výdajů na očkování a pandemický plán měl letos 514 milionů. Pro rok 2027 zbývá 30 milionů na vakcíny pro zvláštní a mimořádná očkování a pro lidi, kteří nejsou v Česku pojištěni. Sešit pokles proti letošku nekomentuje.</p>
+        </div>
+      </div>
+
+      <h2>Co v rozpočtu chybí</h2>
+
+      <p>
+        Závěr sešitu otevřeně uvádí, které výdaje návrh nepokrývá. Patří k nim <strong>jednorázové odškodnění osob sterilizovaných v rozporu s právem</strong>, které kapitola musí platit podle zákona č. 297/2021 Sb. („Tyto výdaje nebyly do návrhu rozpočtu zohledněny.“). Dále možné <strong>odškodnění po očkování</strong> a výdaje na <strong>soudní spory z nákupů v době pandemie covidu-19</strong>. Na ně ministerstvo podle potřeby požádá ministerstvo financí o posílení rozpočtu během roku. Současně varuje, že návrh je napjatý: „případné krácení by mohlo ohrozit plnění závazků kapitoly a vést k omezení nebo pozastavení financování vybraných činností.“
+      </p>
+
+      <h2>Nemocnice, které ministerstvo řídí: 174 miliard mimo kapitolu</h2>
+
+      <p>
+        Kapitolní sešit obsahuje i přílohu, která rozpočtem kapitoly není, ale ukazuje skutečné měřítko odpovědnosti ministerstva. Je to souhrnný rozpočet nákladů a výnosů jeho <strong>příspěvkových organizací</strong>, tedy fakultních nemocnic, specializovaných ústavů a psychiatrických nemocnic. Jejich náklady mají v roce 2027 dosáhnout 174,1 miliardy korun. Z prodeje služeb, hlavně z úhrad zdravotních pojišťoven, mají získat 156,8 miliardy. Transfery od státu tvoří jen 3,6 miliardy.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avRzPoH">
+        <figcaption class="av-figure-h" id="avRzPoH">Příspěvkové organizace MZ: náklady, úvazky a průměrný plat 2025–2029</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Ukazatel</th>
+                <th scope="col" class="av-num">2025 skutečnost</th>
+                <th scope="col" class="av-num">2026 schváleno</th>
+                <th scope="col" class="av-num">2027 návrh</th>
+                <th scope="col" class="av-num">2028 výhled</th>
+                <th scope="col" class="av-num">2029 výhled</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Náklady celkem (mld Kč)</th>
+                <td class="av-num">154,1</td>
+                <td class="av-num">168,3</td>
+                <td class="av-num">174,1</td>
+                <td class="av-num">180,1</td>
+                <td class="av-num">187,2</td>
+              </tr>
+              <tr>
+                <th scope="row">z toho mzdové náklady (mld Kč)</th>
+                <td class="av-num">53,0</td>
+                <td class="av-num">58,7</td>
+                <td class="av-num">61,1</td>
+                <td class="av-num">63,0</td>
+                <td class="av-num">65,4</td>
+              </tr>
+              <tr>
+                <th scope="row">z toho spotřeba materiálu (mld Kč)</th>
+                <td class="av-num">57,6</td>
+                <td class="av-num">62,7</td>
+                <td class="av-num">65,3</td>
+                <td class="av-num">68,1</td>
+                <td class="av-num">71,4</td>
+              </tr>
+              <tr>
+                <th scope="row">Výnosy z prodeje služeb (mld Kč)</th>
+                <td class="av-num">143,2</td>
+                <td class="av-num">151,2</td>
+                <td class="av-num">156,8</td>
+                <td class="av-num">162,2</td>
+                <td class="av-num">168,8</td>
+              </tr>
+              <tr>
+                <th scope="row">Úvazky (přepočtené)</th>
+                <td class="av-num">63 884</td>
+                <td class="av-num">66 931</td>
+                <td class="av-num">67 422</td>
+                <td class="av-num">67 752</td>
+                <td class="av-num">68 210</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">Průměrný měsíční plat (Kč)</th>
+                <td class="av-num">68 328</td>
+                <td class="av-num">72 182</td>
+                <td class="av-num">74 645</td>
+                <td class="av-num">76 621</td>
+                <td class="av-num">78 897</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> MZ, kapitolní sešit 2027, příloha č. 8 — přehled o rozpočtu nákladů a výnosů státních příspěvkových organizací kapitoly 335, hlavní činnost (souhrnný sumář, stav k 29. 9. 2026). U skutečnosti 2025 jde o průměrný evidenční počet zaměstnanců, u ostatních let o úvazky v celoročním vyjádření. Spotřeba materiálu zahrnuje i léčiva a zdravotnický materiál.</p>
+      </figure>
+
+      <p>
+        Tabulka ukazuje tlak, o kterém jsme psali u <a href="clanek-uhradova-vyhlaska-2027.html">úhradové vyhlášky 2027</a>. Náklady přímo řízených organizací rostou mezi lety 2026 a 2027 o 3,4 % a výnosy z prodeje služeb o 3,7 %. Podle plánu tedy nemocnice hospodaří zhruba vyrovnaně: výsledek hospodaření po zdanění je v návrhu pro roky 2027–2029 nula. Zda to vyjde, nerozhodne kapitola 335, ale úhrady zdravotních pojišťoven a výše platby za státní pojištěnce.
+      </p>
+
+      <h2>Co bude dál</h2>
+
+      <ol class="av-timeline">
+        <li class="av-timeline-item av-timeline-item-done">
+          <time class="av-timeline-date">30. 6. 2026</time>
+          <h4 class="av-timeline-title">Instrukce ministryně financí</h4>
+          <p class="av-timeline-desc">Závazné parametry pro sestavení kapitol (čj. MF–33031/2026/1404-2).</p>
+        </li>
+        <li class="av-timeline-item av-timeline-item-done">
+          <time class="av-timeline-date">konec srpna 2026</time>
+          <h4 class="av-timeline-title">Návrh ministerstva financí</h4>
+          <p class="av-timeline-desc">Kapitola MZ 12,68 mld Kč, schodek státního rozpočtu 389 mld Kč.</p>
+        </li>
+        <li class="av-timeline-item av-timeline-item-done">
+          <time class="av-timeline-date">21. 9. 2026</time>
+          <h4 class="av-timeline-title">Vláda schválila návrh rozpočtu</h4>
+          <p class="av-timeline-desc">Kapitola MZ 13,04 mld Kč, schodek 386 mld Kč.</p>
+        </li>
+        <li class="av-timeline-item av-timeline-item-done">
+          <time class="av-timeline-date">30. 9. 2026</time>
+          <h4 class="av-timeline-title">Sněmovní tisk 324</h4>
+          <p class="av-timeline-desc">Návrh doručen sněmovně a přikázán rozpočtovému výboru.</p>
+        </li>
+        <li class="av-timeline-item av-timeline-item-now">
+          <time class="av-timeline-date">12.–13. 10. 2026</time>
+          <h4 class="av-timeline-title">Kapitolní sešit podepsán, sněmovna začíná</h4>
+          <p class="av-timeline-desc">Ministr podepsal podklad pro výbor pro zdravotnictví; tisk 324 je navržen na pořad 34. schůze od 13. 10.</p>
+          <span class="av-timeline-tag">Teď</span>
+        </li>
+        <li class="av-timeline-item av-timeline-item-future">
+          <time class="av-timeline-date">podzim 2026</time>
+          <h4 class="av-timeline-title">Projednání kapitoly ve výborech a závěrečné hlasování</h4>
+          <p class="av-timeline-desc">V prvním čtení sněmovna schvaluje hlavní parametry rozpočtu. Kapitoly projednávají výbory a změny mezi nimi lze navrhovat až ve druhém čtení.</p>
+        </li>
+      </ol>
+
+      <p>
+        Na co se při projednávání dívat: zda poslanci sáhnou na <strong>investiční řádky</strong>, které tvoří největší a nejpružnější část kapitoly; zda se do výhledu promítne <strong>závazek k rezidenčním místům</strong>; zda nový program elektronizace dostane schválenou dokumentaci a peníze i na další roky. A hlavně jak dopadne <strong>platba za státní pojištěnce</strong>. Ta sice v kapitole ministerstva není, ale rozhodne, s kolika penězi bude v roce 2027 hospodařit celé zdravotnictví včetně 43 organizací z organigramu výše.
+      </p>
+
+      <p class="article-caveat" style="font-size:0.9rem;color:var(--ink-mut);border-top:1px solid var(--rule);padding-top:10px;">
+        <strong>Jak číst čísla:</strong> Všechny hodnoty kapitoly 335 pocházejí z kapitolního sešitu, který ministr zdravotnictví podepsal 12. 10. 2026, a ze schválených ukazatelů kapitoly pro rok 2026. Jde o <strong>návrh</strong>, o kterém rozhodne sněmovna. Rozdíly, procenta, podíly a součty označené jako výpočet redakce v sešitu nejsou. Vývojová řada míchá skutečnost let 2022–2025 s rozpočtem 2026 a návrhem 2027; tyto veličiny nejsou přímo srovnatelné. Graf investic redakce převzala z popisků grafu v sešitu. Náklady příspěvkových organizací nejsou výdaji státního rozpočtu.
+      </p>
+
+    </div>
+
+    <aside class="article-databox">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, které dávají rozpočtu kontext</h4>
+      <ul class="article-databox-list">
+        <li><a href="indikator-vydaje_zdravotnictvi_hdp.html"><strong>Výdaje na zdravotnictví / HDP</strong></a> — 8,6 % (2024); kapitola 335 je jen malá část těchto výdajů, většinu tvoří veřejné zdravotní pojištění</li>
+        <li><a href="indikator-vydaje_sprava_systemu_pct.html"><strong>Výdaje na správu a řízení zdravotního systému</strong></a> — 1,85 % běžných výdajů na zdravotnictví (2024)</li>
+        <li><a href="indikator-vydaje_prevence_pct.html"><strong>Výdaje na prevenci</strong></a> — 2,736 % běžných výdajů na zdravotnictví (2023); z kapitoly 335 se platí hygienická služba, SZÚ a zdravotní ústavy</li>
+        <li><a href="indikator-uhrada_zp_per_pojistenec.html"><strong>Úhrada zdravotních pojišťoven na pojištěnce</strong></a> — 46 529 Kč ročně (2024)</li>
+        <li><a href="indikator-podil_prakticti_lekari.html"><strong>Podíl praktických lékařů mezi všemi lékaři</strong></a> — 16,9 % (2023); rezidenční místa ve všeobecném praktickém lékařství mají stoupnout ze 140 na 200</li>
+        <li><a href="indikator-umrtnost_predavkovani_drogy.html"><strong>Úmrtnost na předávkování drogami</strong></a> — 10,3 na milion obyvatel 15–64 let (2023); protidrogová politika je nově v kapitole MZ</li>
+      </ul>
+    </aside>
+
+    <section class="article-related" aria-labelledby="related-h">
+      <h4 id="related-h">Související obsah</h4>
+      <ul class="article-related-list">
+        <li><a href="clanek-platba-statni-pojistenci-2027-tri-cisla.html">→ Jedna platba, čtyři čísla. Nařízení přidá za státní pojištěnce 33 korun, zákon 291 — a vyrovnaná vyhláška stojí na částce, kterou nikdo neschválil</a></li>
+        <li><a href="clanek-uhradova-vyhlaska-2027.html">→ Osmdesát osm celých čtyři procenta. Úhradová vyhláška 2027 si sama píše, že nemocnicím rostou náklady rychleji než úhrady</a></li>
+        <li><a href="clanek-financovani-sha.html">→ Odkud jdou peníze a kam mizí. Anatomie financování českého zdravotnictví</a></li>
+        <li><a href="clanek-ncez-financovani-2027.html">→ Evropské peníze na e-zdravotnictví letos dojdou. Stát rozhodl, kdo zaplatí jeho provoz od roku 2027</a></li>
+        <li><a href="clanek-vydaje-sprava-zdravotnictvi.html">→ Nejlacinější řízení v pojišťovenské Evropě. Česko utratí za správu zdravotnictví 1,9 % výdajů — a je otázka, jestli si to může dovolit</a></li>
+      </ul>
+    </section>
+
+    <section class="article-sources" aria-labelledby="sources-h">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h" id="sources-h">Kde si data sami ověříte</h4>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární — rozpočet kapitoly 335</h5>
+        <ul class="article-sources-list">
+          <li><strong>Ministerstvo zdravotnictví — <em>Návrh rozpočtu na rok 2027 kapitoly 335 – Ministerstvo zdravotnictví</em>, podklad pro jednání Výboru pro zdravotnictví PS PČR, říjen 2026 (PID MZDRX022B6RS, elektronicky podepsáno ministrem 12. 10. 2026)</strong> — 174stránkový kapitolní sešit: komentář (souhrnné a specifické ukazatele, běžné a kapitálové výdaje podle finančních míst, platy a úvazky, výzkum, rezidence, protidrogová politika, programy EU/FM, národní programy reprodukce majetku, závěr) a tabulkové přílohy č. 1–11. Z něj pochází většina čísel v článku. Dokument redakci poskytl vlastník portálu; text byl strojově vytažen z OCR vrstvy PDF a graf investic přečten z vykreslené stránky.</li>
+          <li><strong>Ministerstvo zdravotnictví — <em>Ukazatele kapitoly 335 Ministerstvo zdravotnictví pro rozpočtové období 2026–2028</em> (schválený rozpočet 2026 a střednědobý výhled)</strong> — srovnávací hodnoty roku 2026 a výhled 8,50 mld Kč na rok 2027. Staženo 12. 10. 2026. <a href="https://mzd.gov.cz/schvaleny-rozpocet-kap-335-mz-na-rok-2026-a-sdv-2027-2028/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární — státní rozpočet a legislativní proces</h5>
+        <ul class="article-sources-list">
+          <li><strong>Ministerstvo financí — TZ <em>Vláda se dohodla na podobě rozpočtu, MF nyní připraví finální dokumentaci</em>, 21. 9. 2026 (aktualizováno 30. 9. 2026)</strong> — příjmy, výdaje a schodek státního rozpočtu 2027, příjmy veřejného zdravotního pojištění 605 mld Kč, tabulka kapitol (MZ 13 041 240 751 Kč). <a href="https://mf.gov.cz/cs/ministerstvo/media/tiskove-zpravy/2026/vlada-se-dohodla-na-podobe-rozpoctu-mf-nyni-pripra-65253" target="_blank" rel="noopener">mf.gov.cz ↗</a></li>
+          <li><strong>Ministerstvo financí — srpnový návrh rozpočtu 2027 (TZ z 31. 8. 2026, přetištěno 1. 9. 2026)</strong> — kapitola MZ 12 680 998 832 Kč, schodek 389 mld Kč. <a href="https://www.zakazka.cz/rozpocet-2027-rekordni-investice-dostupnejsi-zdravotnictvi-vyssi-zivotni-uroven-a-nadprumerny-hospodarsky-rust/" target="_blank" rel="noopener">zakazka.cz ↗</a></li>
+          <li><strong>Poslanecká sněmovna PČR — sněmovní tisk 324, vládní návrh zákona o státním rozpočtu ČR na rok 2027</strong> — předložen 30. 9. 2026, přikázán rozpočtovému výboru, navržen na pořad 34. schůze od 13. 10. 2026 (stav k 12. 10. 2026). <a href="https://www.psp.cz/sqw/historie.sqw?o=10&amp;t=324" target="_blank" rel="noopener">psp.cz — historie tisku 324 ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Sekundární — vyjádření a kontext</h5>
+        <ul class="article-sources-list">
+          <li><strong>Zdravé zprávy (ČTK) — <em>Rozpočet MZd ČR zůstane stejný. Ministr Vojtěch ale říká, že si polepší</em>, 2. 9. 2026</strong> — citace ministra o 2,2 mld Kč; navýšení platby za státní pojištěnce o 18 mld Kč v návrhu rozpočtu. <a href="https://www.zdravezpravy.cz/2026/09/02/rozpocet-mzd-cr-zustane-stejny-ministr-vojtech-ale-rika-ze-si-polepsi/" target="_blank" rel="noopener">zdravezpravy.cz ↗</a></li>
+          <li><strong>Newstream — <em>Rozpočet MZd 2027: 13 miliard, více na platy a méně na EU</em>, 30. 9. 2026</strong> — tatáž citace ministra po schválení návrhu vládou. <a href="https://www.newstream.cz/politika/vojtechuv-rozpocet-meni-smer-mene-na-evropske-projekty-vice-na-platy" target="_blank" rel="noopener">newstream.cz ↗</a></li>
+        </ul>
+      </div>
+
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Některé zpravodajské texty uváděly meziroční nárůst kapitoly o 114 milionů. Z primárních čísel (12 681 846 408 Kč → 13 041 240 751 Kč) vychází +359,4 milionu, a to článek používá. Agenturní zpráva z 2. 9. 2026 uváděla zvýšení rezidentní dotace z 55 na 75 tisíc korun. Novější kapitolní sešit uvádí 50 tisíc (57 tisíc v pediatrii) → 70 tisíc a článek se drží sešitu. Přesnou roční částku platby za státní pojištěnce pro rok 2027 dostupné dokumenty neuvádějí. Článek proto pracuje s letošní sazbou (2 188 Kč měsíčně; roční objem je výpočet redakce) a s navýšením 18 mld Kč, které uvádí ČTK. Konečný stav závisí na novele zákona o pojistném (tisk 235).
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
