@@ -941,7 +941,7 @@ Jedna Routine v Claude Code on the web (zakládá vlastník; přesný postup v
 | Parametr | Hodnota |
 |---|---|
 | **Název** | `HSPA – rutina` |
-| **Prompt** | `Spusť dnešní běh podle PROMPT_ROUTINE.md v kořeni repozitáře hspa. Projdi bloky A–L přesně podle souboru, dodrž kalendář (§ 3) a pravidla šumu (§ 0) a na konci otevři nejvýš jeden PR podle bloku L. Zásadní je validace a ověření všech zdrojů.` |
+| **Prompt** | `Spusť dnešní běh podle PROMPT_ROUTINE.md v kořeni repozitáře hspa. Projdi bloky A–L včetně bloku V (video dne) přesně podle souboru, dodrž kalendář (§ 3) a pravidla šumu (§ 0) a na konci otevři nejvýš jeden PR podle bloku L. Zásadní je validace a ověření všech zdrojů.` |
 | **Cron (UTC)** | `0 1 * * *` — 03:00 CEST / 02:00 CET: po půlnočních změnách, před `publish-articles.yml` (04:00 UTC), `awareness-weekly.yml` (po 04:00 UTC) i `newsletter-weekly.yml` (čt 07:33 UTC); 2. den čtvrtletí už vidí data z `refresh.yml` (1. den 06:00 UTC). |
 | **Konektory** | GitHub · `PubMed` · `Consensus` · `hlidac_statu` · `Buffer` · `Brevo` |
 | **Repo / větev** | `veritasderman-rgb/hspa`, `main` (rutina si větev zakládá sama) |
