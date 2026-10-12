@@ -20,7 +20,7 @@ import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { Resvg } from '@resvg/resvg-js';
-import { compile, frameSvg, audioTrack, validate, W, H } from './lib/scene.js';
+import { compile, frameSvg, audioTrack, validate, W, H } from './lib/styles.js';
 import { writeWav } from './lib/audio.js';
 import { RESVG_FONT } from './lib/text.js';
 

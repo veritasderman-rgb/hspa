@@ -7,7 +7,11 @@ import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Resvg } from '@resvg/resvg-js';
-import { compile, frameSvg, audioTrack, validate, parseValue } from '../social/reels/lib/scene.js';
+import { compile, frameSvg, audioTrack, validate } from '../social/reels/lib/styles.js';
+import { parseValue } from '../social/reels/lib/facts.js';
+import { chunkWords } from '../social/reels/lib/florence-scene.js';
+import { florence, MOODS as F_MOODS, GESTURES_F } from '../social/reels/characters/florence.js';
+import { parseLine as parseLine2 } from '../social/reels/lib/speech.js';
 import { schedule, syllables, parseLine } from '../social/reels/lib/speech.js';
 import { kompik } from '../social/reels/characters/kompik.js';
 import { person, ROLES } from '../social/reels/characters/cast.js';
@@ -18,6 +22,8 @@ import { SR } from '../social/reels/lib/audio.js';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SCRIPTS = resolve(ROOT, 'social/reels/scripts');
 const scripts = readdirSync(SCRIPTS).filter(f => f.endsWith('.json')).map(f => ({ f, s: JSON.parse(readFileSync(resolve(SCRIPTS, f), 'utf8')) }));
+const kompikScripts = scripts.filter(x => !x.s.style || x.s.style === 'kompik');
+const florenceScripts = scripts.filter(x => x.s.style === 'florence');
 
 const plain = html => html.replace(/<[^>]*>/g, ' ').replace(/&nbsp;|&#160;/g, ' ').replace(/\s+/g, ' ').replace(/\s+([.,!?;:])/g, '$1');
 
@@ -44,26 +50,26 @@ test('reels: každý fakt je doslovně doložen v textu článku (žádná čís
 });
 
 test('reels: validátor odmítne klamavý počet postaviček a chybějící zdroj', () => {
-  const base = JSON.parse(JSON.stringify(scripts[0].s));
+  const base = JSON.parse(JSON.stringify(kompikScripts[0].s));
   const g = base.beats.find(b => b.type === 'group');
   g.count = Math.round(parseValue(g.value) * 2);
   assert.ok(validate(base).errors.some(e => e.includes('obraz by klamal')));
-  const noSrc = JSON.parse(JSON.stringify(scripts[0].s));
+  const noSrc = JSON.parse(JSON.stringify(kompikScripts[0].s));
   delete noSrc.source_line;
   assert.ok(validate(noSrc).errors.some(e => e.includes('source_line')));
-  const long = JSON.parse(JSON.stringify(scripts[0].s));
+  const long = JSON.parse(JSON.stringify(kompikScripts[0].s));
   long.beats[0].dur = 30;
   assert.ok(validate(long).errors.some(e => e.includes('> 20')));
-  const frac = JSON.parse(JSON.stringify(scripts[0].s));
+  const frac = JSON.parse(JSON.stringify(kompikScripts[0].s));
   frac.beats.find(b => b.type === 'group').count = 16.1;
   assert.ok(validate(frac).errors.some(e => e.includes('celé číslo')), 'neceločíselný count');
-  const undeclared = JSON.parse(JSON.stringify(scripts[0].s));
+  const undeclared = JSON.parse(JSON.stringify(kompikScripts[0].s));
   undeclared.beats[0].line = 'Úspěšnost je 99 %.';
   assert.ok(validate(undeclared).errors.some(e => e.includes('„99"')), 'číslo bez faktu v replice');
-  const declared = JSON.parse(JSON.stringify(scripts[0].s));
+  const declared = JSON.parse(JSON.stringify(kompikScripts[0].s));
   declared.beats[0].line = 'Jen 16,1 na 100 000?';
   assert.ok(!validate(declared).errors.some(e => e.includes('není hodnota')), 'hodnota faktu a číslo z citace projdou');
-  const noOutro = JSON.parse(JSON.stringify(scripts[0].s));
+  const noOutro = JSON.parse(JSON.stringify(kompikScripts[0].s));
   noOutro.beats.pop();
   assert.ok(validate(noOutro).errors.some(e => e.includes('outro')));
 });
@@ -74,7 +80,7 @@ test('reels: červená (#B8361E) je jen na hrotu střelky a v miniznačce kompas
   }
   for (const r of Object.keys(ROLES)) assert.ok(!person({ role: r }).toUpperCase().includes(C.needle.toUpperCase()), `role ${r} nese červenou`);
   assert.equal((kompik({}).svg.match(new RegExp(C.needle, 'gi')) || []).length, 1, 'Kompík má červenou jen na střelce');
-  const tl = compile(scripts[0].s);
+  const tl = compile(kompikScripts[0].s);
   for (const t of [0.5, 4, 9, 12.9]) {
     const n = (frameSvg(tl, t).match(new RegExp(C.needle, 'gi')) || []).length;
     // 1× střelka Kompíka + 1× značka v odznaku série (+ 1× v logu koncové karty)
@@ -94,7 +100,7 @@ test('reels: řeč — slabiky, zvýraznění, rozvrh', () => {
 });
 
 test('reels: snímek se vykreslí (resvg) a zvuková stopa má správnou délku', () => {
-  const tl = compile(scripts[0].s);
+  const tl = compile(kompikScripts[0].s);
   const png = new Resvg(frameSvg(tl, 9.8), { font: RESVG_FONT, fitTo: { mode: 'width', value: 270 } }).render().asPng();
   assert.ok(png.length > 2000);
   const a = audioTrack(tl);
@@ -118,4 +124,39 @@ test('reels: všechny typy beatů, emoce a gesta se vykreslí bez chyby', () => 
   assert.deepEqual(validate(s).errors, []);
   const tl = compile(s);
   for (let t = 0; t < tl.duration; t += 0.37) assert.ok(frameSvg(tl, t).startsWith('<svg'));
+});
+
+test('florence: postava nese odznak AI a žádnou červenou střelky', () => {
+  for (const mood of F_MOODS) for (const gesture of GESTURES_F) {
+    const svg = florence({ mood, gesture }).svg;
+    assert.ok(svg.includes('>AI</text>'), `${mood}/${gesture}: chybí odznak AI`);
+    assert.ok(!svg.toUpperCase().includes(C.needle.toUpperCase()), `${mood}/${gesture}: nese červenou střelky`);
+  }
+});
+
+test('florence: titulky nerozdělí „0,3 %" a předložky, kousky ≤ 3 slova', () => {
+  const ch = chunkWords(parseLine2('A že péči nedostali, hlásí jen *0,3 %* lidí.')).map(c => c.map(w => w.text).join(' '));
+  assert.ok(ch.some(c => c.includes('0,3 %')), ch.join(' | '));
+  assert.ok(ch.every(c => c.split(' ').length <= 4), ch.join(' | '));
+});
+
+test('florence: scénáře mají háček, outro a AI označení na každém snímku', () => {
+  assert.ok(florenceScripts.length >= 1);
+  for (const { f, s } of florenceScripts) {
+    const tl = compile(s);
+    for (let t = 0; t < tl.duration; t += 0.5) {
+      const svg = frameSvg(tl, t);
+      assert.ok(svg.includes('FLORENCE · AI AUTORKA'), `${f} t=${t}: chybí AI označení`);
+    }
+    const bad = JSON.parse(JSON.stringify(s));
+    bad.beats.shift();
+    assert.ok(validate(bad).errors.some(e => e.includes('hook')), `${f}: validátor nevyžaduje hook`);
+    const nofact = JSON.parse(JSON.stringify(s));
+    const nb = nofact.beats.find(b => b.type === 'number');
+    if (nb) { nb.fact = 'neexistuje'; assert.ok(validate(nofact).errors.some(e => e.includes('fakt'))); }
+  }
+});
+
+test('styly: neznámý styl validátor odmítne', () => {
+  assert.ok(validate({ ...kompikScripts[0].s, style: 'xyz' }).errors.length > 0);
 });

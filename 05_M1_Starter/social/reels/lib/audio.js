@@ -65,7 +65,31 @@ export const sfx = {
   }, t),
   spin: (b, t) => { for (let i = 0; i < 6; i++) addTone(b, t + i * 0.06, 0.05, { f0: 900 + i * 120, gain: 0.08, wave: 'tri' }); },
   boing: (b, t) => addTone(b, t, 0.4, { f0: 180, f1: 420, gain: 0.25, vibrato: 0.08, vibRate: 18, release: 0.2 }),
+  // styl Florence: psací stroj, hluboký úder, náběh
+  tick: (b, t, k = 0) => { addNoise(b, t, 0.03, { gain: 0.16, lp0: 0.7, lp1: 0.95, seed: 31 + k, release: 0.02 }); addTone(b, t, 0.03, { f0: 1800 + (k % 3) * 140, gain: 0.04, wave: 'tri', release: 0.02 }); },
+  boom: (b, t) => { addTone(b, t, 0.9, { f0: 95, f1: 38, gain: 0.7, release: 0.7 }); addNoise(b, t, 0.25, { gain: 0.25, lp0: 0.2, lp1: 0.5, seed: 9 }); },
+  riser: (b, t, d = 0.6) => { addNoise(b, t, d, { gain: 0.22, lp0: 0.02, lp1: 0.6, seed: 13, release: 0.02 }); addTone(b, t, d, { f0: 220, f1: 880, gain: 0.06, wave: 'saw', release: 0.03 }); },
 };
+
+/**
+ * Noční podkres stylu Florence: mollová smyčka Am–F–C–G, 96 BPM, kopák na dobu,
+ * šum na offbeatu, měkké plucky. Tlumenější a „tajemnější" než Kompíkova smyčka.
+ */
+export function musicNight(buf, seconds, { bpm = 96, gain = 0.08 } = {}) {
+  const beat = 60 / bpm;
+  const prog = [[57, 60, 64], [53, 57, 60], [48, 52, 55], [55, 59, 62]];
+  const steps = Math.ceil(seconds / (beat / 2));
+  for (let i = 0; i < steps; i++) {
+    const t = i * (beat / 2);
+    if (t > seconds - 0.2) break;
+    const chord = prog[Math.floor(i / 8) % 4];
+    if (i % 2 === 0) addTone(buf, t, 0.22, { f0: 120, f1: 45, gain: gain * 3.2, release: 0.16 });
+    if (i % 4 === 2) addNoise(buf, t, 0.12, { gain: gain * 1.1, lp0: 0.35, lp1: 0.6, seed: i, release: 0.08 });
+    if (i % 2 === 1) addNoise(buf, t, 0.03, { gain: gain * 0.6, lp0: 0.8, lp1: 0.95, seed: 100 + i, release: 0.02 });
+    if (i % 2 === 0) addTone(buf, t, beat * 0.9, { f0: NOTE(chord[0] - 24), gain: gain * 1.6, release: 0.3 });
+    if ([0, 3, 5].includes(i % 8)) addTone(buf, t, beat * 0.6, { f0: NOTE(chord[(i % 8) % 3] + 12), gain: gain * 0.8, wave: 'tri', release: 0.25 });
+  }
+}
 
 /** Žvatlání po slabikách. base = výška hlasu (Hz). */
 export function babble(buf, sched, { base = 560, gain = 0.15, seed = 3 } = {}) {

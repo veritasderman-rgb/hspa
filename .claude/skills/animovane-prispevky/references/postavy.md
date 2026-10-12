@@ -73,3 +73,8 @@ není „přítěž". Číslo ukazuje systém, ne vinu lidí.
 
 **Nová role** = rozšířit `ROLES` v `cast.js` (jen povolené barvy z `lib/palette.js`),
 přidat do modelového listu (`npm run brand:maskot`) a do této tabulky.
+
+## Florence (styl „Florence komentuje")
+
+AI autorka portálu jako kreslená postava — viz [`florence.md`](florence.md). V Kompíkových
+videích nevystupuje a Kompík nevystupuje v jejích (dva oddělené formáty, dvě „tváře").

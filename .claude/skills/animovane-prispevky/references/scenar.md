@@ -4,6 +4,10 @@ Soubor `05_M1_Starter/social/reels/scripts/<slug>.json`, `slug` = slug článku
 (= název souboru). Validuje `validate()` v `social/reels/lib/scene.js`
 (`npm run reels:check`), fakta proti článku hlídá `tests/reels-engine.test.js`.
 
+Tento soubor popisuje styl **Kompík vysvětluje** (výchozí, bez pole `style`).
+Styl **Florence komentuje** (`"style": "florence"`) má vlastní beaty — viz
+[`florence.md`](florence.md). Fakta, `source_line`, `footnote` a kontrola čísel platí stejně.
+
 ## Kostra
 
 ```json
