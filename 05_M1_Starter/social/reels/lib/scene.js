@@ -22,6 +22,8 @@ export const BEAT_TYPES = ['intro', 'say', 'group', 'punch', 'outro'];
 export const EMOTIONS = ['curious', 'explain', 'worried', 'shocked', 'sad', 'happy', 'proud', 'skeptic'];
 export const GESTURES = ['none', 'point-left', 'point-right', 'point-up', 'shrug', 'hands-up', 'wave', 'think'];
 export const LIMITS = { minDur: 8, maxDur: 20, maxLine: 70, maxGroup: 40 };
+// číslo v textu: 16,1 · 100 000 · 34.8 · 2024
+const NUM_RE = /\d+(?:[\s\u00a0\u202f]\d{3})*(?:[.,]\d+)?/g;
 
 // Rozvržení 9:16 s ohledem na UI Reels/Stories (horních ~220 px a spodních ~360 px
 // překrývá rozhraní aplikace; důležité věci drž mezi y 230 a 1560).
@@ -30,9 +32,9 @@ const L = {
   bubbleTop: 372, bubbleMaxW: 940, bubbleFont: 64, bubbleLH: 80,
   groupBase: 1080, groupColGap: 84, groupRowGap: 60, groupScale: 0.4,
   valueY: 1178, labelY: 1226,
-  kompikStage: { x: 540, y: 1545, s: 0.62 },
+  kompikStage: { x: 540, y: 1490, s: 0.62 },
   kompikHero: { x: 540, y: 1420, s: 0.9 },
-  footY: 1590,
+  footY: 1546,   // účaří drobného textu; s dotahy končí nad y 1560
 };
 const SIDE_X = { left: 280, right: 800, center: 540 };
 
@@ -202,8 +204,8 @@ function background(t, tl) {
   return `<rect width="${W}" height="${H}" fill="${C.sand}"/>
   ${dots}
   <g transform="translate(540 960) rotate(${rot})" opacity="0.9"><circle r="620" fill="none" stroke="${C.sand2}" stroke-width="6"/>${ticks}</g>
-  <rect x="0" y="1500" width="${W}" height="${H - 1500}" fill="${C.sand2}"/>
-  <rect x="0" y="1500" width="${W}" height="8" fill="${C.ink}" opacity="0.08"/>`;
+  <rect x="0" y="1478" width="${W}" height="${H - 1478}" fill="${C.sand2}"/>
+  <rect x="0" y="1478" width="${W}" height="8" fill="${C.ink}" opacity="0.08"/>`;
 }
 
 function badge(script, t) {
@@ -344,8 +346,8 @@ function outroLayer(b, t, script) {
     <text x="0" y="12" text-anchor="middle" font-family="Inter" font-weight="900" font-size="${ctaFs}" fill="${C.ink}">${escapeXml(cta)}</text>
   </g>
   <g opacity="${r1(prog(t, b.t0 + 0.5, b.t0 + 0.8) * 100) / 100}">
-    ${src ? `<text x="540" y="${L.footY - 34}" text-anchor="middle" font-family="Inter" font-weight="700" font-size="26" fill="${C.inkSoft}">${escapeXml(src)}</text>` : ''}
-    <text x="540" y="${L.footY + 4}" text-anchor="middle" font-family="Inter" font-weight="700" font-size="26" fill="${C.inkSoft}">Animace a text: AI · redakce HSPA Monitor</text>
+    ${src ? `<text x="540" y="${L.footY - 36}" text-anchor="middle" font-family="Inter" font-weight="700" font-size="26" fill="${C.inkSoft}">${escapeXml(src)}</text>` : ''}
+    <text x="540" y="${L.footY}" text-anchor="middle" font-family="Inter" font-weight="700" font-size="26" fill="${C.inkSoft}">Animace a text: AI · redakce HSPA Monitor</text>
   </g>`;
 }
 
@@ -455,7 +457,7 @@ export function validate(script) {
       if (lines.length > 3) err(`${at}: replika se v bublině zalomí na ${lines.length} řádky (max 3)`);
     } else if (b.type !== 'outro' && b.type !== 'group') warn(`${at}: beat bez repliky`);
     if (b.type === 'group') {
-      if (!(b.count >= 1 && b.count <= LIMITS.maxGroup)) err(`${at}: count musí být 1–${LIMITS.maxGroup}`);
+      if (!(Number.isInteger(b.count) && b.count >= 1 && b.count <= LIMITS.maxGroup)) err(`${at}: count musí být celé číslo 1–${LIMITS.maxGroup} (vykreslí se tolik postaviček)`);
       if (!ROLES[b.role]) err(`${at}: neznámá role „${b.role}" (${Object.keys(ROLES).join(', ')})`);
       if (b.side && !SIDE_X[b.side]) err(`${at}: side musí být left|right|center`);
       if (!b.fact || !factIds.has(b.fact)) err(`${at}: skupina musí odkazovat na fakt (fact) z \`facts\``);
@@ -471,6 +473,22 @@ export function validate(script) {
       if (!b.text) err(`${at}: chybí text pointy`);
       if (!b.basis) err(`${at}: chybí \`basis\` — z jakých faktů pointa plyne (např. "16,1 / 34,8 = 0,46")`);
       if (b.tone && !['bad', 'good', 'warn'].includes(b.tone)) err(`${at}: tone musí být bad|good|warn`);
+    }
+  });
+  // Každé číslo napsané ve viditelném textu (bublina, pointa, popisek, výzva) musí být
+  // doložené: hodnota nebo rok faktu, nebo číslo z citace faktu v článku.
+  const norm = x => String(x).replace(/[\s\u00a0\u202f]/g, '').replace('.', ',');
+  const allowed = new Set();
+  facts.forEach(f => {
+    allowed.add(norm(f.value));
+    if (f.year) allowed.add(String(f.year));
+    (String(f.quote || '').match(NUM_RE) || []).forEach(n => allowed.add(norm(n)));
+  });
+  beats.forEach((b, i) => {
+    for (const key of ['line', 'text', 'label', 'cta']) {
+      for (const n of String(b[key] || '').match(NUM_RE) || []) {
+        if (!allowed.has(norm(n))) err(`beat ${i + 1} (${b.type}): číslo „${n}" v \`${key}\` není hodnota, rok ani číslo z citace žádného faktu — doplň fakt s citací z článku`);
+      }
     }
   });
   if (beats.length && beats[beats.length - 1].type !== 'outro') err('poslední beat musí být outro (koncová karta s odkazem a zdrojem)');

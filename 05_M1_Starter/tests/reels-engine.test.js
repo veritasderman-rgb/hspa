@@ -54,6 +54,15 @@ test('reels: validátor odmítne klamavý počet postaviček a chybějící zdro
   const long = JSON.parse(JSON.stringify(scripts[0].s));
   long.beats[0].dur = 30;
   assert.ok(validate(long).errors.some(e => e.includes('> 20')));
+  const frac = JSON.parse(JSON.stringify(scripts[0].s));
+  frac.beats.find(b => b.type === 'group').count = 16.1;
+  assert.ok(validate(frac).errors.some(e => e.includes('celé číslo')), 'neceločíselný count');
+  const undeclared = JSON.parse(JSON.stringify(scripts[0].s));
+  undeclared.beats[0].line = 'Úspěšnost je 99 %.';
+  assert.ok(validate(undeclared).errors.some(e => e.includes('„99"')), 'číslo bez faktu v replice');
+  const declared = JSON.parse(JSON.stringify(scripts[0].s));
+  declared.beats[0].line = 'Jen 16,1 na 100 000?';
+  assert.ok(!validate(declared).errors.some(e => e.includes('není hodnota')), 'hodnota faktu a číslo z citace projdou');
   const noOutro = JSON.parse(JSON.stringify(scripts[0].s));
   noOutro.beats.pop();
   assert.ok(validate(noOutro).errors.some(e => e.includes('outro')));

@@ -61,7 +61,7 @@ Stejné `cols` pro obě skupiny → rozdíl výšek davu je férové srovnání.
 
 Horních ~230 px a spodních ~360 px překrývá UI Instagramu/TikToku (popisek, ikony,
 tlačítka vpravo). Renderer drží odznak na y 250, bublinu od y 372, davy y 600–1080,
-čísla y 1180–1230, Kompíka nad y 1545 a drobný text na y 1590. Nic klíčového
+čísla y 1180–1230, Kompíka nohama na y 1490 a drobný text s účařím na y 1546. Nic klíčového
 nevkládej mimo tyto zóny.
 
 ## Popisek k příspěvku (caption)

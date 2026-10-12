@@ -56,6 +56,9 @@ Pracovní adresář `05_M1_Starter/`.
 
 - **Žádné číslo z paměti.** Každé číslo ve videu (bublina, cedule, počet postaviček,
   pointa) musí stát v článku; `facts[].quote` je doslovná věta z článku.
+  Validátor odmítne každé číslo napsané v replice, pointě, popisku nebo výzvě, které
+  není hodnotou, rokem ani číslem z citace některého faktu. Čísla vyslovená slovy
+  („šestnáct“) strojově hlídat nejde — ta kontroluješ ty proti `facts[]`.
 - **Obraz nesmí klamat.** Počet postaviček × `per` se od hodnoty liší nejvýš o 10 %
   (validátor). Když se hodnota nedá poctivě vyjádřit postavičkami (procenta, miliardy),
   použij `per` (1 postavička = 10 %, = 1 mld.) a napiš to do `footnote`.
