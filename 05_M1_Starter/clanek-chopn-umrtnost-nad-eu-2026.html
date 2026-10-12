@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-10-12
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-10-12
+    creation_phase: rutina+indicator-add
+    primary_sources_count: 6
+    visual_elements_count: 5
+    notes: "Doprovodny clanek k novemu indikatoru mortalita_chopn (Vysledky · Mortalita · Chronicke nemoci dychacich cest, framework hspa, dimension zdravi, direction lower_is_better, signal bad, benchmark EU27 27,86, prahy good 5 / warn 15 jako u umrtnost_diabetes a mortalita_jaterni_chronicka). Vytvoreno z bloku F rutiny 2026-10-12 (pondeli = INDICATOR-ADD). KPI: 33,48 umrti na 100 000 obyvatel (Eurostat hlth_cd_asdr2, CZ, sex=T, age=TOTAL, icd10=J40-J47, unit=RT, ESP 2013; dataset aktualizovan 8. 6. 2026; stazeno z API 12. 10. 2026). Bench: EU27_2020 27,86 (2023, tataz rada). Pomer 33,48/27,86 = 1,20, odchylka +20,2 % (vypocet redakce). RADA CZ: 2011 31,56 · 2012 30,04 · 2013 41,43 · 2014 35,38 · 2015 40,76 · 2016 35,53 · 2017 37,87 · 2018 36,13 · 2019 34,97 · 2020 33,25 · 2021 31,82 · 2022 34,38 · 2023 33,48. EU: 2012 20,50 · 2013 31,72 · 2019 29,95 · 2020 27,67 · 2021 25,55 · 2022 27,84 · 2023 27,86. Sousede 2023: DE 39,29 · AT 32,96 · PL 16,87 · SK 11,72 · HU 57,07. POHLAVI 2023: CZ M 45,45 / F 25,80; EU M 38,46 / F 21,02. VEK 65+ 2023: CZ M 208,77 / F 120,23; EU M 179,33 / F 96,80. ABSOLUTNE: Eurostat hlth_cd_aro (TOT_RESID) CZ 2012 2 580 · 2013 3 584 · 2023 3 575; CSU Tab. 1 Zemreli podle priciny smrti v Cesku (PDF 13020625001.pdf, stazeno 12. 10. 2026) J40-J47: 2015 3 733 ... 2023 3 572 · 2024 3 480; celkem zemrelych 2024 112 211 (podil 3,1 %, vypocet redakce). OVERENI CR V CSU: uspesne — absolutni pocty CSU (3 572 za 2023) se shoduji s Eurostat hlth_cd_aro (3 575) az na 3 umrti (rozdil definice rezidentu / zpracovani). Standardizovanou miru CSU ani NZIP pro J40-J47 nepublikuje (nenalezeno), prebira se z Eurostatu. SKOK 2012->2013: Eurostat narodni metadata CR hlth_cdeath_simscd_cz § 15.2 uvadi k roku 2013 ICD-10 updates a 'introduction of a new death certificate with four lines in part I'; agregat EU skace tez (20,50 -> 31,72). Pricina ceskeho skoku NENI primarnim zdrojem dolozena — text rika jen, ze rada ma skok, a srovnava od 2019. EVIDENCE (vse overeno v PubMed 12. 10. 2026 pres get_article_metadata; 8 dotazu PubMed, 2 Consensus jako vyhledavac): Lamprecht B et al. Chest 2015;148(4):971-985, PMID 25950276, doi 10.1378/chest.14-2535 (BOLD + PLATINO, 44 lokalit, 27 zemi, 30 874 osob 40+, 81,4 % spirometricky definovane CHOPN bez diagnozy, 26,4 % kdy spirometrie); Anthonisen NR et al. Ann Intern Med 2005;142(4):233-9, PMID 15710956, doi 10.7326/0003-4819-142-4-200502150-00005 (Lung Health Study RCT, 5 887 osob, 14,5 roku, umrtnost 8,83 vs 10,38/1000 osoboroku, HR 1,18; abstinence po 5 letech 21,7 % vs 5,4 %); Puhan MA et al. Cochrane 2016 CD005305.pub4, PMID 27930803 (20 RCT, 1 477 osob; rehospitalizace OR 0,44 strední kvalita; mortalita OR 0,68 CI 0,28-1,67 n.s.; SGRQ -7,80; 6MWD +62 m); Park J et al. Environ Res 2021;194:110703, PMID 33417909, doi 10.1016/j.envres.2020.110703 (7 kohort, PM2.5 +10 ug/m3 HR 1,18 incidence CHOPN); Mackenbach JP et al. J Epidemiol Community Health 1987;41(2):156-60, PMID 3655636, doi 10.1136/jech.41.2.156 (detekcni frakce CHOPN 60-92 % mezi zememi ES); Jensen HH et al. Eur Respir J 2006;28(4):781-5, PMID 16807258, doi 10.1183/09031936.06.00152205 (Kodan, jen 24,9 % s nejmene tezkou CHOPN melo CHOPN jako pricinu smrti). Doporuceny postup CPFS pro CHOPN: primarni URL v tomto behu nedohledana — text se na nej neodvolava. Databox: 6 indikatoru literalne z data/indicators.json (kuractvi_denni 16,4 % 2024 vs EU 18,5 / OECD 14,8; pm25_expozice 14,1 vs EU 12,1 / OECD 11,2 2024; hospitalizace_acsc 592 vs OECD 473 2022; screening_plicni 2,7 % 2024; mortalita_preventabilni 173,86 vs EU 150,85 2023). Miloslav z Karvine je ilustrativni postava. Ceka na schvaleni redakce."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Na chronické nemoci plic umírá v Česku o pětinu víc lidí než v průměru EU. Odstup se od roku 2019 nezmenšil · HSPA Monitor</title>
+<meta name="description" content="Na chronické nemoci dolních dýchacích cest, hlavně CHOPN a astma, zemřelo v Česku podle Eurostatu v roce 2023 33,48 lidí na 100 000 obyvatel, v průměru EU 27,86. Česko je o pětinu nad Evropou a od roku 2019 se odstup nezmenšil. Polsko a Slovensko vykazují zhruba poloviční čísla, která ale vypovídají i o tom, jak se vyplňují úmrtní listy. Nový indikátor HSPA Monitoru ukazuje, co v tom čísle dělá kouření, znečištěné ovzduší a pozdní diagnóza.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Na chronické nemoci plic umírá v Česku o pětinu víc lidí než v průměru EU. Odstup se od roku 2019 nezmenšil">
+<meta property="og:description" content="33,48 úmrtí na CHOPN, astma a další chronické nemoci dolních dýchacích cest na 100 000 obyvatel v Česku proti 27,86 v EU (Eurostat 2023). Nový indikátor HSPA Monitoru.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-chopn-umrtnost-nad-eu-2026.html">
+<meta property="article:published_time" content="2026-10-13T06:00:00+02:00">
+<meta property="article:section" content="Mortalita a zátěž nemocí">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-chopn-umrtnost-nad-eu-2026.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "Na chronické nemoci plic umírá v Česku o pětinu víc lidí než v průměru EU. Odstup se od roku 2019 nezmenšil",
+  "description": "Na chronické nemoci dolních dýchacích cest, hlavně CHOPN a astma, zemřelo v Česku podle Eurostatu v roce 2023 33,48 lidí na 100 000 obyvatel, v průměru EU 27,86. Česko je o pětinu nad Evropou a od roku 2019 se odstup nezmenšil. Polsko a Slovensko vykazují zhruba poloviční čísla, která ale vypovídají i o tom, jak se vyplňují úmrtní listy. Nový indikátor HSPA Monitoru ukazuje, co v tom čísle dělá kouření, znečištěné ovzduší a pozdní diagnóza.",
+  "datePublished": "2026-10-13T06:00:00+02:00",
+  "dateModified": "2026-10-12",
+  "inLanguage": "cs",
+  "articleSection": "Mortalita a zátěž nemocí",
+  "author": { "@type": "Organization", "name": "Redakce HSPA Monitoru" },
+  "publisher": { "@type": "Organization", "name": "HSPA Monitor · Skóre zdravotnictví", "url": "https://skorezdravotnictvi.cz" },
+  "mainEntityOfPage": "https://skorezdravotnictvi.cz/clanek-chopn-umrtnost-nad-eu-2026.html"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Mortalita a zátěž nemocí</span>
+        <span class="article-tag article-tag-muted">CHOPN · astma · příčiny smrti · kouření · ovzduší · Eurostat</span>
+      </div>
+      <h1 class="article-title">Na chronické nemoci plic umírá v Česku o pětinu víc lidí než v průměru EU. Odstup se od roku 2019 nezmenšil</h1>
+      <p class="article-deck">
+        Na chronické nemoci dolních dýchacích cest, hlavně CHOPN a astma, zemřelo v Česku podle Eurostatu v roce 2023 33,48 lidí na 100 000 obyvatel, v průměru EU 27,86. Česko je o pětinu nad Evropou a od roku 2019 se odstup nezmenšil. Polsko a Slovensko vykazují zhruba poloviční čísla, která ale vypovídají i o tom, jak se vyplňují úmrtní listy. Nový indikátor HSPA Monitoru ukazuje, co v tom čísle dělá kouření, znečištěné ovzduší a pozdní diagnóza.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">13. října 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">9 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Miloslav z Karviné, 66 let, kouří od patnácti. Do schodů se zastavuje už pár let, ranní kašel bere jako rituál a obojí přičítá věku. Spirometrii, základní vyšetření plicních funkcí, mu nikdo neudělal, dokud ho v zimě nepřivezla záchranka s dušností na urgentní příjem. Tam poprvé slyší zkratku CHOPN — chronická obstrukční plicní nemoc. Miloslav je ilustrativní postava. Čísla, která za jeho příběhem stojí, ne: v roce 2023 zemřelo v Česku na chronické nemoci dolních dýchacích cest <strong>33,48 lidí na 100 000 obyvatel</strong>, v průměru Evropské unie 27,86.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCntH">
+        <figcaption class="av-figure-h" id="avCntH">Úmrtnost na chronické nemoci dolních dýchacích cest: čtyři čísla (Eurostat hlth_cd_asdr2 2023, ČSÚ 2024, Lamprecht et al. 2015)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="33.48" data-decimals="2">33,48</span>
+            <span class="av-counter-label">úmrtí na 100 000 obyvatel v Česku, 2023 (věkově standardizováno, MKN-10 J40–J47)</span>
+            <span class="av-counter-foot">Průměr EU-27: 27,86</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-prefix="+" data-value="20" data-suffix=" %">+20 %</span>
+            <span class="av-counter-label">o tolik je Česko nad průměrem EU</span>
+            <span class="av-counter-foot">33,48 / 27,86 = 1,20 (výpočet redakce)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="3480">3 480</span>
+            <span class="av-counter-label">lidí zemřelo na chronické nemoci dolních dýchacích cest v roce 2024</span>
+            <span class="av-counter-foot">ČSÚ; 3,1 % ze 112 211 zemřelých. V roce 2023 to bylo 3 572.</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="81.4" data-decimals="1" data-suffix=" %">81,4 %</span>
+            <span class="av-counter-label">spirometricky prokázaných CHOPN bylo bez diagnózy</span>
+            <span class="av-counter-foot">Mezinárodní šetření 30 874 dospělých ve 27 zemích (Lamprecht et al. 2015); česká data chybí</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat, hlth_cd_asdr2 (standardizovaná míra, ESP 2013, J40–J47), referenční rok 2023, staženo z API 12. 10. 2026; ČSÚ, Zemřelí podle příčiny smrti v Česku 2015–2024 (Tab. 1); Lamprecht et al., <em>Chest</em> 2015. Poměr 1,20 a podíl 3,1 % jsou výpočty redakce.</p>
+      </figure>
+
+      <h3>Co indikátor měří</h3>
+      <p>
+        Nový indikátor <a href="indicator.html?id=mortalita_chopn">Úmrtnost na chronické nemoci dolních dýchacích cest</a> přebírá řadu Eurostatu <em>hlth_cd_asdr2</em>: věkově standardizovanou míru úmrtí, u nichž byla jako základní příčina smrti vybrána některá z chronických nemocí dolních dýchacích cest, tedy kódy MKN-10 J40 až J47, na 100 000 obyvatel. Standardizace na evropskou standardní populaci (ESP 2013) odstraňuje vliv toho, že některé země mají starší obyvatelstvo než jiné, a hodnoty Česka, sousedů i průměru EU jsou tak spočítané stejně.
+      </p>
+      <p>
+        Hned na začátku je třeba říct, co indikátor není. Není to čistá úmrtnost na CHOPN. Skupina J40–J47 zahrnuje chronickou bronchitidu, emfyzém a další formy CHOPN (J40–J44), ale také astma (J45–J46) a bronchiektazie (J47). Eurostat ji publikuje jako jednu harmonizovanou položku, a proto ji HSPA Monitor přebírá celou. Prvotním zdrojem jsou v Česku Listy o prohlídce zemřelého, ze kterých Český statistický úřad vybírá základní příčinu smrti podle pravidel MKN-10 automatizovaným systémem IRIS; Eurostat data poté harmonizuje. V datovém kontraktu má indikátor směr „nižší je lepší“ a signál <strong>bad</strong>: Česko je od průměru EU vzdáleno o 20,2 %, za hranicí 15 %, kterou HSPA Monitor používá u všech standardizovaných měr úmrtnosti z této řady.
+      </p>
+
+      <h3>Stav v Česku: pětina nad Evropou, odstup se nezužuje</h3>
+      <p>
+        V absolutních číslech zemřelo podle ČSÚ na chronické nemoci dolní části dýchacího ústrojí 3 572 lidí v roce 2023 a 3 480 v roce 2024, což jsou 3,1 % ze 112 211 zemřelých. Eurostat za rok 2023 uvádí u rezidentů Česka 3 575 úmrtí; obě čísla se tedy liší jen o tři případy, což potvrzuje, že evropská řada přebírá českou statistiku věrně. Standardizovanou míru za rok 2024 zatím Eurostat nezveřejnil — data přicházejí s odstupem zhruba dva a půl roku.
+      </p>
+      <p>
+        Důležitější než jeden rok je směr. V roce 2019 měla Česká republika 34,97 úmrtí na 100 000 obyvatel a EU 29,95. Do roku 2023 klesla česká hodnota na 33,48, tedy o 4 %, evropská na 27,86, tedy o 7 % (výpočty redakce). Odstup se tak mírně rozšířil: v roce 2019 bylo Česko na 1,17násobku EU, v roce 2023 na 1,20násobku. Roky 2020 a 2021 je přitom třeba číst opatrně, protože lidé s chronickou plicní nemocí mohli v pandemii umírat se základní příčinou covid-19, což mohlo míru na čas snížit.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTblH">
+        <figcaption class="av-figure-h" id="avTblH">Úmrtnost na chronické nemoci dolních dýchacích cest, Česko a EU-27, na 100 000 obyvatel, standardizováno (Eurostat, 2019–2023)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr><th scope="col">Rok</th><th scope="col">Česko</th><th scope="col">EU-27</th><th scope="col">Česko proti EU</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>2019</td><td>34,97</td><td>29,95</td><td>1,17×</td></tr>
+              <tr><td>2020</td><td>33,25</td><td>27,67</td><td>1,20×</td></tr>
+              <tr><td>2021</td><td>31,82</td><td>25,55</td><td>1,25×</td></tr>
+              <tr><td>2022</td><td>34,38</td><td>27,84</td><td>1,23×</td></tr>
+              <tr><td>2023</td><td><strong>33,48</strong></td><td>27,86</td><td>1,20×</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat, hlth_cd_asdr2, sex=T, age=TOTAL, icd10=J40–J47, unit=RT; staženo z API 12. 10. 2026. Poměry jsou výpočet redakce (zaokrouhleno na dvě desetinná místa).</p>
+      </figure>
+
+      <p>
+        Rozdíl proti Evropě platí pro obě pohlaví. Muži v Česku umírají na chronické nemoci dolních dýchacích cest v míře 45,45 na 100 000 (EU 38,46), ženy 25,80 (EU 21,02). Naprostá většina úmrtí připadá na lidi nad 65 let: u mužů v této věkové skupině je česká míra 208,77 proti 179,33 v EU, u žen 120,23 proti 96,80. Jde tedy o nemoc stáří, ale nemoc, která se buduje desítky let předtím.
+      </p>
+      <p>
+        Časová řada má ještě jedno místo, které je třeba znát. Mezi roky 2012 a 2013 česká míra vyskočila z 30,04 na 41,43 a počet úmrtí z 2 580 na 3 584. Eurostat v národních metadatech Česka uvádí pro rok 2013 aktualizaci klasifikace MKN-10 a zavedení nového úmrtního listu se čtyřmi řádky pro řetězec příčin smrti. Skok ve stejném roce má ovšem i agregát EU, jehož složení se v čase měnilo. Co přesně český skok způsobilo, primární zdroje nevyčíslují a HSPA Monitor to netvrdí; proto řadu srovnáváme až od roku 2013 a hlavní srovnání stavíme na letech 2019–2023.
+      </p>
+
+      <h3>Mezinárodní srovnání: proč nečíst Polsko a Slovensko jako vzor</h3>
+
+      <figure class="av-figure" aria-labelledby="avBarH">
+        <figcaption class="av-figure-h" id="avBarH">Úmrtnost na chronické nemoci dolních dýchacích cest, na 100 000 obyvatel, věkově standardizováno (Eurostat, 2023)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-unit="" data-max="60">
+          <li class="av-bar-row" data-value="57.07" data-label="Maďarsko" data-accent="bad"></li>
+          <li class="av-bar-row" data-value="39.29" data-label="Německo" data-accent="bad"></li>
+          <li class="av-bar-row" data-value="33.48" data-label="Česko" data-accent="bad"></li>
+          <li class="av-bar-row" data-value="32.96" data-label="Rakousko" data-accent="warn"></li>
+          <li class="av-bar-row" data-value="27.86" data-label="EU-27" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="16.87" data-label="Polsko" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="11.72" data-label="Slovensko" data-accent="neutral"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat, hlth_cd_asdr2, sex=T, age=TOTAL, icd10=J40–J47, unit=RT; referenční rok 2023 (poslední dostupný), dataset aktualizován 8. 6. 2026, staženo 12. 10. 2026. Hodnoty Polska a Slovenska jsou ovlivněny kódovací praxí (viz rámeček), proto jsou označeny neutrálně.</p>
+      </figure>
+
+      <p>
+        Mezi sousedy je obraz rozporuplný. Rakousko má 32,96, tedy prakticky stejně jako Česko. Německo je s 39,29 výš než Česko a Maďarsko s 57,07 výrazně výš. Polsko vykazuje 16,87 a Slovensko 11,72, zhruba polovinu, respektive třetinu české hodnoty. Kdyby to bylo zdraví plic, musely by mít polské a slovenské populace podstatně jiný vztah ke kouření a k ovzduší než česká — ale pro tak velký rozdíl HSPA Monitor žádné vysvětlení v datech o rizikových faktorech nemá. Je proto pravděpodobné, že se část rozdílu vysvětluje tím, jak se v různých zemích stejné úmrtí zapíše na úmrtní list.
+      </p>
+
+      <div class="article-callout-caveat" role="note">
+        <strong>Kódování úmrtních listů mění výsledek.</strong>
+        Chronická plicní nemoc je typický stav, který na úmrtním listu soupeří s jinými příčinami — srdečním selháním, zápalem plic nebo rakovinou plic. Klasická studie zemí Evropského společenství (Mackenbach et al. 1987, <em>Journal of Epidemiology and Community Health</em>) rozeslala lékařům stejné modelové případy CHOPN a zjistila, že podíl případů, které skončily se správnou základní příčinou, se mezi zeměmi lišil od 60 do 92 %. Dánská kohorta (Jensen et al. 2006, <em>European Respiratory Journal</em>) ukázala, že CHOPN byla příčinou smrti jen u 24,9 % zemřelých s nejméně těžkou CHOPN. Indikátor proto měří, jak často lékař a kódovací pravidla vyberou chronickou plicní nemoc jako základní příčinu, ne kolik lidí s CHOPN zemřelo. Srovnání s průměrem EU a s Rakouskem je spolehlivější než s Polskem a Slovenskem; Německo připomíná, že odchylka může jít i opačným směrem.
+      </div>
+
+      <h3>Co za číslem stojí: kouření, ovzduší, pozdní diagnóza</h3>
+      <p>
+        <strong>Kouření.</strong> Denně kouří 16,4 % Čechů starších 15 let (<a href="indicator.html?id=kuractvi_denni">denní kuřáctví</a>, 2024). To je pod průměrem EU (18,5 %), ale nad průměrem OECD (14,8 %). Samotná dnešní míra kouření tedy rozdíl proti EU nevysvětluje; chronická plicní nemoc se vyvíjí desítky let a dnešní úmrtnost nese i kouření minulých generací. Co víme jistě, je účinek odvykání. V randomizované Lung Health Study (Anthonisen et al. 2005, <em>Annals of Internal Medicine</em>) dostalo 5 887 kuřáků s dosud bezpříznakovou obstrukcí dýchacích cest buď desetitýdenní program odvykání, nebo běžnou péči. Po 14,5 roku byla celková úmrtnost ve skupině s programem nižší (8,83 proti 10,38 úmrtí na 1 000 osoboroků), přestože po pěti letech nekouřilo jen 21,7 % účastníků programu proti 5,4 % v kontrolní skupině.
+      </p>
+      <p>
+        <strong>Ovzduší.</strong> Populačně vážená expozice jemným prachovým částicím je v Česku 14,1 µg/m³ (<a href="indicator.html?id=pm25_expozice">expozice PM2.5</a>, 2024) proti 12,1 v EU a 11,2 v OECD. Metaanalýza sedmi prospektivních kohortových studií (Park et al. 2021, <em>Environmental Research</em>) spojuje každých 10 µg/m³ PM2.5 navíc s o 18 % vyšším výskytem CHOPN (HR 1,18). Kvalita ovzduší je tak zdravotní politika, i když ji nedělá ministerstvo zdravotnictví.
+      </p>
+      <p>
+        <strong>Pozdní diagnóza.</strong> Největší slepá skvrna je, kolik lidí o své nemoci neví. V mezinárodním šetření 30 874 dospělých nad 40 let ze 44 lokalit ve 27 zemích (Lamprecht et al. 2015, <em>Chest</em>) zůstalo 81,4 % spirometricky prokázaných případů CHOPN bez diagnózy a jen 26,4 % účastníků kdy absolvovalo vyšetření plicních funkcí. Česko v tomto šetření nebylo a srovnatelná česká data HSPA Monitor nenašel. Autoři ale formulují závěr, který platí obecně: protože účinná léčba existuje, spirometrie pomáhá zachytit CHOPN ve fázi, kdy léčba zlepší výsledky a kvalitu života.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-bad">
+          <span class="av-counter" data-value="592">592</span>
+          <span class="av-counter-label">odvratitelných hospitalizací na 100 000 obyvatel v Česku (2022)</span>
+          <span class="av-counter-foot">Průměr OECD 473. Mezi stavy, kterým má předejít dobrá ambulantní péče, patří i CHOPN a astma.</span>
+        </div>
+      </aside>
+
+      <p>
+        <strong>Péče mezi zhoršeními.</strong> CHOPN se projevuje epizodami akutního zhoršení, tzv. exacerbacemi, které často končí v nemocnici. Indikátor <a href="indicator.html?id=hospitalizace_acsc">odvratitelných hospitalizací</a>, jehož součástí jsou CHOPN a astma, je v Česku 592 na 100 000 obyvatel (2022) proti 473 v průměru OECD. Cochranův přehled 20 randomizovaných studií s 1 477 pacienty (Puhan et al. 2016) ukázal, že plicní rehabilitace po exacerbaci snižuje počet opakovaných hospitalizací (OR 0,44, důkazy střední kvality) a výrazně zlepšuje kvalitu života i tělesnou výkonnost (chůze za šest minut v průměru o 62 metrů delší). Na úmrtnost prokazatelný vliv neměla (OR 0,68, interval spolehlivosti 0,28–1,67). Rehabilitace tedy není nástroj, který by sám snížil číslo z Eurostatu, ale je to nástroj, který drží lidi mimo nemocnici.
+      </p>
+
+      <h3>Politická páka: jeden program už osloví správné lidi</h3>
+      <p>
+        Česko spustilo pilotní <a href="indicator.html?id=screening_plicni">program časného záchytu karcinomu plic</a>, který zve současné a bývalé kuřáky ve věku 55–74 let s dlouhou kuřáckou historií na nízkodávkové CT. Pokrytí cílové populace dosáhlo v roce 2024 2,7 % (2022: 0,4 %, 2023: 1,3 %). Je to přesně populace, ve které se nediagnostikovaná CHOPN dá čekat nejčastěji. Návrh, který z dat vyplývá, je jednoduchý: kdo přijde na screening plic, měl by odejít i s výsledkem spirometrie a s nabídkou odvykání kouření. Účinek takového propojení zatím v Česku nikdo neměřil a HSPA Monitor ho nedokládá; jde o logiku sdílené cílové skupiny, ne o doložený výsledek.
+      </p>
+      <p>
+        Druhou pákou je ovzduší. Česká expozice PM2.5 klesá (z 16,5 µg/m³ v roce 2020 na 14,1 v roce 2024), ale zůstává nad evropským průměrem. Třetí pákou je péče po exacerbaci: dostupnost plicní rehabilitace po hospitalizaci pro CHOPN je ukazatel, který Česko veřejně nesleduje, a odvratitelné hospitalizace ukazují, že prostor existuje.
+      </p>
+
+      <h3>Co s tím</h3>
+      <p>
+        <strong>Primární péče a screening: spirometrie pro kuřáky s příznaky.</strong> Nejlevnější krok je propojit už fungující pilotní screening karcinomu plic s vyšetřením plicních funkcí a programem odvykání. Randomizovaná data ukazují, že odvykání snižuje úmrtnost i u lidí, kteří už obstrukci mají, a to i když uspěje jen menšina.
+      </p>
+      <p>
+        <strong>Nemocnice a pojišťovny: rehabilitace po exacerbaci.</strong> Kdo odchází z nemocnice po zhoršení CHOPN, má mít cestu k plicní rehabilitaci. Evidence ukazuje méně návratů do nemocnice a lepší kvalitu života. Pojišťovny mají data, aby změřily, kolik pacientů ji po hospitalizaci skutečně dostane.
+      </p>
+      <p>
+        <strong>ČSÚ a ÚZIS: zveřejnit vícečetné příčiny smrti.</strong> Protože CHOPN je na úmrtních listech podhlášená a mezinárodní srovnání závisí na kódování, užitečným doplňkem by byla statistika všech zmínek chronické plicní nemoci na Listu o prohlídce zemřelého, nejen základní příčiny. Teprve pak půjde říct, jak velký je rozdíl proti Evropě doopravdy.
+      </p>
+
+      <h3>Co tenhle ukazatel nedokáže</h3>
+      <p>
+        <strong>Za prvé</strong> neodděluje CHOPN od astmatu a bronchiektazií. <strong>Za druhé</strong> počítá jen úmrtí, u nichž byla plicní nemoc vybrána jako základní příčina; lidí s CHOPN zemře víc. <strong>Za třetí</strong> je silně citlivý na to, jak se v které zemi vyplňují a kódují úmrtní listy — polské a slovenské hodnoty to ukazují nejzřetelněji. <strong>Za čtvrté</strong> roky 2020–2021 jsou zkreslené pandemií. <strong>Za páté</strong> přichází s odstupem dva a půl roku a česká řada má mezi roky 2012 a 2013 skok, jehož příčina není vyčíslena. Miloslav z Karviné v této statistice jednou bude, nebo nebude. Jestli dojede na rehabilitaci a přestane kouřit, o tom rozhodne víc než cokoli, co se o něm dá vyčíst z tabulek.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=mortalita_chopn"><strong>Úmrtnost na chronické nemoci dolních dýchacích cest (CHOPN, astma)</strong></a> — 33,48 na 100 000 ob. (2023, ČR) proti 27,86 v EU-27 · Výsledky · signál bad · nový indikátor (Eurostat hlth_cd_asdr2)</li>
+        <li><a href="indicator.html?id=kuractvi_denni"><strong>Denní kuřáctví (15+)</strong></a> — 16,4 % (2024) proti 18,5 % v EU a 14,8 % v OECD · signál bad</li>
+        <li><a href="indicator.html?id=pm25_expozice"><strong>Expozice PM2.5</strong></a> — 14,1 µg/m³ (2024) proti 12,1 v EU a 11,2 v OECD · signál bad</li>
+        <li><a href="indicator.html?id=hospitalizace_acsc"><strong>Odvratitelné hospitalizace (ACSC)</strong></a> — 592 na 100 000 obyvatel (2022) proti 473 v OECD · signál bad</li>
+        <li><a href="indicator.html?id=screening_plicni"><strong>Časný záchyt karcinomu plic — pokrytí cílové populace</strong></a> — 2,7 % (2024) · signál neutral</li>
+        <li><a href="indicator.html?id=mortalita_preventabilni"><strong>Preventovatelná mortalita</strong></a> — 173,86 na 100 000 ob. (2023) proti 150,85 v EU · signál bad</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární zdroje dat</h5>
+        <ul class="article-sources-list">
+          <li><strong>Eurostat — hlth_cd_asdr2, Causes of death: standardised death rate by NUTS 2 region of residence.</strong> Dimenze icd10 = J40-J47, sex = T/M/F, age = TOTAL/Y_GE65, unit = RT; referenční rok 2023, dataset aktualizován 8. 6. 2026. Hodnoty pro ČR, EU-27, sousedy, pohlaví a věk. Staženo z API 12. 10. 2026. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_asdr2/default/table" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a></li>
+          <li><strong>Eurostat — hlth_cd_aro, Causes of death: deaths by country of residence and occurrence.</strong> Absolutní počty úmrtí na J40–J47 u rezidentů ČR: 2 580 (2012), 3 584 (2013), 3 575 (2023). Staženo 12. 10. 2026. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_aro/default/table" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a></li>
+          <li><strong>ČSÚ — Zemřelí podle zkráceného seznamu příčin smrti, pohlaví a věku v ČR, krajích a okresech (2024), Tab. 1 Zemřelí podle příčiny smrti v Česku.</strong> Řádek J40–J47 Chronické nemoci dolní části dýchacího ústrojí: 3 572 (2023), 3 480 (2024); celkem zemřelých 112 211 (2024). Staženo 12. 10. 2026. <a href="https://csu.gov.cz/docs/107508/59d1a2e9-5159-0b98-e5a3-2df2f1497462/13020625001.pdf?version=1.0" target="_blank" rel="noopener">csu.gov.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Metodika</h5>
+        <ul class="article-sources-list">
+          <li><strong>Eurostat — národní metadata Česko, Causes of death (SIMS-CD).</strong> § 15.2 srovnatelnost v čase: „2011: implementation of IRIS automated coding software“, „2013: introduction of a new death certificate with four lines in part I for certification of causes of death“; výběr základní příčiny systémem IRIS. <a href="https://ec.europa.eu/eurostat/cache/metadata/en/hlth_cdeath_simscd_cz.htm" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Evidence</h5>
+        <ul class="article-sources-list">
+          <li><strong>Lamprecht B, Soriano JB, Studnicka M et al. Determinants of underdiagnosis of COPD in national and international surveys.</strong> <em>Chest</em> 2015;148(4):971–985. DOI 10.1378/chest.14-2535. PMID 25950276. Ověřeno v PubMed 12. 10. 2026. <a href="https://doi.org/10.1378/chest.14-2535" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Anthonisen NR, Skeans MA, Wise RA et al. The effects of a smoking cessation intervention on 14.5-year mortality: a randomized clinical trial.</strong> <em>Annals of Internal Medicine</em> 2005;142(4):233–239. DOI 10.7326/0003-4819-142-4-200502150-00005. PMID 15710956. Ověřeno v PubMed 12. 10. 2026. <a href="https://pubmed.ncbi.nlm.nih.gov/15710956/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+          <li><strong>Puhan MA, Gimeno-Santos E, Cates CJ, Troosters T. Pulmonary rehabilitation following exacerbations of chronic obstructive pulmonary disease.</strong> <em>Cochrane Database of Systematic Reviews</em> 2016;12:CD005305. DOI 10.1002/14651858.CD005305.pub4. PMID 27930803. Ověřeno v PubMed 12. 10. 2026. <a href="https://doi.org/10.1002/14651858.CD005305.pub4" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Park J, Kim HJ, Lee CH et al. Impact of long-term exposure to ambient air pollution on the incidence of chronic obstructive pulmonary disease: A systematic review and meta-analysis.</strong> <em>Environmental Research</em> 2021;194:110703. DOI 10.1016/j.envres.2020.110703. PMID 33417909. Ověřeno v PubMed 12. 10. 2026. <a href="https://doi.org/10.1016/j.envres.2020.110703" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Mackenbach JP, Van Duyne WM, Kelson MC. Certification and coding of two underlying causes of death in The Netherlands and other countries of the European Community.</strong> <em>Journal of Epidemiology and Community Health</em> 1987;41(2):156–160. DOI 10.1136/jech.41.2.156. PMID 3655636. Ověřeno v PubMed 12. 10. 2026. <a href="https://doi.org/10.1136/jech.41.2.156" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Jensen HH, Godtfredsen NS, Lange P, Vestbo J. Potential misclassification of causes of death from COPD.</strong> <em>European Respiratory Journal</em> 2006;28(4):781–785. DOI 10.1183/09031936.06.00152205. PMID 16807258. Ověřeno v PubMed 12. 10. 2026. <a href="https://doi.org/10.1183/09031936.06.00152205" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Standardizované míry pocházejí z jediné řady Eurostatu (hlth_cd_asdr2, ESP 2013), aby byly ČR, EU-27 i sousedé souměřitelní; absolutní počty za rok 2024 publikuje jen ČSÚ a nejsou standardizované. Poměry ČR/EU, odchylka +20,2 %, změny 2019–2023 (−4 % a −7 %) a podíl 3,1 % na všech úmrtích jsou výpočty redakce z uvedených hodnot. Příčina skoku české řady mezi roky 2012 a 2013 není primárními zdroji vyčíslena. Hodnoty souvisejících indikátorů jsou převzaty z datového kontraktu HSPA Monitoru. Miloslav z Karviné je ilustrativní postava.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
