@@ -114,9 +114,10 @@ Pracovní adresář `05_M1_Starter/`.
 
 ## Hranice skillu
 
-- Skill **vyrábí** video a scénář. **Nepublikuje** — zařazení do Bufferu řídí
-  `PROMPT_ROUTINE.md` blok B (vertikální slot: „Reel jen když existuje video
-  `assets/social/reels/<slug>.mp4`"). Kadenci a zapojení do rutiny mění jen vydavatel.
-- Videa jsou v gitu: drž ≤ 3 MB a rozumnou kadenci (doporučeno 2–3 týdně), ať repo
-  nebobtná.
+- Skill **vyrábí** video a scénář. **Nepublikuje.** Denní rutina (`PROMPT_ROUTINE.md`)
+  vyrobí blokem V jedno video za běh (styl se střídá Kompík ↔ Florence) a blok B plní
+  frontu Bufferu **výhradně video příspěvky** (reel na IG a FB, video na X) — až po
+  merge a nasazení videa. Kadenci mění jen vydavatel.
+- Videa jsou v gitu: drž ≤ 3 MB, ať repo nebobtná (~1 video denně ≈ 0,8 GB ročně).
+- `thumbnailOffset` pro Buffer = `node social/reels/render.js <slug> --poster-time` (ms plakátu).
 - Změna postavy, palety nebo pravidel = změna tohoto skillu + `references/` + testu.

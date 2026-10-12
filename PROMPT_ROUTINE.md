@@ -3,7 +3,7 @@
 > **Jediná naplánovaná rutina projektu** (rozhodnutí redakce 2026-09-13). Nahrazuje
 > šest dřívějších běhů — denní (články), noční (údržba korpusu), indikátorový, sociální,
 > newsletterový a Týdny zdraví. Vše, co dělaly, dělá **jeden běh denně** v pevném pořadí
-> bloků A–L, s kalendářem uvnitř souboru a s tvrdými stropy na šum.
+> bloků A–L (+ V — video dne), s kalendářem uvnitř souboru a s tvrdými stropy na šum.
 >
 > Zdroj pravdy je tento soubor. Prompt v Routines je jedna věta, která na něj odkazuje
 > (viz § 18). Kdo mění pravidla rutiny, mění tento soubor, ne prompt v UI.
@@ -22,12 +22,13 @@ Rutina existuje proto, aby redakce ráno našla **jednu věc ke schválení**, n
 | **Soubory za běh** | **Žádné.** Discovery report, routing, datový rámec, auditní protokol, noční report — nic z toho se do repa nezapisuje. Report běhu je **tělo PR** (`<details>` sekce). Pracovní soubory drž v gitignorované `05_M1_Starter/reports/` (adresáře `discovery/` jsou zmrazené — historický archiv, nové běhy tam nepíší; jsou gitignorované). |
 | **Commity** | Jeden na blok, který něco změnil (max ~8 za běh), česky, prefix `feat/fix/content/data/chore` + scope. |
 | **Komentáře na GitHubu** | Žádné vlastní komentáře k vlastnímu PR, žádné labely, žádné pingování. |
-| **Obsahové stropy** | 1 nový článek · 1 nový indikátor (pondělí nebo reaktivně) · revize korpusu max 5 (jen v kvartálním okně) · 1 draft Týdne zdraví · evidence-audit 6 + 4 položek (neděle) · Buffer do 10 postů/kanál. Stropy se **nesčítají přes běhy** — co nestihneš, počká. |
+| **Obsahové stropy** | 1 nový článek · 1 nový indikátor (pondělí nebo reaktivně) · revize korpusu max 5 (jen v kvartálním okně) · 1 draft Týdne zdraví · evidence-audit 6 + 4 položek (neděle) · 1 nové video (blok V) · Buffer **jen video příspěvky**, do 10/kanál. Stropy se **nesčítají přes běhy** — co nestihneš, počká. |
 | **Publikace** | Nikdy. Žádné `published: true`, žádné `audit-status: verified`, žádný merge, žádné `shareNow` v Bufferu, žádné okamžité odeslání newsletteru. Redakce má vždy poslední slovo. |
 
 Pořadí bloků je zároveň priorita. Když dochází čas nebo kontext, přeskakují se bloky
-odzadu, ale **A (příprava), B (Buffer), C (discovery), E (obsah dne), K (audit) a L
-(uzávěrka) se nepřeskakují nikdy**. Přeskočený blok se zapíše do těla PR.
+odzadu, ale **A (příprava), B (Buffer), C (discovery), E (obsah dne), V (video dne),
+K (audit) a L (uzávěrka) se nepřeskakují nikdy** — bez bloku V by se fronta Bufferu
+za pár dní vyprázdnila. Přeskočený blok se zapíše do těla PR.
 
 ---
 
@@ -51,10 +52,11 @@ odzadu, ale **A (příprava), B (Buffer), C (discovery), E (obsah dne), K (audit
 
 | Blok | Kdo |
 |---|---|
-| B Buffer | subagent **Sonnet** (texty podle copywriting manuálu), orchestrátor jen kontroluje limity |
+| B Buffer | subagent **Sonnet** (texty k videím podle copywriting manuálu), orchestrátor jen kontroluje limity |
 | C Discovery | **tři paralelní subagenti Sonnet**: (1) powerlist 1–14, (2) Hlídač státu, (3) PubMed + Consensus; každý vrátí strukturovaný seznam nálezů s URL a datem |
 | D Legislativa, Barometr | Sonnet (datové změny), Opus (verdikt Ověřovny) |
 | E Článek | **Opus** píše, Sonnet dělá AV obohacení a kontrolu odkazů |
+| V Video | **Opus** píše scénář (fakta + dramaturgie), orchestrátor renderuje a prohlíží kontaktní arch |
 | F Indikátor | průzkum zdrojů Sonnet, karta + příběh Opus |
 | G Údržba korpusu | auto-fix Sonnet, obsahové revize Opus |
 | H Týdny zdraví | Opus |
@@ -142,10 +144,11 @@ kolem 03:00 místního času, viz § 18).
 | Blok | Kdy | Poznámka |
 |---|---|---|
 | A Příprava | každý běh | větev, recovery, skeny |
-| B Distribuce (Buffer) | každý běh | nic do repa |
+| B Distribuce (Buffer) | každý běh | **jen video příspěvky**; nic do repa |
 | C Discovery | každý běh | |
 | D Legislativa + Barometr | každý běh | plan_items s prošlým termínem jen **pondělí**; indikátorová větev Barometru **2. den čtvrtletí** (den po `refresh.yml`) nebo když discovery najde novou vlnu dat |
 | E Obsah dne | každý běh | max 1 článek; **pondělí** = INDICATOR-ADD (blok F) |
+| V Video dne | každý běh | 1 video; styl se střídá (Kompík ↔ Florence) |
 | F Indikátor | **pondělí** + reaktivně | reaktivně = discovery našel nový strukturovaný dataset |
 | G Údržba korpusu | auto-fix každý běh; **review jen 2.–8. den ledna, dubna, července, října** | kvartální okno navazuje na `refresh.yml` (1. den čtvrtletí) |
 | H Týdny zdraví | když nejbližší marquee den do **42 dní** nemá kompletní draft | typicky ~1× měsíčně |
@@ -197,25 +200,27 @@ npm run evidence:queue -- --status       # jen v neděli (blok I)
 
 ---
 
-## 5. Blok B — Distribuce: fronta Bufferu
+## 5. Blok B — Distribuce: fronta Bufferu (jen videa)
 
-**Účel**: udržet na každém připojeném kanálu **10 naplánovaných feed příspěvků**
-+ na Facebooku a Instagramu **1 vertikální Story/Reels slot** za běh, pokud se do stropu vejde
-(viz pravidlo 4 — na Free plánu se Story počítá do téhož limitu 10). Texty podle
-`docs/social-copywriting-manual.md` (hlavní věc do 1. věty, jeden hák, věcně ale
-poutavě) a etalonu `docs/social-buffer-prvni-prispevky.md`. Portál = **HSPA Monitor**,
-doména v CTA `skorezdravotnictvi.cz`.
+**Účel**: udržet na každém připojeném kanálu frontu **video příspěvků** (reels) z hotových
+animací — `assets/social/reels/*.mp4` ve stylech „Kompík vysvětluje" a „Florence
+komentuje" (skill `animovane-prispevky`, blok V). **Statické karty, covery ani Story
+grafiky se do fronty nezařazují** (rozhodnutí vydavatele 12. 10. 2026, `docs/decisions-log.md`).
+Cíl je 10 naplánovaných na kanál; když hotových videí není dost, fronta zůstane kratší
+— **nikdy ji nedoplňuj obrázky**, jen to nahlas („fronta N/10, čeká na videa z bloku V").
+Texty podle `docs/social-copywriting-manual.md` (hlavní věc do 1. věty, jeden hák, věcně
+ale poutavě). Portál = **HSPA Monitor**, doména v CTA `skorezdravotnictvi.cz`.
 
 **Železná pravidla Bufferu**
 
 1. Výhradně `mode: addToQueue`, `schedulingType: automatic`. Žádné `shareNow`, `shareNext`,
    `customScheduled`.
-2. Žádná čísla z paměti — jen z textu článku / datového kontraktu.
-3. Nepřekračuj **10 naplánovaných feed příspěvků na kanál** (Buffer Free); vertikální sloty
-   se počítají zvlášť.
-4. Neduplikuj: jeden článek = max 1 příspěvek na kanál v cooldownu **30 dní**.
+2. Žádná čísla z paměti — jen z `facts[]` scénáře videa (citace z článku) nebo z textu článku.
+3. Nepřekračuj **10 naplánovaných příspěvků na kanál** (Buffer Free).
+4. Neduplikuj: jedno video = max 1 příspěvek na kanál; znovu ho lze zařadit až po
+   **60 dnech** od odeslání, a jen když jinak není co zařadit.
 5. Needituj a nemaž cizí příspěvky; maž jen vlastní, chybně vytvořený v tomtéž běhu.
-6. Jen viditelné články: `published !== false`, `date` ≤ dnes, `audit-status` ∉
+6. Jen videa k viditelným článkům: `published !== false`, `date` ≤ dnes, `audit-status` ∉
    {`draft`, `flagged`, `draft-flagged`}.
 7. Idempotence: plné fronty = nic nepřidávej, jen to nahlas.
 8. Žádné PII, žádné placené akce. **Nic necommituj** — stav drží Buffer.
@@ -223,23 +228,14 @@ doména v CTA `skorezdravotnictvi.cz`.
 Cokoli, co by vyžadovalo porušení těchto pravidel (mazání, překročení limitu, okamžitá
 publikace), → **zastav se a nahlas to** místo provedení.
 
-**Grafika — vždy tmavá stat-hero karta** (`node scripts/generate-ig-cards.js`, manifest
-slugů ve skriptu). Světlý landscape cover (`assets/covers/`) je jen nouzový fallback.
+**Zdroj videí** = scénáře `social/reels/scripts/*.json`. Každý scénář nese `slug`
+(= název videa `assets/social/reels/<slug>.mp4`), `article` (článek, na který příspěvek
+odkazuje), `style` (`florence`, jinak Kompík), `facts[]` a `source_line`. Do fronty
+patří jen video **živé na produkci** (HTTP 200 na
+`https://www.skorezdravotnictvi.cz/assets/social/reels/<slug>.mp4`) — nové video
+z bloku V jde do fronty až po merge a nasazení, tj. v některém z dalších běhů.
 
-| Účel | Cesta | Rozměr |
-|---|---|---|
-| FB/IG feed | `assets/social/ig/<slug>.png` | 1080×1080 — povinné |
-| X feed | `assets/social/x/<slug>.png` | 1600×900 — povinné, fallback `ig/` |
-| Story/Reels | `assets/social/ig-story/<slug>.png` | 1080×1920 |
-
-Do fronty patří jen karta **živá na produkci** (HTTP 200 na
-`https://skorezdravotnictvi.cz/assets/social/…`). Chybí-li článku karta: přidej slug do
-manifestu `scripts/generate-ig-cards.js` (stat + claim jen z doložených čísel), spusť
-`npm run ig:cards <slug>` (X: `-- --format landscape <slug>`), PNG **commitni v tomto
-běhu** — do fronty půjde až po nasazení, tj. v příštím běhu. Landscape cover: FB/X mohou
-jít text-only, **IG kandidáta bez karty přeskoč**.
-
-**Kanály nehardcoduj** — každý běh `get_account` (org `My Organization`,
+**Kanály nehardcoduj** — každý běh `get_account` (org `Skore Zdravotnictvi`,
 `5a06fbc0513d8d6f2373e6b9`) → `list_channels` (id, service, isDisconnected). Referenčně:
 FB `Skóre zdravotnictví Česko` `6a26b01d8f1d11f9b263c41b`, IG `skorezdravotnictvi`
 `6a29cd518f1d11f9b2729507`, X `SkoreZdravko` `6a2a55ab38b557934582b311`.
@@ -249,46 +245,29 @@ FB `Skóre zdravotnictví Česko` `6a26b01d8f1d11f9b263c41b`, IG `skorezdravotni
 0. **Inventura** (Buffer = zdroj pravdy): `get_account` → org ID a timezone;
    `list_channels` → kanály, odpojené (`isDisconnected: true`) přeskoč. Per kanál
    `list_posts` `status: ["scheduled","sent"]`, `sort dueAt asc`, `first: 100`.
-   `deficit = 10 − scheduledCount` (≤ 0 → přeskoč). `usedSlugs` = slugy z coveru
-   v `assets` (`…/<slug>.png`) nebo z odkazu `skorezdravotnictvi.cz/clanek-…` v textu;
-   `sent` jen mladší než 30 dní, `scheduled` vždy. Do fronty přispívá i pipeline
-   `social-publish.yml` (Notion → Buffer, pondělí 05:00 UTC): její příspěvky se počítají
-   do `scheduledCount` i do `usedSlugs` stejně jako tvoje.
-1. **Kandidáti**: články dle pravidla 6 s živou kartou, minus `usedSlugs`.
-2. **Priorita**: (1) news hook — `topical_until` ≥ dnes vzestupně (nejbližší expirace
-   nejdřív), čerstvá agenda (novela, vládní rozhodnutí, výročí, sezóna), indikátor
-   s čerstvou změnou (`data/freshness.json` „fresh") nebo překlopením signálu do
-   `bad`/`warn`; (2) nejnovější dosud nepropagované podle `date` sestupně; (3) evergreen
-   `verified` mimo cooldown, od nejdéle nepropagovaných / nejmladších. Nová částka
-   Věstníku MZ (`data/vestniky.json`, `datum` za poslední týden) je kandidát na věcný post
-   s odkazem na `/vestniky-mz` (ne, když už fronta post o té částce má).
-3. **Texty** — společné: CTA `https://skorezdravotnictvi.cz/<slug>?utm_source=<facebook|x>&utm_medium=social&utm_campaign=rutina-buffer`
-   (UTM povinné — stejná konvence jako `social/config.js` → `utmUrl`; IG odkaz v textu nemá, Story
-   dostane `utm_source=instagram` v `metadata.instagram.link`); `assets[0].image`
-   + povinný `altText` („Čtvercová grafika článku … na portálu HSPA Monitor."); hashtagy
-   3–6 (oborové + `#zdravícesko`); emoji 1–4. **Facebook** (`metadata.facebook.type: "post"`):
-   hook + 2–4 věty + 1 číslo + klikací odkaz. **Instagram** (`metadata.instagram:
-   { type:"post", shouldShareToFeed:true }`): caption, URL do textu ne, konec `🔗 odkaz
-   v biu`. **X** (`service: twitter`): max 280 znaků (Free; ukáže-li `get_channel` placený
-   tier, limit povol vyšší; odkaz = 23), 16:9 karta, 1–2 hashtagy. `altText` podle
-   formátu: FB/IG „Čtvercová grafika článku … na portálu HSPA Monitor.", X „Grafika článku
-   …", Story „Vertikální grafika článku …".
-4. **Vertikální slot** (FB i IG po 1): jen články s živou `ig-story/` kartou, stejná
-   priorita a cooldown (klíč = URL vertikální karty). **Pozor na strop plánu** (rozhodnuto
-   5. 10. 2026, issue #1233): Buffer na Free plánu počítá Story do téhož limitu 10
-   naplánovaných příspěvků na kanál, ne zvlášť — po doplnění feedu na 10 proto Story
-   vrátí `Limit reached: Scheduled posts limit reached. You have 10 scheduled posts out of
-   10 allowed.` Platí varianta (a) z issue: **feed má přednost**, Story se plní jen v dnech,
-   kdy fronta po doplnění nedosáhne 10. Nic se kvůli Story nemaže ani nepřeplánovává;
-   nevyužitý slot se jen nahlásí v reportu („Story vynechána — strop plánu 10/10“).
-   Odpadne to samo, až bude plán placený (pak Story sloty běží zvlášť a pravidlo se vrátí
-   k původnímu znění). Story = výchozí: IG
-   `metadata.instagram = { type: "story", shouldShareToFeed: false, link: "<URL článku s UTM utm_source=instagram>" }`,
-   FB `metadata.facebook = { type: "story" }`. Reel jen když existuje video
-   (`assets/social/reels/<slug>.mp4`). Caption ultra-stručně. Bez kandidáta slot vynech
-   a nahlas „chybí vertikální karta".
-5. **Zařazení** `create_post` v pořadí priority; po kanálu zkontroluj, že `scheduledCount`
-   nepřekročil 10.
+   `deficit = 10 − scheduledCount` (≤ 0 → přeskoč). `usedVideos` = videa z `assets[].source`
+   (`…/reels/<slug>.mp4`); `sent` jen mladší než 60 dní, `scheduled` vždy. Starší
+   obrázkové příspěvky ve frontě (např. z ručního spuštění `social-publish.yml`) se
+   počítají do `scheduledCount`, ale rutina je nemaže.
+1. **Kandidáti**: scénáře podle pravidla 6, video živé na produkci, minus `usedVideos`.
+2. **Priorita**: (1) news hook — článek s `topical_until` ≥ dnes (nejbližší expirace
+   nejdřív) nebo čerstvá agenda; (2) nejnovější videa (podle data commitu MP4) dosud
+   nezařazená; (3) **střídej styly** — po Kompíkovi Florence a naopak, je-li z čeho;
+   (4) evergreen re-post podle pravidla 4.
+3. **Texty** — společné: CTA `https://skorezdravotnictvi.cz/<slug-článku>?utm_source=<facebook|x>&utm_medium=social&utm_campaign=reels`
+   (slug článku = `article` bez `.html`); hák = pointa videa jinými slovy, 1–2 čísla
+   z `facts[]`; předposlední řádek vždy **„Animace a text: AI · data: {zdroj ze `source_line`}"**;
+   hashtagy 3–5 vč. `#zdravícesko` a `#kompikvysvetluje`, resp. `#florencekomentuje`;
+   emoji 1–3. Asset: `assets: [{ video: { url: "<URL videa na www.>",
+   metadata: { thumbnailOffset: <ms>, title: "Kompík vysvětluje: …" | "Florence komentuje: …" } } }]`,
+   kde `thumbnailOffset` = `node social/reels/render.js <slug> --poster-time` (plakát videa).
+   **Instagram** `metadata.instagram = { type: "reel", shouldShareToFeed: true, isAiGenerated: true }`,
+   caption bez URL, konec `🔗 Odkaz v biu`. **Facebook** `metadata.facebook = { type: "reel" }`,
+   hák + 2–3 věty + odkaz s UTM. **X** `metadata.twitter = { isAiGenerated: true }`, max 280
+   znaků (odkaz = 23), 1 hashtag, konec „Kompík vysvětluje 👇" / „Florence komentuje 👇" + odkaz.
+4. **Zařazení** `create_post` v pořadí priority, na všech kanálech stejné pořadí videí;
+   po kanálu zkontroluj, že `scheduledCount` nepřekročil 10.
+5. **Vertikální Story sloty** se nepoužívají — reel je vertikální formát sám o sobě.
 6. **LinkedIn — týdenní draft pro profil vydavatele** (jen **pondělí**, nebo první běh v týdnu,
    když pondělní běh nebyl). LinkedIn je podle `MARKETING-PLAN.md` kanál č. 1, ale Buffer Free má
    strop 3 kanálů (FB, IG, X), takže LinkedIn **není připojený kanál** a text publikuje vlastník
@@ -308,7 +287,8 @@ FB `Skóre zdravotnictví Česko` `6a26b01d8f1d11f9b263c41b`, IG `skorezdravotni
    a napiš to do reportu („LinkedIn: minulý draft nepublikován“).
 
 **Výstup do těla PR** (nebo do závěrečné zprávy, když PR nevzniká): tabulka per kanál
-(bylo → přidáno → teď, nejbližší/poslední slot), seznam přidaných (kanál · článek · důvod),
+(bylo → přidáno → teď, nejbližší/poslední slot), seznam přidaných (kanál · video · článek · důvod),
+kolik živých videí ještě čeká na zařazení,
 přeskočení s důvodem, řádek LinkedIn (Idea vytvořena · slug / minulý draft nepublikován / není pondělí).
 
 ---
@@ -581,6 +561,41 @@ Commit: `content(clanky): nový článek {slug}` / `content(clanky): revize {slu
 
 ---
 
+## 8b. Blok V — Video dne (1 animovaný příspěvek)
+
+**Účel**: vyrobit **jedno** nové video denně, aby fronta Bufferu (blok B, jen videa) měla
+z čeho brát. Řídí se skillem `.claude/skills/animovane-prispevky/` — **před prací přečti
+`SKILL.md`** a podle stylu `references/scenar.md` + `references/dramaturgie.md` (Kompík),
+resp. `references/florence.md` (Florence). Pravidla skillu (fakta jen z článku s doslovnou
+citací, poctivý počet postaviček, AI označení, žádné skutečné osoby, Florence půvabná,
+ne lascivní) platí beze zbytku.
+
+1. **Styl**: jiný než poslední commitnuté video (nejnovější `.mp4` podle
+   `git log -1 --name-only -- 05_M1_Starter/assets/social/reels/` a `style` jeho scénáře).
+   Kompík = srovnání dvou čísel; Florence = paradox, mýtus, „prý…", komentář k debatě.
+2. **Kandidát**: viditelný článek (pravidlo 6 bloku B) **bez videa** ve zvoleném stylu
+   (žádný scénář s tímto `article` a `style`). Priorita: dnešní článek z bloku E, pokud už
+   je viditelný; jinak news hook (`topical_until`, čerstvá agenda) → `verified` články se
+   silným doloženým číslem (kostra: manifest `scripts/generate-ig-cards.js` — `stat`,
+   `claim`, `context`) → nejnovější. Článek, jehož číslo se nedá poctivě ukázat
+   (Kompík) nebo který nemá skutečný paradox (Florence), přeskoč na dalšího kandidáta.
+3. **Scénář** `social/reels/scripts/<slug>.json` (Kompík: `<slug>` = slug článku;
+   Florence: `florence-<slug-článku-bez-clanek->`): `facts[].quote` = **doslovná věta
+   z článku**, `source_line`, `footnote`, 10–20 s.
+4. **Kontrola**: `npm run reels:check` ✅ → `npm run reels:render -- <slug> --sheet` →
+   **prohlédni arch** (Read): čitelnost, překryvy, bezpečné zóny, emoce sedí k obsahu.
+   Při vadě uprav scénář a opakuj (max 3×), jinak blok V dnes vynech a nahlas proč.
+5. **Render** `npm run reels:render -- <slug>` (~80 s) → MP4 + plakát; `ffprobe`
+   (1080×1920, 30 fps), velikost **≤ 3 MB**. `node --test tests/reels-engine.test.js` ✅.
+6. **Commit** `content(reels): {styl} — {slug}` (scénář + MP4 + plakát). Video jde do
+   Bufferu až po merge a nasazení (blok B v dalších bězích).
+
+Strop: **1 video za běh**. Renderer, postavy ani skill blok V neupravuje — změny
+postav a stylů jsou samostatný PR mimo rutinu. Výstup do těla PR: řádek `Video: {styl} ·
+{slug} · {délka} s · {MB}` (kontaktní arch zůstává v gitignorované `social/reels/out/`).
+
+---
+
 ## 9. Blok F — Nový indikátor (INDICATOR-ADD)
 
 Cíl: **1 nový smysluplný indikátor** z české strukturované datové sady, který dashboard
@@ -797,8 +812,9 @@ evidence `data/newsletter-log.json`. Rutina ho **neduplikuje** — v pátek jen 
 
 ## 14. Blok K — Nezávislý audit (čerstvý pohled, jiná instance)
 
-Na **každý** nový nebo změněný článek, kartu indikátoru a draft Týdne zdraví. Auditor
-dostane jen soubor a tento checklist, ne rámec autora.
+Na **každý** nový nebo změněný článek, kartu indikátoru, draft Týdne zdraví a **scénář
+videa** (blok V — u videa jen body A a D: každé číslo a tvrzení v `line`/`text`/`label`
+stojí v článku, srovnání je férové). Auditor dostane jen soubor a tento checklist, ne rámec autora.
 
 **A. Faktická tvrzení** — u každého čísla, instituce, zákona, data, citace: primární
 zdroj → hodnota, rok/vlna, kontext → OK (doplň přesný odkaz s datem) / zastaralé
@@ -854,7 +870,7 @@ git status --short                          # žádné generované artefakty, ž
 - Obsah dne: {ARTICLE-WRITE | EVERGREEN-WRITE | INDICATOR-ADD | ARTICLE-REVISE | FALLBACK-AUDIT | žádný} — {slug} (KPI: …) · dní od posledního nového článku: N · týdenní kvóta X/3
 - Indikátor: {id / —} · Legislativa: N posunů · Barometr: N změn stavů, N verdiktů
 - Údržba: N auto-fix, N revizí (kvartální okno: ano/ne) · Týdny zdraví: {id / —} · Evidence-audit: {run_id / —}
-- Buffer: FB a→b, IG a→b, X a→b (+ Story FB/IG) · LinkedIn Idea: {slug / — } · Newsletter: {ověřeno / fallback / —}
+- Video: {Kompík | Florence} · {slug} · {s} · {MB} / — · Buffer (videa): FB a→b, IG a→b, X a→b · LinkedIn Idea: {slug / — } · Newsletter: {ověřeno / fallback / —}
 - Přeskočené bloky a proč: …
 
 ### K rozhodnutí redakce
@@ -890,7 +906,8 @@ Závěrečná zpráva session = odkaz na PR (nebo „bez změn v repu") + tři �
 
 - 1 větev, ≤ 1 PR, ≤ 1 issue, 0 souborů-reportů v repu, 0 komentářů na GitHubu.
 - ≤ 1 nový článek; ≤ 1 nový indikátor; ≤ 5 obsahových revizí (jen kvartální okno);
-  ≤ 1 verdikt Ověřovny; evidence-audit ≤ 10 položek; Buffer ≤ 10 feed postů/kanál;
+  ≤ 1 verdikt Ověřovny; evidence-audit ≤ 10 položek; ≤ 1 nové video; Buffer jen
+  video příspěvky, ≤ 10/kanál (nikdy obrázkové karty);
   ≤ 1 LinkedIn Idea/týden (nikdy post).
 - Nikdy `published: true`, `audit-status: verified`, merge, `shareNow`, okamžité odeslání
   newsletteru, mazání cizí fronty, `number` u článku, bump počtů v HTML.
@@ -906,7 +923,7 @@ Závěrečná zpráva session = odkaz na PR (nebo „bez změn v repu") + tři �
 ## 17. Na vyžádání (není součástí běhu)
 
 - **Plný restart fronty Bufferu** (jen na výslovný pokyn vlastníka, po nasazení nových
-  karet — ověř HTTP 200): per kanál `list_posts status:["scheduled"]`, maž jen s
+  videí — ověř HTTP 200): per kanál `list_posts status:["scheduled"]`, maž jen s
   `allowedActions.deletePost`, po jednom, nikdy `sent`; pak postav frontu znovu blokem B;
   nahlas smazáno → zařazeno → stav.
 - **Větší dávka evidence-auditu** (`articles` 12 + `indicators` 8, strop 20) — spustí
@@ -939,8 +956,9 @@ Dřívější Routines (`HSPA - clánky`, `HSPA - indikatory`, `Social HSPA`, `K
 `HSPA Newsletter`) se **vypnou nebo smažou** — jejich prompt soubory byly z repa
 odstraněny (2026-09-13), tento soubor je jediný zdroj pravdy. GitHub Actions crony
 (`publish-articles`, `refresh`, `nightly-scan` kvartálně, `awareness-weekly`,
-`newsletter-weekly`, `social-generate` + `social-publish` (Notion pipeline, plní tutéž
-frontu Bufferu — blok B s tím počítá), `regenerate-artifacts`, `ga4-stats`) zůstávají —
+`newsletter-weekly`, `social-generate` + `social-publish` (Notion pipeline; od 12. 10. 2026
+`social-publish` běží **jen ručně**, aby do video fronty nepřidával obrázky),
+`regenerate-artifacts`, `ga4-stats`) zůstávají —
 rutina na ně navazuje, nenahrazuje je.
 
 ## Cíl
@@ -948,5 +966,5 @@ rutina na ně navazuje, nenahrazuje je.
 Každý den jeden běh, jeden PR, jedna věc ke schválení: korpus **roste** (1 kvalitní
 článek), zůstává **aktuální** (legislativa a barometr každý den, sweep kvartálně),
 **doložený** (každé číslo primární zdroj, studie ověřené v PubMed) a **viditelný**
-(Buffer plný, newsletter pod kontrolou, Týdny zdraví připravené dopředu). Lepší žádná
+(denně nové video, Buffer plný videí, newsletter pod kontrolou, Týdny zdraví připravené dopředu). Lepší žádná
 změna než zbytečná.
