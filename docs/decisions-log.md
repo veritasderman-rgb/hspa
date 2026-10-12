@@ -6,6 +6,18 @@ Formát: každá položka má `Datum`, `PR`, `Co`, `Proč`, `Důsledek`.
 
 ---
 
+## 2026-10-12 — Animované příspěvky s maskotem Kompíkem (Reels/Stories)
+
+- **PR**: `claude/quirky-planck-byh0j6`
+- **Co**: Nový formát sociálních příspěvků — 10–20s vertikální animace (9:16) s maskotem **Kompík** (živý kompas HSPA Monitoru, střelka na hlavě = ukazovátko a měřič nálady) a postavičkami místo grafů a fotek. Renderer `05_M1_Starter/social/reels/` (SVG → resvg → ffmpeg, syntetizovaný zvuk, offline), scénáře `social/reels/scripts/<slug>.json`, výstup `assets/social/reels/<slug>.mp4` (cesta, kterou už čte vertikální slot v `PROMPT_ROUTINE.md` blok B). Tvář a logo série v `assets/brand/maskot/` (`npm run brand:maskot`). Postup a pravidla: skill `.claude/skills/animovane-prispevky/`. Pilot: `clanek-absolventi-osetrovatelstvi`.
+- **Proč**: Vydavatel chce místo statických (fotografických) karet virální animované příspěvky s rozpoznatelnou tváří. Postavičky ukážou číslo tělem (dav 16 vs. 35), což je čitelné bez zvuku i bez grafu. Mění dřívější bod `MARKETING-PLAN.md` „žádné Story/Reels".
+- **Důsledek**:
+  - Každé číslo ve videu musí mít `facts[].quote` = doslovnou větu z článku (test `tests/reels-engine.test.js` ji v článku hledá); počet postaviček × `per` se od hodnoty liší nejvýš o 10 %; pointa má `basis`. **NEOBCHÁZET** validátor.
+  - Červená jen na hrotu střelky (brand), žádné skutečné osoby ani loga, Kompík nemluví lidským hlasem (žvatlá, text nese bublina), koncová karta vždy nese zdroj a „Animace a text: AI".
+  - Videa jsou v gitu: ≤ 3 MB, kadence doporučeně 2–3 týdně. Zapojení výroby do denní rutiny (`PROMPT_ROUTINE.md`) je samostatné rozhodnutí vydavatele.
+
+---
+
 ## 2026-10-05 — Herní stránky bez časových popupů; newsletter až po verdiktu
 
 - **PR**: `claude/sleepy-rubin-5ud558` (vyhláška v3, Tři židle)

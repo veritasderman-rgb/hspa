@@ -95,6 +95,16 @@ Designový list (specimen) k prvku: [`hspa-compass-specimen.html`](../hspa-compa
 - **Pattern textura** — opt-in utilita `.brand-pattern-bg` (jemné kompasové pole
   na pozadí; použito na homepage `.ed-hero`).
 
+### Maskot Kompík (animované příspěvky)
+
+Z kompasu se stala postava: **Kompík** — tělo = ciferník značky, na temeni střelka
+(ukazovátko a měřič nálady; jediná červená věc, stejné pravidlo jako u značky).
+Tvář a logo série „Kompík vysvětluje": `assets/brand/maskot/` (`kompik-avatar.png`
+profilovka, `kompik-logo.png`, `kompik.png`, modelový list `kompik-list.png`),
+generuje `npm run brand:maskot` ze stejného kódu jako videa
+(`social/reels/characters/`). Postava, obsazení, formát videí a pravidla:
+skill [`.claude/skills/animovane-prispevky/`](../.claude/skills/animovane-prispevky/SKILL.md).
+
 ---
 
 # 1. Article Visuals (`.av-*`)

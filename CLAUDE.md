@@ -29,6 +29,7 @@ Inspirováno belgickým modelem **Healthy Belgium**.
 | Nezávislý editor (revize + merge PR tříd A/B) · týdenní porada (priority) · ombudsman (schránka) | [`PROMPT_EDITOR.md`](PROMPT_EDITOR.md), [`PROMPT_PORADA.md`](PROMPT_PORADA.md), [`PROMPT_OMBUDSMAN.md`](PROMPT_OMBUDSMAN.md) |
 | Rutina agenta (jeden běh denně: discovery → článek, legislativa, údržba, indikátor, Buffer, newsletter, Týdny zdraví, evidence-audit) | [`PROMPT_ROUTINE.md`](PROMPT_ROUTINE.md) |
 | Ověřit články a indikátory proti studiím (PubMed/Consensus) | [`05_M1_Starter/PROMPT_EVIDENCE_AUDIT.md`](05_M1_Starter/PROMPT_EVIDENCE_AUDIT.md) |
+| Animovaný příspěvek (Reels/Stories, 10–20 s) s maskotem Kompíkem | skill [`.claude/skills/animovane-prispevky/`](.claude/skills/animovane-prispevky/SKILL.md) |
 
 ---
 
