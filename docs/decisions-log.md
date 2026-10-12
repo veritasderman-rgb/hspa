@@ -6,6 +6,15 @@ Formát: každá položka má `Datum`, `PR`, `Co`, `Proč`, `Důsledek`.
 
 ---
 
+## 2026-10-12 — Fronta Bufferu jen z videí, rutina vyrábí 1 video denně
+
+- **PR**: `claude/quirky-planck-byh0j6` (úprava rutiny)
+- **Co**: Vydavatel nechal smazat celou frontu Bufferu (27 obrázkových příspěvků) a nahradit ji 15 video příspěvky (5 videí × FB, IG, X). `PROMPT_ROUTINE.md`: blok B plní frontu **výhradně video příspěvky** (IG a FB reel, X video, `isAiGenerated`, UTM `utm_campaign=reels`, „Animace a text: AI" v textu). Nový blok **V — Video dne** vyrobí podle skillu `animovane-prispevky` jedno video za běh a střídá styly Kompík a Florence. Blok K audituje fakta scénáře. `social-publish.yml` (Notion → Buffer) běží jen ručně. `render.js --poster-time` vrací `thumbnailOffset`.
+- **Proč**: Vydavatel chce na sítích místo fotografických karet animované příspěvky („jen videa"). Kdyby fronta nedostávala nová videa, vyprázdnila by se za pár dní, proto je výroba součástí denní rutiny.
+- **Důsledek**: **NEDOPLŇOVAT** frontu obrázkovými kartami ani Story grafikami, ani když je krátká. Nahlásí se „čeká na videa". Video jde do fronty až po merge a nasazení (HTTP 200). Repo roste o ~2–2,5 MB denně (~0,8 GB ročně). Pokud to začne vadit, je to rozhodnutí pro vydavatele (Git LFS nebo externí hosting videí). Statické karty (`scripts/generate-ig-cards.js`) zůstávají jako kostra pro výběr čísel do videí.
+
+---
+
 ## 2026-10-12 — Druhý styl animovaných příspěvků: „Florence komentuje"
 
 - **PR**: `claude/quirky-planck-byh0j6` (navazuje na Kompíka)

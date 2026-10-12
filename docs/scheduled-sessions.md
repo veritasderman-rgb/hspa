@@ -2,7 +2,7 @@
 
 > **Stav (2026-10-06):** projekt má rutinu **autorky** a od AI-first provozu k ní přibývají editor, porada a ombudsman (§ 1b).
 > Původní text: projekt má **jednu** rutinu agenta. Její úplné znění je
-> [`PROMPT_ROUTINE.md`](../PROMPT_ROUTINE.md) v kořeni repozitáře — bloky A–L,
+> [`PROMPT_ROUTINE.md`](../PROMPT_ROUTINE.md) v kořeni repozitáře — bloky A–L + V (video dne),
 > kalendář (§ 3) a pravidla šumu (§ 0). Dřívější rutiny (denní články, noční údržba,
 > indikátory, Social, Newsletter, Týdny zdraví) jsou v ní sloučené; jejich prompt
 > soubory už v repu nejsou.
@@ -34,7 +34,7 @@
 | Parametr | Hodnota |
 |---|---|
 | **Název** | `HSPA – rutina` |
-| **Prompt** | `Spusť dnešní běh podle PROMPT_ROUTINE.md v kořeni repozitáře hspa. Projdi bloky A–L přesně podle souboru, dodrž kalendář (§ 3) a pravidla šumu (§ 0) a na konci otevři nejvýš jeden PR podle bloku L. Zásadní je validace a ověření všech zdrojů.` |
+| **Prompt** | `Spusť dnešní běh podle PROMPT_ROUTINE.md v kořeni repozitáře hspa. Projdi bloky A–L včetně bloku V (video dne) přesně podle souboru, dodrž kalendář (§ 3) a pravidla šumu (§ 0) a na konci otevři nejvýš jeden PR podle bloku L. Zásadní je validace a ověření všech zdrojů.` |
 | **Cadence / cron (UTC)** | `0 1 * * *` — jednou denně, 03:00 CEST / 02:00 CET |
 | **Konektory** | GitHub · `PubMed` · `Consensus` · `hlidac_statu` · `Buffer` · `Brevo` (ostatní nejsou potřeba) |
 | **Model** | výchozí model účtu (rutina si sama deleguje bloky na Sonnet/Opus přes Agent tool, viz § 1 souboru) |
@@ -106,8 +106,9 @@ rutina na ně navazuje.
    když něco skutečně vyžaduje rozhodnutí. Starší otevřená issue se doplňuje komentářem.
 3. **Routines → Runs**: čas, stav, transkript. Závěrečná zpráva každého běhu má odkaz na
    PR (nebo „bez změn v repu") a tabulku Bufferu.
-4. **Buffer**: fronta 10 feed příspěvků na kanál + Story na FB/IG. Plné fronty → běh
-   nahlásí „nic nepřidáno".
+4. **Buffer**: fronta **jen video příspěvků** (reel na FB/IG, video na X), cíl 10 na kanál;
+   obrázkové karty ani Story se nezařazují. Každý běh přidá do repa 1 nové video (blok V),
+   do fronty jde po nasazení. Plné fronty → „nic nepřidáno"; málo videí → „čeká na videa".
 5. **Po týdnu**: v `data/articles.json` přibývají `published: false` záznamy s rostoucím
    `scheduled_for` (fronta se plní, `publish-articles.yml` je pouští ven max 1/den);
    v pondělí přibyla metodická karta v `indicators/`; v neděli záznamy v

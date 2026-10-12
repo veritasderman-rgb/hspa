@@ -8,6 +8,7 @@
 //   --all              s --check: validuje všechny scénáře v social/reels/scripts/
 //   --sheet            kontaktní arch 4×3 klíčových snímků → <out>/<slug>-arch.png (náhled pro kontrolu)
 //   --frame <s>        jeden snímek v čase s (sekundy) → <out>/<slug>-<s>s.png
+//   --poster-time      vypíše čas plakátu v ms (= thumbnailOffset pro Buffer)
 //   --out <adresář>    výstupní adresář (video: assets/social/reels, náhledy: social/reels/out — gitignored)
 //   --fps <n>          snímková frekvence (výchozí 30)
 //
@@ -57,6 +58,20 @@ function contactSheet(tl, out) {
   const sw = gap + cols * (tw + gap), sh = gap + rows * (th + gap + 30);
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${sw}" height="${sh}"><rect width="${sw}" height="${sh}" fill="#fff"/>${cells.join('')}</svg>`;
   writeFileSync(out, new Resvg(svg, { font: RESVG_FONT }).render().asPng());
+}
+
+/**
+ * Čas plakátu (s): `poster_at` ze scénáře, jinak konec pointy (Kompík)
+ * nebo 1,6 s po začátku nasvíceného čísla (Florence), jinak polovina videa.
+ * Stejná hodnota v ms je `thumbnailOffset` videa v Bufferu.
+ */
+export function posterTime(tl) {
+  if (tl.script.poster_at != null) return tl.script.poster_at;
+  const pb = tl.beats.find(b => b.type === 'punch');
+  if (pb) return pb.t1 - 0.35;
+  const nb = tl.beats.find(b => b.type === 'number');
+  if (nb) return Math.min(nb.t1 - 0.2, nb.t0 + 1.6);
+  return tl.duration / 2;
 }
 
 async function encode(tl, outMp4, fps) {
@@ -114,6 +129,10 @@ async function main() {
   const tl = compile(script);
   const fps = Number(arg('--fps', script.fps || 30));
 
+  if (has('--poster-time')) {
+    console.log(Math.round(posterTime(tl) * 1000));
+    return;
+  }
   if (has('--sheet')) {
     const p = resolve(out, `${slug}-arch.png`);
     contactSheet(tl, p);
@@ -129,9 +148,7 @@ async function main() {
   }
   const mp4 = resolve(out, `${slug}.mp4`);
   await encode(tl, mp4, fps);
-  // plakát: konec pointy (celá replika i nápis jsou vidět), jinak polovina videa
-  const pb = tl.beats.find(b => b.type === 'punch');
-  const posterT = script.poster_at ?? (pb ? pb.t1 - 0.35 : tl.duration / 2);
+  const posterT = posterTime(tl);
   writeFileSync(resolve(out, `${slug}.png`), renderPng(frameSvg(tl, posterT)));
   console.log(`✓ video → ${mp4}\n✓ plakát (${posterT.toFixed(1)} s) → ${resolve(out, `${slug}.png`)}`);
 }
