@@ -5,6 +5,8 @@
 //   kompik-avatar.svg / .png       profilová „tvář" do kruhu — 1080×1080
 //   kompik-logo.svg / .png         logo série „Kompík vysvětluje" — 1600×600
 //   kompik-list.png                modelový list: emoce, střelka, obsazení, paleta, pravidla
+//   florence-avatar / florence     tvář a postava stylu „Florence komentuje"
+//   florence-list.png              modelový list Florence (nálady × gesta)
 //
 // Spuštění:  node scripts/generate-mascot-assets.js
 // Postava se kreslí ze stejného kódu jako videa (social/reels/characters/), takže
@@ -16,6 +18,7 @@ import { fileURLToPath } from 'node:url';
 import { Resvg } from '@resvg/resvg-js';
 import { kompik } from '../social/reels/characters/kompik.js';
 import { person, ROLES } from '../social/reels/characters/cast.js';
+import { florence, MOODS as FL_MOODS } from '../social/reels/characters/florence.js';
 import { C } from '../social/reels/lib/palette.js';
 import { RESVG_FONT } from '../social/reels/lib/text.js';
 
@@ -88,3 +91,33 @@ pal.forEach(([n, c], i) => {
 });
 writeFileSync(resolve(OUT, 'kompik-list.png'), new Resvg(svgDoc(W, H, body, 'Kompík — modelový list'), { font: RESVG_FONT, fitTo: { mode: 'width', value: 1600 } }).render().asPng());
 console.log('✓ kompik-list.png');
+
+// ───────────── Florence (styl „Florence komentuje") ─────────────
+const FL_BG = `<rect width="1080" height="1080" fill="${C.night}"/><circle cx="540" cy="560" r="460" fill="${C.amber}" opacity="0.12"/>`;
+save('florence-avatar', 1080, 1080, `${FL_BG}
+  ${florence({ x: 540, y: 1960, s: 2.2, mood: 'wink', tilt: -4 }).svg}`,
+'Florence — AI autorka HSPA Monitoru (animovaná podoba)');
+
+save('florence', 1080, 1350, `<rect width="1080" height="1350" fill="${C.night}"/>
+  <circle cx="300" cy="420" r="420" fill="${C.amber}" opacity="0.14"/>
+  ${florence({ x: 540, y: 1450, s: 1.25, mood: 'smile', gesture: 'lamp', glow: 1 }).svg}
+  <g transform="translate(540 110)"><rect x="-260" y="-36" width="520" height="72" rx="36" fill="${C.ink}" stroke="${C.amber}" stroke-width="4"/>
+  <text x="0" y="12" text-anchor="middle" font-family="Inter" font-weight="900" font-size="32" letter-spacing="2" fill="${C.paper}">FLORENCE · AI AUTORKA</text></g>`,
+'Florence s lampou — AI autorka HSPA Monitoru');
+
+{
+  const moods = FL_MOODS, gestures = ['idle', 'point', 'lamp', 'chin', 'facepalm', 'shrug', 'wave', 'idle', 'idle'];
+  const W2 = 2250, H2 = 1900;
+  let b = `<rect width="${W2}" height="${H2}" fill="${C.night}"/>
+    <text x="70" y="110" font-family="Inter" font-weight="900" font-size="80" fill="${C.paper}">Florence — modelový list</text>
+    <text x="70" y="175" font-family="Inter" font-weight="700" font-size="34" fill="${C.grey}">AI autorka HSPA Monitoru. Lampa = „dáma s lampou", nasvítí číslo. Odznak AI vždy viditelný.</text>`;
+  moods.forEach((m, i) => {
+    const cx = 225 + (i % 5) * 450, base = 1010 + Math.floor(i / 5) * 840;
+    b += `<rect x="${cx - 210}" y="${base - 780}" width="420" height="770" rx="30" fill="#241A12"/>`;
+    b += `<g clip-path="url(#c${i})">${florence({ x: cx, y: base + 40, s: 0.74, mood: m, gesture: gestures[i] }).svg}</g>`;
+    b += `<clipPath id="c${i}"><rect x="${cx - 210}" y="${base - 780}" width="420" height="770" rx="30"/></clipPath>`;
+    b += `<text x="${cx}" y="${base - 730}" text-anchor="middle" font-family="Inter" font-weight="800" font-size="30" fill="${C.paper}">mood: "${m}" · ${gestures[i]}</text>`;
+  });
+  writeFileSync(resolve(OUT, 'florence-list.png'), new Resvg(svgDoc(W2, H2, b, 'Florence — modelový list'), { font: RESVG_FONT, fitTo: { mode: 'width', value: 1600 } }).render().asPng());
+  console.log('✓ florence-list.png');
+}

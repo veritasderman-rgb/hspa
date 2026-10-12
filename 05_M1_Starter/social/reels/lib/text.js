@@ -48,3 +48,19 @@ export function lineWidth(line) {
   const last = line[line.length - 1];
   return last.x + last.w;
 }
+
+/**
+ * Vyvážené zalomení: stejný počet řádků jako wrapWords, ale co nejužší sazba
+ * (žádné osamocené „EU" na posledním řádku).
+ */
+export function balancedWrap(words, size, maxW, weight = 800) {
+  const base = wrapWords(words, size, maxW, weight);
+  if (base.length < 2) return base;
+  let lo = Math.max(...words.map(w => measure(w.text, size, weight))), hi = maxW, best = base;
+  for (let k = 0; k < 12 && hi - lo > 2; k++) {
+    const mid = (lo + hi) / 2;
+    const tryL = wrapWords(words, size, mid, weight);
+    if (tryL.length <= base.length) { best = tryL; hi = mid; } else lo = mid;
+  }
+  return best;
+}

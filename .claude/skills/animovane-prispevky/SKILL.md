@@ -1,6 +1,6 @@
 ---
 name: animovane-prispevky
-description: Animované příspěvky s maskotem Kompíkem — z článku HSPA Monitoru udělá 10–20s vertikální video (Reels, Stories, TikTok, Shorts) s postavičkami, titulky v bublině a syntetizovaným zvukem. Použij, když má vzniknout video, reel nebo animace k článku či indikátoru, když se píše scénář pro Kompíka, nebo když se mění maskot, postavičky či renderer v 05_M1_Starter/social/reels/.
+description: Animované příspěvky ve dvou stylech — „Kompík vysvětluje" (maskot, postavičky, bublina) a „Florence komentuje" (AI autorka, velké titulky, lampa nasvítí číslo). Z článku HSPA Monitoru udělá 10–20s vertikální video (Reels, Stories, TikTok, Shorts) se syntetizovaným zvukem. Použij, když má vzniknout video, reel nebo animace k článku či indikátoru, když se píše scénář pro Kompíka nebo Florence, nebo když se mění postavy či renderer v 05_M1_Starter/social/reels/.
 ---
 
 # Animované příspěvky s Kompíkem
@@ -18,10 +18,22 @@ postavičky, emoce, rytmus. Jedno video = jedno číslo = jedna pointa.
 | Výstup | `05_M1_Starter/assets/social/reels/<slug>.mp4` + plakát `<slug>.png` |
 | Scénář | `05_M1_Starter/social/reels/scripts/<slug>.json` (verzovaný, testovaný) |
 | Renderer | `05_M1_Starter/social/reels/` — SVG → resvg → ffmpeg, offline, deterministický |
-| Tvář a logo | `05_M1_Starter/assets/brand/maskot/` (`kompik-avatar.png`, `kompik-logo.png`, `kompik.png`, `kompik-list.png`) |
+| Tváře a logo | `05_M1_Starter/assets/brand/maskot/` — Kompík (`kompik-avatar.png`, `kompik-logo.png`, `kompik.png`, `kompik-list.png`), Florence (`florence-avatar.png`, `florence.png`, `florence-list.png`) |
+
+## Dva styly
+
+| | **Kompík vysvětluje** (výchozí) | **Florence komentuje** (`"style": "florence"`) |
+|---|---|---|
+| Na co | srovnání dvou čísel, laskavě a srozumitelně | paradox, mýtus, ironický komentář — hlavně zaujmout |
+| Vizuál | světlá scéna, dav postaviček, bublina | tmavá scéna, lampa, velké titulky po kouscích |
+| Soubor | `scripts/<slug-článku>.json` → `reels/<slug-článku>.mp4` | `scripts/florence-<…>.json` → `reels/florence-<…>.mp4` |
+
+Střídej je: Kompík je „vysvětlující" série, Florence „komentářová". Ke stejnému
+článku může vzniknout obojí.
 
 Než začneš, přečti podle potřeby:
 - [`references/postavy.md`](references/postavy.md) — kdo je Kompík, jak mluví, emoce a střelka, obsazení
+- [`references/florence.md`](references/florence.md) — styl „Florence komentuje": postava, nálady, gesta, beaty, dramaturgie
 - [`references/scenar.md`](references/scenar.md) — formát JSON scénáře, typy beatů, všechny parametry
 - [`references/dramaturgie.md`](references/dramaturgie.md) — jak z čísla udělat virální skeč (háčky, rytmus, vzory)
 
@@ -75,8 +87,11 @@ Pracovní adresář `05_M1_Starter/`.
   pojišťoven, nemocnic, stran.
 - **Žádné zdravotní rady jednotlivci.** Kompík vysvětluje systém a data, neříká
   „běžte na…", „berte…". Prevence jen jako systémový fakt („půlka lidí prohlídku vynechá").
-- **Kompík nemluví lidským hlasem** a nepředstírá člověka — žvatlá tóny, text nese
-  bublina. Žádné klonování hlasů skutečných lidí.
+- **Kompík ani Florence nemluví lidským hlasem** a nepředstírají člověka — Kompík
+  žvatlá tóny, Florence má titulky a psací stroj. Žádné klonování hlasů skutečných lidí.
+- **Florence je vždy označená jako AI** (odznak na klopě, štítek nahoře, koncová karta).
+  Je krásná a sebevědomá — šarm, mrknutí, ironie — ale ne lascivní (žádný výstřih
+  ani vyzývavé pózy; sítě to navíc tlumí v dosahu).
 
 ## Brand
 

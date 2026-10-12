@@ -12,18 +12,19 @@
 import { C } from './palette.js';
 import { clamp, lerp, prog, ease, tween, keys, squashAt, blink, escapeXml, r1, hash } from './anim.js';
 import { schedule, mouthOpen } from './speech.js';
-import { measure, wrapWords, lineWidth } from './text.js';
+import { measure, wrapWords, balancedWrap, lineWidth } from './text.js';
 import { kompik, aimArm, KOMPIK_HEIGHT } from '../characters/kompik.js';
 import { person, ROLES } from '../characters/cast.js';
 import { track, sfx, babble, music } from './audio.js';
+import { parseValue, checkFacts, checkNumbers } from './facts.js';
+
+export { parseValue };
 
 export const W = 1080, H = 1920;
 export const BEAT_TYPES = ['intro', 'say', 'group', 'punch', 'outro'];
 export const EMOTIONS = ['curious', 'explain', 'worried', 'shocked', 'sad', 'happy', 'proud', 'skeptic'];
 export const GESTURES = ['none', 'point-left', 'point-right', 'point-up', 'shrug', 'hands-up', 'wave', 'think'];
 export const LIMITS = { minDur: 8, maxDur: 20, maxLine: 70, maxGroup: 40 };
-// číslo v textu: 16,1 · 100 000 · 34.8 · 2024
-const NUM_RE = /\d+(?:[\s\u00a0\u202f]\d{3})*(?:[.,]\d+)?/g;
 
 // Rozvržení 9:16 s ohledem na UI Reels/Stories (horních ~220 px a spodních ~360 px
 // překrývá rozhraní aplikace; důležité věci drž mezi y 230 a 1560).
@@ -48,12 +49,6 @@ const EMO = {
   proud:   { needle: 35,  eyes: { mood: 'happy' },               brows: 'neutral', mouth: 'smile',  arms: [52, 52], hips: true },
   skeptic: { needle: 58,  eyes: { mood: 'normal', lookX: 0.5 },  brows: 'skeptic', mouth: 'wobble', arms: [28, 28] },
 };
-
-/** "16,1" → 16.1 ; "1,05 mil." → 1.05 */
-export function parseValue(v) {
-  const m = String(v).replace(/\s/g, '').match(/-?\d+(?:[.,]\d+)?/);
-  return m ? Number(m[0].replace(',', '.')) : NaN;
-}
 
 function decimals(v) {
   const m = String(v).match(/[.,](\d+)/);
@@ -239,7 +234,7 @@ function bubble(b, t, anchor, { top = L.bubbleTop, tone = 'warn', above = false 
   const fadeOut = 1 - prog(t, b.t1 - 0.12, b.t1);
   const pop = ease.outBack(prog(t, tIn, tIn + 0.2));
   const fs = L.bubbleFont, lh = L.bubbleLH, padX = 44, padY = 30;
-  const lines = wrapWords(b.sched.words, fs, L.bubbleMaxW - padX * 2, 800);
+  const lines = balancedWrap(b.sched.words, fs, L.bubbleMaxW - padX * 2, 800);
   const wMax = Math.max(...lines.map(lineWidth));
   const bw = wMax + padX * 2, bh = lines.length * lh + padY * 2 - (lh - fs) + 8;
   const bx = 540 - bw / 2, by = above ? Math.max(L.bubbleTop, anchor[1] - 110 - bh) : top;
@@ -312,7 +307,7 @@ function punchLayer(b, t) {
   const text = String(b.text || '').toUpperCase();
   const fs = 80;
   const words = text.split(/\s+/).map(w => ({ text: w }));
-  const lines = wrapWords(words, fs, 820, 900);
+  const lines = balancedWrap(words, fs, 820, 900);
   const wMax = Math.max(...lines.map(lineWidth));
   const pad = 44, lh = 88;
   const bw = wMax + pad * 2, bh = lines.length * lh + pad * 1.4;
@@ -437,9 +432,7 @@ export function validate(script) {
   if (!beats.length) err('scénář nemá žádné beaty');
   const facts = Array.isArray(script.facts) ? script.facts : [];
   const factIds = new Set(facts.map(f => f.id));
-  facts.forEach((f, i) => {
-    for (const k of ['id', 'value', 'source', 'quote']) if (!f[k]) err(`facts[${i}]: chybí ${k}`);
-  });
+  checkFacts(facts, err);
   let total = 0;
   beats.forEach((b, i) => {
     const at = `beat ${i + 1} (${b.type})`;
@@ -475,22 +468,7 @@ export function validate(script) {
       if (b.tone && !['bad', 'good', 'warn'].includes(b.tone)) err(`${at}: tone musí být bad|good|warn`);
     }
   });
-  // Každé číslo napsané ve viditelném textu (bublina, pointa, popisek, výzva) musí být
-  // doložené: hodnota nebo rok faktu, nebo číslo z citace faktu v článku.
-  const norm = x => String(x).replace(/[\s\u00a0\u202f]/g, '').replace('.', ',');
-  const allowed = new Set();
-  facts.forEach(f => {
-    allowed.add(norm(f.value));
-    if (f.year) allowed.add(String(f.year));
-    (String(f.quote || '').match(NUM_RE) || []).forEach(n => allowed.add(norm(n)));
-  });
-  beats.forEach((b, i) => {
-    for (const key of ['line', 'text', 'label', 'cta']) {
-      for (const n of String(b[key] || '').match(NUM_RE) || []) {
-        if (!allowed.has(norm(n))) err(`beat ${i + 1} (${b.type}): číslo „${n}" v \`${key}\` není hodnota, rok ani číslo z citace žádného faktu — doplň fakt s citací z článku`);
-      }
-    }
-  });
+  checkNumbers(beats, facts, err);
   if (beats.length && beats[beats.length - 1].type !== 'outro') err('poslední beat musí být outro (koncová karta s odkazem a zdrojem)');
   if (beats.length && beats[0].type !== 'intro') warn('první beat by měl být intro (háček do 1. sekundy)');
   if (beats.filter(b => b.type === 'group').length > 2) err('nejvýš 2 skupiny postaviček na video (jedna myšlenka, jedno srovnání)');

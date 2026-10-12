@@ -6,6 +6,15 @@ Formát: každá položka má `Datum`, `PR`, `Co`, `Proč`, `Důsledek`.
 
 ---
 
+## 2026-10-12 — Druhý styl animovaných příspěvků: „Florence komentuje"
+
+- **PR**: `claude/quirky-planck-byh0j6` (navazuje na Kompíka)
+- **Co**: AI autorka Florence jako animovaná postava (`social/reels/characters/florence.js`) a samostatný styl `"style": "florence"` (`social/reels/lib/florence-scene.js`): tmavá scéna s lampou, titulky po kouscích (TikTok), číslo nasvícené lampou, noční podkres. Volbu stylu řeší `lib/styles.js`; společná kontrola faktů je v `lib/facts.js`. Tvář a modelový list jsou v `assets/brand/maskot/florence-*`. Ve stejném PR vznikla další tři videa s Kompíkem (nenaplněná potřeba péče, odvratitelné hospitalizace, očkování seniorů proti pneumokokům) a pilot Florence (čekání na specialistu).
+- **Proč**: Vydavatel chtěl vedle vysvětlujícího Kompíka „separátní styl, který má hlavně zaujmout", s Florence jako tváří. Florence má být krásná a mít šarm, protože to je potenciál pro sítě.
+- **Důsledek**: Florence je vždy viditelně AI: odznak „AI" na klopě, štítek „FLORENCE · AI AUTORKA" na každém snímku, „Text a animace: AI" na kartě. Test to hlídá, **NEODSTRAŇOVAT**. Je půvabná, ale ne lascivní (žádný výstřih ani vyzývavé pózy). Ironie míří na paradoxy systému, ne na lidi. Fakta podléhají stejné kázni jako u Kompíka.
+
+---
+
 ## 2026-10-12 — Animované příspěvky s maskotem Kompíkem (Reels/Stories)
 
 - **PR**: `claude/quirky-planck-byh0j6`
