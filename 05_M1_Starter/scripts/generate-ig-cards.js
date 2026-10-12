@@ -99,6 +99,12 @@ const OUT_DIRS = {
 //   headline    — fallback bez čísla (velký serif nadpis).
 // Žádná nová čísla z paměti — vše vychází z dříve schválených headline.
 const MANIFEST = {
+  'clanek-chripka-sezona-2026-vakciny-proockovanost': {
+    kicker: 'Prevence · chřipka', signal: 'bad',
+    stat: '24,6', statSuffix: ' %',
+    claim: 'lidí nad 65 let se v minulé sezóně nechalo očkovat proti chřipce. Cíl Rady EU je 75 %.',
+    context: 'Vakcín je letos o 15 % víc než loni. Data ÚZIS a MZ ČR.',
+  },
   'clanek-platby-pacientu-metodicke-stanovisko-mz-2026': {
     kicker: 'Práva pacientů · platby u lékaře', signal: 'neutral',
     stat: '90', statSuffix: ' Kč',
