@@ -92,6 +92,7 @@ git push -u origin claude/<branch>
 ├── prevence.html               ← Vakcinace + screeningy
 ├── pohotovosti.html            ← Nejbližší pohotovost (vyhledávání podle obce/polohy, otevřeno teď, dojezdová analýza, rozcestník „Kam s tím?“, poradní linky ZZS, EN/UK, offline)
 ├── pohotovost-*.html           ← 75 generovaných okresních stránek (scripts/build-pohotovosti-okresy.js, statický výpis + JSON-LD)
+├── poplatky.html               ← Poplatky u lékaře: metodické stanovisko MZ z 8. 10. 2026 v plném znění (přepis 9 PDF), kontrola poplatku (data/poplatky.json + src/poplatky-engine.js), průvodce stížností s generátorem
 ├── strategie.html              ← Národní strategické dokumenty
 ├── zdravi-2035.html            ← Plní se Zdraví 2035? (strategie po kapitolách a úkolech, každý s indikátory)
 ├── plneni-*.html               ← 7 dalších stránek plnění strategií (onko 2030, KV 2035, AMR, duševní zdraví, Zdraví 2030 retrospektivně, sociální služby 2026–2030, sociální služby 2016–2025 retrospektivně) — sdílený renderer src/strategie-plneni.js, datasety data/plneni-*.json
