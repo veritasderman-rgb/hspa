@@ -106,6 +106,7 @@ git push -u origin claude/<branch-name>
 | `.timeline-*` | Časová osa (HSPA, projekt) | o-projektu.html |
 | `.dlz-*` | Doložka (klikatelné doložky tvrzení, panel, badge) | clanek-*.html, redakce.html |
 | `.poh-*` | Pohotovosti (triáž, vyhledávání, karty, mapa, kontext) | pohotovosti.html |
+| `.pop-*` | Poplatky u lékaře (kontrola poplatku, mapa smí/nesmí, průvodce stížností, generátor, plné znění) | poplatky.html |
 
 ---
 

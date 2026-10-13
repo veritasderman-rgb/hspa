@@ -1,0 +1,681 @@
+{
+  "version": "1.0",
+  "updated": "2026-10-13",
+  "source": {
+    "name": "MZ ČR — Metodické stanovisko k platbám pacientů v rámci poskytování zdravotních služeb",
+    "url": "https://mzd.gov.cz/metodicke-stanovisko-k-platbam-pacientu-v-ramci-poskytovani-zdravotnich-sluzeb/",
+    "published": "2026-10-08",
+    "cj": "MZDR 25582/2026-1 až -9/DZP",
+    "note": "Výklad ministerstva, ne zákon. O konkrétním případu rozhoduje krajský úřad (Magistrát hl. m. Prahy), u eReceptu SÚKL."
+  },
+  "cesty": {
+    "doklad": {
+      "title": "Chtějte doklad a písemnou zprávu",
+      "text": "Za každou zaplacenou službu musí poskytovatel vystavit účet s konkrétními službami a cenami. Když vás kvůli odmítnuté platbě nepřijme nebo péči ukončí, musí vám vydat písemnou zprávu s důvodem. Obojí je pro další kroky klíčový důkaz.",
+      "law": "§ 45 odst. 2 písm. a), § 48 odst. 5 zákona č. 372/2011 Sb."
+    },
+    "stiznost": {
+      "title": "Stížnost poskytovateli",
+      "text": "První krok je stížnost přímo ordinaci nebo nemocnici. Musí ji vyřídit do 30 dnů (odůvodněně o dalších 30 dnů prodloužit). Podání stížnosti vám nesmí být na újmu.",
+      "law": "§ 93 odst. 1 a 3 zákona č. 372/2011 Sb."
+    },
+    "kraj": {
+      "title": "Krajský úřad / Magistrát hl. m. Prahy",
+      "text": "Když nesouhlasíte s vyřízením stížnosti (nebo poskytovatel nestihl lhůtu), podejte do 60 dnů od doručení vyřízení stížnost krajskému úřadu v kraji, kde ordinace sídlí. Nezávisle na tom můžete kdykoli podat podnět k prošetření přestupku — požadovat platbu za hrazenou péči je přestupek s pokutou až 1 000 000 Kč.",
+      "law": "§ 93 odst. 2, § 117, § 118 zákona č. 372/2011 Sb.; § 42 správního řádu"
+    },
+    "pojistovna": {
+      "title": "Vaše zdravotní pojišťovna",
+      "text": "U smluvního poskytovatele si můžete stěžovat i své pojišťovně. Ta vám musí zajistit jiného poskytovatele, který péči poskytne bez platby, může případ prověřit a sama podat podnět krajskému úřadu.",
+      "law": "§ 46 odst. 1 a § 40 odst. 3 zákona č. 48/1997 Sb."
+    },
+    "sukl": {
+      "title": "SÚKL — platba za eRecept",
+      "text": "Porušení povinnosti předat nebo zaslat eRecept zdarma je přestupek podle zákona o léčivech, který projednává Státní ústav pro kontrolu léčiv. Podmiňuje-li lékař zaplacením přímo další péči, obraťte se i na krajský úřad.",
+      "law": "§ 80 odst. 4, § 103 odst. 9 písm. e), § 108 odst. 1 písm. i) zákona č. 378/2007 Sb."
+    },
+    "sfu": {
+      "title": "Specializovaný finanční úřad — přemrštěná cena",
+      "text": "Cenu nehrazených a částečně hrazených služeb reguluje cenový výměr ministerstva (do ceny smí jen ekonomicky oprávněné náklady a přiměřený zisk). Při podezření na cenu v rozporu s výměrem podejte podnět Specializovanému finančnímu úřadu.",
+      "law": "§ 18c zákona č. 526/1990 Sb., o cenách; cenový výměr MZ 1/2026/CAU"
+    }
+  },
+  "situace": [
+    {
+      "id": "registrace",
+      "kazuistika": 1,
+      "label": "Registrační, roční nebo „administrativní“ poplatek",
+      "hint": "Platba za to, že vás lékař vezme nebo udrží v péči — jakkoli se jmenuje.",
+      "start": "q1",
+      "uzly": {
+        "q1": {
+          "otazka": "Má ordinace smlouvu s vaší zdravotní pojišťovnou?",
+          "pomoc": "smluvni",
+          "moznosti": [
+            { "label": "Ano, je smluvní", "dalsi": "q2" },
+            { "label": "Ne, je nesmluvní", "verdikt": "v_nesmluvni" },
+            { "label": "Nevím", "verdikt": "v_nevim" }
+          ]
+        },
+        "q2": {
+          "otazka": "Je platba podmínkou registrace nebo ošetření? Tedy bez zaplacení vás nevezmou, nebo vás vyřadí?",
+          "moznosti": [
+            { "label": "Ano, bez platby to nejde", "verdikt": "v_ne" },
+            { "label": "Ne, je to dobrovolná nabídka navíc", "verdikt": "v_dobrovolne" }
+          ]
+        }
+      },
+      "verdikty": {
+        "v_ne": {
+          "typ": "ne",
+          "titulek": "Tohle smluvní lékař chtít nesmí.",
+          "text": "Smluvní poskytovatel nesmí podmínit registraci ani péči žádnou platbou. Nezáleží na tom, jak se jmenuje (registrační, administrativní, administrativně-technický, roční poplatek), ani na tom, že má údajně krýt „recepci“, pozvánky na prevenci nebo zasílání výsledků e-mailem. Rozhoduje skutečná povaha platby, ne její název.",
+          "law": "§ 48 odst. 6 písm. c) zákona č. 372/2011 Sb.; kazuistika 1",
+          "cesty": ["doklad", "stiznost", "kraj", "pojistovna"]
+        },
+        "v_dobrovolne": {
+          "typ": "zalezi",
+          "titulek": "Smí, pokud je to opravdu vaše volba.",
+          "text": "Doplňkové a „nadstandardní“ služby smí smluvní lékař nabízet, ale jen jako možnost, kterou můžete odmítnout bez dopadu na péči. Musí být v ceníku a cenu vám musí sdělit předem. Dobrovolný dar je také v pořádku — pokud není podmínkou.",
+          "law": "§ 45 odst. 2, § 48 odst. 6 písm. b) a c) zákona č. 372/2011 Sb.; obecná část, kap. 3.1",
+          "cesty": ["doklad"]
+        },
+        "v_nesmluvni": {
+          "typ": "zalezi",
+          "titulek": "Nesmluvní lékař platbu chtít smí — ale ne za neodkladnou péči.",
+          "text": "Pro pojištěnce pojišťovny, se kterou nemá smlouvu, je péče zpravidla nehrazená, takže za ni nesmluvní poskytovatel platbu chtít smí a může vás odmítnout. Výjimky: neodkladná péče, porod, péče nezbytná z hlediska ochrany veřejného zdraví a další případy podle § 48 odst. 3. Platit se smí jen podle ceníku a s informací o ceně předem. A pojištěnce z jiných států EU, EHP, Švýcarska a států se smlouvou o sociálním zabezpečení nesmí poskytovatel odmítnout jen kvůli chybějící smlouvě s jejich pojišťovnou.",
+          "law": "§ 48 odst. 1 písm. c) a odst. 3 zákona č. 372/2011 Sb.; obecná část, kap. 1.2 a 3.2",
+          "cesty": ["doklad"]
+        },
+        "v_nevim": {
+          "typ": "info",
+          "titulek": "Nejdřív zjistěte, zda je lékař smluvní.",
+          "text": "Posuzuje se vždy vůči vaší pojišťovně — tatáž ordinace může být pro jednoho pacienta smluvní a pro jiného ne. Seznam smluvních poskytovatelů i samotné smlouvy zveřejňuje každá pojišťovna na svém webu; orientačně to ukazuje i Národní registr poskytovatelů (nrpzs.uzis.cz). Nebo se zeptejte na klientské lince své pojišťovny.",
+          "law": "§ 40 odst. 6 písm. a) a § 17 odst. 9 zákona č. 48/1997 Sb.; obecná část, kap. 1",
+          "cesty": []
+        }
+      },
+      "dopis": {
+        "predmet": "požadavek na platbu za registraci / přijetí do péče",
+        "pravni": "Podle § 48 odst. 6 písm. c) zákona č. 372/2011 Sb., o zdravotních službách, nesmí smluvní poskytovatel podmínit přijetí pacienta do péče ani pokračování péče platbou nebo jiným prospěchem, a to bez ohledu na její označení. Tento výklad potvrzuje Metodické stanovisko Ministerstva zdravotnictví k platbám pacientů, kazuistika 1 – Platba za registraci (č. j. MZDR 25582/2026-2/DZP)."
+      }
+    },
+    {
+      "id": "prednostni",
+      "kazuistika": 2,
+      "label": "Platba za dřívější (přednostní) termín",
+      "hint": "Kdo zaplatí, jde na řadu dřív.",
+      "start": "v_ne",
+      "uzly": {},
+      "verdikty": {
+        "v_ne": {
+          "typ": "ne",
+          "titulek": "Tohle nesmí smluvní ani nesmluvní lékař.",
+          "text": "Pořadí pacientů se musí řídit zdravotním stavem a naléhavostí, ne tím, kdo zaplatil. Platbu za přednostní termín proto podle ministerstva nesmí chtít žádný poskytovatel. U smluvního jde navíc o podmiňování péče platbou.",
+          "law": "§ 48 odst. 6 písm. c) zákona č. 372/2011 Sb.; kazuistika 2.1",
+          "cesty": ["doklad", "stiznost", "kraj", "pojistovna"]
+        }
+      },
+      "dopis": {
+        "predmet": "požadavek na platbu za přednostní (dřívější) termín",
+        "pravni": "Podle Metodického stanoviska Ministerstva zdravotnictví k platbám pacientů, kazuistika 2 – Platby za objednání (č. j. MZDR 25582/2026-3/DZP), se poskytovatel při stanovení pořadí pacientů musí řídit jejich zdravotním stavem a nesmí požadovat platbu za přednostní termín; u smluvního poskytovatele jde o podmínění péče platbou v rozporu s § 48 odst. 6 písm. c) zákona č. 372/2011 Sb."
+      }
+    },
+    {
+      "id": "objednani",
+      "kazuistika": 2,
+      "label": "Placené objednání (aplikace, online rezervace)",
+      "hint": "Poplatek za to, jakým způsobem se objednáte.",
+      "start": "q1",
+      "uzly": {
+        "q1": {
+          "otazka": "Má ordinace smlouvu s vaší zdravotní pojišťovnou?",
+          "pomoc": "smluvni",
+          "moznosti": [
+            { "label": "Ano, je smluvní", "dalsi": "q2" },
+            { "label": "Ne, je nesmluvní", "dalsi": "q4" },
+            { "label": "Nevím", "verdikt": "v_nevim" }
+          ]
+        },
+        "q2": {
+          "otazka": "Dá se objednat i zdarma — telefonem, e-mailem, osobně?",
+          "moznosti": [
+            { "label": "Ne, jen přes placenou aplikaci", "verdikt": "v_ne_jen_placene" },
+            { "label": "Ano, bezplatná cesta existuje", "dalsi": "q3" }
+          ]
+        },
+        "q3": {
+          "otazka": "Jsou termíny přes bezplatnou cestu srovnatelné s placenými?",
+          "pomoc": "srovnatelne",
+          "moznosti": [
+            { "label": "Ano, liší se o hodiny či pár dní", "verdikt": "v_ok" },
+            { "label": "Ne, zdarma až za týdny či měsíce", "verdikt": "v_ne_zvyhodneni" }
+          ]
+        },
+        "q4": {
+          "otazka": "Dostanou ti, kdo zaplatí, dřívější termín než ostatní?",
+          "moznosti": [
+            { "label": "Ano", "verdikt": "v_ne_zvyhodneni" },
+            { "label": "Ne, termíny jsou stejné", "verdikt": "v_nesmluvni_ok" }
+          ]
+        }
+      },
+      "verdikty": {
+        "v_ne_jen_placene": {
+          "typ": "ne",
+          "titulek": "Tohle smluvní lékař nesmí.",
+          "text": "Pokud smluvní poskytovatel nabízí placené objednání, musí vždy zajistit i bezplatnou cestu, která je reálně dostupná a funkčně srovnatelná. Jinak podmiňuje péči nákupem služby, která pro ni není nezbytná. Platí to i tehdy, když poplatek vybírá provozovatel rezervačního systému, ne ordinace.",
+          "law": "§ 48 odst. 6 písm. c) zákona č. 372/2011 Sb.; kazuistika 2.2 (platná do 31. 12. 2026)",
+          "cesty": ["doklad", "stiznost", "kraj", "pojistovna"]
+        },
+        "v_ne_zvyhodneni": {
+          "typ": "ne",
+          "titulek": "Placená cesta nesmí znamenat rychlejší termín.",
+          "text": "Placené objednání nesmí vést ke kratší čekací době, lepší dostupnosti termínů ani jiné výhodě. Srovnatelný je podle ministerstva u plánované péče termín, který se liší v řádu hodin či jednotek dnů — ne placené termíny za pár dní a bezplatné za několik týdnů či měsíců. Platí pro smluvní i nesmluvní poskytovatele.",
+          "law": "§ 48 odst. 6 písm. c) zákona č. 372/2011 Sb.; kazuistika 2.2 (platná do 31. 12. 2026)",
+          "cesty": ["doklad", "stiznost", "kraj", "pojistovna"]
+        },
+        "v_ok": {
+          "typ": "ano",
+          "titulek": "To je v pořádku.",
+          "text": "Placená online rezervace smí existovat jako pohodlnější varianta, pokud vedle ní funguje bezplatné objednání se srovnatelnými termíny. Placenou cestu můžete klidně nevyužít.",
+          "law": "Kazuistika 2.2 (platná do 31. 12. 2026)",
+          "cesty": []
+        },
+        "v_nesmluvni_ok": {
+          "typ": "zalezi",
+          "titulek": "Smí, pokud platící nepředbíhají.",
+          "text": "Nesmluvní poskytovatel smí za objednání účtovat, nesmí ale z hlediska včasnosti termínu zvýhodňovat ty, kdo za objednání zaplatili. Cena musí být v ceníku a známá předem.",
+          "law": "Kazuistika 2.2 (platná do 31. 12. 2026); § 45 odst. 2 zákona č. 372/2011 Sb.",
+          "cesty": ["doklad"]
+        },
+        "v_nevim": {
+          "typ": "info",
+          "titulek": "Nejdřív zjistěte, zda je lékař smluvní.",
+          "text": "Seznam smluvních poskytovatelů zveřejňuje každá pojišťovna; orientačně ho ukazuje i Národní registr poskytovatelů (nrpzs.uzis.cz). Jedno ale platí vždy: placená cesta nesmí vést k rychlejšímu termínu — u smluvního ani nesmluvního lékaře.",
+          "law": "Obecná část, kap. 1; kazuistika 2.2",
+          "cesty": []
+        }
+      },
+      "dopis": {
+        "predmet": "zpoplatněné objednání bez srovnatelné bezplatné možnosti",
+        "pravni": "Podle Metodického stanoviska Ministerstva zdravotnictví k platbám pacientů, kazuistika 2 – Platby za objednání (č. j. MZDR 25582/2026-3/DZP), musí smluvní poskytovatel vedle zpoplatněného objednání zajistit reálně dostupné bezplatné objednání na termíny z hlediska včasnosti srovnatelné; jinak jde o podmínění péče nákupem služby v rozporu s § 48 odst. 6 písm. c) zákona č. 372/2011 Sb."
+      }
+    },
+    {
+      "id": "nedostaveni",
+      "kazuistika": 3,
+      "label": "Pokuta za nedostavení se na termín",
+      "hint": "„Storno poplatek“ za zmeškanou návštěvu.",
+      "start": "q1",
+      "uzly": {
+        "q1": {
+          "otazka": "Odsouhlasili jste pokutu předem — podpisem, elektronicky, v dohodě? Včetně toho, kdy vzniká a kolik dělá?",
+          "moznosti": [
+            { "label": "Ano, výslovně jsem souhlasil(a)", "verdikt": "v_ok" },
+            { "label": "Ne, bylo to jen na webu, v čekárně nebo v SMS", "verdikt": "v_ne" }
+          ]
+        }
+      },
+      "verdikty": {
+        "v_ok": {
+          "typ": "zalezi",
+          "titulek": "Smí, pokud jste souhlasili dobrovolně a prokazatelně.",
+          "text": "Platba za nedodržení termínu je smluvní pokuta. Poskytovatel (smluvní i nesmluvní) ji smí chtít, jen když s vámi předem sjednal, za jakých podmínek vzniká a jakou má výši (nebo jak se vypočte). Souhlas musí být dobrovolný, výslovný a zachycený písemně nebo jinak prokazatelně — nesmíte k němu být nuceni.",
+          "law": "§ 2048–2052 občanského zákoníku; kazuistika 3",
+          "cesty": ["doklad"]
+        },
+        "v_ne": {
+          "typ": "ne",
+          "titulek": "Platit nemusíte.",
+          "text": "Jednostranné oznámení na webu, v čekárně, hromadným e-mailem nebo SMS nestačí. Bez vašeho předchozího souhlasu je požadování pokuty nepřípustné. Pokud by smluvní lékař zaplacení takové pokuty dával jako podmínku další péče, porušuje zákaz podmiňování péče platbou.",
+          "law": "§ 48 odst. 6 písm. c) zákona č. 372/2011 Sb.; kazuistika 3",
+          "cesty": ["doklad", "stiznost", "kraj", "pojistovna"]
+        }
+      },
+      "dopis": {
+        "predmet": "požadavek na pokutu za nedostavení se, kterou jsem předem nesjednal(a)",
+        "pravni": "Podle Metodického stanoviska Ministerstva zdravotnictví k platbám pacientů, kazuistika 3 – Platba za nedodržení termínu objednání (č. j. MZDR 25582/2026-4/DZP), je taková platba smluvní pokutou, kterou lze požadovat jen při předchozím výslovném a prokazatelném souhlasu pacienta; jednostranné zveřejnění nestačí. Podmiňuje-li smluvní poskytovatel další péči jejím zaplacením, jedná v rozporu s § 48 odst. 6 písm. c) zákona č. 372/2011 Sb."
+      }
+    },
+    {
+      "id": "pohotovost",
+      "kazuistika": 4,
+      "label": "Pohotovost, urgentní příjem, lékárna v noci",
+      "hint": "90 Kč, triáž a „pohotovostní příplatek“ v lékárně.",
+      "start": "q1",
+      "uzly": {
+        "q1": {
+          "otazka": "Kde po vás platbu chtěli?",
+          "moznosti": [
+            { "label": "Lékařská nebo zubní pohotovost", "dalsi": "q2" },
+            { "label": "Urgentní příjem nemocnice / triáž", "verdikt": "v_up" },
+            { "label": "Lékárna mimo běžnou otevírací dobu", "dalsi": "q3" }
+          ]
+        },
+        "q2": {
+          "otazka": "Rozhodl lékař, že musíte do nemocnice (hospitalizace), nebo pobíráte dávky pomoci v hmotné nouzi?",
+          "moznosti": [
+            { "label": "Ano", "verdikt": "v_lps_vyjimka" },
+            { "label": "Ne", "verdikt": "v_lps_90" }
+          ]
+        },
+        "q3": {
+          "otazka": "Jde o lék nebo pomůcku na recept, kterou pojišťovna hradí (aspoň částečně)?",
+          "moznosti": [
+            { "label": "Ano, hrazený lék na recept", "verdikt": "v_lekarna_ne" },
+            { "label": "Ne — nehrazený lék, antikoncepce, volný prodej", "verdikt": "v_lekarna_ano" }
+          ]
+        }
+      },
+      "verdikty": {
+        "v_up": {
+          "typ": "ne",
+          "titulek": "Na urgentním příjmu se neplatí nic.",
+          "text": "Urgentní příjem žádnému poplatku nepodléhá a poplatkem není zatížena ani samotná triáž. Kdo je po triáži poslán na urgentní příjem, neplatí nic; kdo je poslán na pohotovost, platí 90 Kč.",
+          "law": "§ 44g zákona č. 372/2011 Sb.; kazuistika 4.1",
+          "cesty": ["doklad", "stiznost", "kraj", "pojistovna"]
+        },
+        "v_lps_90": {
+          "typ": "ano",
+          "titulek": "90 Kč zaplatit musíte.",
+          "text": "Regulační poplatek 90 Kč za lékařskou nebo zubní pohotovost je zákonná výjimka ze zákazu plateb za hrazenou péči. Poskytovatel ho nejen smí, ale musí vybrat. Za dítě ho platí zákonný zástupce.",
+          "law": "§ 16a odst. 1 a 5 zákona č. 48/1997 Sb.; kazuistika 4.2",
+          "cesty": []
+        },
+        "v_lps_vyjimka": {
+          "typ": "ne",
+          "titulek": "V tom případě se 90 Kč neplatí.",
+          "text": "Regulační poplatek se neplatí mimo jiné tehdy, když lékař na pohotovosti shledá, že váš stav vyžaduje hospitalizaci, nebo když jde o pacienta, jemuž jsou poskytovány dávky pomoci v hmotné nouzi (výjimku je potřeba doložit). Další výjimky vyjmenovává § 16a odst. 2 zákona o veřejném zdravotním pojištění.",
+          "law": "§ 16a odst. 2 zákona č. 48/1997 Sb.; kazuistika 4.2",
+          "cesty": ["doklad", "stiznost", "kraj"]
+        },
+        "v_lekarna_ne": {
+          "typ": "ne",
+          "titulek": "Pohotovostní příplatek u hrazeného léku lékárna chtít nesmí.",
+          "text": "„Pohotovostní příplatek“ žádný předpis neupravuje. Za výdej léku nebo zdravotnického prostředku, který pojišťovna hradí plně nebo částečně, ho lékárna požadovat nesmí. Navíc můžete požádat o lék se stejnou účinnou látkou s nižším doplatkem, pokud ho lékař na receptu nevyloučil.",
+          "law": "§ 11 odst. 1 písm. d) a e), § 32 odst. 2 zákona č. 48/1997 Sb.; kazuistika 4.3",
+          "cesty": ["doklad", "stiznost", "kraj", "pojistovna"]
+        },
+        "v_lekarna_ano": {
+          "typ": "ano",
+          "titulek": "U nehrazeného léku příplatek smí.",
+          "text": "Za výdej nebo prodej léku či pomůcky, kterou pojišťovna nehradí, si lékárna pohotovostní příplatek vybrat může. Patří sem i některé léky na recept — například hormonální antikoncepce nebo nehrazená varianta léku, k níž existuje hrazená se stejnou účinnou látkou.",
+          "law": "Kazuistika 4.3",
+          "cesty": []
+        }
+      },
+      "dopis": {
+        "predmet": "požadavek na platbu za urgentní příjem / pohotovostní příplatek za hrazený lék",
+        "pravni": "Podle Metodického stanoviska Ministerstva zdravotnictví k platbám pacientů, kazuistika 4 – Platba za využití pohotovostní služby nebo urgentního příjmu (č. j. MZDR 25582/2026-5/DZP), urgentní příjem ani triáž poplatku nepodléhají a lékárna nesmí požadovat pohotovostní příplatek za výdej léčivého přípravku nebo zdravotnického prostředku plně či částečně hrazeného z veřejného zdravotního pojištění (§ 11 odst. 1 písm. d) zákona č. 48/1997 Sb., § 48 odst. 6 písm. a) zákona č. 372/2011 Sb.)."
+      }
+    },
+    {
+      "id": "erecept",
+      "kazuistika": 5,
+      "label": "Platba za eRecept (SMS, e-mail, „roční paušál“)",
+      "hint": "Poplatek za vystavení, předání nebo zaslání receptu.",
+      "start": "v_ne",
+      "uzly": {},
+      "verdikty": {
+        "v_ne": {
+          "typ": "ne",
+          "titulek": "Za eRecept se neplatí — nikdy a nikde.",
+          "text": "Identifikátor eReceptu musí lékař předat bezplatně, a to i když si zvolíte zaslání SMS nebo e-mailem. Nesmí chtít jednorázový ani roční poplatek, ani ho obhájit tím, že „vystavení je zdarma a platí se jen zaslání“ nebo že jde o příspěvek na informační systém. Nesmí ani nutit neplatící pacienty k osobní návštěvě nebo jim recept posílat později. Platí pro smluvní i nesmluvní lékaře.",
+          "law": "§ 80 odst. 4 zákona č. 378/2007 Sb., o léčivech; kazuistika 5",
+          "cesty": ["doklad", "sukl", "stiznost", "kraj", "pojistovna"]
+        }
+      },
+      "dopis": {
+        "predmet": "požadavek na platbu za předání či zaslání eReceptu",
+        "pravni": "Podle § 80 odst. 4 zákona č. 378/2007 Sb., o léčivech, se identifikátor elektronického receptu předává pacientovi bezplatně, včetně zaslání e-mailem nebo SMS. Metodické stanovisko Ministerstva zdravotnictví k platbám pacientů, kazuistika 5 – Platba za eRecept (č. j. MZDR 25582/2026-6/DZP), výslovně uvádí, že smluvní ani nesmluvní poskytovatel nesmí předání či zaslání identifikátoru eReceptu podmínit zaplacením jakéhokoliv poplatku, jednorázového ani ročního."
+      }
+    },
+    {
+      "id": "hygiena",
+      "kazuistika": 6,
+      "label": "Povinná placená dentální hygiena",
+      "hint": "„Bez hygieny vás nezaregistrujeme / neošetříme.“",
+      "start": "q1",
+      "uzly": {
+        "q1": {
+          "otazka": "Má zubař smlouvu s vaší zdravotní pojišťovnou?",
+          "pomoc": "smluvni",
+          "moznosti": [
+            { "label": "Ano, je smluvní", "dalsi": "q2" },
+            { "label": "Ne, je nesmluvní", "dalsi": "q3" },
+            { "label": "Nevím", "verdikt": "v_nevim" }
+          ]
+        },
+        "q2": {
+          "otazka": "Je placená hygiena podmínkou registrace nebo ošetření?",
+          "moznosti": [
+            { "label": "Ano, bez ní mě neošetří", "verdikt": "v_ne" },
+            { "label": "Ne, jen mi ji nabídli", "verdikt": "v_nabidka" }
+          ]
+        },
+        "q3": {
+          "otazka": "Jde o neodkladné ošetření — akutní bolest, úraz, otok?",
+          "moznosti": [
+            { "label": "Ano", "verdikt": "v_neodkladna" },
+            { "label": "Ne, běžná péče", "verdikt": "v_nesmluvni" }
+          ]
+        }
+      },
+      "verdikty": {
+        "v_ne": {
+          "typ": "ne",
+          "titulek": "Tohle smluvní zubař nesmí.",
+          "text": "Dentální hygiena je zpravidla nehrazená služba, ale pro žádné zubní ošetření obvykle není nezbytná. Smluvní zubař proto nesmí registraci ani ošetření podmínit tím, že si ji zaplatíte. A když zubní kámen výjimečně opravdu brání výkonu, jeho odstranění je zpravidla součástí hrazeného výkonu — účtovat ho smluvní zubař nesmí.",
+          "law": "§ 48 odst. 6 písm. a) a c) zákona č. 372/2011 Sb.; kazuistika 6",
+          "cesty": ["doklad", "stiznost", "kraj", "pojistovna"]
+        },
+        "v_nabidka": {
+          "typ": "ano",
+          "titulek": "Nabídnout ji smí.",
+          "text": "Hygienu jako dobrovolnou službu nabízet smí, pokud je v ceníku a cenu znáte předem. Odmítnutí nesmí mít vliv na registraci ani ošetření.",
+          "law": "§ 45 odst. 2 zákona č. 372/2011 Sb.; obecná část, kap. 3.1",
+          "cesty": []
+        },
+        "v_neodkladna": {
+          "typ": "ne",
+          "titulek": "Neodkladné ošetření nesmí podmínit ani nesmluvní zubař.",
+          "text": "Nesmluvní zubař nesmí podmínit zpoplatněnou hygienou poskytnutí neodkladné stomatologické péče. Neodkladnou péči navíc nesmluvní poskytovatel nesmí ani účtovat — hradí ji pojišťovna.",
+          "law": "§ 48 odst. 3 a odst. 6 písm. a) a c) zákona č. 372/2011 Sb.; kazuistika 6",
+          "cesty": ["doklad", "stiznost", "kraj", "pojistovna"]
+        },
+        "v_nesmluvni": {
+          "typ": "zalezi",
+          "titulek": "Smí, ale jen předem, přiměřeně a odborně zdůvodněně.",
+          "text": "U jiné než neodkladné péče může nesmluvní zubař hygienu požadovat jako podmínku. Musí vám to ale předem transparentně sdělit a požadavek musí být přiměřený a odborně odůvodnitelný.",
+          "law": "Kazuistika 6",
+          "cesty": ["doklad"]
+        },
+        "v_nevim": {
+          "typ": "info",
+          "titulek": "Nejdřív zjistěte, zda je zubař smluvní.",
+          "text": "Rozhoduje smlouva s vaší pojišťovnou. Seznam smluvních zubařů najdete na webu pojišťovny, orientačně i v Národním registru poskytovatelů (nrpzs.uzis.cz). Pojišťovna vám také musí pomoci najít smluvního zubaře, který vás přijme.",
+          "law": "Obecná část, kap. 1 a 4.2",
+          "cesty": ["pojistovna"]
+        }
+      },
+      "dopis": {
+        "predmet": "podmínění zubního ošetření / registrace placenou dentální hygienou",
+        "pravni": "Podle Metodického stanoviska Ministerstva zdravotnictví k platbám pacientů, kazuistika 6 – Platba za dentální hygienu (č. j. MZDR 25582/2026-7/DZP), dentální hygiena zpravidla není pro zdravotní služby v oboru zubní lékařství nezbytná; podmiňuje-li smluvní zubní lékař ošetření nebo registraci jejím absolvováním, jedná v rozporu s § 48 odst. 6 písm. c) zákona č. 372/2011 Sb."
+      }
+    },
+    {
+      "id": "prohlidka",
+      "kazuistika": 7,
+      "label": "Platba za druhou preventivní prohlídku u zubaře",
+      "hint": "Druhá prevence v témže roce.",
+      "start": "q1",
+      "uzly": {
+        "q1": {
+          "otazka": "Kdo jde na druhou prohlídku během 12 měsíců?",
+          "moznosti": [
+            { "label": "Dítě do 18 let", "verdikt": "v_dite" },
+            { "label": "Těhotná žena", "verdikt": "v_tehotna" },
+            { "label": "Dospělý — zubař ji doporučil kvůli zdravotnímu stavu", "verdikt": "v_odbornost" },
+            { "label": "Dospělý — chci ji sám(a), bez zdravotního důvodu", "verdikt": "v_prani" }
+          ]
+        }
+      },
+      "verdikty": {
+        "v_dite": {
+          "typ": "ne",
+          "titulek": "Děti mají nárok na dvě hrazené prohlídky.",
+          "text": "Nezletilí pojištěnci mají v jednom roce (12 měsících, ne nutně kalendářním roce) nárok na dvě hrazené preventivní prohlídky. Smluvní zubař za druhou platbu chtít nesmí.",
+          "law": "§ 29 odst. 2 písm. a) zákona č. 48/1997 Sb.; kazuistika 7",
+          "cesty": ["doklad", "stiznost", "kraj", "pojistovna"]
+        },
+        "v_tehotna": {
+          "typ": "ne",
+          "titulek": "Těhotné mají nárok na dvě hrazené prohlídky.",
+          "text": "Během těhotenství jsou hrazené dvě preventivní prohlídky. Smluvní zubař za druhou platbu chtít nesmí.",
+          "law": "§ 29 odst. 2 písm. b) zákona č. 48/1997 Sb.; kazuistika 7",
+          "cesty": ["doklad", "stiznost", "kraj", "pojistovna"]
+        },
+        "v_odbornost": {
+          "typ": "ne",
+          "titulek": "Když ji odůvodňuje váš stav, je hrazená.",
+          "text": "Dospělým se hradí jedna prevence ročně. Pokud ale registrující zubař vyhodnotí, že váš zdravotní stav druhou prohlídku odůvodňuje (například vysoká kazivost nebo chronické obtíže v dutině ústní), je i ta hrazená (kód 00905) a smluvní zubař za ni platbu chtít nesmí.",
+          "law": "§ 48 odst. 6 písm. a) zákona č. 372/2011 Sb.; kazuistika 7",
+          "cesty": ["doklad", "stiznost", "kraj", "pojistovna"]
+        },
+        "v_prani": {
+          "typ": "ano",
+          "titulek": "Tu si zaplatíte.",
+          "text": "Druhá prohlídka, kterou si dospělý vyžádá sám a kterou jeho zdravotní stav podle zubaře neodůvodňuje, hrazená není. Zubař za ni platbu chtít smí — podle ceníku a s cenou sdělenou předem.",
+          "law": "§ 15 odst. 19 zákona č. 48/1997 Sb.; kazuistika 7",
+          "cesty": []
+        }
+      },
+      "dopis": {
+        "predmet": "požadavek na platbu za druhou preventivní zubní prohlídku",
+        "pravni": "Podle Metodického stanoviska Ministerstva zdravotnictví k platbám pacientů, kazuistika 7 – Platba za druhou zubní preventivní prohlídku v roce (č. j. MZDR 25582/2026-8/DZP), mají nezletilí a těhotné nárok na dvě hrazené preventivní prohlídky a dospělým je druhá prohlídka hrazena, odůvodňuje-li ji podle registrujícího zubního lékaře zdravotní stav; požadování úhrady je v rozporu s § 48 odst. 6 písm. a) zákona č. 372/2011 Sb."
+      }
+    },
+    {
+      "id": "doprovod",
+      "kazuistika": 8,
+      "label": "Platba za doprovod (u vyšetření, porodu, v nemocnici)",
+      "hint": "Rodič u dítěte, partner u porodu, průvodce.",
+      "start": "q1",
+      "uzly": {
+        "q1": {
+          "otazka": "Za co po vás chtějí zaplatit?",
+          "moznosti": [
+            { "label": "Za samotnou přítomnost (vstupné, „poplatek za doprovod“)", "verdikt": "v_pritomnost" },
+            { "label": "Povinný nákup — dezinfekce, balíček, pomůcky", "verdikt": "v_nakup" },
+            { "label": "Jednorázový ochranný oděv, návleky, nutná instruktáž", "verdikt": "v_naklady" },
+            { "label": "Pobyt s lůžkem a stravou při hospitalizaci", "dalsi": "q2" }
+          ]
+        },
+        "q2": {
+          "otazka": "Je pacientovi méně než 6 let, nebo pobyt doprovodu (průvodce) schválila pojišťovna?",
+          "moznosti": [
+            { "label": "Ano", "verdikt": "v_pobyt_zdarma" },
+            { "label": "Ne", "verdikt": "v_pobyt_placeny" }
+          ]
+        }
+      },
+      "verdikty": {
+        "v_pritomnost": {
+          "typ": "ne",
+          "titulek": "Přítomnost doprovodu se zpoplatnit nesmí.",
+          "text": "Na přítomnost doprovodu (zákonného zástupce, opatrovníka, osoby blízké) při vyšetření, hospitalizaci či porodu má pacient zákonné právo. Požadovat za ni platbu zákon výslovně zakazuje.",
+          "law": "§ 28 odst. 3 písm. e) a odst. 8 zákona č. 372/2011 Sb.; kazuistika 8.1",
+          "cesty": ["doklad", "stiznost", "kraj", "pojistovna"]
+        },
+        "v_nakup": {
+          "typ": "ne",
+          "titulek": "Přítomnost nesmí být podmíněna nákupem.",
+          "text": "Poskytovatel nesmí podmínit přítomnost doprovodu platbou za jiné plnění, včetně běžných provozních výdajů jako dezinfekce. Doplňkové věci (cvičební pomůcky, deka navíc) smí nabídnout jen jako vaši volbu.",
+          "law": "§ 28 odst. 8 a § 48 odst. 6 písm. c) zákona č. 372/2011 Sb.; nález ÚS IV. ÚS 3035/15; kazuistika 8.1",
+          "cesty": ["doklad", "stiznost", "kraj", "pojistovna"]
+        },
+        "v_naklady": {
+          "typ": "zalezi",
+          "titulek": "Přiměřenou náhradu nákladů smí.",
+          "text": "Poskytovatel smí chtít přiměřenou náhradu nákladů, které přítomnost doprovodu objektivně vyžaduje nad rámec běžného provozu: jednorázový hygienický oděv, roušku, návleky, nezbytnou instruktáž. Cena musí odpovídat skutečně spotřebovanému materiálu — a nesmí sloužit k tomu, aby doprovod odradila.",
+          "law": "§ 28 odst. 8 věta třetí zákona č. 372/2011 Sb.; kazuistika 8.1",
+          "cesty": ["doklad", "sfu"]
+        },
+        "v_pobyt_zdarma": {
+          "typ": "ne",
+          "titulek": "Pobyt doprovodu je v tom případě zdarma.",
+          "text": "U pojištěnce mladšího 6 let a u staršího, u něhož pobyt průvodce schválila pojišťovna, musí poskytovatel umožnit pobyt doprovodu (lůžko a strava) bezplatně. Hradí ho pojišťovna.",
+          "law": "§ 25 odst. 1 zákona č. 48/1997 Sb.; § 48 odst. 6 písm. a) zákona č. 372/2011 Sb.; kazuistika 8.2",
+          "cesty": ["doklad", "stiznost", "kraj", "pojistovna"]
+        },
+        "v_pobyt_placeny": {
+          "typ": "zalezi",
+          "titulek": "Smí, ale přiměřeně — orientačně 572 Kč za den.",
+          "text": "U ostatních pacientů může nemocnice pobyt doprovodu zpoplatnit. U nezletilého nebo pacienta s ustanoveným zástupcem ho zpravidla musí umožnit, pokud nebrání závažné provozní či medicínské důvody. Za rámcově přiměřenou cenu ministerstvo považuje úhradu pojišťoven za den pobytu doprovodu: v akutní lůžkové péči 572 Kč (2026), v následné a dlouhodobé péči zhruba 400 až 1 200 Kč (2025).",
+          "law": "§ 47 odst. 1 písm. b) zákona č. 372/2011 Sb.; kazuistika 8.2",
+          "cesty": ["doklad", "sfu"]
+        }
+      },
+      "dopis": {
+        "predmet": "požadavek na platbu za přítomnost či pobyt doprovodu",
+        "pravni": "Podle § 28 odst. 8 zákona č. 372/2011 Sb. nesmí poskytovatel za přítomnost doprovodu požadovat platbu ani ji podmínit platbou za jiné plnění; pobyt doprovodu u pojištěnce mladšího 6 let a u pojištěnce, jemuž pobyt průvodce schválila zdravotní pojišťovna, je hrazen z veřejného zdravotního pojištění. Tento výklad potvrzuje Metodické stanovisko Ministerstva zdravotnictví k platbám pacientů, kazuistika 8 – Platba za přítomnost nebo pobyt doprovodu (č. j. MZDR 25582/2026-9/DZP)."
+      }
+    },
+    {
+      "id": "jine",
+      "kazuistika": 0,
+      "label": "Jiná platba u lékaře",
+      "hint": "Obecný test podle § 48 odst. 6: hrazená služba, ceník, podmiňování.",
+      "start": "q1",
+      "uzly": {
+        "q1": {
+          "otazka": "Má poskytovatel smlouvu s vaší zdravotní pojišťovnou?",
+          "pomoc": "smluvni",
+          "moznosti": [
+            { "label": "Ano, je smluvní", "dalsi": "q2" },
+            { "label": "Ne, je nesmluvní", "dalsi": "q5" },
+            { "label": "Nevím", "verdikt": "v_nevim" }
+          ]
+        },
+        "q2": {
+          "otazka": "Hradí tu konkrétní službu pojišťovna?",
+          "pomoc": "hrazeni",
+          "moznosti": [
+            { "label": "Ano, plně", "verdikt": "v_plne" },
+            { "label": "Částečně (např. zubní výplň, léky)", "verdikt": "v_castecne" },
+            { "label": "Ne (posudek, estetika…)", "dalsi": "q3" },
+            { "label": "Nevím", "verdikt": "v_nevim_hrazeni" }
+          ]
+        },
+        "q3": {
+          "otazka": "Byla služba v ceníku a řekli vám cenu předem?",
+          "moznosti": [
+            { "label": "Ano", "dalsi": "q4" },
+            { "label": "Ne", "verdikt": "v_cenik" }
+          ]
+        },
+        "q4": {
+          "otazka": "Dávají zaplacení této služby jako podmínku jiné (hrazené) péče?",
+          "moznosti": [
+            { "label": "Ano", "verdikt": "v_podminka" },
+            { "label": "Ne, je to moje volba", "verdikt": "v_ok" }
+          ]
+        },
+        "q5": {
+          "otazka": "Šlo o neodkladnou péči — stav ohrožující život či zdraví, náhlá intenzivní bolest?",
+          "moznosti": [
+            { "label": "Ano", "verdikt": "v_neodkladna" },
+            { "label": "Ne", "dalsi": "q6" }
+          ]
+        },
+        "q6": {
+          "otazka": "Byla služba v ceníku a řekli vám cenu předem?",
+          "moznosti": [
+            { "label": "Ano", "verdikt": "v_nesmluvni_ok" },
+            { "label": "Ne", "verdikt": "v_cenik" }
+          ]
+        }
+      },
+      "verdikty": {
+        "v_plne": {
+          "typ": "ne",
+          "titulek": "Za plně hrazenou službu smluvní lékař nesmí chtít nic.",
+          "text": "Zákaz platí už pro samotné požádání o platbu — i když ji nakonec nezaplatíte. A platí bez ohledu na to, jestli chtějí peníze po vás, po rodiči nebo po někom jiném. Je to přestupek s pokutou až 1 000 000 Kč.",
+          "law": "§ 48 odst. 6 písm. a) a § 117 odst. 2 písm. r) zákona č. 372/2011 Sb.; obecná část, kap. 1",
+          "cesty": ["doklad", "stiznost", "kraj", "pojistovna"]
+        },
+        "v_castecne": {
+          "typ": "zalezi",
+          "titulek": "Smí chtít jen doplatek nad úhradu pojišťovny.",
+          "text": "U částečně hrazené služby smí smluvní poskytovatel chtít jen rozdíl mezi cenou a úhradou pojišťovny — podle ceníku a s cenou sdělenou předem. Chtít platbu v rozsahu, který hradí pojišťovna, nesmí.",
+          "law": "§ 48 odst. 6 písm. a) a b) zákona č. 372/2011 Sb.; obecná část, kap. 1.1.2 a 2",
+          "cesty": ["doklad", "pojistovna", "sfu"]
+        },
+        "v_cenik": {
+          "typ": "ne",
+          "titulek": "Co není v ceníku, platit nemusíte.",
+          "text": "Ceník je pro poskytovatele závazný. Za službu, která v době, kdy vás informoval o ceně, nebyla v ceníku, platbu chtít nesmí — a vy ji smíte odmítnout. O ceně vás musí informovat výslovně a předem; ceník musí viset na přístupném místě, typicky v čekárně.",
+          "law": "§ 45 odst. 2 písm. a) a b), § 48 odst. 6 písm. b), § 117 odst. 2 písm. s) zákona č. 372/2011 Sb.; obecná část, kap. 2",
+          "cesty": ["doklad", "stiznost", "kraj", "sfu"]
+        },
+        "v_podminka": {
+          "typ": "ne",
+          "titulek": "Smluvní lékař nesmí péči podmínit nákupem.",
+          "text": "Smluvní poskytovatel nesmí podmínit přijetí do péče ani pokračování péče platbou za zboží či službu, která pro péči není nezbytná — ani když jde o nehrazenou službu. Výjimkou je jen to, co je pro ošetření skutečně nezbytné a pojišťovna to nehradí (například fixní rovnátka v ortodoncii nebo zubní náhrada od zubního technika).",
+          "law": "§ 48 odst. 6 písm. c) zákona č. 372/2011 Sb.; obecná část, kap. 3.1",
+          "cesty": ["doklad", "stiznost", "kraj", "pojistovna"]
+        },
+        "v_ok": {
+          "typ": "ano",
+          "titulek": "To je v pořádku.",
+          "text": "Nehrazenou službu smí poskytovatel účtovat, pokud je v ceníku, znáte cenu předem a souhlasili jste s ní. Za zaplacené služby vám musí vystavit účet.",
+          "law": "§ 45 odst. 2 a § 28 odst. 1 zákona č. 372/2011 Sb.; obecná část, kap. 1.1.3 a 2",
+          "cesty": ["doklad", "sfu"]
+        },
+        "v_neodkladna": {
+          "typ": "ne",
+          "titulek": "Neodkladnou péči nesmí účtovat ani nesmluvní poskytovatel.",
+          "text": "Neodkladná péče je hrazená z pojištění i u nesmluvního poskytovatele. Platbu za ni chtít nesmí a nesmí ji ani podmiňovat.",
+          "law": "§ 48 odst. 3 a odst. 6 písm. a) a c) zákona č. 372/2011 Sb.; obecná část, kap. 1.2 a 3.2",
+          "cesty": ["doklad", "stiznost", "kraj", "pojistovna"]
+        },
+        "v_nesmluvni_ok": {
+          "typ": "ano",
+          "titulek": "Nesmluvní poskytovatel smí účtovat.",
+          "text": "Pro vás je péče u nesmluvního poskytovatele nehrazená, takže za ni platit můžete — podle ceníku a s cenou sdělenou předem. Pokud se vám cena zdá přemrštěná vzhledem k cenovému výměru, je tu Specializovaný finanční úřad. A pojišťovna vám musí pomoci najít smluvního poskytovatele.",
+          "law": "Obecná část, kap. 1.2 a 2",
+          "cesty": ["doklad", "pojistovna", "sfu"]
+        },
+        "v_nevim": {
+          "typ": "info",
+          "titulek": "Nejdřív zjistěte, zda je poskytovatel smluvní.",
+          "text": "Rozhoduje smlouva s vaší pojišťovnou. Seznam smluvních poskytovatelů a jejich smlouvy zveřejňuje každá pojišťovna, orientačně je ukazuje i Národní registr poskytovatelů (nrpzs.uzis.cz).",
+          "law": "Obecná část, kap. 1",
+          "cesty": ["pojistovna"]
+        },
+        "v_nevim_hrazeni": {
+          "typ": "info",
+          "titulek": "Zeptejte se pojišťovny.",
+          "text": "Rozsah hrazené péče určuje zákon o veřejném zdravotním pojištění; co přesně má konkrétní lékař nasmlouváno, je v příloze č. 2 jeho smlouvy, kterou pojišťovna zveřejňuje. Obsah výkonů ukazuje databáze seznamu výkonů (szv.mzd.gov.cz). Nejrychlejší je zavolat na klientskou linku pojišťovny — a krajský úřad si v řízení vyjádření pojišťovny vyžádá sám.",
+          "law": "Obecná část, kap. 1.1.1",
+          "cesty": ["pojistovna"]
+        }
+      },
+      "dopis": {
+        "predmet": "požadavek na úhradu, který považuji za neoprávněný",
+        "pravni": "Podle § 48 odst. 6 zákona č. 372/2011 Sb., o zdravotních službách, nesmí poskytovatel požadovat úhradu v rozsahu hrazeném z veřejného zdravotního pojištění, úhradu za služby neuvedené v ceníku v době informování o ceně ani podmínit přijetí do péče či pokračování péče platbou nebo nákupem služeb, které nejsou nezbytné. Výklad podává Metodické stanovisko Ministerstva zdravotnictví k platbám pacientů, obecná část (č. j. MZDR 25582/2026-1/DZP)."
+      }
+    }
+  ],
+  "pomoc": {
+    "smluvni": "Smluvní = má smlouvu s vaší pojišťovnou. Seznam smluvních poskytovatelů zveřejňuje každá pojišťovna na webu, orientačně ho ukazuje Národní registr poskytovatelů (nrpzs.uzis.cz). Tatáž ordinace může být smluvní pro jednu pojišťovnu a nesmluvní pro jinou.",
+    "srovnatelne": "Ministerstvo: u plánované péče je srovnatelný termín ten, který se od placeného liší v řádu hodin či jednotek dnů — ne placené termíny za pár dní a bezplatné za týdny či měsíce.",
+    "hrazeni": "Většina péče je hrazená plně. Částečně hlavně zubní péče, léky a pomůcky (doplatek). Nehrazené jsou typicky služby na vlastní žádost bez zdravotního účelu: posudky (řidičák, zbrojní průkaz), estetická medicína."
+  },
+  "kraje": [
+    { "kraj": "Hlavní město Praha", "urad": "Magistrát hl. m. Prahy", "web": "https://www.praha.eu" },
+    { "kraj": "Středočeský", "urad": "Krajský úřad Středočeského kraje", "web": "https://www.kr-stredocesky.cz" },
+    { "kraj": "Jihočeský", "urad": "Krajský úřad Jihočeského kraje", "web": "https://www.kraj-jihocesky.cz" },
+    { "kraj": "Plzeňský", "urad": "Krajský úřad Plzeňského kraje", "web": "https://www.plzensky-kraj.cz" },
+    { "kraj": "Karlovarský", "urad": "Krajský úřad Karlovarského kraje", "web": "https://www.kr-karlovarsky.cz" },
+    { "kraj": "Ústecký", "urad": "Krajský úřad Ústeckého kraje", "web": "https://www.kr-ustecky.cz" },
+    { "kraj": "Liberecký", "urad": "Krajský úřad Libereckého kraje", "web": "https://www.kraj-lbc.cz" },
+    { "kraj": "Královéhradecký", "urad": "Krajský úřad Královéhradeckého kraje", "web": "https://www.khk.cz" },
+    { "kraj": "Pardubický", "urad": "Krajský úřad Pardubického kraje", "web": "https://www.pardubickykraj.cz" },
+    { "kraj": "Vysočina", "urad": "Krajský úřad Kraje Vysočina", "web": "https://www.kr-vysocina.cz" },
+    { "kraj": "Jihomoravský", "urad": "Krajský úřad Jihomoravského kraje", "web": "https://www.jmk.cz" },
+    { "kraj": "Olomoucký", "urad": "Krajský úřad Olomouckého kraje", "web": "https://www.olkraj.cz" },
+    { "kraj": "Zlínský", "urad": "Krajský úřad Zlínského kraje", "web": "https://zlinskykraj.cz" },
+    { "kraj": "Moravskoslezský", "urad": "Krajský úřad Moravskoslezského kraje", "web": "https://www.msk.cz" }
+  ],
+  "pojistovny": [
+    { "kod": "111", "nazev": "Všeobecná zdravotní pojišťovna ČR", "web": "https://www.vzp.cz" },
+    { "kod": "201", "nazev": "Vojenská zdravotní pojišťovna ČR", "web": "https://www.vozp.cz" },
+    { "kod": "205", "nazev": "Česká průmyslová zdravotní pojišťovna", "web": "https://www.cpzp.cz" },
+    { "kod": "207", "nazev": "Oborová zdravotní pojišťovna", "web": "https://www.ozp.cz" },
+    { "kod": "209", "nazev": "Zaměstnanecká pojišťovna Škoda", "web": "https://www.zpskoda.cz" },
+    { "kod": "211", "nazev": "Zdravotní pojišťovna ministerstva vnitra ČR", "web": "https://www.zpmvcr.cz" },
+    { "kod": "213", "nazev": "RBP, zdravotní pojišťovna", "web": "https://www.rbp213.cz" }
+  ]
+}

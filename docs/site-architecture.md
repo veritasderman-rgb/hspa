@@ -263,6 +263,23 @@ kapacit dlouhodobé péče do roku 2035).
 - **Vstupy**: nav skupina Strategie („Plní se Zdraví 2035?“), zvýrazněný odkaz
   z detailu strategie (`plneni_url` v strategies.json), related-tools, sitemap.
 
+### `poplatky.html` — Poplatky u lékaře
+
+| | |
+|---|---|
+| **Účel** | Sekce k metodickému stanovisku MZ k platbám pacientů (8. 10. 2026, § 48 odst. 6 zákona o zdravotních službách). Tři zákazy, mapa smí/nesmí (smluvní × nesmluvní × hrazenost), interaktivní kontrola poplatku (10 rozhodovacích stromů podle kazuistik 1–8 + obecný test), modelové příklady ano/ne, průvodce stížností s časovou osou lhůt (§ 93–94) a kontakty, generátor stížnosti/podnětu (5 typů podání), plné znění všech 9 PDF převedené do textu s poznámkami pod čarou, ohlasy v médiích, poděkování zpracovatelce. |
+| **Cílový uživatel** | Pacient, kterému lékař účtuje sporný poplatek; novinář; krajský úřad. |
+| **Fetchuje** | `data/poplatky.json` (stromy, verdikty, cesty, kontakty) |
+| **Logika** | `src/poplatky-engine.js` — čisté funkce `walk`, `validateData`, `buildLetter` (bez DOM), testy `tests/poplatky.test.js`. |
+| **JS moduly** | `src/poplatky.js` (render, generátor, otevírání `<details>` plného znění podle kotvy `#zneni-k5`, `#zneni-ob-fn-27`) → `poplatky-engine.js`, `page-shared` |
+| **CSS namespace** | `.pop-*` |
+
+**Co dělá jinak**
+
+- **Plné znění je statické HTML** (indexovatelné), převzaté doslova z PDF; opravené překlepy originálu jsou vyjmenované v poznámce pod přepisem. Při aktualizaci stanoviska MZ (kazuistika 2 platí do 31. 12. 2026) je potřeba přepis i stromy v `data/poplatky.json` srovnat.
+- **Nic se neodesílá** — generátor skládá text v prohlížeči, bez localStorage.
+- **Vstupy**: nav skupina „Co s tím můžu dělat já“, `SITE_TOOLS` (Prozkoumejte dál), odkaz z článku `clanek-platby-pacientu-metodicke-stanovisko-mz-2026.html`, sitemap.
+
 ### `kalkulacka-pece-2035.html` — Kdo se o nás postará v roce 2035?
 
 | | |

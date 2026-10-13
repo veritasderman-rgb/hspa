@@ -40,6 +40,7 @@ const PAGES = [
   // Reprezentant 75 generovaných okresních stránek (stejná šablona).
   'pohotovost-klatovy.html',
   'kalkulacka-pece-2035.html',
+  'poplatky.html',
   'zdravi-2035.html',
   'plneni-amr.html',
   'plneni-zdravi-2030.html',

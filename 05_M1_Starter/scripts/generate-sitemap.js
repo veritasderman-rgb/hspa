@@ -76,6 +76,7 @@ export const STATIC_PAGES = [
   { loc: '/prevence.html', priority: '0.8', changefreq: 'weekly' },
   { loc: '/vedra.html', priority: '0.7', changefreq: 'weekly' },
   { loc: '/pohotovosti.html', priority: '0.9', changefreq: 'weekly' },
+  { loc: '/poplatky.html', priority: '0.8', changefreq: 'monthly' },
   { loc: '/strategie.html', priority: '0.7', changefreq: 'weekly' },
   { loc: '/zdravi-2035.html', priority: '0.8', changefreq: 'weekly' },
   { loc: '/plneni-onko-2030.html', priority: '0.7', changefreq: 'monthly' },
