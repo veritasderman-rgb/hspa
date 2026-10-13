@@ -57,6 +57,10 @@ Každý beat smí mít `"voice": "social/reels/voice/<slug>/NN.mp3"` — namluve
 s řečí (když hlas říká mnohem víc než bublina, text se jen posune) a pusa se hýbe
 podle hlasitosti. Validátor ověří, že řeč + nástup + 0,35 s se vejde do `dur`.
 
+Vedle mp3 leží `timing.json` (začátek/konec řeči, délka, hash souboru) — CI runner
+nemá ffmpeg a validace jede z něj. Zapisuje ho každý render; po výměně nahrávky
+`node social/reels/render.js <slug> --voice-timing` a commitnout s mp3.
+
 ### `intro` — háček (první beat)
 Kompík vyskočí zespodu (boing + pop), velký uprostřed, bublina nad ním.
 ```json

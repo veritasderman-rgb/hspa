@@ -7,10 +7,16 @@
 //
 // loadVoice() dekóduje soubor přes ffmpeg na mono float PCM a najde začátek a konec
 // řeči; alignSchedule() natáhne rozvrh slabik (bublina, titulky, pusa) na skutečnou řeč.
+//
+// Časování řeči je navíc zapsané v `voice/<slug>/timing.json` (vedle mp3, v gitu).
+// Kde ffmpeg není (CI runner), validace a kompilace čtou časy odtud; hash souboru
+// hlídá, že manifest patří k dnešní nahrávce. Přegeneruje ho každý render, ručně
+// `node social/reels/render.js <slug> --voice-timing`.
 
 import { spawnSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
-import { resolve, dirname } from 'node:path';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { resolve, dirname, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { SR } from './audio.js';
 
@@ -19,12 +25,39 @@ const cache = new Map();
 
 export const voicePath = rel => resolve(ROOT, rel);
 
-/** { pcm: Float32Array, start, end (s, řeč), dur (s, celý soubor) } — nebo null, když soubor chybí. */
+let ffmpegOk;
+export function hasFfmpeg() {
+  // REELS_NO_FFMPEG=1 simuluje runner bez ffmpeg (test)
+  if (ffmpegOk === undefined) ffmpegOk = process.env.REELS_NO_FFMPEG !== '1' && spawnSync('ffmpeg', ['-version']).status === 0;
+  return ffmpegOk;
+}
+
+export const timingPath = rel => resolve(dirname(voicePath(rel)), 'timing.json');
+const timingKey = (rel, tempo) => `${basename(rel)}@${tempo}`;
+const fileHash = path => createHash('sha256').update(readFileSync(path)).digest('hex').slice(0, 16);
+
+function readTiming(rel) {
+  const p = timingPath(rel);
+  return existsSync(p) ? JSON.parse(readFileSync(p, 'utf8')) : {};
+}
+
+/**
+ * { pcm: Float32Array | null, start, end (s, řeč), dur (s, celý soubor) } — nebo null, když soubor chybí.
+ * Bez ffmpeg vrací časy z timing.json a `pcm: null` (stačí na validaci a kompilaci, ne na render).
+ */
 export function loadVoice(rel, tempo = 1) {
   const key = `${rel}@${tempo}`;
   if (cache.has(key)) return cache.get(key);
   const path = voicePath(rel);
   if (!existsSync(path)) return null;
+  if (!hasFfmpeg()) {
+    const e = readTiming(rel)[timingKey(rel, tempo)];
+    if (!e) throw new Error(`${rel}: chybí časování v ${basename(dirname(path))}/timing.json a ffmpeg není k dispozici (spusť render.js <slug> --voice-timing)`);
+    if (e.sha256 !== fileHash(path)) throw new Error(`${rel}: timing.json neodpovídá nahrávce (soubor se změnil — spusť render.js <slug> --voice-timing)`);
+    const info = { pcm: null, start: e.start, end: e.end, dur: e.dur };
+    cache.set(key, info);
+    return info;
+  }
   // tempo ≠ 1: zrychlení bez změny výšky hlasu (ffmpeg atempo)
   const af = tempo !== 1 ? ['-af', `atempo=${tempo}`] : [];
   const r = spawnSync('ffmpeg', ['-v', 'error', '-i', path, ...af, '-f', 'f32le', '-ac', '1', '-ar', String(SR), '-'], { maxBuffer: 64 * 1024 * 1024 });
@@ -41,6 +74,25 @@ export function loadVoice(rel, tempo = 1) {
   const info = { pcm, start: first < 0 ? 0 : first / SR, end: last < 0 ? pcm.length / SR : last / SR, dur: pcm.length / SR };
   cache.set(key, info);
   return info;
+}
+
+/** Zapíše timing.json pro všechny hlasové beaty scénáře (potřebuje ffmpeg). Vrátí cesty zapsaných souborů. */
+export function writeVoiceTiming(script) {
+  const tempo = script.voice_tempo || 1;
+  const byFile = new Map();
+  for (const b of script.beats) {
+    if (!b.voice) continue;
+    const v = loadVoice(b.voice, tempo);
+    if (!v) continue;
+    const p = timingPath(b.voice);
+    if (!byFile.has(p)) byFile.set(p, readTiming(b.voice));
+    byFile.get(p)[timingKey(b.voice, tempo)] = { sha256: fileHash(voicePath(b.voice)), start: v.start, end: v.end, dur: v.dur };
+  }
+  for (const [p, m] of byFile) {
+    const sorted = Object.fromEntries(Object.keys(m).sort().map(k => [k, m[k]]));
+    writeFileSync(p, JSON.stringify(sorted, null, 2) + '\n');
+  }
+  return [...byFile.keys()];
 }
 
 /** Natáhne rozvrh slabik a slov na interval skutečné řeči [speakAt, speakAt + délka řeči]. */
@@ -63,6 +115,7 @@ export function alignSchedule(sched, speakAt, v) {
 export const voiceStart = (speakAt, v) => speakAt - v.start;
 
 export function mixVoice(buf, t0, v, gain = 0.9) {
+  if (!v.pcm) return; // bez ffmpeg (časy z timing.json) jen ticho — render ffmpeg potřebuje stejně
   const i0 = Math.round(t0 * SR);
   for (let i = 0; i < v.pcm.length; i++) {
     const j = i0 + i;
@@ -84,7 +137,7 @@ export const hasVoice = tl => tl.beats.some(b => b.voice);
 
 /** Otevření pusy podle skutečné hlasitosti hlasu v čase t (0..1), mimo řeč 0. */
 export function voiceMouth(b, t) {
-  if (!b?.v) return 0;
+  if (!b?.v?.pcm) return voiceSpeaking(b, t) ? 0.5 : 0;
   const ts = t - b.voiceAt;
   if (ts < b.v.start || ts > b.v.end) return 0;
   const i0 = Math.max(0, Math.round((ts - 0.02) * SR)), i1 = Math.min(b.v.pcm.length, Math.round((ts + 0.02) * SR));

@@ -8,6 +8,7 @@
 //   --all              s --check: validuje všechny scénáře v social/reels/scripts/
 //   --sheet            kontaktní arch 4×3 klíčových snímků → <out>/<slug>-arch.png (náhled pro kontrolu)
 //   --frame <s>        jeden snímek v čase s (sekundy) → <out>/<slug>-<s>s.png
+//   --voice-timing     jen zapíše voice/<slug>/timing.json (časy řeči pro validaci bez ffmpeg; dělá i každý render)
 //   --poster-time      vypíše čas plakátu v ms (= thumbnailOffset pro Buffer)
 //   --out <adresář>    výstupní adresář (video: assets/social/reels, náhledy: social/reels/out — gitignored)
 //   --fps <n>          snímková frekvence (výchozí 30)
@@ -24,6 +25,7 @@ import { Resvg } from '@resvg/resvg-js';
 import { compile, frameSvg, audioTrack, validate, dims } from './lib/styles.js';
 import { writeWav } from './lib/audio.js';
 import { RESVG_FONT } from './lib/text.js';
+import { writeVoiceTiming } from './lib/voice.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SCRIPTS = resolve(ROOT, 'social', 'reels', 'scripts');
@@ -124,6 +126,10 @@ async function main() {
   if (errors.length) { errors.forEach(e => console.error(`✗ ${e}`)); process.exit(1); }
   console.log(`✓ scénář ${slug}: ${script.beats.length} beatů, ${duration.toFixed(1)} s`);
   if (has('--check')) return;
+  if (script.beats.some(b => b.voice)) {
+    for (const p of writeVoiceTiming(script)) console.log(`✓ časování hlasu → ${p}`);
+    if (has('--voice-timing')) return;
+  }
 
   const preview = has('--sheet') || has('--frame');
   const out = resolve(arg('--out', preview ? resolve(ROOT, 'social', 'reels', 'out') : resolve(ROOT, 'assets', 'social', 'reels')));
