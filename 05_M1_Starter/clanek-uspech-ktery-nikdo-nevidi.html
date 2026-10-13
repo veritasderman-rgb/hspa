@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-10-13
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-10-13
+    creation_phase: zadani-uzivatele
+    primary_sources_count: 16
+    visual_elements_count: 3
+    notes: "Esej na zadání vlastníka z 13. 10. 2026: paradox prevence a reforma hygienické služby, styl dlouhé
+      vyprávěcí analýzy (scéna → zdánlivá odpověď → obrat → komplikace → česká reforma → návrat ke scéně).
+      HISTORICKÁ SCÉNA (primární zdroj): Snow J. On the Mode of Communication of Cholera, 2. vyd., London: John
+      Churchill, 1855 — digitalizace Wellcome Library na archive.org (identifikátor b28985266), text čten 13. 10. 2026.
+      Doslovně ověřeno: „upwards of five hundred fatal attacks of cholera in ten days“ v okruhu 250 yardů; útěk více
+      než tří čtvrtin obyvatel nejpostiženějších ulic do šesti dnů; schůzka s Board of Guardians farnosti St James
+      ve čtvrtek 7. 9. večer, klika odmontována následující den; denní počty onemocnění z tabulky (31. 8.: 56,
+      1. 9.: 143, 2. 9.: 116, 3. 9.: 54, 4. 9.: 46, 5. 9.: 36, 6. 9.: 20, 7. 9.: 28, 8. 9.: 12, 9. 9.: 11, 10. 9.: 5,
+      11. 9.: 5, 12. 9.: 1 — hodnoty 1.–3. a 8.–12. 9. jsou v Snowově souvislém textu, 31. 8. a 4.–7. 9. z OCR tabulky,
+      shodují se se standardně citovanou tabulkou); věta „the attacks had so far diminished before the use of the
+      water was stopped, that it is impossible to decide…“. Sekundárně PubMed: McLeod 2000 (PMID 10714917 — Snowova
+      data ukazují pokles před odstraněním kliky), Brody et al. 2000 (PMID 10892779, bez abstraktu, jen kontext).
+      RECENZOVANÁ LITERATURA (PubMed 13. 10. 2026): Fineberg 2013 (PMID 23821092), Jacques & Noël 2022 (PMID 35985243),
+      Martin, Lomas, Claxton 2020 (PMID 33039987), Colombo et al. 2026 (PMID 42753783, Lancet Public Health, Review,
+      online 17. 9. 2026; ročník a strany v PubMed zatím nejsou — článek EXISTUJE a tvrzení zadání odpovídá abstraktu),
+      Masters et al. 2017 (PMID 28356325), Rose 1981 BMJ (PMID 6786649, abstrakt ani plný text v PMC nedostupný —
+      paradox prevence proto JEN parafrázován, bez uvozovek) a Rose 1985 IJE (PMID 3872850, abstrakt: high-risk vs.
+      populační přístup). Cohen/Neumann/Weinstein 2008 NEJM (PMID 18272889) zvažován, VYNECHÁN — bez abstraktu,
+      čísla nelze ověřit.
+      ČESKÁ DATA: (a) podíl HC.6 na běžných výdajích — OECD SDMX DSD_SHA@DF_SHA verze 1.1, klíč
+      CZE.A..PT_EXP_HLTH._T..HC6.._T..._Z, staženo 13. 10. 2026: 2017 3,36; 2018 3,189; 2019 3,185; 2020 3,923;
+      2021 8,412; 2022 5,206; 2023 2,736; 2024 3,069. Průměry OECD = VÝPOČET REDAKCE, nevážený průměr 38 členů OECD
+      s daty (2019: 2,64, n=35; 2020: 3,56, n=35; 2021: 5,67, n=35; 2022: 4,58, n=35; 2023: 3,27, n=33; 2024: 3,09,
+      n=31). Indikátor vydaje_prevence_pct v kontraktu: origin seed, verification_status verified (2026-06-10),
+      známá výjimka v tests/verification-origin-consistency.test.js; jeho hodnota 2,7 % (2023) a benchmark 3,2 %
+      se s OECD daty shodují. POZOR pro redakci: ingest/mapping/oecd_sdmx2_codes.json (_blocked) uvádí, že živá hodnota
+      2024 = 3,069 by měnila tezi „Česko pod průměrem“ — tento text proto výslovně říká, že Česko je v podílu zhruba
+      u průměru OECD a že před covidem bylo nad ním. (b) data/regions.json vydaje_prevence_pct_kraje — dataset NEMÁ
+      zdroj, origin ani stav ověření → NEPOUŽIT. (c) rozpočet KHS 4,36 mld. Kč (2021) → 3,2 mld. Kč (2025), −27 %
+      nominálně — převzato z článku clanek-institut-verejneho-zdravi (zápis III. jednání pracovní skupiny 30. 3. 2026,
+      interní čísla, ne auditované závěrky; v textu takto označeno); věta zápisu X. o roce 2025 „s viditelným
+      podfinancováním hygienických služeb“ tamtéž.
+      REFORMA: výhradně z clanek-institut-verejneho-zdravi (harmonogram z přílohy zápisu IX: vnitřní PŘ 30. 9.–14. 10.
+      2026, meziresort 12. 4.–7. 5. 2027, vládě 30. 8. 2027; zápis IV. „vyňata z MZ a podřízena přímo vládě“,
+      „usnadnit vyjednávání o financích“; 17 institucí, cca 4 200 zaměstnanců) a z clanek-obcan-v-siti-ochrana-
+      verejneho-zdravi-2026 (Občan v síti 9/2026: citace M. Fošuma a R. Maďara, doslovné podle PDF).
+      ČESKÝ PŘÍKLAD ZÁSAHU KHS: tisková zpráva KHS Moravskoslezského kraje „Záškrt“ z 22. 5. 2026 (PDF
+      khsova.cz/docs/01_aktuality/files/Zaskrt_22052026.pdf staženo a přečteno 13. 10. 2026): citace „Hygienická
+      služba zareagovala obratem, dotrasovala všechny kontakty…“, 9 případů v kraji k 21. 5. 2026 včetně jednoho úmrtí,
+      2000–2022 žádný případ. Případ dítěte popsán jen v rozsahu tiskové zprávy, bez dalších osobních údajů.
+      VĚDOMĚ NEUVEDENO: jakýkoli odhad počtu případů, kterým zásah KHS MS zabránil (neexistuje); reálný (inflací
+      očištěný) pokles rozpočtu KHS (výpočet redakce v původním článku není v textu uveden číslem); čísla z Cohen 2008;
+      krajské výdaje na prevenci. Hodnocení konkrétních politiků žádné.
+      CHYBÍ PŘED PUBLIKACÍ: cover (node ingest/scripts/generate-article-cover.js uspech-ktery-nikdo-nevidi), SEO injekce,
+      záznam v data/articles.json a případně claims.json — soubor vznikl samostatně, sdílené soubory needitovány.
+      published:false, audit-status draft."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Úspěch, který nikdo nevidí. Proč stát škrtá nejdřív to, co funguje — a co to znamená pro reformu hygienické služby · HSPA Monitor</title>
+<meta name="description" content="V září 1854 dal John Snow odmontovat kliku z pumpy na Broad Street. Nejslavnější zásah v dějinách veřejného zdraví má jednu potíž: ani Snow nedokázal říct, kolik životů zachránil, protože epidemie už slábla. Úspěch prevence vypadá jako „nic se nestalo“, a proto je politicky neviditelný a v úsporách se škrtá první. Výzkum to dokládá napříč OECD. Česká reforma hygienické služby teď stojí před otázkou, jak měřit a financovat úřad, jehož úspěch nikdo nevidí.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Úspěch, který nikdo nevidí. Proč stát škrtá nejdřív to, co funguje — a co to znamená pro reformu hygienické služby">
+<meta property="og:description" content="Pumpa na Broad Street, ohnisko záškrtu na Ostravsku a rozpočet krajských hygienických stanic: proč se prevence slaví v projevech a škrtá v rozpočtech — a jak by měl budoucí Národní institut veřejného zdraví ukázat, že se nic nestalo.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-10-13">
+<meta property="article:section" content="Veřejné zdraví">
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+<main id="content">
+  <article class="article-page">
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Veřejné zdraví</span>
+        <span class="article-tag article-tag-muted">paradox prevence · hygienická služba · Národní institut veřejného zdraví · výdaje na prevenci</span>
+      </div>
+      <h1 class="article-title">Úspěch, který nikdo nevidí. Proč stát škrtá nejdřív to, co funguje — a co to znamená pro reformu hygienické služby</h1>
+      <p class="article-deck">
+        V září 1854 dal John Snow odmontovat kliku z pumpy na Broad Street. Nejslavnější zásah v dějinách veřejného zdraví má jednu potíž: ani Snow nedokázal říct, kolik životů zachránil, protože epidemie už slábla. Úspěch prevence vypadá jako „nic se nestalo“, a proto je politicky neviditelný a v úsporách se škrtá první. Výzkum to dokládá napříč OECD. Česká reforma hygienické služby teď stojí před otázkou, jak měřit a financovat úřad, jehož úspěch nikdo nevidí.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">13. října 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">12 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+    <div class="article-body">
+      <p class="article-lead">
+        V noci z 31. srpna na 1. září 1854 začali v londýnské čtvrti Soho umírat lidé. Rychle a ve velkém. Lékař John Snow později spočítal, že v okruhu dvou set padesáti yardů od místa, kde se Cambridge Street potkává s Broad Street, zemřelo na choleru za deset dní přes pět set lidí. Za necelý týden z nejpostiženějších ulic utekly víc než tři čtvrtiny obyvatel.
+      </p>
+      <p>
+        Snow měl podezření, které tehdy zdaleka nesdílel každý: že cholera se šíří vodou. Obcházel domy, ptal se, odkud kdo bral vodu, a stopy ho vedly k jediné veřejné pumpě na Broad Street. Ve čtvrtek 7. září večer přednesl svá zjištění správní radě farnosti St James. Jak sám napsal, „v důsledku toho, co jsem řekl, byla následujícího dne z pumpy odstraněna klika“.
+      </p>
+      <p>
+        Tak zní příběh, který se učí na každé lékařské fakultě. Muž s mapou, pumpa, klika, konec epidemie. Zakladatelský mýtus epidemiologie.
+      </p>
+      <p>
+        Jenže když si otevřete Snowovu vlastní knihu, najdete v ní tabulku, která ten příběh komplikuje. Nejvíc lidí onemocnělo 1. září, celkem 143. Pak počty klesaly den za dnem. V den, kdy klika zmizela, onemocnělo dvanáct lidí. A Snow, poctivý vědec, k tomu připsal větu, která se do učebnic dostává méně často: nových případů ubylo ještě předtím, než se přestala pít voda z pumpy, natolik, že „nelze rozhodnout“, zda studna jed ještě obsahovala.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avSnowH">
+        <figcaption class="av-figure-h" id="avSnowH">Nová onemocnění cholerou kolem Broad Street po dnech (1854)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="143">
+          <li class="av-bar-row" data-value="56" data-label="31. srpna" data-note="propuknutí v noci na 1. září"></li>
+          <li class="av-bar-row av-bar-row-bad" data-value="143" data-label="1. září" data-note="vrchol epidemie"></li>
+          <li class="av-bar-row" data-value="116" data-label="2. září"></li>
+          <li class="av-bar-row" data-value="54" data-label="3. září"></li>
+          <li class="av-bar-row" data-value="46" data-label="4. září"></li>
+          <li class="av-bar-row" data-value="36" data-label="5. září"></li>
+          <li class="av-bar-row" data-value="20" data-label="6. září"></li>
+          <li class="av-bar-row" data-value="28" data-label="7. září" data-note="večer Snow přesvědčuje farní radu"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="12" data-label="8. září" data-note="z pumpy odstraněna klika"></li>
+          <li class="av-bar-row" data-value="11" data-label="9. září"></li>
+          <li class="av-bar-row" data-value="5" data-label="10. září"></li>
+          <li class="av-bar-row" data-value="5" data-label="11. září"></li>
+          <li class="av-bar-row" data-value="1" data-label="12. září"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> J. Snow, <em>On the Mode of Communication of Cholera</em>, 2. vydání, Londýn 1855, tabulka onemocnění v okolí Golden Square (digitalizace Wellcome Library). Počty jsou nová onemocnění podle dne začátku nemoci, ne úmrtí. Snow sám upozorňuje, že pokles před 8. zářím zčásti způsobil útěk obyvatel.</p>
+      </figure>
+
+      <p>
+        Historici to dnes říkají otevřeně: Snowova data spojitost mezi odmontovanou klikou a koncem epidemie nepodporují, epidemie slábla už předtím. Klika možná zabránila druhé vlně. Možná ne. Nikdo se to nikdy nedozví, protože druhá vlna, pokud měla přijít, nepřišla. Nejslavnější zásah v dějinách veřejného zdraví tak nese stejné znamení jako všechny ostatní: jeho úspěch, pokud nastal, vypadá přesně jako nic.
+      </p>
+      <p>
+        O tomhle je tento text. O tom, proč je „nic se nestalo“ to nejhorší, co můžete napsat do výroční zprávy, když chcete víc peněz. A proč na tom záleží právě teď, kdy Česko přestavuje svou hygienickou službu.
+      </p>
+
+      <h2>Zdánlivě jasná odpověď</h2>
+      <p>
+        Na první pohled tu žádné dilema není. Prevence je přece levnější než léčba. Kdo by platil za drahou nemocniční péči, když může nemoci předejít?
+      </p>
+      <p>
+        Data tomu dávají za pravdu nečekaně silně. Systematický přehled <a href="https://doi.org/10.1136/jech-2016-208141" target="_blank" rel="noopener">Masters a kolegů (2017) v <em>Journal of Epidemiology and Community Health</em> ↗</a> prošel 52 studií z bohatých zemí, které počítaly návratnost intervencí veřejného zdraví. Medián návratnosti: 14,3 ku 1, tedy zhruba čtrnáct jednotek zpět za každou vloženou. U celostátních opatření 27,2, u místních 4,1. Na tutéž studii se letos v září odvolala ředitelka české kanceláře WHO, když se k reformě vyjadřovala <a href="clanek-obcan-v-siti-ochrana-verejneho-zdravi-2026.html">v měsíčníku Občan v síti</a>.
+      </p>
+      <aside class="av-aside">
+        <figure class="av-figure">
+          <figcaption class="av-figure-h">Kolik stojí jeden rok života ve zdraví navíc (Anglie, 2013/14)</figcaption>
+          <ol class="av-bar-compare av-bar-compare-list" data-max="13500" data-unit=" £">
+            <li class="av-bar-row av-bar-row-good" data-value="3800" data-label="rozpočet veřejného zdraví obcí" data-display="~3 800 £"></li>
+            <li class="av-bar-row" data-value="13500" data-label="rozpočet NHS na léčbu" data-display="~13 500 £"></li>
+          </ol>
+          <p class="av-figure-note"><strong>Zdroj:</strong> Martin, Lomas, Claxton, <em>BMJ Open</em> 2020. Náklad na jeden QALY; obě hodnoty jsou pod prahem 20 000–30 000 £, kterým NICE posuzuje nové léčby.</p>
+        </figure>
+      </aside>
+      <p>
+        Ještě názornější je anglická práce ekonomů z Yorku. <a href="https://doi.org/10.1136/bmjopen-2019-036411" target="_blank" rel="noopener">Martin, Lomas a Claxton (2020, <em>BMJ Open</em>) ↗</a> porovnali, kolik zdraví koupí libra utracená místními úřady za veřejné zdraví a libra utracená nemocnicemi a ambulancemi NHS. Jeden rok života v plném zdraví navíc (QALY) stál z rozpočtu veřejného zdraví zhruba 3 800 liber, z rozpočtu NHS zhruba 13 500. Miliarda navíc do veřejného zdraví by podle jejich nejopatrnějšího odhadu přinesla přes 206 tisíc QALY, stejná miliarda do léčby přes 67 tisíc.
+      </p>
+      <p>
+        Kdyby šlo jen o aritmetiku, dávno bychom přelévali peníze z léčby do prevence. Neděláme to. A není to omyl jedné vlády nebo jedné země.
+      </p>
+      <div class="av-aside-clear"></div>
+
+      <h2>Proč to nefunguje: tichá politika</h2>
+      <p>
+        V roce 2013 napsal Harvey Fineberg, tehdy předseda amerického Institutu medicíny, do časopisu <em>JAMA</em> esej s názvem, který by mohl být mottem celého oboru: <a href="https://doi.org/10.1001/jama.2013.7518" target="_blank" rel="noopener">„Paradox prevence nemocí: oslavovaná v principu, odmítaná v praxi“ ↗</a>. Vyjmenoval v něm, proč prevence prohrává. Její úspěch je neviditelný a postrádá drama. Často vyžaduje trvalou změnu chování. Přínos přichází se zpožděním, někdy dlouhým. Statistické životy nemají citovou váhu. A přínos často nedopadne na toho, kdo platí.
+      </p>
+      <p>
+        Statistický život je ten klíčový pojem. Když se zasypaný horník ozve zpod trosek, země zastaví dech a záchranná akce nebude hledět na cenu. Když opatření sníží úmrtnost o několik desetin promile, zachrání možná stejný počet lidí. Jenže žádného z nich nikdy nepoznáme. Nemají jméno, tvář ani rodinu před kamerou. Nevědí o tom ani oni sami.
+      </p>
+      <p>
+        Dva výzkumníci z Montrealské univerzity, <a href="https://doi.org/10.1016/j.socscimed.2022.115272" target="_blank" rel="noopener">Olivier Jacques a Alain Noël (2022, <em>Social Science &amp; Medicine</em>) ↗</a>, z toho udělali testovatelnou teorii. Prevence je podle nich „tichá“ politika: dnes stojí vzácné peníze a přínosy jsou rozptýlené a přijdou za roky. Nestojí za ní žádná zájmová skupina ani veřejné mínění. Na datech z 25 zemí OECD za léta 1970–2018 pak ukázali dvě věci. Když vlády konsolidují rozpočty, výdaje na prevenci klesají, absolutně i v poměru k léčbě. A levicové vlády do veřejného zdraví neinvestují víc než pravicové, protože se na tom nedají získat hlasy. K tomu jedno zjištění, které se Česka týká přímo: země s národní zdravotní službou placenou z daní drží výdaje na prevenci výš než země se systémem zdravotního pojištění. Česko patří k té druhé skupině.
+      </p>
+      <p>
+        Nejčerstvější potvrzení přišlo letos v září. Pět autorů ze zdravotní divize OECD, první autorkou je Francesca Colombo, v přehledu pro <a href="https://doi.org/10.1016/S2468-2667(26)00161-1" target="_blank" rel="noopener"><em>Lancet Public Health</em> ↗</a> konstatuje, že výdaje na prevenci se v zemích OECD dvacet let drží kolem 3 % výdajů na zdravotnictví, za covidu se dočasně zdvojnásobily a ten trend se už obrátil. Problém podle autorů není v chybějících důkazech, ale v chybějící politické vůli a v systémech, které neumějí důkazy proměnit v rozpočet.
+      </p>
+      <p>
+        Česky to v zářijovém čísle měsíčníku Občan v síti řekl Matyáš Fošum, ředitel odboru ochrany veřejného zdraví ministerstva zdravotnictví:
+      </p>
+      <blockquote class="av-quote">
+        <p>„Nejdražší položku necháváme růst a nejlevnější nástroj financujeme nejistěji. … když funguje, není vidět, a co není vidět, se snadno škrtá.“</p>
+        <cite>Matyáš Fošum, Občan v síti 9/2026</cite>
+      </blockquote>
+
+      <h2>Česká čísla jsou méně jednoznačná, než se říká</h2>
+      <p>
+        Tady je místo pro poctivou odbočku. V české debatě, včetně textů na tomto webu, často zaznívá, že Česko dává na prevenci výrazně méně než ostatní. Data OECD, která jsme pro tento článek stáhli znovu, ukazují složitější obraz.
+      </p>
+      <figure class="av-figure" aria-labelledby="avHc6H">
+        <figcaption class="av-figure-h" id="avHc6H">Podíl preventivní péče (HC.6) na běžných výdajích na zdravotnictví, %</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Rok</th>
+                <th scope="col" class="av-num">Česko</th>
+                <th scope="col" class="av-num">Průměr OECD</th>
+                <th scope="col" class="av-num">Zemí s daty</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">2019</th>
+                <td class="av-num">3,2</td>
+                <td class="av-num">2,6</td>
+                <td class="av-num av-mut">35</td>
+              </tr>
+              <tr>
+                <th scope="row">2020</th>
+                <td class="av-num">3,9</td>
+                <td class="av-num">3,6</td>
+                <td class="av-num av-mut">35</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">2021</th>
+                <td class="av-num">8,4</td>
+                <td class="av-num">5,7</td>
+                <td class="av-num av-mut">35</td>
+              </tr>
+              <tr>
+                <th scope="row">2022</th>
+                <td class="av-num">5,2</td>
+                <td class="av-num">4,6</td>
+                <td class="av-num av-mut">35</td>
+              </tr>
+              <tr>
+                <th scope="row">2023</th>
+                <td class="av-num av-bad">2,7</td>
+                <td class="av-num">3,3</td>
+                <td class="av-num av-mut">33</td>
+              </tr>
+              <tr>
+                <th scope="row">2024</th>
+                <td class="av-num">3,1</td>
+                <td class="av-num">3,1</td>
+                <td class="av-num av-mut">31</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> OECD Health Statistics, System of Health Accounts (DSD_SHA@DF_SHA), funkce HC.6, % běžných výdajů na zdravotnictví; staženo 13. 10. 2026. Průměr OECD je výpočet redakce: nevážený průměr členských zemí OECD, které za daný rok data vykázaly; složení vzorku se mezi roky mění, proto uvádíme jejich počet.</p>
+      </figure>
+      <p>
+        Před covidem bylo Česko v podílu výdajů na prevenci nad průměrem OECD, ne pod ním. V roce 2021 vyletělo na 8,4 %, víc než průměr, protože testování a očkování proti covidu se účtuje jako prevence. V roce 2023 kleslo na 2,7 %, pod průměr, a právě tohle číslo nese i náš <a href="indicator.html?id=vydaje_prevence_pct"><strong>indikátor výdajů na prevenci</strong></a>. Za rok 2024 OECD uvádí 3,1 %, tedy zhruba průměr. Česká křivka je tak učebnicovou ukázkou toho, co popisuje Colombo: covidové peníze přišly, a zase odešly.
+      </p>
+      <p>
+        Souhrnné číslo ale skrývá víc, než ukazuje. Do položky HC.6 se počítá očkování, screeningy i preventivní prohlídky u praktických lékařů placené z pojištění. Hygienická služba je v ní jen menší částí. A u ní je obraz jiný. Podle rozpočtové řady, kterou ministerstvo předložilo pracovní skupině pro reformu, klesl rozpočet krajských hygienických stanic z 4,36 miliardy korun v roce 2021 na 3,2 miliardy v roce 2025, tedy o 27 % v nominálních korunách, které mezitím výrazně ztratily na hodnotě. Část toho poklesu je konec pandemických výdajů, protože rok 2021 byl rokem covidu. Pracovní skupina ale v srpnovém zápisu sama napsala, že rok 2025 byl uzavřen „s viditelným podfinancováním hygienických služeb“. Jde o interní čísla prezentovaná skupině, ne o auditované závěrky; podrobně je rozebírá náš <a href="clanek-institut-verejneho-zdravi.html">článek o reformě hygienické služby</a>.
+      </p>
+      <p>
+        Poučení z toho je jemnější než „dáváme málo“. Kolik dáváme, se mění podle toho, jestli je zrovna vidět hrozba. Když je vidět, peníze tečou. Když se nic neděje, odtékají. A nic se neděje právě tehdy, když prevence funguje.
+      </p>
+
+      <h2>Komplikace: prevence nemusí šetřit, aby se vyplatila</h2>
+      <p>
+        Teď je potřeba přiznat, že argument „prevence je levnější“ je sám o sobě past.
+      </p>
+      <p>
+        Fineberg na ni upozornil ve stejném eseji. Od prevence chceme, aby přinesla čistou finanční úsporu. Od léčby chceme jen to, aby za své peníze stála. Nový lék na rakovinu nikdo neodmítne proto, že nešetří; posuzujeme, kolik zdraví za své peníze přinese. Programy veřejného zdraví naopak často obhajujeme slibem úspor, a když úspora nepřijde nebo ji nejde spočítat, prohrají.
+      </p>
+      <p>
+        Anglická studie z Yorku přitom neříká, že veřejné zdraví peníze šetří. Říká, že kupuje zdraví levněji než léčba. To je jiné a poctivější tvrzení. A medián návratnosti 14 : 1 je medián: studie, které návratnost počítají, nejsou náhodným vzorkem všech programů, a za průměrem se skrývá velký rozptyl. Některá prevence ušetří víc, než stojí, jiná je jen dobrá koupě, a jiná nefunguje vůbec.
+      </p>
+      <p>
+        A pak je tu hlubší háček, který v roce 1981 popsal britský epidemiolog Geoffrey Rose v <a href="https://doi.org/10.1136/bmj.282.6279.1847" target="_blank" rel="noopener"><em>British Medical Journal</em> ↗</a> a který se od té doby jmenuje paradox prevence. Opatření, které přinese velký prospěch celé populaci, přinese každému jednotlivci jen nepatrný prospěch. Ve slavném textu z roku 1985 <a href="https://doi.org/10.1093/ije/14.1.32" target="_blank" rel="noopener">„Sick individuals and sick populations“ ↗</a> Rose vysvětlil, proč je to tak. Můžete hledat a chránit jednotlivce s vysokým rizikem, nebo ovlivnit příčiny, které posouvají riziko celé populace. Druhá cesta zachrání víc lidí, ale nikdo z nich to nepozná.
+      </p>
+      <p>
+        Roseův paradox tak k Finebergovu seznamu přidává další rozměr neviditelnosti. Úspěch prevence není skrytý jen v čase, protože přijde za deset let. Je skrytý i mezi lidmi, protože se rozpustí v tisících lidí, z nichž žádný neví, že byl zachráněn.
+      </p>
+
+      <h2>Ostrava, jaro 2026</h2>
+      <p>
+        Jak tohle vypadá v praxi, ukazuje případ z letošního května. Krajská hygienická stanice Moravskoslezského kraje oznámila, že na Ostravsku onemocněl záškrtem neočkovaný chlapec předškolního věku a 18. května zemřel. Bylo to <a href="clanek-zaskrt-umrti-2026.html">druhé úmrtí na záškrt v Česku od roku 1969</a>. Zpráva obletěla média. Je to přesně ten druh události, který vidíme: jeden případ, jedna rodina, jeden den, kdy selhalo něco, co mělo fungovat.
+      </p>
+      <p>
+        Ve stejné tiskové zprávě ale stojí věta, které si skoro nikdo nevšiml:
+      </p>
+      <blockquote class="av-quote">
+        <p>„Hygienická služba zareagovala obratem, dotrasovala všechny kontakty a tím zajistila, aby se onemocnění nešířilo dále. Ohnisko nákazy bylo ohraničeno a onemocnění se dál nešířilo.“</p>
+        <cite>Krajská hygienická stanice Moravskoslezského kraje, tisková zpráva 22. 5. 2026</cite>
+      </blockquote>
+      <p>
+        Hygienici nařídili protiepidemická opatření v rodině i ve školním kolektivu. Kolik dětí ve škole díky tomu záškrt nedostalo? To nevíme a nikdy vědět nebudeme. Neexistuje žádná tabulka případů, které nenastaly. Víme jen, že v kraji, kde mezi roky 2000 a 2022 nebyl hlášen jediný případ, jich letos bylo k 21. květnu devět, včetně toho jednoho úmrtí. Selhání jsme viděli. Úspěch, pokud nastal, má stejný tvar jako Snowova klika: nic.
+      </p>
+      <p>
+        Tohle není výtka médiím ani čtenářům. Je to vlastnost samotného úkolu. Hasiče vidíme v plamenech. Hygienika, který oheň uhasil dřív, než vzplál, nevidí nikdo.
+      </p>
+
+      <h2>Reforma, která musí změřit nic</h2>
+      <p>
+        Do tohoto světa vstupuje česká reforma hygienické služby. Ministerstvo zdravotnictví chce sloučit čtrnáct krajských hygienických stanic, Státní zdravotní ústav a dva zdravotní ústavy, tedy sedmnáct institucí s přibližně 4 200 zaměstnanci, do jednoho úřadu. Pracovní název se od února změnil na Národní institut veřejného zdraví. Podle harmonogramu z přílohy zápisu pracovní skupiny má vnitřní připomínkové řízení běžet od 30. září do 14. října 2026, meziresortní od dubna do května 2027 a vládě má návrh jít 30. srpna 2027. Vnitřní kolo se odehrává uvnitř ministerstva, takže text návrhu zatím veřejný není.
+      </p>
+      <p>
+        Pozoruhodné je, jak přímo se reforma k paradoxu prevence vztahuje, i když ho tak nenazývá. Na dubnovém jednání pracovní skupiny zaznělo, že instituce má být vyňata z ministerstva a podřízena přímo vládě, mimo jiné proto, že to má „usnadnit vyjednávání o financích“. Rastislav Maďar, který pracovní skupinu vede, v Občanu v síti napsal, že v rámci resortu by prevence „byla z hlediska financí vždy až za péči o lidské životy“. To je Jacquesova a Noëlova teorie v praxi: tichá politika prohrává s hlasitou, pokud sedí u stejného stolu. A Fošum slibuje, že celostátní a očkovací programy se stanou „zákonnou kompetencí institutu, ne jen dotačním titulem“.
+      </p>
+      <p>
+        Jestli tohle uspořádání peníze ochrání, nevíme. Výzkum, který známe, ukazuje, že úsporná opatření prevenci zasahují bez ohledu na to, kdo vládne. Zda na tom něco mění, kde v organizačním schématu státu úřad sedí, žádná ze studií citovaných v tomto článku netestovala. Je to hypotéza, ne zkušenost.
+      </p>
+      <p>
+        Co se ale dá říct s jistotou: úřad, jehož úspěch nikdo nevidí, potřebuje umět ten úspěch ukázat jinak. Pokud bude o svůj rozpočet bojovat počtem epidemií, kterým zabránil, prohraje, protože ten počet nikdo nezná. Může ale vykazovat rychlost a kvalitu práce, která epidemiím brání. Mezinárodně se k tomu používá metrika 7-1-7: nejvýš sedm dní na odhalení ohniska, jeden den na nahlášení odpovědným orgánům a sedm dní na zahájení prvních opatření. Kolik času český systém dnes mezi prvním případem a reakcí ztrácí, jak upozornil už <a href="clanek-institut-verejneho-zdravi.html">náš rozbor reformy</a>, nikdo systematicky neměří ani nezveřejňuje.
+      </p>
+      <p>
+        K tomu cíle, které se počítat dají, i když měří spíš to, co se nestalo. Fošum sám nabízí dva: aby o své infekci HIV vědělo 95 % nakažených a aby se v Česku nenarodilo žádné dítě se syfilis. A institut má podle něj jednou za pět let hodnotit zdraví obyvatel a stanovovat priority. Pokud se z těchto slibů stanou zveřejňované ukazatele s výchozí hodnotou, bude mít nový úřad čím obhájit svůj rozpočet i v roce, kdy se nic nestane.
+      </p>
+      <p>
+        A ještě jedna věc: víceletý rozpočet. Pokud prevence žije z ročních dotací, škrtá se pokaždé, když se nic neděje. Tedy pokaždé, když funguje.
+      </p>
+
+      <h2>Klika, která chybí</h2>
+      <p>
+        Vraťme se na Broad Street. Nejslavnějším předmětem v dějinách veřejného zdraví je kus kovu, který chybí: klika, kterou 8. září 1854 někdo odmontoval z pumpy. A nejpoctivější věta, kterou o něm kdy kdo napsal, pochází od Snowa samotného: nelze rozhodnout.
+      </p>
+      <p>
+        To je úděl každé hygienické stanice, každého očkovacího programu a každého úředníka, který dotrasuje kontakty dřív, než se nákaza rozšíří. Jejich nejlepší dny vypadají v tabulce jako prázdný řádek. Reforma, která se teď píše, nebude posuzována podle toho, jak přeskládá organizační schéma. Bude posuzována podle toho, jestli dokáže z prázdného řádku udělat data. Data, která obstojí v rozpočtovém jednání v roce, kdy se zase nic nestane.
+      </p>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Upozornění na limity použitých dat a tvrzení">
+        <p class="article-callout-h">Co v tomto textu není doloženo napevno</p>
+        <p>
+          Denní počty onemocnění z Broad Street jsou ze Snowovy knihy z roku 1855; Snow je sestavil zpětně z úmrtních záznamů a vlastního šetření a sám upozorňuje na jejich limity. Průměry OECD v tabulce jsou výpočet redakce z dat OECD a mezi roky se mění počet zemí, které data vykázaly; Česko v nich proto nesrovnáváme s jedním pevným číslem. Údaje o rozpočtu krajských hygienických stanic jsou interní čísla prezentovaná pracovní skupině, ne auditované závěrky. Paradox prevence Geoffreyho Rose parafrázujeme, protože plný text článku z roku 1981 nebyl dostupný. Kolika případům záškrtu zabránil zásah hygieniků na Ostravsku, nelze zjistit a nikde to netvrdíme. Výrok, že podřízení úřadu vládě ochrání jeho rozpočet, je hypotéza předkladatelů, kterou zatím žádná ze známých studií neověřila. Podobu Národního institutu veřejného zdraví popisujeme podle zápisů pracovní skupiny a veřejných vyjádření; paragrafové znění zveřejněno nebylo a může se změnit.
+        </p>
+      </aside>
+    </div>
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, které s prevencí a veřejným zdravím souvisejí</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=vydaje_prevence_pct"><strong>Výdaje na prevenci (% běžných výdajů na zdravotnictví)</strong></a> — 2,7 % (ČR, 2023) · Struktury · vyšší je lepší (signál špatný; OECD 3,2 %) · OECD za rok 2024 uvádí 3,1 %, zhruba průměr · viz <a href="clanek-vydaje-prevence.html">Dvě a tři čtvrtě procenta</a></li>
+        <li><a href="indicator.html?id=mortalita_preventabilni"><strong>Preventovatelná mortalita</strong></a> — 173,9 na 100 000 obyvatel (ČR, 2023) · Výsledky · nižší je lepší (signál špatný; EU 150,9) · úmrtí, kterým lze předejít prevencí a veřejným zdravím</li>
+        <li><a href="indicator.html?id=vakcinace_hexa_deti"><strong>Proočkovanost dětí hexavalentní vakcínou</strong></a> — kontext k případu záškrtu na Ostravsku; aktuální hodnotu a stav ověření najdete na stránce indikátoru · viz <a href="clanek-vakcinace-hexa-deti.html">Z premianta pod evropský průměr</a></li>
+        <li><a href="prevence.html">Prevence</a> — přehled očkování a screeningových programů na HSPA Monitoru</li>
+      </ul>
+    </aside>
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Historický případ</h5>
+        <ul class="article-sources-list">
+          <li><strong>Snow J. On the Mode of Communication of Cholera. 2. vydání. London: John Churchill; 1855.</strong> Kapitola o epidemii v okolí Golden Square: přes 500 úmrtí za deset dní v okruhu 250 yardů, útěk více než tří čtvrtin obyvatel, schůzka s farní radou St James 7. 9. 1854 a odstranění kliky následující den, tabulka nových onemocnění po dnech, věta o tom, že pokles nastal před zastavením odběru vody. Digitalizace Wellcome Library, čteno 13. 10. 2026. <a href="https://archive.org/details/b28985266" target="_blank" rel="noopener">archive.org ↗</a></li>
+          <li><strong>McLeod KS. Our sense of Snow: the myth of John Snow in medical geography. Soc Sci Med. 2000;50(7–8):923–935.</strong> DOI 10.1016/s0277-9536(99)00345-7. PMID 10714917. Historická analýza: Snowova data neukazují příčinnou souvislost mezi odstraněním kliky a koncem epidemie, počty klesaly už předtím. Ověřeno v PubMed 13. 10. 2026. <a href="https://doi.org/10.1016/s0277-9536(99)00345-7" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Brody H, Rip MR, Vinten-Johansen P, Paneth N, Rachman S. Map-making and myth-making in Broad Street: the London cholera epidemic, 1854. Lancet. 2000;356(9223):64–68.</strong> DOI 10.1016/S0140-6736(00)02442-9. PMID 10892779. Historický článek (bez abstraktu v PubMed), kontext. <a href="https://doi.org/10.1016/S0140-6736(00)02442-9" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Recenzovaná literatura</h5>
+        <ul class="article-sources-list">
+          <li><strong>Fineberg HV. The paradox of disease prevention: celebrated in principle, resisted in practice. JAMA. 2013;310(1):85–90.</strong> DOI 10.1001/jama.2013.7518. PMID 23821092. Esej / přehled překážek prevence (neviditelný úspěch, zpoždění, statistické životy, přínos mimo plátce, požadavek finanční návratnosti u prevence, ne u léčby). Ověřeno v PubMed 13. 10. 2026. <a href="https://doi.org/10.1001/jama.2013.7518" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Jacques O, Noël A. The politics of public health investments. Soc Sci Med. 2022;309:115272.</strong> DOI 10.1016/j.socscimed.2022.115272. PMID 35985243. Panelová analýza 25 zemí OECD, 1970–2018: fiskální konsolidace snižují výdaje na prevenci absolutně i v poměru k léčbě; stranická orientace vlády vliv nemá; systémy národní zdravotní služby drží prevenci výš než systémy zdravotního pojištění. Ověřeno v PubMed 13. 10. 2026. <a href="https://doi.org/10.1016/j.socscimed.2022.115272" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Martin S, Lomas J, Claxton K. Is an ounce of prevention worth a pound of cure? A cross-sectional study of the impact of English public health grant on mortality and morbidity. BMJ Open. 2020;10(10):e036411.</strong> DOI 10.1136/bmjopen-2019-036411. PMID 33039987. Průřezová studie s instrumentálními proměnnými, data anglických místních samospráv 2013/14: QALY z rozpočtu veřejného zdraví ~3 800 £, z rozpočtu NHS ~13 500 £; 1 mld. £ navíc = 206 398 QALY (veřejné zdraví) vs. 67 060 QALY (NHS), nejkonzervativnější odhad. Ověřeno v PubMed 13. 10. 2026. <a href="https://doi.org/10.1136/bmjopen-2019-036411" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Colombo F, Cecchini M, Elgar K, Segal AB, Sutherland E. Fit for the future: from siloed to integrated public health systems. Lancet Public Health. 2026.</strong> DOI 10.1016/S2468-2667(26)00161-1. PMID 42753783. Přehledový článek (Review), online 17. 9. 2026; ročník a strany v PubMed k 13. 10. 2026 ještě nejsou. Výdaje na prevenci kolem 3 % výdajů na zdraví v OECD dvě dekády, dočasné zdvojnásobení za covidu se už obrátilo. Ověřeno v PubMed 13. 10. 2026. <a href="https://doi.org/10.1016/S2468-2667(26)00161-1" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Masters R, Anwar E, Collins B, Cookson R, Capewell S. Return on investment of public health interventions: a systematic review. J Epidemiol Community Health. 2017;71(8):827–834.</strong> DOI 10.1136/jech-2016-208141. PMID 28356325. Systematický přehled 52 studií z vyspělých zemí: medián ROI 14,3 : 1, u celostátních intervencí 27,2 : 1, u místních 4,1 : 1. Ověřeno v PubMed 13. 10. 2026. <a href="https://doi.org/10.1136/jech-2016-208141" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Rose G. Strategy of prevention: lessons from cardiovascular disease. Br Med J (Clin Res Ed). 1981;282(6279):1847–1851.</strong> DOI 10.1136/bmj.282.6279.1847. PMID 6786649. Text, ve kterém Rose popsal paradox prevence; abstrakt v PubMed není, v článku parafrázujeme. <a href="https://doi.org/10.1136/bmj.282.6279.1847" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Rose G. Sick individuals and sick populations. Int J Epidemiol. 1985;14(1):32–38.</strong> DOI 10.1093/ije/14.1.32. PMID 3872850. Přístup vysokého rizika vs. populační přístup. Ověřeno v PubMed 13. 10. 2026. <a href="https://doi.org/10.1093/ije/14.1.32" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Data a české primární zdroje</h5>
+        <ul class="article-sources-list">
+          <li><strong>OECD Health Statistics — System of Health Accounts (DSD_SHA@DF_SHA, verze 1.1)</strong>, funkce HC.6 Preventivní péče, % běžných výdajů na zdravotnictví (PT_EXP_HLTH); Česko 2010–2024 a všechny vykazující země, staženo 13. 10. 2026. Průměr OECD v tabulce je nevážený průměr členských zemí s daty za daný rok (výpočet redakce). <a href="https://data-explorer.oecd.org/vis?df[ds]=dsDisseminateFinalDMZ&amp;df[id]=DSD_SHA%40DF_SHA" target="_blank" rel="noopener">data-explorer.oecd.org ↗</a></li>
+          <li><strong>Krajská hygienická stanice Moravskoslezského kraje — Tisková zpráva: Záškrt</strong>, 22. 5. 2026 (protiepidemická opatření v rodině a školním kolektivu, citace o dotrasování kontaktů a ohraničení ohniska, 9 případů v kraji k 21. 5. 2026 včetně jednoho úmrtí, 2000–2022 bez hlášeného případu). <a href="https://www.khsova.cz/homepage/detail-aktuality/14146" target="_blank" rel="noopener">khsova.cz ↗</a></li>
+          <li><strong>Pracovní skupina pro reformu veřejného zdraví v ČR — zápisy z jednání</strong> (rozpočtová řada KHS ze III. jednání 30. 3. 2026; vyčlenění pod vládu ze IV. jednání; legislativní harmonogram z přílohy zápisu IX; věta o podfinancování roku 2025 ze zápisu X), podle našeho rozboru v článku <a href="clanek-institut-verejneho-zdravi.html">Největší reforma hygienické služby za sto let</a>. <a href="https://ppo.mzcr.cz/workGroup/227" target="_blank" rel="noopener">ppo.mzcr.cz ↗</a></li>
+          <li><strong>Občan v síti 9/2026</strong> — „Kde nás tlačí bota v prevenci závažných infekcí a jak vypadá návrh nového uspořádání ochrany veřejného zdraví?“, elektronický měsíčník Občan z. s.; citace M. Fošuma a R. Maďara, podle našeho referátu <a href="clanek-obcan-v-siti-ochrana-verejneho-zdravi-2026.html">Hasíme, místo abychom předcházeli</a>. <a href="https://mcusercontent.com/2acc71212b0a648df5959c3e5/files/9a441215-c483-246c-9f4d-4186531b2d8a/obcan_2026_09.pdf" target="_blank" rel="noopener">PDF ↗</a></li>
+          <li><strong>Metrika 7-1-7</strong> — Resolve to Save Lives / 7-1-7 Alliance: 7 dní na odhalení ohniska, 1 den na nahlášení, 7 dní na první opatření. <a href="https://resolvetosavelives.org/how-we-save-lives/epidemic-prevention/7-1-7/" target="_blank" rel="noopener">resolvetosavelives.org ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Související čtení na portálu</h5>
+        <ul class="article-sources-list">
+          <li><a href="clanek-institut-verejneho-zdravi.html">Největší reforma hygienické služby za sto let</a>, <a href="clanek-szu-pripominky-nivz.html">Devět stran, jedenáct výhrad: co vytýká Státní zdravotní ústav reformě</a> a <a href="clanek-obcan-v-siti-ochrana-verejneho-zdravi-2026.html">Hasíme, místo abychom předcházeli</a> — série o reformě veřejného zdraví.</li>
+          <li><a href="clanek-vydaje-prevence.html">Dvě a tři čtvrtě procenta: výdaje na prevenci</a> a <a href="clanek-ockovani-dospelych-rezerva.html">Dvacet čtyři procenta: nevyužitá rezerva očkování dospělých</a> — prevence v číslech.</li>
+          <li><a href="clanek-zaskrt-umrti-2026.html">Druhé úmrtí za 57 let: záškrt na Ostravsku</a>, <a href="clanek-salmoneloza-ujezd-nad-lesy-2026.html">363 nemocných z jednoho školního oběda</a> a <a href="clanek-monitoring-zdravotnich-hrozeb-mz.html">Stát začal týdně počítat hrozby</a> — hygienická služba při práci.</li>
+          <li><a href="clanek-epidemiologie-1-proc-verit-cislum.html">Proč věřit číslům: od mapy cholery k reprodukčnímu číslu</a>, <a href="clanek-governance-nezavislost.html">Kdo drží smyčku: governance a nezávislost měřičů</a> a <a href="clanek-posledni-mile-implementace.html">Poslední míle: proč dobře navržené reformy selžou při zavádění</a>.</li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Data OECD o podílu výdajů na prevenci jsme stáhli přímo z rozhraní OECD 13. 10. 2026; hodnota za rok 2023 odpovídá indikátoru HSPA Monitoru, hodnota za rok 2024 v datovém kontraktu portálu zatím není. Průměry OECD jsou výpočet redakce. Rozpočtová čísla krajských hygienických stanic a citace ze zápisů pracovní skupiny přebíráme z našeho rozboru reformy, který je ověřil proti zveřejněným zápisům; citace z měsíčníku Občan v síti jsou doslovné podle PDF. Studie jsou ověřeny v PubMed; čísla uvádíme jen ta, která jsou v abstraktech. Údaje o epidemii v roce 1854 přebíráme z vlastního textu Johna Snowa.
+      </p>
+    </section>
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+  </article>
+</main>
+<footer class="bottom" id="siteFooter"></footer>
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
