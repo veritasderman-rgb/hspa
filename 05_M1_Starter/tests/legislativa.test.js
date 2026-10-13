@@ -466,13 +466,14 @@ test('plan_items z reálného datasetu: stavy a typy mají UI labely, overdue od
   assert.ok(ehds);
   assert.equal(ehds.stav, 'vlada');
   assert.equal(isPlanItemOverdue(ehds, now), false);
-  // Specifické zdravotní služby: plán září 2026, k 2. 10. 2026 stále v připomínkovém
-  // řízení (VeKLEP KORNDVAHEWJL) → po termínu; k červenci ještě ne
+  // Specifické zdravotní služby: plán září 2026; od 12. 10. 2026 je materiál ve VeKLEP
+  // „zařazen do evidence" (VeKLEP KORNDVAHEWJL, stav 7) → stav 'vlada' už není
+  // overdue-eligible, takže po termínu nevychází ani v říjnu
   const szs = data.plan_items.find(p => p.id === 'plan-novela-specificke-zdravotni-sluzby');
   assert.ok(szs);
-  assert.equal(szs.stav, 'pripominkove_rizeni');
+  assert.equal(szs.stav, 'vlada');
   assert.equal(isPlanItemOverdue(szs, now), false);
-  assert.equal(isPlanItemOverdue(szs, new Date('2026-10-02T12:00:00')), true);
+  assert.equal(isPlanItemOverdue(szs, new Date('2026-10-13T12:00:00')), false);
 });
 
 // ── F7: horizont (výhled 2027–2029) ──

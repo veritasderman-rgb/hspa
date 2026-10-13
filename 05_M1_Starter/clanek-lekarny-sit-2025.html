@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-10-13
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-10-13
+    creation_phase: rutina+article-write
+    primary_sources_count: 12
+    visual_elements_count: 5
+    notes: "Vytvoreno z nove vlny dat: UZIS Aktualni informace 1/2026 Lekarenska pece 2025 (zverejneno 5. 10. 2026, record id=8470), PDF + priloha p1 (personalni kapacity, NRZP k 31. 12. 2025) + p2.xlsx; vse stazeno a cteno pdftotext/openpyxl 13. 10. 2026. KPI: 2 703 registrovanych lekaren vc. OOVL (112 nemocnicnich + 2 591 verejnych) a 208 vydejen ZP k 31. 12. 2025 (NRPZS), 4 038 obyvatel na lekarnu, 2,48 lekarny na 10 000 obyvatel (2024: 2,47). RADA registrovanych lekaren vc. OOVL z textu rocenek 2019-2025: 2 754 (souhrn 2019 uvadi 2 749) / 2 729 / 2 735 / 2 738 / 2 753 / 2 697 / 2 703; nemocnicni 111/109/108/108/167/111/112 (zmena zarazeni 2023-2024). RECEPTY Tab. 6 rocenky 2025 (nemocnicni + verejne lekarny): 74 121 520 (2019) -> 87 626 213 (2024) -> 88 568 142 (2025), +19,5 % 2019-2025 vypocet redakce; Tab. 3 vc. vydejen 88 585 394; na obyvatele 6,93 (2019) / 7,21 / 7,14 / 7,41 / 7,07 / 8,03 / 8,12 (souhrny). Prumer na verejnou lekarnu 31 507 receptu, median 24 214 (2024: 31 520 / 23 747). KRAJE Tab. 1 (jen ZJ, ktere odevzdaly a validovany vykaz, 2 603 lekaren, 2,38 / 10 000): Stredocesky 1,90 ... Zlinsky 2,89; 2024 Tab. 1: 2 571, 2,36. Recepty na 1 verejnou lekarnu po krajich = Tab. 4 recepty verejnych lekaren / pocet verejnych lekaren (vypocet redakce): Ustecky 37 175, JMK 26 353, CR 31 507 (sedi s UZIS). PERSONAL Tab. 2 (prepocteni): 7 178 farmaceutu, 4 861 ZPBD (z toho 4 421 farm. asistentu), 1 122 ostatnich; 2024: 7 309 / 5 581 (4 328) / 1 204. UZIS text: -131 farmaceutu, -721 ZPBD; asistentu ale +93 (vypocet redakce z Tab. 2 2024 a 2025). Verejne lekarny 6 097 farmaceutu / 2 491 lekaren = 2,45 (vypocet redakce). NRZP priloha: 8 390 aktivnich farmaceutu (6 905 v lekarne), 6 042 farm. asistentu (4 745 v lekarne), 1 129 farmaceutu 60+ (13,5 %). SUKL: open data seznam lekaren, export SOD20260925 (stazeno 13. 10. 2026): 2 689 zaznamu, 205 typ OOVL, 103 typu nemocnicni lekarna (NO, NZ, NO/OOVL), vypocet redakce; indikator lekarny_per_100k 25,07 (2026). LEGISLATIVA (zakonyprolidi.cz, stazeno 13. 10. 2026): zak. 372/2011 Sb. (zneni 1. 1. 2026, verze 39) par. 5 odst. 2 (lekarenska pece = farmaceuticka pece v lekarne), par. 15 odst. 1 a 2 (krajsky urad, zavazne stanovisko SUKL), par. 16 (podminky udeleni opravneni - personalni, technicke, bezuhonnost; zadne kriterium poctu obyvatel ani vzdalenosti), par. 19 (zapis do NRPZS do 3 pracovnich dnu), par. 74 (NRPZS); zak. 378/2007 Sb. (zneni 1. 1. 2026, verze 44) par. 82 odst. 2 pism. a) a b) (vydej: farmaceuti; farm. asistenti jen volne prodejne LP bez omezeni a zadanky). BENCH: harmonizovanou mezinarodni hustotu lekaren s rokem a definici jsme v primarnim zdroji nenasli (PGEU Annual Report 2024 neobsahuje tabulku po zemich; Eurostat ani OECD pocet lekaren nepublikuji v rade, kterou bychom overili) - jen caveat; misto toho farmaceuti_per_100k 76 vs OECD 86 (2023, z kontraktu). Ceka na schvaleni redakce."
+    audit_k_2026-10-13: "Nezavisly audit (cerstvy pohled): overena vsechna cisla v perexu, textu, AV counterech, tabulce 2019-2025, bar grafu kraju a databoxu proti UZIS Lekarenska pece 2019-2025 (text NRPZS, Tab. 1-6, priloha p1/p2), SUKL export SOD20260925 (2 689 zaznamu, 205 OOVL, 103 NO+NZ+NO/OOVL - sedi; pozn. 7 testovacich zaznamu SUKL) a indicators.json; prepocty redakce (+19,5 %, -1,9 %, +14,5 %, recepty/verejnou lekarnu po krajich, 2,45 uvazku, +93 asistentu) sedi. Legislativa 372/2011 Sb. par. 5, 15, 16, 19 a 378/2007 Sb. par. 82 odst. 2 overena v zneni od 1. 1. 2026. Externi odkazy 200. Opraveno 4 drobnosti: (1) pres 88,6 mil. -> temer 88,6 mil. (88 568 142); (2) preklep label counteru receptu -> receptů; (3) skok nemocnicnich lekaren 2023 zmekcen na interpretaci (rocenka ho nevysvetluje); (4) tvrzeni ze rocenka nema obecni udaje o lekarnach opraveno - priloha p2 ma list Lekarny v obcich SUKL. Status draft ponechan."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lékáren je 2 703, skoro stejně jako před šesti lety. Receptů přibylo o pětinu, lidí za pultem loni ubylo · HSPA Monitor</title>
+<meta name="description" content="Podle ročenky ÚZIS Lékárenská péče 2025 bylo ke konci roku registrováno 2 703 lékáren včetně odloučených oddělení výdeje léčiv, na jednu připadalo 4 038 obyvatel. Síť je od roku 2019 téměř beze změny, receptů ale přibylo ze 74,1 na 88,6 milionu ročně a lékárny loni vykázaly o 131 farmaceutů na přepočtené úvazky méně. Hustota se mezi kraji liší o polovinu: od 1,90 lékárny na 10 000 obyvatel ve Středočeském kraji po 2,89 ve Zlínském.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Lékáren je 2 703, skoro stejně jako před šesti lety. Receptů přibylo o pětinu, lidí za pultem loni ubylo">
+<meta property="og:description" content="ÚZIS Lékárenská péče 2025: 2 703 lékáren vč. OOVL, 4 038 obyvatel na lékárnu, 88,6 mil. receptů. Síť stojí, výdej roste, kraje se liší o polovinu.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-lekarny-sit-2025.html">
+<meta property="article:published_time" content="2026-10-14T06:00:00+02:00">
+<meta property="article:section" content="Dostupnost péče">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-lekarny-sit-2025.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "Lékáren je 2 703, skoro stejně jako před šesti lety. Receptů přibylo o pětinu, lidí za pultem loni ubylo",
+  "description": "Podle ročenky ÚZIS Lékárenská péče 2025 bylo ke konci roku registrováno 2 703 lékáren včetně odloučených oddělení výdeje léčiv, na jednu připadalo 4 038 obyvatel. Síť je od roku 2019 téměř beze změny, receptů ale přibylo ze 74,1 na 88,6 milionu ročně a lékárny loni vykázaly o 131 farmaceutů na přepočtené úvazky méně. Hustota se mezi kraji liší o polovinu: od 1,90 lékárny na 10 000 obyvatel ve Středočeském kraji po 2,89 ve Zlínském.",
+  "datePublished": "2026-10-14T06:00:00+02:00",
+  "dateModified": "2026-10-13",
+  "inLanguage": "cs",
+  "articleSection": "Dostupnost péče",
+  "author": { "@type": "Organization", "name": "Redakce HSPA Monitoru" },
+  "publisher": { "@type": "Organization", "name": "HSPA Monitor · Skóre zdravotnictví", "url": "https://skorezdravotnictvi.cz" },
+  "mainEntityOfPage": "https://skorezdravotnictvi.cz/clanek-lekarny-sit-2025.html"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Dostupnost péče</span>
+        <span class="article-tag article-tag-muted">lékárny · síť · recepty · kraje · ÚZIS · SÚKL</span>
+      </div>
+      <h1 class="article-title">Lékáren je 2 703, skoro stejně jako před šesti lety. Receptů přibylo o pětinu, lidí za pultem loni ubylo</h1>
+      <p class="article-deck">
+        Podle ročenky ÚZIS Lékárenská péče 2025 bylo ke konci roku registrováno 2 703 lékáren včetně odloučených oddělení výdeje léčiv, na jednu připadalo 4 038 obyvatel. Síť je od roku 2019 téměř beze změny, receptů ale přibylo ze 74,1 na 88,6 milionu ročně a lékárny loni vykázaly o 131 farmaceutů na přepočtené úvazky méně. Hustota se mezi kraji liší o polovinu: od 1,90 lékárny na 10 000 obyvatel ve Středočeském kraji po 2,89 ve Zlínském.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">14. října 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">8 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        O lékárnách se v debatách o dostupnosti péče mluví málokdy. Ústav zdravotnických informací a statistiky (ÚZIS) 5. října zveřejnil ročenku <em>Lékárenská péče 2025</em>. Ukazuje síť, která se šest let téměř nehýbe, a výdej, který mezitím vyrostl o pětinu. O doplatcích, které ročenka také uvádí, jsme psali v <a href="clanek-doplatky-leky-2025-dva-kraje.html">samostatném článku</a>. Tady se díváme na to, kolik lékáren je, kde jsou a kolik práce na každou připadá.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCntH">
+        <figcaption class="av-figure-h" id="avCntH">Lékárenská síť v Česku: čtyři čísla (ÚZIS, Lékárenská péče 2025, stav k 31. 12. 2025)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="2703">2 703</span>
+            <span class="av-counter-label">registrovaných lékáren vč. odloučených oddělení výdeje léčiv</span>
+            <span class="av-counter-foot">2019: 2 754; navíc 208 výdejen zdravotnických prostředků</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="4038">4 038</span>
+            <span class="av-counter-label">obyvatel na jednu lékárnu</span>
+            <span class="av-counter-foot">2,48 lékárny na 10 000 obyvatel; 2024: 2,47</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="8.12" data-decimals="2">8,12</span>
+            <span class="av-counter-label">receptů na obyvatele za rok</span>
+            <span class="av-counter-foot">2019: 6,93; celkem 88,6 mil. receptů</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="31507">31 507</span>
+            <span class="av-counter-label">receptů na jednu veřejnou lékárnu (průměr)</span>
+            <span class="av-counter-foot">medián 24 214</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS ČR, Aktuální informace Lékárenská péče 2025 (5. 10. 2026), souhrn, text str. 2 a 6, Tab. 6; Lékárenská péče 2019, souhrn a str. 2. Počty lékáren podle Národního registru poskytovatelů zdravotních služeb.</p>
+      </figure>
+
+      <h3>Síť, která se nehýbe</h3>
+      <p>
+        Národní registr poskytovatelů zdravotních služeb (NRPZS) evidoval k 31. prosinci 2025 celkem <strong>2 703 lékáren a odloučených oddělení výdeje léčiv</strong> (OOVL), z toho 112 nemocničních a 2 591 veřejných. Vedle nich bylo registrováno 208 výdejen zdravotnických prostředků. Na jednu lékárnu připadalo 4 038 obyvatel, tedy 2,48 lékárny na 10 000 obyvatel, o setinu víc než rok předtím.
+      </p>
+      <p>
+        Ve srovnání s rokem 2019, kdy registr evidoval 2 754 lékáren včetně OOVL, je to o 51 méně (−1,9 %, výpočet redakce). Mezitím se počet pohyboval mezi 2 697 a 2 753. Řada má ovšem zlom: v ročence za rok 2023 vykázal ÚZIS 167 nemocničních lékáren, o rok později 111. Takový skok těžko odpovídá zavírání nemocničních lékáren, spíš změně v tom, co se za nemocniční lékárnu počítá; ročenka ho nevysvětluje. Do roku 2023 navíc ÚZIS počítal obyvatele na lékárnu bez odloučených oddělení. Srovnávat proto dává smysl hlavně absolutní počty a jen v hrubých obrysech.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTabRadaH">
+        <figcaption class="av-figure-h" id="avTabRadaH">Registrované lékárny a přijaté recepty, Česko 2019–2025 (ÚZIS, ročenky Lékárenská péče 2019–2025)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Rok</th>
+                <th scope="col" class="av-num">Lékárny vč. OOVL</th>
+                <th scope="col" class="av-num">z toho nemocniční</th>
+                <th scope="col" class="av-num">Recepty (mil.)</th>
+                <th scope="col" class="av-num">Receptů na obyvatele</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">2019</th><td class="av-num">2 754</td><td class="av-num">111</td><td class="av-num">74,1</td><td class="av-num">6,93</td></tr>
+              <tr><th scope="row">2020</th><td class="av-num">2 729</td><td class="av-num">109</td><td class="av-num">77,2</td><td class="av-num">7,21</td></tr>
+              <tr><th scope="row">2021</th><td class="av-num">2 735</td><td class="av-num">108</td><td class="av-num">75,1</td><td class="av-num">7,14</td></tr>
+              <tr><th scope="row">2022</th><td class="av-num">2 738</td><td class="av-num">108</td><td class="av-num">80,2</td><td class="av-num">7,41</td></tr>
+              <tr><th scope="row">2023</th><td class="av-num">2 753</td><td class="av-num">167</td><td class="av-num">76,5</td><td class="av-num">7,07</td></tr>
+              <tr><th scope="row">2024</th><td class="av-num">2 697</td><td class="av-num">111</td><td class="av-num">87,6</td><td class="av-num">8,03</td></tr>
+              <tr class="av-row-highlight"><th scope="row">2025</th><td class="av-num">2 703</td><td class="av-num">112</td><td class="av-num">88,6</td><td class="av-num">8,12</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS ČR, Lékárenská péče 2019–2025: počty lékáren z textu o NRPZS k 31. 12. daného roku (souhrn ročenky 2019 uvádí 2 749), recepty v nemocničních a veřejných lékárnách z Tab. 6 ročenky 2025, recepty na obyvatele ze souhrnů jednotlivých ročenek. Skok nemocničních lékáren v roce 2023 nejspíš odráží změnu zařazení, ne vývoj sítě (ročenka ho nevysvětluje).</p>
+      </figure>
+
+      <h3>Výdej roste rychleji než síť</h3>
+      <p>
+        Zatímco lékáren mírně ubylo, receptů přibylo. Nemocniční a veřejné lékárny přijaly v roce 2019 přes 74,1 milionu receptů, v roce 2025 téměř 88,6 milionu, o 19,5 % víc (výpočet redakce z Tab. 6). Na obyvatele to je 8,12 receptu proti 6,93. Největší skok přišel v roce 2024, kdy počet receptů meziročně vzrostl o 14,5 %. Loni přibylo dalších 1,1 %. K tomu lékárny a výdejny přijaly 5,07 milionu poukazů na zdravotnické prostředky, 0,46 na obyvatele.
+      </p>
+      <p>
+        Pozor na výklad. ÚZIS sám upozorňuje, že na elektronický recept lze uvést jednu nebo dvě položky a že neexistuje průzkum průměrného počtu položek na recept. Z ročenky proto „není možné odvodit, zda se jedná o skutečný růst předepsaných léčiv nebo zvýšení průměrného počtu léčiv na jednom receptu“. Recept je tedy počet dokladů, ne počet balení ani pacientů.
+      </p>
+      <p>
+        Průměrná veřejná lékárna, která odevzdala výkaz, přijala 31 507 receptů za rok, medián je 24 214. Rozdíl ukazuje, že část lékáren má výrazně vyšší obrat než typická lékárna. Tržby všech lékáren a výdejen za léky a zdravotnické prostředky dosáhly 156,9 miliardy korun, o 14,7 % víc než v roce 2024.
+      </p>
+
+      <h3>Kraje: rozdíl o polovinu</h3>
+      <p>
+        Krajské rozložení ročenka uvádí jen pro lékárny, které odevzdaly výkaz a jejichž data prošla validací. Těch je 2 603, celostátně 2,38 na 10 000 obyvatel, tedy o něco méně než podle registru. Nejhustší síť má Zlínský kraj (2,89 lékárny na 10 000 obyvatel), dále Královéhradecký (2,79) a Jihomoravský (2,71). Nejřidší je Středočeský kraj s 1,90, po něm Ústecký (2,10) a Liberecký (2,12). Mezi krajními hodnotami je rozdíl zhruba o polovinu.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avBarH">
+        <figcaption class="av-figure-h" id="avBarH">Lékárny na 10 000 obyvatel podle krajů, 2025 (ÚZIS, Lékárenská péče 2025, Tab. 1, jen lékárny s validovaným výkazem)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="3">
+          <li class="av-bar-row" data-value="2.89" data-label="Zlínský" data-display="2,89"></li>
+          <li class="av-bar-row" data-value="2.79" data-label="Královéhradecký" data-display="2,79"></li>
+          <li class="av-bar-row" data-value="2.71" data-label="Jihomoravský" data-display="2,71"></li>
+          <li class="av-bar-row" data-value="2.66" data-label="Olomoucký" data-display="2,66"></li>
+          <li class="av-bar-row" data-value="2.58" data-label="Pardubický" data-display="2,58"></li>
+          <li class="av-bar-row" data-value="2.43" data-label="Karlovarský" data-display="2,43"></li>
+          <li class="av-bar-row" data-value="2.41" data-label="Moravskoslezský" data-display="2,41"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="2.38" data-label="Česko" data-display="2,38"></li>
+          <li class="av-bar-row" data-value="2.38" data-label="Vysočina" data-display="2,38"></li>
+          <li class="av-bar-row" data-value="2.37" data-label="Hl. m. Praha" data-display="2,37"></li>
+          <li class="av-bar-row" data-value="2.28" data-label="Plzeňský" data-display="2,28"></li>
+          <li class="av-bar-row" data-value="2.27" data-label="Jihočeský" data-display="2,27"></li>
+          <li class="av-bar-row" data-value="2.12" data-label="Liberecký" data-display="2,12"></li>
+          <li class="av-bar-row" data-value="2.10" data-label="Ústecký" data-display="2,10"></li>
+          <li class="av-bar-row" data-value="1.90" data-label="Středočeský" data-display="1,90"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS ČR, Lékárenská péče 2025, Tab. 1 (nemocniční a veřejné lékárny a OOVL, které odevzdaly výkaz a data byla validována, k 31. 12. 2025). Celostátní hodnota podle registru je 2,48; krajské hodnoty podle registru ročenka neuvádí.</p>
+      </figure>
+
+      <p>
+        Hustota je jen polovina obrazu. Druhou je zátěž: kolik receptů připadá na jednu veřejnou lékárnu. Když podělíme recepty veřejných lékáren počtem veřejných lékáren v kraji (výpočet redakce z Tab. 4), vychází nejvíc v Ústeckém kraji, <strong>37 175 receptů na lékárnu</strong>, a v Praze 34 896. Nejméně v Jihomoravském kraji (26 353) a ve Zlínském (26 903). Kraje s nejhustší sítí tedy mají i nejméně vytížené lékárny. Ústecký kraj patří k těm s nejřidší sítí a zároveň s nejvyšší zátěží.
+      </p>
+
+      <div class="article-callout-caveat" role="note">
+        <strong>Co krajská čísla neříkají.</strong>
+        Krajská tabulka zahrnuje jen lékárny, které odevzdaly výkaz. Za rok 2025 to bylo 96,2 % lékáren, u výdejen zdravotnických prostředků jen 78,4 %. Meziroční změna v kraji proto může být jen změnou v tom, kdo výkaz odevzdal. Výkaz se váže k sídlu lékárny, ne k bydlišti pacienta: kdo bydlí ve Středočeském kraji a léky si vyzvedává v Praze, se v datech projeví v Praze. A hustota neříká nic o vzdálenosti. Kraj s průměrnou hustotou může mít lékárny soustředěné ve městech a venkov bez nich. Okresní údaje podle registru ročenka neobsahuje; příloha 2 uvádí jen počty lékáren v obcích podle seznamu SÚKL.
+      </div>
+
+      <h3>Kdo síť řídí a jak se počítá</h3>
+      <p>
+        Lékárna je zdravotnické zařízení a provozovat ji smí jen ten, kdo má oprávnění k poskytování zdravotních služeb. Podle zákona o zdravotních službách (č. 372/2011 Sb., § 15) o něm rozhoduje krajský úřad. U lékárenské péče jen na základě souhlasného závazného stanoviska Státního ústavu pro kontrolu léčiv (SÚKL) k technickému a věcnému vybavení. Podmínky v § 16 jsou personální, technické a odborné. Kritérium počtu obyvatel nebo vzdálenosti k nejbližší lékárně mezi nimi není. Udělené oprávnění zapíše úřad do NRPZS do tří pracovních dnů (§ 19). Z tohoto registru vychází ÚZIS.
+      </p>
+      <p>
+        Kdo smí léky vydávat, určuje zákon o léčivech (č. 378/2007 Sb., § 82 odst. 2): léky na předpis farmaceut. Farmaceutický asistent smí vydávat jen léky, které nejsou vázané na lékařský předpis (kromě těch „s omezením“), a léky na žádanku. Bez farmaceuta tedy lékárna recept nevydá. Proto je personál pro dostupnost stejně důležitý jako počet provozoven.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-neutral">
+          <span class="av-counter" data-value="25.07" data-decimals="2">25,07</span>
+          <span class="av-counter-label">lékárny na 100 000 obyvatel podle seznamu SÚKL (indikátor HSPA Monitoru, 2026)</span>
+          <span class="av-counter-foot">ÚZIS k 31. 12. 2025: 2,48 na 10 000, tj. 24,8 na 100 000</span>
+        </div>
+      </aside>
+      <p>
+        HSPA Monitor sleduje hustotu lékáren v indikátoru <a href="indicator.html?id=lekarny_per_100k">lekarny_per_100k</a>, který vychází z otevřených dat SÚKL. Ukazuje 25,07 lékárny na 100 000 obyvatel. Číslo ÚZIS, 2,48 na 10 000, odpovídá po převodu 24,8 na 100 000. Rozdíl dělají tři věci. Jiný registr: SÚKL vede vlastní seznam pracovišť, ÚZIS čte NRPZS. Jiné datum: export SÚKL ze září 2026 proti stavu k 31. prosinci 2025. A jiný jmenovatel, tedy počet obyvatel. Seznam SÚKL přitom také obsahuje odloučená oddělení i nemocniční lékárny: v exportu z 25. září 2026 jsme našli 2 689 záznamů, z toho 205 odloučených oddělení a 103 nemocničních lékáren (výpočet redakce). Obě čísla tedy měří prakticky totéž a liší se zhruba o jedno procento.
+      </p>
+      <div class="av-aside-clear"></div>
+
+      <h3>Lidé za pultem</h3>
+      <p>
+        V lékárnách v roce 2025 pracovalo v přepočtu na plné úvazky 7 178 farmaceutů a 4 861 zdravotnických pracovníků způsobilých k výkonu povolání bez odborného dohledu, z toho 4 421 farmaceutických asistentů. ÚZIS uvádí, že proti roku 2024 je to o 131 farmaceutů a 721 těchto pracovníků méně. Z tabulek obou ročenek ale vychází, že farmaceutických asistentů o 93 přibylo (výpočet redakce). Úbytek se tedy týká jiných profesí v této skupině. Na jednu veřejnou lékárnu připadá v průměru 2,45 úvazku farmaceuta (výpočet redakce: 6 097 úvazků na 2 491 veřejných lékáren a OOVL). Personální řada je přitom rozkolísaná: za rok 2024 hlásil ÚZIS naopak nárůst o 1 035 farmaceutů.
+      </p>
+      <p>
+        Příloha ročenky z Národního registru zdravotnických pracovníků počítá osoby, ne úvazky: aktivních farmaceutů bylo ke konci roku 8 390, z toho 6 905 zaměstnaných v lékárně, a farmaceutických asistentů 6 042, z toho 4 745 v lékárně. Šedesát a víc let má 1 129 farmaceutů, tedy 13,5 %. Podrobněji se personálu věnuje článek <a href="clanek-farmaceuti-pracovni-sila.html">Farmaceuti jako pracovní síla</a>.
+      </p>
+
+      <h3>Mezinárodní srovnání: chybí spolehlivé měřítko</h3>
+      <p>
+        Pro hustotu lékáren jsme nenašli mezinárodní srovnání z primárního zdroje s uvedeným rokem a definicí. Ověřitelnou harmonizovanou řadu počtu lékáren jsme v databázích Eurostatu a OECD nenašli a výroční zpráva evropského sdružení lékárníků PGEU za rok 2024 tabulku po zemích neobsahuje. Srovnávat by bylo navíc ošidné: některé země do sítě počítají nemocniční lékárny nebo výdejní místa, jiné ne, a česká čísla se kvůli odloučeným oddělením mění podle toho, zda je počítáme. Indikátor <a href="indicator.html?id=lekarny_per_100k">lekarny_per_100k</a> proto vedeme bez benchmarku a s neutrálním signálem.
+      </p>
+      <p>
+        Srovnatelný je jen personál. Podle OECD (Health at a Glance 2025) mělo Česko v roce 2023 76 praktikujících farmaceutů na 100 000 obyvatel proti průměru OECD 86. Kolik lékáren země má, je méně důležité než to, kolik v nich pracuje farmaceutů a kolik receptů na každého připadá.
+      </p>
+
+      <h3>Co z toho plyne</h3>
+      <p>
+        Česká lékárenská síť je stabilní co do počtu, ale ne co do zátěže. Za šest let ubylo zhruba 2 % lékáren a přibyla pětina receptů. Kolik z toho je skutečně víc léků a kolik jen jinak rozepsaných receptů, ročenka neříká. Mezi kraji je rozdíl o polovinu v hustotě a o víc než třetinu ve vytížení lékáren. Ústecký kraj kombinuje řídkou síť s nejvyšším počtem receptů na lékárnu. A personál je údaj, ve kterém se meziroční změny počítají na stovky úvazků oběma směry, takže z jednoho roku závěr dělat nelze.
+      </p>
+      <p>
+        Pro pacienta z toho plyne hlavně jedno: celostátní průměr 4 038 obyvatel na lékárnu nic neříká o tom, jak daleko to má on. To dnes veřejná statistika neměří.
+      </p>
+
+      <h3>Co s tím</h3>
+      <p>
+        <strong>ÚZIS:</strong> zveřejňovat krajské (a ideálně okresní) počty lékáren podle registru, nejen podle odevzdaných výkazů, a v ročence vysvětlit změnu zařazení nemocničních lékáren mezi lety 2023 a 2024. Bez toho nelze řadu číst jako vývoj sítě. U personálu vysvětlit kolísání o stovky úvazků mezi roky.
+      </p>
+      <p>
+        <strong>SÚKL a Ministerstvo zdravotnictví:</strong> doplnit k počtu receptů z eReceptu počet vydaných položek a balení. Systém je sbírá a odpověděl by na otázku, kterou ÚZIS nechává otevřenou: přibývá léků, nebo jen dokladů?
+      </p>
+      <p>
+        <strong>Kraje:</strong> krajský úřad uděluje lékárnám oprávnění a vidí, kde vznikají a zanikají. Zveřejňovat, kde je nejbližší lékárna nejdál, by bylo užitečnější než krajský průměr.
+      </p>
+      <p>
+        <strong>HSPA Monitor:</strong> indikátor <a href="indicator.html?id=lekarny_per_100k">lekarny_per_100k</a> ponecháváme na datech SÚKL, protože se aktualizují měsíčně, a čísla ÚZIS uvádíme jako kontrolu. Liší se zhruba o jedno procento. Až bude k dispozici ověřený mezinárodní zdroj, doplníme benchmark.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=lekarny_per_100k"><strong>Hustota lékáren / 100 000 obyvatel</strong></a> — 25,07 / 100 000 obyvatel (2026, SÚKL · Open data — seznam lékáren) · signál neutral (bez benchmarku)</li>
+        <li><a href="indicator.html?id=farmaceuti_per_100k"><strong>Praktikující farmaceuti / 100 000 obyvatel</strong></a> — 76 / 100 000 (2023, OECD Health at a Glance 2025 · Eurostat · ÚZIS) proti OECD 86</li>
+        <li><a href="indicator.html?id=doplatky_leky_na_obyvatele"><strong>Doplatky pacientů za léky a zdravotnické prostředky na obyvatele</strong></a> — 1 803 Kč/obyv./rok (2025, ÚZIS Lékárenská péče 2025)</li>
+        <li><a href="indicator.html?id=nevydana_baleni_leku_pct"><strong>Nevydaná balení léků (rozdíl předpis − výdej na eRecept)</strong></a> — 3,8 % (2025, SÚKL eRecept, redakční výpočet)</li>
+      </ul>
+      <p>Související články: <a href="clanek-doplatky-leky-2025-dva-kraje.html">Doplatky na léky 2025</a> · <a href="clanek-farmaceuti-pracovni-sila.html">Farmaceuti jako pracovní síla</a> · <a href="clanek-ockovani-v-lekarnach.html">Očkování v lékárnách</a></p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární zdroje dat (ÚZIS ČR, řada Aktuální informace Lékárenská péče, výkaz A080; staženo 13. 10. 2026)</h5>
+        <ul class="article-sources-list">
+          <li><strong>Lékárenská péče 2025</strong> (Aktuální informace č. 1/2026, Praha 5. 10. 2026) — souhrn, počty registrovaných lékáren (str. 2), Tab. 1, 2, 3, 4 a 6, průměr a medián receptů na lékárnu, tržby. <a href="https://www.uzis.cz/res/f/008470/ai-2026-01-lekarenska-pece-2025.pdf" target="_blank" rel="noopener">uzis.cz (PDF) ↗</a> · <a href="https://www.uzis.cz/index.php?pg=record&amp;id=8470" target="_blank" rel="noopener">záznam publikace ↗</a></li>
+          <li><strong>Personální kapacity v lékárenství a farmacii</strong> — příloha 1 ročenky 2025, NRZP k 31. 12. 2025 (aktivní farmaceuti a asistenti, věk). <a href="https://www.uzis.cz/res/f/008470/ai-2026-01-lekarenska-pece-2025-p1.pdf" target="_blank" rel="noopener">uzis.cz (PDF) ↗</a></li>
+          <li><strong>Příloha 2 ročenky 2025</strong> — tabulky NRZP podle krajů, okresů a typu péče; list s počty lékáren v obcích podle seznamu SÚKL. <a href="https://www.uzis.cz/res/f/008470/ai-2026-01-lekarenska-pece-2025-p2.xlsx" target="_blank" rel="noopener">uzis.cz (XLSX) ↗</a></li>
+          <li><strong>Lékárenská péče 2024</strong> — registrované lékárny, Tab. 1 a 2 pro meziroční srovnání. <a href="https://www.uzis.cz/res/f/008466/ai-2025-01-lekarenska-pece-2024.pdf" target="_blank" rel="noopener">uzis.cz (PDF) ↗</a></li>
+          <li><strong>Lékárenská péče 2023</strong>. <a href="https://www.uzis.cz/res/f/008459/ai-2024-01-lekarenska-pece-2023.pdf" target="_blank" rel="noopener">uzis.cz (PDF) ↗</a></li>
+          <li><strong>Lékárenská péče 2022</strong>. <a href="https://www.uzis.cz/res/f/008457/ai-2023-01-lekarenska-pece-2022.pdf" target="_blank" rel="noopener">uzis.cz (PDF) ↗</a></li>
+          <li><strong>Lékárenská péče 2021</strong>. <a href="https://www.uzis.cz/res/f/008417/ai-2022-01-lekarenska-pece-2021.pdf" target="_blank" rel="noopener">uzis.cz (PDF) ↗</a></li>
+          <li><strong>Lékárenská péče 2020</strong>. <a href="https://www.uzis.cz/res/f/008371/ai-2021-03-lekarenska-pece-2020.pdf" target="_blank" rel="noopener">uzis.cz (PDF) ↗</a></li>
+          <li><strong>Lékárenská péče 2019</strong>. <a href="https://www.uzis.cz/res/f/008320/ai-2020-02-lekarenska-pece-2019.pdf" target="_blank" rel="noopener">uzis.cz (PDF) ↗</a></li>
+          <li><strong>SÚKL — Otevřená data, Seznam lékáren</strong> — export z 25. 9. 2026 (lekarny_seznam, lekarny_typ), staženo 13. 10. 2026; počty podle typu spočítala redakce. <a href="https://opendata.sukl.cz/?q=katalog/seznam-lekaren" target="_blank" rel="noopener">opendata.sukl.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Legislativa</h5>
+        <ul class="article-sources-list">
+          <li><strong>Zákon č. 372/2011 Sb., o zdravotních službách</strong> — § 5 (lékárenská péče), § 15 a 16 (oprávnění, závazné stanovisko SÚKL), § 19 (zápis do NRPZS), § 74 (Národní registr poskytovatelů); znění účinné od 1. 1. 2026, staženo 13. 10. 2026. <a href="https://www.zakonyprolidi.cz/cs/2011-372" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Zákon č. 378/2007 Sb., o léčivech</strong> — § 82 odst. 2 (kdo smí vydávat léčivé přípravky); znění účinné od 1. 1. 2026, staženo 13. 10. 2026. <a href="https://www.zakonyprolidi.cz/cs/2007-378" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Počty lékáren podle NRPZS zahrnují nemocniční a veřejné lékárny a odloučená oddělení výdeje léčiv; výdejny zdravotnických prostředků se počítají zvlášť. Krajské hodnoty v Tab. 1 se týkají jen lékáren s odevzdaným a validovaným výkazem. Recepty jsou počty dokladů, ne balení. Personální údaje z výkazu jsou přepočtené úvazky, údaje z NRZP počty osob. Změnu za 2019–2025, recepty na veřejnou lékárnu po krajích, úvazky farmaceutů na lékárnu, změnu počtu asistentů a počty v exportu SÚKL spočítala redakce HSPA Monitoru. Mezinárodní srovnání hustoty lékáren neuvádíme, protože jsme pro ně nenašli primární zdroj s rokem a definicí.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
