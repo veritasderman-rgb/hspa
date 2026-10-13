@@ -42,7 +42,7 @@ const PORTRAIT = {
   punchCX: 540, punchY: 700, punchMaxW: 820,
   outroCX: 540, logoY: 470, ctaY: 700,
   footCX: 540, footY: 1546,   // účaří drobného textu; s dotahy končí nad y 1560
-  board: { x: 90, y: 560, w: 900, rowH: 118, font: 46 },
+  board: { x: 70, y: 630, w: 940, rowH: 128, font: 50 },
   sideX: { left: 280, right: 800, center: 540 },
   pointL: [200, 900], pointR: [880, 900], pointUp: [760, 300],
 };
@@ -364,7 +364,8 @@ function boardLayer(tl, t) {
   const out = [];
   tl.beats.forEach((b, bi) => {
     if (b.type !== 'board' || t < b.t0) return;
-    const next = tl.beats.slice(bi + 1).find(x => x.type === 'board' || x.type === 'group' || x.type === 'outro');
+    // na výšku pointa tabuli překryje → tabule odejde i před pointou
+    const next = tl.beats.slice(bi + 1).find(x => x.type === 'board' || x.type === 'group' || x.type === 'outro' || (L === PORTRAIT && x.type === 'punch'));
     const until = next ? next.t0 : Infinity;
     if (t >= until + 0.1) return;
     const leave = ease.in(prog(t, until - 0.25, until + 0.1));
