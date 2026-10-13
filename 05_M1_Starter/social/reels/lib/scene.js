@@ -416,7 +416,9 @@ function punchLayer(b, t) {
   const bw = wMax + pad * 2, bh = lines.length * lh + pad * 1.4;
   const fill = b.tone === 'good' ? C.green : b.tone === 'warn' ? C.amber : C.ink;
   const ink = b.tone === 'bad' || !b.tone ? C.amber : C.ink;
-  const cy = L.punchY;
+  // na výšku: dvouřádková bublina by kartu pointy přesahovala → karta o kus níž
+  const twoLine = L === PORTRAIT && b.sched && balancedWrap(b.sched.words, L.bubbleFont, L.bubbleMaxW - 88, 800).length > 1;
+  const cy = L.punchY + (twoLine ? L.bubbleLH : 0);
   const txt = lines.map((ln, i) => `<text x="0" y="${r1(-bh / 2 + pad * 0.7 + fs * 0.82 + i * lh)}" text-anchor="middle" font-family="Inter" font-weight="900" font-size="${fs}" letter-spacing="-1" fill="${ink}">${escapeXml(ln.map(w => w.text).join(' '))}</text>`).join('');
   return `<g transform="translate(${L.punchCX} ${cy}) rotate(-4) scale(${r1(sc * 1000) / 1000})" opacity="${r1(op * 100) / 100}">
     <rect x="${r1(-bw / 2 + 12)}" y="${r1(-bh / 2 + 14)}" width="${r1(bw)}" height="${r1(bh)}" rx="28" fill="${C.ink}" opacity="0.18"/>
