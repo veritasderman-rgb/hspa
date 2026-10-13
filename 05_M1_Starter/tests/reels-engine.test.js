@@ -20,6 +20,8 @@ import { RESVG_FONT } from '../social/reels/lib/text.js';
 import { SR } from '../social/reels/lib/audio.js';
 import { FORMATS } from '../social/reels/lib/format.js';
 import { dims } from '../social/reels/lib/styles.js';
+import { spawnSync } from 'node:child_process';
+import { loadVoice, hasFfmpeg, timingPath } from '../social/reels/lib/voice.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SCRIPTS = resolve(ROOT, 'social/reels/scripts');
@@ -235,5 +237,26 @@ test('hlas (ElevenLabs) jen na šířku, s označením a s řečí, která se ve
     const short = JSON.parse(JSON.stringify(voiced[0].s));
     short.beats.find(b => b.voice).dur = 0.8;
     assert.ok(validate(short).errors.some(e => e.includes('hlas')));
+  }
+});
+
+test('hlas bez ffmpeg: validace a kompilace jedou z timing.json (CI runner ffmpeg nemá)', () => {
+  const voiced = scripts.filter(x => x.s.beats.some(b => b.voice));
+  for (const { f, s } of voiced) {
+    for (const b of s.beats.filter(x => x.voice)) assert.ok(existsSync(timingPath(b.voice)), `${f}: chybí timing.json vedle ${b.voice}`);
+  }
+  if (!voiced.length) return;
+  const r = spawnSync(process.execPath, ['social/reels/render.js', '--check', '--all'], { cwd: ROOT, env: { ...process.env, REELS_NO_FFMPEG: '1' }, encoding: 'utf8' });
+  assert.equal(r.status, 0, `validace bez ffmpeg selhala:\n${r.stderr}`);
+  // s ffmpeg: manifest musí sedět na skutečnou nahrávku (jinak render.js <slug> --voice-timing)
+  if (!hasFfmpeg()) return;
+  for (const { f, s } of voiced) {
+    for (const b of s.beats.filter(x => x.voice)) {
+      const tempo = s.voice_tempo || 1;
+      const m = JSON.parse(readFileSync(timingPath(b.voice), 'utf8'))[`${b.voice.split('/').pop()}@${tempo}`];
+      const v = loadVoice(b.voice, tempo);
+      assert.ok(m, `${f}: ${b.voice} není v timing.json`);
+      assert.deepEqual([m.start, m.end, m.dur], [v.start, v.end, v.dur], `${f}: timing.json je zastaralý pro ${b.voice}`);
+    }
   }
 });
