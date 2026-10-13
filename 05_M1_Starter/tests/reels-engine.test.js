@@ -18,6 +18,8 @@ import { person, ROLES } from '../social/reels/characters/cast.js';
 import { C } from '../social/reels/lib/palette.js';
 import { RESVG_FONT } from '../social/reels/lib/text.js';
 import { SR } from '../social/reels/lib/audio.js';
+import { FORMATS } from '../social/reels/lib/format.js';
+import { dims } from '../social/reels/lib/styles.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SCRIPTS = resolve(ROOT, 'social/reels/scripts');
@@ -32,7 +34,8 @@ test('reels: aspoň jeden scénář existuje a všechny projdou validací', () =
   for (const { f, s } of scripts) {
     const { errors, duration } = validate(s);
     assert.deepEqual(errors, [], `${f}: ${errors.join('; ')}`);
-    assert.ok(duration >= 8 && duration <= 20, `${f}: délka ${duration}`);
+    const max = FORMATS[s.format || 'portrait'].maxDur;
+    assert.ok(duration >= 8 && duration <= max, `${f}: délka ${duration} (max ${max} pro ${s.format || 'portrait'})`);
     assert.equal(s.slug, f.replace(/\.json$/, ''), `${f}: slug musí odpovídat názvu souboru`);
   }
 });
@@ -159,4 +162,78 @@ test('florence: scénáře mají háček, outro a AI označení na každém sní
 
 test('styly: neznámý styl validátor odmítne', () => {
   assert.ok(validate({ ...kompikScripts[0].s, style: 'xyz' }).errors.length > 0);
+});
+
+test('formát na šířku: 1920×1080, delší limit, tabule a kroky se vykreslí', () => {
+  const land = scripts.filter(x => x.s.format === 'landscape');
+  assert.ok(land.length >= 2, 'aspoň jedno video na šířku pro Kompíka i Florence');
+  for (const { f, s } of land) {
+    const tl = compile(s);
+    assert.deepEqual(dims(tl), { W: 1920, H: 1080 }, f);
+    for (let t = 0; t < tl.duration; t += 0.9) {
+      const svg = frameSvg(tl, t);
+      assert.ok(svg.startsWith('<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080"'), `${f} t=${t}`);
+    }
+  }
+  // portrait zůstává 1080×1920 a 20 s
+  assert.deepEqual(dims(kompikScripts[0].s), { W: 1080, H: 1920 });
+  const long = JSON.parse(JSON.stringify(land.find(x => !x.s.style).s));
+  long.beats[0].dur += 30;
+  assert.ok(validate(long).errors.some(e => e.includes('> 40')), 'landscape má strop 40 s');
+});
+
+test('tabule (board): verdikty, překryv s razítkem a doložení čísel hlídá validátor', () => {
+  const base = scripts.find(x => x.s.format === 'landscape' && !x.s.style).s;
+  const over = JSON.parse(JSON.stringify(base));
+  over.beats.find(b => b.type === 'board').items[0].text = 'Velmi dlouhý text položky tabule';
+  assert.ok(validate(over).errors.some(e => e.includes('překryla') || e.includes('32 znaků')));
+  const bad = JSON.parse(JSON.stringify(base));
+  bad.beats.find(b => b.type === 'board').items[0].verdict = 'mozna';
+  assert.ok(validate(bad).errors.some(e => e.includes('verdict')));
+  const num = JSON.parse(JSON.stringify(base));
+  num.beats.find(b => b.type === 'board').items[0].stamp = '500 Kč';
+  assert.ok(validate(num).errors.some(e => e.includes('„500"')), 'číslo na razítku musí mít fakt');
+  const nobasis = JSON.parse(JSON.stringify(base));
+  delete nobasis.beats.find(b => b.type === 'board').items[0].basis;
+  assert.ok(validate(nobasis).errors.some(e => e.includes('basis')));
+});
+
+test('kroky (step) Florence: titulek, základ a čísla jen z faktů', () => {
+  const base = scripts.find(x => x.s.format === 'landscape' && x.s.style === 'florence').s;
+  const step = b => b.type === 'step';
+  const noBasis = JSON.parse(JSON.stringify(base));
+  delete noBasis.beats.find(step).basis;
+  assert.ok(validate(noBasis).errors.some(e => e.includes('basis')));
+  const num = JSON.parse(JSON.stringify(base));
+  num.beats.find(step).title = 'Stížnost do 15 dnů';
+  assert.ok(validate(num).errors.some(e => e.includes('„15"')));
+  const many = JSON.parse(JSON.stringify(base));
+  const st = many.beats.find(step);
+  for (let i = 0; i < 3; i++) many.beats.splice(2, 0, { ...st });
+  assert.ok(validate(many).errors.some(e => e.includes('kroků') || e.includes('překryly')));
+});
+
+test('hlas (ElevenLabs) jen na šířku, s označením a s řečí, která se vejde do beatu', () => {
+  const voiced = scripts.filter(x => x.s.beats.some(b => b.voice));
+  for (const { f, s } of voiced) {
+    assert.equal(s.format, 'landscape', `${f}: hlas jen u webových videí na šířku`);
+    assert.ok(s.voice_credit && /ElevenLabs/.test(s.voice_credit), `${f}: chybí voice_credit`);
+    for (const b of s.beats.filter(x => x.voice)) assert.ok(existsSync(resolve(ROOT, b.voice)), `${f}: chybí ${b.voice}`);
+    const tl = compile(s);
+    const out = tl.beats.find(b => b.type === 'outro');
+    assert.ok(frameSvg(tl, out.t0 + 1.2).includes('hlas: '), `${f}: koncová karta neoznačuje hlas`);
+    const a = audioTrack(tl);
+    assert.ok(Math.abs(a.length / SR - (tl.duration + 0.3)) < 0.05);
+  }
+  if (voiced.length) {
+    const port = JSON.parse(JSON.stringify(voiced[0].s));
+    delete port.format;
+    assert.ok(validate(port).errors.some(e => e.includes('jen u videí na šířku')));
+    const nocredit = JSON.parse(JSON.stringify(voiced[0].s));
+    delete nocredit.voice_credit;
+    assert.ok(validate(nocredit).errors.some(e => e.includes('voice_credit')));
+    const short = JSON.parse(JSON.stringify(voiced[0].s));
+    short.beats.find(b => b.voice).dur = 0.8;
+    assert.ok(validate(short).errors.some(e => e.includes('hlas')));
+  }
 });

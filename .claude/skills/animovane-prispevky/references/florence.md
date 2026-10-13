@@ -78,6 +78,7 @@ u `number`) · `chin` (přemýšlí) · `facepalm` · `shrug` · `wave` (výchoz
 |---|---|---|
 | `hook` (první) | titulky od 1. snímku, Florence vyjede zespodu | `line` |
 | `say` | komentář v titulcích, výraz a gesto | `line` |
+| `step` | krok návodu: seznam kroků vlevo nahoře (aktuální jantarový, hotové s fajfkou), titulky pod ním | `line`, `title` (≤ 40 znaků), `basis`; volitelně `n` |
 | `number` | titulek nad číslem, lampa, počítání a úder (0,85 s), pak `label` a `compare` | `fact`, `label` |
 | `outro` (poslední) | Florence · AI autorka, výzva, doména, zdroj a „Text a animace: AI" | — |
 
@@ -98,3 +99,11 @@ u `number`) · `chin` (přemýšlí) · `facepalm` · `shrug` · `wave` (výchoz
 3. **Twist:** proč číslo neznamená to, co se zdá (paradox, metodika, souvislost).
 4. **Pointa s nadhledem**, nejlépe krátká věta („Zvykli jsme si *čekat*.").
 5. **Outro s mrknutím** a výzvou do bia.
+
+## Na šířku (`"format": "landscape"`)
+
+16:9 1920×1080 pro vložení do webu, strop 35 s. Florence stojí vpravo a svítí
+lampou do textu, titulky, číslo a seznam kroků jsou vlevo (střed x 700). Beat
+`step` dělá z Florence průvodkyni: „krok jedna… krok dva…" se skládá do seznamu.
+Vzor: `scripts/florence-poplatky-stiznost.json` (stížnost na poplatek v pěti
+krocích, 32 s). Velká čísla s mezerami („1 000 000 Kč") se načítají celá.

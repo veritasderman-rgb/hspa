@@ -149,3 +149,15 @@ test('poplatky.html: poděkování zpracovatelce a odkazy na ohlasy', () => {
   assert.match(html, /zdravotnickydenik\.cz\/2026\/10\/poplatky-lekari-pacienti/);
   assert.match(html, /mzd\.gov\.cz\/tiskove-centrum-mz\/za-co-u-lekare-platit-muzete/);
 });
+
+test('poplatky.html: vložená videa a plakáty existují a mají přepis', () => {
+  const vids = [...html.matchAll(/<source src="(assets\/social\/reels\/[^"]+\.mp4)"/g)].map((m) => m[1]);
+  assert.deepEqual(vids.sort(), ['assets/social/reels/florence-poplatky-stiznost.mp4', 'assets/social/reels/poplatky-kompik.mp4']);
+  for (const v of vids) {
+    assert.ok(fs.existsSync(path.join(ROOT, v)), `chybí ${v}`);
+    assert.ok(fs.existsSync(path.join(ROOT, v.replace(/\.mp4$/, '.png'))), `chybí plakát k ${v}`);
+    assert.ok(fs.statSync(path.join(ROOT, v)).size <= 12 * 1024 * 1024, `${v} je příliš velké`);
+  }
+  assert.equal((html.match(/class="pop-video-text"/g) || []).length, 2, 'každé video má textový přepis');
+  assert.match(html, /preload="none"/);
+});

@@ -6,6 +6,13 @@ Formát: každá položka má `Datum`, `PR`, `Co`, `Proč`, `Důsledek`.
 
 ---
 
+## 2026-10-13 — Webová videa na šířku smí mít syntetický český hlas (ElevenLabs)
+
+- **PR**: `claude/determined-mayer-y0gud5` (videa k `poplatky.html`)
+- **Co**: Renderer animovaných příspěvků umí `"format": "landscape"` (16:9 1920×1080, do 40 s) a dva nové beaty: `board` (Kompíkova tabule „smí / nesmí“) a `step` (Florence provádí krok za krokem). Vydavatel pro tato webová videa výslovně povolil syntetický český hlas z ElevenLabs („v tomto případě povoluji Eleven Labs pro český hlas, tady to dává smysl“). Beat nese `voice` (mp3 v `social/reels/voice/<slug>/`), scénář `voice_credit`, který koncová karta i přepis pod videem uvádějí. Použity jsou hlasy z knihovny („Pavel“ pro Kompíka, „Eva“ pro Florence), žádný klon.
+- **Proč**: Video vložené do stránky jako průvodce (stížnost krok za krokem) se poslouchá jako výklad. Na webu velikost souboru nevadí, takže se drží plná kvalita (`crf` 22).
+- **Důsledek**: Hlas je **jen** u `format: landscape`. Validátor ho jinde odmítne a sociální sítě zůstávají bez hlasu (pravidla skillu). Nikdy neklonovat hlas skutečné osoby. Florence je vždy označená jako AI. Nové hlasové repliky stojí kredity ElevenLabs a generují se jen na pokyn vydavatele.
+
 ## 2026-10-12 — Fronta Bufferu jen z videí, rutina vyrábí 1 video denně
 
 - **PR**: `claude/quirky-planck-byh0j6` (úprava rutiny)

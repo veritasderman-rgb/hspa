@@ -278,6 +278,7 @@ kapacit dlouhodobé péče do roku 2035).
 
 - **Plné znění je statické HTML** (indexovatelné), převzaté doslova z PDF; opravené překlepy originálu jsou vyjmenované v poznámce pod přepisem. Při aktualizaci stanoviska MZ (kazuistika 2 platí do 31. 12. 2026) je potřeba přepis i stromy v `data/poplatky.json` srovnat.
 - **Nic se neodesílá** — generátor skládá text v prohlížeči, bez localStorage.
+- **Dvě videa na šířku** (16:9, `<video preload="none">` s plakátem a textovým přepisem): Kompík vysvětluje, za co se platí (`assets/social/reels/poplatky-kompik.mp4`, scénář `social/reels/scripts/poplatky-kompik.json`, beat `board`), a Florence provede stížností v pěti krocích (`florence-poplatky-stiznost.mp4`, beat `step`, 32 s). Renderer: `npm run reels:render -- <slug>`; formát `"format": "landscape"` popisuje skill `animovane-prispevky`.
 - **Vstupy**: nav skupina „Co s tím můžu dělat já“, `SITE_TOOLS` (Prozkoumejte dál), odkaz z článku `clanek-platby-pacientu-metodicke-stanovisko-mz-2026.html`, sitemap.
 
 ### `kalkulacka-pece-2035.html` — Kdo se o nás postará v roce 2035?
