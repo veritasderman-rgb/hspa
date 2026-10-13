@@ -31,6 +31,10 @@ Styl **Florence komentuje** (`"style": "florence"`) má vlastní beaty — viz
 | Pole | Povinné | Význam |
 |---|---|---|
 | `slug` | ✅ | = název souboru, = slug článku |
+| `format` | — | `portrait` (výchozí, 9:16, ≤ 20 s) nebo `landscape` (16:9 1920×1080, ≤ 40 s — pro web) |
+| `voice_credit` | ✅ s hlasem | označení hlasu na koncové kartě, např. „ElevenLabs (syntetický hlas „Pavel“)“ |
+| `voice_tempo` | — | zrychlení hlasu bez změny výšky (ffmpeg atempo), např. 1.08 |
+| `crf` | — | kvalita H.264 (výchozí 22) |
 | `article` | ✅ | HTML článku (relativně k `05_M1_Starter/`), proti němu se ověřují citace |
 | `series` | — | text odznaku nahoře (výchozí „Kompík vysvětluje") |
 | `kicker` | — | podtitul pod odznakem (téma · rok), VERZÁLKAMI se vykreslí sám |
@@ -46,6 +50,12 @@ Beaty jdou za sebou, každý má `type` a `dur` (s). Celek **8–20 s**. Replika
 (`line`) se musí vejít do beatu i s rezervou 0,35 s (validátor spočítá slabiky).
 Zvýraznění v replice: `*slovo*` nebo `*víc slov*` (vykreslí se tmavě jantarově,
 zelenou při `tone: good`).
+
+### Hlas u beatu (jen `format: landscape`)
+Každý beat smí mít `"voice": "social/reels/voice/<slug>/NN.mp3"` — namluvenou repliku
+(ElevenLabs, hlas z knihovny). Žvatlání se pak vypne, podkres ztiší, bublina se srovná
+s řečí (když hlas říká mnohem víc než bublina, text se jen posune) a pusa se hýbe
+podle hlasitosti. Validátor ověří, že řeč + nástup + 0,35 s se vejde do `dur`.
 
 ### `intro` — háček (první beat)
 Kompík vyskočí zespodu (boing + pop), velký uprostřed, bublina nad ním.
@@ -97,6 +107,23 @@ Plácnutý nápis přes scénu (otřes, zoom) + zvuk podle `tone`: `bad` = smutn
 trombon (wah-wah-waaah) a hudba ztichne do mollu, `good` = ta-da, `warn` = boing.
 `basis` (povinné) — výpočet nebo věta z článku, ze které pointa plyne. `text`
 ≤ ~20 znaků (2 řádky).
+
+### `board` — tabule „smí / nesmí" (hlavně na šířku)
+```json
+{ "type": "board", "dur": 5.6, "emotion": "skeptic", "title": "U smluvního lékaře",
+  "items": [
+    { "text": "Registrační poplatek", "verdict": "ne", "basis": "kazuistika 1" },
+    { "text": "Pohotovost", "verdict": "ano", "stamp": "90 Kč", "basis": "kazuistika 4.2" }
+  ],
+  "line": "Tohle po vás smluvní lékař chtít *nesmí*." }
+```
+Řádky naskakují (plop), na každý dopadne razítko (pop); `at` a `stamp_at` (s od začátku beatu) je srovnají s mluveným výčtem: `verdict` `ne` = NESMÍ
+(inkoust + jantar), `zalezi` = JEN ZA PODMÍNEK (jantar), `ano` = SMÍ (zeleň);
+`stamp` přepíše text razítka (≤ 16 znaků). 2–6 položek, text ≤ 32 znaků,
+`basis` povinný. Validátor odmítne položku, která by se překryla s razítkem,
+a beat, do kterého se položky nevejdou (≥ 0,9 s + 0,55 s na položku). Čísla
+v textu i na razítku musí být doložená fakty. Tabule zůstane na scéně i během
+pointy, odjede před další tabulí, skupinou nebo outrem; Kompík na ni ukazuje.
 
 ### `outro` — koncová karta (poslední beat, povinný)
 ```json

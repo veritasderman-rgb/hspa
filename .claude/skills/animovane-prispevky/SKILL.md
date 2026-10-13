@@ -15,6 +15,7 @@ postavičky, emoce, rytmus. Jedno video = jedno číslo = jedna pointa.
 | | |
 |---|---|
 | Formát | 9:16, 1080×1920, 30 fps, H.264 + AAC, **10–20 s** (ideál 13–16 s), ≤ 3 MB |
+| Na šířku | `"format": "landscape"` → 16:9, 1920×1080, **≤ 35 s** — jen pro vložení do webu (sekce, průvodce), ne do Reels |
 | Výstup | `05_M1_Starter/assets/social/reels/<slug>.mp4` + plakát `<slug>.png` |
 | Scénář | `05_M1_Starter/social/reels/scripts/<slug>.json` (verzovaný, testovaný) |
 | Renderer | `05_M1_Starter/social/reels/` — SVG → resvg → ffmpeg, offline, deterministický |
@@ -64,6 +65,31 @@ Pracovní adresář `05_M1_Starter/`.
    jde video až když je **živé na produkci** (HTTP 200 na
    `https://skorezdravotnictvi.cz/assets/social/reels/<slug>.mp4`), stejně jako karty.
 
+## Video na šířku (web)
+
+Pro vložení do stránky webu (`<video>` v sekci, např. `poplatky.html`) přidej do
+scénáře `"format": "landscape"`. Scéna se přeskládá na 16:9: Kompík vlevo,
+tabule / skupiny vpravo; Florence vpravo s lampou, titulky a kroky vlevo. Strop
+délky je 35 s (portrait dál 20 s). Na šířku dávají smysl dva nové beaty:
+
+- **`board`** (Kompík) — tabule „smí / nesmí": 2–6 řádků, každý s razítkem
+  `verdict: ne|zalezi|ano` (NESMÍ / JEN ZA PODMÍNEK / SMÍ, nebo vlastní `stamp`,
+  např. „90 Kč") a povinným `basis` (kazuistika, paragraf). Hodí se na výklad
+  pravidel bez čísla k porovnání.
+- **`step`** (Florence) — návod krok za krokem: `n`, `title` (≤ 40 znaků, čísla jen
+  z faktů), `basis`; kroky se skládají do seznamu, hotové dostanou fajfku. Nejvýš 6.
+
+S hlasem (viz výjimka níže): repliky vygeneruj v ElevenLabs po beatech
+(`creative_generate_speech`, jeden take), ulož do `social/reels/voice/<slug>/NN.mp3`
+a délky beatů nastav podle naměřené řeči (`loadVoice()` v `lib/voice.js` vrací
+začátek a konec řeči). Bublina a titulky se na řeč srovnají samy, pusa jde podle
+hlasitosti, podkres se pod hlasem ztiší. U tabule sesynchronizuj řádky s výčtem
+(`items[].at`, `stamp_at`). Strop délky na šířku je 40 s.
+
+Fakta se dokládají stejně, `article` může být i sekční stránka (`poplatky.html`).
+Ověř obraz archem (`--sheet` je na šířku 3×4) a vlož video do stránky s plakátem,
+`preload="none"` a textovým přepisem titulků pod videem (video nemá hlas).
+
 ## Fakta a poctivost (červené linie — GOVERNANCE § 2 a § 6)
 
 - **Žádné číslo z paměti.** Každé číslo ve videu (bublina, cedule, počet postaviček,
@@ -89,6 +115,11 @@ Pracovní adresář `05_M1_Starter/`.
   „běžte na…", „berte…". Prevence jen jako systémový fakt („půlka lidí prohlídku vynechá").
 - **Kompík ani Florence nemluví lidským hlasem** a nepředstírají člověka — Kompík
   žvatlá tóny, Florence má titulky a psací stroj. Žádné klonování hlasů skutečných lidí.
+  **Výjimka (vydavatel, 13. 10. 2026):** webová videa na šířku (`format: landscape`)
+  smí mít syntetický český hlas z knihovny ElevenLabs — beat `voice` (mp3 v
+  `social/reels/voice/<slug>/`), skript `voice_credit` (označení na koncové kartě,
+  povinné) a volitelně `voice_tempo`. Jen hlasy z knihovny, nikdy klon skutečné
+  osoby; mimo landscape validátor hlas odmítne. Na sociální sítě dál bez hlasu.
 - **Florence je vždy označená jako AI** (odznak na klopě, štítek nahoře, koncová karta).
   Je krásná a sebevědomá — šarm, mrknutí, ironie — ale ne lascivní (žádný výstřih
   ani vyzývavé pózy; sítě to navíc tlumí v dosahu).

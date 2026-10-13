@@ -17,27 +17,61 @@ import { kompik, aimArm, KOMPIK_HEIGHT } from '../characters/kompik.js';
 import { person, ROLES } from '../characters/cast.js';
 import { track, sfx, babble, music } from './audio.js';
 import { parseValue, checkFacts, checkNumbers } from './facts.js';
+import { FORMATS, formatName } from './format.js';
+import { loadVoice, alignSchedule, voiceStart, mixVoice, duck, voiceMouth, voiceSpeaking } from './voice.js';
 
 export { parseValue };
 
-export const W = 1080, H = 1920;
-export const BEAT_TYPES = ['intro', 'say', 'group', 'punch', 'outro'];
+export const BEAT_TYPES = ['intro', 'say', 'group', 'punch', 'board', 'outro'];
+export const VERDICTS = ['ne', 'zalezi', 'ano'];
 export const EMOTIONS = ['curious', 'explain', 'worried', 'shocked', 'sad', 'happy', 'proud', 'skeptic'];
 export const GESTURES = ['none', 'point-left', 'point-right', 'point-up', 'shrug', 'hands-up', 'wave', 'think'];
 export const LIMITS = { minDur: 8, maxDur: 20, maxLine: 70, maxGroup: 40 };
 
 // Rozvržení 9:16 s ohledem na UI Reels/Stories (horních ~220 px a spodních ~360 px
 // překrývá rozhraní aplikace; důležité věci drž mezi y 230 a 1560).
-const L = {
-  badgeY: 250, kickerY: 318,
-  bubbleTop: 372, bubbleMaxW: 940, bubbleFont: 64, bubbleLH: 80,
+const PORTRAIT = {
+  W: 1080, H: 1920, cx: 540, cy: 960,
+  badgeX: 540, badgeY: 250, kickerY: 318,
+  bubbleCX: 540, bubbleTop: 372, bubbleMaxW: 940, bubbleFont: 64, bubbleLH: 80,
   groupBase: 1080, groupColGap: 84, groupRowGap: 60, groupScale: 0.4,
   valueY: 1178, labelY: 1226,
   kompikStage: { x: 540, y: 1490, s: 0.62 },
   kompikHero: { x: 540, y: 1420, s: 0.9 },
-  footY: 1546,   // účaří drobného textu; s dotahy končí nad y 1560
+  floorY: 1478, ringR: 620,
+  punchCX: 540, punchY: 700, punchMaxW: 820,
+  outroCX: 540, logoY: 470, ctaY: 700,
+  footCX: 540, footY: 1546,   // účaří drobného textu; s dotahy končí nad y 1560
+  board: { x: 90, y: 560, w: 900, rowH: 118, font: 46 },
+  sideX: { left: 280, right: 800, center: 540 },
+  pointL: [200, 900], pointR: [880, 900], pointUp: [760, 300],
 };
-const SIDE_X = { left: 280, right: 800, center: 540 };
+// Rozvržení 16:9 pro web: Kompík vlevo, tabule / skupiny vpravo, bublina nad Kompíkem.
+const LANDSCAPE = {
+  W: 1920, H: 1080, cx: 960, cy: 540,
+  badgeX: 960, badgeY: 62, kickerY: 120,
+  bubbleCX: 500, bubbleTop: 160, bubbleMaxW: 880, bubbleFont: 60, bubbleLH: 74,
+  groupBase: 640, groupColGap: 72, groupRowGap: 52, groupScale: 0.34,
+  valueY: 740, labelY: 782,
+  kompikStage: { x: 470, y: 1000, s: 0.9 },
+  kompikHero: { x: 500, y: 1000, s: 0.96 },
+  floorY: 985, ringR: 470,
+  punchCX: 960, punchY: 470, punchMaxW: 1100,
+  outroCX: 1220, logoY: 360, ctaY: 560,
+  footCX: 960, footY: 1052,
+  board: { x: 940, y: 165, w: 930, rowH: 146, font: 48 },
+  sideX: { left: 1100, right: 1560, center: 1330 },
+  pointL: [120, 500], pointR: [1500, 500], pointUp: [900, 140],
+};
+const LAYOUTS = { portrait: PORTRAIT, landscape: LANDSCAPE };
+// Geometrie aktuálně kreslené scény. Vše je synchronní, takže stačí přepnout
+// na vstupu (compile / frameSvg / validate) podle `script.format`.
+let L = PORTRAIT, W = L.W, H = L.H, SIDE_X = L.sideX;
+function useFormat(scriptOrTl) {
+  L = LAYOUTS[formatName(scriptOrTl)] || PORTRAIT;
+  W = L.W; H = L.H; SIDE_X = L.sideX;
+}
+export { W, H };
 
 const EMO = {
   curious: { needle: 0,   eyes: { mood: 'normal', lookY: -0.5 }, brows: 'up',      mouth: 'o',      arms: [28, 28] },
@@ -62,12 +96,17 @@ function fmtCz(n, dec) {
 // ───────────────────────────── kompilace ─────────────────────────────
 
 export function compile(script) {
+  useFormat(script);
   const beats = [];
   let t = 0;
   for (const b of script.beats) {
     const beat = { ...b, t0: t, t1: t + b.dur };
     const speakAt = t + (b.type === 'intro' ? 0.45 : b.type === 'punch' ? 0.25 : b.type === 'outro' ? 0.55 : 0.2);
     if (b.line) beat.sched = schedule(b.line, speakAt);
+    if (b.voice) {
+      beat.v = loadVoice(b.voice, script.voice_tempo || 1);
+      if (beat.v) { beat.sched = alignSchedule(beat.sched, speakAt, beat.v); beat.voiceAt = voiceStart(speakAt, beat.v); }
+    }
     beats.push(beat);
     t += b.dur;
   }
@@ -97,7 +136,7 @@ export function compile(script) {
     groups.push({ ...b, cx, figs, top: L.groupBase - (Math.ceil(n / cols) - 1) * L.groupRowGap - 80, countEnd: b.t0 + 0.3 + n * stagger + 0.2 });
   });
 
-  return { script, beats, groups, duration };
+  return { script, beats, groups, duration, W, H };
 }
 
 function beatAt(tl, t) {
@@ -143,8 +182,8 @@ function kompikPose(tl, t) {
   if (b.type === 'outro') needle = lerp(pe.needle, 35, ease.outElastic(prog(t, b.t0 + 0.45, b.t0 + 1.4)));
 
   // výraz + řeč
-  const open = mouthOpen(b.sched, t);
-  const speaking = b.sched && t >= b.sched.syl[0]?.t0 && t <= b.sched.end;
+  const open = b.v ? voiceMouth(b, t) : mouthOpen(b.sched, t);
+  const speaking = b.v ? voiceSpeaking(b, t) : b.sched && t >= b.sched.syl[0]?.t0 && t <= b.sched.end;
   const eyes = { ...e.eyes, blink: blink(t, 7) };
   if (e.shake && t < b.t0 + 0.6) squash *= squashAt(t, b.t0 + 0.05, 0.16, 0.4);
 
@@ -160,9 +199,14 @@ function kompikPose(tl, t) {
     const arm = point(side, target.cx, target.top + 40);
     if (side < 0) armL = arm; else armR = arm;
     eyes.lookX = side * 0.8; eyes.lookY = -0.6;
-  } else if (g === 'point-left') { armL = point(-1, 200, 900); eyes.lookX = -0.8; }
-  else if (g === 'point-right') { armR = point(1, 880, 900); eyes.lookX = 0.8; }
-  else if (g === 'point-up') { armR = point(1, 760, 300); eyes.lookY = -0.9; }
+  } else if (b.type === 'board') {
+    const bx = L.board.x + L.board.w / 2, side = bx < x ? -1 : 1;
+    const arm = point(side, bx, L.board.y + 120);
+    if (side < 0) armL = arm; else armR = arm;
+    eyes.lookX = side * 0.8; eyes.lookY = -0.4;
+  } else if (g === 'point-left') { armL = point(-1, ...L.pointL); eyes.lookX = -0.8; }
+  else if (g === 'point-right') { armR = point(1, ...L.pointR); eyes.lookX = 0.8; }
+  else if (g === 'point-up') { armR = point(1, ...L.pointUp); eyes.lookY = -0.9; }
   else if (g === 'hands-up') { armL = { a: 160, bend: -0.2 }; armR = { a: 160, bend: -0.2 }; }
   else if (g === 'shrug') { armL = { a: 105, bend: -1.4, len: 100 }; armR = { a: 105, bend: -1.4, len: 100 }; }
   else if (g === 'think') { armR = { a: 168, bend: 1.4, len: 104 }; eyes.lookY = -0.7; eyes.lookX = 0.4; }
@@ -188,8 +232,8 @@ function kompikPose(tl, t) {
 function background(t, tl) {
   const rot = r1(t * 3);
   const ticks = Array.from({ length: 24 }, (_, i) => {
-    const a = (i * 15) * Math.PI / 180, r0 = i % 6 === 0 ? 560 : 590;
-    return `<line x1="${r1(Math.sin(a) * r0)}" y1="${r1(-Math.cos(a) * r0)}" x2="${r1(Math.sin(a) * 620)}" y2="${r1(-Math.cos(a) * 620)}" stroke="${C.sand2}" stroke-width="${i % 6 === 0 ? 10 : 5}" stroke-linecap="round"/>`;
+    const R = L.ringR, a = (i * 15) * Math.PI / 180, r0 = R - (i % 6 === 0 ? 60 : 30);
+    return `<line x1="${r1(Math.sin(a) * r0)}" y1="${r1(-Math.cos(a) * r0)}" x2="${r1(Math.sin(a) * R)}" y2="${r1(-Math.cos(a) * R)}" stroke="${C.sand2}" stroke-width="${i % 6 === 0 ? 10 : 5}" stroke-linecap="round"/>`;
   }).join('');
   const dots = Array.from({ length: 14 }, (_, i) => {
     const rx = (hash(`d${i}`) % 1000) / 1000, ry = (hash(`e${i}`) % 1000) / 1000;
@@ -198,9 +242,9 @@ function background(t, tl) {
   }).join('');
   return `<rect width="${W}" height="${H}" fill="${C.sand}"/>
   ${dots}
-  <g transform="translate(540 960) rotate(${rot})" opacity="0.9"><circle r="620" fill="none" stroke="${C.sand2}" stroke-width="6"/>${ticks}</g>
-  <rect x="0" y="1478" width="${W}" height="${H - 1478}" fill="${C.sand2}"/>
-  <rect x="0" y="1478" width="${W}" height="8" fill="${C.ink}" opacity="0.08"/>`;
+  <g transform="translate(${L.cx} ${L.cy}) rotate(${rot})" opacity="0.9"><circle r="${L.ringR}" fill="none" stroke="${C.sand2}" stroke-width="6"/>${ticks}</g>
+  <rect x="0" y="${L.floorY}" width="${W}" height="${H - L.floorY}" fill="${C.sand2}"/>
+  <rect x="0" y="${L.floorY}" width="${W}" height="8" fill="${C.ink}" opacity="0.08"/>`;
 }
 
 function badge(script, t) {
@@ -208,12 +252,12 @@ function badge(script, t) {
   const text = (script.series || 'Kompík vysvětluje').toUpperCase();
   const fs = 30, w = measure(text, fs, 900) + text.length * 2 + 100;
   const kicker = script.kicker ? escapeXml(script.kicker.toUpperCase()) : '';
-  return `<g transform="translate(540 ${L.badgeY}) scale(${r1(k * 100) / 100})">
+  return `<g transform="translate(${L.badgeX} ${L.badgeY}) scale(${r1(k * 100) / 100})">
     <rect x="${r1(-w / 2)}" y="-34" width="${r1(w)}" height="68" rx="34" fill="${C.paper}" stroke="${C.ink}" stroke-width="5"/>
     <g transform="translate(${r1(-w / 2 + 40)} 0) scale(0.3)">${miniCompass()}</g>
     <text x="${r1(-w / 2 + 70)}" y="11" font-family="Inter" font-weight="900" font-size="${fs}" letter-spacing="2" fill="${C.ink}">${escapeXml(text)}</text>
   </g>
-  ${kicker ? `<text x="540" y="${L.kickerY}" text-anchor="middle" font-family="Inter" font-weight="800" font-size="27" letter-spacing="3" fill="${C.inkSoft}" opacity="${r1(prog(t, 0.3, 0.6) * 100) / 100}">${kicker}</text>` : ''}`;
+  ${kicker ? `<text x="${L.badgeX}" y="${L.kickerY}" text-anchor="middle" font-family="Inter" font-weight="800" font-size="27" letter-spacing="3" fill="${C.inkSoft}" opacity="${r1(prog(t, 0.3, 0.6) * 100) / 100}">${kicker}</text>` : ''}`;
 }
 
 /** Značka HSPA Kompas (compass-mark.svg) vystředěná na 0,0, šířka 100. */
@@ -237,10 +281,10 @@ function bubble(b, t, anchor, { top = L.bubbleTop, tone = 'warn', above = false 
   const lines = balancedWrap(b.sched.words, fs, L.bubbleMaxW - padX * 2, 800);
   const wMax = Math.max(...lines.map(lineWidth));
   const bw = wMax + padX * 2, bh = lines.length * lh + padY * 2 - (lh - fs) + 8;
-  const bx = 540 - bw / 2, by = above ? Math.max(L.bubbleTop, anchor[1] - 110 - bh) : top;
+  const bx = L.bubbleCX - bw / 2, by = above ? Math.max(L.bubbleTop, anchor[1] - 110 - bh) : top;
   const emphColor = tone === 'good' ? C.greenDeep : '#B86E00';
   const texts = lines.map((ln, li) => {
-    const lx = 540 - lineWidth(ln) / 2;
+    const lx = L.bubbleCX - lineWidth(ln) / 2;
     const yy = by + padY + fs * 0.86 + li * lh;
     return ln.map(wd => {
       const ws = b.sched.wordStart[wd.i];
@@ -258,7 +302,7 @@ function bubble(b, t, anchor, { top = L.bubbleTop, tone = 'warn', above = false 
   const hasTail = tipY > tailBaseY + 20;
   const tailOuter = hasTail ? `<path d="M${r1(tx - 30)},${r1(tailBaseY)} L${r1(tipX)},${r1(tipY)} L${r1(tx + 30)},${r1(tailBaseY)} Z" fill="${C.paper}" stroke="${C.ink}" stroke-width="7" stroke-linejoin="round"/>` : '';
   const tailCover = hasTail ? `<path d="M${r1(tx - 24)},${r1(tailBaseY - 6)} L${r1(lerp(tipX, tx, 0.12))},${r1(tipY - 14)} L${r1(tx + 24)},${r1(tailBaseY - 6)} Z" fill="${C.paper}"/>` : '';
-  const cx = 540, cy = by + bh / 2;
+  const cx = L.bubbleCX, cy = by + bh / 2;
   return `<g opacity="${r1(fadeOut * 100) / 100}" transform="translate(${cx} ${r1(cy)}) scale(${r1(pop * 1000) / 1000}) translate(${-cx} ${r1(-cy)})">
     <rect x="${r1(bx + 8)}" y="${r1(by + 10)}" width="${r1(bw)}" height="${r1(bh)}" rx="40" fill="${C.ink}" opacity="0.12"/>
     ${tailOuter}
@@ -281,7 +325,7 @@ function groupsLayer(tl, t, outroT0) {
       const hop = (1 - ease.out(k)) * 90 + Math.max(0, Math.sin((t - f.t) * 5 + f.i)) * 4 * (1 - leave);
       const sc = L.groupScale * ease.outBack(k);
       const mood = punch && g.punchMood ? g.punchMood : (g.mood || 'happy');
-      return person({ role, x: f.x, y: f.y + leave * 900, opacity: 1 - leave, s: sc, seed: f.seed, hop, blink: blink(t, f.seed % 97), mood, lookX: g.cx < 540 ? 0.6 : -0.6 });
+      return person({ role, x: f.x, y: f.y + leave * 900, opacity: 1 - leave, s: sc, seed: f.seed, hop, blink: blink(t, f.seed % 97), mood, lookX: g.cx < L.cx ? 0.6 : -0.6 });
     }).join('');
     // číslo a popisek
     const v = parseValue(g.value), dec = decimals(g.value);
@@ -298,6 +342,64 @@ function groupsLayer(tl, t, outroT0) {
   return out.join('');
 }
 
+/** Časování tabule: kdy naskočí řádek a kdy na něj dopadne razítko. */
+export function boardTimes(b) {
+  const n = (b.items || []).length;
+  const step = n ? Math.min(0.95, (b.dur - 0.9) / n) : 0;
+  return (b.items || []).map((it, k) => {
+    // `at` / `stamp_at` (s od začátku beatu) srovnají řádek a razítko s mluveným výčtem
+    const row = it.at != null ? b.t0 + it.at : b.t0 + 0.35 + k * step;
+    return { row, stamp: it.stamp_at != null ? b.t0 + it.stamp_at : row + Math.min(0.35, step * 0.55) };
+  });
+}
+
+const STAMP = {
+  ne: { fill: C.ink, ink: C.amber, text: 'NESMÍ' },
+  zalezi: { fill: C.amber, ink: C.ink, text: 'JEN ZA PODMÍNEK' },
+  ano: { fill: C.green, ink: C.ink, text: 'SMÍ' },
+};
+
+/** Tabule „smí / nesmí": řádky naskakují, razítka dopadají. Drží se do další tabule, skupiny nebo outra. */
+function boardLayer(tl, t) {
+  const out = [];
+  tl.beats.forEach((b, bi) => {
+    if (b.type !== 'board' || t < b.t0) return;
+    const next = tl.beats.slice(bi + 1).find(x => x.type === 'board' || x.type === 'group' || x.type === 'outro');
+    const until = next ? next.t0 : Infinity;
+    if (t >= until + 0.1) return;
+    const leave = ease.in(prog(t, until - 0.25, until + 0.1));
+    const B = L.board, times = boardTimes(b);
+    const rows = b.items.map((it, k) => {
+      const tm = times[k];
+      if (t < tm.row) return '';
+      const kr = ease.outBack(prog(t, tm.row, tm.row + 0.28));
+      const y = B.y + (b.title ? 70 : 0) + k * B.rowH;
+      const st = STAMP[it.verdict] || STAMP.ne;
+      const label = (it.stamp || st.text).toUpperCase();
+      const sfs = Math.round(B.font * (label.length > 8 ? 0.66 : 0.8));
+      const sw = measure(label, sfs, 900) + 44;
+      let stamp = '';
+      if (t >= tm.stamp) {
+        const ks = prog(t, tm.stamp, tm.stamp + 0.14);
+        const sc = lerp(2.2, 1, ease.in(ks));
+        const sx = B.x + B.w - 24 - sw / 2, sy = y + B.rowH / 2 - 6;
+        stamp = `<g transform="translate(${r1(sx)} ${r1(sy)}) rotate(-7) scale(${r1(sc * 1000) / 1000})" opacity="${r1(clamp(ks * 3) * 100) / 100}">
+          <rect x="${r1(-sw / 2)}" y="${r1(-sfs * 0.85)}" width="${r1(sw)}" height="${r1(sfs * 1.7)}" rx="12" fill="${st.fill}" stroke="${C.ink}" stroke-width="6"/>
+          <text x="0" y="${r1(sfs * 0.36)}" text-anchor="middle" font-family="Inter" font-weight="900" font-size="${sfs}" letter-spacing="1" fill="${st.ink}">${escapeXml(label)}</text>
+        </g>`;
+      }
+      return `<g transform="translate(${r1(-(1 - kr) * 60)} 0)" opacity="${r1(clamp(kr) * 100) / 100}">
+        <rect x="${B.x}" y="${r1(y + 6)}" width="${B.w}" height="${B.rowH - 16}" rx="22" fill="${C.paper}" stroke="${C.ink}" stroke-width="6"/>
+        <text x="${B.x + 32}" y="${r1(y + B.rowH / 2 + B.font * 0.33)}" font-family="Inter" font-weight="800" font-size="${B.font}" fill="${C.ink}">${escapeXml(it.text)}</text>
+        ${stamp}
+      </g>`;
+    }).join('');
+    const title = b.title ? `<text x="${B.x + 4}" y="${B.y + 40}" font-family="Inter" font-weight="900" font-size="${Math.round(B.font * 0.82)}" letter-spacing="2" fill="${C.inkSoft}">${escapeXml(b.title.toUpperCase())}</text>` : '';
+    out.push(`<g transform="translate(0 ${r1(leave * 60)})" opacity="${r1((1 - leave) * 100) / 100}">${title}${rows}</g>`);
+  });
+  return out.join('');
+}
+
 function punchLayer(b, t) {
   const hit = b.t0 + 0.12;
   if (t < b.t0) return '';
@@ -307,15 +409,15 @@ function punchLayer(b, t) {
   const text = String(b.text || '').toUpperCase();
   const fs = 80;
   const words = text.split(/\s+/).map(w => ({ text: w }));
-  const lines = balancedWrap(words, fs, 820, 900);
+  const lines = balancedWrap(words, fs, L.punchMaxW, 900);
   const wMax = Math.max(...lines.map(lineWidth));
   const pad = 44, lh = 88;
   const bw = wMax + pad * 2, bh = lines.length * lh + pad * 1.4;
   const fill = b.tone === 'good' ? C.green : b.tone === 'warn' ? C.amber : C.ink;
   const ink = b.tone === 'bad' || !b.tone ? C.amber : C.ink;
-  const cy = 700;
+  const cy = L.punchY;
   const txt = lines.map((ln, i) => `<text x="0" y="${r1(-bh / 2 + pad * 0.7 + fs * 0.82 + i * lh)}" text-anchor="middle" font-family="Inter" font-weight="900" font-size="${fs}" letter-spacing="-1" fill="${ink}">${escapeXml(ln.map(w => w.text).join(' '))}</text>`).join('');
-  return `<g transform="translate(540 ${cy}) rotate(-4) scale(${r1(sc * 1000) / 1000})" opacity="${r1(op * 100) / 100}">
+  return `<g transform="translate(${L.punchCX} ${cy}) rotate(-4) scale(${r1(sc * 1000) / 1000})" opacity="${r1(op * 100) / 100}">
     <rect x="${r1(-bw / 2 + 12)}" y="${r1(-bh / 2 + 14)}" width="${r1(bw)}" height="${r1(bh)}" rx="28" fill="${C.ink}" opacity="0.18"/>
     <rect x="${r1(-bw / 2)}" y="${r1(-bh / 2)}" width="${r1(bw)}" height="${r1(bh)}" rx="28" fill="${fill}" stroke="${C.ink}" stroke-width="8"/>
     ${txt}
@@ -330,19 +432,19 @@ function outroLayer(b, t, script) {
   const src = script.source_line || '';
   const lockW = measure('HSPA Monitor', 70, 900);
   return `
-  <g transform="translate(540 470) scale(${r1(k(0.05) * 1000) / 1000})">
+  <g transform="translate(${L.outroCX} ${L.logoY}) scale(${r1(k(0.05) * 1000) / 1000})">
     <g transform="translate(${r1(-lockW / 2 - 50)} -24) scale(0.95)">${miniCompass()}</g>
     <text x="${r1(-lockW / 2 + 22)}" y="0" font-family="Inter" font-weight="900" font-size="70" letter-spacing="-1" fill="${C.ink}">HSPA Monitor</text>
     <text x="0" y="66" text-anchor="middle" font-family="Inter" font-weight="800" font-size="40" fill="${C.inkSoft}">${escapeXml(domain)}</text>
   </g>
-  <g transform="translate(540 700) rotate(-2) scale(${r1(k(0.25) * 1000) / 1000})">
+  <g transform="translate(${L.outroCX} ${L.ctaY}) rotate(-2) scale(${r1(k(0.25) * 1000) / 1000})">
     <rect x="${r1(-ctaW / 2 + 8)}" y="-46" width="${r1(ctaW)}" height="100" rx="50" fill="${C.ink}" opacity="0.15"/>
     <rect x="${r1(-ctaW / 2)}" y="-54" width="${r1(ctaW)}" height="100" rx="50" fill="${C.amber}" stroke="${C.ink}" stroke-width="7"/>
     <text x="0" y="12" text-anchor="middle" font-family="Inter" font-weight="900" font-size="${ctaFs}" fill="${C.ink}">${escapeXml(cta)}</text>
   </g>
   <g opacity="${r1(prog(t, b.t0 + 0.5, b.t0 + 0.8) * 100) / 100}">
-    ${src ? `<text x="540" y="${L.footY - 36}" text-anchor="middle" font-family="Inter" font-weight="700" font-size="26" fill="${C.inkSoft}">${escapeXml(src)}</text>` : ''}
-    <text x="540" y="${L.footY}" text-anchor="middle" font-family="Inter" font-weight="700" font-size="26" fill="${C.inkSoft}">Animace a text: AI · redakce HSPA Monitor</text>
+    ${src ? `<text x="${L.outroCX}" y="${L.footY - 36}" text-anchor="middle" font-family="Inter" font-weight="700" font-size="26" fill="${C.inkSoft}">${escapeXml(src)}</text>` : ''}
+    <text x="${L.outroCX}" y="${L.footY}" text-anchor="middle" font-family="Inter" font-weight="700" font-size="26" fill="${C.inkSoft}">${script.voice_credit ? `Animace a text: AI · hlas: ${escapeXml(script.voice_credit)} · redakce HSPA Monitor` : 'Animace a text: AI · redakce HSPA Monitor'}</text>
   </g>`;
 }
 
@@ -351,11 +453,12 @@ function footnote(script, t, tl) {
   if (!script.footnote || (out && t >= out.t0)) return '';
   const first = tl.groups[0];
   if (!first || t < first.t0) return '';
-  return `<text x="540" y="${L.footY}" text-anchor="middle" font-family="Inter" font-weight="700" font-size="25" fill="${C.inkSoft}" opacity="${r1(prog(t, first.t0, first.t0 + 0.4) * 100) / 100}">${escapeXml(script.footnote)}</text>`;
+  return `<text x="${L.footCX}" y="${L.footY}" text-anchor="middle" font-family="Inter" font-weight="700" font-size="25" fill="${C.inkSoft}" opacity="${r1(prog(t, first.t0, first.t0 + 0.4) * 100) / 100}">${escapeXml(script.footnote)}</text>`;
 }
 
 /** Celý snímek v čase t jako SVG. */
 export function frameSvg(tl, t) {
+  useFormat(tl);
   const { script } = tl;
   const b = beatAt(tl, t);
   const outro = tl.beats.find(x => x.type === 'outro');
@@ -370,7 +473,7 @@ export function frameSvg(tl, t) {
       cam = `translate(${r1(Math.sin(t * 90) * a)} ${r1(Math.cos(t * 77) * a)})`;
     }
     const z = 1 + 0.035 * ease.out(prog(t, hit, hit + 0.4));
-    cam += ` translate(540 960) scale(${r1(z * 1000) / 1000}) translate(-540 -960)`;
+    cam += ` translate(${L.cx} ${L.cy}) scale(${r1(z * 1000) / 1000}) translate(${-L.cx} ${-L.cy})`;
   }
 
   const pose = kompikPose(tl, t);
@@ -385,6 +488,7 @@ export function frameSvg(tl, t) {
     ${background(t, tl)}
     ${badge(script, t)}
     ${groupsLayer(tl, t, outro ? outro.t0 : null)}
+    ${boardLayer(tl, t)}
     ${kp.svg}
     ${speech}
     ${punch ? punchLayer(punch, t) : ''}
@@ -401,6 +505,7 @@ export function audioTrack(tl) {
   const bad = tl.beats.find(b => b.type === 'punch' && (b.tone || 'bad') === 'bad');
   const outro = tl.beats.find(b => b.type === 'outro');
   music(buf, tl.duration, { mood: t => (bad && t >= bad.t0 && (!outro || t < outro.t0) ? 'down' : 'up') });
+  tl.beats.forEach(b => { if (b.v) duck(buf, b.voiceAt + b.v.start, b.voiceAt + b.v.end); });
   tl.beats.forEach((b, i) => {
     if (b.type === 'intro' && i === 0) { sfx.boing(buf, 0.05); sfx.pop(buf, 0.34); }
     if (b.type === 'intro' && b.emotion === 'curious') sfx.spin(buf, b.t0 + 0.35);
@@ -414,15 +519,18 @@ export function audioTrack(tl) {
       else sfx.boing(buf, b.t0 + 0.3);
     }
     if (b.type === 'outro') sfx.ding(buf, b.t0 + 0.5);
-    if (b.sched) babble(buf, b.sched, { seed: 3 + i });
+    if (b.v) mixVoice(buf, b.voiceAt, b.v);
+    else if (b.sched) babble(buf, b.sched, { seed: 3 + i });
   });
   tl.groups.forEach(g => g.figs.forEach(f => sfx.plop(buf, f.t, f.i)));
+  tl.beats.filter(b => b.type === 'board').forEach(b => boardTimes(b).forEach((tm, k) => { sfx.plop(buf, tm.row, k); sfx.pop(buf, tm.stamp); }));
   return buf;
 }
 
 // ───────────────────────────── validace ─────────────────────────────
 
 export function validate(script) {
+  useFormat(script);
   const errors = [], warnings = [];
   const err = m => errors.push(m), warn = m => warnings.push(m);
   if (!script || typeof script !== 'object') return { errors: ['scénář není objekt'], warnings };
@@ -445,7 +553,10 @@ export function validate(script) {
       if (b.line.length > LIMITS.maxLine) err(`${at}: replika má ${b.line.length} znaků (max ${LIMITS.maxLine})`);
       const sc = schedule(b.line, 0);
       const lead = b.type === 'intro' ? 0.45 : b.type === 'punch' ? 0.25 : b.type === 'outro' ? 0.55 : 0.2;
-      if (sc.end + lead + 0.35 > b.dur) err(`${at}: replika trvá ${(sc.end + lead).toFixed(2)} s, beat má ${b.dur} s (nech ≥ 0,35 s rezervu)`);
+      const v = b.voice ? loadVoice(b.voice, script.voice_tempo || 1) : null;
+      if (b.voice && !v) err(`${at}: hlasový soubor ${b.voice} neexistuje`);
+      const speech = v ? v.end - v.start : sc.end;
+      if (speech + lead + 0.35 > b.dur) err(`${at}: ${v ? 'hlas' : 'replika'} trvá ${(speech + lead).toFixed(2)} s, beat má ${b.dur} s (nech ≥ 0,35 s rezervu)`);
       const lines = wrapWords(sc.words, L.bubbleFont, L.bubbleMaxW - 88, 800);
       if (lines.length > 3) err(`${at}: replika se v bublině zalomí na ${lines.length} řádky (max 3)`);
     } else if (b.type !== 'outro' && b.type !== 'group') warn(`${at}: beat bez repliky`);
@@ -462,20 +573,47 @@ export function validate(script) {
         if (dev > 0.1) err(`${at}: ${b.count} postaviček × ${per} = ${b.count * per}, ale hodnota je ${v} (odchylka ${(dev * 100).toFixed(0)} % > 10 % — obraz by klamal)`);
       }
     }
+    if (b.type === 'board') {
+      const items = Array.isArray(b.items) ? b.items : [];
+      if (items.length < 2 || items.length > 6) err(`${at}: tabule musí mít 2–6 položek`);
+      items.forEach((it, k) => {
+        if (!it.text || it.text.length > 32) err(`${at}: položka ${k + 1} — text chybí nebo je delší než 32 znaků`);
+        if (!VERDICTS.includes(it.verdict)) err(`${at}: položka ${k + 1} — verdict musí být ${VERDICTS.join('|')}`);
+        if (it.stamp && it.stamp.length > 16) err(`${at}: položka ${k + 1} — razítko je delší než 16 znaků`);
+        if (it.text && VERDICTS.includes(it.verdict)) {
+          const label = (it.stamp || STAMP[it.verdict].text).toUpperCase();
+          const sw = measure(label, Math.round(L.board.font * (label.length > 8 ? 0.66 : 0.8)), 900) + 44;
+          if (32 + measure(it.text, L.board.font, 800) + 40 + sw + 24 > L.board.w) err(`${at}: položka ${k + 1} „${it.text}" by se překryla s razítkem — zkrať text nebo razítko`);
+        }
+        if (!it.basis) err(`${at}: položka ${k + 1} — chybí \`basis\` (kazuistika nebo paragraf, ze kterého verdikt plyne)`);
+      });
+      let prev = -1;
+      items.forEach((it, k) => {
+        if (it.at == null) return;
+        if (!(it.at >= 0 && it.at <= b.dur - 0.3) || it.at < prev) err(`${at}: položka ${k + 1} — \`at\` musí být v beatu a rostoucí`);
+        if (it.stamp_at != null && !(it.stamp_at >= it.at && it.stamp_at <= b.dur - 0.2)) err(`${at}: položka ${k + 1} — \`stamp_at\` musí být mezi \`at\` a koncem beatu`);
+        prev = it.at;
+      });
+      if (b.dur < 0.9 + items.length * 0.55) err(`${at}: ${items.length} položek se do ${b.dur} s nevejde (≥ ${(0.9 + items.length * 0.55).toFixed(1)} s)`);
+    }
     if (b.type === 'punch') {
       if (!b.text) err(`${at}: chybí text pointy`);
       if (!b.basis) err(`${at}: chybí \`basis\` — z jakých faktů pointa plyne (např. "16,1 / 34,8 = 0,46")`);
       if (b.tone && !['bad', 'good', 'warn'].includes(b.tone)) err(`${at}: tone musí být bad|good|warn`);
     }
   });
-  checkNumbers(beats, facts, err);
+  checkNumbers(beats.map(b => ({ ...b, boardText: (b.items || []).map(it => `${it.text} ${it.stamp || ''}`).join(' ') })), facts, err, ['line', 'text', 'label', 'cta', 'boardText']);
+  if (script.format && !FORMATS[script.format]) err(`neznámý formát „${script.format}" (${Object.keys(FORMATS).join(', ')})`);
+  const maxDur = (FORMATS[script.format] || FORMATS.portrait).maxDur;
   if (beats.length && beats[beats.length - 1].type !== 'outro') err('poslední beat musí být outro (koncová karta s odkazem a zdrojem)');
   if (beats.length && beats[0].type !== 'intro') warn('první beat by měl být intro (háček do 1. sekundy)');
   if (beats.filter(b => b.type === 'group').length > 2) err('nejvýš 2 skupiny postaviček na video (jedna myšlenka, jedno srovnání)');
-  if (total > LIMITS.maxDur) err(`délka ${total.toFixed(1)} s > ${LIMITS.maxDur} s`);
+  if (total > maxDur) err(`délka ${total.toFixed(1)} s > ${maxDur} s`);
   if (total && total < LIMITS.minDur) err(`délka ${total.toFixed(1)} s < ${LIMITS.minDur} s`);
   if (!script.source_line) err('chybí `source_line` (zdroj na koncové kartě)');
   if (beats.some(b => b.type === 'group') && !script.footnote) err('chybí `footnote` (co znamená jedna postavička, rok, zdroj)');
+  if (beats.some(b => b.voice) && !script.voice_credit) err('beat s hlasem vyžaduje `voice_credit` (kdo/co mluví — označení na koncové kartě)');
+  if (beats.some(b => b.voice) && script.format !== 'landscape') err('hlas je povolený jen u videí na šířku pro web (`format: landscape`)');
   return { errors, warnings, duration: total };
 }
 

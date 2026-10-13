@@ -3,7 +3,7 @@
 //
 //   node social/reels/render.js <slug|cesta.json> [volby]
 //
-//   (bez voleb)        MP4 9:16 1080×1920 30 fps + plakát → assets/social/reels/<slug>.mp4 / .png
+//   (bez voleb)        MP4 30 fps (9:16 1080×1920, se `"format": "landscape"` 16:9 1920×1080) + plakát → assets/social/reels/<slug>.mp4 / .png
 //   --check            jen validace scénáře (exit 1 při chybě)
 //   --all              s --check: validuje všechny scénáře v social/reels/scripts/
 //   --sheet            kontaktní arch 4×3 klíčových snímků → <out>/<slug>-arch.png (náhled pro kontrolu)
@@ -21,7 +21,7 @@ import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { Resvg } from '@resvg/resvg-js';
-import { compile, frameSvg, audioTrack, validate, W, H } from './lib/styles.js';
+import { compile, frameSvg, audioTrack, validate, dims } from './lib/styles.js';
 import { writeWav } from './lib/audio.js';
 import { RESVG_FONT } from './lib/text.js';
 
@@ -40,12 +40,13 @@ export function loadScript(ref) {
   return { path, script: JSON.parse(readFileSync(path, 'utf8')) };
 }
 
-export function renderPng(svg, width = W) {
+export function renderPng(svg, width = 1080) {
   return new Resvg(svg, { font: RESVG_FONT, fitTo: { mode: 'width', value: width } }).render().asPng();
 }
 
 function contactSheet(tl, out) {
-  const n = 12, cols = 4, tw = 270, th = 480, gap = 12;
+  const { W, H } = dims(tl);
+  const n = 12, cols = W > H ? 3 : 4, tw = W > H ? 480 : 270, th = Math.round(tw * H / W), gap = 12;
   const rows = Math.ceil(n / cols);
   const cells = [];
   for (let i = 0; i < n; i++) {
@@ -81,7 +82,8 @@ async function encode(tl, outMp4, fps) {
     '-y', '-loglevel', 'error',
     '-f', 'image2pipe', '-framerate', String(fps), '-c:v', 'png', '-i', '-',
     '-i', wav,
-    '-c:v', 'libx264', '-preset', 'slow', '-tune', 'animation', '-crf', '22', '-pix_fmt', 'yuv420p',
+    // kvalita: `crf` ve scénáři (výchozí 22); delší videa na šířku 24–26, ať se vejdou do ~3 MB
+    '-c:v', 'libx264', '-preset', 'slow', '-tune', 'animation', '-crf', String(tl.script.crf || 22), '-pix_fmt', 'yuv420p',
     '-profile:v', 'high', '-r', String(fps),
     // hlasitost pro sociální sítě (~ −15 LUFS, true peak −1,5 dB)
     '-af', 'loudnorm=I=-15:TP=-1.5:LRA=11',
@@ -92,7 +94,7 @@ async function encode(tl, outMp4, fps) {
   const frames = Math.round(tl.duration * fps);
   const t0 = Date.now();
   for (let f = 0; f < frames; f++) {
-    const png = renderPng(frameSvg(tl, f / fps));
+    const png = renderPng(frameSvg(tl, f / fps), dims(tl).W);
     if (!ff.stdin.write(png)) await new Promise(r => ff.stdin.once('drain', r));
     if (f % fps === 0) process.stdout.write(`\r  snímek ${f}/${frames} (${((Date.now() - t0) / 1000).toFixed(0)} s)`);
   }
@@ -142,14 +144,14 @@ async function main() {
   if (has('--frame')) {
     const t = Number(arg('--frame'));
     const p = resolve(out, `${slug}-${t}s.png`);
-    writeFileSync(p, renderPng(frameSvg(tl, t)));
+    writeFileSync(p, renderPng(frameSvg(tl, t), dims(tl).W));
     console.log(`✓ snímek ${t} s → ${p}`);
     return;
   }
   const mp4 = resolve(out, `${slug}.mp4`);
   await encode(tl, mp4, fps);
   const posterT = posterTime(tl);
-  writeFileSync(resolve(out, `${slug}.png`), renderPng(frameSvg(tl, posterT)));
+  writeFileSync(resolve(out, `${slug}.png`), renderPng(frameSvg(tl, posterT), dims(tl).W));
   console.log(`✓ video → ${mp4}\n✓ plakát (${posterT.toFixed(1)} s) → ${resolve(out, `${slug}.png`)}`);
 }
 

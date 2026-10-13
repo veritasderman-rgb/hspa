@@ -3,6 +3,7 @@
 
 import * as kompikStyle from './scene.js';
 import * as florenceStyle from './florence-scene.js';
+import { formatOf } from './format.js';
 
 export const STYLES = { kompik: kompikStyle, florence: florenceStyle };
 
@@ -20,4 +21,6 @@ export const validate = script => {
 export const compile = script => styleOf(script).compile(script);
 export const frameSvg = (tl, t) => styleOf(tl).frameSvg(tl, t);
 export const audioTrack = tl => styleOf(tl).audioTrack(tl);
-export const W = 1080, H = 1920;
+export const W = 1080, H = 1920;   // výchozí formát (portrait); jinak dims()
+/** Rozměry videa podle `script.format` (portrait 1080×1920, landscape 1920×1080). */
+export const dims = scriptOrTl => { const f = formatOf(scriptOrTl); return { W: f.W, H: f.H }; };
