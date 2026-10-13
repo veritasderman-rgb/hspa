@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-10-13
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-10-13
+    creation_phase: zadani-uzivatele
+    primary_sources_count: 22
+    visual_elements_count: 3
+    notes: "Vytvořeno na zadání vlastníka 13. 10. 2026: dlouhý esej ve stylu Malcolma Gladwella „Roseto naruby“ — proč muž
+      z Ústecka žije kratší život. Teze: zdraví regionu nedělají hlavně nemocnice, ale to, jak společnost drží pohromadě
+      (práce, příjmy, vztahy). Bez obviňování obyvatel, bez klišé „chudoba = nemoc“, s poctivě přiznanými limity Roseta.
+      LITERATURA (ověřeno v PubMed 13. 10. 2026; Consensus jen k dohledání, necitován):
+      Stout 1964 JAMA (PMID 14132548, bez abstraktu — citován jen jako první publikace); Bruhn 1965 J Chronic Dis
+      (PMID 14273698, abstrakt v PubMed chybí, kvalitativní tvrzení „čím dál od Roseta, tím víc infarktů“ z abstraktu
+      v časopise); Keys 1966 JAMA (PMID 6015070, abstrakt v PubMed chybí, kvalitativní kritika malé populace z abstraktu
+      JAMA); Wolf 1992 Integr Physiol Behav Sci (PMID 1419870: Roseto ~1 600, Bangor ~5 000, úmrtnost mužů na infarkt
+      méně než polovina, stejné rizikové faktory — kouření, strava); Egolf 1992 AJPH (PMID 1636828: úmrtní listy
+      1935–1985, nižší úmrtnost prvních 30 let, vyrovnání po erozi soudržnosti, hlavně mladší muži a starší ženy);
+      Lasker 1994 Soc Sci Med (PMID 8066487: sňatky, členství ve spolcích, volby, sociální třída; změny zrychlené v 60.
+      letech, ztráta ochrany po 1965); Adhikari 2026 Cureus (PMID 42518891, oprava PMID 42564463 se týká jen afiliací:
+      srovnání s Framinghamem bez rozdílu po standardizaci na věk a pohlaví); Holt-Lunstad 2010 PLoS Med (PMID 20668659:
+      148 studií, 308 849 osob, OR 1,50; komplexní míry sociální integrace OR 1,91); Roelfs 2011 Soc Sci Med (PMID 21330027:
+      42 studií, >20 mil. osob, HR 1,63, vyšší u mužů, o 24 % nižší po kontrole zdravotního chování); Kawachi 1997 AJPH
+      (PMID 9314802: 39 států, ekologická studie); Choi 2014 IJE (PMID 25369975: 14 prospektivních studií, u většiny
+      dimenzí bez souvislosti); Xue 2020 J Health Econ (PMID 32497954: 470 studií, 12 778 odhadů, efekty velmi malé);
+      Ehsan 2019 SSM Popul Health (PMID 31431915: 20 systematických přehledů); Meijer 2012 Soc Sci Med (PMID 22365939:
+      souvislost soudržnosti a úmrtnosti, silnější u mužů a mladších); Pearce & Davey Smith 2003 AJPH (PMID 12511401:
+      riziko „obviňování oběti“ na úrovni komunity); Lynch 2000 BMJ (PMID 10784551, bez abstraktu, citován jen názvem
+      sporu psychosociální vs. materiální vysvětlení).
+      KNIHY (mimo PubMed, uvedeny s opatrností): Bruhn JG, Wolf S. The Roseto Story: An Anatomy of Health. University of
+      Oklahoma Press, 1979 — existence ověřena recenzí v Contemporary Psychology 1979 (DOI 10.1037/017865); Wolf S, Bruhn JG.
+      The Power of Clan (1993, reedice Routledge 2021, DOI 10.4324/9780429339271); Gladwell M. Outliers (2008), úvodní
+      kapitola o Rosetu — z knih nepřebíráme žádná čísla ani citace.
+      ČESKÁ DATA (ověřeno živě z API ČSÚ data.csu.gov.cz 13. 10. 2026): OBY04BKT01 kraje 2024–2025 a 2014–2015 (muži
+      Praha 79,22 / Ústecký 75,39; ženy 84,56 / 81,01; Vysočina muži 77,92; MSK 75,81; KV 75,97; OL 76,82; 2014–2015
+      Praha 77,53 / Ústecký 73,79); OBY04BCRT01 ČR 2025 muži 77,49, ženy 83,19; WNUC04T01 čistý disponibilní důchod
+      domácností 2024: ČR 399 747, Praha 528 267 (132,2 %), Ústecký 348 560 (87,2 %), Vysočina 389 388 (97,4 %),
+      Středočeský 431 292. Okresy (OBY04BOT01, 2021–2025): Most 73,1, Praha-západ 78,5 — převzato z data/regions.json
+      (ČSÚ, staženo 27. 7. 2026, shodně s článkem regionalni-nuzky ověřeným 4. 8. 2026); živé přeověření 13. 10. selhalo,
+      API vrací pro celý výběr odložený výstup. Indikátory (data/indicators.json, origin live, verification verified):
+      mortalita_preventabilni 173,86 vs EU 150,85 (2023), mortalita_lecitelna 107,19 vs EU 86,81 (2023),
+      mortalita_kardiovaskularni 463,75 vs EU 312,95 (2023), nadeje_doziti_total 80,1 (2024), ohrozeni_chudobou 9,6 (2025).
+      MMR, Strategie RE:START — usnesení vlády č. 826 z 19. 10. 2015 (stránka mmr.gov.cz ověřena 13. 10. 2026).
+      VÝPOČTY REDAKCE: rozdíl mužů Praha − Ústecký 3,83 roku; ženy 3,54; rozdíl pohlaví uvnitř kraje Ústecký 5,62 vs Praha
+      5,34; poměr příjmů 528 267 / 348 560 = 1,52; Spearmanův koeficient pořadí krajů (naděje dožití mužů × disponibilní
+      důchod 2024, n = 14) = 0,90, bez Prahy 0,87 — výslovně označen jako ekologická korelace stejného typu jako Roseto.
+      VĚDOMĚ NEPOUŽITO: krajské datasety v data/regions.json bez zdroje (kuractvi_denni_kraje, obezita_kraje,
+      sebevrazdy_per_100k_kraje, mortalita_preventabilni_kraje, mortalita_kvn_kraje, ohrozeni_chudobou_kraje,
+      prijem_disponibilni_kraje, pyll_…_kraje) — soubor je podle _doc „v současné fázi seed“, hodnoty nepodáváme jako fakt
+      a v textu to říkáme; anekdoty z Gladwellovy knihy (setkání Wolfa s místním lékařem, tři generace pod jednou
+      střechou apod.) — nepodloženy primárním zdrojem; detail z Wolf 1974 (žádné úmrtí na infarkt pod 47 let) —
+      plný text z PMC nebyl dostupný; žádná česká krajská data o sociálním kapitálu, důvěře či osamělosti — v kontraktu
+      chybí, v textu řečeno.
+      published:false, audit-status draft. Cover a SEO bloky (og:image, canonical, JSON-LD) doplní
+      generate-article-cover.js / inject-article-covers.js / inject-article-seo.js."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roseto naruby. Městečko, kde se neumíralo na infarkt, a co říká o kratším životě v Ústeckém kraji · HSPA Monitor</title>
+<meta name="description" content="V pensylvánském Rosetu umírali muži v polovině 20. století na infarkt méně než z poloviny tak často jako v sousedním Bangoru, ač kouření i strava byly podobné. Lékaři to přičetli soudržnosti obce. Příběh má trhliny, otázka zůstává: co když délku života v Ústeckém kraji nepíší hlavně nemocnice?">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Roseto naruby. Městečko, kde se neumíralo na infarkt, a co říká o kratším životě v Ústeckém kraji">
+<meta property="og:description" content="Muž z Ústeckého kraje má podle úmrtnostních tabulek ČSÚ před sebou o 3,8 roku kratší život než Pražan. Příběh amerického Roseta napovídá, kde hledat proč: v práci, příjmech a vztazích, ne hlavně v nemocnicích. A poctivě i to, co Roseto nedokazuje.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-10-13">
+<meta property="article:section" content="Sociální determinanty">
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+<main id="content">
+  <article class="article-page">
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Sociální determinanty</span>
+        <span class="article-tag article-tag-muted">Roseto · naděje dožití · kraje · sociální vztahy · sociální kapitál · Ústecký kraj</span>
+      </div>
+      <h1 class="article-title">Roseto naruby. Městečko, kde se neumíralo na infarkt, a co říká o kratším životě v Ústeckém kraji</h1>
+      <p class="article-deck">
+        V pensylvánském Rosetu umírali muži v polovině 20. století na infarkt méně než z poloviny tak často jako v sousedním Bangoru, ač kouření i strava byly podobné. Lékaři to přičetli soudržnosti obce. Příběh má trhliny, otázka zůstává: co když délku života v Ústeckém kraji nepíší hlavně nemocnice?
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">13. října 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">13 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+    <div class="article-body">
+      <p class="article-lead">
+        V Pensylvánii, hned vedle obyčejného amerického městečka Bangor, leží obec Roseto. V polovině minulého století v ní žilo asi 1 600 lidí, skoro výhradně italští přistěhovalci a jejich děti; Bangor měl kolem pěti tisíc obyvatel. Když se na obě místa podívali lékaři kolem Stewarta Wolfa, našli rozdíl, který se nedal přehlédnout. Muži v Rosetu umírali na infarkt méně než z poloviny tak často jako muži v Bangoru. Přitom obvyklé rizikové faktory, hlavně kouření a strava, byly v obou obcích rozšířené stejně (<a href="https://doi.org/10.1007/BF02690896" target="_blank" rel="noopener">Wolf, 1992 ↗</a>).
+      </p>
+      <p>
+        Tohle je příběh, kterým novinář Malcolm Gladwell otevírá svou knihu <em>Outliers</em>. Je to příběh o tom, že nejdůležitější věci o našem zdraví se možná nedějí v ordinaci. A je to také příběh, který se dá vyprávět až příliš hezky. My ho zkusíme vyprávět celý, včetně míst, kde praská. Protože na jeho konci nestojí americké městečko, ale Ústecký kraj.
+      </p>
+
+      <h2>Zdánlivě jasná odpověď</h2>
+      <p>
+        Když najdete obec, kde se neumírá na srdce, první otázka je samozřejmá: co jedí? Wolfův tým první výsledky publikoval v roce 1964 v časopise <em>JAMA</em> (<a href="https://doi.org/10.1001/jama.1964.03060360005001" target="_blank" rel="noopener">Stout et al., 1964 ↗</a>) a strava byla první podezřelý. Jenže vysvětlením nebyla. Pozdější shrnutí uvádějí podobné kouření a obezitu jako v okolních obcích a spíš víc nasycených tuků, ne méně (<a href="https://doi.org/10.7759/cureus.113024" target="_blank" rel="noopener">Adhikari et al., 2026 ↗</a>).
+      </p>
+      <p>
+        Druhý podezřelý byly geny. Jestli to byla odolná krev z jednoho italského kraje, měla by jít s lidmi, kamkoli se odstěhují. Sociolog John Bruhn ale v roce 1965 popsal opak: čím dál od Roseta lidé z téže komunity žili, tím častější byly mezi nimi infarkty (<a href="https://doi.org/10.1016/0021-9681(65)90039-1" target="_blank" rel="noopener">Bruhn, 1965 ↗</a>). Stejné geny, jiné místo, jiný výsledek.
+      </p>
+      <p>
+        A třetí podezřelý, ten, na kterého by dnes v Česku ukázal skoro každý: lékaři a nemocnice. Wolf a jeho kolegové ale došli k vysvětlení, které tehdejší medicína neměla kam zapsat. Rosetané byli podle nich nezvykle soudržní. Pevné rodiny, vzájemná výpomoc, společenství, kde nikdo nezůstal sám se svými potížemi (<a href="https://doi.org/10.1097/00007611-198205000-00017" target="_blank" rel="noopener">Bruhn, Philips a Wolf, 1982 ↗</a>).
+      </p>
+
+      <h2>Obrat: městečko, které se změnilo</h2>
+      <p>
+        Pokud byste chtěli takovou teorii vyvrátit, nejlepší test by byl nechat soudržnost zmizet a sledovat, co se stane. Přesně to se v Rosetu stalo samo.
+      </p>
+      <p>
+        V šedesátých letech se obec začala měnit. Podle Wolfa se posunula od soudržné rodiny a komunity k individuálním cílům a materiálním hodnotám (<a href="https://doi.org/10.1007/BF02690896" target="_blank" rel="noopener">Wolf, 1992 ↗</a>). Sociologové tu proměnu sledovali na záznamech o sňatcích, složení obyvatel, členství v organizacích, volbách a sociální třídě, které v některých případech sahaly až do dvacátých let. Změny se v šedesátých letech výrazně zrychlily (<a href="https://doi.org/10.1016/0277-9536(94)90165-1" target="_blank" rel="noopener">Lasker, Egolf a Wolf, 1994 ↗</a>).
+      </p>
+      <p>
+        Pak přišla studie, kvůli které se o Rosetu mluví dodnes. Egolf a kolegové prošli úmrtní listy Roseta a Bangoru za padesát let, od roku 1935 do roku 1985. Výsledek publikovali v roce 1992 v <em>American Journal of Public Health</em> (<a href="https://doi.org/10.2105/ajph.82.8.1089" target="_blank" rel="noopener">Egolf et al., 1992 ↗</a>). Prvních třicet let měl Roseto nižší úmrtnost na infarkt. Poté, co se tradiční rodinné a komunitní vazby rozvolnily, se vyrovnala Bangoru. Přírůstek se týkal hlavně mladších mužů a starších žen.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avRosetoTimelineH">
+        <figcaption class="av-figure-h" id="avRosetoTimelineH">Padesát let jednoho městečka a jedné hypotézy</figcaption>
+        <ol class="av-timeline">
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">1935–1965</time>
+            <h4 class="av-timeline-title">Roseto umírá na infarkt méně než soused</h4>
+            <p class="av-timeline-desc">Úmrtní listy ukazují nižší úmrtnost na infarkt než v Bangoru po celé první tři dekády sledování (Egolf et al., 1992).</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">1964</time>
+            <h4 class="av-timeline-title">První článek v JAMA</h4>
+            <p class="av-timeline-desc">„Neobvykle nízký výskyt úmrtí na infarkt myokardu“ v italsko-americké obci (Stout et al.).</p>
+            <span class="av-timeline-tag">objev</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-warn">
+            <time class="av-timeline-date">1966</time>
+            <h4 class="av-timeline-title">Ancel Keys: populace je na takový závěr příliš malá</h4>
+            <p class="av-timeline-desc">Podle kritiky v JAMA úmrtní data nedokazují, že by se Roseto lišilo od průměru bílých Američanů.</p>
+            <span class="av-timeline-tag">kritika</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">60. léta → 1985</time>
+            <h4 class="av-timeline-title">Soudržnost slábne, úmrtnost se vyrovnává</h4>
+            <p class="av-timeline-desc">Změny v sňatcích, spolcích, volbách a sociální třídě se zrychlují; po roce 1965 Roseto ochranu ztrácí (Lasker et al., 1994).</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">1992</time>
+            <h4 class="av-timeline-title">Padesátileté srovnání v AJPH</h4>
+            <p class="av-timeline-desc">Rozdíl podle autorů nebyl náhodným výkyvem malých obcí. Článek se jmenuje „The Roseto effect“.</p>
+            <span class="av-timeline-tag">potvrzení</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-now">
+            <time class="av-timeline-date">2026</time>
+            <h4 class="av-timeline-title">Nové srovnání s Framinghamem</h4>
+            <p class="av-timeline-desc">Po standardizaci na věk a pohlaví autoři nenacházejí nižší úmrtnost na infarkt než ve Framinghamu (Adhikari et al.).</p>
+            <span class="av-timeline-tag">kritika</span>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Stout et al., JAMA 1964; Keys, JAMA 1966; Egolf et al., Am J Public Health 1992; Lasker et al., Soc Sci Med 1994; Adhikari et al., Cureus 2026. Všechny záznamy ověřeny v PubMed 13. 10. 2026; plné citace ve zdrojích pod článkem.</p>
+      </figure>
+
+      <p>
+        Tady je ta krása příběhu, jak ho vyprávějí jeho autoři. Geny se za jednu generaci nezmění a obvyklé rizikové faktory byly podle nich stejné jako u sousedů. Změnilo se to, jak spolu lidé žili. A s tím se podle nich změnilo, jak umírali.
+      </p>
+      <p>
+        Od té doby se z Roseta stalo podobenství, které převyprávěl i Gladwell. Jenže podobenství a důkaz nejsou totéž.
+      </p>
+
+      <h2>Co Roseto nedokazuje</h2>
+      <p>
+        Pochybnosti tu byly od začátku. Už v roce 1966 namítal v <em>JAMA</em> fyziolog Ancel Keys, že na takový závěr je Roseto prostě příliš malé a že úmrtní data neprokazují, že by se lišilo od průměrných bílých Američanů (<a href="https://doi.org/10.1001/jama.1966.03100020081018" target="_blank" rel="noopener">Keys, 1966 ↗</a>). V obci s 1 600 lidmi stačí pár úmrtí navíc nebo méně a míry úmrtnosti se výrazně pohnou.
+      </p>
+      <p>
+        Letos v létě vyšla práce, která jde dál. Tři autoři z Newyorské univerzity srovnali úmrtí na infarkt v Rosetu a okolních obcích s tehdejší Framinghamskou studií srdce a po zohlednění věku a pohlaví nenašli důkaz, že by Rosetané umírali méně. Podle nich za nápadným rozdílem stojí zkreslení ve výběru srovnávacích populací. A dodávají důležitou výhradu: sociální opora zdraví prospívá, ale studie z Roseta tuto souvislost „ani nepodpořila, ani nevyvrátila“ (<a href="https://doi.org/10.7759/cureus.113024" target="_blank" rel="noopener">Adhikari, Ogedegbe a Devinsky, 2026 ↗</a>). I tahle práce má své meze: je krátká, vyšla v otevřeném časopise <em>Cureus</em> a srovnává jedno americké město s druhým. Poslední slovo to nebude.
+      </p>
+      <p>
+        Je tu i hlubší problém. Roseto jsou <strong>ekologická data</strong>, tedy srovnání celých obcí, ne sledování jednotlivých lidí. Z toho, že v soudržnější obci umíralo méně lidí, neplyne, že méně umírali právě ti soudržní. Mohlo jít o věkové složení, o to, kdo se odstěhoval a kdo zůstal, nebo o jiné rozdíly mezi obcemi, které nikdo neměřil.
+      </p>
+      <p>
+        Takže: Roseto je hypotéza, ne důkaz. Kdyby celá myšlenka stála jen na něm, měli bychom ji odložit. Nestojí.
+      </p>
+
+      <h2>Kde ta myšlenka stojí doopravdy</h2>
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-neutral">
+          <span class="av-counter" data-value="148">148</span>
+          <span class="av-counter-label">studií s 308 849 lidmi: silnější sociální vztahy = o 50 % vyšší šance přežít sledované období</span>
+          <span class="av-counter-foot">Holt-Lunstad et al., PLoS Medicine 2010, metaanalýza; OR 1,50 (95% CI 1,42–1,59)</span>
+        </div>
+      </aside>
+      <p>
+        Pevnější důkazy přišly odjinud: ze studií, které sledují tisíce jednotlivců po celé roky. Nejznámější z nich je metaanalýza Julianne Holt-Lunstadové a kolegů v <em>PLoS Medicine</em> z roku 2010 (<a href="https://doi.org/10.1371/journal.pmed.1000316" target="_blank" rel="noopener">Holt-Lunstad et al., 2010 ↗</a>). Spojila 148 studií s 308 849 účastníky. Lidé se silnějšími sociálními vztahy měli o 50 % vyšší šanci, že sledované období přežijí. Nejsilnější byla souvislost u složených měr sociální integrace, tedy toho, do kolika vztahů a společenství je člověk zapojený. Autoři ji řadí na úroveň zavedených rizikových faktorů úmrtnosti.
+      </p>
+      <p>
+        Druhý pilíř je práce. Metaanalýza 42 studií s více než dvaceti miliony lidí zjistila, že nezaměstnaní v produktivním věku mají vyšší riziko úmrtí, s průměrným poměrem rizik 1,63. U mužů bylo vyšší než u žen. A ve studiích, které braly v potaz kouření, pití a další zdravotní chování, byl průměrný poměr rizik zhruba o čtvrtinu nižší (<a href="https://doi.org/10.1016/j.socscimed.2011.01.005" target="_blank" rel="noopener">Roelfs et al., 2011 ↗</a>). Ztráta práce tedy zřejmě nepůsobí jen přes cigarety a sklenky. Nabízí se vysvětlení, že člověku bere i příjem, denní řád, kolegy a místo mezi ostatními.
+      </p>
+      <div class="av-aside-clear"></div>
+      <p>
+        Na úrovni celých komunit je to ale složitější a tady je poctivost na místě. Systematický přehled 14 prospektivních studií v <em>International Journal of Epidemiology</em> nenašel u většiny dimenzí sociálního kapitálu, jako je důvěra, sociální opora nebo pocit sounáležitosti, souvislost s úmrtností; omezené náznaky měl jen u společenské a občanské angažovanosti (<a href="https://doi.org/10.1093/ije/dyu212" target="_blank" rel="noopener">Choi et al., 2014 ↗</a>). Metaanalýza 470 studií a 12 778 odhadů souvislost našla, ale konzistentně velmi malou (<a href="https://doi.org/10.1016/j.jhealeco.2020.102317" target="_blank" rel="noopener">Xue, Reed a Menclova, 2020 ↗</a>). Přehled dvaceti systematických přehledů shrnuje, že důkazy pro ochranný vliv existují, ale vedle nich stojí mnoho nulových výsledků (<a href="https://doi.org/10.1016/j.ssmph.2019.100425" target="_blank" rel="noopener">Ehsan et al., 2019 ↗</a>). A metaanalýza víceúrovňových studií o sousedstvích ukázala vyšší úmrtnost v sociálně slabších oblastech i po zohlednění socioekonomického postavení jednotlivce, přičemž souvislost byla silnější u mužů a mladších lidí. Tentýž přehled našel souvislost úmrtnosti se soudržností sousedství, ne však jasnou souvislost s místní nerovností či se sociálním kapitálem (<a href="https://doi.org/10.1016/j.socscimed.2011.11.034" target="_blank" rel="noopener">Meijer et al., 2012 ↗</a>).
+      </p>
+      <p>
+        Epidemiologové se navíc dlouho přeli, co je příčina a co následek. Kawachi a kolegové ukázali na 39 amerických státech, že kde je víc příjmové nerovnosti, tam lidé méně důvěřují druhým a tam se také víc umírá (<a href="https://doi.org/10.2105/ajph.87.9.1491" target="_blank" rel="noopener">Kawachi et al., 1997 ↗</a>). Druhá strana sporu namítala, že rozhodují hmotné podmínky a příjem jednotlivce, ne psychosociální prostředí (<a href="https://doi.org/10.1136/bmj.320.7243.1200" target="_blank" rel="noopener">Lynch et al., 2000 ↗</a>). A Pearce s Davey Smithem přidali varování, které je pro tenhle článek podstatné: nerovnost, nízký sociální kapitál i horší zdraví mohou být všechno důsledky širších ekonomických procesů. Kdo jen vyzývá komunity, ať jsou soudržnější, riskuje, že bude „obviňovat oběť“ a přehlédne, co se s danou krajinou stalo (<a href="https://doi.org/10.2105/ajph.93.1.122" target="_blank" rel="noopener">Pearce a Davey Smith, 2003 ↗</a>).
+      </p>
+      <p>
+        Z toho plyne užší, ale pevnější verze teze. Na tom, jak dlouho žijeme, se velkou měrou podílejí věci mimo ordinaci: práce, příjem a vztahy. Nejsou to ctnosti jednotlivců, ale podmínky, ve kterých lidé žijí. A ty se dají rozbít zvenku.
+      </p>
+
+      <h2>Ústecký kraj: Roseto naruby</h2>
+      <p>
+        Teď se podívejme domů. Podle úmrtnostních tabulek Českého statistického úřadu za roky 2024–2025 má muž narozený v Praze před sebou v průměru 79,2 roku, muž narozený v Ústeckém kraji 75,4 roku. Rozdíl je 3,8 roku a žádný kraj v zemi na tom není hůř. U žen je rozdíl 3,5 roku: 84,6 v Praze, 81,0 v Ústeckém kraji. Celostátně podle jednoleté tabulky za rok 2025 vychází 77,5 roku pro muže a 83,2 pro ženy. Podrobně jsme kraje i okresy rozebrali v článku <a href="clanek-regionalni-nuzky-nadeje-doziti.html">Muž z Ústecka umírá skoro o čtyři roky dřív než Pražan</a>.
+      </p>
+      <p>
+        Roseto bylo místo, kde lidé umírali na srdce méně, než by čekal lékař s tabulkou rizikových faktorů. Ústecký kraj je jeho zrcadlový obraz. Má nejkratší život mužů v zemi a podle regionálních účtů ČSÚ zároveň nejnižší čistý disponibilní důchod domácností na obyvatele, tedy to, co domácnostem zbývá po zdanění a po započtení sociálních transferů: 348 560 Kč v roce 2024, 87,2 % celostátního průměru. Praha měla 528 267 Kč, zhruba o polovinu víc.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avRosetoKrajeH">
+        <figcaption class="av-figure-h" id="avRosetoKrajeH">Dvě mapy, jedno pořadí: naděje dožití mužů a příjmy domácností podle krajů</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Kraj</th>
+                <th scope="col" class="av-num">Naděje dožití mužů (roky, 2024–2025)</th>
+                <th scope="col" class="av-num">Čistý disponibilní důchod (Kč/obyv., 2024)</th>
+                <th scope="col" class="av-num">% průměru ČR</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-good"><th scope="row">Hlavní město Praha</th><td class="av-num av-good">79,2</td><td class="av-num">528 267</td><td class="av-num">132,2</td></tr>
+              <tr><th scope="row">Královéhradecký</th><td class="av-num">78,1</td><td class="av-num">383 180</td><td class="av-num">95,9</td></tr>
+              <tr class="av-row-highlight"><th scope="row">Kraj Vysočina</th><td class="av-num">77,9</td><td class="av-num">389 388</td><td class="av-num">97,4</td></tr>
+              <tr><th scope="row">Jihomoravský</th><td class="av-num">77,9</td><td class="av-num">392 721</td><td class="av-num">98,2</td></tr>
+              <tr><th scope="row">Středočeský</th><td class="av-num">77,8</td><td class="av-num">431 292</td><td class="av-num">107,9</td></tr>
+              <tr><th scope="row">Pardubický</th><td class="av-num">77,6</td><td class="av-num">372 925</td><td class="av-num">93,3</td></tr>
+              <tr><th scope="row">Plzeňský</th><td class="av-num">77,4</td><td class="av-num">389 566</td><td class="av-num">97,5</td></tr>
+              <tr><th scope="row">Jihočeský</th><td class="av-num">77,4</td><td class="av-num">380 500</td><td class="av-num">95,2</td></tr>
+              <tr><th scope="row">Zlínský</th><td class="av-num">77,3</td><td class="av-num">370 841</td><td class="av-num">92,8</td></tr>
+              <tr><th scope="row">Liberecký</th><td class="av-num">77,1</td><td class="av-num">360 946</td><td class="av-num">90,3</td></tr>
+              <tr class="av-row-warn"><th scope="row">Olomoucký</th><td class="av-num">76,8</td><td class="av-num">356 687</td><td class="av-num">89,2</td></tr>
+              <tr class="av-row-warn"><th scope="row">Karlovarský</th><td class="av-num">76,0</td><td class="av-num">352 746</td><td class="av-num">88,2</td></tr>
+              <tr class="av-row-warn"><th scope="row">Moravskoslezský</th><td class="av-num">75,8</td><td class="av-num">356 179</td><td class="av-num">89,1</td></tr>
+              <tr class="av-row-bad"><th scope="row">Ústecký</th><td class="av-num av-bad">75,4</td><td class="av-num av-bad">348 560</td><td class="av-num av-bad">87,2</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ČSÚ — úmrtnostní tabulky za kraje (výběr OBY04BKT01, naděje dožití mužů při narození, dvouletý průměr 2024–2025) a regionální účty (výběr WNUC04T01, čistý disponibilní důchod domácností na 1 obyvatele, běžné ceny, 2024; ČR = 399 747 Kč). Obojí staženo z open-data API ČSÚ (data.csu.gov.cz) 13. 10. 2026. Seřazeno podle naděje dožití mužů. Zvýrazněna Vysočina (výjimka, viz text). Čtyři kraje s nejnižšími příjmy jsou zároveň čtyři kraje s nejkratším životem mužů. Interaktivní mapa: <a href="kraje.html">krajský dashboard</a>.</p>
+      </figure>
+
+      <p>
+        Pořadí obou sloupců se překrývá nápadně. Spočítali jsme pro čtrnáct krajů Spearmanův koeficient pořadí: vychází 0,90, a i bez Prahy 0,87. Tady je ale potřeba se zastavit. Tohle číslo je přesně stejný druh důkazu jako Roseto: srovnání celých území, ne lidí. Čtrnáct krajů je málo a za oběma sloupci se mohou skrývat stejné třetí věci, například věková struktura, vzdělání nebo druh práce. Shoda pořadí ukazuje, kde se nerovnosti potkávají. Neříká, co je způsobuje.
+      </p>
+      <p>
+        Přesto je v tabulce detail, který by Stewarta Wolfa zaujal. Kraj Vysočina má příjmy pod celostátním průměrem (97,4 %), a přesto třetí nejdelší život mužů v zemi, 77,9 roku. Je to rosetovská výjimka? Možná. Jenže data o tom, jak drží pohromadě rodiny, obce a spolky na Vysočině ve srovnání se severem Čech, v podobě, kterou by šlo položit vedle úmrtnostních tabulek, jsme nenašli. Zůstává to otázkou, ne odpovědí.
+      </p>
+
+      <h2>Co se stalo s krajinou</h2>
+      <p>
+        Kdo hledá mechanismus, nemusí pátrat dlouho. Vláda vede Ústecký kraj spolu s Moravskoslezským a Karlovarským jako strukturálně postižený region. Jejich hospodářskou restrukturalizaci řeší strategie RE:START, kterou vláda vzala za svou mimo jiné usnesením č. 826 z 19. října 2015 (<a href="https://mmr.gov.cz/cs/microsites/restart-regionu/uvod" target="_blank" rel="noopener">MMR, RE:START ↗</a>). Tytéž tři kraje najdete v tabulce úplně dole.
+      </p>
+      <p>
+        V Rosetu se vazby rozvolnily, protože se změnil způsob života. Ve strukturálně postiženém regionu mohou slábnout z jiného důvodu. Typicky mizí zaměstnavatelé, kolem kterých se dřív točil život celých měst. S nimi mizí jistota práce, stálý příjem i místa, kde se lidé denně potkávali. Část mladých odchází za studiem a prací jinam. A to, co zbude, je řidší síť: méně lidí, na které se dá v nouzi obrátit. Literatura výše ukazuje, že právě tyhle věci, tedy práce, příjem a zapojení mezi ostatní, souvisejí s délkou života bez ohledu na to, jak dobrá je místní nemocnice.
+      </p>
+      <p>
+        Dvě čísla z českých dat k tomu pasují. Prvním je, že kratší život na severu Čech je hlavně mužský. Rozdíl mezi pohlavími je v Ústeckém kraji 5,6 roku, v Praze 5,3. V okresních tabulkách za roky 2021–2025 se nůžky rozevírají ještě víc: muž z okresu Most má podle úmrtnostních poměrů těch let před sebou 73,1 roku, muž z okresu Praha-západ 78,5. To odpovídá tomu, co mezinárodní studie říkají o mužích, u kterých se ztráta práce i slabší okolí v úmrtnosti projevují silněji. Důkaz to ale není, jen shoda.
+      </p>
+      <p>
+        Druhým číslem je čas. Za deset let se život prodloužil všude. Muž z Ústeckého kraje si podle dvouletých tabulek ČSÚ polepšil ze 73,8 roku (2014–2015) na 75,4, Pražan ze 77,5 na 79,2. Oba si přidali zhruba stejně a rozdíl mezi nimi zůstal, kde byl. Život se za tu dekádu prodloužil v celé zemi. Propast mezi kraji se ale nezasypala.
+      </p>
+      <p>
+        <strong>Modelová situace</strong> (nejde o skutečné lidi): dva chlapci se narodí ve stejný den, jeden v Mostě, druhý o necelých sto kilometrů dál v obci za Prahou. Kdyby po celý jejich život platily úmrtnostní poměry let 2021–2025 v jejich okresech, první by se v průměru dožil asi o pět a půl roku méně. Nikdo z nich si to nevybral a žádný lékař v porodnici to nezmění. Úmrtnostní poměry se ale mění, takže tohle číslo není předpověď. Popisuje dnešní stav.
+      </p>
+
+      <h2>A co nemocnice?</h2>
+      <p>
+        Nic z toho neznamená, že na zdravotnictví nezáleží. Znamená to, že mu nesmíme přičítat víc, než unese. Dobře to ukazuje dvojice ukazatelů, které HSPA Monitor sleduje. <a href="indicator.html?id=mortalita_lecitelna"><strong>Léčitelná úmrtnost</strong></a> počítá předčasná úmrtí do 75 let, kterým mohla zabránit včasná a účinná léčba. V Česku jich bylo v roce 2023 107,2 na 100 000 obyvatel, proti 86,8 v průměru EU. <a href="indicator.html?id=mortalita_preventabilni"><strong>Preventabilní úmrtnost</strong></a> počítá úmrtí, kterým šlo předejít prevencí a veřejným zdravím. Ta je v Česku podstatně vyšší: 173,9 na 100 000 proti 150,9 v EU (Eurostat). Velká část předčasných úmrtí se tedy rozhoduje dřív, než člověk dorazí do nemocnice.
+      </p>
+      <p>
+        Rádi bychom obě čísla ukázali i po krajích. Na <a href="kraje.html">krajském dashboardu</a> ale zatím máme u preventabilní úmrtnosti, kouření, obezity i sebevražd jen orientační hodnoty, které nejsou ověřené z primárního zdroje. Proto je tu jako fakt nepodáváme. Ověřené krajské řady máme jen u naděje dožití a příjmů, tedy u čísel výše.
+      </p>
+
+      <h2>Zpátky v Rosetu</h2>
+      <p>
+        Vraťme se na začátek, k úmrtním listům, které Wolfův tým kdysi procházel. Na žádném z nich nestálo „osamělost“, „zavřená továrna“ ani „rozpadlý spolek“. Stálo tam „infarkt myokardu“. Úmrtní list zachytí, na co člověk zemřel. Proč zemřel zrovna on, zrovna tehdy a zrovna tam, z něj nevyčtete.
+      </p>
+      <p>
+        Úmrtnostní tabulky ČSÚ fungují stejně. Řeknou nám, že muž z Ústeckého kraje žije o 3,8 roku kratší život než Pražan. Neřeknou, kolik z toho připadá na práci, která zmizela, na příjem, který nestačí, a na sítě, které se roztrhaly. To nevíme a předstírat opak by bylo nepoctivé. Datový kontrakt HSPA Monitoru zatím nemá žádný krajský ukazatel důvěry, osamělosti ani zapojení do společenství. Bez nich se na tuto otázku odpovědět nedá.
+      </p>
+      <p>
+        Roseto nakonec možná nebylo zázračné městečko, za jaké ho mnozí vydávali. Jeho otázka ale zestárla lépe než jeho čísla. Když chcete vědět, jak dlouho budou lidé někde žít, nestačí se dívat do nemocnice. Musíte se dívat, jak to místo drží pohromadě. V Ústeckém kraji je ta otázka položená naruby. Nejde o to, proč tam lidé žijí déle, než by měli, ale proč žijí kratší život, než by mohli.
+      </p>
+      <aside class="article-callout article-callout-caveat" aria-label="Upozornění na limity použitých dat a studií">
+        <p class="article-callout-h">Co v tomto textu není doloženo napevno</p>
+        <p>
+          Roseto je malá obec a jeho data jsou ekologická, tedy srovnání celých obcí. Nejnovější srovnání s Framinghamem (Adhikari et al., 2026) samotný rozdíl v úmrtnosti zpochybňuje, starší padesátileté srovnání (Egolf et al., 1992) ho potvrzuje. Tento spor nerozhodujeme. Detaily o životě v Rosetu přebíráme jen z odborných článků; anekdoty z popularizačních knih neuvádíme jako fakt. Studie o sociálních vztazích a nezaměstnanosti jsou metaanalýzy observačních studií. Ukazují souvislost, ne důkaz příčiny, a u sociálního kapitálu celých komunit jsou výsledky smíšené a efekty malé. Shoda pořadí krajů v naději dožití a příjmech (Spearman 0,90) je redakční výpočet ze čtrnácti krajů a jde o tentýž typ ekologické korelace jako Roseto. Naděje dožití je ukazatel úmrtnostních poměrů období, ne předpověď pro konkrétního člověka. Krajská data jsou dvouleté průměry 2024–2025, okresní pětileté průměry 2021–2025 (okresní hodnoty z datové sady portálu stažené z ČSÚ 27. 7. 2026). Česká krajská data o sociálním kapitálu, důvěře či osamělosti jsme nenašli.
+        </p>
+      </aside>
+    </div>
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, které s tématem souvisejí</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=nadeje_doziti_total"><strong>Naděje dožití při narození</strong></a> — 80,1 roku (obě pohlaví, ČR, 2024, Eurostat) · Výsledky · vyšší je lepší (signál warn; EU 81,5) · krajský rozpad z tabulek ČSÚ na <a href="kraje.html">krajském dashboardu</a></li>
+        <li><a href="indicator.html?id=nadeje_doziti_zeny"><strong>Naděje dožití žen</strong></a> — 83 let (ČR, 2024, Eurostat) · Výsledky · vyšší je lepší (signál warn; EU 84,1)</li>
+        <li><a href="indicator.html?id=mortalita_preventabilni"><strong>Preventabilní úmrtnost</strong></a> — 173,9 na 100 000 (ČR, 2023, Eurostat) · Výsledky · nižší je lepší (signál bad; EU 150,9)</li>
+        <li><a href="indicator.html?id=mortalita_lecitelna"><strong>Léčitelná úmrtnost</strong></a> — 107,2 na 100 000 (ČR, 2023, Eurostat) · Výsledky · nižší je lepší (signál bad; EU 86,8) · viz <a href="clanek-lecitelna-mortalita.html">Co dokáže systém vyléčit</a></li>
+        <li><a href="indicator.html?id=mortalita_kardiovaskularni"><strong>Úmrtnost na kardiovaskulární nemoci (standardizovaná)</strong></a> — 463,8 na 100 000 (ČR, 2023, Eurostat) · Výsledky · nižší je lepší (signál bad; EU 313,0)</li>
+        <li><a href="indicator.html?id=ohrozeni_chudobou"><strong>Míra ohrožení příjmovou chudobou</strong></a> — 9,6 % (ČR, 2025, Eurostat EU-SILC) · Struktury · nižší je lepší (signál good; EU 16,3) · krajská čísla na dashboardu jsou zatím orientační, v textu je nepoužíváme</li>
+        <li><a href="indicator.html?id=prijem_disponibilni"><strong>Čistý disponibilní důchod domácností</strong></a> — hodnota na dashboardu je zatím ilustrativní (seed); krajská čísla v tomto článku pocházejí přímo z regionálních účtů ČSÚ za rok 2024</li>
+      </ul>
+    </aside>
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Česká data</h5>
+        <ul class="article-sources-list">
+          <li><strong>ČSÚ — Úmrtnostní tabulky za kraje</strong> (sada OBY04BK, výběr OBY04BKT01; naděje dožití při narození, dvouleté průměry 2014–2015 a 2024–2025, muži i ženy). Staženo z API 13. 10. 2026. <a href="https://data.csu.gov.cz/vybery/OBY04BKT01" target="_blank" rel="noopener">data.csu.gov.cz ↗</a></li>
+          <li><strong>ČSÚ — Úmrtnostní tabulky za ČR</strong> (sada OBY04BCR, výběr OBY04BCRT01; 2025: muži 77,49, ženy 83,19). Staženo z API 13. 10. 2026. <a href="https://data.csu.gov.cz/vybery/OBY04BCRT01" target="_blank" rel="noopener">data.csu.gov.cz ↗</a></li>
+          <li><strong>ČSÚ — Úmrtnostní tabulky za okresy</strong> (sada OBY04BO, výběr OBY04BOT01; pětileté průměry 2021–2025; muži Most 73,1, Praha-západ 78,5). Hodnoty z datové sady portálu stažené 27. 7. 2026. <a href="https://data.csu.gov.cz/vybery/OBY04BOT01" target="_blank" rel="noopener">data.csu.gov.cz ↗</a></li>
+          <li><strong>ČSÚ — Regionální účty</strong> (sada WNUC04, výběr WNUC04T01; čistý disponibilní důchod domácností na 1 obyvatele v Kč a v % průměru ČR, běžné ceny, 2024). Staženo z API 13. 10. 2026. <a href="https://data.csu.gov.cz/vybery/WNUC04T01" target="_blank" rel="noopener">data.csu.gov.cz ↗</a></li>
+          <li><strong>Eurostat — Avoidable mortality (hlth_cd_apr)</strong>: preventabilní a léčitelná úmrtnost, standardizované míry do 75 let, 2023; v datovém kontraktu HSPA Monitoru jako indikátory mortalita_preventabilni a mortalita_lecitelna. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_apr/default/table" target="_blank" rel="noopener">ec.europa.eu ↗</a></li>
+          <li><strong>Ministerstvo pro místní rozvoj — RE:START, Strategie hospodářské restrukturalizace Ústeckého, Moravskoslezského a Karlovarského kraje</strong> (usnesení vlády č. 952/2013, č. 73/2014 a č. 826 z 19. 10. 2015 a navazující akční plány). <a href="https://mmr.gov.cz/cs/microsites/restart-regionu/uvod" target="_blank" rel="noopener">mmr.gov.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Recenzovaná literatura o Rosetu</h5>
+        <ul class="article-sources-list">
+          <li><strong>Stout C, Marrow J, Brandt EN, Wolf S. Unusually low incidence of death from myocardial infarction. Study of an Italian American community in Pennsylvania. JAMA. 1964;188:845–849.</strong> DOI 10.1001/jama.1964.03060360005001. PMID 14132548. Původní studie (abstrakt v PubMed není). Ověřeno v PubMed 13. 10. 2026. <a href="https://doi.org/10.1001/jama.1964.03060360005001" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Bruhn JG. An epidemiological study of myocardial infarctions in an Italian-American community; a preliminary sociological study. J Chronic Dis. 1965;18:353–365.</strong> DOI 10.1016/0021-9681(65)90039-1. PMID 14273698. Předběžná sociologická studie (abstrakt v PubMed není, kvalitativní závěr přebíráme z abstraktu v časopise). Ověřeno v PubMed 13. 10. 2026. <a href="https://doi.org/10.1016/0021-9681(65)90039-1" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Keys A. Arteriosclerotic heart disease in Roseto, Pennsylvania. JAMA. 1966;195(2):93–95.</strong> DOI 10.1001/jama.1966.03100020081018. PMID 6015070. Kritika (abstrakt v PubMed není, kvalitativní závěr přebíráme z abstraktu v JAMA). Ověřeno v PubMed 13. 10. 2026. <a href="https://doi.org/10.1001/jama.1966.03100020081018" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Bruhn JG, Philips BU, Wolf S. Lessons from Roseto 20 years later: a community study of heart disease. South Med J. 1982;75(5):575–580.</strong> DOI 10.1097/00007611-198205000-00017. PMID 7079814. Retrospektivní přehled. Ověřeno v PubMed 13. 10. 2026. <a href="https://doi.org/10.1097/00007611-198205000-00017" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Egolf B, Lasker J, Wolf S, Potvin L. The Roseto effect: a 50-year comparison of mortality rates. Am J Public Health. 1992;82(8):1089–1092.</strong> DOI 10.2105/ajph.82.8.1089. PMID 1636828. Srovnání úmrtních listů dvou obcí 1935–1985, věkově standardizované míry po dekádách. Ověřeno v PubMed 13. 10. 2026. <a href="https://doi.org/10.2105/ajph.82.8.1089" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Wolf S. Predictors of myocardial infarction over a span of 30 years in Roseto, Pennsylvania. Integr Physiol Behav Sci. 1992;27(3):246–257.</strong> DOI 10.1007/BF02690896. PMID 1419870. Prospektivní sledování; Roseto asi 1 600 obyvatel, Bangor asi 5 000; úmrtnost mužů na infarkt na začátku studie méně než poloviční při stejném výskytu obvyklých rizikových faktorů. Ověřeno v PubMed 13. 10. 2026. <a href="https://doi.org/10.1007/BF02690896" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Lasker JN, Egolf BP, Wolf S. Community social change and mortality. Soc Sci Med. 1994;39(1):53–62.</strong> DOI 10.1016/0277-9536(94)90165-1. PMID 8066487. Srovnání komunitních ukazatelů (sňatky, členství v organizacích, volby, sociální třída). Ověřeno v PubMed 13. 10. 2026. <a href="https://doi.org/10.1016/0277-9536(94)90165-1" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Adhikari S, Ogedegbe OG, Devinsky O. The Roseto Study: Selection Bias Versus Social Support. Cureus. 2026;18(7):e113024.</strong> DOI 10.7759/cureus.113024. PMID 42518891 (oprava afiliací: DOI 10.7759/cureus.c467, PMID 42564463). Srovnání s Framinghamskou kohortou standardizované na věk a pohlaví. Ověřeno v PubMed 13. 10. 2026. <a href="https://doi.org/10.7759/cureus.113024" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Recenzovaná literatura o vztazích, práci a sociálním kapitálu</h5>
+        <ul class="article-sources-list">
+          <li><strong>Holt-Lunstad J, Smith TB, Layton JB. Social relationships and mortality risk: a meta-analytic review. PLoS Med. 2010;7(7):e1000316.</strong> DOI 10.1371/journal.pmed.1000316. PMID 20668659. Metaanalýza 148 studií, 308 849 účastníků; OR 1,50 (95% CI 1,42–1,59); složené míry sociální integrace OR 1,91 (1,63–2,23). Ověřeno v PubMed 13. 10. 2026. <a href="https://doi.org/10.1371/journal.pmed.1000316" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Roelfs DJ, Shor E, Davidson KW, Schwartz JE. Losing life and livelihood: a systematic review and meta-analysis of unemployment and all-cause mortality. Soc Sci Med. 2011;72(6):840–854.</strong> DOI 10.1016/j.socscimed.2011.01.005. PMID 21330027. Metaanalýza 42 studií, přes 20 milionů osob; HR 1,63, vyšší u mužů, o 24 % nižší ve studiích kontrolujících zdravotní chování. Ověřeno v PubMed 13. 10. 2026. <a href="https://doi.org/10.1016/j.socscimed.2011.01.005" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Choi M, Mesa-Frias M, Nuesch E, et al. Social capital, mortality, cardiovascular events and cancer: a systematic review of prospective studies. Int J Epidemiol. 2014;43(6):1895–1920.</strong> DOI 10.1093/ije/dyu212. PMID 25369975. Systematický přehled 14 prospektivních studií. Ověřeno v PubMed 13. 10. 2026. <a href="https://doi.org/10.1093/ije/dyu212" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Xue X, Reed WR, Menclova A. Social capital and health: a meta-analysis. J Health Econ. 2020;72:102317.</strong> DOI 10.1016/j.jhealeco.2020.102317. PMID 32497954. Metaanalýza 12 778 odhadů ze 470 studií. Ověřeno v PubMed 13. 10. 2026. <a href="https://doi.org/10.1016/j.jhealeco.2020.102317" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Ehsan A, Klaas HS, Bastianen A, Spini D. Social capital and health: A systematic review of systematic reviews. SSM Popul Health. 2019;8:100425.</strong> DOI 10.1016/j.ssmph.2019.100425. PMID 31431915. Přehled 20 systematických přehledů. Ověřeno v PubMed 13. 10. 2026. <a href="https://doi.org/10.1016/j.ssmph.2019.100425" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Meijer M, Röhl J, Bloomfield K, Grittner U. Do neighborhoods affect individual mortality? A systematic review and meta-analysis of multilevel studies. Soc Sci Med. 2012;74(8):1204–1212.</strong> DOI 10.1016/j.socscimed.2011.11.034. PMID 22365939. Systematický přehled 40 a metaanalýza 18 víceúrovňových studií. Ověřeno v PubMed 13. 10. 2026. <a href="https://doi.org/10.1016/j.socscimed.2011.11.034" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Kawachi I, Kennedy BP, Lochner K, Prothrow-Stith D. Social capital, income inequality, and mortality. Am J Public Health. 1997;87(9):1491–1498.</strong> DOI 10.2105/ajph.87.9.1491. PMID 9314802. Průřezová ekologická studie 39 států USA. Ověřeno v PubMed 13. 10. 2026. <a href="https://doi.org/10.2105/ajph.87.9.1491" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Lynch JW, Smith GD, Kaplan GA, House JS. Income inequality and mortality: importance to health of individual income, psychosocial environment, or material conditions. BMJ. 2000;320(7243):1200–1204.</strong> DOI 10.1136/bmj.320.7243.1200. PMID 10784551. Přehledový článek (abstrakt v PubMed není; citujeme jen téma sporu). Ověřeno v PubMed 13. 10. 2026. <a href="https://doi.org/10.1136/bmj.320.7243.1200" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Pearce N, Davey Smith G. Is social capital the key to inequalities in health? Am J Public Health. 2003;93(1):122–129.</strong> DOI 10.2105/ajph.93.1.122. PMID 12511401. Přehledový a kritický článek. Ověřeno v PubMed 13. 10. 2026. <a href="https://doi.org/10.2105/ajph.93.1.122" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Knihy (mimo recenzovanou literaturu)</h5>
+        <ul class="article-sources-list">
+          <li><strong>Bruhn JG, Wolf S. The Roseto Story: An Anatomy of Health.</strong> University of Oklahoma Press, 1979. Kniha autorů studie; její existenci ověřujeme jen přes dobovou recenzi (Contemporary Psychology, 1979, DOI 10.1037/017865), čísla z ní nepřebíráme.</li>
+          <li><strong>Wolf S, Bruhn JG. The Power of Clan: The Influence of Human Relationships on Heart Disease.</strong> Transaction Publishers, 1993; reedice Routledge 2021, DOI 10.4324/9780429339271. Monografie o pětadvacetiletém sledování; v textu z ní nic necitujeme.</li>
+          <li><strong>Gladwell M. Outliers: The Story of Success.</strong> Little, Brown and Company, 2008. Úvodní kapitola o Rosetu; uvádíme jako kulturní kontext, ne jako zdroj faktů.</li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Související čtení na portálu</h5>
+        <ul class="article-sources-list">
+          <li><a href="clanek-regionalni-nuzky-nadeje-doziti.html">Muž z Ústecka umírá skoro o čtyři roky dřív než Pražan. Nůžky mezi kraji se nezavírají</a> — kraje a okresy podrobně, dekádní trend.</li>
+          <li><a href="clanek-plodnost-mladistvych.html">Dětem se rodí děti jen v některých krajích</a> — jiná metrika, stejná mapa; <a href="clanek-prijem-a-zdravi.html">Třicet bodů mezi pětinami</a> — příjmový gradient zdraví v Česku.</li>
+          <li><a href="clanek-nadeje-doziti-vzdelani.html">Třináct let života navíc za diplom</a> — vzdělanostní osa téhož gradientu; <a href="clanek-co-urcuje-zdravi-naroda.html">Co doopravdy určuje zdraví národa</a> — sociální determinanty v širším rámci.</li>
+          <li><a href="clanek-duvera-nadumrtnost-covid-studie.html">Důvěra a nadúmrtnost za pandemie</a> — důvěra jako možný ukazatel zdraví společnosti; <a href="clanek-lecitelna-mortalita.html">Co dokáže systém vyléčit</a> — co zmůže samotná léčba.</li>
+          <li><a href="kraje.html">Krajský dashboard</a> — interaktivní mapa naděje dožití a dalších ukazatelů.</li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Krajská naděje dožití a příjmy domácností pocházejí z open-data API ČSÚ (dotazy 13. 10. 2026), okresní hodnoty z datové sady portálu stažené z ČSÚ 27. 7. 2026. Krajské hodnoty jsou dvouleté průměry, okresní pětileté a celostátní jednoleté, proto je nelze mezi úrovněmi přímo odečítat. Čistý disponibilní důchod z regionálních účtů je jiná metrika než příjem ze šetření EU-SILC, ze kterého vychází dashboardový indikátor. Spearmanův koeficient a rozdíly mezi kraji jsou výpočty redakce. Studie jsme ověřili v PubMed; čísla přebíráme jen z abstraktů a u článků bez abstraktu v PubMed uvádíme jen kvalitativní závěr.
+      </p>
+    </section>
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+  </article>
+</main>
+<footer class="bottom" id="siteFooter"></footer>
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
