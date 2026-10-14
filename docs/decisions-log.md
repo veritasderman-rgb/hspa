@@ -6,6 +6,13 @@ Formát: každá položka má `Datum`, `PR`, `Co`, `Proč`, `Důsledek`.
 
 ---
 
+## 2026-10-14 — Esej ve stylu Gladwella jako forma článku, když to data unesou
+
+- **PR**: `claude/determined-mayer-y0gud5` (vydání série „Co čísla neříkají“ + úprava rutiny)
+- **Co**: Vydavatel schválil a pustil do publikační fronty čtyři eseje série „Co čísla neříkají“ (`co-cisla-nerikaji`: praktik, zeměpis péče, Roseto, prevence). `PROMPT_ROUTINE.md` § 8.2a: nad datovým rámcem rutina rozhodne o formě. Esej píše jen tehdy, když má doloženou scénu, obrat v recenzované studii i ověřená česká data. Jinak píše dosavadní článek podle § 8.3.
+- **Proč**: Vydavatel: „tohle je způsob, jak se ty příběhy mají vyprávět, pokud jsou k tomu data“. Esej s obratem a přiznanými limity čtenáři vysvětlí mechanismus lépe než výčet čísel.
+- **Důsledek**: Málo dat se **NEPŘIKRÝVÁ** vyprávěním. Bez doložené scény nebo bez obratu se esej nepíše. Žádné vymyšlené osoby ani citáty, modelová situace jen výslovně označená. Seed a „Ilustrativní“ hodnoty nikdy jako fakt. Nové eseje se řadí jako další díly série `co-cisla-nerikaji`.
+
 ## 2026-10-13 — Webová videa na šířku smí mít syntetický český hlas (ElevenLabs)
 
 - **PR**: `claude/determined-mayer-y0gud5` (videa k `poplatky.html`)
