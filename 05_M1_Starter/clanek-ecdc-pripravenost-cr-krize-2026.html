@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-10-14
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-10-14
+    creation_phase: rutina+article-write
+    primary_sources_count: 5
+    evidence_sources_count: 0
+    visual_elements_count: 5
+    notes: "Vytvoreno z discovery 2026-10-14: ECDC zverejnilo 13. 10. 2026 prvni Public Health Emergency Preparedness Assessment Ceske republiky podle cl. 8 narizeni (EU) 2022/2371; MZ vydalo tentyz den tiskovou zpravu. Vsechna cisla z PDF https://www.ecdc.europa.eu/sites/default/files/documents/PHEPA-report-Czech-Republic-2026.pdf (35 stran PDF, stazeno 14. 10. 2026; cislovani nize = tistene cislo strany, PDF strana = tistena + 6; v tiraži Stockholm, September 2026, doi 10.2900/4912528). KPI: 16 kapacit, 5 do hloubky (lab 3, surveillance 4, rizeni 6, zoonozy 10, AMR/HAI 12) (s. 1, 5, 24); mise 16.-20. 2. 2026 (s. 1, 5); tym 7 expertu ECDC + 3 experti DG SANTE, DG HERA, WHO Europe (s. 5); kazda zeme jednou za 3 roky, prvni cyklus 2024-2026, 30 zemi EU/EHP, akcni plan do 9 mesicu od obdrzeni zpravy (s. 1, 4). Rizeni: pandemicky plan chripky 2011, ptaci chripky 2012, epidemicky plan 2017/2020 (s. 6-7); typove plany doporucena aktualizace kazde 4 roky, pandemicke zastarale; 22 prioritnich hrozeb z celostatni analyzy rizik 2016 (s. 7); hodnoceni rizik ad hoc, bez narodni metodiky (s. 1, 7); chybi mechanismus posileni personalu (s. 8); chybi seznam kritickych MCM (s. 8). Surveillance: ISIN z primych grantu EU do 2028 (s. 6, 11); 65 nemoci vyhlaska 389/2023 (s. 11); rucni tydenni vystupy, zadne vyhrazene zdroje na pokrocilou analytiku (s. 11); odpadni vody: polio 24 odberovych mist mesicne, SARS-CoV-2 5 mist, 70 % populace, mesicne, nepouziva se pro situacni hodnoceni (s. 12); chybi nastroj pro event-based surveillance (s. 12). Lab: 5 BSL-3, z toho 3 pridany po pandemii; BSL-4 Techonin 2027 (s. 9); ~180 laboratori, 24 NRL v SZU (s. 10); nedostatek penez na provoz NGS a bioinformatiku (s. 10). AMR/HAI: NAP 2011-2013 a 2019-2022, nyni zadny schvaleny; navrh strategie s rozpoctem, priprava 3. NAP s ucelovym financovanim (s. 13); EARS-Net ~70 % populace; zadna oficialni narodni zprava; zadny rozpocet na genomickou surveillance MDRO; podil Access 2024 nizsi nez 2019; nejvyssi spotreba antimikrobik pro systemove pouziti v nemocnicich v EU/EHP 2024 (s. 13); IPC povinny v akutnich nemocnicich od 2013, pruzkum 2023: IPC personal jen v 83 % nemocnic; zadna narodni koordinace IPC; navrh strategickeho planu surveillance HAI neschvalen; osveta omezena od 2023 (s. 14). Zoonozy: environmentalni sektor v dohodach a vyborech prevazne chybi (s. 14); bez prioritizace podle rizika, bez narodniho online sdileni dat (s. 15). Kapacita 16: urady uvedly, ze komplexni akcni plan neni narodni prioritou (s. 22). EOC na MZ od 2025 (s. 20). Rozliseni: zprava nedava skore ani poradi zemi; casti nalezu ECDC uvadi formulaci 'it was reported' (udaje ceske strany) - v textu rozliseno. TZ MZ 13. 10. 2026 (https://mzd.gov.cz/ecdc-zverejnilo-hodnotici-zpravu-pripravenosti-ceske-republiky-na-mimoradne-udalosti-v-oblasti-verejneho-zdravi/, stazeno 14. 10. 2026): popis hodnoceni, mise 16.-20. 2. 2026, vycet instituci, podekovani, 'oceňuje otevřený a konstruktivní přístup', navazujici akcni plan; zadne konkretni zjisteni ani lhutu 9 mesicu neuvadi. Web MZ (stazeno 14. 10. 2026): stranka Pandemicky plan CR vytvorena 18. 10. 2011 (posl. aktualizace 11. 7. 2020), Pandemicky plan rezortu zdravotnictvi cerven 2012 - ECDC 2012 plan nazyva 'pandemic avian flu plan'. Konzistence s portalem: plneni-amr.json (stav k 1. 9. 2026) uvadi, ze nastupnicky akcni plan NAP nebyl dohledan - ECDC to potvrzuje; strategies.json nap_amr ma horizon 2019-2030, coz neodpovida poslednimu planu 2019-2022 (k rozhodnuti redakce). Indikator spotreba_antibiotik je ambulantni sektor; nemocnicni spotreba na portalu indikator nema. Fact-check K 2026-10-14: cisla a strany overeny proti PDF, TZ MZ a strankam MZ; opraveno 4x formulace (EU/EHP misto clenskych statu, 1082/2013 'rozsirit a posilit', atribuce rozpoctu MDRO ceskym institucim, datum 18. 10. 2011 = vytvoreni stranky). Ceka na schvaleni redakce."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pandemický plán z roku 2011 a žádný akční plán proti rezistenci. Co našlo první hodnocení připravenosti Česka od ECDC · HSPA Monitor</title>
+<meta name="description" content="Evropské středisko pro prevenci a kontrolu nemocí (ECDC) zveřejnilo 13. října 2026 první hodnocení toho, jak je Česko připravené na závažné zdravotní hrozby. Oceňuje silný právní rámec, ale upozorňuje, že země nemá národní metodiku hodnocení rizik, pandemické plány z let 2011 a 2012 jsou zastaralé, po plánu na roky 2019–2022 chybí schválený akční plán proti antimikrobiální rezistenci a pracovníci prevence infekcí byli podle průzkumu z roku 2023 jen v 83 % nemocnic. Tisková zpráva ministerstva zdravotnictví žádné z těchto zjištění nejmenuje.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Pandemický plán z roku 2011 a žádný akční plán proti rezistenci. Co našlo první hodnocení připravenosti Česka od ECDC">
+<meta property="og:description" content="ECDC poprvé prověřilo 16 schopností českého systému zvládat zdravotní krize. Chybí národní metodika hodnocení rizik, aktuální pandemický plán i schválený akční plán proti rezistenci na antibiotika.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-ecdc-pripravenost-cr-krize-2026.html">
+<meta property="article:published_time" content="2026-10-15T06:00:00+02:00">
+<meta property="article:section" content="Veřejné zdraví">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-ecdc-pripravenost-cr-krize-2026.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "Pandemický plán z roku 2011 a žádný akční plán proti rezistenci. Co našlo první hodnocení připravenosti Česka od ECDC",
+  "description": "Evropské středisko pro prevenci a kontrolu nemocí (ECDC) zveřejnilo 13. října 2026 první hodnocení toho, jak je Česko připravené na závažné zdravotní hrozby. Oceňuje silný právní rámec, ale upozorňuje, že země nemá národní metodiku hodnocení rizik, pandemické plány z let 2011 a 2012 jsou zastaralé, po plánu na roky 2019–2022 chybí schválený akční plán proti antimikrobiální rezistenci a pracovníci prevence infekcí byli podle průzkumu z roku 2023 jen v 83 % nemocnic. Tisková zpráva ministerstva zdravotnictví žádné z těchto zjištění nejmenuje.",
+  "datePublished": "2026-10-15T06:00:00+02:00",
+  "dateModified": "2026-10-14",
+  "inLanguage": "cs",
+  "articleSection": "Veřejné zdraví",
+  "author": { "@type": "Organization", "name": "Redakce HSPA Monitoru" },
+  "publisher": { "@type": "Organization", "name": "HSPA Monitor · Skóre zdravotnictví", "url": "https://skorezdravotnictvi.cz" },
+  "mainEntityOfPage": "https://skorezdravotnictvi.cz/clanek-ecdc-pripravenost-cr-krize-2026.html"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Veřejné zdraví</span>
+        <span class="article-tag article-tag-muted">ECDC · připravenost na krize · pandemický plán · antimikrobiální rezistence · ISIN</span>
+      </div>
+      <h1 class="article-title">Pandemický plán z roku 2011 a žádný akční plán proti rezistenci. Co našlo první hodnocení připravenosti Česka od ECDC</h1>
+      <p class="article-deck">
+        Evropské středisko pro prevenci a kontrolu nemocí (ECDC) zveřejnilo 13. října 2026 první hodnocení toho, jak je Česko připravené na závažné zdravotní hrozby. Oceňuje silný právní rámec, ale upozorňuje, že země nemá národní metodiku hodnocení rizik, pandemické plány z let 2011 a 2012 jsou zastaralé, po plánu na roky 2019–2022 chybí schválený akční plán proti antimikrobiální rezistenci a pracovníci prevence infekcí byli podle průzkumu z roku 2023 jen v 83&nbsp;% nemocnic. Tisková zpráva ministerstva zdravotnictví žádné z těchto zjištění nejmenuje.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">15. října 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">9 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Po covidu si Evropská unie dala nový pravidelný test: jednou za tři roky přijede do každé země EU a EHP tým ECDC a prověří, jak by země zvládla příští vážnou hrozbu pro zdraví. Česko je za sebou má poprvé. Výsledkem je zpráva s desítkami doporučení, kterou ECDC zveřejnilo 13. října 2026. Ministerstvo zdravotnictví ji týž den oznámilo tiskovou zprávou. Ta ale neuvádí ani jedno konkrétní zjištění. Přečetli jsme obojí.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCntH">
+        <figcaption class="av-figure-h" id="avCntH">První hodnocení připravenosti Česka na zdravotní hrozby: čtyři čísla ze zprávy ECDC (ECDC, zveřejněno 13. 10. 2026)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="16">16</span>
+            <span class="av-counter-label">hodnocených schopností systému, z toho 5 do hloubky</span>
+            <span class="av-counter-foot">zpráva ECDC, s. 1</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter">2011</span>
+            <span class="av-counter-label">rok vzniku pandemického plánu pro chřipku; ECDC ho řadí mezi zastaralé</span>
+            <span class="av-counter-foot">zpráva ECDC, s. 6–7</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="83" data-suffix=" %">83&nbsp;%</span>
+            <span class="av-counter-label">nemocnic mělo pracovníky prevence a kontroly infekcí</span>
+            <span class="av-counter-foot">průzkum z roku 2023; povinné od roku 2013 (s. 14)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter">2028</span>
+            <span class="av-counter-label">do tohoto roku je nový systém hlášení infekcí ISIN placen z grantů EU</span>
+            <span class="av-counter-foot">zpráva ECDC, s. 6 a 11</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ECDC, Country report: Public Health Emergency Preparedness Assessment for the Czech Republic, 2026 (Stockholm, září 2026; zveřejněno 13. 10. 2026). Čísla stran podle tištěného číslování zprávy.</p>
+      </figure>
+
+      <h3>Datový kontext: co a jak ECDC hodnotilo</h3>
+      <p>
+        Hodnocení stojí na šestnácti „kapacitách“, tedy schopnostech, které má mít každý stát pro prevenci zdravotních krizí, přípravu na ně a reakci na ně: od laboratoří a sledování nemocí přes financování a personál po komunikaci rizik, hraniční přechody nebo obnovu po krizi. Pět z nich tým prošel do hloubky: <strong>laboratoře</strong>, <strong>surveillance</strong> (sledování infekčních nemocí), <strong>řízení zdravotních mimořádných událostí</strong>, <strong>antimikrobiální rezistenci a nemocniční infekce</strong> a <strong>zoonózy a hrozby z prostředí včetně klimatu</strong>.
+      </p>
+      <p>
+        Postup měl dvě fáze. Nejdřív tým prostudoval dokumenty a české odpovědi v jednotném sebehodnoticím formuláři EU. Pak ve dnech 16.–20. února 2026 strávil pět dní v Česku. Tým tvořilo sedm expertů ECDC a tři odborníci z Evropské komise (generální ředitelství DG SANTE a úřad HERA) a z evropské kanceláře WHO.
+      </p>
+      <p>
+        Pro čtení zprávy je důležité jedno rozlišení. Zpráva nedává známky ani body a Česko s jinými zeměmi neporovnává. Jde o slovní nálezy a doporučení. Část nálezů jsou vlastní závěry hodnotitelů. Část jsou informace, které týmu sdělily české instituce: zpráva je uvádí formulací „it was reported“ (bylo uvedeno), například u nedostatku peněz a lidí. Kde v textu níže jde o údaj české strany, píšeme to.
+      </p>
+      <p>
+        Zpráva popisuje i výchozí stav. Systém ochrany veřejného zdraví je podle ní silně decentralizovaný: 14 krajských hygienických stanic s jistou autonomií, dva zdravotní ústavy (Ostrava a Ústí nad Labem) a Státní zdravotní ústav (SZÚ) v roli technického poradce. SZÚ hostí 24 národních referenčních laboratoří, které spolupracují zhruba se 180 laboratořemi ve všech 14 krajích. Ohniska nákaz vyšetřují kraje. Ministerstvo koordinuje celostátně jen tehdy, když se ohnisko týká více krajů nebo zahraničí.
+      </p>
+
+      <h3>Institucionální rámec: nařízení 2022/2371 a jeho článek 8</h3>
+      <p>
+        Právní základ je <a href="https://eur-lex.europa.eu/eli/reg/2022/2371/oj" target="_blank" rel="noopener">nařízení Evropského parlamentu a Rady (EU) 2022/2371 o vážných přeshraničních zdravotních hrozbách</a> z 23. listopadu 2022. Nahradilo dřívější rozhodnutí č. 1082/2013/EU, které bylo podle zprávy během pandemie potřeba rozšířit a posílit. Článek 7 ukládá státům jednou za tři roky podat Komisi zprávu o plánování prevence, připravenosti a reakce. Článek 8 pak ECDC ukládá jednou za tři roky posoudit všech 30 zemí EU a EHP. První cyklus běží v letech 2024–2026. Postupy a kritéria hodnocení stanoví nařízení Komise v přenesené pravomoci (EU) 2024/1232 z března 2024.
+      </p>
+      <p>
+        Zpráva tím nekončí. Hodnocená země má podle zprávy do devíti měsíců od jejího obdržení předložit <strong>akční plán</strong>, jak doporučení naplní. Datum, kdy ministerstvo zprávu obdrželo, ani jedna strana neuvádí. V tiráži zprávy je září 2026.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTlH">
+        <figcaption class="av-figure-h" id="avTlH">Od nařízení k akčnímu plánu: cesta prvního hodnocení Česka (nařízení (EU) 2022/2371; zpráva ECDC, s. 1–5; TZ MZ 13. 10. 2026)</figcaption>
+        <ol class="av-timeline">
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">23. 11. 2022</time>
+            <h4 class="av-timeline-title">Nařízení (EU) 2022/2371</h4>
+            <p class="av-timeline-desc">Článek 8: ECDC hodnotí každou zemi EU a EHP jednou za tři roky.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">březen 2024</time>
+            <h4 class="av-timeline-title">Pravidla hodnocení</h4>
+            <p class="av-timeline-desc">Nařízení v přenesené pravomoci (EU) 2024/1232; začíná první cyklus 2024–2026.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">16.–20. 2. 2026</time>
+            <h4 class="av-timeline-title">Mise ECDC v Česku</h4>
+            <p class="av-timeline-desc">Po studiu dokumentů a sebehodnocení pět dní jednání s institucemi.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-now">
+            <time class="av-timeline-date">13. 10. 2026</time>
+            <h4 class="av-timeline-title">Zpráva zveřejněna</h4>
+            <p class="av-timeline-desc">ECDC zprávu publikuje, ministerstvo vydává tiskovou zprávu.</p>
+            <span class="av-timeline-tag">Teď</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-future">
+            <time class="av-timeline-date">do 9 měsíců</time>
+            <h4 class="av-timeline-title">Akční plán Česka</h4>
+            <p class="av-timeline-desc">Lhůta běží od obdržení zprávy; to datum zveřejněno není.</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> nařízení (EU) 2022/2371 (EUR-Lex); ECDC, Public Health Emergency Preparedness Assessment for the Czech Republic, 2026, s. 1, 4 a 5; tisková zpráva MZ ČR z 13. 10. 2026.</p>
+      </figure>
+
+      <h3>Co ECDC našlo</h3>
+      <p>
+        Silné stránky zpráva jmenuje hned na začátku: ucelený právní rámec, jehož páteří jsou zákon o ochraně veřejného zdraví č.&nbsp;258/2000&nbsp;Sb. a krizový zákon č.&nbsp;240/2000&nbsp;Sb., dlouhou tradici cvičení krizových struktur, důraz laboratoří na kvalitu a akreditaci a nové Operační centrum pro mimořádné události na ministerstvu. To podle zprávy funguje od roku 2025. Pak ale přicházejí mezery.
+      </p>
+      <p>
+        <strong>Řízení krizí.</strong> Česko nemá obecný plán prevence, připravenosti a reakce (PPR), který by propojil množství dílčích plánů. Připravuje se teprve. Pandemický plán pro chřipku je z roku 2011, plán pro ptačí chřipku z roku 2012, epidemický plán z roku 2017 s aktualizací v roce 2020. Na webu ministerstva je v sekci Pandemický plán ČR dodnes zveřejněn plán z roku 2011 (stránka vytvořena 18. října 2011) a pandemický plán rezortu zdravotnictví z června 2012. Pro takzvané typové plány se doporučuje aktualizace každé čtyři roky, ale pandemické plány jsou podle zprávy zastaralé. Typový plán se zpracovává pro každou z 22 prioritních hrozeb. Ty určila celostátní analýza rizik z roku 2016, jejíž aktualizace teprve probíhá. Rizika zdravotních hrozeb se navíc hodnotí ad hoc a lokálně: <strong>národní metodika hodnocení rizik neexistuje</strong>. Podle ECDC to může zpozdit varování ostatních aktérů v raných fázích události. Chybí také mechanismus, jak při zdravotní krizi posílit personál napříč sektory, a úplný seznam kritických zdravotnických prostředků a léků pro krize.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-warn">
+          <span class="av-counter" data-value="70" data-suffix=" %">70&nbsp;%</span>
+          <span class="av-counter-label">obyvatel pokrývá sledování SARS-CoV-2 v odpadních vodách, data se ale pro hodnocení situace nepoužívají</span>
+          <span class="av-counter-foot">pět odběrových míst, vzorky jednou měsíčně (s. 12)</span>
+        </div>
+      </aside>
+      <p>
+        <strong>Sledování nemocí.</strong> Zákon ukládá hlásit onemocnění i úmrtí na infekční nemoci, vyhláška č.&nbsp;389/2023&nbsp;Sb. jich vyjmenovává 65. Nový automatizovaný Informační systém infekčních nemocí (ISIN), napojený na elektronické záznamy lékařů, se zavádí postupně a podle zprávy nabídne „významné výhody“. Je ale placený z přímých grantů EU, které jsou k dispozici do roku 2028. ECDC proto žádá dlouhodobé financování a doporučuje ponechat stávající systémy v provozu, dokud nový nebude ověřen. Týdenní bulletin o respiračních virech i týdenní data pro ECDC se dnes sestavují ručně. Na pokročilou analytiku nejsou podle zprávy vyhrazeni lidé ani peníze. Pandemický plán vzniklý po pandemii chřipky v roce 2009 obsahuje o surveillance jen omezené technické podrobnosti.
+      </p>
+      <p>
+        Odpadní vody se sledují na přítomnost polioviru (24 odběrových míst, měsíčně) a viru SARS-CoV-2 (pět míst včetně pražského letiště a hlavního autobusového nádraží). Sledování SARS-CoV-2 pokrývá 70&nbsp;% obyvatel. Vzorky se ale berou jednou měsíčně a na centrálních sběrných místech, takže je nelze číst po regionech. Pro hodnocení respirační situace se proto nepoužívají. Celostátní nástroj pro tzv. event-based surveillance, tedy pro ověřování a sdílení signálů o neobvyklých událostech, neexistuje. Každá ze 14 krajských hygien má vlastní postupy. Shluky, které vzniknou až součtem případů z více krajů, tak podle ECDC mohou zůstat neodhalené.
+      </p>
+      <div class="av-aside-clear"></div>
+      <p>
+        <strong>Laboratoře.</strong> Akreditace je povinná pro všechny laboratoře pracující pro zdravotnictví. Na práci s vysoce nebezpečnými patogeny má veřejné zdravotnictví k dispozici pět laboratoří úrovně BSL-3, tři z nich přibyly po pandemii. Laboratoř nejvyšší úrovně BSL-4 staví ministerstvo obrany v Těchoníně, provoz je plánován na rok 2027. Formální mechanismus, jak v krizi rychle navýšit testování, ale chybí: za covidu se navyšovalo ad hoc a z rezerv. Na provoz celogenomového sekvenování a bioinformatiku chybí peníze, takže se k analýze používá hlavně volně dostupný software.
+      </p>
+      <p>
+        <strong>Rezistence a nemocniční infekce.</strong> Tady je zpráva nejpřímější. Česko mělo dva národní akční plány proti antimikrobiální rezistenci (2011–2013 a 2019–2022), <strong>dnes ale žádný schválený nemá</strong>. Existuje návrh národní strategie s odhadem rozpočtu a příprava třetího plánu počítá s účelově vázanými penězi. Na krajskou úroveň se výsledky sledování rezistence a nemocničních infekcí dostanou jen jako hlášení událostí: ohniska, vážné poškození zdraví nebo úmrtí. Ohniska rozprostřená mezi více nemocnic a krajů tak mohou uniknout. Oficiální národní zpráva, která by data rozebírala, neexistuje. Nedostatek peněz a lidí uvedly české instituce; například na genomické sledování multirezistentních bakterií není vyhrazený rozpočet. Podíl antibiotik ze žádoucí skupiny Access (klasifikace WHO AWaRe) byl v roce 2024 nižší než v roce 2019. Česko mělo v roce 2024 nejvyšší spotřebu antimikrobik pro systémové použití v nemocnicích v celé EU a EHP. Program prevence a kontroly infekcí je v akutních nemocnicích povinný od roku 2013, podle průzkumu z roku 2023 ale měla příslušné pracovníky jen <strong>83&nbsp;% nemocnic</strong>. Národní koordinace této prevence chybí. Návrh strategického plánu sledování nemocničních infekcí nebyl na úrovni ministerstva schválen. Osvěta o rezistenci je podle zprávy omezená od roku 2023, kdy skončil projekt podpořený z fondů EHP a Norska.
+      </p>
+      <p>
+        <strong>Zoonózy a životní prostředí.</strong> Spolupráce zdravotníků a veterinářů má zákonný základ i pracovní skupiny. Sektor životního prostředí ale v dohodách a výborech podle zprávy převážně chybí. Meziresortní skupina pro zoonózy nemá prioritizaci podle rizika a kromě sekvenačních dat chybí společné online sdílení dat mezi resorty. Pochvalu dostala reakce na povodně ze září 2024: varování, krizová komunikace i řízení jsou podle zprávy zavedené.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTabH">
+        <figcaption class="av-figure-h" id="avTabH">Pět oblastí hodnocených do hloubky: co funguje, co chybí a co ECDC doporučuje (zpráva ECDC, zveřejněno 13. 10. 2026)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Oblast (číslo kapacity)</th>
+                <th scope="col">Silná stránka</th>
+                <th scope="col">Hlavní mezera</th>
+                <th scope="col">Klíčové doporučení</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Řízení zdravotních mimořádných událostí (6)</th><td>Krizový zákon, tradice cvičení, nové operační centrum MZ</td><td>Bez národní metodiky hodnocení rizik; pandemické plány 2011 a 2012</td><td>Dokončit obecný plán PPR a propojit s ním dílčí plány</td></tr>
+              <tr><th scope="row">Laboratoře (3)</th><td>Povinná akreditace, pět laboratoří BSL-3</td><td>Bez formálního mechanismu navýšení testování; málo peněz na sekvenování</td><td>Zařadit strategii navýšení kapacit do plánu PPR</td></tr>
+              <tr><th scope="row">Surveillance (4)</th><td>Silná zákonná povinnost hlášení, automatizace přes ISIN</td><td>ISIN placen z grantů EU do roku 2028; ruční výstupy</td><td>Dokončit ISIN a zajistit mu trvalé peníze a lidi</td></tr>
+              <tr class="av-row-highlight"><th scope="row">Rezistence a nemocniční infekce (12)</th><td>Data do evropských sítí EARS-Net, ESAC-Net, HAI-Net</td><td>Žádný schválený akční plán; pracovníci prevence infekcí v 83 % nemocnic</td><td>Schválit, zafinancovat a zavést akční plán proti rezistenci</td></tr>
+              <tr><th scope="row">Zoonózy a hrozby z prostředí (10)</th><td>Spolupráce s veterinární správou, zvládání povodní</td><td>Sektor životního prostředí převážně chybí; bez sdílení dat</td><td>Zapojit resort životního prostředí a ČHMÚ do pracovních skupin</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ECDC, Public Health Emergency Preparedness Assessment for the Czech Republic, 2026, shrnutí s. 1–3 a kapitoly kapacit s. 7–16. Výběr a zkrácení: redakce HSPA Monitoru.</p>
+      </figure>
+
+      <p>
+        <strong>Napříč všemi oblastmi</strong> zpráva opakuje totéž: lidí a peněz je málo, na národní i krajské úrovni. Potíže s náborem a udržením odborníků uvedly české instituce, ECDC je označuje za kritické omezení. Jedna věta v kapitole o akčním plánování (kapacita 16) stojí za doslovné převzetí. Podle zprávy české úřady uvedly, že vypracování komplexního akčního plánu pro zdravotní bezpečnost <em>„není v současnosti národní prioritou“</em> (s. 22). Doporučení ECDC přitom zní právě takový dokument vypracovat.
+      </p>
+
+      <h3>Co je v tiskové zprávě ministerstva a co v ní chybí</h3>
+      <p>
+        <a href="https://mzd.gov.cz/ecdc-zverejnilo-hodnotici-zpravu-pripravenosti-ceske-republiky-na-mimoradne-udalosti-v-oblasti-verejneho-zdravi/" target="_blank" rel="noopener">Tisková zpráva MZ z 13. října 2026</a> má čtyři odstavce. Popisuje, na co se hodnocení zaměřilo a podle jakého předpisu proběhlo. Uvádí termín mise 16.–20. února 2026 a vyjmenovává instituce, se kterými hodnotitelé jednali, od SZÚ a krajských hygienických stanic po hasiče, veterinární správu a ČHMÚ. O obsahu zprávy píše jedinou větou: zpráva „identifikuje silné stránky českého systému a obsahuje doporučení pro jeho další rozvoj“. Dál ministerstvo děkuje zapojeným odborníkům, uvádí, že zpráva „oceňuje otevřený a konstruktivní přístup České republiky“, a slibuje spolupráci „při přípravě a realizaci navazujícího akčního plánu“.
+      </p>
+      <p>
+        Všechno to ve zprávě ECDC je. Ocenění otevřeného přístupu tam najdeme v metodické části i v závěrech. Tisková zpráva ale nejmenuje ani jednu silnou stránku a ani jedno doporučení. Chybí v ní zastaralé pandemické plány, chybějící metodika hodnocení rizik, akční plán proti rezistenci, financování ISIN i nedostatek lidí. Neuvádí ani lhůtu devíti měsíců pro akční plán. Čtenář, který zůstane u tiskové zprávy, se nedozví, co ECDC doporučilo.
+      </p>
+
+      <div class="article-callout-caveat" role="note">
+        <strong>Co zpráva ECDC neříká.</strong>
+        Hodnocení nemá skóre ani pořadí zemí, takže z něj nelze vyčíst, zda je Česko připravené lépe, nebo hůř než jiné státy. Řada nálezů vychází z dokumentů a výpovědí českých institucí, ne z vlastního měření ECDC. Údaj o 83&nbsp;% nemocnic pochází z průzkumu z roku 2023, jehož autora ani metodiku zpráva neuvádí. Výjimkou jsou údaje o spotřebě antibiotik, které ECDC sbírá samo v síti ESAC-Net.
+      </div>
+
+      <h3>Co s tím</h3>
+      <p>
+        <strong>Pro ministerstvo:</strong> zpráva dává hotový seznam úkolů a lhůtu, do které na něj má Česko odpovědět. Tři úkoly se opakují v různých kapitolách: dokončit obecný plán PPR (a s ním obnovit pandemický plán), zajistit ISIN peníze i po roce 2028 a schválit, zafinancovat a zavést akční plán proti antimikrobiální rezistenci. Zpráva obecně zmiňuje „probíhající reformy systému veřejného zdraví“, aniž by je jmenovala. V Česku se připravuje <a href="clanek-institut-verejneho-zdravi.html">reforma hygienické služby</a> a několik doporučení se jí týká: posílit koordinační roli ministerstva, zlepšit koordinaci mezi kraji a vyřešit nábor a udržení lidí.
+      </p>
+      <p>
+        <strong>Pro čtenáře:</strong> zpráva je veřejná, v angličtině, a její doporučení se dají kontrolovat. Až ministerstvo zveřejní navazující akční plán, půjde ho srovnat s tabulkou výše. Týdenní výstup nového operačního centra, který jsme rozebrali v článku <a href="clanek-monitoring-zdravotnich-hrozeb-mz.html">o prvním Monitoringu zdravotních hrozeb</a>, ukazuje práci operačního centra, které zpráva označuje za „významné posílení“ národních kapacit (s. 16). Jak problémy systému popisují sami odborníci, jsme shrnuli v článku <a href="clanek-obcan-v-siti-ochrana-verejneho-zdravi-2026.html">o jedenácti hlasech z měsíčníku Občan v síti</a>.
+      </p>
+      <p>
+        <strong>Pro HSPA Monitor:</strong> nález o akčním plánu proti rezistenci odpovídá tomu, co uvádí naše stránka <a href="plneni-amr.html">plnění akčního plánu AMR</a>: posledním schváleným plánem je plán na roky 2019–2022 a nástupce jsme k 1. září 2026 v primárních zdrojích nedohledali. ECDC to teď potvrzuje. Zpráva ukazuje i mezeru v našich datech. Sledujeme <a href="indicator.html?id=spotreba_antibiotik">spotřebu antibiotik v ambulantní péči</a> (15 definovaných denních dávek na 1&nbsp;000 obyvatel a den, 2023), ale ne v nemocnicích, kde je podle ECDC česká spotřeba nejvyšší v EU a EHP. Na indikátoru <a href="indicator.html?id=podil_access_antibiotik">podílu antibiotik skupiny Access</a> (59,4&nbsp;% v roce 2024) a <a href="indicator.html?id=infekce_nosokomialni">prevalenci nemocničních infekcí</a> (6,5&nbsp;% v roce 2023) budeme sledovat, zda se doporučení ECDC propíší do čísel.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=spotreba_antibiotik"><strong>Spotřeba antibiotik (ambulantní sektor)</strong></a> — 15 DDD na 1 000 obyvatel a den (2023, SZÚ · NRL pro antibiotika); nemocniční spotřebu portál zatím nesleduje</li>
+        <li><a href="indicator.html?id=podil_access_antibiotik"><strong>Podíl antibiotik skupiny Access (WHO AWaRe)</strong></a> — 59,4 % (2024, ECDC ESAC-Net)</li>
+        <li><a href="indicator.html?id=infekce_nosokomialni"><strong>Prevalence nemocničních infekcí</strong></a> — 6,5 % (2023, SZÚ)</li>
+      </ul>
+      <p>Související články: <a href="clanek-monitoring-zdravotnich-hrozeb-mz.html">Stát začal týdně počítat hrozby</a> · <a href="clanek-obcan-v-siti-ochrana-verejneho-zdravi-2026.html">Hasíme, místo abychom předcházeli</a> · <a href="clanek-institut-verejneho-zdravi.html">Největší reforma hygienické služby za sto let</a> · <a href="clanek-antibiotika-access-aware.html">Antibiotika: Česko je pod evropským cílem</a> · <a href="clanek-amr-multirezistence-soubeh.html">Rezistence nechodí po jedné</a></p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární zdroje</h5>
+        <ul class="article-sources-list">
+          <li><strong>ECDC — Country report: ECDC Public Health Emergency Preparedness Assessment for the Czech Republic, 2026</strong> (PDF, Stockholm, září 2026, doi 10.2900/4912528). Shrnutí s. 1–3, rámec a postup s. 4–6, kapacity do hloubky s. 7–16, ostatní kapacity s. 16–22, závěry s. 23, seznam kapacit s. 24. Staženo 14. 10. 2026. <a href="https://www.ecdc.europa.eu/sites/default/files/documents/PHEPA-report-Czech-Republic-2026.pdf" target="_blank" rel="noopener">ecdc.europa.eu ↗</a></li>
+          <li><strong>ECDC — stránka publikace</strong> (zveřejněno 13. 10. 2026) se shrnutím zprávy. <a href="https://www.ecdc.europa.eu/en/publications-data/country-report-ecdc-public-health-emergency-preparedness-assessment-czech" target="_blank" rel="noopener">ecdc.europa.eu ↗</a></li>
+          <li><strong>MZ ČR — tisková zpráva z 13. 10. 2026</strong>: ECDC zveřejnilo hodnoticí zprávu připravenosti České republiky na mimořádné události v oblasti veřejného zdraví. Staženo 14. 10. 2026. <a href="https://mzd.gov.cz/ecdc-zverejnilo-hodnotici-zpravu-pripravenosti-ceske-republiky-na-mimoradne-udalosti-v-oblasti-verejneho-zdravi/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+          <li><strong>MZ ČR — Pandemický plán České republiky</strong> (stránka vytvořena 18. 10. 2011, poslední aktualizace 11. 7. 2020) a <strong>Pandemický plán rezortu zdravotnictví</strong> (červen 2012). Staženo 14. 10. 2026. <a href="https://mzd.gov.cz/pandemicky-plan-ceske-republiky/" target="_blank" rel="noopener">mzd.gov.cz ↗</a> · <a href="https://mzd.gov.cz/pandemicky-plan-rezortu-zdravotnictvi/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+          <li><strong>Nařízení Evropského parlamentu a Rady (EU) 2022/2371</strong> ze dne 23. listopadu 2022 o vážných přeshraničních zdravotních hrozbách a o zrušení rozhodnutí č. 1082/2013/EU, zejména články 7 a 8. <a href="https://eur-lex.europa.eu/eli/reg/2022/2371/oj" target="_blank" rel="noopener">eur-lex.europa.eu ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Všechna čísla o českém systému pocházejí ze zprávy ECDC. Ta je přebírá z dokumentů a výpovědí českých institucí nebo z vlastních sítí ECDC. Čísla stran odpovídají tištěnému číslování zprávy (strana PDF = tištěná strana + 6). Citace ze zprávy ECDC jsou překlad redakce, citace z tiskové zprávy MZ jsou doslovné. Hodnoty indikátorů v rámečku jsou z datového kontraktu HSPA Monitoru, ne ze zprávy ECDC.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+</main>
+<footer class="bottom" id="siteFooter"></footer>
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
