@@ -448,6 +448,37 @@ odkaz; sněmovní tisk + stav) · mezinárodní kontext + methodology caveat · 
 souhlasí / nesouhlasí / nejasná + DOI přehledu) · interní křížové odkazy (slugy, id
 indikátorů). **Nelze-li rámec sestavit, ARTICLE-WRITE zruš** a přepni na další větev.
 
+### 8.2a Forma: esej ve stylu Gladwella, nebo dosavadní článek?
+
+Rozhodnutí vydavatele 14. 10. 2026 (`docs/decisions-log.md`). Nad hotovým datovým
+rámcem polož jednu otázku: **unesou data příběh?** Esej se píše jen tehdy, když platí
+všechny tři podmínky:
+
+1. **Doložená scéna na úvod.** Historická událost, publikovaná studie s konkrétním
+   místem a lidmi, nebo doložený český případ (tisková zpráva, rozhodnutí, zpráva úřadu).
+   Nikdy vymyšlená osoba ani citát. Modelová situace je přípustná jen výslovně označená
+   („Představte si…“, „modelová obec“).
+2. **Obrat ve výzkumu.** Aspoň jedna recenzovaná studie ověřená v PubMed, která zdánlivě
+   jasnou odpověď převrací, a aspoň jedna komplikace nebo kritika, která obrat zpochybní
+   či omezí.
+3. **Ověřená česká data.** Čísla z indikátorů `origin: live` / `verification_status:
+   verified`, nebo stažená přímo z primárního zdroje (ČSÚ, ÚZIS, OECD) a označená datem
+   stažení. Seed a „Ilustrativní“ hodnoty se jako fakt nepoužijí.
+
+**Platí všechny tři → ESEJ.** Struktura: doložená scéna → zdánlivě jasná odpověď →
+obrat (studie) → komplikace a limity dat přiznané v textu → co to znamená pro Česko →
+závěr, který vrátí úvodní scénu v novém světle. Mezititulky místo standardních sekcí
+z 8.3, 1 800–2 600 slov, krátké odstavce, jedna velká myšlenka, sebevědomý lidský tón,
+žádné senzace. Hlavička, audit komentář, AV prvky, `article-databox` a
+`article-sources` zůstávají jako v 8.3; do audit komentáře `form: essay`. Esej zařaď jako
+další díl série `co-cisla-nerikaji` v `data/series.json`. Vzory: `clanek-doktor-ktery-zustal.html`,
+`clanek-zemepis-a-diagnoza.html`, `clanek-roseto-naruby.html`,
+`clanek-uspech-ktery-nikdo-nevidi.html`.
+
+**Chybí-li kterákoli podmínka → dosavadní článek podle 8.3.** Málo dat se nepřikrývá
+vyprávěním. Když scéna nebo obrat chybí, esej nevymýšlej a napiš standardní článek.
+Rozhodnutí (esej / článek + která podmínka chyběla) zapiš jednou větou do těla PR.
+
 ### 8.3 Článek
 
 Použij existující články jako vzor (`article-page` layout, `docs/workflows.md` „nový
