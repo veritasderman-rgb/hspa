@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-10-14
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-10-14
+    creation_phase: zadani-uzivatele
+    form: article (8.3) — zpráva bez doložené úvodní scény, esej podle 8.2a se nepíše
+    primary_sources_count: 14
+    visual_elements_count: 3
+    notes: "Vytvořeno na zadání vydavatele 14. 10. 2026: WHO/Europe spustila v Měsíci povědomí o rakovině prsu
+      WHO Alcohol Screening and Brief Interventions Hub (sbi.euro.who.int) s AI asistentem pro zdravotníky.
+      Český úhel: navázání na clanek-kratke-intervence-uhrady (Devadesát vteřin…) — nástroj rozhovoru pomůže,
+      úhrada za něj v Česku chybí.
+      ZDROJE A OVĚŘENÍ (staženo 14. 10. 2026):
+      (1) UN News, „Health workers tackle taboos over drinking with new AI tool“, Daniel Johnson, Ženeva, 14. 10. 2026 —
+          hlavní zpravodajský zdroj (pokyn vydavatele): hub s AI asistentem, 10otázkový screeningový test, 15 % ve 14 zemích,
+          ≥ 7 typů rakoviny, > 200 nemocí, citace C. Ferreira-Borges („Alcohol harm isn't abstract…“, „We know screening and
+          brief interventions work, but only if health professionals feel able to use them“, „The science is evolving…“).
+          Text čten přes curl, citace doslovně z HTML.
+      (2) Tisková zpráva WHO/Europe z 14. 10. 2026 — na who.int/europe/news NENALEZENA (URL odhadem vrací 404, vyhledávání
+          ji nenašlo). Čtena jen z přetisku Novinite 14. 10. 2026 (doslovný text TZ): 21 % u žen, název SBI Assistant,
+          AUDIT, citace N. Bekiriho („We built an assistant that works the other way round…“), EVID-ACTION jako hlavní výstup.
+          Mirage News = přetisk UN News. V textu i zdrojích označeno jako sekundární.
+      (3) Hub sbi.euro.who.int i sbi-hub.euro.who.int vracely z prostředí redakce 503 (WebFetch) a chybu TLS (curl) —
+          obsah hubu a asistenta redakce sama neviděla; v textu řečeno.
+      (4) PRIMÁRNÍ ZDROJ 15 % a 21 %: Neufeld M, Kokole D, Correia D, Ferreira-Borges C, Olsen A, Tran A, Rehm J.
+          BMC Res Notes 2024;17(1):56, DOI 10.1186/s13104-024-06707-w, PMID 38378598, plný text PMC10880362 ověřen v PubMed
+          14. 10. 2026: online průzkum 2022–2023, 19 601 dospělých, KTEŘÍ ZA POSLEDNÍCH 12 MĚSÍCŮ PILI; 14 zemí (AT, BE, EE, FR,
+          DE, IE, LV, LT, NL, NO, PT, SI, ES, SE) — ČESKO MEZI NIMI NENÍ, Norsko není v EU; vážení podle Eurostatu, autoři
+          výslovně netvrdí reprezentativnost; prs 15 % celkem, ženy 21 %, muži 10 %; rakovina obecně 53 %, játra 90 %.
+          Video-věta 1 („lidí ze 14 evropských zemí“) je v textu hned doplněna o to, že šlo o pijáky a že ČR chyběla.
+      (5) PRIMÁRNÍ ZDROJ 39 200 a 7 typů: WHO/Europe fact sheet Alcohol and cancer, 26. 11. 2025 — „Most cancers caused by
+          alcohol in 2020 were of the colorectum (60 200 cases), female breast (39 200 cases) and oral cavity (22 600 cases)“;
+          celkem asi 186 000 případů (4 %) v regionu 2020; „at least 7 types of cancer“; žádná bezpečná hladina; téměř třetina
+          alkoholem způsobených rakovin prsu z ≤ 1–2 nápojů denně. Metodika odhadů IARC: Rumgay H et al., Lancet Oncol
+          2021;22(8):1071–1080, DOI 10.1016/S1470-2045(21)00279-5, PMID 34270924 (globálně 741 300 případů, prs 98 300).
+      (6) EVID-ACTION: WHO/Europe TZ 7. 12. 2022 (projekt za 10 mil. EUR, 30 zemí — EU, Island, Norsko, Ukrajina; tři cíle
+          vč. screeningu a krátkých intervencí) a fact sheet 26. 11. 2025 (spolufinancováno EU, 2022–2026).
+      (7) WHO/Europe, stránka Reducing alcohol-related harms by integrating conversations… (SBI jako nákladově efektivní;
+          dokument Let's talk about alcohol 26. 3. 2026); WHO, AUDIT — guidelines for use in primary health care (WHO/MSD/MSB/01.6a).
+      (8) PubMed 14. 10. 2026: Kaner 2018 Cochrane (PMID 29476653; −20 g/týden, 95% CI −28 až −12, 34 studií, 15 197 osob);
+          Bagnardi 2015 (PMID 25422909; 572 studií, prs RR 1,61 u silného pití, jasný vztah dávka–riziko); Rosário 2021
+          (PMID 33413487; 84 studií, bariéry: čas, víra ve vlastní schopnost, chybějící dovednosti); Keurhorst 2015
+          (PMID 26234486; 29 studií, implementační strategie zvýšily screening SMD 0,53 a intervence SMD 0,64, spotřebu pacientů
+          celkově ne SMD 0,07; nejlépe kombinace profesních, organizačních a pacientských opatření). Nezávislé hodnocení
+          SBI Assistant v PubMed nenalezeno.
+      (9) data/indicators.json: alkohol_spotreba 10,6 l (2024, OECD 8,4; live, verified); screening_mamograficky 54,5 %
+          (2024, OECD 68, EU 65; live, verified); prezit_karcinom_prsu_5let 81,4 % (2014, OECD 84,3; live, verified);
+          mortalita_jaterni_chronicka 19,5 (2023; live, verified). incidence_prsu = SEED bez verification_status →
+          jen v databoxu s výslovným označením, v textu se jako fakt nepoužívá.
+      (10) Český rámec převzat z publikovaného článku clanek-kratke-intervence-uhrady (16. 8. 2026): zákon č. 65/2017 Sb.,
+          hlava VI; manuál MZ 2020; vodítka SZÚ 2023; samostatný hrazený výkon krátké intervence u praktika v číselníku
+          chybí (stav k srpnu 2026 — redakce znovu neověřovala v aktuálním číselníku, v textu datováno).
+      VĚDOMĚ NEUVEDENO: místo spuštění a partneři projektu (veřejný zdroj nepotvrzuje); jazykové verze hubu (neověřeno);
+      jakékoli rady jednotlivci.
+      Video-věty (blok V): 1) „Jen 15 % pijících dospělých ze 14 evropských zemí ví, že alkohol může způsobit rakovinu prsu.“
+      2) „V roce 2020 alkohol v Evropském regionu WHO způsobil odhadem 39 200 nových případů rakoviny prsu.“
+      3) „Krátká intervence v ceníku praktického lékaře chybí.“
+      published:false, audit-status draft. Čeká na schválení redakce."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jen 15 % pijících dospělých ve 14 zemích ví, že alkohol způsobuje rakovinu prsu. WHO dala zdravotníkům AI asistenta k rozhovoru o pití, český praktik ho ale nemá jak vykázat · HSPA Monitor</title>
+<meta name="description" content="WHO/Europe 14. října spustila v Měsíci povědomí o rakovině prsu online rozcestník pro zdravotníky se screeningovým testem AUDIT a AI asistentem, který má lékařům a sestrám pomoci začít rozhovor o alkoholu. Potřeba je doložená: v průzkumu WHO ve 14 zemích vědělo jen 15 % pijících dospělých, že alkohol způsobuje rakovinu prsu, a v roce 2020 alkohol v Evropském regionu WHO způsobil odhadem 39 200 nových případů. Krátká intervence patří k nejlépe doloženým zásahům v medicíně, v Česku ji ale praktik nemá jak vykázat. Česko přitom pije 10,6 litru čistého alkoholu na osobu a rok proti 8,4 v OECD.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jen 15 % pijících dospělých ve 14 zemích ví, že alkohol způsobuje rakovinu prsu. WHO dala zdravotníkům AI asistenta k rozhovoru o pití, český praktik ho ale nemá jak vykázat">
+<meta property="og:description" content="WHO/Europe spustila rozcestník se screeningovým testem AUDIT a AI asistentem pro zdravotníky. Rozhovor o alkoholu funguje, jen se nevede. V Česku k tomu chybí i úhrada.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-10-14">
+<meta property="article:section" content="Prevence">
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+<main id="content">
+  <article class="article-page">
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Prevence</span>
+        <span class="article-tag article-tag-muted">alkohol · rakovina prsu · krátká intervence · WHO/Europe · AUDIT · umělá inteligence · primární péče</span>
+      </div>
+      <h1 class="article-title">Jen 15 % pijících dospělých ve 14 zemích ví, že alkohol způsobuje rakovinu prsu. WHO dala zdravotníkům AI asistenta k rozhovoru o pití, český praktik ho ale nemá jak vykázat</h1>
+      <p class="article-deck">
+        WHO/Europe 14. října spustila v Měsíci povědomí o rakovině prsu online rozcestník pro zdravotníky se screeningovým testem AUDIT a AI asistentem, který má lékařům a sestrám pomoci začít rozhovor o alkoholu. Potřeba je doložená: v průzkumu WHO ve 14 zemích vědělo jen 15 % pijících dospělých, že alkohol způsobuje rakovinu prsu, a v roce 2020 alkohol v Evropském regionu WHO způsobil odhadem 39 200 nových případů. Krátká intervence patří k nejlépe doloženým zásahům v medicíně, v Česku ji ale praktik nemá jak vykázat. Česko přitom pije 10,6 litru čistého alkoholu na osobu a rok proti 8,4 v OECD.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">14. října 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">9 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+    <div class="article-body">
+      <p class="article-lead">
+        Představte si lékaře, který má mezi dvěma pacienty pár minut. Pacientka přišla kvůli tlaku nebo kvůli spánku, ne kvůli alkoholu, a otázka „kolik pijete?“ se v té chvíli zdá nevhodná, zdlouhavá a trochu trapná. Přesně tuhle chvíli chce Světová zdravotnická organizace změnit. Její evropská kancelář ve středu 14. října spustila WHO Alcohol Screening and Brief Interventions Hub, online rozcestník, který na jednom místě nabízí screeningový dotazník, doporučení a AI asistenta. „Víme, že screening a krátké intervence fungují, ale jen tehdy, když se zdravotníci cítí schopni je používat,“ řekla podle UN News regionální poradkyně WHO/Europe pro alkohol Carina Ferreira-Borges. Pro Česko z toho plyne nepříjemná otázka. Nástroj pomůže rozhovor vést, ale kdo ho tady zaplatí?
+      </p>
+      <figure class="av-figure av-figure-wide" aria-labelledby="avWhoCntH">
+        <figcaption class="av-figure-h" id="avWhoCntH">Čtyři čísla, se kterými WHO nástroj spouští</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="15" data-suffix=" %">15 %</span>
+            <span class="av-counter-label">pijících dospělých ve 14 zemích ví, že alkohol způsobuje rakovinu prsu</span>
+            <span class="av-counter-foot">online průzkum WHO/Europe 2022–2023, 19 601 respondentů; Česko mezi zeměmi nebylo</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="21" data-suffix=" %">21 %</span>
+            <span class="av-counter-label">u žen; u mužů 10 %</span>
+            <span class="av-counter-foot">tentýž průzkum; největší rozdíl mezi pohlavími ze všech sledovaných nemocí</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="39200">39 200</span>
+            <span class="av-counter-label">nových případů rakoviny prsu způsobil alkohol v Evropském regionu WHO (2020)</span>
+            <span class="av-counter-foot">odhad WHO/Europe a IARC; celkem asi 186 000 rakovin způsobených alkoholem, 4 % všech případů</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="7">7</span>
+            <span class="av-counter-label">nejméně tolik typů rakoviny alkohol způsobuje</span>
+            <span class="av-counter-foot">dutina ústní, hltan, hrtan, jícen, prs, játra, tlusté střevo a konečník</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Neufeld a kol., BMC Research Notes 2024 (průzkum ve 14 zemích, 15 % celkem, 21 % ženy, 10 % muži); WHO/Europe, informační list Alcohol and cancer, 26. 11. 2025 (39 200 případů v roce 2020, nejméně 7 typů rakoviny, 186 000 případů celkem). Odhady pro rok 2020 vycházejí z metodiky IARC (Rumgay a kol., Lancet Oncology 2021).</p>
+      </figure>
+
+      <h3>Co WHO spustila</h3>
+      <p>
+        Rozcestník běží na adrese sbi.euro.who.int a podle UN News funguje ve dvou krocích. Zdravotník začne desetiotázkovým screeningovým testem, kterým odhadne, jak rizikově pacient pije. Je to AUDIT, dotazník, který WHO vyvinula pro primární péči a vydává k němu vlastní metodiku. Pak se může obrátit na AI asistenta a nechat si poradit, jak rozhovor otevřít, nebo najít doporučení k situaci, kterou zrovna řeší. Podle tiskové zprávy WHO/Europe, kterou v plném znění přetiskl bulharský server Novinite, rozcestník doplňují interaktivní pomůcky, například co je „standardní nápoj“, a WHO ho chce dál rozšiřovat.
+      </p>
+      <p>
+        Asistent se jmenuje SBI Assistant a WHO ho popisuje jako opak běžných chatbotů. „Lidé se už dnes ptají umělé inteligence na své zdraví, včetně toho, kolik alkoholu je bezpečné. Často dostanou sebevědomou odpověď a nemají jak ověřit, odkud pochází,“ uvádí podle přetisku tiskové zprávy Nebi Bekiri, vedoucí IT a umělé inteligence ve WHO/Europe. „Postavili jsme asistenta, který funguje obráceně.“ Odpovídá prý jen z vymezeného souboru dokumentů a evidence WHO a u každé odpovědi ukazuje zdroj.
+      </p>
+      <p>
+        Rozcestník je hlavním výstupem projektu WHO a EU Evidence into Action Alcohol Project (EVID-ACTION). Ten WHO/Europe ohlásila v prosinci 2022 jako projekt za 10 milionů eur spolufinancovaný Evropskou unií. Má tři cíle: zdravotní varování na etiketách alkoholu, zdravotní gramotnost a právě screening a krátké intervence. Podporuje 30 zemí, tedy státy EU, Island, Norsko a Ukrajinu, a podle informačního listu WHO běží v letech 2022 až 2026. Česko jako členský stát EU do jeho záběru patří.
+      </p>
+
+      <h3>Mezera, kterou má nástroj zavřít</h3>
+      <p>
+        Jen 15 % pijících dospělých ze 14 evropských zemí ví, že alkohol může způsobit rakovinu prsu. Toto číslo pochází z průzkumu, který WHO/Europe provedla v letech 2022 a 2023 a v roce 2024 publikovala v časopise BMC Research Notes. Upřesnění je důležité: online dotazník vyplnilo 19 601 dospělých, kteří za poslední rok pili alkohol, ve třinácti zemích EU a v Norsku. Česko mezi nimi nebylo, takže české povědomí z něj neznáme. Výsledky autoři převážili podle věku, pohlaví a vzdělání, ale výslovně netvrdí, že je průzkum reprezentativní. Že alkohol škodí játrům, vědělo 90 % dotázaných. Rakovinu obecně uvedla jen zhruba polovina. U žen znalo souvislost s rakovinou prsu 21 %, u mužů 10 %.
+      </p>
+      <p>
+        Na druhé straně stojí odhad škod. V roce 2020 alkohol v Evropském regionu WHO způsobil odhadem 39 200 nových případů rakoviny prsu. Uvádí to informační list WHO/Europe z listopadu 2025, který stojí na metodice Mezinárodní agentury pro výzkum rakoviny. Rakovina prsu je tak po nádorech tlustého střeva a konečníku druhým nejčastějším nádorem, který alkohol v regionu způsobuje. Celkem šlo podle WHO asi o 186 000 případů rakoviny, tedy 4 % všech nových diagnóz. Alkohol je od roku 1988 klasifikován jako karcinogen skupiny 1 a způsobuje nejméně sedm typů rakoviny.
+      </p>
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-warn">
+          <span class="av-counter">⅓</span>
+          <span class="av-counter-label">alkoholem způsobených rakovin prsu v regionu WHO vzniklo v roce 2020 při pití nejvýše 1–2 nápojů denně</span>
+          <span class="av-counter-foot">WHO/Europe, Alcohol and cancer, 2025: „neexistuje bezpečná úroveň konzumace alkoholu ve vztahu k riziku rakoviny“</span>
+        </div>
+      </aside>
+      <p>
+        U rakoviny prsu nejde jen o silné pijačky. Metaanalýza 572 studií (Bagnardi a kol., British Journal of Cancer 2015) našla u prsu jasný vztah mezi dávkou a rizikem. U silného pití bylo relativní riziko 1,61 proti abstinentkám a příležitostným pijačkám. Riziko tedy roste s každým nápojem. WHO z téhož důvodu uvádí, že téměř třetina alkoholem způsobených rakovin prsu v regionu v roce 2020 vznikla při pití nejvýše jednoho až dvou nápojů denně. „Může to být žena, která onemocní rakovinou prsu, aniž by jí kdy kdo řekl, že alkohol je riziko,“ řekla Ferreira-Borges podle UN News.
+      </p>
+
+      <h3>Proč se o alkoholu v ordinaci nemluví</h3>
+      <p>
+        Že krátký rozhovor u lékaře funguje, je doložené lépe než u většiny preventivních zásahů. Cochrane přehled Kanerové a kolegů z roku 2018 shrnul 34 randomizovaných studií s 15 197 účastníky. Ukázal, že lidé s rizikovým pitím po krátké intervenci pili o rok později v průměru o 20 gramů čistého alkoholu týdně méně než kontrolní skupina (95% interval spolehlivosti −28 až −12 g). Krátkou intervencí se přitom rozumí nejvýš pět sezení, dohromady pod hodinu. Delší poradenství už podle přehledu další efekt nepřidalo. Podrobněji jsme evidenci rozebrali v článku <a href="clanek-kratke-intervence-uhrady.html">Devadesát vteřin, které se vyplatí</a>.
+      </p>
+      <p>
+        Potíž je v tom, že se rozhovor nevede. WHO podle UN News uvádí, že alkohol patří k nejméně probíraným rizikovým faktorům a ve zdravotnictví se o něm mluví méně než o kouření, pohybu nebo jídle. Proč, popisuje systematický přehled 84 studií (Rosário a kol., Implementation Science 2021). Nejčastější bariérou u praktických lékařů a sester byl nedostatek času a dalších zdrojů. Následovala nejistota, zda rozhovor zvládnou a zda pacientovi pomůže, a chybějící výcvik. Ferreira-Borges k tomu přidává kulturní rovinu: alkohol je podle ní tak zakořeněný v kultuře a společenském životě, že i lékařům a sestrám bývá nepříjemné se na něj ptát, zvlášť když pacient přišel s něčím zdánlivě nesouvisejícím.
+      </p>
+      <p>
+        AI asistent míří na dvě z těchto bariér, na nejistotu a na chybějící znalosti. Na nedostatek času a peněz nemíří. Literatura přitom ukazuje, proč na tom záleží. Metaanalýza 29 kontrolovaných studií (Keurhorst a kol., Addiction 2015) zjistila, že opatření na podporu zavádění krátkých intervencí zvýšila počet screeningů i provedených intervencí. Na tom, kolik pacienti nakonec pili, se ale v souhrnu neprojevila. Nejlépe fungovala kombinace, která vedle školení a pomůcek pro zdravotníky měnila i organizaci práce a zapojila pacienty.
+      </p>
+
+      <h3>Co o AI asistentovi zatím nevíme</h3>
+      <p>
+        Asistent je nástroj pro zdravotníky, ne poradna pro pacienty. WHO ho představuje jako pomůcku pro lékaře nebo sestru, kteří se chtějí na rozhovor připravit. Jeho hlavním slibem je, že odpovídá jen z vymezeného souboru dokumentů WHO a u každé odpovědi uvádí zdroj. Je to rozumná konstrukce, ale zatím jen tvrzení provozovatele. Nezávislé hodnocení přesnosti asistenta zatím neexistuje. V databázi PubMed jsme k 14. říjnu žádné nenašli a WHO se na žádné neodvolává. Nevíme ani, jak často asistent odpoví chybně nebo neúplně, v jakých jazycích funguje a jak se chová k otázkám mimo svůj soubor dokumentů. Rozcestník nám navíc v den spuštění opakovaně vracel chybu serveru, takže jsme asistenta sami vyzkoušet nemohli.
+      </p>
+      <p>
+        Opatrnost je na místě i proto, že se zdravotnictví v Evropě s umělou inteligencí teprve učí zacházet. O tom, co pro české poskytovatele znamená evropský AI Act, jsme psali v článku <a href="clanek-ai-act-zdravotnictvi-srpen-2026.html">2. srpna 2026. AI Act, české nemocnice a regulační vrstva, kterou nikdo necvičil</a>. Širší souvislosti shrnuje text <a href="clanek-ai-zdravotnictvi-1-vstricnost.html">Lékař, který se vám zase dívá do očí</a>. Asistent, který jen vyhledává v dokumentech WHO a cituje je, nese menší riziko než chatbot, který radí pacientům. Kvalitu jeho odpovědí ale musí teprve někdo nezávisle změřit.
+      </p>
+
+      <h3>Česko: hodně pití, žádný výkon</h3>
+      <p>
+        Česko je pro takový nástroj zjevný adresát. Podle OECD tu lidé starší 15 let v roce 2024 vypili v průměru 10,6 litru čistého alkoholu na osobu, proti průměru OECD 8,4 litru. Spotřeba od roku 2019 klesá z 11,9 litru, pořád je ale o čtvrtinu nad průměrem. Proč se drží vysoko a co s tím dělají jiné země, rozebírá článek <a href="clanek-alkohol-spotreba.html">Čtrnáct litrů</a>. Účet za pití je vidět i jinde: úmrtnost na chronická onemocnění jater byla v roce 2023 19,5 na 100 000 obyvatel (<a href="clanek-jaterni-mortalita-alkohol.html">Cena levného piva</a>).
+      </p>
+      <p>
+        U rakoviny prsu stojí česká prevence hlavně na mamografickém screeningu. Ten v roce 2024 podle ÚZIS pokrýval 54,5 % žen ve věku 50 až 69 let, proti 68 % v OECD a 65 % v EU. Proč účast stagnuje, popisuje článek <a href="clanek-mamograf-rakovina-prsu.html">Šedesát procent</a>. Screening ale nádor jen zachytí. Riziko, že vznikne, nesníží. Rozhovor o alkoholu je jednou z mála cest, jak riziko snížit už v ordinaci.
+      </p>
+      <p>
+        Právní základ pro ten rozhovor Česko má. Zákon č. 65/2017 Sb. o ochraně zdraví před škodlivými účinky návykových látek ukládá zdravotníkům provést krátkou intervenci u pacienta, který návykové látky užívá. Ministerstvo zdravotnictví k tomu vydalo manuál a Státní zdravotní ústav v roce 2023 klinická vodítka s dotazníky AUDIT a AUDIT-C. Chybí platba. Krátká intervence v ceníku praktického lékaře chybí. V seznamu zdravotních výkonů, podle kterého pojišťovny ordinacím platí, nemá samostatný hrazený výkon. Tak to bylo podle stavu číselníku k srpnu 2026, jak ho popsal náš rozbor. Zákon tedy rozhovor nařizuje, systém za něj neplatí a za jeho vynechání nikoho nepostihuje. Nástroj WHO může lékaři ušetřit čas na přípravu. Minuty, které rozhovor v ordinaci zabere, mu nezaplatí.
+      </p>
+      <figure class="av-figure">
+        <figcaption class="av-figure-h">Cesta rozhovoru o alkoholu v české ordinaci: co nabízí WHO a kde se cesta láme</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Screening dotazníkem AUDIT</h4>
+            <p class="av-flow-desc">Deset otázek WHO o tom, jak často a kolik člověk pije; zkrácená verze AUDIT-C je v českých vodítkách SZÚ.</p>
+            <span class="av-flow-tag">Nástroj existuje</span>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Příprava rozhovoru</h4>
+            <p class="av-flow-desc">Nový AI asistent WHO a doporučení na jednom místě. Přesnost asistenta zatím nikdo nezávisle neověřil.</p>
+            <span class="av-flow-tag">Nové od 14. 10. 2026</span>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Krátká intervence</h4>
+            <p class="av-flow-desc">Rozhovor do několika minut: zpětná vazba, informace o riziku včetně rakoviny, plán. Ukládá ho zákon č. 65/2017 Sb.</p>
+            <span class="av-flow-tag">Povinnost bez času</span>
+          </li>
+          <li class="av-flow-step av-flow-step-bad">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Vykázání pojišťovně</h4>
+            <p class="av-flow-desc">Samostatný hrazený výkon krátké intervence u praktika v seznamu výkonů chybí.</p>
+            <span class="av-flow-tag">Tady se cesta láme</span>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> WHO, AUDIT — guidelines for use in primary health care; UN News 14. 10. 2026; zákon č. 65/2017 Sb.; SZÚ, Alkohol a primární zdravotní péče (2023); stav seznamu výkonů podle článku HSPA Monitoru z 16. 8. 2026.</p>
+      </figure>
+
+      <h3>Co s tím</h3>
+      <p>
+        Za prvé: nástroj WHO je k dispozici na webu a míří správným směrem. Česko patří do zemí, které projekt EVID-ACTION podporuje, a rozcestník řeší dvě doložené bariéry, nejistotu a chybějící znalosti. Ministerstvo zdravotnictví, Státní zdravotní ústav a odborné společnosti ho mohou zapojit do vzdělávání praktiků a sester. Rozhodující bude, jestli bude k dispozici v češtině. To jsme ověřit nemohli.
+      </p>
+      <p>
+        Za druhé: bez úhrady zůstane rozhovor tam, kde je dnes. Přehled Keurhorstové a kolegů ukazuje, že samotné pomůcky pro zdravotníky zvyšují počet rozhovorů, ale na pití pacientů se v souhrnu nepromítnou. Fungují kombinace, které mění i organizaci práce. V českých podmínkách to znamená definovat krátkou intervenci jako výkon s jasným obsahem a zaplatit čas, který zabere. Jak to udělat, aby z toho nevznikl jen další vykazovaný kód, rozebírá článek <a href="clanek-kratke-intervence-uhrady.html">Devadesát vteřin, které se vyplatí</a>. Úhrady pro rok 2027 se dojednávaly už v <a href="clanek-dohodovaci-rizeni-2027-vysledek.html">dohodovacím řízení</a> v červnu, takže reálným termínem je podle našeho srpnového rozboru rok 2028.
+      </p>
+      <p>
+        Za třetí: chybí česká data. Neznáme podíl Čechů, kteří vědí o souvislosti alkoholu a rakoviny prsu, protože Česko v průzkumu WHO nebylo. Neznáme ani to, jak často praktici dotazník AUDIT používají. Bez toho nepůjde změřit, jestli rozcestník, výcvik nebo budoucí výkon v ordinacích něco změnily. Fakta, ze kterých lze vycházet, jsou zatím jednoduchá: alkohol je karcinogen a riziko rakoviny prsu roste s každým nápojem.
+      </p>
+      <aside class="article-callout article-callout-caveat" aria-label="Upozornění na limity použitých dat">
+        <p class="article-callout-h">Co v tomto textu není doloženo napevno</p>
+        <p>
+          Údaj 15 % pochází z online průzkumu mezi dospělými, kteří za poslední rok pili alkohol. Proběhl ve 14 zemích bez Česka a autoři netvrdí, že je reprezentativní. Na celou populaci ani na Česko ho proto nelze přenášet. Podíl 21 % u žen a 10 % u mužů jsme ověřili v plném textu studie. Tisková zpráva WHO/Europe ze 14. 10. 2026 nebyla v den vydání na webu WHO k nalezení. Její znění, včetně citace Nebiho Bekiriho a popisu asistenta, přebíráme z doslovného přetisku na serveru Novinite. Citace Cariny Ferreira-Borges přebíráme z UN News. Počet 39 200 je modelový odhad WHO a IARC pro celý Evropský region WHO (53 zemí), ne sečtené diagnózy. Rozcestník sbi.euro.who.int vracel z našeho prostředí chybu serveru, asistenta jsme sami nezkoušeli. Že krátká intervence nemá samostatný hrazený výkon, vychází ze stavu číselníku k srpnu 2026. Před dalším použitím je potřeba to ověřit v aktuální verzi.
+        </p>
+      </aside>
+    </div>
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=alkohol_spotreba"><strong>Spotřeba alkoholu (čistý alkohol, 15+)</strong></a> — 10,6 l/os./rok (ČR, 2024; OECD Health Statistics), OECD 8,4 · Výsledky · nižší je lepší (signál špatný)</li>
+        <li><a href="indicator.html?id=screening_mamograficky"><strong>Pokrytí mamografickým screeningem (50–69)</strong></a> — 54,5 % (ČR, 2024; ÚZIS), OECD 68 · EU 65 · Procesy · vyšší je lepší (signál špatný)</li>
+        <li><a href="indicator.html?id=prezit_karcinom_prsu_5let"><strong>Pětileté přežití po diagnóze karcinomu prsu</strong></a> — 81,4 % (ČR, kohorta do roku 2014; OECD / CONCORD), OECD 84,3 · Výstupy · vyšší je lepší (signál varovný) · viz <a href="clanek-preziti-karcinom-prsu.html">Pět let po diagnóze</a></li>
+        <li><a href="indicator.html?id=mortalita_jaterni_chronicka"><strong>Úmrtnost na chronická onemocnění jater</strong></a> — 19,5 na 100 000 obyvatel (ČR, 2023) · Výsledky · nižší je lepší</li>
+        <li><a href="indicator.html?id=incidence_prsu"><strong>Incidence karcinomu prsu (ženy)</strong></a> — jen výchozí hodnota převzatá z EU Country Cancer Profile 2025, zatím neověřená živým stažením dat; v textu ji proto jako fakt nepoužíváme</li>
+      </ul>
+    </aside>
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Zpráva o spuštění rozcestníku</h5>
+        <ul class="article-sources-list">
+          <li><strong>UN News — Health workers tackle taboos over drinking with new AI tool</strong> (Daniel Johnson, Ženeva), 14. 10. 2026. Hlavní zpravodajský zdroj: rozcestník s AI asistentem, desetiotázkový screeningový test, 15 % ve 14 zemích, nejméně 7 typů rakoviny, přes 200 nemocí, citace C. Ferreira-Borges. <a href="https://news.un.org/en/story/2026/10/1168594" target="_blank" rel="noopener">news.un.org ↗</a></li>
+          <li><strong>WHO/Europe — Alcohol Screening and Brief Interventions Hub</strong>, spuštěn 14. 10. 2026. Z prostředí redakce v den vydání nedostupný (chyba serveru 503), obsah jsme neověřili přímo. <a href="https://sbi.euro.who.int/" target="_blank" rel="noopener">sbi.euro.who.int ↗</a></li>
+          <li><strong>Novinite — New AI-Powered Hub Launched to Help Health Workers Talk About Alcohol</strong>, 14. 10. 2026. <em>Sekundární zdroj:</em> doslovný přetisk tiskové zprávy WHO/Europe, kterou jsme na webu WHO nenašli. Odtud přebíráme podíl 21 % u žen v podání WHO, název SBI Assistant, citaci N. Bekiriho a popis EVID-ACTION jako hlavního výstupu. Údaj 21 % jsme ověřili v primární studii níže. <a href="https://www.novinite.com/articles/241055/New+AI-Powered+Hub+Launched+to+Help+Health+Workers+Talk+About+Alcohol" target="_blank" rel="noopener">novinite.com ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">WHO a projekt EVID-ACTION</h5>
+        <ul class="article-sources-list">
+          <li><strong>WHO/Europe — Alcohol and cancer</strong>, informační list, 26. 11. 2025. V roce 2020 asi 186 000 rakovin způsobených alkoholem v regionu (4 %), z toho 39 200 rakovin prsu; nejméně 7 typů rakoviny; žádná bezpečná úroveň konzumace ve vztahu k rakovině; téměř třetina alkoholem způsobených rakovin prsu při pití nejvýše 1–2 nápojů denně; EVID-ACTION v 30 zemích v letech 2022–2026. <a href="https://www.who.int/europe/news-room/fact-sheets/item/alcohol-and-cancer" target="_blank" rel="noopener">who.int ↗</a></li>
+          <li><strong>WHO/Europe — New €10 million WHO/EU project will translate evidence into action to reduce alcohol consumption and harms</strong>, tisková zpráva 7. 12. 2022. EVID-ACTION za 10 mil. EUR; EU, Island, Norsko, Ukrajina; tři cíle včetně screeningu a krátkých intervencí. <a href="https://www.who.int/europe/news/item/07-12-2022-new--10-million-who-eu-project-will-translate-evidence-into-action-to-reduce-alcohol-consumption-and-harms" target="_blank" rel="noopener">who.int ↗</a></li>
+          <li><strong>WHO/Europe — Reducing alcohol-related harms by integrating conversations as part of health care routine</strong>. Screening a krátká intervence jako nákladově efektivní postup; dokument „Let's talk about alcohol“ (26. 3. 2026). <a href="https://www.who.int/europe/activities/reducing-alcohol-related-harms-by-integrating-conversations-as-part-of-health-care-routine" target="_blank" rel="noopener">who.int ↗</a> · <a href="https://www.who.int/europe/publications/m/item/let-s-talk-about-alcohol--making-alcohol-screening-and-brief-intervention-routine-in-primary-health-care" target="_blank" rel="noopener">Let's talk about alcohol ↗</a></li>
+          <li><strong>WHO — AUDIT: the Alcohol Use Disorders Identification Test. Guidelines for use in primary health care</strong> (WHO/MSD/MSB/01.6a). Desetiotázkový screeningový dotazník a jeho použití v primární péči. <a href="https://www.who.int/publications/i/item/WHO-MSD-MSB-01.6a" target="_blank" rel="noopener">who.int ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Recenzovaná literatura</h5>
+        <ul class="article-sources-list">
+          <li><strong>Neufeld M, Kokole D, Correia D, Ferreira-Borges C, Olsen A, Tran A, Rehm J. How much do Europeans know about the link between alcohol use and cancer? Results from an online survey in 14 countries. BMC Res Notes. 2024;17(1):56.</strong> DOI 10.1186/s13104-024-06707-w. PMID 38378598. Průřezový online průzkum, 19 601 dospělých, kteří v posledních 12 měsících pili; 14 zemí bez Česka; rakovina prsu 15 % (ženy 21 %, muži 10 %). Ověřeno v PubMed 14. 10. 2026, plný text PMC10880362. <a href="https://doi.org/10.1186/s13104-024-06707-w" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Rumgay H, Shield K, Charvat H, et al. Global burden of cancer in 2020 attributable to alcohol consumption: a population-based study. Lancet Oncol. 2021;22(8):1071–1080.</strong> DOI 10.1016/S1470-2045(21)00279-5. PMID 34270924. Metodika odhadů IARC pro rok 2020; globálně 741 300 případů, z toho 98 300 rakovin prsu. Ověřeno v PubMed 14. 10. 2026. <a href="https://doi.org/10.1016/S1470-2045(21)00279-5" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Bagnardi V, Rota M, Botteri E, et al. Alcohol consumption and site-specific cancer risk: a comprehensive dose-response meta-analysis. Br J Cancer. 2015;112(3):580–593.</strong> DOI 10.1038/bjc.2014.579. PMID 25422909. Metaanalýza 572 studií; rakovina prsu RR 1,61 u silného pití, jasný vztah dávka–riziko. Ověřeno v PubMed 14. 10. 2026. <a href="https://doi.org/10.1038/bjc.2014.579" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Kaner EFS, Beyer FR, Muirhead C, et al. Effectiveness of brief alcohol interventions in primary care populations. Cochrane Database Syst Rev. 2018;2:CD004148.</strong> DOI 10.1002/14651858.CD004148.pub4. PMID 29476653. Systematický přehled 69 RCT; hlavní metaanalýza 34 studií, 15 197 osob: −20 g alkoholu týdně po roce (95% CI −28 až −12), střední jistota. Ověřeno v PubMed 14. 10. 2026. <a href="https://doi.org/10.1002/14651858.CD004148.pub4" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Rosário F, Santos MI, Angus K, Pas L, Ribeiro C, Fitzgerald N. Factors influencing the implementation of screening and brief interventions for alcohol use in primary care practices: a systematic review using the COM-B system and Theoretical Domains Framework. Implement Sci. 2021;16(1):6.</strong> DOI 10.1186/s13012-020-01073-0. PMID 33413487. Systematický přehled 84 studií; nejčastější bariéry: čas a zdroje, víra ve vlastní schopnosti, dovednosti a výcvik. Ověřeno v PubMed 14. 10. 2026. <a href="https://doi.org/10.1186/s13012-020-01073-0" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Keurhorst M, van de Glind I, Bitarello do Amaral-Sabadini M, et al. Implementation strategies to enhance management of heavy alcohol consumption in primary health care: a meta-analysis. Addiction. 2015;110(12):1877–1900.</strong> DOI 10.1111/add.13088. PMID 26234486. Metaanalýza 29 kontrolovaných studií: více screeningů (SMD 0,53) a intervencí (SMD 0,64), bez souhrnného vlivu na spotřebu pacientů (SMD 0,07; 95% CI −0,02 až 0,16); nejlépe působí kombinace opatření. Ověřeno v PubMed 14. 10. 2026. <a href="https://doi.org/10.1111/add.13088" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Česká data, zákon a metodika</h5>
+        <ul class="article-sources-list">
+          <li><strong>OECD Health Statistics — Alcohol consumption (litres per capita 15+)</strong>. ČR 10,6 l v roce 2024, OECD 8,4 l; řada od roku 2019 (indikátor HSPA Monitoru, staženo 1. 10. 2026). <a href="https://data-explorer.oecd.org/vis?df[ds]=dsDisseminateFinalDMZ&amp;df[id]=DSD_HEALTH_LVNG%40DF_HEALTH_LVNG_AC" target="_blank" rel="noopener">data-explorer.oecd.org ↗</a></li>
+          <li><strong>ÚZIS — Národní registr hrazených zdravotních služeb, mamografický screening</strong>. Pokrytí žen 50–69 let 54,5 % v roce 2024 (indikátor HSPA Monitoru). <a href="https://www.uzis.cz/" target="_blank" rel="noopener">uzis.cz ↗</a></li>
+          <li><strong>Zákon č. 65/2017 Sb., o ochraně zdraví před škodlivými účinky návykových látek</strong>. Hlava Orientační diagnostika, krátká intervence a odborná péče. <a href="https://e-sbirka.gov.cz/sb/2017/65" target="_blank" rel="noopener">e-sbirka.gov.cz ↗</a></li>
+          <li><strong>Státní zdravotní ústav — Alkohol a primární zdravotní péče: klinická vodítka pro identifikaci a krátké intervence</strong> (2023). AUDIT a AUDIT-C, postup intervence. <a href="https://szu.gov.cz/wp-content/uploads/2023/03/Alkohol-a-primarni-zdravotni-pece_Klinicka-voditka-pro-identifikaci-a-kratke-intervence.pdf" target="_blank" rel="noopener">szu.gov.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Související čtení na portálu</h5>
+        <ul class="article-sources-list">
+          <li><a href="clanek-kratke-intervence-uhrady.html">Devadesát vteřin, které se vyplatí. Krátká intervence patří k nejlépe doloženým zásahům v medicíně — a v ceníku praktika chybí</a>: evidence, zákon a čtyři podmínky úhrady.</li>
+          <li><a href="clanek-alkohol-spotreba.html">Čtrnáct litrů</a>, <a href="clanek-napoje-4-alkohol-mytus.html">Pivo, víno a mýtus zdravého alkoholu</a> a <a href="clanek-jaterni-mortalita-alkohol.html">Cena levného piva</a>: české pití a jeho účet.</li>
+          <li><a href="clanek-mamograf-rakovina-prsu.html">Šedesát procent. Proč český mamograf naráží na pomyslný strop</a> a <a href="clanek-preziti-karcinom-prsu.html">Pět let po diagnóze: jak dobře Česko léčí rakovinu prsu</a>.</li>
+          <li><a href="clanek-reforma-primarni-pece-2027.html">Praktik jako uzel systému</a> a <a href="clanek-dohodovaci-rizeni-2027-vysledek.html">Dohoda ve 12 z 15 segmentů</a>: jak se platí primární péče.</li>
+          <li><a href="clanek-ai-act-zdravotnictvi-srpen-2026.html">AI Act, české nemocnice a regulační vrstva, kterou nikdo necvičil</a> a <a href="clanek-ai-zdravotnictvi-1-vstricnost.html">Lékař, který se vám zase dívá do očí</a>: umělá inteligence v provozu medicíny.</li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Údaje o povědomí (15 %, 21 %, 10 %) přebíráme z primární studie, ne z tiskové zprávy. Týkají se pijících dospělých ve 14 zemích bez Česka. Počet 39 200 rakovin prsu a nejméně 7 typů rakoviny uvádí informační list WHO/Europe z 26. 11. 2025. Odhady pro rok 2020 vycházejí z metodiky IARC. Popis rozcestníku a AI asistenta je podle UN News a podle přetisku tiskové zprávy WHO/Europe. Rozcestník sám jsme v den vydání otevřít nemohli. Hodnoty indikátorů odpovídají datovému kontraktu HSPA Monitoru ke dni vydání. Údaj o chybějícím hrazeném výkonu krátké intervence odpovídá stavu seznamu zdravotních výkonů k srpnu 2026, jak ho popsal článek z 16. 8. 2026.
+      </p>
+    </section>
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+  </article>
+</main>
+<footer class="bottom" id="siteFooter"></footer>
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
