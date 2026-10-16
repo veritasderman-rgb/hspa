@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-10-15
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-10-15
+    creation_phase: rutina+article-write
+    form: article (8.3) — chybí podmínka 2 a 3 z 8.2a (žádná studie, která by zdánlivou odpověď převracela; česká data k tématu jsou jen tisková zpráva, indikátory duševního zdraví jsou kromě sebevražd seed), esej se nepíše
+    primary_sources_count: 3
+    evidence_sources_count: 5
+    visual_elements_count: 5
+    notes: "Vytvořeno z discovery 2026-10-15: tisková zpráva MZ ČR z 13. 10. 2026 Téměř třetina dospělých využívá AI v souvislosti s duševním zdravím (Pražské fórum o AI a duševním zdraví 2026, Úřad vlády + MZ).
+      ZDROJE A OVĚŘENÍ (staženo 15. 10. 2026):
+      (1) TZ MZ, https://mzd.gov.cz/tiskove-centrum-mz/temer-tretina-dospelych-vyuziva-ai-v-souvislosti-s-dusevnim-zdravim-stat-chce-nastavit-pravidla-pro-jeji-bezpecne-pouzivani/ (vytvořeno 13. 10. 2026), text stažen curlem, čísla doslovně: reprezentativní výzkum PAQ Research z jara 2026, 1 760 dospělých; 29,2 % použilo generativní AI v souvislosti s duševním zdravím během 30 dnů před dotazováním; 18–34 let 51 %; z uživatelů 30,8 % v psychické krizi nebo akutním stresu; 30,7 % alespoň někdy jako náhradu odborné péče; 13,4 % kvůli AI odložilo nebo nevyhledalo odbornou pomoc; 10,9 % obdrželo doporučení odporující radě lékaře či psychoterapeuta; 8,4 % v souvislosti s používáním AI změnilo předepsanou medikaci. Citace A. Vojtěcha, P. Winklera (1. LF UK, autor analytické zprávy), D. Protopopové, M. Kalmana (HBSC, UP Olomouc), Z. Pusztai (WHO). Navazuje příprava doporučení pro veřejnost a odborníky a sledování dopadů; termín ani forma neuvedeny.
+      (2) PRIMÁRNÍ ZPRÁVA PAQ Research / 1. LF UK NENALEZENA: paqresearch.cz (titulní stránka, /studie-a-clanky, /tema/studie, sitemap-posts.xml) bez výstupu k AI a duševnímu zdraví; vyhledávání webu (2 dotazy) bez výsledku; vlada.gov.cz aktuality bez zmínky. Čísla proto v textu výslovně přebírána ze shrnutí MZ; metodika (sběr, vážení, znění otázek, jmenovatel podílu uživatelů) neznámá.
+      (3) AI Act: nařízení (EU) 2024/1689, ELI http://data.europa.eu/eli/reg/2024/1689/oj; čl. 50 odst. 1 (informovat, že člověk komunikuje se systémem AI) a čl. 113 (obecná použitelnost od 2. 8. 2026) ověřeno přes konsolidovaný přepis artificialintelligenceact.eu 15. 10. 2026 (EUR-Lex z prostředí redakce vracel prázdnou odpověď). Časový posun pro vysoce rizikové systémy (nařízení 2026/1744) přebrán z článku clanek-ai-act-zdravotnictvi-srpen-2026, v textu jen odkazem. MDR (EU) 2017/745 čl. 2 odst. 1 — definice zdravotnického prostředku podle účelu určeného výrobcem.
+      (4) PubMed 15. 10. 2026 (7 dotazů): Sohn 2026 npj Digit Med PMID 41882250 (39 RCT; deprese g 0,31, 95% CI 0,17–0,46; úzkost g 0,28, 0,05–0,51; větší účinek u klinických a subklinických vzorků); Zhang 2025 J Med Internet Res PMID 41401240 (generativní chatboti, 14 RCT, N 6 314, ES 0,30, 95% CI 0,004–0,59, predikční interval −0,85 až 1,67, střední riziko zkreslení); Zhong 2024 J Affect Disord PMID 38631422 (18 RCT, 3 477 osob, deprese g −0,26, po 3 měsících bez významného účinku); Pichowicz 2025 Sci Rep PMID 40866537 (29 aplikací s AI chatbotem, simulované scénáře podle C-SSRS, žádná nesplnila kritéria adekvátní odpovědi, 51,72 % hraniční, 48,28 % nedostatečné); Winkler 2021 J Psychiatr Res PMID 34062293 (CZ, M.I.N.I., 20,02 % 11/2017, 29,63 % 5/2020, 32,94 % 11/2020). Therabot (Heinz et al., NEJM AI 2025) v PubMed nenalezen (NEJM AI není indexován) — necitováno.
+      (5) Consensus 1 dotaz (účinnost a bezpečnost generativních chatbotů, medical_mode): nejvýše řazený přehled Sohn 2026 + Zhang 2025 — souhlasí (malý až střední krátkodobý účinek navržených chatbotů, nejistota u generativních). Žádný kvalitní přehled proti.
+      (6) data/indicators.json: sebevrazdy_per_100k 11,59 (2023, EU 10,37; Eurostat, live, verified) — v textu jako fakt. prevalence_dusevni_poruchy_dospeli 27,22 % (2022), centra_dusevniho_zdravi_per_100k 0,37 (2024, EU 1), vydaje_dusevni_zdravi_pct 4 % (2022, EU 7), psychiatri_per_100k 13 (2024, OECD 17,3) = SEED bez verification_status → jen v databoxu s označením, v textu se jako fakt nepoužívají. Řada prevalence 2017 a 2020 v textu z Winklera 2021 (PubMed).
+      VĚDOMĚ NEUVEDENO: které nástroje AI respondenti používali (TZ neuvádí); přepočet podílů z uživatelů na celou populaci (jmenovatel neznámý); obsah doporučení WHO zmíněného Z. Pusztai (nedohledáno); jakékoli rady jednotlivci kromě odkazu na krizové linky.
+      Video-věty (blok V): 1) „Generativní AI kvůli duševnímu zdraví za posledních 30 dní použilo 29,2 % dospělých, mezi lidmi do 34 let 51 %.“ 2) „13,4 % uživatelů kvůli ní odložilo odbornou pomoc nebo ji nevyhledalo vůbec.“ 3) „Žádná z 29 testovaných aplikací neodpověděla na simulovanou sebevražednou krizi plně dostatečně.“
+      published:false, audit-status draft. Čeká na schválení redakce."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Téměř třetina dospělých použila AI kvůli duševnímu zdraví. 13 % uživatelů kvůli ní odložilo odbornou pomoc, stát chystá pravidla · HSPA Monitor</title>
+<meta name="description" content="Podle průzkumu agentury PAQ Research z jara 2026 použilo generativní umělou inteligenci v souvislosti s duševním zdravím během 30 dnů před dotazováním 29,2 % z 1 760 dospělých, ve věku 18 až 34 let 51 %. Téměř třetina uživatelů se na ni obrátila v psychické krizi, 13,4 % kvůli ní odložilo nebo nevyhledalo odbornou pomoc a 8,4 % v souvislosti s ní změnilo předepsané léky. Čísla zveřejnilo ministerstvo zdravotnictví 13. října, samotná zpráva zatím veřejná není. Recenzované studie ukazují, že chatboti navržení pro terapii mírně ulevují od deprese, v simulované sebevražedné krizi ale žádná z 29 testovaných aplikací neodpověděla plně dostatečně.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Téměř třetina dospělých použila AI kvůli duševnímu zdraví. 13 % uživatelů kvůli ní odložilo odbornou pomoc, stát chystá pravidla">
+<meta property="og:description" content="Nový průzkum: 29,2 % dospělých a 51 % lidí do 34 let řešilo za poslední měsíc duševní zdraví s umělou inteligencí. Část z nich ji použila místo odborné péče. Co o tom víme a co ne.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-ai-dusevni-zdravi-tretina-dospelych-2026.html">
+<meta property="article:published_time" content="2026-10-19T06:00:00+02:00">
+<meta property="article:section" content="Duševní zdraví">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-ai-dusevni-zdravi-tretina-dospelych-2026.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "Téměř třetina dospělých použila AI kvůli duševnímu zdraví. 13 % uživatelů kvůli ní odložilo odbornou pomoc, stát chystá pravidla",
+  "description": "Podle průzkumu agentury PAQ Research z jara 2026 použilo generativní umělou inteligenci v souvislosti s duševním zdravím během 30 dnů před dotazováním 29,2 % z 1 760 dospělých, ve věku 18 až 34 let 51 %. Téměř třetina uživatelů se na ni obrátila v psychické krizi, 13,4 % kvůli ní odložilo nebo nevyhledalo odbornou pomoc a 8,4 % v souvislosti s ní změnilo předepsané léky. Čísla zveřejnilo ministerstvo zdravotnictví 13. října, samotná zpráva zatím veřejná není. Recenzované studie ukazují, že chatboti navržení pro terapii mírně ulevují od deprese, v simulované sebevražedné krizi ale žádná z 29 testovaných aplikací neodpověděla plně dostatečně.",
+  "datePublished": "2026-10-19T06:00:00+02:00",
+  "dateModified": "2026-10-15",
+  "inLanguage": "cs",
+  "articleSection": "Duševní zdraví",
+  "author": { "@type": "Organization", "name": "Redakce HSPA Monitoru" },
+  "publisher": { "@type": "Organization", "name": "HSPA Monitor · Skóre zdravotnictví", "url": "https://skorezdravotnictvi.cz" },
+  "mainEntityOfPage": "https://skorezdravotnictvi.cz/clanek-ai-dusevni-zdravi-tretina-dospelych-2026.html"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Duševní zdraví</span>
+        <span class="article-tag article-tag-muted">umělá inteligence · chatboti · psychická krize · PAQ Research · AI Act · mladí dospělí</span>
+      </div>
+      <h1 class="article-title">Téměř třetina dospělých použila AI kvůli duševnímu zdraví. 13 % uživatelů kvůli ní odložilo odbornou pomoc, stát chystá pravidla</h1>
+      <p class="article-deck">
+        Podle průzkumu agentury PAQ Research z jara 2026 použilo generativní umělou inteligenci v souvislosti s duševním zdravím během 30 dnů před dotazováním 29,2 % z 1 760 dospělých, ve věku 18 až 34 let 51 %. Téměř třetina uživatelů se na ni obrátila v psychické krizi, 13,4 % kvůli ní odložilo nebo nevyhledalo odbornou pomoc a 8,4 % v souvislosti s ní změnilo předepsané léky. Čísla zveřejnilo ministerstvo zdravotnictví 13. října, samotná zpráva zatím veřejná není. Recenzované studie ukazují, že chatboti navržení pro terapii mírně ulevují od deprese, v simulované sebevražedné krizi ale žádná z 29 testovaných aplikací neodpověděla plně dostatečně.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">19. října 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">9 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Chatbot je k dispozici ve tři ráno, nic nestojí, na nic se nečeká a nikomu nemusíte nic vysvětlovat. Pro velkou část Česka se tak stal běžnou součástí péče o vlastní psychiku. Ministerstvo zdravotnictví 13. října zveřejnilo první česká čísla o tom, jak lidé generativní umělou inteligenci kvůli duševnímu zdraví používají. Představili je odborníci na Pražském fóru o AI a duševním zdraví, které uspořádal Úřad vlády spolu s ministerstvem u příležitosti Světového dne duševního zdraví. Čísla jsou velká a některá znepokojivá. Ministerstvo z nich vyvozuje, že je potřeba nastavit pravidla. Jaká, zatím neříká.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avAiDzCntH">
+        <figcaption class="av-figure-h" id="avAiDzCntH">Generativní AI a duševní zdraví v Česku, jaro 2026</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="29.2" data-suffix=" %">29,2 %</span>
+            <span class="av-counter-label">dospělých použilo generativní AI v souvislosti s duševním zdravím</span>
+            <span class="av-counter-foot">během 30 dnů před dotazováním; 1 760 respondentů</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="51" data-suffix=" %">51 %</span>
+            <span class="av-counter-label">ve věku 18 až 34 let</span>
+            <span class="av-counter-foot">tentýž průzkum, tatáž otázka</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="30.8" data-suffix=" %">30,8 %</span>
+            <span class="av-counter-label">uživatelů ji použilo v psychické krizi nebo akutním stresu</span>
+            <span class="av-counter-foot">podíl z uživatelů AI, ne ze všech dospělých</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="13.4" data-suffix=" %">13,4 %</span>
+            <span class="av-counter-label">uživatelů kvůli AI odložilo odbornou pomoc nebo ji nevyhledalo</span>
+            <span class="av-counter-foot">podíl z uživatelů AI</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> PAQ Research, reprezentativní výzkum z jara 2026, analytická zpráva P. Winklera (1. LF UK); čísla podle tiskové zprávy MZ ČR z 13. 10. 2026. Samotnou zprávu jsme k 15. 10. 2026 nenašli zveřejněnou.</p>
+      </figure>
+
+      <h3>Co průzkum zjistil</h3>
+      <p>
+        Reprezentativní výzkum agentury PAQ Research zahrnoval 1 760 dospělých. Generativní umělou inteligenci v souvislosti s duševním zdravím během 30 dnů před dotazováním využilo 29,2 % z nich. Ve věkové skupině 18 až 34 let to byla víc než polovina, 51 %. Nejčastěji podle ministerstva AI lidem pomáhá zvládat stres, hledat informace a lépe porozumět vlastním psychickým obtížím. Autorem analytické zprávy je Petr Winkler z 1. lékařské fakulty Univerzity Karlovy. S kolegy z Národního ústavu duševního zdraví vedl i opakované celostátní průzkumy výskytu duševních poruch, o kterých píšeme níže.
+      </p>
+      <p>
+        Druhá polovina čísel se týká rizik. Téměř třetina uživatelů (30,8 %) se na AI obrátila během psychické krize nebo akutního stresu. Podobný podíl (30,7 %) ji alespoň někdy použil jako náhradu odborné péče. 13,4 % uživatelů uvedlo, že kvůli AI odložili vyhledání odborné pomoci nebo ji nevyhledali vůbec. 10,9 % dostalo doporučení, které odporovalo radě lékaře nebo psychoterapeuta. A 8,4 % uvedlo, že v souvislosti s používáním AI změnili předepsanou medikaci.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avAiDzBarH">
+        <figcaption class="av-figure-h" id="avAiDzBarH">Jak lidé AI kvůli duševnímu zdraví používají: podíl z uživatelů (%)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-unit=" %" data-max="40">
+          <li class="av-bar-row" data-value="30.8" data-label="Použili ji v psychické krizi nebo akutním stresu" data-accent="warn"></li>
+          <li class="av-bar-row" data-value="30.7" data-label="Alespoň někdy jako náhradu odborné péče" data-accent="warn"></li>
+          <li class="av-bar-row" data-value="13.4" data-label="Kvůli AI odložili nebo nevyhledali odbornou pomoc" data-accent="bad"></li>
+          <li class="av-bar-row" data-value="10.9" data-label="Dostali radu odporující lékaři či psychoterapeutovi" data-accent="bad"></li>
+          <li class="av-bar-row" data-value="8.4" data-label="V souvislosti s AI změnili předepsanou medikaci" data-accent="bad"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> PAQ Research, jaro 2026, podle tiskové zprávy MZ ČR z 13. 10. 2026. Podíly se vztahují k uživatelům AI, ne ke všem dospělým, a nesčítají se.</p>
+      </figure>
+
+      <p>
+        „Umělá inteligence může být dobrým pomocníkem, ale nemůže nahrazovat odbornou péči. Zvlášť obezřetní musíme být u dětí a mladých lidí,“ řekl podle tiskové zprávy ministr zdravotnictví Adam Vojtěch. Winkler zdůraznil, že cílem není AI omezovat: „Naší snahou není její využívání omezovat, ale zajistit, aby lidé i odborníci dokázali AI využívat bezpečně, kriticky a ve prospěch duševního zdraví.“
+      </p>
+
+      <h3>Co z čísel zatím nevyčteme</h3>
+      <p>
+        Všechna čísla v tomto článku přebíráme ze shrnutí ministerstva. Samotnou analytickou zprávu jsme k 15. říjnu nenašli na webu PAQ Research, ministerstva ani Úřadu vlády. Několik důležitých věcí proto nevíme. Nevíme, jak přesně zněly otázky a jak byl vzorek sestaven a převážen. Nevíme ani, které nástroje lidé používali. Výraz „generativní AI“ může znamenat univerzálního chatbota typu ChatGPT, specializovanou aplikaci pro duševní zdraví, nebo obojí.
+      </p>
+      <p>
+        Nejasný je i jmenovatel. Tisková zpráva mluví o „uživatelích“. Neříká ale, zda jde o lidi, kteří AI kvůli duševnímu zdraví použili za posledních 30 dní, nebo o širší skupinu. Proto podíly jako 13,4 % nepřepočítáváme na celou populaci. A konečně jde o výpovědi respondentů. Údaj o 8,4 % lidí, kteří změnili předepsané léky, neříká, zda změnu provedli sami proti radě lékaře, nebo ji s lékařem probrali. Neříká ani, zda jim uškodila. Je to signál, který stojí za prověření, ne důkaz škody.
+      </p>
+
+      <h3>Co o chatbotech říká výzkum</h3>
+      <p>
+        Chatbot není jen hrozba. Metaanalýza z roku 2026 (Sohn a kol., <em>npj Digital Medicine</em>, 2026) shrnula 39 randomizovaných studií, ve kterých chatboti pomáhali lidem s depresí nebo úzkostí. U deprese i úzkosti vyšel proti kontrolním skupinám statisticky významný, ale malý účinek (Hedgesovo g 0,31 u deprese a 0,28 u úzkosti). U deprese byl větší u lidí, kteří měli potíže klinicky významné nebo blízko k nim. Šlo ale o chatboty navržené pro duševní zdraví a testované v kontrolovaných studiích. O volném používání univerzálních nástrojů, které popisuje český průzkum, tyto studie přímo nevypovídají.
+      </p>
+      <p>
+        U generativních chatbotů, tedy těch, které text samy tvoří, je důkazů méně. Přehled Zhanga a kolegů (<em>Journal of Medical Internet Research</em>, 2025) našel 14 randomizovaných studií s 6 314 účastníky. Průměrný účinek na depresi, úzkost a podobné potíže vyšel 0,30. Spodní hranice intervalu spolehlivosti ale ležela těsně nad nulou (0,004) a predikční interval sahal od −0,85 do 1,67. Jinými slovy: v průměru o něco lépe než kontrolní skupina, v konkrétním nasazení cokoli od zhoršení po velký přínos. A účinek nemusí vydržet. Metaanalýza 18 studií se 3 477 účastníky (Zhong a kol., <em>Journal of Affective Disorders</em>, 2024) našla největší přínos po osmi týdnech léčby, po třech měsících už významný účinek nezjistila.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-bad">
+          <span class="av-counter" data-value="0" data-suffix=" z 29">0 z 29</span>
+          <span class="av-counter-label">aplikací s AI chatbotem odpovědělo na simulovanou sebevražednou krizi plně dostatečně</span>
+          <span class="av-counter-foot">Pichowicz a kol., Scientific Reports 2025; 48 % aplikací odpovídalo nedostatečně</span>
+        </div>
+      </aside>
+
+      <p>
+        Nejcitlivější je krize. Polští výzkumníci z Lékařské univerzity ve Vratislavi (Pichowicz a kol., <em>Scientific Reports</em>, 2025) vyzkoušeli 29 aplikací, které slibují pomoc při psychických potížích a nabízejí AI chatbota. Zadávali jim standardizované zprávy, ve kterých postupně stoupalo riziko sebevraždy. Žádná aplikace nesplnila jejich kritéria přiměřené odpovědi. 51,72 % aplikací vyhovělo jen zmírněným kritériím hraniční odpovědi a 48,28 % odpovídalo nedostatečně. Mezi častými chybami bylo, že aplikace nenabídla kontakt na krizovou pomoc nebo nepochopila souvislosti. Česká data přitom říkají, že kolem třetiny uživatelů se na AI obrací právě v krizi.
+      </p>
+      <div class="av-aside-clear"></div>
+
+      <h3>Proč se lidé obracejí na stroj</h3>
+      <p>
+        Poptávka po pomoci v Česku roste. Opakované celostátní průzkumy Národního ústavu duševního zdraví (Winkler a kol., <em>Journal of Psychiatric Research</em>, 2021) ukázaly, že aktuální duševní poruchu mělo v listopadu 2017 20,02 % dospělých. V květnu 2020 to bylo 29,63 % a v listopadu 2020 32,94 %. Nejvíc zasaženi byli mladší dospělí a studenti, tedy stejná skupina, která dnes nejčastěji sahá po AI. Standardizovaná míra sebevražd byla podle Eurostatu v roce 2023 11,59 na 100 000 obyvatel, nad průměrem EU (10,37).
+      </p>
+      <p>
+        Na druhé straně stojí kapacita systému. O tom, kolik lidí s duševní poruchou zůstává bez léčby, píšeme v článku <a href="clanek-prevalence-dusevnich-poruch.html">Duševní poruchu má víc než čtvrtina dospělých Čechů. A většina se nikdy neléčí</a>. Síť center duševního zdraví se teprve buduje, jak ukazuje článek <a href="clanek-centra-dusevniho-zdravi.html">Reforma slíbila 100 center duševního zdraví. Funguje jich zhruba 40</a>. Chatbot tuhle mezeru nezaplní, ale vyplňuje ji. Je logické, že lidé, kteří na odbornou péči nedosáhnou nebo se o ni stydí požádat, sáhnou po tom, co mají v kapse. Proto je údaj o 13,4 % odložené pomoci tak důležitý. Neříká jen, že AI radí špatně. Může také ukazovat, jak špatně je dostupná péče, kterou by AI měla doplňovat.
+      </p>
+
+      <h3>Co platí dnes a co stát chystá</h3>
+      <p>
+        Evropská pravidla na tuhle situaci míří jen částečně. Nařízení o umělé inteligenci (EU) 2024/1689, známé jako AI Act, se obecně uplatňuje od 2. srpna 2026. Jeho článek 50 ukládá poskytovatelům zajistit, aby lidé věděli, že komunikují se systémem AI, pokud to není zřejmé. Kvalitu rad o duševním zdraví ale toto ustanovení neřeší. Přísnější režim platí pro AI, která je zdravotnickým prostředkem. Podle nařízení o zdravotnických prostředcích (EU) 2017/745 o tom rozhoduje účel, který jí určí výrobce. Univerzální chatbot, kterého výrobce k diagnostice ani léčbě neurčil, do tohoto režimu nespadá, i když se ho lidé na zdraví ptají. Termíny pro vysoce rizikové systémy se navíc letos posunuly. Podrobně je rozebírá článek <a href="clanek-ai-act-zdravotnictvi-srpen-2026.html">AI Act, české nemocnice a regulační vrstva, kterou nikdo necvičil</a>.
+      </p>
+      <p>
+        Ministerstvo na průzkum naváže dvěma kroky. Připraví doporučení pro veřejnost a odborníky, jak AI při psychických potížích používat bezpečně, jak poznat její omezení a situace, kdy je potřeba odborná pomoc. Bude také sledovat dopady těchto technologií na duševní zdraví. Termín ani podobu doporučení tisková zpráva neuvádí. Vládní zmocněnkyně pro duševní zdraví Dita Protopopová shrnula cíl tak, aby AI „vhodně doplňovala, nikoli nahrazovala odbornou péči“. Podobně se vyjádřila i představitelka WHO v Česku Zsófia Pusztai. Podle ní WHO v nedávném doporučení zdůrazňuje, že je potřeba sledovat dopady, nastavit nezávislé bezpečnostní mechanismy a do tvorby řešení zapojit odborníky i lidi s vlastní zkušeností.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avAiDzFlowH">
+        <figcaption class="av-figure-h" id="avAiDzFlowH">Od průzkumu k pravidlům: co je hotové a co chybí (stav k 15. 10. 2026)</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Data o používání</h4>
+            <p class="av-flow-desc">Průzkum PAQ Research, 1 760 dospělých, jaro 2026. Čísla zveřejněna jen v tiskové zprávě.</p>
+            <span class="av-flow-tag">Hotovo, zpráva neveřejná</span>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Doporučení pro veřejnost a odborníky</h4>
+            <p class="av-flow-desc">Bezpečné používání, omezení AI, kdy vyhledat odborníka. Ministerstvo je ohlásilo bez termínu.</p>
+            <span class="av-flow-tag">Ohlášeno</span>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Sledování dopadů</h4>
+            <p class="av-flow-desc">Ohlášeno jako součást dalšího postupu. Metodika ani ukazatele zatím nejsou známé.</p>
+            <span class="av-flow-tag">Ohlášeno</span>
+          </li>
+          <li class="av-flow-step av-flow-step-bad">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Bezpečnost odpovědí v krizi</h4>
+            <p class="av-flow-desc">AI Act žádá hlavně transparentnost (čl. 50). Univerzálních chatbotů se režim zdravotnických prostředků netýká.</p>
+            <span class="av-flow-tag">Mezera</span>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> tisková zpráva MZ ČR z 13. 10. 2026; nařízení (EU) 2024/1689, čl. 50 a 113; nařízení (EU) 2017/745, čl. 2.</p>
+      </figure>
+
+      <h3>Co s tím</h3>
+      <p>
+        Za prvé: zveřejnit zprávu. Stát chce stavět pravidla na datech, a ta by proto měla být veřejná celá, včetně dotazníku, metodiky a rozpadu podle věku a zdravotního stavu. Bez toho nelze posoudit, jak velký je problém s odloženou péčí a se změnami léků. Nepůjde ani za rok změřit, jestli doporučení něco změnila. Rozumné by bylo zopakovat stejné otázky ve stejné podobě.
+      </p>
+      <p>
+        Za druhé: rozlišovat nástroje. Výzkum ukazuje, že chatbot postavený na ověřené terapeutické metodě a testovaný v randomizované studii může mírně pomoci. Univerzální jazykový model, který odpovídá na cokoli, takovou evidenci nemá. U specializovaných aplikací se navíc v krizi ukázala vážná selhání. Doporučení pro veřejnost by tenhle rozdíl měla pojmenovat srozumitelně. Měla by také jasně říct, že změna předepsaných léků patří do ordinace, ne do okna chatu.
+      </p>
+      <p>
+        Za třetí: zkrátit cestu k člověku. Když se třetina uživatelů obrací na AI v krizi, nejdůležitější je, aby je chatbot rychle dovedl k živé pomoci. Česko má krizové linky a síť center duševního zdraví, kterou buduje reforma. Kdo je v krizi, má zavolat na linku 112 nebo 155, případně na Linku první psychické pomoci 116 123. Stát může po provozovatelích chtít, aby tyto kontakty jejich nástroje spolehlivě nabízely. Dlouhodobě ale platí, že chatbot zachytí poptávku, kterou systém neobslouží. Čím dostupnější bude odborná péče, tím menší část lidí bude odkázaná jen na stroj.
+      </p>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Upozornění na limity použitých dat">
+        <p class="article-callout-h">Co v tomto textu není doloženo napevno</p>
+        <p>
+          Všechna česká čísla o používání AI pocházejí ze shrnutí v tiskové zprávě ministerstva zdravotnictví z 13. 10. 2026. Analytickou zprávu PAQ Research a 1. LF UK jsme k 15. 10. 2026 nenašli zveřejněnou, a nemohli jsme proto ověřit metodiku, znění otázek ani jmenovatel podílů „z uživatelů“. Jde o výpovědi respondentů, ne o zdravotnickou dokumentaci. Studie o účinnosti chatbotů testovaly převážně specializované aplikace v randomizovaných studiích, ne univerzální chatboty, které lidé běžně používají. Výsledky obou typů se proto nedají zaměňovat. Prevalence duševních poruch za roky 2017 a 2020 pochází z recenzované studie. Novější hodnota v dashboardu je zatím výchozí a neověřená, v textu ji proto nepoužíváme.
+        </p>
+      </aside>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=sebevrazdy_per_100k"><strong>Sebevraždy (standardizovaná míra)</strong></a> — 11,59 na 100 000 obyvatel (ČR, 2023; Eurostat), EU 10,37 · Výsledky · nižší je lepší (signál varovný)</li>
+        <li><a href="indicator.html?id=prevalence_dusevni_poruchy_dospeli"><strong>Prevalence duševního onemocnění (dospělí)</strong></a> — výchozí hodnota 27,22 % (2022; NUDZ, CZEMS), zatím neověřená živým stažením dat; v textu používáme jen recenzované hodnoty 2017 a 2020 (Winkler a kol. 2021)</li>
+        <li><a href="indicator.html?id=centra_dusevniho_zdravi_per_100k"><strong>Centra duševního zdraví (na 100 000 obyvatel)</strong></a> — výchozí hodnota 0,37 (2024), domácí cílová hodnota 1 (NAPDZ); zatím neověřená, v textu ji jako fakt nepoužíváme</li>
+        <li><a href="indicator.html?id=vydaje_dusevni_zdravi_pct"><strong>Podíl výdajů na péči o duševní zdraví</strong></a> — výchozí hodnota 4 % výdajů na zdravotnictví (2022), EU 7 %; zatím neověřená, v textu ji jako fakt nepoužíváme</li>
+        <li><a href="indicator.html?id=psychiatri_per_100k"><strong>Psychiatři na 100 000 obyvatel</strong></a> — výchozí hodnota 13 (2024; ÚZIS), OECD 17,3; zatím neověřená</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Průzkum a jeho zveřejnění</h5>
+        <ul class="article-sources-list">
+          <li><strong>MZ ČR — Téměř třetina dospělých využívá AI v souvislosti s duševním zdravím. Stát chce nastavit pravidla pro její bezpečné používání</strong>, tisková zpráva 13. 10. 2026. Primární zdroj všech českých čísel: 1 760 respondentů, 29,2 %, 51 % (18–34 let), 30,8 %, 30,7 %, 13,4 %, 10,9 %, 8,4 %; citace A. Vojtěcha, P. Winklera, D. Protopopové, M. Kalmana a Z. Pusztai; plán doporučení a sledování dopadů. Staženo 15. 10. 2026. <a href="https://mzd.gov.cz/tiskove-centrum-mz/temer-tretina-dospelych-vyuziva-ai-v-souvislosti-s-dusevnim-zdravim-stat-chce-nastavit-pravidla-pro-jeji-bezpecne-pouzivani/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+          <li><strong>PAQ Research</strong> — agentura, která výzkum provedla. Analytickou zprávu jsme na jejím webu k 15. 10. 2026 nenašli. <a href="https://www.paqresearch.cz/" target="_blank" rel="noopener">paqresearch.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Recenzovaná literatura</h5>
+        <ul class="article-sources-list">
+          <li><strong>Sohn JS, Ha BG, Park S, Kim JJ, Lee E, Oh H, Lee S, Kim E. Systematic review and meta analysis of chatbots in the management of depressive and anxiety symptoms. NPJ Digit Med. 2026;9(1).</strong> DOI 10.1038/s41746-026-02566-w. PMID 41882250. 39 randomizovaných studií; deprese g 0,31 (95% CI 0,17–0,46), úzkost g 0,28 (0,05–0,51); větší účinek u klinických a subklinických vzorků. Ověřeno v PubMed 15. 10. 2026. <a href="https://doi.org/10.1038/s41746-026-02566-w" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Zhang Q, Zhang R, Xiong Y, Sui Y, Tong C, Lin FH. Generative AI Mental Health Chatbots as Therapeutic Tools: Systematic Review and Meta-Analysis of Their Role in Reducing Mental Health Issues. J Med Internet Res. 2025;27:e78238.</strong> DOI 10.2196/78238. PMID 41401240. Metaanalýza 14 RCT generativních chatbotů, N = 6 314; účinek 0,30 (95% CI 0,004–0,59; predikční interval −0,85 až 1,67); střední riziko zkreslení. Ověřeno v PubMed 15. 10. 2026. <a href="https://doi.org/10.2196/78238" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Zhong W, Luo J, Zhang H. The therapeutic effectiveness of artificial intelligence-based chatbots in alleviation of depressive and anxiety symptoms in short-course treatments: A systematic review and meta-analysis. J Affect Disord. 2024;356:459–469.</strong> DOI 10.1016/j.jad.2024.04.057. PMID 38631422. 18 RCT, 3 477 účastníků; deprese g −0,26, úzkost g −0,19; po třech měsících bez významného účinku. Ověřeno v PubMed 15. 10. 2026. <a href="https://doi.org/10.1016/j.jad.2024.04.057" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Pichowicz W, Kotas M, Piotrowski P. Performance of mental health chatbot agents in detecting and managing suicidal ideation. Sci Rep. 2025;15(1):31652.</strong> DOI 10.1038/s41598-025-17242-4. PMID 40866537. 29 aplikací s AI chatbotem, simulované scénáře podle škály C-SSRS; žádná nesplnila kritéria přiměřené odpovědi, 51,72 % hraniční, 48,28 % nedostatečné. Ověřeno v PubMed 15. 10. 2026. <a href="https://doi.org/10.1038/s41598-025-17242-4" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Winkler P, Mohrova Z, Mlada K, Kuklova M, Kagstrom A, Mohr P, Formanek T. Prevalence of current mental disorders before and during the second wave of COVID-19 pandemic: An analysis of repeated nationwide cross-sectional surveys. J Psychiatr Res. 2021;139:167–171.</strong> DOI 10.1016/j.jpsychires.2021.05.032. PMID 34062293. Česko, diagnostický rozhovor M.I.N.I.; aktuální duševní porucha 20,02 % (11/2017), 29,63 % (5/2020), 32,94 % (11/2020). Ověřeno v PubMed 15. 10. 2026. <a href="https://doi.org/10.1016/j.jpsychires.2021.05.032" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Právo a data</h5>
+        <ul class="article-sources-list">
+          <li><strong>Nařízení Evropského parlamentu a Rady (EU) 2024/1689 o umělé inteligenci (AI Act)</strong>. Čl. 50 odst. 1 (povinnost informovat, že člověk komunikuje se systémem AI) a čl. 113 (obecná použitelnost od 2. 8. 2026). <a href="http://data.europa.eu/eli/reg/2024/1689/oj" target="_blank" rel="noopener">eur-lex.europa.eu ↗</a></li>
+          <li><strong>Nařízení Evropského parlamentu a Rady (EU) 2017/745 o zdravotnických prostředcích (MDR)</strong>. Čl. 2 odst. 1, definice zdravotnického prostředku podle účelu určeného výrobcem. <a href="http://data.europa.eu/eli/reg/2017/745/oj" target="_blank" rel="noopener">eur-lex.europa.eu ↗</a></li>
+          <li><strong>Eurostat — Causes of death, standardised death rate: intentional self-harm</strong>. ČR 11,59 na 100 000 obyvatel v roce 2023, EU 10,37 (indikátor HSPA Monitoru, staženo 1. 10. 2026). <a href="https://ec.europa.eu/eurostat" target="_blank" rel="noopener">ec.europa.eu ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Související čtení na portálu</h5>
+        <ul class="article-sources-list">
+          <li><a href="clanek-prevalence-dusevnich-poruch.html">Duševní poruchu má víc než čtvrtina dospělých Čechů. A většina se nikdy neléčí</a> a <a href="clanek-centra-dusevniho-zdravi.html">Reforma slíbila 100 center duševního zdraví. Funguje jich zhruba 40</a>.</li>
+          <li><a href="clanek-sebevrazdy-dusevni-zdravi.html">Léky se předepisují, péče ne. Český paradox duševního zdraví v číslech</a>.</li>
+          <li><a href="clanek-ai-zdravotnictvi-1-vstricnost.html">Lékař, který se vám zase dívá do očí</a> a <a href="clanek-ai-zdravotnictvi-2-lecba.html">Od mamografu k antibiotikům z počítače</a>: umělá inteligence v provozu medicíny.</li>
+          <li><a href="clanek-ai-act-zdravotnictvi-srpen-2026.html">AI Act, české nemocnice a regulační vrstva, kterou nikdo necvičil</a>: termíny a povinnosti evropského nařízení.</li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Česká čísla o používání AI přebíráme z tiskové zprávy MZ ČR, protože analytická zpráva nebyla v době psaní veřejná. Podíly 30,8 %, 30,7 %, 13,4 %, 10,9 % a 8,4 % se vztahují k uživatelům AI, ne ke všem dospělým. Údaje o účinnosti a bezpečnosti chatbotů jsou z recenzovaných studií ověřených v databázi PubMed. Hodnoty indikátorů odpovídají datovému kontraktu HSPA Monitoru ke dni vydání. Hodnoty označené jako výchozí zatím nebyly ověřeny živým stažením dat.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
