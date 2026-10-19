@@ -12,8 +12,10 @@
 # a postaví se až commit od bota. Když regenerace nic nezmění, bot pushne
 # prázdný commit, aby deploy proběhl i tak.
 
-# Preview buildy nestavíme vůbec.
-[ "$VERCEL_ENV" = "production" ] || exit 0
+# Preview buildy nestavíme. Prázdné nebo neznámé VERCEL_ENV (např. vypnuté
+# „Automatically expose System Environment Variables“) = nejistota → stavíme.
+[ "$VERCEL_ENV" = "preview" ] && exit 0
+[ "$VERCEL_ENV" = "production" ] || exit 1
 
 # Commity od bota (crony, regenerace) stavíme vždy. Pushe s GITHUB_TOKEN
 # regeneraci nespouštějí, takže by po nich žádný další commit nepřišel.
