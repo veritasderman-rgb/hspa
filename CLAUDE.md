@@ -114,7 +114,7 @@ git push -u origin claude/<branch>
 │
 ├── src/                        ← Frontend ES modules (25 souborů, ~18 000 LOC)
 │   ├── app.js                  ← Homepage (hub matrix, dimensions, podcasts, ticker)
-│   ├── page-shared.js          ← Sdílené komponenty (nav, header, scroll)
+│   ├── page-shared.js          ← Sdílené komponenty (nav, header, scroll, patička, pásek „Na kafe 50 Kč“ = Stripe Payment Link v KAFE_URL)
 │   ├── clanky.js               ← Hub článků + auto-bootstrap AV pro clanek-*.html
 │   ├── article-visuals.js      ← AV designsystem (timeline, bar, table, flow, counter)
 │   ├── article-toc.js          ← Table of Contents na stránkách clanek-*.html
