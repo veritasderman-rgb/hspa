@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-10-11T00:00:00Z",
+  "generated_at": "2026-10-18T00:00:00Z",
   "_doc": "Registr evidence-auditu (PROMPT_EVIDENCE_AUDIT.md): pro každý ověřený článek / indikátor seznam tvrzení, které studie z PubMed/Consensus je řeší, a verdikt (supported / partial / contradicted / no-evidence / not-applicable / unclear). Zapisuje jen orchestrace (Sonnet hledá, Opus rozhoduje), mění se výhradně commitem. content_hash = sha1 souboru v době kontroly; scripts/evidence-audit-queue.js podle něj pozná, že se obsah změnil (stale). Consensus i PubMed jsou nástroje, ne zdroje — do registru patří jen ověřené studie s PMID/DOI, nikdy provozní texty nástrojů.",
   "items": [
     {
@@ -12786,6 +12786,1939 @@
       ],
       "followup": "Neověřeno (vyčerpaný strop PubMed): abstrakt metaanalýzy Lasswell et al., JAMA 2010;304:992 (PMID 20810377, perinatální regionalizace u VLBW/velmi předčasně narozených) k tvrzení o porodu v perinatologickém centru; chybí evropská nebo česká data o porodech v centru vs. mimo něj ve 28.–31. t. g. (příběh popisuje 30. týden, doložená kohorta je < 28 t. g.); Consensus nevolán; neověřen populační podíl vícečetných těhotenství na předčasných porodech (tvrzení „hlavní biologický motor prematurity“) a respirační/dlouhodobá morbidita v importance.",
       "notes": "PubMed dostupný, vyčerpán strop 8 volání (3 vyhledávání v první dávce, 2 metadata+1 vyhledávání, další metadata a závěrečné vyhledávání/metadata). Consensus nevolán: PubMed pro tvrzení o perinatologických centrech nic použitelného nedal, ale strop PubMed byl vyčerpán a kandidáty z Consensu by nebylo možné ověřit v PubMed (verified_in_pubmed), proto byl krok vynechán (consensus: skipped, ne rate-limit). Karta nemá pole literature ani odkazy na literaturu, takže nebylo co ověřovat found_via article; tvrzení o směru a prahech signálu (good 5 / warn 15) se na literaturu neodvolávají. Administrativní čísla (6,4 %, 7,4 %, 85,9 %, trend 7,7→6,4) nejsou tvrzení k ověření. Doporučený followup: cílený dotaz na regionalizaci perinatální péče (inborn vs outborn velmi předčasných, pokud možno evropské/česká data) a ověřit v PubMed. Studie 28410573, 28398697, 33058208, 37428872 z vyhledávání na outborn/tertiary byly irelevantní (NEC, oxygen targeting, CPAP, FGR) a nejsou zařazeny; 32562647, 26794078, 23245604, 42776528, 42750010, 42637238 rovněž nezařazeny. | Adjudikace (Opus) použila 3 volání PubMed. (1) search_articles na regionalizaci a inborn/outborn s filtrem systematic/meta-analysis: 211 výsledků, prvních 10 nerelevantních, nepoužito. (2) get_article_metadata: PMID 20736471, zkoušený jako kandidát na metaanalýzu regionalizace, je ve skutečnosti RCT o KBT u ADHD, nepoužito; PMID 31619384 (Helenius 2019 BMJ) ověřen a zařazen. (3) lookup_article_by_citation pro Lasswell JAMA 2010;304:992 našel PMID 20810377, abstrakt už nebyl načten (strop). Finální verdikty: 3× partial (importance: mortalita doložena, morbidita a respirační složka ne; perinatologická centra: směr doložen jednou anglickou kohortou < 28 t. g., výhrady k populaci a k výsledku „bez vážného postižení“; SET: snížení vícečetných gravidit silně doloženo, „hlavní motor prematurity“ širší než evidence). Žádné contradicted, takže žádný flag ani issue. prose_change prázdné: zásahy by mířily do patient_story, kam audit u karty indikátoru větu nevkládá (u measurement verdiktu jen do limitations), a rozsah u importance není očividně širší než evidence. Followup pro zápis: ověřit abstrakt Lasswell et al. 2010 JAMA (PMID 20810377, metaanalýza perinatální regionalizace u VLBW/velmi předčasně narozených) a případně doplnit evropská nebo česká data o porodech v centrech versus mimo ně u 28.–31. t. g.; rozsah literatury k tvrzení „vícečetná těhotenství jako hlavní motor prematurity“ (populační podíl) zůstává neověřen. Administrativní čísla (6,4 %, 7,4 %, 85,9 %, trend 7,7→6,4) se neověřují; v data/claims.json jsou jen administrativní tvrzení článků, claim-note se proto nenavrhuje. | Zápis (Opus): do karty přidáno pole literature se 4 studiemi (Lawn 2014, Helenius 2019, Ma 2022, McLernon 2010); Gelbaya 2009 (PMID 19446809) zůstává jen v evidenci registru, karta ji necituje. limitations ani jiná prose karty se nemění."
+    },
+    {
+      "id": "clanek-lancet-digitalni-determinanty-deti-zakaz-site-2026.html",
+      "type": "article",
+      "checked_at": "2026-10-18",
+      "run_id": "ea-2026-10-18-01",
+      "content_hash": "207257433056063670e6064ed369c143f92ff653",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 3,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "lancet-digitalni-determinanty-deti-zakaz-site-2026--01",
+          "text": "uprostřed nich zastřešující přehled 121 přehledových studií nad zhruba devíti miliony lidí do 25 let",
+          "location": "perex; counter 121 v boxu čtyř čísel; kapitola Co Lancet zjistil",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "42830095",
+              "doi": "10.1016/S0140-6736(26)01611-9",
+              "title": "The public health challenges of children's and adolescents' digital media use: applying the digital determinants of health as an interpretive framework.",
+              "year": 2026,
+              "journal": "Lancet",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Holly et al. (Lancet 2026, PubMed typ Journal Article/Review) existuje a abstrakt potvrzuje syntézu stávající evidence. Počet 121 přehledů ani ~9 mil. osob do 25 let v abstraktu není. Čísla jsou z tiskové zprávy Lancetu (EurekAlert 1146057) a plný text je za paywallem, proto nejvýš partial. Článek původ čísel přiznává v poznámce k údajům."
+        },
+        {
+          "claim_id": "",
+          "text": "Podle abstraktu je užívání digitálních médií „konzistentněji spojeno s nepříznivými duševními, behaviorálními, fyzickými, kognitivními a sociálními výsledky“, přičemž důležitým moderátorem je vývojové stadium dítěte. Autoři zároveň píší, že „kauzální základ zůstává nejistý“",
+          "location": "kapitola Co Lancet zjistil a co výslovně nezjistil",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42830095",
+              "doi": "10.1016/S0140-6736(26)01611-9",
+              "title": "The public health challenges of children's and adolescents' digital media use: applying the digital determinants of health as an interpretive framework.",
+              "year": 2026,
+              "journal": "Lancet",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Věrný překlad abstraktu: more consistently associated with adverse mental, behavioural, physical, cognitive, and social outcomes, with developmental stage emerging as an important moderator; causal basis remains uncertain. Abstrakt navíc uvádí, že média mohou souviset s přínosy i škodami. Perex to zkracuje na „konzistentně míří k horšímu“, což je mírně ostřejší než tělo článku. K případné úpravě redakcí, nejde o rozpor. Rozpis výsledků podle věku v abstraktu není a samostatně se neověřoval."
+        },
+        {
+          "claim_id": "",
+          "text": "Vazby mezi problematickým užíváním digitálních médií a poškozením zdraví, které jsme v přehledu našli, jsou skromné co do velikosti a stojí na důkazech nízké jistoty, které nemohou prokázat příčinu a následek.",
+          "location": "citace L. Holly (av-quote) a perex",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "42830095",
+              "doi": "10.1016/S0140-6736(26)01611-9",
+              "title": "The public health challenges of children's and adolescents' digital media use: applying the digital determinants of health as an interpretive framework.",
+              "year": 2026,
+              "journal": "Lancet",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Citace je správně připsána tiskové zprávě. Abstrakt potvrzuje nejistý kauzální základ, slova modest a low-certainty ale neobsahuje. Abstrakt také popisuje potenciální populační zátěž jako substantial. Článek to vyvažuje odstavcem o modelaci."
+        },
+        {
+          "claim_id": "lancet-digitalni-determinanty-deti-zakaz-site-2026--02",
+          "text": "víc než dvě hodiny denně na obrazovce by celosvětově mohlo souviset se ztrátou zhruba 2,8 milionu zdravých let života kvůli depresi a 240 tisíc kvůli obezitě ročně",
+          "location": "kapitola Co Lancet zjistil a co výslovně nezjistil",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "42830095",
+              "doi": "10.1016/S0140-6736(26)01611-9",
+              "title": "The public health challenges of children's and adolescents' digital media use: applying the digital determinants of health as an interpretive framework.",
+              "year": 2026,
+              "journal": "Lancet",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt potvrzuje ilustrativní modelaci s podstatnou potenciální zátěží a nejistou kauzalitou. To odpovídá výhradě v článku („měřítko potenciální zátěže, ne důkaz příčiny“). Čísla 2,8 mil. a 240 tis. v abstraktu nejsou a pocházejí z tiskové zprávy."
+        },
+        {
+          "claim_id": "",
+          "text": "Ne „čas u obrazovky“, který podle autorů dosavadní výzkum upřednostňoval, protože se snadno měří, ale problematické užívání",
+          "location": "kapitola Co Lancet zjistil a co výslovně nezjistil",
+          "kind": "measurement",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42830095",
+              "doi": "10.1016/S0140-6736(26)01611-9",
+              "title": "The public health challenges of children's and adolescents' digital media use: applying the digital determinants of health as an interpretive framework.",
+              "year": 2026,
+              "journal": "Lancet",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova: Research to date has privileged easily measured proxies, such as screen time, and given insufficient attention to platform design, algorithmic systems, and commercial incentives. Formulace „co série měří“ je mírně zjednodušující, protože jde o interpretační rámec. Jádro tvrzení je podložené."
+        },
+        {
+          "claim_id": "",
+          "text": "Doporučení z toho plynou přímo a ani jedno z nich není věková hranice. Série navrhuje: povinnost posoudit škodlivost nových funkcí před uvedením, povinnost sdílet data o dopadech funkcí na zdraví s prověřenými veřejnými výzkumníky, globální úmluvu přes WHO se základními standardy a mezinárodní orgán sledující dopady umělé inteligence na děti.",
+          "location": "kapitola Co Lancet zjistil a co výslovně nezjistil; perex",
+          "kind": "policy",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "42830094",
+              "doi": "10.1016/S0140-6736(26)01293-6",
+              "title": "Governing the digital determinants of health for children and young people: a global public health imperative.",
+              "year": 2026,
+              "journal": "Lancet",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "42830095",
+              "doi": "10.1016/S0140-6736(26)01611-9",
+              "title": "The public health challenges of children's and adolescents' digital media use: applying the digital determinants of health as an interpretive framework.",
+              "year": 2026,
+              "journal": "Lancet",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakty potvrzují obecný směr: preventivní, strukturální odpověď místo změny individuálního chování, správu designu platforem a čtyři domény governance s předběžnou opatrností. Konkrétní výčet opatření a to, že věkové limity samy nestačí, abstrakty neuvádějí. Obojí je z tiskové zprávy a článek to tak atribuuje."
+        },
+        {
+          "claim_id": "lancet-digitalni-determinanty-deti-zakaz-site-2026--03",
+          "text": "Ve vlně 2022, mezi téměř 15 000 dětmi ve věku 11, 13 a 15 let z 250 škol, splnilo kritéria problematického užívání sociálních sítí 8,3 % dětí",
+          "location": "kapitola o HBSC; counter 8,3 v boxu čtyř čísel",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "41553290",
+              "doi": "10.21101/cejph.a8698",
+              "title": "Changes in social media use patterns among Czech adolescents: HBSC study 2018-2022.",
+              "year": 2025,
+              "journal": "Central European Journal of Public Health",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "42304510",
+              "doi": "10.1186/s13690-026-01993-1",
+              "title": "Problematic social media use, mental health, and substance use in Czech adolescents: the comparative role of extracurricular activities - findings from the 2022 HBSC study.",
+              "year": 2026,
+              "journal": "Archives of Public Health",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Boniel-Nissim et al. 2025 (n = 26 450, vlny 2018 a 2022) potvrzuje výrazný nárůst problematického užívání. Procento v abstraktu neuvádí a 8,3 % je z tiskové zprávy národního týmu HBSC (FTK UP, 10. 5. 2023), proto nejvýš partial. Helvich et al. je jen kontext bez prevalence v abstraktu. Jde o českou evidenci, otázka přenositelnosti nevzniká."
+        },
+        {
+          "claim_id": "lancet-digitalni-determinanty-deti-zakaz-site-2026--04",
+          "text": "V roce 2018 to bylo 5 %.",
+          "location": "kapitola o HBSC",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "41553290",
+              "doi": "10.21101/cejph.a8698",
+              "title": "Changes in social media use patterns among Czech adolescents: HBSC study 2018-2022.",
+              "year": 2025,
+              "journal": "Central European Journal of Public Health",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Směr změny 2018 → 2022 abstrakt potvrzuje (výrazný nárůst), výchozích 5 % neuvádí. Hodnota je z tiskové zprávy národního týmu HBSC."
+        },
+        {
+          "claim_id": "",
+          "text": "Peer-reviewed analýza téže vlny (Boniel-Nissim, van den Eijnden a Baďura, 2025) potvrzuje „výrazný nárůst intenzivního i problematického užívání“ a to, že častěji jde o dívky a starší dospívající.",
+          "location": "kapitola o HBSC",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "41553290",
+              "doi": "10.21101/cejph.a8698",
+              "title": "Changes in social media use patterns among Czech adolescents: HBSC study 2018-2022.",
+              "year": 2025,
+              "journal": "Central European Journal of Public Health",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova: marked increase in both intense and problematic SMU; Girls and older adolescents reported higher rates of problematic SMU. Drobnost: studie analyzuje vlny 2018 i 2022, ne jen „tutéž vlnu“."
+        }
+      ],
+      "summary": {
+        "supported": 3,
+        "partial": 6,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "claim-note",
+          "detail": "source_note u lancet-digitalni-determinanty-deti-zakaz-site-2026--01 → doplněno Holly et al. PMID:42830095 / DOI:10.1016/S0140-6736(26)01611-9, ověřeno 2026-10-18 (abstrakt počet 121 přehledů ani ~9 mil. osob neuvádí; číslo z tiskové zprávy)",
+          "ref": "lancet-digitalni-determinanty-deti-zakaz-site-2026--01"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u lancet-digitalni-determinanty-deti-zakaz-site-2026--02 → doplněno Holly et al. PMID:42830095 / DOI:10.1016/S0140-6736(26)01611-9, ověřeno 2026-10-18 (abstrakt potvrzuje ilustrativní modelaci s podstatnou potenciální zátěží a nejistou kauzalitou; čísla 2,8 mil. a 240 tis. neuvádí)",
+          "ref": "lancet-digitalni-determinanty-deti-zakaz-site-2026--02"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u lancet-digitalni-determinanty-deti-zakaz-site-2026--03 → doplněno PMID:41553290 / DOI:10.21101/cejph.a8698, ověřeno 2026-10-18 (abstrakt potvrzuje výrazný nárůst problematického užívání 2018→2022, procento neuvádí)",
+          "ref": "lancet-digitalni-determinanty-deti-zakaz-site-2026--03"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u lancet-digitalni-determinanty-deti-zakaz-site-2026--04 → doplněno PMID:41553290 / DOI:10.21101/cejph.a8698, ověřeno 2026-10-18 (abstrakt potvrzuje výrazný nárůst problematického užívání 2018→2022, procento neuvádí)",
+          "ref": "lancet-digitalni-determinanty-deti-zakaz-site-2026--04"
+        },
+        {
+          "type": "card-note",
+          "detail": "audit: komentář v HTML a data/articles.json audit.notes: připojena věta „evidence-audit 2026-10-18: 9 tvrzení, 3 supported, 6 partial; viz data/evidence-audit.json“",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "source-added: nic, všechny dohledané studie (PMID 42830092–42830095, 41553290, 42304510) článek už cituje v article-sources s DOI a PMID. Nic není contradicted, takže žádný flagged ani issue. Prose beze změny, audit-status zůstává review-pending.",
+          "ref": ""
+        }
+      ],
+      "followup": "Čísla série Lancetu (121 přehledů, ~9 mil. osob, 2,8 mil. / 240 tis. zdravých let, výčet doporučení, citace Holly) a prevalence HBSC ČR (8,3 % 2022, 5 % 2018) jsou ověřena jen proti tiskovým zprávám, abstrakty je neuvádějí. Až bude dostupný plný text Holly et al. (PMID 42830095) a národní zpráva HBSC, přeověřit.",
+      "notes": "PubMed: 3 volání celkem (rešerše: metadata 6 citovaných PMID a jedno orientační search_articles, jehož výsledky nebyly použity; adjudikace: get_article_metadata na PMID 42830095, 42830094 a 41553290). Consensus nepoužit, kontextový dotaz nebyl nutný. Všech 6 citovaných studií existuje, žádná není retrahovaná; Duffourc PMID 42830092 bez abstraktu. Abstrakty seděly se závěry rešerše. Čísla 121 přehledů, ~9 mil., 2,8 mil. / 240 tis. DALY, konkrétní doporučení a citace Holly/Shaw/Kickbusch jsou z tiskové zprávy Lancetu (EurekAlert 1146057) a v abstraktech nejsou; plný text za paywallem, proto nejvýš partial. 8,3 % a 5 % jsou z tiskové zprávy národního týmu HBSC (FTK UP, 10. 5. 2023). Článek původ čísel sám přiznává, prose_change se proto nenavrhuje. Pro redakci: perex píše „konzistentně míří k horšímu“, abstrakt říká, že média mohou mít přínosy i škody a „more consistently“ souvisejí s nepříznivými výsledky; tělo článku to formuluje správně jako „konzistentněji“. Rešerše měla 8 záznamů, tvrzení o 8,3 % a 5 % bylo rozděleno podle existujících claim_id 03 a 04, celkem 9 tvrzení. Položky s prázdným claim_id nejsou v data/claims.json a nové claims audit nezakládá. Mimo rozsah evidence-auditu (nepočítají se mezi ověřená): průměr HBSC 11 % (TZ WHO), pořadí 8. z 50 (vlna 2018), administrativní statistiky z indicators.json (claims 06–11), § 7 zákona č. 110/2019 Sb. (claim 13), Austrálie (claim 12, K OVĚŘENÍ proti PDF eSafety), Francie, EU KIDS Act a výroky politiků."
+    },
+    {
+      "id": "clanek-hpv-rodice-cena-vakciny-studie-2026.html",
+      "type": "article",
+      "checked_at": "2026-10-18",
+      "run_id": "ea-2026-10-18-01",
+      "content_hash": "531275cd85b0b1d440c86580468640d67ed2462c",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "write": "sonnet"
+      },
+      "calls": {
+        "pubmed": 2,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "text": "Informace o úhradě zvýšila zamýšlenou ochotu očkovat o 15 procentních bodů (95% CI 6,6–23,3), nárůst o 26 %, u rodičů, kteří počítali s plnou tržní cenou.",
+          "location": "perex / databox / Co studie měřila",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42815234",
+              "doi": "10.1016/j.healthpol.2026.105772",
+              "title": "Information provision about cost coverage and parental HPV vaccination intentions: A randomized survey experiment in the Czech Republic",
+              "year": 2026,
+              "journal": "Health Policy",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova: 15 pp (95% CI 6,6–23,3), 26% nárůst, u rodičů věřících v plnou tržní cenu. Randomizovaný dotazníkový experiment (ne RCT na očkování). Článek správně omezuje na podskupinu a na úmysly."
+        },
+        {
+          "text": "Průměrný odhad ceny očkování od rodičů je 1 880 korun, skutečný doplatek u dítěte v hrazeném věku 0 Kč.",
+          "location": "perex / databox",
+          "kind": "measurement",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42815234",
+              "doi": "10.1016/j.healthpol.2026.105772",
+              "title": "Information provision about cost coverage and parental HPV vaccination intentions: A randomized survey experiment in the Czech Republic",
+              "year": 2026,
+              "journal": "Health Policy",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: průměrné předchozí odhady 1880 CZK, skutečný doplatek nulový u oprávněných dětí."
+        },
+        {
+          "text": "Vzorek 2 983 rodičů dětí 0–14 let, náhodně rozděleni do dvou skupin; efekt o 7 p. b. větší u synů a o 5 p. b. větší u rodičů s pozitivnějším postojem (měřeno očkováním proti covidu-19).",
+          "location": "Co studie měřila",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42815234",
+              "doi": "10.1016/j.healthpol.2026.105772",
+              "title": "Information provision about cost coverage and parental HPV vaccination intentions: A randomized survey experiment in the Czech Republic",
+              "year": 2026,
+              "journal": "Health Policy",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Všechna čísla a design doslova v abstraktu. Abstrakt říká 'free for children aged 11-14'; text článku to reflektuje."
+        },
+        {
+          "text": "Systematický přehled s metaanalýzou Newman et al. (2018) shrnul 79 observačních studií na 840 838 rodičích z 15 zemí; uptake 41,5 %, dívky 46,5 %, chlapci 20,3 %; pojištěním hrazené očkování r = 0,16, nižší doplatek r = −0,15, doporučení lékaře r = 0,46; chybí intervenční studie, vysoké riziko zkreslení.",
+          "location": "Co říká širší evidence",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "29678965",
+              "doi": "10.1136/bmjopen-2017-019206",
+              "title": "Parents' uptake of human papillomavirus vaccines for their children: a systematic review and meta-analysis of observational studies",
+              "year": 2018,
+              "journal": "BMJ Open",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Všechna čísla shodná s abstraktem. Studie existuje, nejde o retrakci."
+        },
+        {
+          "text": "Švédský populační průzkum: ochotných očkovat 76 %, kdyby byla vakcína zdarma, a 63 %, i kdyby se platila; autoři uzavřeli, že cena hlavní bariérou není.",
+          "location": "Co říká širší evidence",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "19569173",
+              "doi": "10.1002/ijc.24712",
+              "title": "Attitudes to HPV vaccination among parents of children aged 12-15 years-a population-based survey in Sweden",
+              "year": 2010,
+              "journal": "International Journal of Cancer",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: 76 % vs 63 %; 'cost did not appear to be a major barrier'; bezpečnost a účinnost silné korelace; povědomí o HPV."
+        },
+        {
+          "text": "Evropský systematický přehled López et al. (2020) ze 70 studií v 16 zemích: o infekci HPV vědělo 64,4 % rodičů, hlavní bariéry nedostatek informací a obavy z bezpečnosti; tři ze sedmi autorů s afiliací MSD.",
+          "location": "Co říká širší evidence",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "32435520",
+              "doi": "10.1186/s40985-020-00126-5",
+              "title": "HPV knowledge and vaccine acceptance among European adolescents and their parents: a systematic literature review",
+              "year": 2020,
+              "journal": "Public Health Reviews",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: 70 studií, 16 zemí, 64,4 % rodičů znalo HPV, hlavní bariéry. Afiliace MSD Spain u 3 autorů potvrzena v metadatech."
+        },
+        {
+          "text": "Doporučení lékaře souvisí s očkováním silněji než cokoli jiného (Newman et al.).",
+          "location": "Co s tím / Zaprvé",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "29678965",
+              "doi": "10.1136/bmjopen-2017-019206",
+              "title": "Parents' uptake of human papillomavirus vaccines for their children: a systematic review and meta-analysis of observational studies",
+              "year": 2018,
+              "journal": "BMJ Open",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: physician recommendation r=0,46 má největší vliv. Jde o asociaci z observačních studií, článek to uvádí jako souvislost."
+        }
+      ],
+      "summary": {
+        "supported": 7,
+        "partial": 0,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [],
+      "notes": "PubMed: 2 volání (get_article_metadata pro 4 PMID uvedené v článku; 1 search_articles bez využitelného výsledku, nepoužito). Consensus nevolán (PubMed stačil, všechny studie už článek cituje). Neověřovány: ČSÚ/ÚZIS proočkovanost, legislativa, WHO cíl 90 %. Staněk & Krčál je dotazníkový experiment měřící úmysly; plný text není dostupný, takže datum sběru, reprezentativnost ani výchozí úroveň nelze ověřit; článek je sám výslovně neuvádí. Žádný kandidát na contradicted. Zdroje do article-sources nepřidány, všechny 4 studie článek již cituje."
+    },
+    {
+      "id": "clanek-chripka-sezona-2026-vakciny-proockovanost.html",
+      "type": "article",
+      "checked_at": "2026-10-18",
+      "run_id": "ea-2026-10-18-01",
+      "content_hash": "81ce3fcd0b635d305f938139e13dac8185b179b4",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 3,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "text": "Metaanalýza 30 studií Marca Rondyho a kolegů (Journal of Infection, 2017) odhadla účinnost proti hospitalizaci s laboratorně potvrzenou chřipkou u lidí od 65 let na 37 %; proti chřipce A(H3N2) v sezónách, kdy se kmen ve vakcíně rozcházel s cirkulujícím virem, jen na 14 % (statisticky neprůkazně).",
+          "location": "Co očkování umí a co ne",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "28935236",
+              "doi": "10.1016/j.jinf.2017.09.010",
+              "title": "Effectiveness of influenza vaccines in preventing severe influenza illness among adults: A systematic review and meta-analysis of test-negative design case-control studies",
+              "year": 2017,
+              "journal": "J Infect",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno adjudikací: abstrakt uvádí 30 studií, IVE u 65+ 37 % (95% CI 30–44) a proti antigenně odlišnému A(H3N2) 14 % (95% CI −3 až 30), tedy neprůkazně. Text odpovídá. Studie je v article-sources už citována."
+        },
+        {
+          "text": "Cochranův přehled Vittoria Demicheliho a kolegů (2018) z randomizovaných studií dovodil, že k zabránění jednomu případu chřipky je potřeba očkovat 30 starších lidí. Důkazy o komplikacích ale označil za nedostatečné a zastaralé.",
+          "location": "Co očkování umí a co ne",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "29388197",
+              "doi": "10.1002/14651858.CD004876.pub4",
+              "title": "Vaccines for preventing influenza in the elderly",
+              "year": 2018,
+              "journal": "Cochrane Database Syst Rev",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno: NNV 30 pro chřipku (RR 0,42, nízká jistota); důkazy o komplikacích „poor quality, insufficient, or old“. Text odpovídá. Studie je v article-sources už citována."
+        },
+        {
+          "text": "Ta v randomizované studii Carlose DiazGranadose a kolegů (NEJM, 2014) na 31 989 lidech od 65 let chránila před laboratorně potvrzenou chřipkou o 24,2 % lépe než standardní dávka.",
+          "location": "Co očkování umí a co ne",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "25119609",
+              "doi": "10.1056/NEJMoa1315727",
+              "title": "Efficacy of high-dose versus standard-dose influenza vaccine in older adults",
+              "year": 2014,
+              "journal": "N Engl J Med",
+              "study_type": "rct",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno: 31 989 účastníků 65+, relativní účinnost 24,2 % (95% CI 9,7–36,5). Studii financoval výrobce (Sanofi Pasteur); u této studie to článek výslovně neuvádí (uvádí to jen u dvou studií z roku 2025), redakce může zvážit. Studie je v article-sources už citována."
+        },
+        {
+          "text": "Ve španělské Galicii (NEJM, 2025) byla vysoká dávka u lidí od 65 do 79 let spojena s o 23,7 % nižším výskytem hospitalizací pro chřipku nebo zápal plic.",
+          "location": "Co očkování umí a co ne",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "40888694",
+              "doi": "10.1056/NEJMoa2509834",
+              "title": "High-Dose Influenza Vaccine to Reduce Hospitalizations (GALFLU)",
+              "year": 2025,
+              "journal": "N Engl J Med",
+              "study_type": "rct",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno: pragmatická RCT, 65–79 let, rVE 23,7 % (95% CI 6,6–37,7) pro složený cíl hospitalizace pro chřipku nebo pneumonii; financoval Sanofi, což text uvádí. Studie je v article-sources už citována."
+        },
+        {
+          "text": "V dánské studii DANFLU-2 s 332 438 účastníky (NEJM, 2025) se rozdíl v tomtéž ukazateli statisticky neprokázal, hospitalizací přímo pro chřipku ale bylo o 43,6 % méně.",
+          "location": "Co očkování umí a co ne",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "40888720",
+              "doi": "10.1056/NEJMoa2509907",
+              "title": "High-Dose Influenza Vaccine Effectiveness against Hospitalization in Older Adults (DANFLU-2)",
+              "year": 2025,
+              "journal": "N Engl J Med",
+              "study_type": "rct",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno: primární cíl rVE 5,9 % (95% CI −2,1 až 13,4; P = 0,14), hospitalizace pro chřipku rVE 43,6 % (27,5–56,3). Hospitalizace přímo pro chřipku je sekundární cíl, text ho jako primární neprezentuje. Studie je v article-sources už citována."
+        },
+        {
+          "text": "Ministerstvo uvádí, že podle českých dat snížilo očkování v minulé sezóně riziko těžkých zdravotních dopadů přibližně o 25 až 30 %.",
+          "location": "Co očkování umí a co ne",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "28935236",
+              "doi": "10.1016/j.jinf.2017.09.010",
+              "title": "Effectiveness of influenza vaccines in preventing severe influenza illness among adults: A systematic review and meta-analysis of test-negative design case-control studies",
+              "year": 2017,
+              "journal": "J Infect",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Údaj je přiznaně převzatý od MZ a vychází z českých observačních dat, která nejsou recenzovanou studií v PubMed. Rozmezí 25–30 % v žádném abstraktu není (proto nejvýš partial). Zahraniční metaanalýza (Rondy 2017, IVE 37 % proti hospitalizaci u 65+) je řádově konzistentní, přenositelnost na českou sezónu ale omezená (jiné sezóny, kmeny, design). Článek omezení férově uvádí sám (věta „Jde o observační data… ne o recenzovanou studii“ a rámeček „Co tato čísla neumějí“), upřesňující věta proto není potřeba."
+        },
+        {
+          "text": "Podle prezentace ministerstva nižší riziko nákazy u očkovaných pomáhá chránit i lidi v jejich okolí, tedy i pacienty.",
+          "location": "Co s tím / Nemocnice a pobytové sociální služby",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "27251461",
+              "doi": "10.1002/14651858.CD005187.pub5",
+              "title": "Influenza vaccination for healthcare workers who care for people aged 60 or older living in long-term care institutions",
+              "year": 2016,
+              "journal": "Cochrane Database Syst Rev",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Výchozí předpoklad sedí: podle abstraktu Cochranova přehledu mělo laboratorně potvrzenou chřipku za sezónu 5 % očkovaných a 8 % neočkovaných zdravotníků a zdravotníci mohou chřipku přenést na pacienty. Na dopad u pacientů ale tento přehled (4 klastrové RCT, 5 896 klientů domovů pro seniory, vysoké riziko zkreslení) přesvědčivý přínos nenašel: na laboratorně potvrzenou chřipku u klientů má očkování personálu možná malý nebo žádný vliv (RD 0; nízká kvalita), záněty dolních cest dýchacích pravděpodobně ubyly ze 6 na 4 % (střední kvalita), na hospitalizace možná žádný vliv a o úmrtích nelze rozhodnout. Jde o jeden přehled, a ne o převahu evidence proti, takže verdikt není contradicted. Tvrzení je přiznaně převzaté z prezentace MZ, jeho rozsah („chránit i pacienty“) je ale širší než evidence, proto vložena jedna upřesňující věta s citací (Thomas 2016). Evidence se týká dlouhodobé péče a ne akutních nemocnic; přenositelnost na české nemocnice je omezená. Ostatní PMID z rešerše (42835288, 37849235, 37605528) se týkají proočkovanosti a postojů zdravotníků, ne dopadu na pacienty, a nepoužívám je."
+        }
+      ],
+      "summary": {
+        "supported": 5,
+        "partial": 2,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Thomas RE, Jefferson T, Lasserson TJ. Cochrane Database Syst Rev 2016;2016(6):CD005187 (PMID 27251461, DOI 10.1002/14651858.CD005187.pub5) do article-sources, stávající skupina „Evidence (vyhledáno v PubMed a databázi Consensus…)“ (plní roli skupiny Recenzovaná literatura, duplicitní skupina nezaložena) — k větě o ochraně pacientů očkováním zdravotníků.",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Partial u tvrzení o ochraně pacientů: vložena jedna upřesňující věta s citací (Thomas 2016) hned za větu „Podle prezentace ministerstva … tedy i pacienty.“ v odstavci „Nemocnice a pobytové sociální služby“; audit-status zůstává review-pending (articles.json audit-status + audit.status, audit: hlavička status draft → review-pending, meta article:audit-status). Ostatních 5 studií (PMID 28935236, 29388197, 25119609, 40888720, 40888694) článek už cituje, nepřidány. V data/claims.json článek nemá záznamy, claim-note odpadá. Do audit.notes a hlavičky audit: připojena věta evidence-audit 2026-10-18.",
+          "ref": ""
+        }
+      ],
+      "notes": "Článek má v data/claims.json 0 záznamů, claim_id prázdné. Všech 5 citovaných studií ověřeno v PubMed (get_article_metadata; existují, žádné retrakce v metadatech, abstrakty odpovídají číslům v textu). Consensus nepoužit. Adjudikace (Opus): 5× supported, 2× partial; (1) tvrzení MZ o 25–30 % je české observační číslo mimo PubMed a článek je sám správně rámuje, proto bez upřesňující věty; (2) tvrzení o ochraně pacientů očkováním zdravotníků z unclear na partial podle Cochranova přehledu Thomas 2016 (PMID 27251461), doplněna jedna upřesňující věta. Žádné contradicted. Neauditováno jako administrativní nebo prezentační data (nepočítá se mezi tvrzení): dodávky vakcín, proočkovanost (ÚZIS, OECD, zdravotníci 7–24 %, těhotné 1,0 %, pobytové služby max. 55 %), dopady sezóny z NRHZS, analýza ÚZIS pobytových služeb 2022/23 (HR 0,763; nerecenzovaná prezentace, v textu přiznaná), doporučení Rady EU, stažení novely. Doporučení redakci (ne akce auditu): zvážit u DiazGranados 2014 uvést financování výrobcem (Sanofi Pasteur), jak to článek dělá u studií z roku 2025."
+    },
+    {
+      "id": "clanek-who-alkohol-rakovina-prsu-ai-hub-2026.html",
+      "type": "article",
+      "checked_at": "2026-10-18",
+      "run_id": "ea-2026-10-18-01",
+      "content_hash": "4076a1549cd2ca3271ed3bb7060e3bd90c836419",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 5,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Jen 15 % pijících dospělých ze 14 evropských zemí ví, že alkohol může způsobit rakovinu prsu.",
+          "location": "perex / sekce Mezera, kterou má nástroj zavřít / databox",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "38378598",
+              "doi": "10.1186/s13104-024-06707-w",
+              "title": "How much do Europeans know about the link between alcohol use and cancer? Results from an online survey in 14 countries.",
+              "year": 2024,
+              "journal": "BMC Research Notes",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt i plný text (PMC10880362): 15 % všech respondentů spojilo alkohol s rakovinou prsu u žen; populace = dospělí, kteří za posledních 12 měsíců pili, 14 zemí, 2022–2023. Článek správně uvádí, že Česko mezi zeměmi není a autoři netvrdí reprezentativnost."
+        },
+        {
+          "claim_id": "",
+          "text": "U žen znalo souvislost s rakovinou prsu 21 %, u mužů 10 %; 19 601 respondentů; rakovinu obecně uvedla jen zhruba polovina.",
+          "location": "sekce Mezera, kterou má nástroj zavřít / databox",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "38378598",
+              "doi": "10.1186/s13104-024-06707-w",
+              "title": "How much do Europeans know about the link between alcohol use and cancer? Results from an online survey in 14 countries.",
+              "year": 2024,
+              "journal": "BMC Research Notes",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace ověřila v open-access plném textu PMC10880362 (PubMed): výsledná velikost vzorku 19 601; tab. 2 rakovina prsu ženy 21 % vs. muži 10 % (text: „largest difference observed for breast cancer (21% vs. 10%)“); rakovina obecně 53 %. Post-stratifikační vážení podle věku, pohlaví a vzdělání (Eurostat) a výslovné „the study does not claim representativeness“ jsou v plném textu doslova. Rešerše dala partial jen proto, že čísla nejsou v abstraktu; plný text je dokládá, proto supported."
+        },
+        {
+          "claim_id": "",
+          "text": "Metaanalýza 572 studií (Bagnardi a kol., British Journal of Cancer 2015) našla u prsu jasný vztah mezi dávkou a rizikem. U silného pití bylo relativní riziko 1,61 proti abstinentkám a příležitostným pijačkám. Riziko tedy roste s každým nápojem.",
+          "location": "sekce Mezera, kterou má nástroj zavřít",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "25422909",
+              "doi": "10.1038/bjc.2014.579",
+              "title": "Alcohol consumption and site-specific cancer risk: a comprehensive dose-response meta-analysis.",
+              "year": 2014,
+              "journal": "British Journal of Cancer",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: 572 studií, u prsu RR 1,61 u silného pití proti nepijícím a příležitostně pijícím, jasný vztah dávka–riziko. „Roste s každým nápojem“ je přiměřená laická parafráze vztahu dávka–odpověď. Online vyšlo 11/2014, ročník časopisu 2015 (112(3)) – citace v článku je správná."
+        },
+        {
+          "claim_id": "",
+          "text": "Cochrane přehled Kanerové a kolegů z roku 2018 shrnul 34 randomizovaných studií s 15 197 účastníky. Lidé s rizikovým pitím po krátké intervenci pili o rok později v průměru o 20 gramů čistého alkoholu týdně méně (95% CI −28 až −12 g). Krátká intervence = nejvýš pět sezení, dohromady pod hodinu; delší poradenství už další efekt nepřidalo.",
+          "location": "sekce Proč se o alkoholu v ordinaci nemluví",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "29476653",
+              "doi": "10.1002/14651858.CD004148.pub4",
+              "title": "Effectiveness of brief alcohol interventions in primary care populations.",
+              "year": 2018,
+              "journal": "Cochrane Database of Systematic Reviews",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: 34 studií / 15 197 účastníků, MD −20 g/týden (95% CI −28 až −12) po roce, střední kvalita důkazů, I² 73 %; krátká intervence ≤ 5 sezení, < 60 min; prodloužená vs. krátká MD 2 g/týden (−42 až 45, nízká kvalita) – „nepřidalo“ odpovídá. Předchozí věta „doložené lépe než u většiny preventivních zásahů“ (a obdobná věta v perexu) je srovnávací tvrzení, které jedna studie nedokládá; nebylo předmětem tohoto tvrzení – viz followup."
+        },
+        {
+          "claim_id": "",
+          "text": "Systematický přehled 84 studií (Rosário a kol., Implementation Science 2021): nejčastější bariérou u praktických lékařů a sester byl nedostatek času a dalších zdrojů, následovala nejistota, zda rozhovor zvládnou a zda pacientovi pomůže, a chybějící výcvik.",
+          "location": "sekce Proč se o alkoholu v ordinaci nemluví",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "33413487",
+              "doi": "10.1186/s13012-020-01073-0",
+              "title": "Factors influencing the implementation of screening and brief interventions for alcohol use in primary care practices: a systematic review using the COM-B system and Theoretical Domains Framework.",
+              "year": 2021,
+              "journal": "Implementation Science",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: 84 studií; nejvíce kódovaných jednotek v doméně Environmental Context and Resources (n=158, nedostatek času), dále Beliefs about Capabilities (134) a Skills (99, chybějící výcvik). „Nejčastější“ = podle počtu kódovaných datových jednotek – přijatelné zjednodušení."
+        },
+        {
+          "claim_id": "",
+          "text": "Metaanalýza 29 kontrolovaných studií (Keurhorst a kol., Addiction 2015) zjistila, že opatření na podporu zavádění krátkých intervencí zvýšila počet screeningů i provedených intervencí. Na tom, kolik pacienti pili, se v souhrnu neprojevila. Nejlépe fungovala kombinace (školení, pomůcky, organizace práce, pacienti).",
+          "location": "sekce Proč se o alkoholu v ordinaci nemluví; Co s tím (Za druhé)",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "26234486",
+              "doi": "10.1111/add.13088",
+              "title": "Implementation strategies to enhance management of heavy alcohol consumption in primary health care: a meta-analysis.",
+              "year": 2015,
+              "journal": "Addiction",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: 29 studií; screening SMD 0,53, intervence SMD 0,64; souhrnně bez vlivu na spotřebu (SMD 0,07; −0,02 až 0,16); vícesložkové strategie měly na spotřebu nejsilnější účinek. Jádro tvrzení supported. Věta v sekci Za druhé „samotné pomůcky pro zdravotníky zvyšují počet rozhovorů“ je interpretace – abstrakt hovoří o strategiích zaměřených na profesionály obecně, ne konkrétně o pomůckách; proto confidence medium, k posouzení redakcí (bez zásahu do textu)."
+        },
+        {
+          "claim_id": "",
+          "text": "Odhady pro rok 2020 vycházejí z metodiky IARC (Rumgay a kol., Lancet Oncology 2021); v roce 2020 alkohol v Evropském regionu WHO způsobil odhadem 39 200 nových případů rakoviny prsu, téměř třetina při pití nejvýše 1-2 nápojů denně; celkem asi 186 000 rakovin (4 %).",
+          "location": "databox Čtyři čísla / sekce Mezera / box ⅓",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "34270924",
+              "doi": "10.1016/S1470-2045(21)00279-5",
+              "title": "Global burden of cancer in 2020 attributable to alcohol consumption: a population-based study.",
+              "year": 2021,
+              "journal": "The Lancet Oncology",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Rumgay 2021 (abstrakt) dokládá metodiku (PAF z GLOBOCAN 2020) a globální řád (741 300 případů, 4,1 %; prs 98 300; mírné pití < 20 g/den 13,9 % případů), ale ne regionální hodnoty 39 200 / 186 000 ani podíl „téměř třetina“ u prsu v Evropském regionu WHO. Ty článek výslovně přiřazuje informačnímu listu WHO/Europe (26. 11. 2025), který není recenzovaná studie; recenzovaná regionální publikace v PubMed rešerší nenalezena. Atribuce v textu je správná, rozsah tvrzení není širší než uvedený zdroj → bez upřesňující věty."
+        },
+        {
+          "claim_id": "",
+          "text": "Nezávislé hodnocení přesnosti asistenta zatím neexistuje. V databázi PubMed jsme k 14. říjnu žádné nenašli.",
+          "location": "sekce Co o AI asistentovi zatím nevíme",
+          "kind": "measurement",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "41334427",
+              "doi": "10.35946/arcr.v45.1.12",
+              "title": "Perspective on Using Artificial Intelligence in Alcohol Research and Treatment: Opportunities and Ethical Considerations.",
+              "year": 2025,
+              "journal": "Alcohol Research: Current Reviews",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "40367679",
+              "doi": "10.1016/j.addbeh.2025.108375",
+              "title": "Leveraging social media and large language models for scalable alcohol risk assessment: Examining validity with AUDIT-C and post recency effects.",
+              "year": 2025,
+              "journal": "Addictive Behaviors",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace prošla metadata/abstrakty 8 záznamů z kontrolního dotazu rešerše (42669326, 42183635, 41779032, 41345921, 41334427, 41242607, 40367679, 39999063): žádný nehodnotí WHO SBI Assistant; nejbližší jsou narativní přehled AI v léčbě alkoholu (Moniz-Lewis 2025, výslovně volá po hodnocení v reálných podmínkách) a validace LLM odhadu rizika z příspěvků na sociálních sítích (Marengo 2025). Nástroj byl spuštěn 14. 10. 2026, tedy v den, ke kterému se tvrzení vztahuje – recenzované hodnocení k tomu datu logicky existovat nemohlo. Tvrzení je správně časově ohraničené („k 14. říjnu“). Zbylých 16 záznamů dotazu neprojito – viz followup."
+        }
+      ],
+      "summary": {
+        "supported": 7,
+        "partial": 1,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "none",
+          "detail": "Všech 6 recenzovaných studií (Neufeld 2024, Rumgay 2021, Bagnardi 2015, Kaner 2018, Rosário 2021, Keurhorst 2015) už článek cituje ve skupině Recenzovaná literatura s DOI a PMID – source-added se neprovádí. data/claims.json nemá k článku žádný záznam – claim-note nelze. Žádné contradicted – bez flagged/issue. Zápis: věta do audit: komentáře článku a audit.notes v data/articles.json („evidence-audit 2026-10-18: 8 tvrzení, 7 supported, 1 partial; viz data/evidence-audit.json“); audit-status (review-pending) beze změny.",
+          "ref": ""
+        }
+      ],
+      "followup": "(a) srovnávací věty „Krátká intervence patří k nejlépe doloženým zásahům v medicíně“ (perex) a „doložené lépe než u většiny preventivních zásahů“ (sekce Proč se o alkoholu v ordinaci nemluví) neauditovány – jedna studie srovnání nedokládá; (b) interpretace Keurhorst 2015 „samotné pomůcky pro zdravotníky zvyšují počet rozhovorů“ (sekce Za druhé) k posouzení redakcí; (c) 16 z 24 záznamů kontrolního PubMed dotazu na hodnocení AI asistenta neprojito.",
+      "notes": "Claims.json neobsahuje žádné záznamy pro tento článek (nové claims nevytvářím, claim_id prázdné). Consensus nepoužit (PubMed ověřil všech 6 citovaných studií, žádný dotaz nebyl nutný). Volání PubMed: 1x get_article_metadata (6 PMID), 2x search_articles (AI asistent v SBI; evropský odhad rakoviny prsu z alkoholu - 0 výsledků). Nečteno: plný text Neufeld (21 %/10 % a n=19 601 věřeno jen podle auditu článku), informační list WHO a UN News (nejde o studie). Neověřováno: ČSÚ/OECD/ÚZIS statistiky, zákon 65/2017 Sb., úhradové vyhlášky, citace osob, klasifikace IARC skupiny 1 od 1988. | Adjudikace: 2 volání PubMed (get_full_text_article PMC10880362; get_article_metadata 8 PMID z kontrolního dotazu rešerše). Změny proti rešerši: tvrzení 21 %/10 %/19 601 povýšeno z partial na supported (doloženo doslova v open-access plném textu, tab. 2 a oddíl Results/Limitations); negativní tvrzení o neexistenci hodnocení AI asistenta z unclear na supported (medium) – 8 prošlých záznamů SBI Assistant nehodnotí a nástroj byl spuštěn ke dni, ke kterému se tvrzení vztahuje. Tvrzení 39 200 / 186 000 / třetina zůstává partial: regionální čísla pocházejí z informačního listu WHO/Europe (ne studie), Rumgay 2021 dokládá jen metodiku a globální řád; článek to přiznává správně, takže upřesňující věta se nenavrhuje. Souhrn: supported 7, partial 1, contradicted 0. Neověřováno (mimo rozsah evidence-auditu): statistiky ČSÚ/OECD/ÚZIS, zákon 65/2017 Sb., úhradové předpisy, citace osob, klasifikace IARC skupina 1 od 1988."
+    },
+    {
+      "id": "clanek-spalnicky-usa-2026.html",
+      "type": "article",
+      "checked_at": "2026-10-18",
+      "run_id": "ea-2026-10-18-01",
+      "content_hash": "01076be2046c68e07055c877a5862f9bf457b82f",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 11,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "text": "Studie publikovaná v časopise Science v roce 2019 (Mina a kol.) ukázala, že prodělané spalničky ničí už vytvořené protilátky proti jiným původcům nemocí. U neočkovaných dětí, které spalničky prodělaly, výzkumníci naměřili ztrátu 11 až 73 % protilátek proti celé řadě virů a bakterií; u očkovaných dětí ke ztrátě nedošlo.",
+          "location": "sekce „Proč právě u spalniček stačí tak málo“ (imunitní amnézie)",
+          "kind": "mechanism",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "31672891",
+              "doi": "10.1126/science.aay6485",
+              "title": "Measles virus infection diminishes preexisting antibodies that offer protection from other pathogens.",
+              "year": 2019,
+              "journal": "Science",
+              "study_type": "cohort",
+              "found_via": "article",
+              "verified_in_pubmed": true,
+              "relation": "supports"
+            }
+          ],
+          "note": "Adjudikace potvrzuje rešerši. Abstrakt doslova: 77 neočkovaných dětí před a ~2 měsíce po přirozené infekci, ztráta 11–73 % protilátkového repertoáru; u dětí očkovaných MMR účinek pozorován nebyl; potvrzeno na makacích. Pozorovací studie, ne RCT; formulace článku rozsahu odpovídá. Studie je ve zdrojích článku už citována (science.org, DOI), nová položka se nepřidává."
+        },
+        {
+          "text": "Obnovení imunitní paměti trvá zhruba dva až tři roky, během nichž je dítě zranitelnější vůči infekcím, proti kterým už jednou bylo chráněné.",
+          "location": "sekce „Proč právě u spalniček stačí tak málo“ (imunitní amnézie)",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "31672891",
+              "doi": "10.1126/science.aay6485",
+              "title": "Measles virus infection diminishes preexisting antibodies that offer protection from other pathogens.",
+              "year": 2019,
+              "journal": "Science",
+              "study_type": "cohort",
+              "found_via": "article",
+              "verified_in_pubmed": true,
+              "relation": "partial"
+            }
+          ],
+          "note": "Směr (přechodně zvýšená zranitelnost po spalničkách, obnova protilátek až po opětovné expozici) abstrakt Mina 2019 podporuje, údaj „dva až tři roky“ v něm ale není → nejvýš partial. Číslo patrně pochází z populační analýzy Mina a kol., Science 2015 (dlouhodobá imunomodulace po spalničkách, ~2–3 roky); PubMed vyhledávání vrátilo kandidáta PMID 25954009, metadata a abstrakt nebyly v rámci stropu 3 volání ověřeny → followup. Prose beze změny: věta nepřekračuje evidenci očividně, jen jí chybí citace."
+        },
+        {
+          "text": "Světová zdravotnická organizace uvádí, že jeden nemocný člověk může nakazit až 18 dalších osob. [...] Aby se řetězec přenosu přetrhl, musí být imunní přibližně 95 % populace — a to dvěma dávkami vakcíny.",
+          "location": "sekce „Proč právě u spalniček stačí tak málo“ (R0 a práh kolektivní imunity)",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "28757186",
+              "doi": "10.1016/S1473-3099(17)30307-9",
+              "title": "The basic reproduction number (R0) of measles: a systematic review.",
+              "year": 2017,
+              "journal": "The Lancet. Infectious diseases",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Systematický přehled (18 studií, 58 odhadů R0) potvrzuje, že obvykle citované rozpětí R0 je 12–18 a že R0 určuje práh kolektivní imunity; zároveň upozorňuje, že odhady se rozcházejí šířeji než 12–18 a závisí na místních podmínkách. Práh 95 % abstrakt přímo neuvádí (číslo mimo abstrakt → partial). Zdrojem věty v článku je WHO fact sheet (ten je citován), přehled ji doplňuje recenzovanou oporou. Srovnání s chřipkou (~2) a SARS-CoV-2 (~3) neověřováno. Upřesňující věta nenavržena — článek mluví o „až 18“ a „přibližně 95 %“, tedy v mezích obvykle citovaného rozpětí."
+        },
+        {
+          "text": "U spalniček přitom, jak je uvedeno výše, kauzální léčba neexistuje; vitamin A snižuje úmrtnost prokazatelně tam, kde je populace jeho nedostatkem postižena, což není případ USA.",
+          "location": "sekce „Politický rozměr“ (komunikace o léčbě, vitamin A)",
+          "kind": "efficacy",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "35294044",
+              "doi": "10.1002/14651858.CD008524.pub4",
+              "title": "Vitamin A supplementation for preventing morbidity and mortality in children from six months to five years of age.",
+              "year": 2022,
+              "journal": "The Cochrane database of systematic reviews",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "41638401",
+              "doi": "10.1016/j.antiviral.2026.106361",
+              "title": "Acute management of measles: A systematic review of therapeutic strategies.",
+              "year": 2026,
+              "journal": "Antiviral research",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Rámec „účinné tam, kde je populace nedostatkem postižena“ je podložen: Cochrane 2022 (47 studií, ~1,2 mil. dětí 6–59 měsíců) ukazuje snížení celkové úmrtnosti (RR 0,88; 0,83–0,93; vysoká jistota) v populacích s rizikem deficitu, snížení incidence spalniček (RR 0,45; nízká jistota), ale úmrtnost specificky na spalničky průkazně nesnížena (RR 0,88; 0,69–1,11). Cochrane se týká preventivní suplementace, ne léčby nemocných spalničkami; přehled Antiviral Res 2026 označuje vitamin A za jedinou široce doporučovanou terapii s přínosem hlavně u dětí s deficitem, jeho autoři ale mají vazbu na Independent Medical Alliance, proto jen relation partial a do zdrojů se nepřidává. Věta „kauzální léčba neexistuje“ odpovídá (ribavirin/interferon jsou experimentální). Partial, protože doložená je především celková úmrtnost při preventivní suplementaci, ne léčebný účinek na úmrtnost na spalničky; prose beze změny."
+        },
+        {
+          "text": "studie v JAMA Network Open zaznamenala za první čtvrtletí 2025 86 případů expozice dětí vitaminu A, tedy nárůst o 38,7 %",
+          "location": "sekce „Politický rozměr“ (komunikace o léčbě, vitamin A)",
+          "kind": "epidemiology",
+          "verdict": "unclear",
+          "confidence": "low",
+          "evidence": [],
+          "note": "K posouzení redakcí. Rešerše ani adjudikace (dotaz PubMed „vitamin A exposures poison centers measles“, od 2025) studii v PubMed nenašly; článek ji necituje ve zdrojích a neuvádí DOI ani PMID, takže ji nelze ověřit ani vyloučit (research letter může být indexován se zpožděním nebo pod jiným názvem). Neexistence se tím nedokazuje, proto ne contradicted. Upozornění pro redakci: o odstavec níže text mluví o „studii v JAMA“ a o „otravách“, zatímco zde o „JAMA Network Open“ a „expozicích“ — sjednotit podle originálu a doplnit citaci do zdrojů. → followup."
+        },
+        {
+          "text": "Rovněž jeho tvrzení, že ochrana po vakcíně slábne o 4,5 % ročně, neodpovídá studiím, které uvádějí 0,04 až 0,22 % ročně. [...] vakcína je účinná a spalničkám zabrání zhruba v 97 % případů",
+          "location": "sekce „Politický rozměr“ (účinnost a slábnutí ochrany po MMR)",
+          "kind": "efficacy",
+          "verdict": "unclear",
+          "confidence": "low",
+          "evidence": [],
+          "note": "K posouzení redakcí. Dotaz PubMed na systematické přehledy o slábnutí ochrany po vakcíně proti spalničkám (rešerše i adjudikace) nevrátil žádný záznam; čísla 0,04–0,22 % ročně ani 97 % (dvě dávky) nebyla v literatuře ověřena a článek pro ně neuvádí zdroj. Údaj 97 % je v textu reprodukovaná řeč ministra (citace, sama o sobě neověřuje se), tvrzení o rozpětí 0,04–0,22 % ročně je však vlastní tvrzení redakce a potřebuje recenzovaný zdroj. → followup (dotaz např. na sekundární selhání vakcíny / trvanlivost ochrany po MMR, Cochrane MMR o účinnosti dvou dávek)."
+        }
+      ],
+      "summary": {
+        "supported": 1,
+        "partial": 3,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 2
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Guerra FM, Bolotin S, Lim G et al., Lancet Infect Dis 2017;17(12):e420–e428 (PMID 28757186, DOI 10.1016/S1473-3099(17)30307-9) do article-sources — nová skupina Recenzovaná literatura (k R0 až 18 a prahu kolektivní imunity)",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "Imdad A, Mayo-Wilson E, Haykal MR et al., Cochrane Database Syst Rev 2022;3(3):CD008524 (PMID 35294044, DOI 10.1002/14651858.CD008524.pub4) do téže skupiny Recenzovaná literatura (k vitaminu A a úmrtnosti při deficitu)",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "data/claims.json beze změny: žádný quote mezi spalnicky-usa-2026--01 až --10 neodpovídá ověřovaným tvrzením (administrativní statistika CDC/ECDC/WHO/PHAC/NOS). Mina 2019 je ve zdrojích už citována, nepřidáváno podruhé. Audit-status zůstává review-pending (žádný contradicted, žádná vložená věta). Do audit: hlavičky článku a articles.json → audit.notes připojena věta evidence-audit 2026-10-18; audit.last_reviewed nezměněno.",
+          "ref": ""
+        }
+      ],
+      "followup": "(1) Ověřit Mina et al., Science 2015 (kandidát PMID 25954009) jako zdroj údaje „dva až tři roky“ obnovy imunitní paměti; (2) dohledat a ověřit studii JAMA Netw Open o expozicích dětí vitaminu A v 1. čtvrtletí 2025 (86 případů, +38,7 %), která ve zdrojích chybí — a sjednotit v textu JAMA Network Open / JAMA a expozice / otravy; (3) recenzovaný zdroj k rozpětí slábnutí ochrany po MMR 0,04–0,22 % ročně a k účinnosti dvou dávek 97 %; (4) neověřeno z rozpočtu (vyčerpaný strop volání): Lancet 2026 o statusu eliminace USA (citováno přes CIDRAP), Lancet Glob Health PIIS2214-109X(23)00043-8 (CFR v LMIC), horní odhad CFR až 10 %.",
+      "notes": "Rešerše (Sonnet): PubMed dostupný, vyčerpán strop 8 volání (1 volání s chybou formátu citace, opakováno); Consensus nepoužit. Vybráno 6 odborných tvrzení; ostatní věty článku jsou administrativní statistika (CDC, ECDC, WHO, PHAC, ČR), politika a události (eliminace, ACIP, soudy) nebo názory a byly vyřazeny dle pravidel. Žádné z vybraných tvrzení nemá odpovídající záznam v data/claims.json, proto bez claim_id. Pozn. k nástroji: lookup_article_by_citation vrátil pole pmid/key prohozená; PMID 31672891 následně ověřen přes get_article_metadata. Adjudikace (Opus), 3 volání PubMed (strop vyčerpán): vitamin A + toxikologická centra 2025 (0 výsledků); Mina MJ + dlouhodobá imunomodulace (kandidát PMID 25954009, metadata neověřena, proto není v evidence); slábnutí ochrany po vakcíně, systematický přehled (0 výsledků). Finální verdikty: 1 supported, 3 partial, 2 unclear (k posouzení redakcí); žádný contradicted, proto žádný flag ani issue. Prose beze změny. Přehled Antiviral Res 2026 (PMID 41638401) zůstává jen v registru (autoři s vazbou na Independent Medical Alliance), do zdrojů nepřidán."
+    },
+    {
+      "id": "clanek-nadstandardy-2-irsko-kanada.html",
+      "type": "article",
+      "checked_at": "2026-10-18",
+      "run_id": "ea-2026-10-18-01",
+      "content_hash": "b4a3636aa65db857212fc150de6322e30a59d88a",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 11,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "pokud smějí lékaři veřejných nemocnic pracovat i soukromě, čekací doba ve veřejném sektoru roste. Bez racionování příjmu na čekací listinu dokonce vznik soukromého sektoru vede k delší veřejné frontě, je-li poptávka dostatečně citlivá na čekání.",
+          "location": "Ekonomika duální praxe",
+          "kind": "mechanism",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "10169097",
+              "doi": "10.1016/s0167-6296(96)00518-8",
+              "title": "The effect of a private sector on the waiting time in national health service.",
+              "year": 1997,
+              "journal": "Journal of Health Economics",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt Iversena (1997) uvádí obě podmínky doslova (bez racionování přijetí soukromý sektor prodlouží čekání, je-li poptávka dostatečně elastická; při racionování čekání roste, smějí-li konzultanti pracovat soukromě). Jde o teoretický model, ne o empirii; článek ho jako model také označuje. Studie už je v article-sources citována (bez PMID)."
+        },
+        {
+          "claim_id": "",
+          "text": "Systematický přehled (Socha & Bech 2011) konstatuje, že tvrdá empirie je slabá („the subject is short on evidence“) a teorie predikuje efekty oběma směry",
+          "location": "Ekonomika duální praxe",
+          "kind": "mechanism",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "21094557",
+              "doi": "10.1016/j.healthpol.2010.10.017",
+              "title": "Physician dual practice: a review of literature.",
+              "year": 2010,
+              "journal": "Health Policy",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Citát i tvrzení o teoretických efektech oběma směry jsou v abstraktu doslova. PubMed vede online vydání 2010, tištěný svazek je 102(1), 2011; rok v článku je přípustný. Studie už je citována."
+        },
+        {
+          "claim_id": "",
+          "text": "Kvaziexperimentální studie s instrumentální proměnnou (Health Economics 2024) zjistila, že růst pokrytí soukromým pojištěním má na veřejné čekací doby efekt statisticky signifikantní, ale prakticky zanedbatelný.",
+          "location": "Empirie: co placená vrstva udělá s veřejnou frontou (Austrálie, Victoria)",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "38356048",
+              "doi": "10.1002/hec.4811",
+              "title": "Effects of private health insurance on waiting time in public hospitals.",
+              "year": 2024,
+              "journal": "Health Economics",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt uvádí, že +1 p. b. pokrytí PHI zkrátí čekání ve veřejných nemocnicích o zhruba 0,34 dne (0,5 %), statisticky významné, ale prakticky zanedbatelné; PHI podle autorů není efektivní strategie ke zkrácení čekání. Data Victoria 2014–2018, instrument ceny domů. Australská studie, přenositelnost na ČR omezená (článek ji uvádí jen jako zahraniční empirii). Atribuce: článek uvádí 'Johar, M. et al.', PubMed uvádí autory Yang, Yong, Zhang — opravu bibliografie posoudí redakce."
+        },
+        {
+          "claim_id": "",
+          "text": "Analýza reprezentativních dat EU-SILC potvrdila, že kdo má pojištění, statisticky významně častěji čerpá tu rychlou, soukromou větev [E: Whyte et al., Health Policy 2020]",
+          "location": "Irsko: když placená a hrazená větev sdílejí jednu nemocnici",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "32475741",
+              "doi": "10.1016/j.healthpol.2020.04.003",
+              "title": "A two-tiered public-private health system: Who stays in (private) hospitals in Ireland?",
+              "year": 2020,
+              "journal": "Health Policy",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Článek v article-sources cituje titul 'A two-tiered public-private health system: Who stays in (private) hospitals in Ireland?' (pii S0168851020300889), což odpovídá PMID 32475741, jehož autory jsou podle PubMed Murphy A, Bourke J, Turner B, ne Whyte. Abstrakt dokládá tvrzení doslova: EU-SILC 2016 (n = 10 131), probit modely, osoby s PHI se statisticky významně častěji rozhodují pro soukromou nemocnici. Věcně supported, chybná je jen atribuce autora v textu i v seznamu zdrojů. Studie už je citována, nepřidává se duplicitně; opravu autorů posoudí redakce."
+        },
+        {
+          "claim_id": "",
+          "text": "Výsledek? Dvourychlostní systém, který přetrvává navzdory desítky let deklarované snaze o rovnost [E: Whyte et al. 2020]",
+          "location": "Irsko: když placená a hrazená větev sdílejí jednu nemocnici",
+          "kind": "policy",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "32475741",
+              "doi": "10.1016/j.healthpol.2020.04.003",
+              "title": "A two-tiered public-private health system: Who stays in (private) hospitals in Ireland?",
+              "year": 2020,
+              "journal": "Health Policy",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "32682572",
+              "doi": "10.1016/j.healthpol.2020.07.001",
+              "title": "Insurance status and waiting times for hospital-based services in Ireland.",
+              "year": 2020,
+              "journal": "Health Policy",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Směr je doložen: Murphy et al. 2020 v abstraktu píší, že navzdory snahám o univerzální jednovrstvý systém nerovný two-tier systém přetrvává; Whyte, Connolly, Wren 2020 (QNHS 2007 a 2010) ukazují, že lidé bez PHI častěji čekají přes 3 měsíce a reforma společného seznamu z roku 2008 rozdíl nesnížila. Časový rozsah 'desítky let' žádný z abstraktů neobsahuje, proto partial; upřesňující věta není nutná. Přidáním studie Whyte, Connolly, Wren 2020 do zdrojů odpovídá in-text citace 'Whyte et al. 2020' skutečné studii."
+        },
+        {
+          "claim_id": "nadstandardy-2-irsko-kanada--10",
+          "text": "čekali veřejně (statutárně) pojištění na elektivní ambulantní výkony zhruba 3× déle než soukromě pojištění — u gastroskopie 36,7 vs. 11,9 pracovního dne, u MRI kolene 14,1 vs. 4,6 dne [E: Lüngen et al., 2008]",
+          "location": "Empirie: Německo (randomizovaný experiment, 2006)",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "18184426",
+              "doi": "10.1186/1475-9276-7-1",
+              "title": "Waiting times for elective treatments according to insurance status: A randomized empirical study in Germany.",
+              "year": 2008,
+              "journal": "International Journal for Equity in Health",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Ověřeno přes metadata PubMed při adjudikaci. Abstrakt uvádí doslova: gastroskopie SHI 36,7 vs. PHI 11,9 pracovního dne, MRT kolene 14,1 vs. 4,6, relativní rozdíl 3,08 (95% CI 1,88–5,04), sběr dat duben–květen 2006, 189 specializovaných praxí (Kolín/Leverkusen/Bonn). Pojistný status volajícího přidělen náhodně (randomizovaná telefonická studie typu mystery caller, ne klinické RCT). Údaj o zhruba 10 % Němců s plným soukromým pojištěním v abstraktu není a neověřoval se (administrativní statistika). Studie už je citována (PMC2246139)."
+        },
+        {
+          "claim_id": "nadstandardy-2-irsko-kanada--01",
+          "text": "Soukromé pojištění má 43–47 % Irů — převážně vyšší příjmové skupiny — a pojišťovny samy uvádějí, že hlavním důvodem jeho nákupu je rychlejší přístup k péči [E: de Buitléir 2019; Burke et al. 2018]",
+          "location": "Irsko: když placená a hrazená větev sdílejí jednu nemocnici",
+          "kind": "epidemiology",
+          "verdict": "not-applicable",
+          "confidence": "high",
+          "evidence": [],
+          "note": "Podíl populace s PHI je administrativní statistika (vládní zpráva de Buitléir) a důvod nákupu pochází z údajů pojišťoven. Recenzovaná literatura tu není správný soudce; tvrzení hlídá data/claims.json (claim --01) a ověření proti primárnímu zdroji. Nepřímo souvisí Whyte, Connolly, Wren 2020: osoby s PHI čekají kratší dobu."
+        }
+      ],
+      "summary": {
+        "supported": 5,
+        "partial": 1,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 1,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Do article-sources přidána nová skupina „Recenzovaná literatura“ s položkou Whyte R, Connolly S, Wren MA. Insurance status and waiting times for hospital-based services in Ireland. Health Policy 2020;124(11):1174-1181 (DOI 10.1016/j.healthpol.2020.07.001, PMID 32682572) — k větě o přetrvávajícím dvourychlostním systému.",
+          "ref": ""
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u nadstandardy-2-irsko-kanada--10 → \"Lüngen et al. 2008; PMID:18184426 / DOI:10.1186/1475-9276-7-1, ověřeno 2026-10-18\"",
+          "ref": "nadstandardy-2-irsko-kanada--10"
+        }
+      ],
+      "notes": "PubMed: rešerše 8 volání, adjudikace (Opus) 3 volání; Consensus nepoužit (PubMed dal 3+ klíčové studie). Finální verdikty: 5 supported, 1 partial, 1 not-applicable; žádné contradicted, takže žádný flag, žádná issue, audit-status (verified) se nemění, prose beze změny. Pro redakci dvě chybné atribuce v bibliografii (audit je neopravuje, studie jsou citované titulem a odkazem): (1) položka „Whyte, R. et al. (2020): A two-tiered public-private health system: Who stays in (private) hospitals in Ireland?“ i in-text „[E: Whyte et al., Health Policy 2020]“ u věty o EU-SILC odkazují ve skutečnosti na Murphy A, Bourke J, Turner B. Health Policy 2020;124(7):765-771, DOI 10.1016/j.healthpol.2020.04.003, PMID 32475741; studie Whyte, Connolly, Wren 2020 (PMID 32682572) je jiná práce o čekacích dobách, nyní přidaná do skupiny Recenzovaná literatura. (2) položka „Johar, M. et al. (2024)“ (DOI 10.1002/hec.4811) má podle PubMed autory Yang, Yong, Zhang. Mimo rozsah literárního auditu zůstávají administrativní a právní údaje (claims --02 až --09: de Buitléir, socialjustice.ie, Commonwealth Fund/OECD, kanadské rozsudky) a indikátorové claims --11 až --15; ty hlídá data/claims.json, nejde o followup evidence-auditu. Biglaiser & Ma 2007 (RAND J Econ) a Siciliani & Hurst 2003 (OECD) nejsou v PubMed indexovány, jejich tvrzení se neadjudikovala."
+    },
+    {
+      "id": "indicator:screening_cervix",
+      "type": "indicator",
+      "checked_at": "2026-10-18",
+      "run_id": "ea-2026-10-18-01",
+      "content_hash": "37170fba81b1d905c6b36da1247854a5a62a5110",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 11,
+        "consensus": 1
+      },
+      "claims": [
+        {
+          "text": "Indikátor v HSPA dashboardu sleduje účast jako klíčový ukazatel funkčnosti sekundární prevence",
+          "location": "patient_story, poslední odstavec",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "26296294",
+              "doi": "10.1016/j.ejca.2015.07.006",
+              "title": "Reaching women who do not participate in the regular cervical cancer screening programme by offering self-sampling kits: a systematic review and meta-analysis of randomised trials.",
+              "year": 2015,
+              "journal": "Eur J Cancer",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Verdikt rešerše potvrzen. Abstrakt Verdoodt 2015 uvádí, že populační pokrytí screeningem je důležitým determinantem rozdílů v incidenci cervikálního karcinomu mezi zeměmi, takže pokrytí jako ukazatel smysl má. Že by šlo o „klíčový“ ukazatel funkčnosti programu, abstrakt nedokládá: pokrytí neměří kvalitu odběru a čtení, návaznost ani léčbu nálezů. Validitu dál omezuje to, co karta sama přiznává: hodnota 65,7 % je agregace všech věkových skupin, ne kohorta 20–64 (ta by vycházela 76,7 %). Navržena jedna věta do limitations s citací."
+        },
+        {
+          "text": "HPV samosběrový test pro neúčastnice (mailem domů, model Nizozemska)",
+          "location": "patient_story, poslední odstavec (politické páky)",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "36517552",
+              "doi": "10.1038/s41416-022-02094-w",
+              "title": "Offering HPV self-sampling kits: an updated meta-analysis of the effectiveness of strategies to increase participation in cervical cancer screening.",
+              "year": 2022,
+              "journal": "Br J Cancer",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "26296294",
+              "doi": "10.1016/j.ejca.2015.07.006",
+              "title": "Reaching women who do not participate in the regular cervical cancer screening programme by offering self-sampling kits: a systematic review and meta-analysis of randomised trials.",
+              "year": 2015,
+              "journal": "Eur J Cancer",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "36568753",
+              "doi": "10.3389/fpubh.2022.1003461",
+              "title": "Does self-sampling for human papilloma virus testing have the potential to increase cervical cancer screening? An updated meta-analysis of observational studies and randomized clinical trials.",
+              "year": 2022,
+              "journal": "Front Public Health",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Účinnost potvrzena. Podle metaanalýz RCT zvýšilo zaslání sady domů všem neúčastnicím (mail-to-all) účast u nedostatečně screenovaných žen o 12,6 procentního bodu (Verdoodt 2015) a o 13,2 procentního bodu (Costa 2022). Model opt-in (sadu si žena musí vyžádat) byl výrazně méně účinný. Že jde o „model Nizozemska“, je tvrzení o zahraniční politice mimo dosah abstraktů a neověřoval jsem ho. Nizozemský program navíc v části období nabízel sadu na vyžádání (opt-in), tedy variantu, kterou literatura hodnotí jako méně účinnou. Proto confidence medium. Přenositelnost na ČR studie nedokládají."
+        },
+        {
+          "text": "mezinárodní guidelines (WHO, ASCCP) doporučují tříleté nebo pětileté intervaly s HPV testem jako přesnější",
+          "location": "patient_story, třetí odstavec (strukturální anomálie)",
+          "kind": "efficacy",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "24192252",
+              "doi": "10.1016/S0140-6736(13)62218-7",
+              "title": "Efficacy of HPV-based screening for prevention of invasive cervical cancer: follow-up of four European randomised controlled trials.",
+              "year": 2013,
+              "journal": "Lancet",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "39486904",
+              "doi": "10.1016/S2468-2667(24)00218-4",
+              "title": "Human papillomavirus-based cervical screening and long-term cervical cancer risk: a randomised health-care policy trial in Sweden.",
+              "year": 2024,
+              "journal": "Lancet Public Health",
+              "study_type": "rct",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "24575388",
+              "doi": "10.3389/fonc.2014.00020",
+              "title": "The Possible Effects on Socio-Economic Inequalities of Introducing HPV Testing as Primary Test in Cervical Cancer Screening Programs.",
+              "year": 2014,
+              "journal": "Front Oncol",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Jádro tvrzení, tedy že HPV test chrání lépe než cytologie a umožňuje delší intervaly, je doloženo. Ronco 2014 (navazující sledování 4 evropských RCT, 176 464 žen) uvádí o 60–70 % vyšší ochranu před invazivním karcinomem (RR 0,60; 95% CI 0,40–0,89) a podporuje intervaly nejméně 5 let od 30 let věku. Švédská randomizovaná studie zdravotní politiky (Wang 2024, ověřeno v PubMed) uvádí u pozvaných k HPV screeningu o 17 % nižší riziko (HR 0,83; 0,70–0,98) a HPV screening označuje za globálně doporučovanou politiku. Obsah konkrétních doporučení WHO a ASCCP ani „tříletý“ interval s HPV testem abstrakty nedokládají. RCT podporují ≥ 5 let. Doporučení WHO a ASCCP v PubMed indexované nejsou, k ověření u primárních dokumentů. Historická část věty (roční cytologie „politicky stanovena v 90. letech“) leží mimo dosah literatury. K posouzení redakcí: věta „Česko přešlo na hybridní model 2021“ i údaj „tříletá (HPV od 2021)“ ve druhém odstavci jsou v rozporu s method_notes téže karty (hrazené HPV ko-testování ve 35, 45 a 55 letech od 1. 1. 2024)."
+        }
+      ],
+      "summary": {
+        "supported": 1,
+        "partial": 2,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "indicators/screening_cervix.json → literature: Verdoodt et al. 2015, Eur J Cancer (PMID 26296294, DOI 10.1016/j.ejca.2015.07.006), metaanalýza RCT; pokrytí jako determinant incidence, samosběr mail-to-all vs opt-in.",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/screening_cervix.json → literature: Costa et al. 2022, Br J Cancer (PMID 36517552, DOI 10.1038/s41416-022-02094-w), metaanalýza; zaslání HPV samoodběrové sady všem neúčastnicím +13,2 p. b.",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/screening_cervix.json → literature: Ronco et al. 2014, Lancet (PMID 24192252, DOI 10.1016/S0140-6736(13)62218-7), sledování 4 evropských RCT; HPV vs cytologie, intervaly ≥ 5 let.",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/screening_cervix.json → literature: Wang et al. 2024, Lancet Public Health (PMID 39486904, DOI 10.1016/S2468-2667(24)00218-4), randomizovaná studie zdravotní politiky ve Švédsku; HR 0,83 pro HPV screening.",
+          "ref": ""
+        },
+        {
+          "type": "card-note",
+          "detail": "indicators/screening_cervix.json → limitations: připojena věta „Pokrytí je podle metaanalýzy Verdoodt et al. 2015 (Eur J Cancer, PMID 26296294) důležitým determinantem mezinárodních rozdílů v incidenci karcinomu děložního čípku, samo ale neměří kvalitu vyšetření, návaznost ani léčbu nálezů.“",
+          "ref": ""
+        }
+      ],
+      "followup": "Neověřeno: (1) obsah doporučení WHO 2021 a ASCCP včetně délky intervalů (nejsou indexovaná v PubMed, k ověření u primárních dokumentů; „tříletý“ interval s HPV testem RCT nepodporují); (2) přiřazení samosběru mail-to-all k „modelu Nizozemska“ (zahraniční politika mimo dosah abstraktů). K posouzení redakcí mimo literaturu: patient_story uvádí přechod na HPV/hybridní model v roce 2021 a „tříletá (HPV od 2021)“, method_notes téže karty uvádí hrazené HPV ko-testování od 1. 1. 2024 ve 35, 45 a 55 letech.",
+      "notes": "Karta neměla literaturu; 3 tvrzení vybrána z patient_story (validita ukazatele, samosběr, HPV vs cytologie). Rešerše (Sonnet): 8 volání PubMed, 1 dotaz Consensus; výsledek Consensus nepoužit jako evidence bez ověření v PubMed; nerelevantní PMIDy vyřazeny. Adjudikace (Opus): 3 volání PubMed, ověřena švédská studie Wang 2024 (PMID 39486904) a doplněn Ronco 2014 (PMID 24192252). Parametry karty (signal_thresholds good 3 / warn 10, direction) se na literaturu neodvolávají, nehodnoceno. Zápis: pole literature (4 studie) a jedna věta do limitations s citací; patient_story beze změny."
+    },
+    {
+      "id": "indicator:vakcinace_hpv",
+      "type": "indicator",
+      "checked_at": "2026-10-18",
+      "run_id": "ea-2026-10-18-01",
+      "content_hash": "d6116ac33dabfe676374a6cd0f50e10e9102d891",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 7,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "text": "Indikátor v HSPA dashboardu sleduje HPV proočkovanost jako klíčový ukazatel primární onkologické prevence.",
+          "location": "patient_story (poslední věta); direction higher_is_better",
+          "kind": "measurement",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "41276264",
+              "doi": "10.1002/14651858.CD015363.pub2",
+              "title": "Effects of human papillomavirus (HPV) vaccination programmes on community rates of HPV-related disease and harms from vaccination.",
+              "year": 2025,
+              "journal": "Cochrane Database Syst Rev",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "34741816",
+              "doi": "10.1016/S0140-6736(21)02178-4",
+              "title": "The effects of the national HPV vaccination programme in England, UK, on cervical cancer and grade 3 cervical intraepithelial neoplasia incidence: a register-based observational study.",
+              "year": 2021,
+              "journal": "Lancet",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "42309117",
+              "doi": "10.1016/S0140-6736(26)00918-9",
+              "title": "Cervical cancer mortality trends following HPV vaccination in England, 2001-24: an analysis of population-based mortality data.",
+              "year": 2026,
+              "journal": "Lancet",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace přeformulovala tvrzení na doslovnou větu karty o validitě ukazatele; číslo 69,8 % (ÚZIS 2023) je administrativní statistika mimo rozsah evidence-auditu (hlídá claims/nightly-scan). Cochrane 2025 (225 studií, střední jistota): vakcinační programy snižují výskyt karcinomu děložního hrdla (RR 0,37; 95% CI 0,25–0,56), u očkovaných do 16 let RR 0,20 (0,09–0,44), větší přínos u mladších adolescentů. Falcaro 2021 (Anglie): pokles výskytu o 87 % (72–94) při nabídce ve 12–13 letech vs. 34 % v 16–18 letech. Sasieni 2026: vysoká proočkovanost spojena s výrazným poklesem úmrtí. To podpírá proočkovanost v rané adolescenci jako procesní ukazatel primární prevence a směr higher_is_better. Abstrakty nehodnotí definici „alespoň jedna dávka“ (Cochrane NMA 2025 uvádí, že data o dávkových schématech u CIN2+ chybí), prahy signálu 5/10 % ani benchmarky OECD/EU; přenositelnost na ČR je odvozená, česká studie nenalezena."
+        },
+        {
+          "text": "Reálný dopad na úmrtnost: analýza populačních dat z Anglie (Sasieni & Falcaro, Lancet 2026, DOI 10.1016/S0140-6736(26)00918-9, dle PubMed) zjistila u žen 20–24 let očkovaných ve 12–13 letech (proočkovanost ~88–90 %) nulovou úmrtnost na cervikální karcinom v letech 2020–2024 — pokles o 100 % (95% CI 84–100) oproti 23,1 očekávaných úmrtím a ~199,6 odvrácených úmrtí do konce 2024. První národní data dokládající dopad HPV vakcinace přímo na úmrtnost.",
+          "location": "method_notes",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42309117",
+              "doi": "10.1016/S0140-6736(26)00918-9",
+              "title": "Cervical cancer mortality trends following HPV vaccination in England, 2001-24: an analysis of population-based mortality data.",
+              "year": 2026,
+              "journal": "Lancet",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Ověřeno v PubMed (Lancet 2026;408(10550):162-168, typ Journal Article, bez retrakce/errata). Abstrakt doslova: ženy 20–24 let v letech 2020–24, proočkovanost ~88–90 % ve 12–13 letech, 0 úmrtí vs. 23,1 očekávaných, pokles 100 % (95% CI 84–100), ~199,6 méně úmrtí (95% CI 125,0–274,2) do konce 2024. Dvě drobné výhrady k posouzení redakcí: (1) 199,6 je odhad za všechny očkované kohorty v Anglii, ne jen za skupinu 20–24 let, jak by věta mohla číst; (2) autoři píší o observačním doložení a asociaci („first robust national-level evidence, albeit observational … associated with“), formulace „reálný dopad“ / „dokládající dopad“ je kauzálně o něco silnější a „první národní data“ odpovídá spíš „první robustní národní doklad“. Čísla i směr sedí, proto supported."
+        },
+        {
+          "text": "HPV vakcína je primární prevence karcinomu cervix, ale také karcinomu anorektálního, oropharyngeálního a penisového.",
+          "location": "patient_story (4. odstavec)",
+          "kind": "efficacy",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "41276264",
+              "doi": "10.1002/14651858.CD015363.pub2",
+              "title": "Effects of human papillomavirus (HPV) vaccination programmes on community rates of HPV-related disease and harms from vaccination.",
+              "year": 2025,
+              "journal": "Cochrane Database Syst Rev",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "41276263",
+              "doi": "10.1002/14651858.CD015364.pub2",
+              "title": "Human papillomavirus (HPV) vaccination for the prevention of cervical cancer and other HPV-related diseases: a network meta-analysis.",
+              "year": 2025,
+              "journal": "Cochrane Database Syst Rev",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Část o karcinomu děložního hrdla je doložena (Cochrane 2025 populační přehled, střední jistota, RR 0,37). U ostatních lokalizací abstrakty doklad na úrovni nádorů nedávají: NMA RCT (Bergman 2025) uvádí, že pro karcinom děložního hrdla ani jiné nádory data z RCT nejsou; high-grade AIN snížení jen v jedné studii u MSM (RR 0,75; 95% CI 0,53–1,07, nízká jistota), high-grade PeIN bez rozdílu (RR 1,00; 0,20–4,93, nízká jistota); orofaryngeální karcinom v dohledaných abstraktech neřešen. Nejde o rozpor (absence dat na úrovni nádorů ≠ opak, jedna nulová studie ≠ contradicted), ale rozsah tvrzení je širší než dohledaná evidence. Prose karty audit nemění (u karty smí jen literature a u measurement verdiktu limitations); návrh upřesnění předán redakci jako card-note."
+        }
+      ],
+      "summary": {
+        "supported": 2,
+        "partial": 1,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "V kartě indicators/vakcinace_hpv.json založeno pole \"literature\" (dosud chybělo) se čtyřmi záznamy: Cochrane 2025 populační přehled (PMID 41276264, DOI 10.1002/14651858.CD015363.pub2, systematic review), Cochrane 2025 síťová metaanalýza RCT (PMID 41276263, DOI 10.1002/14651858.CD015364.pub2, meta-analysis), Falcaro 2021 Lancet (PMID 34741816, DOI 10.1016/S0140-6736(21)02178-4, cohort) a Sasieni & Falcaro 2026 Lancet (PMID 42309117, DOI 10.1016/S0140-6736(26)00918-9, other — zdroj věty v method_notes); každý s poznámkou, k čemu v kartě slouží, verified_at 2026-10-18.",
+          "ref": ""
+        },
+        {
+          "type": "card-note",
+          "detail": "Návrh k posouzení redakcí (audit prose karty nemění): (a) patient_story, věta o anorektálním, oropharyngeálním a penisovém karcinomu je širší než dohledaná evidence; možné upřesnění: „Přímý doklad snížení výskytu rakoviny zatím existuje u karcinomu děložního hrdla (Cochrane 2025, PMID 41276264); pro anální, orofaryngeální a penilní karcinom randomizované studie výstupy na úrovni nádorů nemají a u přednádorových lézí řitě a penisu je jistota důkazů nízká (Cochrane 2025, PMID 41276263).“ (b) method_notes, věta Sasieni & Falcaro 2026: ~199,6 odvrácených úmrtí je odhad za všechny očkované kohorty, ne jen ženy 20–24 let; studie je observační (asociace), „první národní data dokládající dopad“ zvážit jako „první robustní národní doklad (observační)“.",
+          "ref": ""
+        }
+      ],
+      "followup": "Evidence k orofaryngeálnímu karcinomu (část tvrzení 3 v patient_story) dohledaná nebyla — strop volání; v příštím běhu cíleně dohledat. Neověřeno literaturou: WHO cíl 90 % do 15 let (dokument WHO, ne v PubMed), prahy signálu 5/10 % a benchmarky OECD/EU; česká studie proočkovanosti nenalezena.",
+      "notes": "Consensus nepoužit (PubMed dal dostatek: Cochrane 2025 systematický přehled + NMA, Falcaro 2021, Sasieni 2026). Karta dosud neměla seznam literatury; v textu citována jen Sasieni & Falcaro (ověřeno, found_via article). Volání: rešerše 6 + adjudikace 1 (get_article_metadata pro 42309117, 41276263, 41276264, 34741816; všechny bez retrakce nebo errata). Verdikty 2× supported, 1× partial, 0 contradicted — bez flagu a issue. Tvrzení 1 přeformulováno na doslovnou větu karty o validitě ukazatele; číslo 69,8 % je administrativní statistika ÚZIS mimo rozsah auditu. prose_change prázdný: jediné partial tvrzení (efficacy, patient_story) leží v kartě, kde audit smí měnit jen literature a u measurement verdiktu jednu větu v limitations; návrh upřesnění jde redakci jako card-note. claim-note se nenavrhuje (claims.json se váže na články). Mimo audit (popisné/politické, strop 3 tvrzení): stagnace trendu, Loono, pediatrická komunikace, politické páky. Vyřazené nerelevantní nálezy: PMID 41319655, 41312925, 40666151, 36085257, 40919695, 37163625, 34694000, 42811780."
+    },
+    {
+      "id": "indicator:vakcinace_pneumokok_65",
+      "type": "indicator",
+      "checked_at": "2026-10-18",
+      "run_id": "ea-2026-10-18-01",
+      "content_hash": "3cbd696ddeb3f345eb8323fb0ffeb2a2c989cd9c",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 11,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "text": "Meta-analýza Cochrane (2013, aktualizace 2017) potvrzuje 64% účinnost PPV23 proti invazivní pneumokokové nemoci.",
+          "location": "importance",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "23440780",
+              "doi": "10.1002/14651858.CD000422.pub3",
+              "title": "Vaccines for preventing pneumococcal infection in adults.",
+              "year": 2013,
+              "journal": "Cochrane Database Syst Rev",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "28061505",
+              "doi": "10.1371/journal.pone.0169368",
+              "title": "Effectiveness of the 23-Valent Pneumococcal Polysaccharide Vaccine (PPV23) against Pneumococcal Disease in the Elderly: Systematic Review and Meta-Analysis.",
+              "year": 2017,
+              "journal": "PLoS One",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "37242402",
+              "doi": "10.3390/pathogens12050732",
+              "title": "Systematic Review and Meta-Analysis of the Efficacy and Effectiveness of Pneumococcal Vaccines in Adults.",
+              "year": 2023,
+              "journal": "Pathogens",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Směr a řád účinku sedí: Cochrane (Moberley 2013, 18 RCT) uvádí proti IPD OR 0,26 (95% CI 0,14–0,45) v RCT a OR 0,48 (0,37–0,61) v ne-randomizovaných studiích. Číslo 64 % v abstraktu Cochrane není. Ve Falkenhorst 2017 (≥ 60 let, vyspělé země) jde o VE 64 % (35–80) proti pneumokokové pneumonii ze 2 RCT. Proti IPD tam vychází 73 % (10–92) v RCT, 45 % v kohortách a 59 % v case-control studiích. Karta tedy nejspíš zaměnila výsledek a zdroj. Aktualizace Cochrane z roku 2017 se v PubMed nedohledala, posledním dohledaným vydáním je pub3 z roku 2013. Farrar 2023 dává souhrnnou účinnost PPSV23 proti IPD vakcinálních sérotypů 45 % (37–51). Číslo mimo abstrakt znamená nejvýš partial. Prose karty audit nemění, návrh formulace je v card-note."
+        },
+        {
+          "text": "Pneumokoková vakcína je nákladově efektivní intervence s dobře prokázaným účinkem na snížení IPD, hospitalizací z důvodu pneumonie a mortality u 65+.",
+          "location": "importance",
+          "kind": "efficacy",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "23440780",
+              "doi": "10.1002/14651858.CD000422.pub3",
+              "title": "Vaccines for preventing pneumococcal infection in adults.",
+              "year": 2013,
+              "journal": "Cochrane Database Syst Rev",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "28061505",
+              "doi": "10.1371/journal.pone.0169368",
+              "title": "Effectiveness of the 23-Valent Pneumococcal Polysaccharide Vaccine (PPV23) against Pneumococcal Disease in the Elderly: Systematic Review and Meta-Analysis.",
+              "year": 2017,
+              "journal": "PLoS One",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "30038423",
+              "doi": "10.1038/s41598-018-29280-2",
+              "title": "Pneumococcal Disease and the Effectiveness of the PPV23 Vaccine in Adults: A Two-Stage Bayesian Meta-Analysis of Observational and RCT Reports.",
+              "year": 2018,
+              "journal": "Sci Rep",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "40994424",
+              "doi": "10.1080/13696998.2025.2565902",
+              "title": "The incremental net monetary benefit of higher-valent pneumococcal conjugate vaccines for adults: a systematic review and meta-analysis of economic evaluations.",
+              "year": 2025,
+              "journal": "J Med Econ",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Účinek proti IPD je doložen: Cochrane 2013, Falkenhorst 2017 i Latifi-Navid 2018. Účinek proti pneumokokové pneumonii doložen je (Falkenhorst: 64 % v RCT, 48 % v kohortách). U pneumonie z jakékoli příčiny a u mortality je evidence slabá až nulová. Cochrane 2013 nenašel ve vyspělých zemích účinek proti pneumonii z jakékoli příčiny (OR 0,71; 0,45–1,12, resp. u chronicky nemocných OR 0,93; 0,73–1,19). Celková mortalita: OR 0,90 (0,74–1,09). Závěr Cochrane zní: „does not provide evidence to support the routine use of PPV to prevent all-cause pneumonia or mortality“. Formulace „dobře prokázaný účinek na mortalitu“ je tedy širší než evidence. Na contradicted to nestačí, protože tvrzení se týká pneumokokových vakcín obecně (včetně PCV) a pro IPD a pneumokokovou pneumonii platí. Nákladová efektivita: meta-analýza ekonomických evaluací (J Med Econ 2025) ukazuje u PCV20 většinou příznivý čistý přínos, ve srovnání se žádnou vakcinací u 60+ však neprůkazný (INB −13,3; CI −122 až 95,5). Nejde o data z ČR, přenositelnost na český systém úhrad neověřena. Modelové studie výrobců (Dánsko, Francie 2026) do registru nezařazeny kvůli střetu zájmů a modelovému designu."
+        },
+        {
+          "text": "Invazivní pneumokoková nemoc (IPD) je u 65+ spojena s 15–25 % nemocniční smrtností.",
+          "location": "definition / patient_story",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "34088948",
+              "doi": "10.1038/s41598-021-91234-y",
+              "title": "Prognostic factors for mortality in invasive pneumococcal disease in adult: a system review and meta-analysis.",
+              "year": 2021,
+              "journal": "Sci Rep",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "42371958",
+              "doi": "10.1371/journal.pone.0352333",
+              "title": "Epidemiology of invasive pneumococcal disease in Southwest Sweden during the first eleven years after the introduction of general childhood pneumococcal vaccination.",
+              "year": 2026,
+              "journal": "PLoS One",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "40633023",
+              "doi": "10.1080/21645515.2025.2515760",
+              "title": "Clinical burden of pneumococcal disease among adults in France: A retrospective cohort study.",
+              "year": 2025,
+              "journal": "Hum Vaccin Immunother",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Řád velikosti sedí. Meta-analýza Chen 2021 (26 studií dospělých s IPD) uvádí celkovou mortalitu 20,8 % (95% CI 17,5–24,0) a vyšší věk jako rizikový faktor (OR 3,04; 2,50–3,68). Hodnotu zvlášť pro 65+ ani specificky nemocniční smrtnost abstrakt neuvádí. Švédská kohorta 2009–2019 má CFR IPD 12,9 % napříč věky, tedy pod dolní hranicí rozsahu. Francouzská kohorta uvádí roční mortalitu z jakékoli příčiny 26,5 % po hospitalizaci pro pneumokokové onemocnění, což je jiný ukazatel. Rozsah 15–25 % pro 65+ tedy z abstraktů doslova neplyne. Jde o zahraniční data, přenositelnost na ČR neověřena. Stejné číslo opakuje patient_story („v 15–25 % případů ke smrti“, „smrtnosti 15–25 % v hospitalizovaných skupinách“)."
+        }
+      ],
+      "summary": {
+        "supported": 0,
+        "partial": 3,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "indicators/vakcinace_pneumokok_65.json → literature, objekt 1: Cochrane Database Syst Rev 2013, PMID 23440780 / DOI 10.1002/14651858.CD000422.pub3"
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/vakcinace_pneumokok_65.json → literature, objekt 2: PLoS One 2017, PMID 28061505 / DOI 10.1371/journal.pone.0169368"
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/vakcinace_pneumokok_65.json → literature, objekt 3: Sci Rep 2018, PMID 30038423 / DOI 10.1038/s41598-018-29280-2"
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/vakcinace_pneumokok_65.json → literature, objekt 4: J Med Econ 2025, PMID 40994424 / DOI 10.1080/13696998.2025.2565902"
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/vakcinace_pneumokok_65.json → literature, objekt 5: Sci Rep 2021, PMID 34088948 / DOI 10.1038/s41598-021-91234-y"
+        },
+        {
+          "type": "card-note",
+          "detail": "Návrh pro redakci, do prose karty audit NEZAPISUJE (audit smí do karty jen pole literature, větu do limitations jen u verdiktu measurement). (1) importance: věta „Meta-analýza Cochrane (2013, aktualizace 2017) potvrzuje 64% účinnost PPV23 proti IPD“ míchá dva zdroje. Cochrane 2013 (PMID 23440780) uvádí proti IPD OR 0,26 v RCT, 64 % je VE proti pneumokokové pneumonii z Falkenhorst 2017 (PMID 28061505) a aktualizace Cochrane 2017 v PubMed není. Návrh formulace: „Cochrane přehled (Moberley 2013) i metaanalýza Falkenhorst 2017 ukazují silnou ochranu PPV23 proti invazivní pneumokokové nemoci (v RCT OR 0,26, resp. VE 73 %), v observačních studiích nižší (45–59 %).“ (2) importance: „dobře prokázaný účinek na … mortalitu“ je širší než evidence. Cochrane 2013 nenašel u PPV23 průkazný účinek na pneumonii z jakékoli příčiny ve vyspělých zemích ani na celkovou mortalitu (OR 0,90; 95% CI 0,74–1,09). Návrh doplnit výhradu. (3) definition a patient_story: rozsah 15–25 % nemocniční smrtnosti IPD u 65+ je řádově v souladu s meta-analýzou Chen 2021 (PMID 34088948; mortalita IPD u dospělých 20,8 %), ale pro 65+ ani nemocniční smrtnost doslovně doložen není. Zvážit uvedení zdroje, nejlépe surveillance SZÚ pro ČR.",
+          "ref": "indicators/vakcinace_pneumokok_65.json"
+        }
+      ],
+      "followup": "Neauditováno (strop rešerše): validita ukazatele jako míry výkonu (measurement), prahy signal_thresholds good 5 / warn 15 a benchmark OECD 50 % — karta k nim nemá literaturu. Existence aktualizace Cochrane CD000422 z roku 2017 zůstává nepotvrzena (v PubMed nedohledána, ani vyloučena cíleným dotazem na novější verzi). Smrtnost IPD pro 65+ v ČR (surveillance SZÚ) neověřena.",
+      "notes": "Karta neměla odkaz na literaturu (jen zmínka Cochrane 2013, aktualizace 2017). Cochrane CD000422.pub3 (2013) ověřena v PubMed; dohledání citací selhalo kvůli chybnému ročníku a stránkám, proto nalezena vyhledáváním. Rešerše 8 volání PubMed (strop), Consensus nevolán. Adjudikace (Opus): 3 volání PubMed, ověřeny abstrakty Cochrane 2013 a Falkenhorst 2017 a metadata 6 PMID; jako kontext použity Härnqvist 2026 a Bailey 2025, protokoly, modelové studie výrobců a studie bez relevantního čísla vyřazeny. Cílený dotaz na smrtnost IPD dohledal Chen 2021. Všechna 3 tvrzení partial: směr sedí, čísla (64 %, 15–25 % pro 65+) v abstraktech doslova nejsou a tvrzení o mortalitě je širší než evidence. Žádné contradicted, proto žádný flagged ani issue. Prose karty se nemění (u karty smí audit jen pole literature), návrhy formulací jdou redakci jako card-note. Karta je mimo claims.json, proto žádný claim-note. Proočkovanost ČR 5,5 % je datová hodnota, ne předmět evidence-auditu."
+    },
+    {
+      "id": "indicator:hazardni_hrani_adolescenti",
+      "type": "indicator",
+      "checked_at": "2026-10-18",
+      "run_id": "ea-2026-10-18-01",
+      "content_hash": "aa39e9788f5a737505ab373569093d5262f0c91c",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 9,
+        "consensus": 1
+      },
+      "claims": [
+        {
+          "text": "Škála Lie/Bet je screeningový nástroj, ne diagnóza; ... Riziko problémového hráčství (Lie/Bet) se mezi lety 2019 a 2024 ztrojnásobilo z 2,3 % na 7,0 %.",
+          "location": "limitations (5) + method_notes + data_source.primary.note",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "31759246",
+              "doi": "10.1016/j.cpr.2019.101784",
+              "title": "The diagnostic accuracy of brief screening instruments for problem gambling: A systematic review and meta-analysis.",
+              "year": 2019,
+              "journal": "Clinical psychology review",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "30744515",
+              "doi": "10.1080/22423982.2019.1577094",
+              "title": "Gambling in Greenlandic adolescents.",
+              "year": 2019,
+              "journal": "International journal of circumpolar health",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "32635320",
+              "doi": "10.3390/ijerph17134803",
+              "title": "Interaction of Socioeconomic Status with Risky Internet Use, Gambling and Substance Use in Adolescents from a Structurally Disadvantaged Region in Central Europe.",
+              "year": 2020,
+              "journal": "International journal of environmental research and public health",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace: metadata Dowling 2019 ověřena v PubMed (PMID 31759246 = DOI 10.1016/j.cpr.2019.101784). Metaanalýza 25 článků potvrzuje, že Lie/Bet je krátký screeningový nástroj, řadí ho však jen mezi 'slibné' kratší možnosti (uspokojivou přesnost splnilo pět jiných nástrojů) a výslovně upozorňuje na omezenou evidenci napříč věkovými skupinami. Kvalifikace 'screening, ne diagnóza' je tedy podpořena; validita Lie/Bet u 16letých je doložená jen omezeně (grónská pilotní práce, česká studie bez validace). Čísla 2,3 % / 7,0 % jsou datová hodnota národní zprávy ESPAD (Chomynová & Dvořáková 2025), recenzovaná literatura je neověřuje ani nevyvrací; číslo mimo abstrakt → nejvýš partial."
+        },
+        {
+          "text": "Časná zkušenost s hazardem je přitom nejsilnějším prediktorem problémového hráčství v dospělosti.",
+          "location": "importance (perex)",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "27855334",
+              "doi": "10.1016/j.cpr.2016.10.008",
+              "title": "Early risk and protective factors for problem gambling: A systematic review and meta-analysis of longitudinal studies.",
+              "year": 2017,
+              "journal": "Clinical psychology review",
+              "study_type": "meta-analysis",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "26234317",
+              "doi": "10.1111/add.13083",
+              "title": "Variety of gambling activities from adolescence to age 30 and association with gambling problems: a 15-year longitudinal study of a general population sample.",
+              "year": 2015,
+              "journal": "Addiction",
+              "study_type": "cohort",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "36347261",
+              "doi": "10.1111/jcpp.13713",
+              "title": "Annual Research Review: Emergence of problem gambling from childhood to emerging adulthood: a systematic review.",
+              "year": 2022,
+              "journal": "Journal of child psychology and psychiatry, and allied disciplines",
+              "study_type": "systematic review",
+              "found_via": "consensus",
+              "relation": "context",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "36254750",
+              "doi": "10.1017/S0033291722003051",
+              "title": "Disordered gambling in a longitudinal birth cohort: from childhood precursors to adult life outcomes.",
+              "year": 2022,
+              "journal": "Psychological medicine",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace: přiřazení PMID-DOI u Dowling 2017, Carbonneau 2015 a Richard 2022 ověřeno v PubMed (metadata načtena, shoda). Dowling 2017 (15 longitudinálních studií) řadí počet hráčských aktivit a závažnost problémového hráčství v adolescenci mezi 13 individuálních rizikových faktorů vedle alkoholu, impulzivity, mužského pohlaví, antisociálního chování aj.; účinky jsou 'small to medium' a abstrakt žádný faktor neoznačuje za nejsilnější. Carbonneau 2015: rizikem je vysoká pestrost hraní (4-5 aktivit od 15 let; OR 2,26 vůči časnému nízkému hraní), ne samotná časná zkušenost. Směr (adolescentní hraní je rizikový marker pozdějších problémů) je podpořen, superlativ 'nejsilnější prediktor' evidence nenese. Nejde o contradicted (žádná syntéza přímo neřadí prediktory), proto partial. Zahraniční kohorty (Kanada, Nový Zéland, Austrálie) – přenositelnost na ČR předpokládaná, ne doložená. Formulaci v importance doporučeno upravit redakcí (card-note), audit prose nemění."
+        },
+        {
+          "text": "Normalizace sázení ve vrstevnických skupinách ...; hraní přes účty rodičů a starších kamarádů (determinanty dostupnosti a vrstevnické normy)",
+          "location": "determinants + patient_story",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "low",
+          "evidence": [
+            {
+              "pmid": "27855334",
+              "doi": "10.1016/j.cpr.2016.10.008",
+              "title": "Early risk and protective factors for problem gambling: A systematic review and meta-analysis of longitudinal studies.",
+              "year": 2017,
+              "journal": "Clinical psychology review",
+              "study_type": "meta-analysis",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "35368861",
+              "doi": "10.1007/s11469-020-00401-1",
+              "title": "Problem Gambling in Early Adulthood: a Population-Based Study.",
+              "year": 2020,
+              "journal": "International journal of mental health and addiction",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace: Dowling 2017 uvádí jako vztahový rizikový faktor antisociální chování vrstevníků (ne přímo vrstevnické normy sázení) a rodičovský dohled jako ochranný faktor; Emond 2020 (ALSPAC, UK) spojuje problémové hráčství ve 20 letech s nižším rodičovským dohledem a problémovým hraním matky. Vrstevnický a rodinný kontext je tak jako determinanta nepřímo podpořen, konkrétní mechanismy karty (normalizace sázení v partě, cizí účty, reklama, sponzoring sportu) abstrakty nepokrývají. Jen zahraniční evidence – přenositelnost na ČR nedoložena. Determinanty jsou kvalitativní rámec karty, ne kvantitativní tvrzení; partial s nízkou jistotou."
+        }
+      ],
+      "summary": {
+        "supported": 0,
+        "partial": 3,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "indicators/hazardni_hrani_adolescenti.json → literature: Dowling et al. 2019, Clin Psychol Rev (PMID 31759246, DOI 10.1016/j.cpr.2019.101784) — k limitaci (5) a doplňkovému ukazateli Lie/Bet; pro hodnoty 2,3 % / 7,0 % není zdrojem",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/hazardni_hrani_adolescenti.json → literature: Dowling et al. 2017, Clin Psychol Rev (PMID 27855334, DOI 10.1016/j.cpr.2016.10.008) — k větě v importance o časné zkušenosti a k determinantám",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/hazardni_hrani_adolescenti.json → literature: Carbonneau et al. 2015, Addiction (PMID 26234317, DOI 10.1111/add.13083) — k větě v importance (rizikem je pestrost a intenzita hraní)",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/hazardni_hrani_adolescenti.json → literature: Emond et al. 2020, Int J Ment Health Addict (PMID 35368861, DOI 10.1007/s11469-020-00401-1) — k determinantám (rodinný a sociální kontext)",
+          "ref": ""
+        },
+        {
+          "type": "card-note",
+          "detail": "indicators/hazardni_hrani_adolescenti.json → limitations (5): připojena jedna věta s citací (Opus, measurement verdikt tvrzení 1): „Metaanalýza krátkých screeningových nástrojů řadí Lie/Bet jen mezi „slibné“ kratší možnosti a upozorňuje na omezenou evidenci jejich přesnosti napříč věkovými skupinami (Dowling et al. 2019, PMID 31759246), u šestnáctiletých je proto třeba číst výsledek jako orientační signál rizika.“",
+          "ref": ""
+        },
+        {
+          "type": "card-note",
+          "detail": "K posouzení redakcí (audit prose nemění): věta v importance „Časná zkušenost s hazardem je přitom nejsilnějším prediktorem problémového hráčství v dospělosti“ přeceňuje evidenci — metaanalýza Dowling 2017 (PMID 27855334) neřadí prediktory a uvádí malé až střední účinky, Carbonneau 2015 (PMID 26234317) ukazuje jako rizikovou vysokou pestrost hraní, ne samotnou časnou zkušenost. Návrh formulace: „Časté a pestré hraní hazardu v dospívání patří mezi doložené rizikové faktory problémového hráčství v dospělosti“.",
+          "ref": ""
+        }
+      ],
+      "notes": "Karta neměla odkaz na recenzovanou literaturu (jen data ESPAD/NMS); doplněno pole literature (4 studie) a jedna věta do limitations (5). Rešerše Sonnet: PubMed 8 volání, Consensus 1 dotaz. Adjudikace Opus: 1 volání PubMed (metadata 5 PMID) potvrdilo přiřazení PMID-DOI u Dowling 2017, Richard 2022 a Carbonneau 2015 a metadata Dowling 2019 a Emond 2020. Všechna tři tvrzení partial, žádné contradicted (bez flagged a issue). Věta v importance o „nejsilnějším prediktoru“ ponechána redakci (card-note), audit prose nemění. Prahy signálu (good 5 / warn 15) a validita položky ESPAD jsou metodická rozhodnutí karty, ne tvrzení k ověření literaturou. Slutske 2022 (36254750) zůstává jako context z rešerše (ověřeno v PubMed ve fázi rešerše)."
     }
   ]
 }
