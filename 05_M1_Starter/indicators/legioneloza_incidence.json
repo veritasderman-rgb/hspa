@@ -1,0 +1,53 @@
+{
+  "id": "legioneloza_incidence",
+  "name": "Incidence legionelózy (míra hlášených případů)",
+  "area": "Výsledky",
+  "domain": "Přenosné nemoci",
+  "subdomain": "Nákazy z vody a prostředí",
+  "definition": "Počet hlášených případů legionářské nemoci (legionelóza, dg. A48.1 dle MKN-10) na 100 000 obyvatel za kalendářní rok podle evropské definice případu z roku 2018 (potvrzené a pravděpodobné případy: alespoň jeden pozitivní laboratorní test a klinická diagnóza zápalu plic). Data za ČR hlásí do ECDC Státní zdravotní ústav z Informačního systému infekčních nemocí (ISIN, dříve EPIDAT).",
+  "unit": "na 100 000 obyvatel",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "ecdc_atlas",
+      "endpoint": "https://atlas.ecdc.europa.eu/public/AtlasService/rest/GetMeasureResultsForTimeUnitAndGeoRegion?measureId=1223625&timeUnit=Y&geoCode=CZ",
+      "dataset": "ECDC Surveillance Atlas of Infectious Diseases — Legionnaires' disease, dataset CURRENT.LEGI.YEARLY (id 519, health topic 30), populace All cases, measure ALL.RATE (id 1223625, Notification rate N/100000). Počty: ALL.COUNT (1223624), úmrtí ALL.FATAL.COUNT (1223627), věkově standardizovaná míra ALL.AGESTANDARDISED.RATE (1223626).",
+      "dimensions": {
+        "country": "CZ",
+        "time": "rok",
+        "measure": "notification rate na 100 000 obyvatel"
+      },
+      "note": "Ověřeno přes REST API 2026-10-19: ČR 2019 2,60 (N 277) · 2020 2,16 (231) · 2021 2,09 (219) · 2022 2,81 (296) · 2023 3,20 (346) · 2024 5,83 (635) · 2025 5,92 (646). Fetcher ingest/fetchers/ecdc_atlas.js zaokrouhluje na 1 desetinné místo a bere poslední dostupný rok."
+    },
+    "fallback": {
+      "type": "szu",
+      "url": "https://szu.gov.cz/wp-content/uploads/2025/06/Legioneloza-zakladni-informace-o-onemocneni.pdf",
+      "note": "SZÚ, Oddělení epidemiologie infekčních nemocí CEM — Základní informace o onemocnění (legionelóza): 2024 = 620 případů, 95 úmrtí; věková skupina 75+ = 331 případů, 60 úmrtí (EPIDAT, ISIN)."
+    }
+  },
+  "benchmark_source": {
+    "type": "ecdc",
+    "code": "LEGI_AER_2024",
+    "dataset": "ECDC — Legionnaires' disease, Annual Epidemiological Report for 2024 (Stockholm, květen 2026; zveřejněno 27. 5. 2026): míra hlášených případů v EU/EEA (30 zemí) 3,4 na 100 000 obyvatel v roce 2024 (15 362 případů), 3,2 v roce 2023. Věkově standardizovaná míra EU/EEA 2024 = 2,8 (ČR 4,9). Sousedé 2024 (Atlas, crude): Německo 2,69 · Rakousko 3,87 · Slovensko 1,99 · Polsko 1,24. OECD benchmark neexistuje.",
+    "value": 3.4,
+    "url": "https://www.ecdc.europa.eu/en/publications-data/legionnaires-disease-annual-epidemiological-report-2024"
+  },
+  "signal_thresholds": {
+    "good": 10,
+    "warn": 25
+  },
+  "frequency": "annual",
+  "stewards": [
+    "Státní zdravotní ústav (SZÚ) — Centrum epidemiologie a mikrobiologie, Oddělení epidemiologie infekčních nemocí",
+    "Krajské hygienické stanice",
+    "ECDC — Evropské středisko pro prevenci a kontrolu nemocí"
+  ],
+  "method_notes": "Hlavní hodnota je rok 2024 (5,8 na 100 000 obyvatel, 635 případů), protože pro něj existuje publikovaný průměr EU/EEA (3,4, ECDC AER 2024). Atlas už obsahuje i rok 2025 (5,9; 646 případů), pro který EU agregát zatím publikován není; po přepnutí na živý ingest se hodnota posune na rok 2025 a benchmark zůstane z roku 2024. Signál: (5,8 − 3,4) / 3,4 = +71 % nad průměrem EU při směru lower_is_better → bad (prahy good 10 %, warn 25 %). Počty podle zdroje: ECDC Atlas 635 případů a 97 úmrtí za rok 2024, SZÚ 620 případů a 95 úmrtí — rozdíl zdroje nevysvětlují, pravděpodobně jde o jiné datum uzávěrky dat a později doplněné či přeřazené případy. Věkově standardizovaná míra ČR 2024 je 4,9 proti 2,8 v EU/EEA, takže nadprůměr nevysvětluje jen věková struktura. Dlouhá řada: 2005 = 8 případů (0,08 na 100 000), 2015 = 120 (1,14), 2024 = 635.",
+  "limitations": "Hlášená incidence silně závisí na tom, jak často lékaři u zápalu plic legionelu testují (v EU je 88 % případů diagnostikováno antigenem v moči); nízké míry v některých státech ECDC považuje spíš za podhodnocení. Skok ČR mezi lety 2023 a 2024 (3,2 → 5,8) nemá v dostupných zdrojích doložené vysvětlení — může jít o změnu testování, hlášení, počasí i skutečný nárůst expozice; ECDC pro rok 2024 u ČR žádné ohnisko neevidovalo. Výskyt je sezónní (v EU 57 % případů mezi červnem a říjnem). Míra je hrubá (crude), nestandardizovaná na věk; srovnání států se liší věkovou strukturou. Úmrtnost případů (ČR 2024 15,3 % v Atlasu) není přímo srovnatelná mezi zeměmi kvůli rozdílnému záchytu lehčích případů.",
+  "determinants": "Teplota a stagnace vody ve vnitřních rozvodech (rozmezí 25–45 °C, biofilm, usazeniny), údržba a dezinfekce rozvodů teplé vody, chladicí věže a další zdroje aerosolu, stárnutí populace a podíl osob s chronickými nemocemi a oslabenou imunitou, kouření, letní teploty a počasí, intenzita laboratorního testování pacientů se zápalem plic.",
+  "importance": "Legionelóza je preventabilní zápal plic s vysokou smrtností u starších a nemocných lidí. Zdrojem jsou technické vodní systémy budov, včetně nemocnic a domovů pro seniory, takže indikátor ukazuje, jak účinně stát a provozovatelé budov řídí rizika vnitřních vodovodů. Je zároveň citlivým ukazatelem kvality surveillance: rostoucí čísla mohou znamenat jak víc nemoci, tak lepší záchyt.",
+  "patient_story": "Modelová situace, ne skutečný případ: pětasedmdesátiletý muž s cukrovkou se v srpnu vrátí z týdenní návštěvy u dcery do svého bytu v panelovém domě. Pustí si sprchu, aby se po cestě opláchl. Voda, která v potrubí týden stála, je vlažná. O pět dní později má horečku, suchý kašel a je zmatený. Na interně mu zjistí zápal plic, a protože lékař pomyslí i na méně častou příčinu, nechá vyšetřit moč na antigen legionely. Test je pozitivní. Nemoc se nešíří z člověka na člověka; muž ji vdechl s aerosolem z vlastní sprchy.\n\nTakových onemocnění Česko hlásí čím dál víc. Podle ECDC Surveillance Atlasu dosáhla v roce 2024 míra hlášené legionelózy 5,8 případu na 100 000 obyvatel (635 případů), zatímco průměr EU/EEA byl 3,4. Signál HSPA Monitoru je proto „bad“. Ještě v letech 2019–2023 se česká hodnota držela mezi 2,1 a 3,2, v roce 2024 se téměř zdvojnásobila a v roce 2025 zůstala na 5,9 (646 případů). Státní zdravotní ústav za rok 2024 uvádí 620 případů a 95 úmrtí, z toho 331 případů a 60 úmrtí ve věku 75 a více let. Rozdíl proti Atlasu zdroje nevysvětlují, pravděpodobně jde o jiné datum uzávěrky dat.\n\nProč to roste, data přímo neříkají. ECDC příčinu evropského vzestupu označuje za neznámou a jmenuje možné faktory: změny testování, stárnutí populace, údržbu vodovodních systémů v budovách a počasí. Legionely se množí ve vodě o teplotě zhruba 25–45 °C, v potrubí se stagnující vodou a usazeninami a chrání je biofilm. SZÚ upozorňuje, že spolu s vyšším věkem zvyšuje riziko i snaha šetřit na vodě a energiích; v praxi to může znamenat nižší teplotu teplé vody. Vysoký podíl úmrtí v české řadě může zároveň znamenat, že se testují hlavně těžké případy a lehčí unikají.\n\nPáky jsou technické a jsou v zákoně. Vyhláška č. 252/2004 Sb. stanoví pro teplou vodu limit 100 KTJ legionel na 100 ml a uvádí, že teplota po odtočení by neměla klesnout pod 50 °C. Novela zákona o ochraně veřejného zdraví (č. 167/2023 Sb.) zavedla pro nemocnice s lůžky, pobytové sociální služby a ubytovací zařízení nad 50 osob povinné posouzení a řízení rizik vnitřního vodovodu; provozní řád s touto částí musí předložit hygieně nejpozději do 30. června 2028. Jestli se pravidla promítnou do čísel, ukáže teprve další řada dat. Vedle toho stojí levná opatření v domácnostech: po návratu z dovolené nechat vodu odtéct a udržovat ohřívač dost teplý.",
+  "framework": "monitoring",
+  "dimension": "bezpecnost",
+  "verification_status": "preliminary"
+}
