@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-10-19
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-10-19
+    creation_phase: rutina+indicator-add
+    primary_sources_count: 7
+    evidence_sources_count: 2
+    visual_elements_count: 6
+    notes: "Doprovodny clanek k novemu indikatoru legioneloza_incidence (Vysledky · Prenosne nemoci · Nakazy z vody a prostredi, framework monitoring, dimension bezpecnost, direction lower_is_better, signal bad). KPI: 5,8 na 100 000 obyvatel (2024; ECDC Surveillance Atlas, dataset CURRENT.LEGI.YEARLY id 519, health topic 30, measure ALL.RATE 1223625, presne 5,825; N 635; REST API stazeno 19. 10. 2026). RADA CZ 2019–2025 (rate/N): 2,60/277 · 2,16/231 · 2,09/219 · 2,81/296 · 3,20/346 · 5,83/635 · 5,92/646; 2005 0,08/8; 2015 1,14/120. BENCH: EU/EEA 3,4 (2024), 3,2 (2023) — ECDC AER 2024 Legionnaires' disease (zverejneno 27. 5. 2026), veta 'In 2024, the annual notification rate for Legionnaires’ disease increased to 3.4 cases per 100 000 population, up from the 3.2' overena na strance i v PDF. AER tab. 1: CZ 2024 5,8 (ASR 4,9), EU/EEA ASR 2,8; vyssi crude jen SI 9,6 a IT 7,8; CZ mezi 19 zememi bez hlaseneho ohniska 2024; 88 % pripadu EU dg. antigenem v moci; 57 % pripadu cerven–rijen; 1 117 z 12 041 (9 %) se znamym vysledkem zemrelo; pricina vzestupu 'remains unknown'. SOUSEDE Atlas (rate 2019/2023/2024/2025): DE 1,87/2,59/2,69/2,67; AT 2,88/3,57/3,87/4,56; PL 0,19/1,15/1,24/1,41; SK 1,56/1,38/1,99/2,95. Umrti 2024 (ALL.FATAL.COUNT 1223627): CZ 97, DE 109, AT 14, PL 52, SK 16; case fatality (ALL.FATAL.PROPORTION 1223628) CZ 15,3, DE 4,9, AT 4,0, PL 11,7, SK 15,0; CZ 2025 92 umrti, 14,4 %. ASR CZ (1223626) 2023 2,75 → 2024 4,90 → 2025 4,93. SZU PDF (Oddeleni epidemiologie infekcnich nemoci CEM, leden 2025, URL 2025/06): 2024 620 pripadu, 95 umrti; 75+ 331 pripadu, 60 umrti; WHO doporuceni TUV nad 50 °C (vystup ze zdroje min. 60 °C); legionely 25–45 °C, optimum 32–42 °C. LEGISLATIVA (zakonyprolidi, stazeno 19. 10. 2026): vyhl. 252/2004 Sb. aktualni zneni 12. 1. 2026 (verze 8), priloha c. 2: Legionella spp. 100 KTJ/100 ml MH (mezni hodnota pro zdravotnicka zarizeni, pobytove soc. sluzby, ubytovaci zarizeni, sprchy koupalist; jinde doporucena), 0 KTJ/100 ml NMH pro oddeleni s imunokompromitovanymi pacienty; teplota TUV 55 °C DH, vysvetlivka 12 'neměla klesnout pod 50 °C (optimálně nad 55 °C)'; § 3b + priloha c. 8. Zakon 258/2000 Sb. (zneni 12. 6. 2026, verze 71) § 3d odst. 2 (prioritni prostory Legionella: luzkova zdravotnicka zarizeni, pobytove soc. sluzby, ubytovaci zarizeni podle § 21a nad 50 osob), odst. 4 (posouzeni a rizeni rizik, prezkum kazdych 6 let), odst. 5; prechodne ustanoveni zak. 167/2023 Sb. cl. II bod 9: provozni rad do 30. 6. 2028. EVIDENCE (overeno v PubMed 19. 10. 2026): Samuelsson J et al., Euro Surveill 2023;28(11), DOI 10.2807/1560-7917.ES.2023.28.11.2200114, PMID 36927719; Borella P et al., Ann Ig 2016;28(2):98–108, DOI 10.7416/ai.2016.2088, PMID 27071320 (review). PubMed dotazu 4, Consensus 0. NEOVERENO a v textu neni: prubezne tydenni pocty 2026 z bulletinu MZ (PDF 38. tydne nebylo z prostredi dostupne). Modelova postava v uvodu je vymyslena a tak oznacena. Ceka na schvaleni redakce."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Legionelóza v Česku za rok téměř zdvojnásobila. S 5,8 případu na 100 tisíc obyvatel je třetí nejvyšší v EU · HSPA Monitor</title>
+<meta name="description" content="Česko hlásilo v roce 2024 podle Evropského střediska pro prevenci a kontrolu nemocí 635 případů legionářské nemoci, tedy 5,8 na 100 000 obyvatel. Proti roku 2023 je to téměř dvojnásobek, průměr EU/EEA byl 3,4 a vyšší míru měly jen Slovinsko a Itálie. V roce 2025 zůstala hodnota na 5,9. Proč číslo vyskočilo, data neříkají. Nový indikátor HSPA Monitoru ukazuje, co víme, co ne a jaké povinnosti teď mají nemocnice a domovy pro seniory.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Legionelóza v Česku za rok téměř zdvojnásobila. S 5,8 případu na 100 tisíc obyvatel je třetí nejvyšší v EU">
+<meta property="og:description" content="635 případů legionářské nemoci v roce 2024, 5,8 na 100 000 obyvatel proti 3,4 v EU/EEA (ECDC). Nový indikátor HSPA Monitoru: co víme, co ne a kde je páka.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-legioneloza-nad-eu-2026.html">
+<meta property="article:published_time" content="2026-10-22">
+<meta property="article:section" content="Veřejné zdraví">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-legioneloza-nad-eu-2026.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "Legionelóza v Česku za rok téměř zdvojnásobila. S 5,8 případu na 100 tisíc obyvatel je třetí nejvyšší v EU",
+  "description": "Česko hlásilo v roce 2024 podle Evropského střediska pro prevenci a kontrolu nemocí 635 případů legionářské nemoci, tedy 5,8 na 100 000 obyvatel. Proti roku 2023 je to téměř dvojnásobek, průměr EU/EEA byl 3,4 a vyšší míru měly jen Slovinsko a Itálie. V roce 2025 zůstala hodnota na 5,9. Proč číslo vyskočilo, data neříkají. Nový indikátor HSPA Monitoru ukazuje, co víme, co ne a jaké povinnosti teď mají nemocnice a domovy pro seniory.",
+  "datePublished": "2026-10-22T06:00:00+02:00",
+  "dateModified": "2026-10-19",
+  "inLanguage": "cs",
+  "articleSection": "Veřejné zdraví",
+  "author": { "@type": "Organization", "name": "Redakce HSPA Monitoru" },
+  "publisher": { "@type": "Organization", "name": "HSPA Monitor · Skóre zdravotnictví", "url": "https://skorezdravotnictvi.cz" },
+  "mainEntityOfPage": "https://skorezdravotnictvi.cz/clanek-legioneloza-nad-eu-2026.html"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Veřejné zdraví</span>
+        <span class="article-tag article-tag-muted">legionelóza · teplá voda · přenosné nemoci · ECDC</span>
+      </div>
+      <h1 class="article-title">Legionelóza v Česku za rok téměř zdvojnásobila. S 5,8 případu na 100 tisíc obyvatel je třetí nejvyšší v EU</h1>
+      <p class="article-deck">
+        Česko hlásilo v roce 2024 podle Evropského střediska pro prevenci a kontrolu nemocí 635 případů legionářské nemoci, tedy 5,8 na 100 000 obyvatel. Proti roku 2023 je to téměř dvojnásobek, průměr EU/EEA byl 3,4 a vyšší míru měly jen Slovinsko a Itálie. V roce 2025 zůstala hodnota na 5,9. Proč číslo vyskočilo, data neříkají. Nový indikátor HSPA Monitoru ukazuje, co víme, co ne a jaké povinnosti teď mají nemocnice a domovy pro seniory.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">22. října 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">10 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Představte si modelovou situaci, ne skutečný případ: starší muž se v srpnu vrátí po týdnu z návštěvy u dcery a pustí si sprchu. Voda, která celý týden stála v potrubí, teče vlažná. Za pár dní má horečku, suchý kašel a zápal plic. Test moči na antigen legionely je pozitivní. Nemoc se nepřenáší z člověka na člověka; bakterii vdechl v drobných kapkách vody z vlastní sprchy. Takových onemocnění Česko hlásí rychle přibývá. V roce 2024 jich bylo podle evropských dat <strong>635, tedy 5,8 na 100 000 obyvatel</strong>, a jen za jediný rok se jejich počet téměř zdvojnásobil.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCntH">
+        <figcaption class="av-figure-h" id="avCntH">Legionelóza v Česku: čtyři čísla (ECDC, 2024)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="5.8" data-decimals="1">5,8</span>
+            <span class="av-counter-label">hlášených případů na 100 000 obyvatel</span>
+            <span class="av-counter-foot">ECDC Surveillance Atlas, rok 2024</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="3.4" data-decimals="1">3,4</span>
+            <span class="av-counter-label">průměr EU/EEA na 100 000 obyvatel</span>
+            <span class="av-counter-foot">ECDC, výroční epidemiologická zpráva za rok 2024</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="635">635</span>
+            <span class="av-counter-label">případů v Česku</span>
+            <span class="av-counter-foot">O rok dříve 346 (ECDC Surveillance Atlas)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="97">97</span>
+            <span class="av-counter-label">úmrtí mezi hlášenými případy</span>
+            <span class="av-counter-foot">SZÚ ve vlastním přehledu uvádí 95 úmrtí z 620 případů</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ECDC Surveillance Atlas of Infectious Diseases, Legionnaires' disease (dataset 519; měřítka Notification rate, Reported cases, Number of deaths), rok 2024, staženo přes REST API 19. 10. 2026; ECDC, Legionnaires' disease — Annual Epidemiological Report for 2024 (květen 2026); SZÚ, Legionelóza — základní informace o onemocnění.</p>
+      </figure>
+
+      <h3>Co indikátor měří</h3>
+      <p>
+        Nový indikátor <a href="indicator.html?id=legioneloza_incidence">Incidence legionelózy</a> přebírá z evropské databáze přenosných nemocí počet hlášených případů legionářské nemoci na 100 000 obyvatel za rok. Data za Česko do Evropského střediska pro prevenci a kontrolu nemocí (ECDC) posílá Státní zdravotní ústav (SZÚ) z celostátního informačního systému infekčních nemocí. Započítávají se potvrzené i pravděpodobné případy podle jednotné evropské definice z roku 2018: pacient musí mít zápal plic a alespoň jeden pozitivní laboratorní test.
+      </p>
+      <p>
+        Legionelóza je zápal plic, který způsobují bakterie rodu <em>Legionella</em>, nejčastěji <em>Legionella pneumophila</em>. Žijí přirozeně ve vodě a v půdě, nebezpečnými se ale stávají v technických systémech budov, kde se jim daří a odkud se mohou rozptýlit do vzduchu: v rozvodech teplé vody, sprchách, vířivkách, zvlhčovačích, fontánách a chladicích věžích. Podle SZÚ se legionely množí zhruba při 25 až 45 °C, nejlépe mezi 32 a 42 °C, a chrání je slizovitý povlak na stěnách potrubí, takzvaný biofilm. Člověk se nakazí vdechnutím aerosolu, ne napitím vody.
+      </p>
+      <p>
+        Indikátor jsme zařadili do oblasti Výsledky a do dimenze bezpečnosti. Nejde jen o jednu z infekcí: zdrojem jsou převážně vodovodní systémy budov, včetně nemocnic a domovů pro seniory, a jejich údržba je věcí provozovatelů a hygienického dozoru. Směr je jasný, nižší hodnota je lepší. Proti průměru EU/EEA je česká hodnota o 71 % vyšší, a signál je proto <em>bad</em>.
+      </p>
+
+      <h3>Stav v Česku: dvacet let růstu a pak skok</h3>
+
+      <figure class="av-trend" data-unit="">
+        <figcaption class="av-trend-h">Hlášené případy legionelózy na 100 000 obyvatel v Česku, 2019–2025 (ECDC Surveillance Atlas)</figcaption>
+        <div class="av-trend-chart"
+             data-points='[{"year":2019,"value":2.6},{"year":2020,"value":2.2},{"year":2021,"value":2.1},{"year":2022,"value":2.8},{"year":2023,"value":3.2},{"year":2024,"value":5.8},{"year":2025,"value":5.9}]'
+             data-min="0" data-max="7"></div>
+        <p class="av-trend-note">Zdroj: ECDC Surveillance Atlas, Legionnaires' disease, Notification rate (měřítko ALL.RATE), Česko; staženo 19. 10. 2026. Hodnoty zaokrouhleny na jedno desetinné místo. Rok 2025 je v Atlasu k dispozici, průměr EU/EEA za něj ECDC zatím nezveřejnilo.</p>
+      </figure>
+
+      <p>
+        Česká řada roste dlouhodobě. V roce 2005 Česko hlásilo do evropské databáze 8 případů, v roce 2015 už 120 a v roce 2019 celkem 277, tedy 2,6 na 100 000 obyvatel. Pandemické roky 2020 a 2021 přinesly mírný pokles na 2,2 a 2,1, v letech 2022 a 2023 se křivka vrátila na 2,8 a 3,2. Pak přišel rok 2024 s 635 případy a hodnotou 5,8. Rok 2025 skok nevrátil: 646 případů a 5,9 na 100 000 obyvatel. Nejde tedy o jednorázový výkyv, ale o novou úroveň, která trvá druhý rok.
+      </p>
+      <p>
+        Vysvětlení, které by se dalo doložit, zatím nemáme. Evropská výroční zpráva za rok 2024 neuvádí pro Česko žádné ohnisko; naopak Česko výslovně řadí mezi devatenáct států, které v tom roce žádné ohnisko legionářské nemoci nezjistily. Nárůst tedy podle dostupných dat netvoří jedna velká epidemie z jedné chladicí věže, ale stovky jednotlivých případů. Skok může mít několik příčin najednou: víc testování pacientů se zápalem plic, změnu v hlášení, horké léto, stárnutí populace i skutečně vyšší expozici v budovách. Žádný z dostupných zdrojů mezi nimi nerozhoduje, a proto ani my netvrdíme, která převažuje.
+      </p>
+      <p>
+        Jedna věc se ale z dat vyčíst dá. ECDC zveřejňuje i věkově standardizovanou míru, která odstraňuje vliv toho, že některé státy mají starší obyvatelstvo. Pro Česko vychází v roce 2024 na 4,9 na 100 000 obyvatel, zatímco pro EU/EEA na 2,8. Nadprůměr tedy nevysvětluje jen to, že Česko stárne. A mezi lety 2023 a 2024 vyskočila i standardizovaná hodnota, ze 2,75 na 4,90. Protože standardizace vliv stárnutí odstraňuje, samotným stárnutím populace se tento skok vysvětlit nedá.
+      </p>
+
+      <h3>Mezinárodní srovnání: nad všemi sousedy</h3>
+
+      <figure class="av-figure" aria-labelledby="avBarH">
+        <figcaption class="av-figure-h" id="avBarH">Hlášené případy legionelózy na 100 000 obyvatel, Česko, sousedé a EU/EEA, 2024 (ECDC)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="10">
+          <li class="av-bar-row" data-value="9.6" data-label="Slovinsko (nejvyšší v EU/EEA)" data-display="9,6"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="5.8" data-label="Česko" data-display="5,8"></li>
+          <li class="av-bar-row" data-value="3.9" data-label="Rakousko" data-display="3,9"></li>
+          <li class="av-bar-row" data-value="3.4" data-label="Průměr EU/EEA (30 zemí)" data-display="3,4"></li>
+          <li class="av-bar-row" data-value="2.7" data-label="Německo" data-display="2,7"></li>
+          <li class="av-bar-row" data-value="2.0" data-label="Slovensko" data-display="2,0"></li>
+          <li class="av-bar-row" data-value="1.2" data-label="Polsko" data-display="1,2"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ECDC, Legionnaires' disease — Annual Epidemiological Report for 2024, tabulka 1 (průměr EU/EEA, Slovinsko); ECDC Surveillance Atlas, Notification rate, rok 2024 (Česko a sousední státy), staženo 19. 10. 2026. Hrubé míry, bez věkové standardizace.</p>
+      </figure>
+
+      <p>
+        V roce 2024 nahlásilo 29 států EU a Evropského hospodářského prostoru celkem 15 362 případů legionářské nemoci, tedy 3,4 na 100 000 obyvatel. O rok dříve to bylo 3,2. ECDC upozorňuje, že jde o nejvyšší míru za poslední desetiletí a že rostoucí trend pokračuje od roku 2020. Vyšší hrubou míru než Česko měla v roce 2024 jen dvě země: Slovinsko s 9,6 a Itálie se 7,8. Česko je s hodnotou 5,8 třetí, těsně před Maltou (5,3); následují Dánsko a Lichtenštejnsko, obě s 5,0. Ve věkově standardizovaném srovnání je pořadí podobné: Slovinsko 8,1, Itálie 5,9, Česko a Malta shodně 4,9.
+      </p>
+      <p>
+        Mezi sousedy je Česko nejvýš, a to zřetelně. Rakousko mělo v roce 2024 hodnotu 3,9, Německo 2,7, Slovensko 2,0 a Polsko 1,2. Zajímavější než samotné pořadí je ale vývoj. Všichni sousedé za posledních pět let rostou, žádný ale neudělal takový skok jako Česko mezi lety 2023 a 2024.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTabH">
+        <figcaption class="av-figure-h" id="avTabH">Legionelóza v Česku a sousedních státech: míra na 100 000 obyvatel a úmrtí (ECDC Surveillance Atlas)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Stát</th>
+                <th scope="col" class="av-num">2019</th>
+                <th scope="col" class="av-num">2023</th>
+                <th scope="col" class="av-num">2024</th>
+                <th scope="col" class="av-num">2025</th>
+                <th scope="col" class="av-num">Úmrtí 2024</th>
+                <th scope="col" class="av-num">Podíl zemřelých 2024 (%)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-highlight"><th scope="row">Česko</th><td class="av-num">2,6</td><td class="av-num">3,2</td><td class="av-num av-bad">5,8</td><td class="av-num av-bad">5,9</td><td class="av-num">97</td><td class="av-num av-bad">15,3</td></tr>
+              <tr><th scope="row">Rakousko</th><td class="av-num">2,9</td><td class="av-num">3,6</td><td class="av-num">3,9</td><td class="av-num">4,6</td><td class="av-num">14</td><td class="av-num">4,0</td></tr>
+              <tr><th scope="row">Německo</th><td class="av-num">1,9</td><td class="av-num">2,6</td><td class="av-num">2,7</td><td class="av-num">2,7</td><td class="av-num">109</td><td class="av-num">4,9</td></tr>
+              <tr><th scope="row">Slovensko</th><td class="av-num">1,6</td><td class="av-num">1,4</td><td class="av-num">2,0</td><td class="av-num">3,0</td><td class="av-num">16</td><td class="av-num">15,0</td></tr>
+              <tr><th scope="row">Polsko</th><td class="av-num">0,2</td><td class="av-num">1,2</td><td class="av-num">1,2</td><td class="av-num">1,4</td><td class="av-num">52</td><td class="av-num">11,7</td></tr>
+              <tr><th scope="row">EU/EEA</th><td class="av-num av-mut">—</td><td class="av-num">3,2</td><td class="av-num">3,4</td><td class="av-num av-mut">zatím nezveřejněno</td><td class="av-num">1 117</td><td class="av-num">9</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ECDC Surveillance Atlas, Legionnaires' disease, měřítka Notification rate, Number of deaths a Case fatality; staženo 19. 10. 2026. Řádek EU/EEA: ECDC, Annual Epidemiological Report for 2024 (míra 2023 a 2024; 1 117 úmrtí z 12 041 případů se známým výsledkem, tj. 9 %). Podíl zemřelých se počítá z případů se známým výsledkem onemocnění. Německo má v Atlasu za rok 2024 2 247 případů, ve výroční zprávě 2 234; rozdíl je dán pozdějšími aktualizacemi dat.</p>
+      </figure>
+
+      <p>
+        Tabulka ukazuje ještě jeden rozdíl. Mezi českými hlášenými případy zemřelo v roce 2024 15,3 %, v Německu 4,9 % a v Rakousku 4,0 %. Průměr EU/EEA byl 9 %. Podobně vysoké podíly jako Česko vykazují Slovensko a Polsko. To samo o sobě neznamená, že by česká péče o pacienty s legionelózou byla horší. Vysoký podíl zemřelých často znamená, že se na legionelu testují hlavně nejtěžší případy, zatímco lehčí zápaly plic zůstávají bez určení původce a do statistiky nevstoupí. Pokud tomu tak je, skutečný počet onemocnění v Česku by byl ještě vyšší, než ukazuje indikátor.
+      </p>
+
+      <div class="article-callout-caveat" role="note">
+        <strong>Proč se počty liší: 635, nebo 620?</strong>
+        ECDC Surveillance Atlas uvádí za Česko v roce 2024 celkem 635 případů a 97 úmrtí. Státní zdravotní ústav v informačním materiálu o legionelóze píše, že „v roce 2024 bylo zaznamenáno celkem 620 případů, z toho 95 úmrtí“. Obě čísla pocházejí z téhož národního systému hlášení. Ani jeden zdroj rozdíl nevysvětluje; nejspíš jde o jiné datum uzávěrky dat a o případy doplněné nebo přeřazené později. Evropská statistika započítává potvrzené i pravděpodobné případy podle definice EU. Indikátor HSPA Monitoru používá evropská čísla, protože jen s nimi lze Česko férově srovnat s ostatními státy.
+      </div>
+
+      <h3>Kdo onemocní a proč to roste</h3>
+      <p>
+        Legionelóza je nemoc starších a nemocných lidí. Podle SZÚ bylo v roce 2024 v Česku nejvíc nemocných ve věkové skupině 75 a více let: 331 případů a 60 úmrtí. Rizikoví jsou podle ústavu lidé s oslabenou imunitou, starší 50 let, s chronickým onemocněním plic nebo ledvin, s nádorovým onemocněním nebo cukrovkou a lidé léčení kortikoidy či imunosupresivy. Víc ohrožení jsou kuřáci a častěji onemocní muži. Evropská data ukazují totéž: 87 % případů se známým věkem připadlo na lidi ve věku 50 let a starší a nejvíc zasaženou skupinou byli muži nad 65 let s 13,0 případu na 100 000 obyvatel.
+      </p>
+      <p>
+        Proč nemoc v Evropě přibývá, nevědí ani v ECDC. Výroční zpráva píše, že „příčina pokračujícího nárůstu zůstává neznámá“, a jmenuje možné vlivy: změny v testování a surveillance, stárnutí populace, návrh a údržbu vodovodních systémů v budovách a změny klimatu a počasí, které ovlivňují růst legionel i to, jak často jsou lidé aerosolu vystaveni. Evropský trend popsal už dřívější rozbor týmu ECDC. Samuelsson a kolegové v roce 2023 v časopise <em>Eurosurveillance</em> zjistili, že v letech 2017 až 2019 bylo v EU/EEA o 33,9 % víc případů, než předpovídal vývoj z let 2012 až 2016, a že nárůst byl nejsilnější u lidí nad 60 let a u případů, které nebyly zavlečené ze zahraničí.
+      </p>
+      <p>
+        SZÚ k tomu přidává jeden konkrétně český postřeh: vyšší věk spolu „se snahou o snížení nákladů na vodu a energie“ představuje i vyšší riziko onemocnění. Logika je technická. Kdo kvůli úsporám sníží teplotu ohřívače, posune teplou vodu v potrubí do pásma, ve kterém se legionelám daří. Data HSPA Monitoru ale neumožňují říct, zda právě tohle stojí za českým skokem v roce 2024. Ukazují jen, že takové vysvětlení je věrohodné a že by stálo za to ho ověřit.
+      </p>
+
+      <h3>Co říká zákon: limity existují, posouzení rizik se teprve zavádí</h3>
+      <p>
+        Pravidla pro teplou vodu stanoví <strong>vyhláška č. 252/2004 Sb.</strong>, kterou se stanoví hygienické požadavky na pitnou a teplou vodu (aktuální znění z 12. ledna 2026). Pro legionely v teplé vodě určuje limit <strong>100 kolonií na 100 mililitrů</strong>. Jako závazná mezní hodnota platí ve zdravotnických zařízeních, v zařízeních sociálních služeb s pobytovými službami, v ubytovacích zařízeních a ve sprchách koupališť; v ostatních budovách je to hodnota doporučená. Na odděleních s imunokompromitovanými pacienty, například na transplantačních, hematoonkologických či dialyzačních odděleních a na jednotkách intenzivní péče, nesmí být v teplé vodě legionela žádná. Teplota teplé vody by podle vyhlášky po odtočení neměla klesnout pod 50 °C, optimálně by měla být nad 55 °C.
+      </p>
+      <p>
+        Novější vrstvu přinesla novela zákona o ochraně veřejného zdraví č. 167/2023 Sb. Zákon č. 258/2000 Sb. teď v § 3d určuje takzvané prioritní prostory z hlediska rizika legionel: zdravotnická zařízení s lůžkovou péčí, zařízení sociálních služeb s pobytovými službami a ubytovací zařízení s kapacitou nad 50 osob. Jejich provozovatelé musí zpracovat posouzení a řízení rizik vnitřního vodovodu, zapracovat ho do provozního řádu, předložit ho hygieně ke schválení a každých šest let ho přezkoumat. Termín je ale daleko: podle přechodného ustanovení stačí provozní řád s touto částí předložit <strong>nejpozději do 30. června 2028</strong>.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avFlowH">
+        <figcaption class="av-figure-h" id="avFlowH">Posouzení rizik legionel v prioritních prostorech podle zákona č. 258/2000 Sb. a vyhlášky č. 252/2004 Sb.</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Kdo</h4>
+            <p class="av-flow-desc">Nemocnice s lůžky, pobytové sociální služby a ubytovací zařízení nad 50 osob (§ 3d odst. 2 zákona).</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Posouzení rizik</h4>
+            <p class="av-flow-desc">Bodové hodnocení rizikových faktorů rozvodu teplé vody, mimo jiné teploty a stagnace (příloha č. 8 vyhlášky).</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Provozní řád</h4>
+            <p class="av-flow-desc">Závěry a opatření jdou do provozního řádu, který schvaluje orgán ochrany veřejného zdraví.</p>
+            <span class="av-flow-tag">do 30. 6. 2028</span>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Přezkum</h4>
+            <p class="av-flow-desc">Každých 6 let a vždy při změně provozu vnitřního vodovodu (§ 3d odst. 4 zákona).</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Zákon č. 258/2000 Sb., o ochraně veřejného zdraví, § 3d (znění od 12. 6. 2026) a přechodné ustanovení zákona č. 167/2023 Sb., čl. II bod 9; vyhláška č. 252/2004 Sb. (znění od 12. 1. 2026), § 3b a příloha č. 8.</p>
+      </figure>
+
+      <p>
+        Bodovací tabulka ve vyhlášce přitom říká, kde je riziko nejvyšší. Nejlépe hodnotí budovu, kde má teplá voda ve všech místech spotřeby 55 ± 2 °C; nejhůř tu, kde teplota „nedosahuje 50 °C v celé budově“. Body přidává i voda, která stagnuje v zásobnících. To jsou přesně podmínky, které SZÚ i ECDC označují za příznivé pro legionely.
+      </p>
+
+      <h3>Co vývoj přináší: preventabilní zápal plic v budovách, které spravuje stát</h3>
+      <p>
+        Legionelóza není nemoc, proti které by existovalo očkování. Prevence je čistě technická: udržovat teplou vodu dost horkou a studenou dost studenou, nenechat vodu stát, čistit a dezinfikovat rozvody a koncová zařízení. SZÚ cituje doporučení Světové zdravotnické organizace udržovat teplou vodu v systému nad 50 °C, což odpovídá teplotě na výstupu ze zdroje nejméně 60 °C, studenou ideálně pod 20 °C, ošetřovat rozvody v nemocnicích a domovech pro seniory vhodným biocidem a jednou týdně proplachovat nepoužívané kohoutky. Zároveň upozorňuje, že úplně odstranit legionely z rozvodů prakticky nejde; reálné je snížit je na přijatelnou úroveň.
+      </p>
+      <p>
+        Z literatury vyplývá, že jedno opatření nestačí. Přehled italského týmu Borellové a kolegů z roku 2016, který shrnul patnáct let zkušeností s kontrolou legionel v nemocničních rozvodech, uzavírá, že samotná dezinfekce vody riziko obvykle nezvládne. Nemocnice podle autorů potřebují ucelený plán bezpečnosti vody, který zahrnuje údržbu, školení personálu a klinickou surveillance, aby se případy zachytily včas. Česká novela zákona jde přesně tímto směrem, jen s dlouhou lhůtou.
+      </p>
+      <p>
+        Pro hodnocení zdravotního systému je důležité, kde se lidé nakazí. Evropská zpráva uvádí, že většina případů je sporadických a pochází z běžného prostředí, nejen z nemocnic. Hlášené ohnisko spojené s nemocnicí ECDC v roce 2024 eviduje jen ve dvou z 32 evropských ohnisek. Pro Česko data o místě nákazy v Atlasu nejsou. Indikátor proto čteme vedle <a href="indicator.html?id=infekce_nosokomialni">prevalence nemocničních infekcí</a>, která je v Česku 6,5 % (2023) proti 5,9 % v EU, a ne jako přímé měřítko kvality nemocnic.
+      </p>
+
+      <h3>Co s tím</h3>
+      <p>
+        <strong>Pro domácnosti:</strong> po návratu z dovolené nebo po delší nepřítomnosti nechte vodu z kohoutků a sprchy chvíli odtéct. Nenastavujte ohřívač příliš nízko jen kvůli úspoře. Perlátory a sprchové hlavice pravidelně čistěte. Lidé s výrazně oslabenou imunitou by podle SZÚ měli dávat přednost koupeli před sprchou a vyhýbat se vířivkám.
+      </p>
+      <p>
+        <strong>Pro nemocnice, domovy pro seniory a hotely:</strong> povinnost posoudit rizika vnitřního vodovodu je v zákoně od novely z roku 2023 a 30. červen 2028 je jen nejzazší termín pro předložení provozního řádu. Vzhledem k tomu, kolik lidí nad 75 let s legionelózou v Česku umírá, nemá smysl čekat. Zařízení, které riziko posoudí a opatření zavede dřív, chrání právě tu skupinu, které se nemoc týká nejvíc.
+      </p>
+      <p>
+        <strong>Pro lékaře:</strong> u zápalu plic u starších a chronicky nemocných pacientů myslet na legionelu a vyšetřit ji. Evropská data ukazují, že většina případů se diagnostikuje rychlým testem moči na antigen, kultivace se dělá jen u menšiny. Právě kultivace je přitom podle ECDC cenná při vyšetřování shluků a ohnisek, protože pomáhá dohledat jejich zdroj.
+      </p>
+      <p>
+        <strong>Pro ministerstvo a hygienickou službu:</strong> zjistit, co stojí za skokem v roce 2024. Bez rozboru, zda vzrostlo testování, nebo počet nákaz, a v jakých typech budov se lidé nakazili, nelze říct, zda je problém v diagnostice, ve vodovodech, nebo v obojím. Rozpad hlášených případů podle krajů, místa nákazy a způsobu diagnostiky by byl prvním krokem.
+      </p>
+
+      <h3>Co tenhle ukazatel nedokáže</h3>
+      <p>
+        Hlášená incidence měří i to, jak pečlivě lékaři testují, ne jen kolik lidí onemocní. ECDC samo upozorňuje, že velmi nízké hodnoty v některých státech jsou spíš podhodnocením, a stejná opatrnost platí pro srovnání Česka s Polskem nebo Slovenskem. Míra je hrubá, nestandardizovaná na věk, proto v textu uvádíme i standardizovanou hodnotu. Hlavní hodnota indikátoru je za rok 2024, protože jen pro něj existuje evropský průměr; rok 2025 s hodnotou 5,9 zatím srovnat nemáme s čím. Nemoc je sezónní, v Evropě vznikne 57 % případů mezi červnem a říjnem, a jedno horké léto může roční číslo posunout. A konečně: indikátor neříká, kde se lidé nakazili, takže nerozliší problém v nemocnicích od problému v bytových domech.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=legioneloza_incidence"><strong>Incidence legionelózy (míra hlášených případů)</strong></a> — 5,8 na 100 000 obyvatel (2024, ECDC Surveillance Atlas) proti průměru EU/EEA 3,4 · Výsledky · signál bad; rok 2025: 5,9</li>
+        <li><a href="indicator.html?id=infekce_nosokomialni"><strong>Prevalence nemocničních infekcí</strong></a> — 6,5 % (2023) proti 5,9 % v EU</li>
+      </ul>
+      <p>Související články: <a href="clanek-monitoring-zdravotnich-hrozeb-mz.html">Týdenní monitoring zdravotních hrozeb ministerstva zdravotnictví</a> · <a href="clanek-ecdc-pripravenost-cr-krize-2026.html">Co našlo první hodnocení připravenosti Česka od ECDC</a></p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární zdroje dat</h5>
+        <ul class="article-sources-list">
+          <li><strong>ECDC — Surveillance Atlas of Infectious Diseases, Legionnaires' disease</strong> (dataset 519). Míra hlášených případů, počty případů a úmrtí, podíl zemřelých a věkově standardizovaná míra pro Česko, Německo, Rakousko, Polsko a Slovensko 2005–2025; staženo přes REST API 19. 10. 2026. <a href="https://atlas.ecdc.europa.eu/public/index.aspx?Dataset=519&amp;HealthTopic=30" target="_blank" rel="noopener">atlas.ecdc.europa.eu ↗</a> · <a href="https://atlas.ecdc.europa.eu/public/AtlasService/rest/GetMeasureResultsForTimeUnitAndGeoRegion?measureId=1223625&amp;timeUnit=Y&amp;geoCode=CZ" target="_blank" rel="noopener">API ↗</a></li>
+          <li><strong>ECDC — Legionnaires' disease, Annual Epidemiological Report for 2024</strong> (Stockholm, květen 2026). Průměr EU/EEA 3,4 (2024) a 3,2 (2023), tabulka států, věkově standardizované míry, ohniska, diagnostika, sezónnost. <a href="https://www.ecdc.europa.eu/en/publications-data/legionnaires-disease-annual-epidemiological-report-2024" target="_blank" rel="noopener">ecdc.europa.eu ↗</a></li>
+          <li><strong>SZÚ — Legionářská nemoc (legionelóza): základní informace o onemocnění</strong> (Oddělení epidemiologie infekčních nemocí CEM). Počet případů a úmrtí v roce 2024, věková skupina 75+, přenos, prevence, doporučení k teplotě vody. <a href="https://szu.gov.cz/wp-content/uploads/2025/06/Legioneloza-zakladni-informace-o-onemocneni.pdf" target="_blank" rel="noopener">szu.gov.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Legislativa</h5>
+        <ul class="article-sources-list">
+          <li><strong>Vyhláška č. 252/2004 Sb., kterou se stanoví hygienické požadavky na pitnou a teplou vodu a četnost a rozsah kontroly pitné vody</strong> (aktuální znění 12. 1. 2026) — příloha č. 2 (limity teplé vody, Legionella spp., teplota), § 3b a příloha č. 8 (posouzení rizik). <a href="https://www.zakonyprolidi.cz/cs/2004-252" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Zákon č. 258/2000 Sb., o ochraně veřejného zdraví</strong> (znění od 12. 6. 2026) — § 3d (prioritní prostory, posouzení a řízení rizik vnitřního vodovodu); přechodná ustanovení zákona č. 167/2023 Sb., čl. II bod 9 (termín 30. 6. 2028). <a href="https://www.zakonyprolidi.cz/cs/2000-258" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Směrnice Evropského parlamentu a Rady (EU) 2020/2184 o jakosti vody určené k lidské spotřebě</strong> (přepracované znění), na kterou odkazuje výroční zpráva ECDC. <a href="https://eur-lex.europa.eu/legal-content/CS/TXT/?uri=CELEX:32020L2184" target="_blank" rel="noopener">eur-lex.europa.eu ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Evidence</h5>
+        <ul class="article-sources-list">
+          <li><strong>Samuelsson J, Payne Hallström L, Marrone G, Gomes Dias J. Legionnaires' disease in the EU/EEA: increasing trend from 2017 to 2019.</strong> <em>Euro Surveillance</em> 2023;28(11). DOI 10.2807/1560-7917.ES.2023.28.11.2200114. PMID 36927719. Ověřeno v PubMed 19. 10. 2026. <a href="https://doi.org/10.2807/1560-7917.ES.2023.28.11.2200114" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Borella P, Bargellini A, Marchegiano P, Vecchi E, Marchesi I. Hospital-acquired Legionella infections: an update on the procedures for controlling environmental contamination.</strong> <em>Annali di Igiene</em> 2016;28(2):98–108. DOI 10.7416/ai.2016.2088. PMID 27071320. Přehledový článek. Ověřeno v PubMed 19. 10. 2026. <a href="https://doi.org/10.7416/ai.2016.2088" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Hodnoty pro Česko a sousední státy pocházejí z ECDC Surveillance Atlasu (stav 19. 10. 2026) a jsou zaokrouhleny na jedno desetinné místo; průměr EU/EEA, údaje o Slovinsku, Itálii, Maltě a Dánsku a věkově standardizované míry z výroční zprávy ECDC za rok 2024. Rozdíl o 71 % mezi Českem a průměrem EU/EEA spočítala redakce HSPA Monitoru. Počty SZÚ (620 případů, 95 úmrtí) se od evropských liší; zdroje rozdíl nevysvětlují, pravděpodobně jde o jiné datum uzávěrky dat. Postava v úvodu je modelová.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
