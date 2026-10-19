@@ -13,16 +13,18 @@ name: Regenerate artifacts
 # Když v diffu nejsou, není na čem konfliktovat. Regenerace proto běží až tady,
 # nad zmergovaným mainem, a výsledek commitne bot.
 #
-# Konzistence deploye: Vercel staví ze stavu mainu, takže mezi merge obsahu
-# a doběhnutím tohohle jobu existuje krátké okno, kdy je index o jeden článek
-# pozadu. Řádově desítky sekund a týká se to jen vyhledávání a křížových
-# odkazů — ne obsahu samotné stránky.
+# Konzistence deploye: Vercel build obsahového merge přeskočí
+# (05_M1_Starter/scripts/vercel-ignore-build.sh = Ignored Build Step) a staví
+# až commit od tohohle jobu. Web tak dostane obsah i indexy najednou a místo
+# dvou buildů běží jeden. Když regenerace nic nezmění, job pushne prázdný
+# commit, aby se obsah merge nasadil i tak.
 
 on:
   push:
     branches: [main]
     paths:
       # Vstupy builderů. Když se nezmění, není co přegenerovat.
+      # Seznam drž v syncu s INPUTS v 05_M1_Starter/scripts/vercel-ignore-build.sh.
       - '05_M1_Starter/data/articles.json'
       - '05_M1_Starter/data/indicators.json'
       - '05_M1_Starter/data/system-model.json'
@@ -89,18 +91,28 @@ jobs:
 
       - name: Commit + push if changed
         run: |
-          if git diff --quiet -- data/search-index.json data/diagnoza-index.json data/souvislosti.json src/styles.min.css; then
-            echo "Artefakty jsou v syncu — nic ke commitu."
-            exit 0
-          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/search-index.json data/diagnoza-index.json data/souvislosti.json src/styles.min.css
-          git commit -m "chore(artefakty): přegenerováno po merge [skip regen]
+          if git diff --quiet -- data/search-index.json data/diagnoza-index.json data/souvislosti.json src/styles.min.css; then
+            if [ "${{ github.event_name }}" != "push" ]; then
+              echo "Artefakty jsou v syncu — nic ke commitu."
+              exit 0
+            fi
+            # Vercel build obsahového merge přeskočil (scripts/vercel-ignore-build.sh)
+            # a čeká na commit od bota. Když regenerace nic nezměnila, pushne se
+            # prázdný commit — jinak by se obsah merge na web nedostal.
+            echo "Artefakty jsou v syncu — prázdný commit kvůli deployi."
+            git commit --allow-empty -m "chore(artefakty): beze změny, spouští deploy [skip regen]
+
+          Generováno automaticky (.github/workflows/regenerate-artifacts.yml)."
+          else
+            git add data/search-index.json data/diagnoza-index.json data/souvislosti.json src/styles.min.css
+            git commit -m "chore(artefakty): přegenerováno po merge [skip regen]
 
           Generováno automaticky (.github/workflows/regenerate-artifacts.yml).
           Obsahové PR tyhle soubory nemění — viz CLAUDE.md, sekce
           Generované artefakty."
+          fi
           # Push s retry: concurrency group serializuje jen běhy TOHOHLE
           # workflow. Do main mezitím může commitnout kterýkoli jiný cron
           # (GA4, newsletter, social, awareness) — a protože ty většinou
