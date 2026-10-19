@@ -269,6 +269,64 @@ export function injectScrollToTop() {
 }
 
 /**
+ * „Na kafe“ — dobrovolný příspěvek 50 Kč přes Stripe Payment Link
+ * (účet Stripe projektu, produkt „Na kafe pro HSPA Monitor“, 50 CZK,
+ * submit_type donate, potvrzení hostované Stripem). Žádný JS Stripe SDK,
+ * žádný iframe ani cookies — jen odkaz na hostovanou platební stránku.
+ * Změna částky/textu = nový Payment Link ve Stripe a přepis konstanty.
+ */
+export const KAFE_URL = 'https://donate.stripe.com/7sYeV62kn6tr9cZcT92wU01';
+export const KAFE_AMOUNT_LABEL = '50 Kč';
+
+const KAFE_CUP_SVG = `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <path d="M9 19h24v10a9 9 0 0 1-9 9h-6a9 9 0 0 1-9-9V19z"/>
+  <path d="M33 22h3.5a4.5 4.5 0 0 1 0 9H33"/>
+  <path d="M7 42h30"/>
+  <path d="M16 6c0 3-2 3-2 6s2 3 2 6M22 6c0 3-2 3-2 6s2 3 2 6M28 6c0 3-2 3-2 6s2 3 2 6" opacity=".7"/>
+</svg>`;
+
+/**
+ * Markup pásku „Líbí se vám náš web? Přidejte mi na kafe 50 Kč.“
+ * Čistá funkce bez DOM — testovatelná v node. Vkládá se do sdílené
+ * patičky (renderFooter) a přes renderKafeStrip() i na stránky, které
+ * sdílenou patičku nemají (starší články se statickým <footer>).
+ */
+export function kafeStripHtml() {
+  return `
+    <aside class="kafe-strip" id="kafeStrip" aria-labelledby="kafeHead">
+      <div class="kafe-inner">
+        <div class="kafe-icon">${KAFE_CUP_SVG}</div>
+        <div class="kafe-text">
+          <h3 class="kafe-h" id="kafeHead">Líbí se vám náš web? Přidejte mi na kafe ${KAFE_AMOUNT_LABEL}.</h3>
+          <p class="kafe-lead">HSPA Monitor píšu a provozuji bez reklam a bez sledování. Jednorázový příspěvek kartou nebo Apple&nbsp;/&nbsp;Google Pay přes Stripe, bez registrace.</p>
+        </div>
+        <a class="kafe-btn" href="${KAFE_URL}" target="_blank" rel="noopener">Přispět ${KAFE_AMOUNT_LABEL} ↗</a>
+      </div>
+    </aside>`;
+}
+
+/**
+ * Zajistí pásek „Na kafe“ na stránce, která nemá sdílenou patičku
+ * (#siteFooter → tam ho vkládá renderFooter). Vloží se před statický
+ * <footer class="site-footer"> starších článků, jinak na konec <main>,
+ * jinak na konec <body>. Idempotentní. Volá se z renderModuleNav().
+ */
+export function renderKafeStrip() {
+  if (typeof document === 'undefined') return;
+  if (document.getElementById('kafeStrip') || document.getElementById('siteFooter')) return;
+  const tpl = document.createElement('template');
+  tpl.innerHTML = kafeStripHtml().trim();
+  const strip = tpl.content.firstElementChild;
+  if (!strip) return;
+  const staticFooter = document.querySelector('footer.site-footer');
+  if (staticFooter && staticFooter.parentNode) {
+    staticFooter.parentNode.insertBefore(strip, staticFooter);
+    return;
+  }
+  (document.querySelector('main') || document.body).appendChild(strip);
+}
+
+/**
  * Vyplní sdílenou patičku do elementu #siteFooter na každé stránce.
  */
 export function renderFooter(el = document.getElementById('siteFooter')) {
@@ -315,6 +373,7 @@ export function renderFooter(el = document.getElementById('siteFooter')) {
         </p>
       </div>
     </aside>
+${kafeStripHtml()}
 
     <div class="row">
       <div>
@@ -534,6 +593,7 @@ export function renderModuleNav(activeId, { popups = 'auto' } = {}) {
   }
   renderBrandMark();
   injectOrgSchema();
+  renderKafeStrip();
   const path = window.location.pathname;
   const tabs = [
     {
