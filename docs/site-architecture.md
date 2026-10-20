@@ -28,6 +28,7 @@ zdrave-cesko.cz/
 ├── /glosar                 glosar.html             (110 termínů)
 ├── /o-projektu             o-projektu.html         (O projektu)
 ├── /jak-funguje            jak-funguje.html        (Jak zdravotnictví funguje)
+├── /newsletter             newsletter.html         (Newsletter: teaser, přihlášení, archiv čísel)
 ├── /redakce                redakce.html            (Redakční fronta)
 ├── /indicator?id={id}      indicator.html          (Detail indikátoru)
 └── /404                    404.html
@@ -408,12 +409,13 @@ materiálem radaru, nese `radar_id` (FK na `legislativa.items[].id`).
 | **JS moduly** | `src/glosar.js` → `page-shared` |
 | **CSS namespace** | `.glossary-*` (page, list, term, search), `.search-*` |
 
-### `o-projektu.html`, `jak-funguje.html`, `redakce.html` — Meta-stránky
+### `o-projektu.html`, `jak-funguje.html`, `newsletter.html`, `redakce.html` — Meta-stránky
 
 | Stránka | Účel | Klíčové moduly / CSS |
 |---|---|---|
 | `o-projektu.html` | Kdo, proč, jak. Manifest projektu. Diskuze metodiky 80 z 122 indikátorů. | Inline `<script type="module">`, `.editorial-*`, `.ed-*` |
 | `jak-funguje.html` | Schéma aktérů systému (MZ, ZP, poskytovatelé, pacienti, ÚZIS, SÚKL) jako interaktivní SVG. | `src/explainers.js`, `.schema-*`, `.cat-*` (kategorie) |
+| `newsletter.html` | Teaser (co a proč), přihlášení k odběru (`submitNewsletterSignup`, source `newsletter-page`, jiná ID než formulář v patičce) a archiv minulých čísel renderovaný za běhu z `data/newsletter-log.json` (předmět, odkazy na články, indikátor čísla; interní `note` se nezobrazuje; naplánované a neodeslané kampaně se skrývají). Fetchuje `newsletter-log.json`, `articles.json`, `indicators.json`. | `src/newsletter-page.js`, `.nlp-*` (+ znovupoužité `.newsletter-*`) |
 | `redakce.html` | Fronta nepublikovaných článků (drafts + review-pending) pro redakční tým. | `src/redakce.js`, `.redakce-*` |
 
 ### `indicator.html?id={id}` — Detail indikátoru
@@ -444,6 +446,7 @@ materiálem radaru, nese `radar_id` (FK na `legislativa.items[].id`).
 | `explainers.js` | `jak-funguje.html` | 403 |
 | `glosar.js` | `glosar.html` | 107 |
 | `redakce.js` | `redakce.html` | 116 |
+| `newsletter-page.js` | `newsletter.html` | 201 |
 | `indicator.js` | `indicator.html` | 515 |
 
 ### Sdílené moduly (importované)

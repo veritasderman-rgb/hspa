@@ -7942,6 +7942,65 @@ body.nl-popup-open .scroll-top-btn {
   .newsletter-submit { width: 100%; }
 }
 
+/* === Stránka Newsletter (newsletter.html) — namespace .nlp-* ===
+   Formulář znovupoužívá .newsletter-form / -submit / -consent / -status z patičky. */
+.nlp-wrap { max-width: 760px; margin: 0 auto; }
+.nlp-hero-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin: 20px 0 0; font-family: var(--sans); }
+.nlp-btn {
+  display: inline-block; padding: 12px 22px; min-height: 44px; box-sizing: border-box;
+  background: var(--ink); color: var(--paper); border-radius: 4px;
+  font-size: 14px; font-weight: 600; text-decoration: none; line-height: 1.4;
+}
+.nlp-btn:hover { background: var(--red); }
+.nlp-btn:focus-visible, .nlp-link:focus-visible, .nlp-more:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+.nlp-link { color: var(--ink); font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
+.nlp-link:hover { color: var(--red); }
+.nlp-section { margin: 0 0 40px; }
+.nlp-h {
+  font-family: var(--serif); font-size: 26px; font-weight: 700; letter-spacing: -0.4px;
+  line-height: 1.2; margin: 6px 0 14px; color: var(--ink);
+}
+.nlp-h3 { font-family: var(--sans); font-size: 14px; font-weight: 700; margin: 26px 0 8px; color: var(--ink); }
+.nlp-sub { font-family: var(--serif); font-size: 15px; line-height: 1.55; color: var(--ink-mut); margin: 0 0 12px; }
+.nlp-list { margin: 0; padding: 0 0 0 20px; font-family: var(--serif); font-size: 16px; line-height: 1.6; color: var(--ink); }
+.nlp-list li { margin-bottom: 10px; }
+.nlp-list strong { color: var(--ink); }
+.nlp-list-compact { font-family: var(--sans); font-size: 13.5px; line-height: 1.55; color: var(--ink-mut); }
+.nlp-list-compact li { margin-bottom: 6px; }
+.nlp-subjects { list-style: none; margin: 0; padding: 0; }
+.nlp-subjects li {
+  font-family: var(--serif); font-size: 16px; font-style: italic; line-height: 1.45; color: var(--ink);
+  padding: 8px 0 8px 14px; border-left: 3px solid var(--red); margin-bottom: 8px; background: var(--paper2);
+}
+.nlp-signup { background: var(--paper2); border-top: 3px solid var(--ink); padding: 24px 24px 20px; }
+.nlp-loading { font-family: var(--sans); font-size: 14px; color: var(--ink-mut); }
+.nlp-issue { padding: 18px 0 18px; border-bottom: 1px solid var(--rule); }
+.nlp-issue:first-child { border-top: 1px solid var(--ink); }
+.nlp-issue-date {
+  display: block; font-family: var(--sans); font-size: 11px; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-mut); margin-bottom: 4px;
+}
+.nlp-issue-subject { font-family: var(--serif); font-size: 19px; font-weight: 700; line-height: 1.3; margin: 0 0 8px; color: var(--ink); }
+.nlp-issue-items { margin: 0 0 8px; padding: 0 0 0 18px; font-family: var(--serif); font-size: 15px; line-height: 1.5; color: var(--ink); }
+.nlp-issue-items li { margin-bottom: 4px; }
+.nlp-issue-items a, .nlp-issue-ind a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--rule2); }
+.nlp-issue-items a:hover, .nlp-issue-ind a:hover { color: var(--red); text-decoration-color: var(--red); }
+.nlp-issue-ind { margin: 0; font-family: var(--sans); font-size: 13.5px; color: var(--ink-mut); }
+.nlp-issue-ind-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-right: 6px;
+}
+.nlp-more {
+  margin-top: 18px; padding: 11px 20px; min-height: 44px; border: 1px solid var(--ink); border-radius: 4px;
+  background: transparent; color: var(--ink); font-family: var(--sans); font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.nlp-more:hover { background: var(--ink); color: var(--paper); }
+@media (max-width: 720px) {
+  .nlp-h { font-size: 22px; }
+  .nlp-signup { padding: 20px 16px 16px; }
+  .nlp-btn { width: 100%; text-align: center; }
+  .nlp-more { width: 100%; }
+}
+
 /* === Na kafe — dobrovolný příspěvek 50 Kč přes Stripe (patička, každá stránka) ===
    Markup kafeStripHtml() v page-shared.js. Ve sdílené patičce (footer.bottom)
    sedí pod newsletterem a roztahuje se na šířku jako .newsletter-block;
