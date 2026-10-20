@@ -24,7 +24,7 @@ const SHOW_DELAY_MS = 10000; // po ~10 s na stránce nabídneme newsletter
 export const DEFAULT_COPY = {
   kicker: 'Newsletter',
   headline: 'Co se v dashboardu hýbe — bez spamu',
-  lead: 'Krátký přehled novinek: které články vyšly a kde se data změnila. Maximálně 1× měsíčně, bez sledovacích pixelů.',
+  lead: 'Krátký přehled novinek: které články vyšly a kde se data změnila. 1× týdně, bez sledovacích pixelů.',
   cta: 'Přihlásit se',
 };
 

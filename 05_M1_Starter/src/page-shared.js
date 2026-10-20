@@ -337,7 +337,7 @@ export function renderFooter(el = document.getElementById('siteFooter')) {
         <div class="ed-kicker">Newsletter</div>
         <h3 class="newsletter-h" id="newsletterHead">Co se v dashboardu hýbe — bez spamu</h3>
         <p class="newsletter-lead">
-          Krátký přehled, co je nového: které články vyšly, kde se data změnila, na čem se v projektu pracuje. Maximálně 1× měsíčně. Bez sledovacích pixelů, bez sdílení s třetími stranami.
+          Krátký přehled, co je nového: které články vyšly, kde se data změnila, na čem se v projektu pracuje. 1× týdně, zpravidla v pátek. Bez sledovacích pixelů, bez sdílení s třetími stranami.
         </p>
 
         <!--

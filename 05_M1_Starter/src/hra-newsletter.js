@@ -13,7 +13,7 @@ import { requestNewsletterPopup } from './newsletter-popup.js';
 export const GENERIC_GAME_COPY = {
   kicker: 'Newsletter',
   headline: 'Hrajete si se systémem, který se každý rok přepisuje',
-  lead: 'Pošleme vám, kde se data pohnula a které články vyšly. Maximálně 1× měsíčně, bez sledovacích pixelů.',
+  lead: 'Pošleme vám, kde se data pohnula a které články vyšly. 1× týdně, bez sledovacích pixelů.',
   cta: 'Přihlásit se',
 };
 
