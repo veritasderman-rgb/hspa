@@ -101,6 +101,7 @@ export const STATIC_PAGES = [
   { loc: '/glosar.html', priority: '0.7', changefreq: 'monthly' },
   { loc: '/jak-funguje.html', priority: '0.6', changefreq: 'monthly' },
   { loc: '/o-projektu.html', priority: '0.5', changefreq: 'monthly' },
+  { loc: '/newsletter.html', priority: '0.5', changefreq: 'weekly' },
   { loc: '/redakce.html', priority: '0.4', changefreq: 'monthly' },
   { loc: '/cesta-pacienta.html', priority: '0.6', changefreq: 'monthly' },
   { loc: '/model-systemu.html', priority: '0.6', changefreq: 'monthly' },

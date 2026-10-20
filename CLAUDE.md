@@ -98,6 +98,7 @@ git push -u origin claude/<branch>
 ├── plneni-*.html               ← 7 dalších stránek plnění strategií (onko 2030, KV 2035, AMR, duševní zdraví, Zdraví 2030 retrospektivně, sociální služby 2026–2030, sociální služby 2016–2025 retrospektivně) — sdílený renderer src/strategie-plneni.js, datasety data/plneni-*.json
 ├── kalkulacka-pece-2035.html   ← Kdo se o nás postará v roce 2035? (interaktivní model dlouhodobé péče: lůžka × pečovatelé v terénu × přesměrování do terénu → kolik seniorů zůstane bez místa, úvazky rodin, náklad systému; src/ltc-engine.js + src/ltc-kalkulacka.js, data/ltc-scenare.json)
 ├── o-projektu.html             ← O projektu, metodika
+├── newsletter.html             ← Newsletter: teaser, přihlášení k odběru (Brevo přes /api/subscribe), archiv minulých čísel z data/newsletter-log.json — src/newsletter-page.js
 ├── jak-funguje.html            ← Jak HSPA hodnocení funguje (vysvětlení)
 ├── model-systemu.html          ← Interaktivní kauzální mapa systému (páky, hrany, režim „Zatlačte na páku")
 ├── redakce.html                ← Redakční tým a procesy

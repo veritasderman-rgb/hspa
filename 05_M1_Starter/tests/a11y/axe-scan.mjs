@@ -49,6 +49,7 @@ const PAGES = [
   'glosar.html',
   'jak-funguje.html',
   'o-projektu.html',
+  'newsletter.html',
   'redakce.html',
   'legislativa.html',
   'barometr.html',

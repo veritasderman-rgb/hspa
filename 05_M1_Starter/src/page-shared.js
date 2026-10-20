@@ -369,7 +369,7 @@ export function renderFooter(el = document.getElementById('siteFooter')) {
         </div>
 
         <p class="newsletter-foot">
-          Rozesílku zajišťuje Brevo; e-mail použijeme jen pro newsletter. Více v <a href="o-projektu.html">O projektu</a>.
+          Rozesílku zajišťuje Brevo; e-mail použijeme jen pro newsletter. Více o rozesílce a minulá čísla: <a href="newsletter.html">Newsletter</a>.
         </p>
       </div>
     </aside>
