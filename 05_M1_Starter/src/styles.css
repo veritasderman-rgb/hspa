@@ -1162,7 +1162,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
    ================================================================= */
 .module-nav {
   display: flex;
-  gap: 22px;
+  gap: 21px;
   background: transparent;
   border-bottom: none;
   padding: 0;
@@ -4373,6 +4373,171 @@ ul.md-enum > li > strong:first-child {
   background: var(--paper2);
   padding: 1px 6px;
   border: 1px solid var(--rule);
+}
+
+/* ── O projektu: obsah stránky + tematické skupiny (.about-*) ───────────
+   Skupiny vyplňují šířku <main> stejně jako hero a „Příbuzné sekce", takže
+   všechny bloky (včetně časové osy a podcastu) sedí na jedné hraně. Vnořené
+   sekce se starým vlastním odsazením (kompas, AI ekonomika, sociální sítě)
+   se uvnitř skupiny vyresetují. */
+.about-toc {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  margin: 0 0 56px;
+}
+.about-toc-label {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-mut);
+}
+.about-toc-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.about-toc-list a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 8px 16px;
+  border: 1px solid var(--rule2);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+.about-toc-list a:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.about-toc-list a:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+
+.about-group {
+  margin: 0 0 72px;
+  scroll-margin-top: 24px;
+}
+.about-group [id] { scroll-margin-top: 24px; }
+.about-group-head { margin: 0 0 20px; }
+.about-group-head .ed-kicker { margin-bottom: 10px; }
+.about-group-h.ed-areas-h {
+  font-size: 40px;
+  line-height: 1.1;
+  margin: 0;
+}
+.about-group h3.ed-areas-h {
+  font-size: 26px;
+  line-height: 1.2;
+}
+.about-flow { column-gap: 56px; }
+/* Sloupec s jedním vysokým blokem a stohem vedle: přebytek výšky jde do posledního řádku */
+.about-flow-2 { grid-template-rows: auto 1fr; }
+.about-flow-3 { grid-template-rows: auto auto 1fr; }
+.about-flow .ed-about-block > ul:not(.ed-about-sources) { margin: 0 0 12px; padding-left: 20px; }
+.about-side-2 { grid-column: 2; grid-row: 1 / span 2; }
+.about-side-3 { grid-column: 2; grid-row: 1 / span 3; }
+
+.about-group .brand-symbol-section {
+  max-width: none;
+  margin: 0;
+  padding: 40px 0 0;
+}
+.about-group .timeline-pair-details {
+  max-width: none;
+  margin: 40px 0 0;
+  padding: 0 0 8px;
+}
+.about-group .oai-section {
+  max-width: none;
+  margin: 0;
+  padding: 48px 0 0;
+  border-top: 0;
+}
+.about-group .about-social-section {
+  max-width: none;
+  margin: 0;
+  padding: 40px 0 0;
+}
+
+/* Podcast: stejná obsahová šířka jako ostatní skupiny. Modifikátor je jen
+   pro o-projektu — .hspa-podcast-section používá i hspa-prehled.html. */
+.about-podcast { margin: 40px 0 0; }
+.about-podcast .hspa-podcast-card {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  padding: 28px;
+  border: 1px solid var(--rule2);
+  border-top: 3px solid var(--ink);
+}
+.about-podcast .hspa-podcast-icon { flex: 0 0 auto; color: var(--ink); }
+.about-podcast .hspa-podcast-body { flex: 1; min-width: 0; max-width: 760px; }
+.about-podcast .hspa-podcast-h {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--ink);
+  margin: 0 0 10px;
+}
+.about-podcast .hspa-podcast-lead {
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--ink);
+  margin: 0 0 12px;
+}
+.about-podcast .hspa-podcast-cta {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--ink);
+}
+.about-podcast .hspa-podcast-cta:hover { color: var(--red); border-bottom-color: var(--red); }
+.about-podcast .hspa-podcast-note {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+  margin: 14px 0 0;
+}
+
+/* „Příbuzné sekce" jako h2 (hierarchie nadpisů) — vzhled shodný s h3 */
+.about-related .section-title h2 {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--ink);
+}
+
+@media (max-width: 880px) {
+  .about-side-2, .about-side-3 { grid-column: auto; grid-row: auto; }
+  .about-flow { column-gap: 0; }
+  .about-flow-2, .about-flow-3 { grid-template-rows: none; }
+  .about-group { margin-bottom: 56px; }
+}
+@media (max-width: 640px) {
+  .about-toc { margin-bottom: 40px; }
+  .about-group-h.ed-areas-h { font-size: 30px; }
+  .about-group h3.ed-areas-h { font-size: 22px; }
+  .about-group .brand-symbol-section { padding-top: 28px; }
+  .about-podcast .hspa-podcast-card { flex-direction: column; gap: 12px; padding: 20px 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .about-toc-list a { transition: none; }
 }
 
 /* === Narrative section (4-step: Jak jsme na tom / Proč / Kdo / Jak poznáme) === */

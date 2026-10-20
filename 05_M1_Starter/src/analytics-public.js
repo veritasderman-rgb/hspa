@@ -44,14 +44,11 @@ function isPlaceholder(data) {
       && (data?.top_glossary_terms?.length ?? 0) === 0);
 }
 
-function renderNoData(slot, generatedAt) {
-  const date = generatedAt
-    ? FORMAT_DATE.format(new Date(generatedAt))
-    : '—';
+function renderNoData(slot) {
   slot.innerHTML = `
     <p class="apub-empty">
-      Veřejný dashboard se aktivuje automaticky <strong>jakmile bude nastaven Service Account a GA Property ID</strong>
-      v GitHub Secrets. Do té doby zde nezobrazujeme žádná „mock" čísla. Stav k ${escapeHtml(date)}.
+      Veřejný přehled se zapne, <strong>až bude napojen GA4 Service Account</strong> (přístupové údaje a GA Property ID
+      se nastavují v GitHub Secrets). Zatím je neaktivní a nezobrazujeme žádná „mock" čísla.
       Detail v <a href="https://github.com/veritasderman-rgb/hspa/blob/main/05_M1_Starter/PLAN-GA4-ROZSIRENI.md" target="_blank" rel="noopener">PLAN-GA4-ROZSIRENI.md</a>.
     </p>`;
 }
@@ -109,7 +106,7 @@ function renderDashboard(data) {
   if (!slot) return;
 
   if (isPlaceholder(data)) {
-    renderNoData(slot, data?.generated_at);
+    renderNoData(slot);
     return;
   }
 
@@ -166,7 +163,7 @@ function renderDashboard(data) {
     <div class="apub-grid">
       <div class="apub-card">
         <h4 class="apub-card-h">Top 10 indikátorů</h4>
-        <p class="apub-card-desc">Co lidé v hub matrix klíčí.</p>
+        <p class="apub-card-desc">Co lidé v hub matrix klikají.</p>
         ${indicatorsHtml}
       </div>
 
