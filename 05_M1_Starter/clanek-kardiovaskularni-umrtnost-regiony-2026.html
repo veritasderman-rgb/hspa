@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-10-20
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-10-20
+    creation_phase: rutina+article-write
+    form: article
+    primary_sources_count: 5
+    evidence_sources_count: 2
+    visual_elements_count: 5
+    notes: "Vytvoreno z discovery 2026-10-20 (zadne nepokryte HOT deni, backlog prazdny): Eurostat news 29. 9. 2026 Almost 1 in 3 EU deaths due to circulatory system diseases (https://ec.europa.eu/eurostat/web/products-eurostat-news/w/edn-20260929-1, stazeno 20. 10. 2026; EU 2023 1,6 mil. umrti, 32,5 %, EU standardizovana mira 313/100 000, 108 z 244 NUTS2 regionu na urovni EU nebo nad ni; zdroj hlth_cd_asdr2, regionalni rocenka 2026). KPI: hlth_cd_asdr2 (API JSON-stat, stazeno 20. 10. 2026, update dat 2026-06-08), icd10=I, sex=T, age=TOTAL, unit=RT, 2023: CZ08 Moravskoslezsko 529,41; CZ04 Severozapad 515,48; CZ05 479,48; CZ02 473,24; CZ07 462,60; CZ06 453,55; CZ03 405,88; CZ01 Praha 395,13; CZ 463,75 (= indikator mortalita_kardiovaskularni); EU27_2020 312,95. 2015: CZ01 524,77; CZ02 659,23; CZ03 617,70; CZ04 724,02; CZ05 610,64; CZ06 597,34; CZ07 637,75; CZ08 703,43; CZ 629,00; EU 397,47. 2019: CZ 529,55, EU 337,10. Age Y_LT65 2023: CZ01 36,70; CZ02 45,58; CZ03 44,70; CZ04 64,30; CZ05 46,80; CZ06 44,62; CZ07 46,47; CZ08 60,25; CZ 48,69; EU 37,47. I20-I25 2023: CZ 193,59, EU 100,39; I60-I69 2023: CZ 67,57, EU 63,93, CZ01 48,23. Pohlavi 2023 (I, TOTAL): CZ M 574,05 / F 384,60; EU M 377,87 / F 261,81; CZ08 M 649,43; CZ04 M 640,67. Sousede 2023: DE 349,67; AT 333,44; PL 450,96; SK 600,47; HU 710,19. Poradi: z 244 NUTS2 regionu EU s hodnotou 2023 (bez extra-regio) je CZ08 33., CZ04 35.-36. (shoda s PL82 515,48), CZ01 61. nejvyssi (vypocet redakce; nezavisly audit K 2026-10-20 opravil 36. -> 35.-36.). Pocty umrti hlth_cd_aro (TOT_RESID, 2023): CZ I 43 840 z 112 323 = 39,0 %; EU 1 589 374 z 4 842 731 = 32,8 % (Eurostat news uvadi 32,5 % - jina definice celku, v textu uvedeno). NKVP 2025-2035 verze 4.0 (PDF https://mzd.gov.cz/wp-content/uploads/2025/01/Narodni-kardiovaskularni-plan-CR-na-obdobi-2025-2035.pdf, stazeno 20. 10. 2026): str. 5 vize bez ohledu na geografickou polohu; str. 15 regionalni rozdily v neprospech MSK, Usteckeho a Karlovarskeho kraje, nejnizsi standardizovana umrtnost Praha a Jihocesky kraj; str. 23 ambulance 6/100 tis., Praha 11, Jihocesky 3,8, Stredocesky 4,0, Karlovarsky 4,2 (jen 1,7 uvazku). Ciselny cil pro regionalni populacni umrtnost v planu nenalezen. EVIDENCE (PubMed overeno 20. 10. 2026): Lustigova 2018 JECH PMID 29439193 (HAPIEE CZ n=8449, vzdelani HR 2,77, PAF 50,5 %); Bosakova 2019 Int J Public Health PMID 30535783 (35 NUTS2 regionu V4, 2011-2013, 20-64 let, nizsi vzdelani nejsilnejsi prediktor). Consensus nepouzit. Rozhodnuti forma: standardni clanek (chybi dolozena uvodni scena a obrat ve vyzkumu). Pozn.: data/regions.json dataset mortalita_kvn_kraje (2024, CR 220) neodpovida Eurostatu (463,75) - v clanku nepouzito, k reviz. Ceka na schvaleni redakce."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ani Praha nedosáhne na průměr EU. Na nemoci srdce a cév se víc umírá ve všech osmi regionech Česka · HSPA Monitor</title>
+<meta name="description" content="Podle regionálních dat Eurostatu za rok 2023 zemřelo na nemoci oběhové soustavy v Moravskoslezsku 529 lidí na 100 000 obyvatel a na Severozápadě 515, po přepočtu na stejnou věkovou strukturu. Průměr EU byl 313. Nad ním je všech osm českých regionů, včetně Prahy s 395. Největší rozdíly jsou u lidí do 65 let: Severozápad 64, Praha 37, tedy pod průměrem EU. Národní kardiovaskulární plán slibuje péči bez ohledu na geografickou polohu, číselný cíl pro regionální úmrtnost ale nemá.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Ani Praha nedosáhne na průměr EU. Na nemoci srdce a cév se víc umírá ve všech osmi regionech Česka">
+<meta property="og:description" content="Moravskoslezsko 529, Severozápad 515, Praha 395 úmrtí na 100 000 obyvatel, průměr EU 313 (Eurostat, 2023, standardizováno). Kde je mezera největší a co s ní.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-kardiovaskularni-umrtnost-regiony-2026.html">
+<meta property="article:published_time" content="2026-10-23">
+<meta property="article:section" content="Kardiovaskulární zdraví">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-kardiovaskularni-umrtnost-regiony-2026.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "Ani Praha nedosáhne na průměr EU. Na nemoci srdce a cév se víc umírá ve všech osmi regionech Česka",
+  "description": "Podle regionálních dat Eurostatu za rok 2023 zemřelo na nemoci oběhové soustavy v Moravskoslezsku 529 lidí na 100 000 obyvatel a na Severozápadě 515, po přepočtu na stejnou věkovou strukturu. Průměr EU byl 313. Nad ním je všech osm českých regionů, včetně Prahy s 395. Největší rozdíly jsou u lidí do 65 let: Severozápad 64, Praha 37, tedy pod průměrem EU. Národní kardiovaskulární plán slibuje péči bez ohledu na geografickou polohu, číselný cíl pro regionální úmrtnost ale nemá.",
+  "datePublished": "2026-10-23T06:00:00+02:00",
+  "dateModified": "2026-10-20",
+  "inLanguage": "cs",
+  "articleSection": "Kardiovaskulární zdraví",
+  "author": { "@type": "Organization", "name": "Redakce HSPA Monitoru" },
+  "publisher": { "@type": "Organization", "name": "HSPA Monitor · Skóre zdravotnictví", "url": "https://skorezdravotnictvi.cz" },
+  "mainEntityOfPage": "https://skorezdravotnictvi.cz/clanek-kardiovaskularni-umrtnost-regiony-2026.html"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Kardiovaskulární zdraví</span>
+        <span class="article-tag article-tag-muted">regiony · úmrtnost · NUTS 2 · Eurostat · Národní kardiovaskulární plán</span>
+      </div>
+      <h1 class="article-title">Ani Praha nedosáhne na průměr EU. Na nemoci srdce a cév se víc umírá ve všech osmi regionech Česka</h1>
+      <p class="article-deck">
+        Podle regionálních dat Eurostatu za rok 2023 zemřelo na nemoci oběhové soustavy v Moravskoslezsku 529 lidí na 100 000 obyvatel a na Severozápadě 515, po přepočtu na stejnou věkovou strukturu. Průměr EU byl 313. Nad ním je všech osm českých regionů, včetně Prahy s 395. Největší rozdíly jsou u lidí do 65 let: Severozápad 64, Praha 37, tedy pod průměrem EU. Národní kardiovaskulární plán slibuje péči bez ohledu na geografickou polohu, číselný cíl pro regionální úmrtnost ale nemá.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">23. října 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">9 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Eurostat koncem září zveřejnil, že nemoci srdce a cév v roce 2023 zabily v Evropské unii 1,6 milionu lidí, tedy téměř každého třetího zemřelého. Ke zprávě přidal mapu 244 evropských regionů. Česko na ní nevypadá jako jedna země s jedním číslem, ale jako osm regionů, z nichž každý má vlastní příběh. Společné mají jedno: <strong>žádný z nich, ani Praha, se nedostal pod průměr EU</strong>. Nejvýš je Moravskoslezsko s 529 úmrtími na 100 000 obyvatel, průměr Unie je 313.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCntH">
+        <figcaption class="av-figure-h" id="avCntH">Úmrtnost na nemoci oběhové soustavy: čtyři čísla (Eurostat, 2023, věkově standardizováno)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="529">529</span>
+            <span class="av-counter-label">úmrtí na 100 000 obyvatel v Moravskoslezsku, nejvíc v Česku</span>
+            <span class="av-counter-foot">Eurostat hlth_cd_asdr2, 2023</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="395">395</span>
+            <span class="av-counter-label">úmrtí na 100 000 obyvatel v Praze, nejméně v Česku</span>
+            <span class="av-counter-foot">Eurostat hlth_cd_asdr2, 2023</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="313">313</span>
+            <span class="av-counter-label">průměr EU na 100 000 obyvatel</span>
+            <span class="av-counter-foot">Eurostat hlth_cd_asdr2, 2023</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="43840">43 840</span>
+            <span class="av-counter-label">Čechů zemřelo na nemoci oběhové soustavy, 39 % všech úmrtí</span>
+            <span class="av-counter-foot">Eurostat hlth_cd_aro, 2023</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat, Causes of death — standardised death rate by NUTS 2 region of residence (<code>hlth_cd_asdr2</code>), diagnózy I00–I99, obě pohlaví, všechny věky, rok 2023; Causes of death — deaths by country of residence and occurrence (<code>hlth_cd_aro</code>), rok 2023. Staženo přes API Eurostatu 20. 10. 2026. Podíl 39 % spočítala redakce.</p>
+      </figure>
+
+      <h3>Co data měří</h3>
+      <p>
+        Standardizovaná úmrtnost říká, kolik lidí by zemřelo na 100 000 obyvatel, kdyby všechny regiony měly stejnou věkovou strukturu. Bez přepočtu by regiony se starším obyvatelstvem vycházely hůř jen proto, že v nich žije víc seniorů. Eurostat počítá podle bydliště zemřelého a podle příčiny smrti z listu o prohlídce zemřelého. Do skupiny nemocí oběhové soustavy patří hlavně ischemická choroba srdeční (infarkt a chronická onemocnění srdečních tepen), cévní mozkové příhody, srdeční selhání a hypertenzní nemoci.
+      </p>
+      <p>
+        Pro regionální srovnání používá Eurostat úroveň NUTS 2. V Česku jde o osm regionů soudržnosti, které se jen částečně kryjí s kraji. Praha, Střední Čechy a Moravskoslezsko odpovídají vždy jednomu kraji. Severozápad tvoří Karlovarský a Ústecký kraj, Jihozápad Jihočeský a Plzeňský, Severovýchod Liberecký, Královéhradecký a Pardubický, Jihovýchod Vysočina a Jihomoravský kraj a Střední Morava Olomoucký a Zlínský kraj.
+      </p>
+      <p>
+        Celostátní hodnota 463,75 na 100 000 obyvatel je stejná jako v indikátoru HSPA Monitoru <a href="indicator.html?id=mortalita_kardiovaskularni">Mortalita na kardiovaskulární nemoci</a>, který čerpá ze stejného zdroje. Česko je proti průměru EU o 48 % výš.
+      </p>
+
+      <h3>Osm regionů, osm čísel nad Evropou</h3>
+
+      <figure class="av-figure" aria-labelledby="avBarH">
+        <figcaption class="av-figure-h" id="avBarH">Standardizovaná úmrtnost na nemoci oběhové soustavy v regionech Česka a v EU, 2023, na 100 000 obyvatel (Eurostat)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="600">
+          <li class="av-bar-row" data-value="529.4" data-label="Moravskoslezsko" data-display="529"></li>
+          <li class="av-bar-row" data-value="515.5" data-label="Severozápad (Karlovarský + Ústecký)" data-display="515"></li>
+          <li class="av-bar-row" data-value="479.5" data-label="Severovýchod" data-display="479"></li>
+          <li class="av-bar-row" data-value="473.2" data-label="Střední Čechy" data-display="473"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="463.8" data-label="Česko" data-display="464"></li>
+          <li class="av-bar-row" data-value="462.6" data-label="Střední Morava" data-display="463"></li>
+          <li class="av-bar-row" data-value="453.6" data-label="Jihovýchod" data-display="454"></li>
+          <li class="av-bar-row" data-value="405.9" data-label="Jihozápad" data-display="406"></li>
+          <li class="av-bar-row" data-value="395.1" data-label="Praha" data-display="395"></li>
+          <li class="av-bar-row" data-value="313.0" data-label="Průměr EU-27" data-display="313"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat, <code>hlth_cd_asdr2</code>, diagnózy I00–I99, obě pohlaví, všechny věky, rok 2023, standardizováno na evropskou standardní populaci; staženo 20. 10. 2026. Hodnoty zaokrouhleny na celá čísla.</p>
+      </figure>
+
+      <p>
+        Rozdíl mezi krajními regiony je velký. V Moravskoslezsku zemřelo na nemoci oběhové soustavy po přepočtu na stejný věk o 34 % víc lidí než v Praze a o 69 % víc, než je průměr EU. Severozápad je s 515 hned za ním. Prostředek tvoří Severovýchod, Střední Čechy, Střední Morava a Jihovýchod v pásmu od 454 do 479. Nejlépe vycházejí Jihozápad se 406 a Praha s 395, i Praha je ale nad průměrem Unie o 26 %.
+      </p>
+      <p>
+        V evropském pořadí to znamená, že z 244 regionů, pro které Eurostat hodnotu za rok 2023 zveřejnil, je Moravskoslezsko 33. nejhorší a Severozápad 35. až 36. (se stejnou hodnotou se o místo dělí s polským Podkarpatským vojvodstvím). Praha jako nejlépe hodnocený český region je 61. Všech osm českých regionů tedy patří mezi 61 regionů s nejvyšší úmrtností, do nejhorší čtvrtiny Evropy. Eurostat ve zprávě uvádí, že 108 regionů bylo na úrovni průměru EU nebo nad ním. Nejvyšší míry mají regiony Bulharska, s hodnotami kolem 1 000 na 100 000 obyvatel, nejnižší regiony Francie; region Île-de-France kolem Paříže má 132.
+      </p>
+      <p>
+        Pořadí uvnitř Česka není nové. Národní kardiovaskulární plán na léta 2025 až 2035, který vláda schválila v prosinci 2024, ve své analytické části píše o „výrazných regionálních rozdílech v neprospěch Moravskoslezského, Ústeckého a Karlovarského kraje“ a uvádí, že nejnižší standardizovaná úmrtnost je v Praze a Jihočeském kraji. Data za rok 2023 tento obraz potvrzují.
+      </p>
+
+      <h3>Kde je mezera největší: lidé do 65 let</h3>
+      <p>
+        Nejostřeji se regiony liší u předčasných úmrtí. Eurostat zveřejňuje standardizovanou úmrtnost i pro lidi mladší 65 let. Tady má Severozápad 64,3 úmrtí na 100 000 obyvatel a Moravskoslezsko 60,3, zatímco Praha 36,7. Na Severozápadě tedy na nemoci srdce a cév umírá před 65. narozeninami 1,75krát víc lidí než v Praze. Praha je přitom v této věkové skupině o něco <em>pod</em> průměrem EU, který činí 37,5. Ostatní regiony se pohybují mezi 44,6 a 46,8.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTabH">
+        <figcaption class="av-figure-h" id="avTabH">Standardizovaná úmrtnost na nemoci oběhové soustavy podle regionů NUTS 2, na 100 000 obyvatel (Eurostat hlth_cd_asdr2, 2015–2023)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Region</th>
+                <th scope="col" class="av-num">2015</th>
+                <th scope="col" class="av-num">2019</th>
+                <th scope="col" class="av-num">2023</th>
+                <th scope="col" class="av-num">Změna 2015–2023 (%)</th>
+                <th scope="col" class="av-num">Do 65 let, 2023</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Moravskoslezsko</th><td class="av-num">703</td><td class="av-num">591</td><td class="av-num av-bad">529</td><td class="av-num">−24,7</td><td class="av-num av-bad">60,3</td></tr>
+              <tr><th scope="row">Severozápad</th><td class="av-num">724</td><td class="av-num">580</td><td class="av-num av-bad">515</td><td class="av-num">−28,8</td><td class="av-num av-bad">64,3</td></tr>
+              <tr><th scope="row">Severovýchod</th><td class="av-num">611</td><td class="av-num">526</td><td class="av-num">479</td><td class="av-num">−21,5</td><td class="av-num">46,8</td></tr>
+              <tr><th scope="row">Střední Čechy</th><td class="av-num">659</td><td class="av-num">560</td><td class="av-num">473</td><td class="av-num">−28,2</td><td class="av-num">45,6</td></tr>
+              <tr><th scope="row">Střední Morava</th><td class="av-num">638</td><td class="av-num">526</td><td class="av-num">463</td><td class="av-num">−27,5</td><td class="av-num">46,5</td></tr>
+              <tr><th scope="row">Jihovýchod</th><td class="av-num">597</td><td class="av-num">527</td><td class="av-num">454</td><td class="av-num">−24,1</td><td class="av-num">44,6</td></tr>
+              <tr><th scope="row">Jihozápad</th><td class="av-num">618</td><td class="av-num">502</td><td class="av-num">406</td><td class="av-num av-good">−34,3</td><td class="av-num">44,7</td></tr>
+              <tr><th scope="row">Praha</th><td class="av-num">525</td><td class="av-num">443</td><td class="av-num">395</td><td class="av-num">−24,7</td><td class="av-num av-good">36,7</td></tr>
+              <tr class="av-row-highlight"><th scope="row">Česko</th><td class="av-num">629</td><td class="av-num">530</td><td class="av-num">464</td><td class="av-num">−26,3</td><td class="av-num">48,7</td></tr>
+              <tr><th scope="row">EU-27</th><td class="av-num">397</td><td class="av-num">337</td><td class="av-num">313</td><td class="av-num">−21,3</td><td class="av-num">37,5</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat, <code>hlth_cd_asdr2</code>, diagnózy I00–I99, obě pohlaví; sloupec „Do 65 let“ = věková skupina mladší 65 let. Staženo 20. 10. 2026. Hodnoty zaokrouhleny; procentní změnu spočítala redakce z nezaokrouhlených hodnot.</p>
+      </figure>
+
+      <p>
+        Tabulka ukazuje i dobrou zprávu. Úmrtnost od roku 2015 klesla ve všech regionech, nejvíc na Jihozápadě o 34 %. Celé Česko kleslo o 26 %, rychleji než průměr EU (o 21 %). Propast vůči Evropě se tím zúžila ze 232 na 151 úmrtí na 100 000 obyvatel, tedy zhruba o třetinu. Pořadí regionů se ale za osm let skoro nezměnilo: Moravskoslezsko a Severozápad byly nahoře v roce 2015 i v roce 2023.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-bad">
+          <span class="av-counter" data-value="385">385</span>
+          <span class="av-counter-label">úmrtí žen na 100 000 v Česku; průměr EU u mužů je 378</span>
+          <span class="av-counter-foot">Eurostat hlth_cd_asdr2, nemoci oběhové soustavy, standardizováno, 2023</span>
+        </div>
+      </aside>
+
+      <p>
+        Rozdíl je vidět i podle pohlaví. U mužů je standardizovaná úmrtnost na nemoci oběhové soustavy v Česku 574 na 100 000 obyvatel, u žen 385. Průměr EU je 378 u mužů a 262 u žen. České ženy tak umírají na nemoci srdce a cév častěji než průměrný evropský muž. V Moravskoslezsku a na Severozápadě přesahuje hodnota u mužů 640.
+      </p>
+
+      <div class="av-aside-clear"></div>
+
+      <h3>Srdce, ne mozek</h3>
+      <p>
+        Rozdíl proti Evropě netvoří všechny nemoci oběhové soustavy stejně. U ischemické choroby srdeční má Česko standardizovanou úmrtnost 193,6 na 100 000 obyvatel, průměr EU 100,4, tedy téměř dvojnásobek. U cévních onemocnění mozku je to 67,6 proti 63,9, jen o 6 % víc; Praha je se 48,2 dokonce pod evropským průměrem. Jde o stejný vzorec, jaký popisujeme v článku <a href="clanek-kardiovaskularni-mortalita.html">Český kardiovaskulární paradox</a>: akutní péče o infarkt a mrtvici patří ke špičce, celková úmrtnost na srdce zůstává vysoko.
+      </p>
+      <p>
+        Mezi regiony je rozdělení na jednotlivé diagnózy méně spolehlivé než celkový součet. Například Jihozápad má nejnižší úmrtnost na ischemickou chorobu srdeční (151 na 100 000), přestože v celkové úmrtnosti je až druhý za Prahou. Jak lékaři v jednotlivých krajích vyplňují příčinu smrti, může ovlivnit, do které podskupiny se úmrtí zapíše. Proto v článku stavíme hlavně na souhrnné skupině I00–I99.
+      </p>
+
+      <h3>Mezinárodní srovnání: sousedé</h3>
+
+      <figure class="av-figure" aria-labelledby="avBar2H">
+        <figcaption class="av-figure-h" id="avBar2H">Standardizovaná úmrtnost na nemoci oběhové soustavy, Česko a sousední státy, 2023, na 100 000 obyvatel (Eurostat)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="750">
+          <li class="av-bar-row" data-value="710.2" data-label="Maďarsko" data-display="710"></li>
+          <li class="av-bar-row" data-value="600.5" data-label="Slovensko" data-display="600"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="463.8" data-label="Česko" data-display="464"></li>
+          <li class="av-bar-row" data-value="451.0" data-label="Polsko" data-display="451"></li>
+          <li class="av-bar-row" data-value="349.7" data-label="Německo" data-display="350"></li>
+          <li class="av-bar-row" data-value="333.4" data-label="Rakousko" data-display="333"></li>
+          <li class="av-bar-row" data-value="313.0" data-label="Průměr EU-27" data-display="313"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat, <code>hlth_cd_asdr2</code>, diagnózy I00–I99, obě pohlaví, všechny věky, rok 2023; staženo 20. 10. 2026.</p>
+      </figure>
+
+      <p>
+        Ve středoevropském srovnání je Česko uprostřed. Slovensko (600) a Maďarsko (710) mají úmrtnost výrazně vyšší, Polsko (451) podobnou. Německo (350) a Rakousko (333) jsou blízko průměru EU. I Praha jako nejlépe hodnocený český region má vyšší hodnotu než celé Německo nebo Rakousko.
+      </p>
+      <p>
+        Že regionální rozdíly ve střední Evropě souvisejí se sociálními podmínkami, ukázala studie Bosákové a kolegů z roku 2019 v časopise <em>International Journal of Public Health</em>. Autoři porovnali úmrtnost lidí ve věku 20 až 64 let v 35 regionech NUTS 2 zemí Visegrádské čtyřky v letech 2011 až 2013. Nejsilnějším ukazatelem vyšší úmrtnosti byla nižší úroveň vzdělání v regionu. Jde o ekologickou studii na úrovni regionů, která neříká, proč konkrétní člověk zemřel, jen jak spolu souvisí regionální průměry.
+      </p>
+
+      <h3>Proč se regiony liší</h3>
+      <p>
+        Na úrovni jednotlivců přinesla podobný závěr česká kohortní studie Lustigové a kolegů z roku 2018 v <em>Journal of Epidemiology and Community Health</em>. Sledovala 8 449 účastníků české části projektu HAPIEE dvanáct let. Vzdělání bylo nejsilnějším faktorem kardiovaskulární úmrtnosti: lidé se základním vzděláním měli 2,77krát vyšší riziko než vysokoškoláci. Významné bylo i kouření, vysoký krevní tlak, cukrovka a nedostatek pohybu. Autoři spočítali, že kdyby celá populace měla stejné rizikové hodnoty jako nejvzdělanější skupina, bylo by možné předejít více než polovině úmrtí na nemoci srdce a cév.
+      </p>
+      <p>
+        Na dostupnost specializované péče rozdíly přímo převést nejdou. Národní kardiovaskulární plán uvádí, že ambulantní kardiologickou péči v Česku zajišťuje v průměru 6 míst na 100 000 obyvatel, v Praze 11, v Jihočeském kraji 3,8 a v Karlovarském 4,2. V Karlovarském kraji navíc smluvním ambulancím odpovídá jen 1,7 úvazku lékaře na 100 000 obyvatel. Jihočeský kraj má přitom podle plánu spolu s Prahou nejnižší standardizovanou úmrtnost. Málo kardiologů tedy samo o sobě vysokou úmrtnost nevysvětluje. Kde se ale vysoké riziko potká s řídkou sítí, jako v Karlovarském kraji, má prevence i následná péče těžší pozici.
+      </p>
+
+      <div class="article-callout-caveat" role="note">
+        <strong>Co data neříkají</strong>
+        Regiony NUTS 2 nejsou kraje, takže Karlovarský a Ústecký kraj nebo Liberecký a Pardubický kraj tu nelze oddělit. Standardizovaná úmrtnost odstraňuje vliv věkové struktury, ne vliv chudoby, vzdělání nebo kouření. Příčinu smrti určuje lékař při prohlídce zemřelého, takže zařazení do skupin diagnóz se může mezi regiony i státy lišit. Podíl 39 % úmrtí v Česku jsme spočítali z počtů v databázi <code>hlth_cd_aro</code>; stejným postupem vychází pro EU 32,8 %, Eurostat ve zprávě uvádí 32,5 %, nejspíš kvůli jinému vymezení celkového počtu úmrtí. Poslední dostupný rok je 2023.
+      </div>
+
+      <h3>Co s tím</h3>
+      <p>
+        <strong>Měřit regiony, ne jen stát.</strong> Národní kardiovaskulární plán má ve vizi péči „bez ohledu na geografickou polohu“ a regionální rozdíly popisuje. Číselný cíl pro populační úmrtnost na nemoci srdce a cév po regionech jsme v něm ale nenašli; regionální cíle se týkají hlavně počtu ambulancí. Standardizovaná úmrtnost podle regionů, zvlášť do 65 let, je přitom každý rok dostupná z Eurostatu. Hodí se jako jednoduchý ukazatel, zda se Moravskoslezsko a Severozápad k ostatním přibližují.
+      </p>
+      <p>
+        <strong>Prevenci posílat tam, kde je riziko.</strong> Studie Lustigové vedle vzdělání jmenuje rizikové faktory, které se dají ovlivnit: kouření, vysoký tlak, cukrovku a nedostatek pohybu. Pro zdravotní pojišťovny a kraje to znamená zaměřit kontrolu tlaku, léčbu závislosti na tabáku a programy pro lidi s cukrovkou hlavně na regiony s nejvyšší úmrtností do 65 let.
+      </p>
+      <p>
+        <strong>Nepodceňovat síť ambulancí v rizikových krajích.</strong> Karlovarský kraj s 1,7 úvazku kardiologa na 100 000 obyvatel je podle plánu na spodním okraji dostupnosti a zároveň patří do regionu s druhou nejvyšší úmrtností. Plán pro ambulantní kardiologii počítá optimálně se 7 až 8 místy na 100 000 obyvatel. Pro takové kraje by mělo platit, že se síť doplňuje přednostně.
+      </p>
+      <p>
+        <strong>Pro čtenáře:</strong> jestli žijete v Moravskoslezském, Ústeckém nebo Karlovarském kraji, nečekejte s kontrolou krevního tlaku a cholesterolu na potíže. Co obsahuje preventivní prohlídka u praktického lékaře a jak často na ni máte nárok, shrnuje náš <a href="clanek-preventivni-prohlidka.html">článek o preventivní prohlídce</a>. Regionální čísla neříkají nic o konkrétním člověku, ukazují ale, kde je riziko v průměru vyšší.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=mortalita_kardiovaskularni"><strong>Mortalita na kardiovaskulární nemoci (standardizovaná)</strong></a> — 463,75 na 100 000 ob. (2023, Eurostat) proti průměru EU 312,95 · signál bad</li>
+        <li><a href="indicator.html?id=mortalita_preventabilni"><strong>Preventovatelná mortalita</strong></a> — 173,86 na 100 000 ob. (2023, Eurostat) proti průměru EU 150,85</li>
+        <li><a href="indicator.html?id=mortalita_lecitelna"><strong>Léčitelná mortalita</strong></a> — 107,19 na 100 000 ob. (2023, Eurostat) proti průměru EU 86,81</li>
+        <li><a href="indicator.html?id=mortalita_inhosp_ami"><strong>Nemocniční úmrtnost po akutním infarktu myokardu</strong></a> — 4,57 % (2024, ÚZIS NRH) proti 6,7 % v EU</li>
+      </ul>
+      <p>Související články: <a href="clanek-kardiovaskularni-mortalita.html">Český kardiovaskulární paradox</a> · <a href="clanek-roseto-naruby.html">Roseto naruby</a> · <a href="clanek-cholesterol-mapa-obci.html">Cholesterol podle místa, kde žijete</a> · <a href="plneni-kv-2035.html">Plnění Národního kardiovaskulárního plánu</a></p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární zdroje dat</h5>
+        <ul class="article-sources-list">
+          <li><strong>Eurostat — Almost 1 in 3 EU deaths due to circulatory system diseases</strong> (zpráva z 29. 9. 2026). Počet úmrtí v EU v roce 2023, podíl 32,5 %, průměr EU 313 na 100 000, počet regionů nad průměrem. <a href="https://ec.europa.eu/eurostat/web/products-eurostat-news/w/edn-20260929-1" target="_blank" rel="noopener">ec.europa.eu ↗</a></li>
+          <li><strong>Eurostat — Causes of death, standardised death rate by NUTS 2 region of residence</strong> (<code>hlth_cd_asdr2</code>, aktualizace dat 8. 6. 2026). Regiony Česka, EU a sousední státy 2015–2023, všechny věky a věk do 65 let, podle pohlaví a skupin diagnóz; staženo přes API 20. 10. 2026. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_asdr2/default/table?lang=en" target="_blank" rel="noopener">ec.europa.eu ↗</a> · <a href="https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/hlth_cd_asdr2?lang=en&amp;icd10=I&amp;sex=T&amp;age=TOTAL&amp;unit=RT&amp;geo=CZ&amp;geo=EU27_2020" target="_blank" rel="noopener">API ↗</a></li>
+          <li><strong>Eurostat — Causes of death, deaths by country of residence and occurrence</strong> (<code>hlth_cd_aro</code>). Počty úmrtí celkem a na nemoci oběhové soustavy, Česko a EU, 2023; staženo 20. 10. 2026. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_aro/default/table?lang=en" target="_blank" rel="noopener">ec.europa.eu ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Strategické dokumenty</h5>
+        <ul class="article-sources-list">
+          <li><strong>Ministerstvo zdravotnictví — Národní kardiovaskulární plán České republiky na období 2025–2035</strong> (verze 4.0, schváleno 11. 12. 2024). Vize (str. 5 PDF), regionální rozdíly v úmrtnosti (str. 15), síť ambulantní kardiologické péče po krajích (str. 23). <a href="https://mzd.gov.cz/wp-content/uploads/2025/01/Narodni-kardiovaskularni-plan-CR-na-obdobi-2025-2035.pdf" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Evidence</h5>
+        <ul class="article-sources-list">
+          <li><strong>Lustigova M, Dzurova D, Pikhart H, Kubinova R, Bobak M. Cardiovascular health among the Czech population at the beginning of the 21st century: a 12-year follow-up study.</strong> <em>J Epidemiol Community Health</em> 2018;72(5):442–448. DOI 10.1136/jech-2017-209967. PMID 29439193. Ověřeno v PubMed 20. 10. 2026. <a href="https://doi.org/10.1136/jech-2017-209967" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Bosakova L, Rosicova K, Filakovska Bobakova D, Rosic M, Dzurova D, Pikhart H, Lustigova M, Santana P. Mortality in the Visegrad countries from the perspective of socioeconomic inequalities.</strong> <em>Int J Public Health</em> 2019;64(3):365–376. DOI 10.1007/s00038-018-1183-6. PMID 30535783. Ověřeno v PubMed 20. 10. 2026. <a href="https://doi.org/10.1007/s00038-018-1183-6" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Všechny míry úmrtnosti jsou věkově standardizované a pocházejí z Eurostatu (stav 20. 10. 2026). Procentní rozdíly, změny 2015–2023, podíl úmrtí a pořadí regionů v EU (z 244 regionů NUTS 2 s hodnotou za rok 2023, bez mimoúzemních jednotek) spočítala redakce HSPA Monitoru. Údaje o ambulancích pocházejí z analytické části Národního kardiovaskulárního plánu, která neuvádí rok jejich stanovení.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
