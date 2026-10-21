@@ -667,7 +667,13 @@ export function renderModuleNav(activeId, { popups = 'auto' } = {}) {
       ],
     },
     { id: 'barometr',    label: 'Barometr',                href: 'barometr.html',           match: ['barometr.html'] },
-    { id: 'about',       label: 'O projektu',              href: 'o-projektu.html',         match: ['o-projektu.html'] },
+    { id: 'about',       label: 'O projektu',              href: 'o-projektu.html',         match: ['o-projektu.html', 'newsletter.html', 'autor-florence.html'],
+      children: [
+        { id: 'o-projektu',     label: 'O projektu',            href: 'o-projektu.html',     match: ['o-projektu.html'] },
+        { id: 'newsletter',     label: 'Newsletter',            href: 'newsletter.html',     match: ['newsletter.html'] },
+        { id: 'autor-florence', label: 'Florence, autorka článků', href: 'autor-florence.html', match: ['autor-florence.html'] },
+      ],
+    },
     { id: 'glossary',    label: 'Glosář',                  href: 'glosar.html',             match: ['glosar.html'] },
   ];
 

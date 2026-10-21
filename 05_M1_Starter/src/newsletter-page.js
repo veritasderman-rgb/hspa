@@ -194,7 +194,7 @@ function wireSignupForm() {
 
 if (typeof window !== 'undefined' && typeof document !== 'undefined') {
   // popups: 'manual' — na stránce samotného newsletteru nevyskakuje nabídka newsletteru.
-  renderModuleNav('about', { popups: 'manual' });
+  renderModuleNav('newsletter', { popups: 'manual' });
   renderMastheadDate();
   wireSignupForm();
   renderArchive();
