@@ -455,7 +455,7 @@ const MANIFEST = {
     kicker: 'Pracovní síla · lékaři', signal: 'warn',
     stat: '41', statSuffix: '%', barPct: 41,
     claim: 'českých lékařů je starších 55 let (2022) — nad průměrem EU.',
-    context: 'U praktiků a pediatrů se podíl nad 60 let blíží polovině.',
+    context: 'U praktiků je nad 60 let 44 %, u dětských praktiků 47 % (2022).',
   },
   'clanek-plne-kojeni-porodnice': {
     kicker: 'Kojení · porodnice', signal: 'warn',
