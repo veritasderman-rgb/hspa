@@ -19,6 +19,7 @@
     status: draft
     creation_phase: nový indikátor naklady_centrove_leky_total (scheduled routine — rozšíření dashboardu z českých veřejných zdrojů)
     notes: "Všechna klíčová čísla spočtena PŘÍMO z primárních XLSX ÚZIS (staženo 23. 8. 2026): (1) úhrady 2022 = 31,71 mld / 2023 = 35,90 mld / 2024 = 39,81 mld Kč = součet sloupců 'Úhrady v tis. Kč' přes 7 ZP × 18 terapeutických oblastí listu 'Rok 2022-2024 Segment' souhrnu OIS-11-06 (edice 2025-02, zdroj NRHZS); (2) tabulka terapeutických oblastí = tytéž součty po řádcích, průměr na pacienta = úhrady / unikátní pacienti dané oblasti (v rámci oblasti je součet unikátních pacientů přes pojišťovny validní — pojištěnec má jednu ZP); (3) součet unikátních pacientů přes oblasti a ZP 2024 = 148 831 — HORNÍ odhad počtu osob (pacient může čerpat ve více oblastech), v textu proto 'necelých 150 tisíc' s vysvětlením; (4) podíl 7,9 % = 35,90 / 456,1 mld Kč; jmenovatel = součet úhrad za rok 2023 ze souhrnu OIS-11-24 Náklady ZP dle segmentů péče (bez dvojzápočtu segmentu 1.7.1 dle metodiky listu Metodika); (5) W.A.I.T. čísla ověřena z primárního PDF EFPIA/IQVIA Patients W.A.I.T. Indicator 2025 (May 2026): Czechia full 6 % / limited 33 % / individual 11 % / privately 13 % / not available 38 % (slide 14); Germany full 93 %; Austria full 57 %; Slovakia full 7 %, not available 79 %; Poland full 6 %, limited 40 %, individual 11 %; EU27 average 45 % available (76/168), full 28 %, average time 597 days (578 v 2024; slide 19 exec summary); (6) ČR 659 dní od registrace EMA k úhradě = AIFP dle W.A.I.T. 2025 (ČTK/Protext 57623, HN 67881550) — v primárním PDF je hodnota v grafu bez strojově čitelného textu, proto citováno přes AIFP; (7) '43 % nákladů na léky' = AIFP (vyjádření ředitele, aifp.cz), sekundární zdroj, v textu atribuováno; (8) § 39da zák. 48/1997 Sb. (orphan proces od 1. 1. 2022), § 16 individuální úhrady, EU HTA nařízení 2021/2282 účinné pro onkologika a ATMP od 12. 1. 2025 — legislativní fakta. Hodnoty v patient_story metodické karty literálně odpovídají data/indicators.json (39,8; 31,7; audit-patient-stories OK)."
+    refine_2026-10-26: "Zpřesnění podílu (issue #1313): 7,9 % = smíšený poměr (čitatel OIS-11-06 35,9 mld, jmenovatel OIS-11-24 456,1 mld); celé z OIS-11-24 (2.1.4 + 1.7.1 = 33,8 mld) vychází 7,4 %. Rozdíl ~2,2 mld Kč mezi sadami ÚZIS nevysvětluje. Popisek čítače změněn na podíl úhrad za centrové léky; doplněna poznámka ve zdrojích."
 -->
 <meta name="article:audit-status" content="review-pending">
 <link rel="stylesheet" href="src/styles.min.css">
@@ -178,8 +179,8 @@
           </div>
           <div class="av-counter-block av-counter-block-neutral">
             <span class="av-counter" data-value="7.9" data-decimals="1" data-suffix=" %">7,9 %</span>
-            <span class="av-counter-label">podíl centrových léků na celkových nákladech pojišťoven (2023)</span>
-            <span class="av-counter-foot">35,9 mld z 456,1 mld Kč; dopočet ze souhrnů OIS-11-06 a OIS-11-24</span>
+            <span class="av-counter-label">podíl úhrad za centrové léky na nákladech pojišťoven (2023)</span>
+            <span class="av-counter-foot">35,9 mld (OIS-11-06) z 456,1 mld Kč (součet segmentů OIS-11-24 bez 1.7.1); ve stejné sadě OIS-11-24 (2.1.4 + 1.7.1 = 33,8 mld) vychází 7,4 %</span>
           </div>
         </div>
         <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS ČR — Datová podpora dohodovacího řízení, datové souhrny OIS-11-06 (Centrové léky) a OIS-11-24 (Náklady ZP dle segmentů péče); primární data Národní registr hrazených zdravotních služeb. Vlastní výpočet, staženo 23. 8. 2026.</p>
@@ -373,7 +374,9 @@
         <p class="article-sources-disclaimer">
           Součty úhrad (31,7 / 35,9 / 39,8 mld Kč), tabulka terapeutických oblastí i podíl 7,9 % jsou vlastní
           výpočty z primárních XLSX souhrnů ÚZIS (staženo 23. 8. 2026); postup je popsán v metodické kartě
-          indikátoru. Počet ~150 tisíc pacientů je horní odhad — součet unikátních pacientů přes terapeutické
+          indikátoru. Podíl 7,9 % spojuje čitatel z OIS-11-06 se jmenovatelem z OIS-11-24; počítaný celý
+          v OIS-11-24 vychází 7,4 % (viz <a href="clanek-financovani-segmenty-2026.html">článek o financování podle segmentů</a>).
+          Rozdíl 2,2 mld Kč mezi sadami ÚZIS nevysvětluje. Počet ~150 tisíc pacientů je horní odhad — součet unikátních pacientů přes terapeutické
           oblasti a pojišťovny (148 831), jeden pacient může čerpat léčbu ve více oblastech. Úhrady jsou nominální,
           před zohledněním neveřejných zpětných plateb výrobců. Stav k 23. 8. 2026.
         </p>
