@@ -24,6 +24,34 @@
 
 ---
 
+## INC-2026-003 · S2 · 2026-10-26 · Dávka věcných chyb z křížového ověření (issues 1304–1317)
+
+- **Co se stalo**: čtenáři viděli v publikovaných článcích, explainerech a kartách
+  indikátorů chybná nebo nedoložená čísla a právní tvrzení: zastaralou preventabilní
+  úmrtnost, neexistující přechodné lhůty eŽádanky, nemocničního ombudsmana „zavedeného
+  zákonem“, nesprávnou vyhlášku u kapitace a dojezdových norem, výpadky léků „2 200 proti
+  580“, švédskou hranici zubní péče, mamografický screening označený jako 50–69, ačkoli
+  zahrnoval všechny ženy 45+, a další (celkem 14 issues).
+- **Kde**: zhruba 30 souborů `05_M1_Starter/clanek-*.html`, `data/explainers.json`,
+  `data/claims.json`, `indicators/*.json`, `jak-funguje.html`, `manifest/` · **Od kdy do kdy**:
+  různě od června do října 2026 → opraveno PR #1318.
+- **Dopad**: publikované texty bez osob a bez přímého zdravotního rizika; největší dopad má
+  změna sdělení u mamografického screeningu (indikátor přešel ze signálu „špatně“ na
+  srovnání se stejně definovaným průměrem OECD) a u článku o reformě primární péče, který
+  nesl neověřitelné částky kapitace a ztratil status ověřený.
+- **Příčina**: čísla převzatá ze sekundárních zdrojů nebo starších seedů bez kontroly
+  definice a roku; odkazy na předpisy bez otevření jejich textu; claims s `check: manual`
+  nebo bez vazby na indikátor, takže drift-check rozpory nehlásil. Zjištěno křížovým
+  ověřením při práci na studii v repu zdravko.
+- **Oprava**: PR #1318 (třída C kvůli podstránkám Manifestu a draftům: obsah, explainery,
+  karty, claims, extraktor screeningu s věkovým filtrem 50–69). Publikované články
+  dostaly viditelnou poznámku „Oprava (26. 10. 2026)“.
+- **Prevence**: dotčené claims převedeny na `check: auto` s `indicator_id`, kde to jde;
+  u právních tvrzení uvádět paragraf a odkaz na znění předpisu. Stejný problém s věkovou
+  kohortou mají screeningy děložního čípku a kolorekta, řeší se samostatně
+  (PLAN-VERIFIKACE-INDIKATORU.md, U3).
+- **Zjistil**: vnější křížové ověření (studie zdravko), ověřeno u primárních zdrojů 26. 10. 2026.
+
 ## INC-2026-002 · S2 · 2026-07-10 · Tři publikované články se renderovaly prázdné
 
 - **Co se stalo**: tři články (`cmp-iktova-centra`, `cekaci-doby-kycel`, `platba-za-vysledek-vzp`)

@@ -22,7 +22,9 @@
     creation_phase: serie-epidemiologie-dil-1
     primary_sources_count: 6
     visual_elements_count: 5
-    notes: "Díl 1/3 vědeckého seriálu o epidemiologii. Empirické tvrzení doložena primární literaturou z PubMedu (uvedeny DOI v sekci Zdroje): reprodukční číslo a herd-immunity threshold spalniček R0 10-20, HIT 90-95 % (Kinoshita & Nishiura 2017, Vaccine, DOI 10.1016/j.vaccine.2017.05.011); R0 a herd-immunity threshold viru hepatitidy A 2,2-5,0 / 55-80 % (Yang et al. 2024, Clin Infect Dis, DOI 10.1093/cid/ciad552); historie a metodika oboru (Kayser & Ramzan 2021, Hum Vaccin Immunother, DOI 10.1080/21645515.2021.1977057). Indikátory z dashboardu (ověřené hodnoty): preventovatelná mortalita 195/100k (2022, EU 168), léčitelná mortalita 107,2/100k (2023, EU 86,8), naděje dožití 80,1 let (2024, EU 81,5), incidence spalniček 0,9/100k (2023). Cross-linky na interaktivní simulátor nedovarenytapir.cz: #/sandbox (R0), #/hra/oyster-bay (historické pátrání po zdroji nákazy), #/prirucka (příručka epidemiologa, úroveň Vysoká škola / lékařská fakulta). John Snow / pumpa Broad Street 1854 uvedena jako historický kontext (klasický příběh oboru). Publikováno jako díl 1, díly 2 a 3 ve frontě (published:false, ready). evidence-audit 2026-10-25: 3 tvrzení, 1 supported, 2 partial; viz data/evidence-audit.json."
+    drift_fix 2026-10-26: mortalita_preventabilni 195 vs 168 EU (2022) → 173,9 vs 150,9 EU-27 (2023, Eurostat hlth_cd_apr) — JSON-LD, counter, tabulka, databox i poznámky sladěny (issue #1305)
+    fix_2026-10-26: preventovatelná mortalita ČR 173,9 / EU-27 150,9 (2023) místo 195/168 (2022); léčitelná 107,2 (2023) beze změny (issue #1305)
+    notes: "Díl 1/3 vědeckého seriálu o epidemiologii. Empirické tvrzení doložena primární literaturou z PubMedu (uvedeny DOI v sekci Zdroje): reprodukční číslo a herd-immunity threshold spalniček R0 10-20, HIT 90-95 % (Kinoshita & Nishiura 2017, Vaccine, DOI 10.1016/j.vaccine.2017.05.011); R0 a herd-immunity threshold viru hepatitidy A 2,2-5,0 / 55-80 % (Yang et al. 2024, Clin Infect Dis, DOI 10.1093/cid/ciad552); historie a metodika oboru (Kayser & Ramzan 2021, Hum Vaccin Immunother, DOI 10.1080/21645515.2021.1977057). Indikátory z dashboardu (ověřené hodnoty): preventovatelná mortalita 173,9/100k (2023, EU-27 150,9), léčitelná mortalita 107,2/100k (2023, EU 86,8), naděje dožití 80,1 let (2024, EU 81,5), incidence spalniček 0,9/100k (2023). Cross-linky na interaktivní simulátor nedovarenytapir.cz: #/sandbox (R0), #/hra/oyster-bay (historické pátrání po zdroji nákazy), #/prirucka (příručka epidemiologa, úroveň Vysoká škola / lékařská fakulta). John Snow / pumpa Broad Street 1854 uvedena jako historický kontext (klasický příběh oboru). Publikováno jako díl 1, díly 2 a 3 ve frontě (published:false, ready). evidence-audit 2026-10-25: 3 tvrzení, 1 supported, 2 partial; viz data/evidence-audit.json."
 -->
 <meta name="article:audit-status" content="verified">
 <link rel="stylesheet" href="src/styles.min.css">
@@ -46,7 +48,7 @@
       "@type": "NewsArticle",
       "@id": "https://skorezdravotnictvi.cz/clanek-epidemiologie-1-proc-verit-cislum#article",
       "headline": "Proč věřit číslům: od mapy cholery k reprodukčnímu číslu",
-      "description": "Díl 1/4 seriálu o epidemiologii. Jak se z odmontované kliky vodní pumpy v roce 1854 stala metoda, proč má každá nákaza svoje reprodukční číslo R₀ (u spalniček 12–18) a jak poznáme příčinu od náhody. Plné indikátorů: preventovatelná mortalita ČR 195 vs EU 168, léčitelná 107,2 vs 86,8. Principy si vyzkoušíte na simulátoru nedovarenytapir.cz (sandbox R₀, pátrání po zdroji nákazy, příručka epidemiologa pro VŠ).",
+      "description": "Díl 1/4 seriálu o epidemiologii. Jak se z odmontované kliky vodní pumpy v roce 1854 stala metoda, proč má každá nákaza svoje reprodukční číslo R₀ (u spalniček 12–18) a jak poznáme příčinu od náhody. Plné indikátorů: preventovatelná mortalita ČR 173,9 vs EU 150,9 (2023), léčitelná 107,2 vs 86,8. Principy si vyzkoušíte na simulátoru nedovarenytapir.cz (sandbox R₀, pátrání po zdroji nákazy, příručka epidemiologa pro VŠ).",
       "inLanguage": "cs-CZ",
       "image": [
         "https://skorezdravotnictvi.cz/assets/covers/clanek-epidemiologie-1-proc-verit-cislum.png"
@@ -166,9 +168,9 @@
             <span class="av-counter-foot">jedna z nejnakažlivějších nemocí vůbec</span>
           </div>
           <div class="av-counter-block av-counter-block-bad">
-            <span class="av-counter" data-value="195">195</span>
+            <span class="av-counter" data-value="173.9" data-decimals="1">173,9</span>
             <span class="av-counter-label">preventovatelných úmrtí na 100 000 obyvatel v ČR</span>
-            <span class="av-counter-foot">EU průměr 168 — Česko nad ním</span>
+            <span class="av-counter-foot">EU průměr 150,9 (2023) — Česko nad ním</span>
           </div>
           <div class="av-counter-block av-counter-block-good">
             <span class="av-counter" data-value="1980">1980</span>
@@ -176,7 +178,7 @@
             <span class="av-counter-foot">první nemoc poražená vakcinací nadobro</span>
           </div>
         </div>
-        <p class="av-figure-note"><strong>Zdroj:</strong> R₀ spalniček dle Kinoshita &amp; Nishiura (2017), Vaccine; preventovatelná mortalita ČR z dashboardu HSPA Monitoru (Eurostat/OECD, 2022); eradikace pravých neštovic dle Kayser &amp; Ramzan (2021). Plné citace s DOI v sekci Zdroje.</p>
+        <p class="av-figure-note"><strong>Zdroj:</strong> R₀ spalniček dle Kinoshita &amp; Nishiura (2017), Vaccine; preventovatelná mortalita ČR z dashboardu HSPA Monitoru (Eurostat, 2023); eradikace pravých neštovic dle Kayser &amp; Ramzan (2021). Plné citace s DOI v sekci Zdroje.</p>
       </figure>
 
       <h3>Co je epidemiologie a proč není věc názoru</h3>
@@ -329,9 +331,9 @@
             <tbody>
               <tr class="av-row-highlight">
                 <th scope="row">Preventovatelná mortalita</th>
-                <td class="av-num av-bad">195</td>
-                <td class="av-num">168</td>
-                <td>úmrtí, jimž lze předejít prevencí (2022)</td>
+                <td class="av-num av-bad">173,9</td>
+                <td class="av-num">150,9</td>
+                <td>úmrtí, jimž lze předejít prevencí (2023)</td>
               </tr>
               <tr class="av-row-highlight">
                 <th scope="row">Léčitelná mortalita</th>
@@ -382,7 +384,7 @@
       <div class="ed-kicker">Data v tomto článku</div>
       <h4 class="article-databox-h">Indikátory a pojmy, ze kterých text vychází</h4>
       <ul class="article-databox-list">
-        <li><strong><a href="indikator-mortalita_preventabilni.html">Preventovatelná mortalita</a></strong> — ČR 195 vs EU 168 na 100 000 ob. (2022)</li>
+        <li><strong><a href="indikator-mortalita_preventabilni.html">Preventovatelná mortalita</a></strong> — ČR 173,9 vs EU 150,9 na 100 000 ob. (2023)</li>
         <li><strong><a href="indikator-mortalita_lecitelna.html">Léčitelná mortalita</a></strong> — ČR 107,2 vs EU 86,8 na 100 000 ob. (2023)</li>
         <li><strong><a href="indikator-nadeje_doziti_total.html">Naděje dožití při narození</a></strong> — ČR 80,1 vs EU 81,5 let (2024)</li>
         <li><strong><a href="indikator-spalnicky.html">Incidence spalniček</a></strong> — ČR 0,9 na 100 000 ob. (2023); citlivý ukazatel proočkovanosti</li>
@@ -423,6 +425,9 @@
       </div>
       <p class="article-sources-disclaimer">
         <strong>Pozn. k hodnotám:</strong> Indikátorové hodnoty (ČR i EU) vycházejí z dashboardu HSPA Monitoru, který je čerpá z Eurostatu a OECD; rok je uveden u každé hodnoty. Příběh pumpy na Broad Street (1854) a „tyfové Mary“ jsou doložené historické případy uváděné v učebnicích epidemiologie. Simulátor Nedovařený tapír je edukační nástroj — slouží k pochopení principů, ne k predikci reálných epidemií.
+      </p>
+      <p class="article-sources-disclaimer">
+        <strong>Oprava (26. 10. 2026):</strong> Článek uváděl preventovatelnou mortalitu ČR 195 a EU 168 na 100 000 obyvatel za rok 2022, což byla zastaralá hodnota. Podle Eurostatu (hlth_cd_apr) je pro rok 2023 v ČR 173,9 a v EU-27 150,9; Česko je nad průměrem EU i nadále.
       </p>
     </section>
 

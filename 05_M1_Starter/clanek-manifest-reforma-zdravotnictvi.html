@@ -22,6 +22,7 @@
     notes: "Manifest — politicky laděný autorský text (Pavlovic, Malíková, Resortní tým ČPS pro zdravotnictví). PER POKYNY: hodnotové soudy a politické postoje se neauditují (autorský názor). Faktická tvrzení uvnitř (čísla, právní normy, citace OECD/WHO) by měla být auditována stejně jako v redakčních článcích. DOPORUČENO pro ruční audit: projít 13 oblastí a verifikovat všechna konkrétní čísla/odkazy v kontextu primárních zdrojů. Tam, kde manifest odkazuje na jiné HSPA články jako referenci, čerpá z jejich auditního stavu. Status published → partial — vyžaduje per-claim audit s explicitním oddělením názor/fakt."
     f1_2026-07-10: "F1 link-audit: 14 externích odkazů zkontrolováno, žádný mrtvý. OECD HSPA Framework CZ (oecd.org/en/publications/health-system-performance-assessment-framework-for-the-czech-republic_5d59b667-en.html) vrací HTTP 403 při skenu (anti-bot Cloudflare) — ověřeno webovým vyhledáním, že jde o platnou, aktuální OECD publikaci; ponecháno beze změny. Ostatní odkazy (e-estonia.com, ecrin.org, GitHub, NHS England, g-ba.de, has-sante.fr, kanta.fi, nice.org.uk, sundhed.dk, who.int) vrací HTTP 200. Ponecháno partial — otevřený bod z 2026-07-09 (per-claim ruční audit zbývajících věcných tvrzení manifestu, např. AWaRe 37,1 %, výpadky léčiv) trvá, odkazy s ním nesouvisí."
     reconcile_2026-07-12: "alkohol_spotreba 14,4/8,9 → recorded 11,2/8,5 (OECD H@G 2025, issue #690 varianta A). Současně sladěna zastaralá čísla v prioritě 8 a counteru s kontraktem: KV mortalita 220/140 → 463,75/EU-27 312,95 (Eurostat ESP 2013, 2023 — jiná standardizace než původní OECD pár), screening kolorektální 28/42 → 31,1/42, kuřáctví 22,6/16 → 16,4/14,8; incidence kolorektálního karcinomu 73,5 ponechána (kontrakt souhlasí), benchmark 36,5 vypuštěn (kontrakt benchmark nemá)."
+    fix_2026-10-26: "Výpadky léčiv: ~2 200 vs ~580 (2019) nahrazeno řadou z opendata.sukl.cz (indikátor vypadky_leciv_aktivni): konec 2019 1 288, minimum 2021 1 077, konec 2025 1 552, říjen 2026 1 420 (issue #1309). Švédsko: bezplatná zubní péče do konce roku dovršení 19 let od 1. 1. 2025 (do 2024 23 let), zdroj Socialstyrelsen (issue #1314)."
 -->
 <link rel="stylesheet" href="src/styles.min.css">
 <link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
@@ -188,7 +189,7 @@
             <li><strong>Screening kolorekta</strong> — účast 31,1 %, OECD průměr 42 %, EU 38 %, Nordic ~70 % (OECD HCQI). Akutní resekce karcinomu rekta má 3× vyšší 90d mortalitu než plánovaná. <a href="indikator-screening_kolorektalni.html">Indikátor →</a></li>
             <li><strong>Antibiotická preskripce</strong> CZ-AWaRe Access podíl 37,1 % (PUK 2024) — pod WHO cílem 60 %. AMR způsobí dle WHO 10 mil úmrtí ročně do 2050. <a href="kvalita-pece.html#cqSec4H">Detail v Kvalitě péče →</a></li>
             <li><strong>Duševní zdraví</strong> — sebevraždy ~11,6 / 100k vs EU 10,4 (Eurostat, 2023), antidepresíva rostou rychleji než síť psychiatrů. <a href="indikator-sebevrazdy_per_100k.html">Indikátor →</a></li>
-            <li><strong>Léková dostupnost</strong> — k 5/2026 ~2 200 aktivních výpadků léčiv (SÚKL §33b) vs ~580 v 2019. Strukturální slabost, ne přechodná anomálie. <a href="jak-funguje.html?id=lekova_dostupnost_vypadky">Explainer →</a></li>
+            <li><strong>Léková dostupnost</strong> — na začátku října 2026 SÚKL evidoval 1 420 aktivních výpadků léčivých přípravků (konec roku 2019: 1 288, konec roku 2025: 1 552; hlášení o dodávkách). Po minimu v roce 2021 (1 077) počet vzrostl o třetinu a drží se vysoko. Strukturální slabost, ne přechodná anomálie. <a href="jak-funguje.html?id=lekova_dostupnost_vypadky">Explainer →</a></li>
           </ul>
           <p>To je pět dat. Manifest na ně odpovídá v 13 prioritách.</p>
         </div>
@@ -408,9 +409,9 @@
         <div class="manifest-priority-data-grid">
           <a class="manifest-data-card" href="jak-funguje.html?id=lekova_dostupnost_vypadky">
             <div class="manifest-data-card-id">vypadky_leciv_aktivni</div>
-            <div class="manifest-data-card-value">~2 200</div>
-            <div class="manifest-data-card-name">Aktivní výpadky léčiv (SÚKL §33b)</div>
-            <div class="manifest-data-card-bench">2019: ~580 · 4× nárůst za 7 let</div>
+            <div class="manifest-data-card-value">1 420</div>
+            <div class="manifest-data-card-name">Aktivní výpadky léčiv (SÚKL)</div>
+            <div class="manifest-data-card-bench">konec 2019: 1 288 · konec 2025: 1 552</div>
           </a>
           <a class="manifest-data-card" href="indikator-platba_z_kapsy_pct.html">
             <div class="manifest-data-card-id">platba_z_kapsy_pct</div>
@@ -512,7 +513,7 @@
       </p>
 
       <p>
-        Inspirace existují. Švédsko poskytuje bezplatnou stomatologickou péči pro děti a mladistvé až do 23 let; pro dospělé existuje státní subvence (tandvårdsstöd). Dánsko a Norsko mají podobné systémy s důrazem na prevenci v dětství. Německo vyžaduje každoroční preventivní prohlídku jako podmínku plné úhrady (tzv. Bonusheft). Ve Spojených státech mají Dental Hygienists v některých státech (Maine, Colorado, Oregon) pravomoc poskytovat širokou škálu preventivní péče samostatně, bez supervize zubaře. Společný jmenovatel: investice do prevence v dětství výrazně snižuje náklady na pozdější léčbu — a dostupnost se zvedne všude tam, kde nemusí být v každém okrese pět zubařů, ale stačí dva zubaři a tři dobře vyškolené dentální hygienistky.
+        Inspirace existují. Švédsko poskytuje bezplatnou stomatologickou péči dětem a mladistvým do konce roku, v němž dovrší 19 let (od 1. 1. 2025; v letech 2019–2024 platila hranice 23 let); dospělí od 20 let mají státní příspěvek na zubní péči (tandvårdsstöd). Dánsko a Norsko mají podobné systémy s důrazem na prevenci v dětství. Německo vyžaduje každoroční preventivní prohlídku jako podmínku plné úhrady (tzv. Bonusheft). Ve Spojených státech mají Dental Hygienists v některých státech (Maine, Colorado, Oregon) pravomoc poskytovat širokou škálu preventivní péče samostatně, bez supervize zubaře. Společný jmenovatel: investice do prevence v dětství výrazně snižuje náklady na pozdější léčbu — a dostupnost se zvedne všude tam, kde nemusí být v každém okrese pět zubařů, ale stačí dva zubaři a tři dobře vyškolené dentální hygienistky.
       </p>
 
       <h3>10 · Data a informace ve službách pacienta</h3>
@@ -681,11 +682,15 @@
           <li><strong>NHS Talking Therapies (UK)</strong> — dříve IAPT, program psychoterapeutické péče. <a href="https://www.england.nhs.uk/mental-health/adults/nhs-talking-therapies/" target="_blank" rel="noopener">england.nhs.uk ↗</a></li>
           <li><strong>WHO Best Buys</strong> — cost-effective intervence pro NCD. <a href="https://www.who.int/health-topics/noncommunicable-diseases" target="_blank" rel="noopener">who.int ↗</a></li>
           <li><strong>NHS Better Care Fund (UK)</strong> — integrovaná zdravotně-sociální péče. <a href="https://www.england.nhs.uk/better-care-fund/" target="_blank" rel="noopener">england.nhs.uk ↗</a></li>
+          <li><strong>Socialstyrelsen, National Dental Health Register</strong> — snížení věkové hranice bezplatné zubní péče z 23 na 19 let od 1. 1. 2025. <a href="https://www.socialstyrelsen.se/en/statistics-and-data/registers/national-dental-health-register/" target="_blank" rel="noopener">socialstyrelsen.se ↗</a></li>
           <li><strong>Plný text manifestu (Markdown)</strong> v repu HSPA Monitoru. <a href="https://github.com/veritasderman-rgb/hspa/blob/main/08_Politicky_program.md" target="_blank" rel="noopener">github.com ↗</a></li>
         </ul>
       </div>
       <p class="article-sources-disclaimer">
         <strong>Pozn. k mezinárodním datům:</strong> Všechny mezinárodní programy a instituce zmíněné v textu existují, jejich popisy jsou opřené o veřejné zdroje. Konkrétní výsledková data těchto programů (např. „o kolik procent IAPT snížil úzkost") nejsou v článku uváděna konkrétními čísly — pro detailní data doporučujeme primární zdroje výše. České hodnoty jsou z dashboardu HSPA Monitoru ke dni vydání článku.
+      </p>
+      <p class="article-sources-disclaimer">
+        <strong>Oprava (26. 10. 2026):</strong> Dřívější verze uváděla u výpadků léčiv „~2 200 aktivních výpadků vs ~580 v roce 2019“; tento údaj nemá oporu v otevřených datech SÚKL. Správně: na začátku října 2026 evidoval SÚKL 1 420 aktivních výpadků (konec roku 2019: 1 288, konec roku 2025: 1 552). U Švédska se bezplatná zubní péče pro děti a mladistvé od 1. 1. 2025 týká jen osob do konce roku, v němž dovrší 19 let (dříve 23 let).
       </p>
     </section>
 

@@ -6,6 +6,7 @@
     last_reviewed: 2026-07-10
     reviewer: claude-code-agent
     status: verified
+    fix_2026-10-26: "odstraněno neexistující číslo 323 / 100 000 (preventable mortality, 2022); správně 173,9 preventabilní a 107,2 léčitelná, Eurostat hlth_cd_apr 2023 (issue #1305)"
     update_2026-07-09: "F1 dávkový plný audit. Jádrové ACSC hodnoty 592 (ČR) / 473 (OECD průměr) z OECD Health at a Glance 2025 (avoidable hospital admissions, 5 diagnóz 15+, age-sex standardizováno) — ponechány, ověřeny předchozím auditem 2026-05-15. REKONCILIACE DATABOXU S KONTRAKTEM: (1) prohlidka_prakticky_lekar mezitím zlivněn (ÚZIS/NZIP mikrodata PPS-08-01, verified 2026-06-10): 52,6 % (2023), článek stál na staré seed hodnotě 48 % — opraveno v těle i databoxu (52,6 % účast → téměř polovina neprojde, framing zachován). (2) hospitalizace_na_100k 18 800 → 17 990 (kontrakt 17 989,8, 2024). Ambulantní kontakty 11,2 vs. OECD 6,8 souhlasí s kontraktem. Metodické oddělení ACSC (OECD HCQI) vs. avoidable mortality (Eurostat) zachováno. Link-check: OECD odkazy 403 = bot-block (funkční v prohlížeči), digital.nhs.uk QOF 403 = bot-block. Status review-pending → verified (čísla srovnána s ověřeným kontraktem, metodika konzistentní)."
     reaudit_2026-07-10: "Fallback audit (nezávislý na F1 z 2026-07-09, shodné závěry). Centrální ACSC 592/473 reověřeno proti OECD Health at a Glance 2025 (country profile Czechia) — OK. Opraven cross-file drift z auditu 2026-05-15: articles.json title+perex zaostávaly (580/480 → 592/473, 'Pět set osmdesát' → 'Téměř šest set'); JSON-LD headline/description a og:image:alt regenerovány z articles.json. Databox: prevalence diabetu zdroj IDF → EHIS·SZÚ (hodnota 9,5 % beze změny, vyhnutí cross-metodika páru); míra hospitalizací doplněn zdroj ÚZIS NRH. Zdrojové odkazy live (OECD/NHS 403 = bot-block, ne dead link)."
     unverified_claims_removed: 1
@@ -183,7 +184,7 @@
       <aside class="article-callout article-callout-caveat" aria-label="Caveat — metodika ACSC vs avoidable mortality">
         <p class="article-callout-h">Caveat — co článek měří a co ne</p>
         <p><strong>ACSC (avoidable hospital admissions)</strong> je indikátor OECD HCQI — počítá <em>hospitalizace</em>, kterým by se dalo předejít kvalitní ambulantní péčí. Měří se u 5 chronických diagnóz (diabetes, CHOPN, srdeční selhání, nekomplikovaná hypertenze, astma) u dospělých 15+, age-sex standardizováno.</p>
-        <p><strong>Avoidable mortality (Eurostat / společný OECD-Eurostat seznam 2019)</strong> je odlišný indikátor — měří <em>úmrtí</em>, kterým by se dalo předejít prevencí (preventable) nebo včasnou léčbou (treatable). Pro Česko publikuje Eurostat hodnotu 323 / 100 000 obyvatel (preventable mortality, ref. rok 2022) — ale jde o zcela jiný metrický rámec než ACSC v tomto článku.</p>
+        <p><strong>Avoidable mortality (Eurostat / společný OECD-Eurostat seznam 2019)</strong> je odlišný indikátor — měří <em>úmrtí</em>, kterým by se dalo předejít prevencí (preventable) nebo včasnou léčbou (treatable). Pro Česko publikuje Eurostat standardizovanou míru 173,9 / 100 000 obyvatel pro preventabilní a 107,2 pro léčitelnou úmrtnost (2023, předčasná úmrtí do 75 let) — ale jde o zcela jiný metrický rámec než ACSC v tomto článku.</p>
         <p>Hodnoty 592 / 473 (Czechia / OECD průměr) v textu odkazují <em>výhradně</em> na ACSC podle OECD <em>Health at a Glance</em> 2025.</p>
       </aside>
 
@@ -351,6 +352,9 @@
       </div>
       <p class="article-sources-disclaimer">
         <strong>Pozn. k údajům:</strong> Hodnoty 592 / 473 (Czechia / OECD průměr) pocházejí z OECD <em>Health at a Glance</em> 2025 (referenční rok 2021/2022), age-sex standardizováno na populaci OECD 15+. Pro detailní časové řady, regionální data a rozpad podle diagnózy doporučujeme primární OECD HCQI dataset. ACSC standard OECD HCQI zahrnuje pět diagnóz (diabetes, CHOPN, srdeční selhání, nekomplikovaná hypertenze, astma); Eurostat publikuje příbuzný indikátor avoidable mortality (úmrtí, ne hospitalizace) podle společného OECD/Eurostat seznamu 2019. Spojení ACSC s kvalitou primární péče je v mezinárodní literatuře dlouhodobě dokumentováno (OECD HCQI working group od r. 2004).
+      </p>
+      <p class="article-sources-disclaimer">
+        <strong>Oprava (26. 10. 2026):</strong> Článek uváděl pro Česko hodnotu preventabilní úmrtnosti 323 / 100 000 (rok 2022); takové číslo Eurostat nepublikuje. Správně: standardizovaná míra 173,9 / 100 000 obyvatel pro preventabilní a 107,2 pro léčitelnou úmrtnost (Eurostat hlth_cd_apr, 2023, předčasná úmrtí do 75 let).
       </p>
     </section>
 
