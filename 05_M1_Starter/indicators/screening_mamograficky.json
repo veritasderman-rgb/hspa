@@ -4,7 +4,7 @@
   "area": "Procesy",
   "domain": "Preventivní péče",
   "subdomain": "Onkologický screening",
-  "definition": "Podíl žen 50–69 let, které absolvovaly mamografii v posledních 24 měsících. Pozn.: reportovaná hodnota vychází z agregace všech věkových skupin v datech ÚZIS NRHZS a vyjadřuje pokrytí cílové populace programu; nemusí přesně odpovídat nominální věkové kohortě OECD uvedené v názvu — přesné vymezení kohorty vyžaduje sladění extraktoru s věkovou strukturou zdroje.",
+  "definition": "Podíl žen ve věku 50–69 let, které absolvovaly mamografii v posledních 24 měsících (programová data, ÚZIS NRHZS, datová sada PPS-01-01 omezená na věkové skupiny 50–69). Odpovídá definici OECD Health Statistics (screening, programová data), proto je srovnatelný s programovými daty OECD; dotazníková data OECD jsou jiný koncept.",
   "unit": "%",
   "direction": "higher_is_better",
   "data_source": {
@@ -12,7 +12,11 @@
       "type": "uzis_nrhzs_screening",
       "dataset": "nrhzs_screening_mamograf_pokryti",
       "url": "https://data.mzcr.cz/data/distribuce/263/Otevrena-data-PPS-01-01-mamografie-screening-pokryti-populace.csv",
-      "note": "NRHZS otevřená data — pokrytí cílové populace žen mamografickým screeningem (PPS-01-01). Data jsou jen ženy (pohlaví Z), bez sex_filter."
+      "note": "NRHZS otevřená data — pokrytí cílové populace žen mamografickým screeningem (PPS-01-01). Data jsou jen ženy (pohlaví Z), bez sex_filter. Agregují se jen věkové skupiny 50–54 až 65–69 (age_filter 50–69).",
+      "age_filter": {
+        "from": 50,
+        "to": 69
+      }
     },
     "fallback": {
       "type": "oecd",
@@ -22,7 +26,8 @@
   "benchmark_source": {
     "type": "oecd",
     "code": "BREAST_SCREENING",
-    "dataset": "HEALTH_HCQI"
+    "dataset": "HEALTH_HCQI",
+    "note": "OECD Health Statistics, screening, programová data (průměr členských zemí ~56 %, Health at a Glance 2025: 55 %)"
   },
   "signal_thresholds": {
     "good": 5,
@@ -33,9 +38,9 @@
     "ÚZIS",
     "Národní program screeningu karcinomu prsu"
   ],
-  "method_notes": "Standardizováno na věk. Cíl WHO: ≥ 70 %.",
-  "limitations": "Adresné zvaní zavedeno až 2014; časový vývoj odráží i organizační kapacitu, ne jen poptávku. Metodická poznámka (2026-07-06, U3): hodnota z pipeline vzniká agregací VŠECH věkových skupin otevřené datové sady NRHZS PPS-01-01 (ženy 45+ až 85+), měří tedy dvouleté pokrytí celé cílové populace dle českého vymezení, ne kohortu 50–69 z definice. V kohortě OECD 50–69 je pokrytí 61,4 % (2024, výpočet z týchž dat). Sladění definice s výpočtem je vedeno v PLAN-VERIFIKACE-INDIKATORU.md.",
-  "patient_story": "České Budějovice, mamografické pracoviště, 54letá žena přichází na vyšetření. „Naposledy jsem byla před šesti lety, pak jsem zapomněla, pak pandemie, pak jsem to odkládala.\" Tahle pacientka je v cílové skupině screeningu (45–69 let), ale účast má suboptimální. Mamografické pracoviště za den vyšetří 40–60 žen — kapacita systému je dostatečná, mezera vzniká na vstupu.\n\nPokrytí cílové populace žen mamografickým screeningem je 54,5 % (ÚZIS NRHZS, 2024). OECD průměr je 68 %, EU 65 %. Cílová hodnota podle EU doporučení je ≥ 75 %. Česko zaostává o ~14 procentních bodů za OECD a o ~20 bodů za doporučenou hodnotou. Program funguje od 2002, screening provádí cca 70 akreditovaných center, frekvence dvouletá, hrazený z veřejného zdravotního pojištění. Trend pomalu roste (2020: 50,6 %; 2024: 54,5 %), ale tempo nestačí na dosažení cíle 75 % do roku 2030.\n\nStrukturálně český systém má akreditovaná centra, organizovaný registr a adresné pozvánky. Mezera vzniká v komunikaci s pacientkou a v dostupnosti center — některé okresy mají center málo, dojezd 60+ minut. Praktická lékařka nebo gynekoložka může screening doporučit, ale není odpovědná za follow-up neúčastnice. Tichá kohorta žen z marginalizovaných skupin (nižší vzdělání, romské komunity, vzdálené regiony) má účast pod 35 %. Programy navigace pacientky (model UK breast cancer navigator) v ČR nejsou.\n\nKarcinom prsu je v Česku nejčastější onkologickou diagnózou u žen (incidence 130 / 100 000, mortalita ~30 / 100 000). Screening snižuje mortalitu o 20–30 % u screenovaných žen (Cochrane). Politické páky: rozšířit pozvánky o digitální notifikace; investovat do mobilních mamografických jednotek pro odlehlé regiony (model Polska a Slovenska); přidat kapitační platbu praktikovi/gynekoložce za organizovaný screening; národní kampaň „říjen růžová\" se sjednoceným systémem komunikace. Indikátor v HSPA dashboardu sleduje účast jako klíčový ukazatel efektivity sekundární prevence rakoviny prsu.",
+  "method_notes": "Cíl WHO: ≥ 70 %.",
+  "limitations": "Adresné zvaní zavedeno až 2014; časový vývoj odráží i organizační kapacitu, ne jen poptávku. Pokrytí celé cílové populace programu (ženy 45+) bylo v roce 2024 54,5 %; do 26. 10. 2026 bylo toto číslo chybně uváděno jako 50–69.",
+  "patient_story": "České Budějovice, mamografické pracoviště, 54letá žena přichází na vyšetření. „Naposledy jsem byla před šesti lety, pak jsem zapomněla, pak pandemie, pak jsem to odkládala.\" Tahle pacientka je v cílové skupině screeningu (45–69 let), ale účast má suboptimální. Mamografické pracoviště za den vyšetří 40–60 žen — kapacita systému je dostatečná, mezera vzniká na vstupu.\n\nPokrytí žen ve věku 50–69 let mamografickým screeningem je 61,4 % (programová data ÚZIS NRHZS, 2024). Průměr členských zemí OECD (programová data) je kolem 56 %, cíl WHO je ≥ 70 %. Česko je tedy nad průměrem OECD, ale o ~9 procentních bodů pod doporučenou hodnotou. Program funguje od 2002, screening provádí cca 70 akreditovaných center, frekvence dvouletá, hrazený z veřejného zdravotního pojištění. Trend pomalu roste (2020: 58,6 %; 2024: 61,4 %), ale tempo nestačí na dosažení cíle 70 % v dohledné době.\n\nStrukturálně český systém má akreditovaná centra, organizovaný registr a adresné pozvánky. Mezera vzniká v komunikaci s pacientkou a v dostupnosti center — některé okresy mají center málo, dojezd 60+ minut. Praktická lékařka nebo gynekoložka může screening doporučit, ale není odpovědná za follow-up neúčastnice. Tichá kohorta žen z marginalizovaných skupin (nižší vzdělání, romské komunity, vzdálené regiony) má účast pod 35 %. Programy navigace pacientky (model UK breast cancer navigator) v ČR nejsou.\n\nKarcinom prsu je v Česku nejčastější onkologickou diagnózou u žen (incidence 130 / 100 000, mortalita ~30 / 100 000). Screening snižuje mortalitu o 20–30 % u screenovaných žen (Cochrane). Politické páky: rozšířit pozvánky o digitální notifikace; investovat do mobilních mamografických jednotek pro odlehlé regiony (model Polska a Slovenska); přidat kapitační platbu praktikovi/gynekoložce za organizovaný screening; národní kampaň „říjen růžová\" se sjednoceným systémem komunikace. Indikátor v HSPA dashboardu sleduje účast jako klíčový ukazatel efektivity sekundární prevence rakoviny prsu.",
   "framework": "hspa",
   "dimension": "kvalita",
   "verification_status": "verified",

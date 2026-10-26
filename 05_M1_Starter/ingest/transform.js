@@ -448,6 +448,30 @@ export function extractFromNor(indicatorId) {
 }
 
 /**
+ * Rozparsuje věkovou skupinu z hodnoty sloupce zdroje na { from, to }.
+ * Podporuje: „50–54 let“, „50-54“, „55+“, „85 let a více“ a číselný kód ÚZIS
+ * (66 + 3 číslice od + 3 číslice do, např. 66050054; 999 = bez horní hranice).
+ * Vrací null, když hodnotu nelze rozpoznat.
+ * @param {unknown} raw
+ * @returns {{from:number,to:number}|null}
+ */
+export function parseAgeBand(raw) {
+  const s = String(raw ?? '').trim();
+  if (!s) return null;
+  const code = /^66(\d{3})(\d{3})$/.exec(s);
+  if (code) {
+    const from = parseInt(code[1], 10);
+    const to = parseInt(code[2], 10);
+    return { from, to: to >= 999 ? Infinity : to };
+  }
+  const range = /^(\d{1,3})\s*[-–—]\s*(\d{1,3})/.exec(s);
+  if (range) return { from: parseInt(range[1], 10), to: parseInt(range[2], 10) };
+  const open = /^(\d{1,3})\s*(\+|let a více|a více|and over)/i.exec(s);
+  if (open) return { from: parseInt(open[1], 10), to: Infinity };
+  return null;
+}
+
+/**
  * Z NRHZS screening cache spočítá pokrytí populace screeningem (%) za nejnovější rok
  * a 5letý trend. Sčítá pocet_vysetrenych přes všechny okresy/věkové skupiny
  * a děli celkovou populací.
@@ -455,6 +479,11 @@ export function extractFromNor(indicatorId) {
  * Konfigurace pres metadata indikátoru:
  *   primary.dataset = 'nrhzs_screening_kolorektal' nebo 'nrhzs_screening_mamograf'
  *   primary.sex_filter = 'F'/'T'/'M' (volitelné)
+ *   primary.age_filter = { from: 50, to: 69 } (volitelné) — do agregace jdou jen
+ *     věkové skupiny zdroje, které celé leží v intervalu <from, to>. Věková skupina
+ *     se čte ze sloupce `vek_nazev` (např. „50–54 let“), jinak `vek_kod`
+ *     (např. „50-54“ nebo číselný kód ÚZIS 66050054). Bez age_filteru se agregují
+ *     všechny skupiny (chování pro kolorektální a cervikální screening).
  *
  * Pro mamografický screening (pouze ženy) přepočet na pokrytí vyžaduje
  * mít cílovou populaci jako jmenovatel — pokud dataset nemá sloupec
@@ -488,9 +517,21 @@ export function extractFromNrhzsScreening(indicatorId) {
   // Guard: pokud sex_filter požadovaný a sloupec chybí → null (analogicky NOR P2 fix)
   if (sexFilter && !sexCol) return null;
 
+  // Volitelný věkový filtr (např. mamografie: ženy 50–69 podle definice OECD).
+  const ageFilter = primary.age_filter;
+  const ageCol = ageFilter
+    ? (cols.find(c => /^vek_nazev$/i.test(c)) ?? cols.find(c => /^vek_kod$/i.test(c)))
+    : null;
+  // Guard: filtr požadovaný, ale zdroj nemá věkovou skupinu → null (raději seed než špatná kohorta)
+  if (ageFilter && !ageCol) return null;
+
   const byYear = {};
   for (const row of cache.records) {
     if (sexFilter && sexCol && String(row[sexCol]).toUpperCase() !== String(sexFilter).toUpperCase()) continue;
+    if (ageFilter) {
+      const band = parseAgeBand(row[ageCol]);
+      if (!band || band.from < ageFilter.from || band.to > ageFilter.to) continue;
+    }
     const y = parseInt(row[yearCol], 10);
     const exams = Number(row[examCol]);
     if (!Number.isFinite(y) || !Number.isFinite(exams)) continue;
