@@ -50,6 +50,10 @@
   u právních tvrzení uvádět paragraf a odkaz na znění předpisu. Stejný problém s věkovou
   kohortou mají screeningy děložního čípku a kolorekta, řeší se samostatně
   (PLAN-VERIFIKACE-INDIKATORU.md, U3).
+- **Doplněk (26. 10. 2026)**: screening děložního čípku přepočten na ženy 20–69 (75,3 %
+  místo 65,7 %, signál „na pozoru“ → „dobře“, průměr OECD 56,8 %) a kolorektální na
+  populaci 50–74 (32,5 % místo 31,1 %, průměr OECD 43,0 %, signál zůstává „špatně“);
+  benchmarky bez zdroje nahrazeny programovými daty OECD. Publikované články s Opravou.
 - **Zjistil**: vnější křížové ověření (studie zdravko), ověřeno u primárních zdrojů 26. 10. 2026.
 
 ## INC-2026-002 · S2 · 2026-07-10 · Tři publikované články se renderovaly prázdné

@@ -348,7 +348,7 @@ const PRIORITIES = [
   {
     num: 8, slug: 'prevence-jako-standard',
     name: 'Prevence jako standard',
-    deck: 'KV mortalita ČR 463/100k vs EU-27 313. Účast na kolorektálním screeningu 28 % vs OECD 42 %. Denní kuřáci 16,4 % vs OECD 14,8 %. Výdaje na prevenci rostou pětkrát pomaleji než léčebná péče.',
+    deck: 'KV mortalita ČR 463/100k vs EU-27 313. Pokrytí kolorektálním screeningem (50–74) 32,5 % vs OECD 43 %. Denní kuřáci 16,4 % vs OECD 14,8 %. Výdaje na prevenci rostou pětkrát pomaleji než léčebná péče.',
     why: {
       state: 'Česko je v primární prevenci pod evropským průměrem. Důsledek: vysoká kardiovaskulární mortalita, pozdě zachycené nádory (akutní resekce kolorekta má 3× vyšší 90d mortalitu než elektivní), předčasné úmrtí mužů v produktivním věku.',
       holds: 'Investice do prevence je neviditelná, léčba následků viditelná. Politici raději financují léčbu — voliči vidí výsledek. Výdaje na prevenci stagnují na 2,7 % vs OECD 3,4 %.',
