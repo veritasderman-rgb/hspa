@@ -23,6 +23,7 @@
     notes: "2026-06-20 (denní rutina, fallback audit nejstaršího článku — last_reviewed 2026-05-12, 39 dní). Ověřeno proti EU Country Cancer Profile 2025 (Czechia, EC/OECD, data ECIS/JRC). OPRAVY: (1) rozdíl 5letého přežití sjednocen na 5,1 p.b. (56,1 vs 61,2 %; titulek/počítadlo dříve uváděly „6/−6 p.b.", lead správně „pět"); (2) incidence prsu v datovém boxu opravena na věk. std. 133/100k vs EU 148 (dříve „145 vs OECD 90,7" — míchala hrubou a std. míru a obracela směr, ČR je ve skutečnosti pod EU); (3) odstraněno zavádějící tvrzení o kolorektální incidenci „2× nad průměrem OECD" (hrubá 73,5 vs std. 36,5) — na věk. std. bázi je ČR srovnatelná s EU (muži 94 vs 93, ženy 53 vs 58), zatímco úmrtnost je o 19 % vyšší (32/100k); (4) screening aktualizován na 31,1 % (2024, ÚZIS); (5) opraven překlep zdroje H@G 2024 → 2023. Předchozí audit (2026-05-12): EUROCARE INT Milán + ISS Řím, colon/rectum distinkce, kohortové ukotvení. Status zůstává review-pending — čeká na ruční schválení redakce. | nightly_scan 2026-07-06 (noční rutina, publikační hygiena): z těla článku odstraněny dvě poznámky o revizním procesu ('Auditní disclaimer (2026-05-12)…' a 'Revize 2026-06-20 (denní rutina, fallback audit)…') — redakční changelog nepatří do publikovaného textu (CLAUDE.md publikační hygiena). Veškerá data i zdroje z těchto poznámek (56,1/61,2 %, incidence prsu 133 vs EU 148, kolorektál muži 94/ženy 53, screening 31,1 %, EU Country Cancer Profile 2025) jsou nadále v těle článku a v sekci Zdroje. Beze změny čísel a tvrzení."
     av_sweep4_2026-07-10: "Doplněny AV vizuály (článek měl jen hero figuru): av-data-table heterogenita diagnóz (prsu/prostata blízko / kolorektál ztrácí / hrdlo+plíce prostor / pankreas špatný všude), av-bar-compare 5leté přežití kolorektál 56,1 vs 61,2 % + kontext screening 31,1/42 a úmrtnost +19 %. Všechna čísla 1:1 z textu/databoxu, text nezměněn (aditivní), claims nedotčeny."
     av_sweep4_codex_2026-07-10: "Codex P2 (#772): titulek bar-compare tvrdil 'podobný výskyt, vyšší úmrtnost', ale sloupce plotují pětileté přežití (56,1/61,2 %) — nesoulad titulku a dat. Titulek přejmenován na 'Pětileté přežití u kolorektálního karcinomu — ČR vs. OECD' (matchuje sloupce); kontext incidence/úmrtnost/screening ponechán ve figure-note pod 'Otisk pozdního záchytu:'."
+    fix_2026-10-26_u3: "Indikátor screening_kolorektalni přepočten na populaci 50–74 let podle definice OECD (programová data ÚZIS NRHZS, PPS-02-01): 32,5 % (2024) místo 31,1 %, což je pokrytí celé populace od 50 let; benchmark OECD 42 / EU 38 (seed bez zdroje) nahrazen průměrem programových dat OECD 2024 (43,0 %, 24 zemí) a EU (41,6 %, 21 zemí). Změněna poznámka pod grafem a blok souvisejících indikátorů. (U3)"
 -->
 <meta name="article:audit-status" content="review-pending">
 <link rel="stylesheet" href="src/styles.min.css">
@@ -278,7 +279,7 @@
           <li class="av-bar-row av-bar-row-bad" data-value="56.1" data-display="56,1 %" data-label="Pětileté přežití — ČR" data-note="příčinou pozdější stadium při diagnóze"></li>
           <li class="av-bar-row av-bar-row-good" data-value="61.2" data-display="61,2 %" data-label="Pětileté přežití — OECD ⌀"></li>
         </ol>
-        <p class="av-figure-note"><strong>Otisk pozdního záchytu:</strong> účast na kolorektálním screeningu ČR jen 31,1 % vs. OECD 42 %; úmrtnost je +19 % nad EU při srovnatelné incidenci. Zdroj: OECD (CONCORD-3); EU CCP 2025.</p>
+        <p class="av-figure-note"><strong>Otisk pozdního záchytu:</strong> pokrytí kolorektálním screeningem v ČR jen 32,5 % lidí 50–74 let vs. průměr OECD 43,0 % (2024); úmrtnost je +19 % nad EU při srovnatelné incidenci. Zdroj: OECD (CONCORD-3); EU CCP 2025.</p>
       </figure>
 
       <h3>Tři příčiny, které jsou doložené</h3>
@@ -347,7 +348,7 @@
         <li><a href="indikator-mortalita_onkologicka.html"><strong>Onkologická mortalita</strong></a> — 250,4 / 100 000 vs. EU27 233,1 (Eurostat 2023)</li>
         <li><a href="indikator-incidence_kolorektalni.html"><strong>Incidence kolorektálního karcinomu</strong></a> — 73,5 / 100 000 (hrubá míra); věkově standardizovaně srovnatelná s EU (muži 94, ženy 53 / 100 000; EU 93, resp. 58)</li>
         <li><a href="indikator-incidence_prsu.html"><strong>Incidence karcinomu prsu (ženy)</strong></a> — 133 / 100 000 (věk. std.) vs. EU 148 (CCP 2025)</li>
-        <li><a href="indikator-screening_kolorektalni.html"><strong>Účast na kolorektálním screeningu</strong></a> — 31,1 % (2024) vs. OECD 42 %</li>
+        <li><a href="indikator-screening_kolorektalni.html"><strong>Účast na kolorektálním screeningu (50–74)</strong></a> — 32,5 % (2024) vs. OECD 43,0 %</li>
       </ul>
     </aside>
 
@@ -384,6 +385,9 @@
       </div>
       <p class="article-sources-disclaimer">
         <strong>Pozn. k metodice:</strong> Indikátor 56,1 % vs. 61,2 % v dashboardu HSPA Monitoru je vázán na karcinom tlustého střeva (colon, MKN-10 C18) dle OECD CONCORD-3, diagnostická kohorta 2010–2014. Karcinom konečníku (C19–C20) reportuje OECD odděleně (ČR 52,3 %). Jde o čisté (relativní) přežití, které koriguje na úmrtnost obecné populace, a je proto mezinárodně srovnatelné. Mezinárodní srovnání pětiletého přežití je obecně metodicky náročné — hodnoty se liší podle toho, zda se počítá relativní nebo čisté přežití, pro jakou diagnózu, pro jakou kohortu pacientů a jaká věková standardizace je použita. Pro pohled na další diagnózy doporučujeme primární zdroje (CONCORD-3, EUROCARE, NOR / IBA MUNI / SVOD).
+      </p>
+      <p class="article-sources-disclaimer">
+        <strong>Oprava (26. 10. 2026):</strong> Pokrytí kolorektálním screeningem jsme uváděli jako 31,1 % populace 50–75 let a srovnávali s hodnotami OECD 42 % a EU 38 %; 31,1 % je ale pokrytí celé populace od 50 let a srovnávací hodnoty neměly doložený zdroj. Správně: v kohortě 50–74 let, kterou sleduje OECD, je pokrytí 32,5 % (2024, programová data ÚZIS), pod průměrem členských zemí OECD (43,0 %) i zemí EU (41,6 %).
       </p>
     </section>
 
