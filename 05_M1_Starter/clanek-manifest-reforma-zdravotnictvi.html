@@ -23,6 +23,7 @@
     f1_2026-07-10: "F1 link-audit: 14 externích odkazů zkontrolováno, žádný mrtvý. OECD HSPA Framework CZ (oecd.org/en/publications/health-system-performance-assessment-framework-for-the-czech-republic_5d59b667-en.html) vrací HTTP 403 při skenu (anti-bot Cloudflare) — ověřeno webovým vyhledáním, že jde o platnou, aktuální OECD publikaci; ponecháno beze změny. Ostatní odkazy (e-estonia.com, ecrin.org, GitHub, NHS England, g-ba.de, has-sante.fr, kanta.fi, nice.org.uk, sundhed.dk, who.int) vrací HTTP 200. Ponecháno partial — otevřený bod z 2026-07-09 (per-claim ruční audit zbývajících věcných tvrzení manifestu, např. AWaRe 37,1 %, výpadky léčiv) trvá, odkazy s ním nesouvisí."
     reconcile_2026-07-12: "alkohol_spotreba 14,4/8,9 → recorded 11,2/8,5 (OECD H@G 2025, issue #690 varianta A). Současně sladěna zastaralá čísla v prioritě 8 a counteru s kontraktem: KV mortalita 220/140 → 463,75/EU-27 312,95 (Eurostat ESP 2013, 2023 — jiná standardizace než původní OECD pár), screening kolorektální 28/42 → 31,1/42, kuřáctví 22,6/16 → 16,4/14,8; incidence kolorektálního karcinomu 73,5 ponechána (kontrakt souhlasí), benchmark 36,5 vypuštěn (kontrakt benchmark nemá)."
     fix_2026-10-26: "Výpadky léčiv: ~2 200 vs ~580 (2019) nahrazeno řadou z opendata.sukl.cz (indikátor vypadky_leciv_aktivni): konec 2019 1 288, minimum 2021 1 077, konec 2025 1 552, říjen 2026 1 420 (issue #1309). Švédsko: bezplatná zubní péče do konce roku dovršení 19 let od 1. 1. 2025 (do 2024 23 let), zdroj Socialstyrelsen (issue #1314)."
+    fix_2026-10-26_u3: "Indikátor screening_kolorektalni přepočten na populaci 50–74 let podle definice OECD (programová data ÚZIS NRHZS, PPS-02-01): 32,5 % (2024) místo 31,1 %, což je pokrytí celé populace od 50 let; benchmark OECD 42 / EU 38 (seed bez zdroje) nahrazen průměrem programových dat OECD 2024 (43,0 %, 24 zemí) a EU (41,6 %, 21 zemí). „Nordic ~70 %“ (bez doložení; OECD 2024: Finsko 73,5, Švédsko 65,2, Norsko 53,0) nahrazeno Finskem 73,5 %. Změněny bod priority, hero counter, odstavec o prevenci, datová karta a blok souvisejících indikátorů. (U3)"
 -->
 <link rel="stylesheet" href="src/styles.min.css">
 <link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
@@ -186,7 +187,7 @@
           </p>
           <ul>
             <li><strong>Kardiovaskulární mortalita</strong> 463 / 100 000 v ČR vs EU-27 313 — 48 % rezerva v primární prevenci (Eurostat <code>hlth_cd_asdr2</code>). <a href="indikator-mortalita_kardiovaskularni.html">Indikátor →</a></li>
-            <li><strong>Screening kolorekta</strong> — účast 31,1 %, OECD průměr 42 %, EU 38 %, Nordic ~70 % (OECD HCQI). Akutní resekce karcinomu rekta má 3× vyšší 90d mortalitu než plánovaná. <a href="indikator-screening_kolorektalni.html">Indikátor →</a></li>
+            <li><strong>Screening kolorekta</strong> — pokrytí 32,5 % lidí 50–74 let, OECD průměr 43,0 %, EU 41,6 %, Finsko 73,5 % (OECD, programová data 2024). Akutní resekce karcinomu rekta má 3× vyšší 90d mortalitu než plánovaná. <a href="indikator-screening_kolorektalni.html">Indikátor →</a></li>
             <li><strong>Antibiotická preskripce</strong> CZ-AWaRe Access podíl 37,1 % (PUK 2024) — pod WHO cílem 60 %. AMR způsobí dle WHO 10 mil úmrtí ročně do 2050. <a href="kvalita-pece.html#cqSec4H">Detail v Kvalitě péče →</a></li>
             <li><strong>Duševní zdraví</strong> — sebevraždy ~11,6 / 100k vs EU 10,4 (Eurostat, 2023), antidepresíva rostou rychleji než síť psychiatrů. <a href="indikator-sebevrazdy_per_100k.html">Indikátor →</a></li>
             <li><strong>Léková dostupnost</strong> — na začátku října 2026 SÚKL evidoval 1 420 aktivních výpadků léčivých přípravků (konec roku 2019: 1 288, konec roku 2025: 1 552; hlášení o dodávkách). Po minimu v roce 2021 (1 077) počet vzrostl o třetinu a drží se vysoko. Strukturální slabost, ne přechodná anomálie. <a href="jak-funguje.html?id=lekova_dostupnost_vypadky">Explainer →</a></li>
@@ -256,9 +257,9 @@
             <span class="av-counter-foot">OECD průměr 14,8 %; kuřáků tabáku celkem 22,4 %</span>
           </div>
           <div class="av-counter-block av-counter-block-bad">
-            <span class="av-counter" data-value="31.1" data-decimals="1" data-suffix=" %">31,1 %</span>
-            <span class="av-counter-label">účast na kolorektálním screeningu</span>
-            <span class="av-counter-foot">OECD průměr 42 %; Nordic ~70 %</span>
+            <span class="av-counter" data-value="32.5" data-decimals="1" data-suffix=" %">32,5 %</span>
+            <span class="av-counter-label">pokrytí kolorektálním screeningem (50–74)</span>
+            <span class="av-counter-foot">OECD průměr 43,0 %; Finsko 73,5 %</span>
           </div>
           <div class="av-counter-block av-counter-block-bad">
             <span class="av-counter" data-value="2.3" data-decimals="1" data-suffix=" %">2,3 %</span>
@@ -461,7 +462,7 @@
       </aside>
 
       <p>
-        Na preventivní programy české zdravotnictví dlouhodobě vydává malý zlomek celkových výdajů a růst v segmentu prevence je výrazně pomalejší než v segmentu léčebné péče. Při srovnání let 2017 a 2018 vzrostly výdaje na léčebnou péči o 14 procent, na preventivní péči pouze o 2,3. Zároveň primárními příčinami úmrtí v ČR jsou kardiovaskulární a nádorová onemocnění, jejichž významná část je preventabilní. V dashboardu HSPA Monitoru se to ukazuje napříč indikátory: kardiovaskulární mortalita 463,75 oproti 312,95 v průměru EU-27 (Eurostat, 2023), incidence kolorektálního karcinomu 73,5 / 100 000, účast na kolorektálním screeningu 31,1 procenta vs. 42 v OECD, denní kuřáctví 16,4 procenta vs. 14,8, registrovaná spotřeba alkoholu 11,2 vs. 8,5 litru čistého alkoholu na osobu starší patnácti let (2023, OECD Health at a Glance 2025). Koncepce Zdraví 2030 má dobré cíle, ale chybí jí odbor a tým, který by ji důsledně realizoval.
+        Na preventivní programy české zdravotnictví dlouhodobě vydává malý zlomek celkových výdajů a růst v segmentu prevence je výrazně pomalejší než v segmentu léčebné péče. Při srovnání let 2017 a 2018 vzrostly výdaje na léčebnou péči o 14 procent, na preventivní péči pouze o 2,3. Zároveň primárními příčinami úmrtí v ČR jsou kardiovaskulární a nádorová onemocnění, jejichž významná část je preventabilní. V dashboardu HSPA Monitoru se to ukazuje napříč indikátory: kardiovaskulární mortalita 463,75 oproti 312,95 v průměru EU-27 (Eurostat, 2023), incidence kolorektálního karcinomu 73,5 / 100 000, pokrytí kolorektálním screeningem 32,5 procenta vs. 43,0 v OECD, denní kuřáctví 16,4 procenta vs. 14,8, registrovaná spotřeba alkoholu 11,2 vs. 8,5 litru čistého alkoholu na osobu starší patnácti let (2023, OECD Health at a Glance 2025). Koncepce Zdraví 2030 má dobré cíle, ale chybí jí odbor a tým, který by ji důsledně realizoval.
       </p>
 
       <p>
@@ -477,9 +478,9 @@
         <div class="manifest-priority-data-grid">
           <a class="manifest-data-card" href="indikator-screening_kolorektalni.html">
             <div class="manifest-data-card-id">screening_kolorektalni</div>
-            <div class="manifest-data-card-value">31,1 %</div>
-            <div class="manifest-data-card-name">Účast na screeningu kolorekta</div>
-            <div class="manifest-data-card-bench">OECD 42 % · EU 38 % · Nordic ~70 %</div>
+            <div class="manifest-data-card-value">32,5 %</div>
+            <div class="manifest-data-card-name">Pokrytí screeningem kolorekta (50–74)</div>
+            <div class="manifest-data-card-bench">OECD 43,0 % · EU 41,6 % · Finsko 73,5 %</div>
           </a>
           <a class="manifest-data-card" href="indikator-kuractvi_denni.html">
             <div class="manifest-data-card-id">kuractvi_denni</div>
@@ -649,7 +650,7 @@
       <ul class="article-databox-list">
         <li><a href="indikator-mortalita_kardiovaskularni.html"><strong>Kardiovaskulární mortalita</strong></a> — 463,75 / 100 000 vs. EU-27 312,95 (Eurostat <code>hlth_cd_asdr2</code>, ESP 2013, 2023)</li>
         <li><a href="indikator-incidence_kolorektalni.html"><strong>Incidence kolorektálního karcinomu</strong></a> — 73,5 / 100 000 (hrubá míra, 2023)</li>
-        <li><a href="indikator-screening_kolorektalni.html"><strong>Účast na kolorektálním screeningu</strong></a> — 31,1 % vs. OECD 42 % / EU 38 % (2024)</li>
+        <li><a href="indikator-screening_kolorektalni.html"><strong>Účast na kolorektálním screeningu (50–74)</strong></a> — 32,5 % vs. OECD 43,0 % / EU 41,6 % (2024, programová data)</li>
         <li><a href="indikator-alkohol_spotreba.html"><strong>Spotřeba alkoholu</strong></a> — 11,2 l/os./rok (registrovaná, 2023) vs. OECD 8,5</li>
         <li><a href="indikator-kuractvi_denni.html"><strong>Denní kuřáctví (15+)</strong></a> — 16,4 % vs. OECD 14,8 % / EU 18,5 %</li>
         <li><a href="indikator-sebevrazdy_per_100k.html"><strong>Sebevraždy</strong></a> — 11,6 / 100 000 vs. EU 10,4 (Eurostat, 2023)</li>
@@ -691,6 +692,9 @@
       </p>
       <p class="article-sources-disclaimer">
         <strong>Oprava (26. 10. 2026):</strong> Dřívější verze uváděla u výpadků léčiv „~2 200 aktivních výpadků vs ~580 v roce 2019“; tento údaj nemá oporu v otevřených datech SÚKL. Správně: na začátku října 2026 evidoval SÚKL 1 420 aktivních výpadků (konec roku 2019: 1 288, konec roku 2025: 1 552). U Švédska se bezplatná zubní péče pro děti a mladistvé od 1. 1. 2025 týká jen osob do konce roku, v němž dovrší 19 let (dříve 23 let).
+      </p>
+      <p class="article-sources-disclaimer">
+        <strong>Oprava (26. 10. 2026):</strong> Pokrytí kolorektálním screeningem jsme uváděli jako 31,1 % populace 50–75 let a srovnávali s hodnotami OECD 42 % a EU 38 %; 31,1 % je ale pokrytí celé populace od 50 let a srovnávací hodnoty neměly doložený zdroj. Správně: v kohortě 50–74 let, kterou sleduje OECD, je pokrytí 32,5 % (2024, programová data ÚZIS), pod průměrem členských zemí OECD (43,0 %) i zemí EU (41,6 %). Nedoložené „severské země kolem 70 %“ jsme nahradili hodnotou Finska (73,5 %).
       </p>
     </section>
 

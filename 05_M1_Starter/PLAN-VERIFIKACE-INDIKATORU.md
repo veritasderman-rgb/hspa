@@ -159,6 +159,25 @@ v kontraktu i srovnatelnost s OECD benchmarkem). Do té doby platí: hodnoty jso
 správné, jen popisky u nich nesmí tvrdit kohorty 50–69/20–64/50–75 (článek MOÚ
 opraven; ostatní články odkazující na `screening_*` prověřit při noční rutině).
 
+**✅ Kohorty sladěny s OECD (2026-10-26):** `extractFromNrhzsScreening()` má volitelný
+`data_source.primary.age_filter` a všechny tři karty ho používají podle definice OECD
+Health Statistics (dataflow `OECD.ELS.HD,DSD_HEALTH_PROC@DF_SCREEN`, programová data):
+
+| Indikátor | Kohorta (age_filter) | 2024 | OECD pro ČR | Benchmark (průměr 2024, programová data) |
+|---|---|---|---|---|
+| `screening_mamograficky` | ženy 50–69 | 61,4 % | 61,4 % | OECD ~56 %, EU 56,6 % (PR #1318) |
+| `screening_cervix` | ženy 20–69 | 75,3 % | 75,3 % | OECD 56,8 % (31 zemí), EU 52,3 % (22 zemí) |
+| `screening_kolorektalni` | populace 50–74 | 32,5 % | 31,1 % ⚠️ | OECD 43,0 % (24 zemí), EU 41,6 % (21 zemí) |
+
+Cervix: dřívější kohorta karty 20–64 (76,7 %) nahrazena 20–69, protože jen ta je
+srovnatelná s OECD/Eurostatem; řada 2015–2024 sedí na OECD na desetinu. ⚠️ Kolorektál:
+hodnota, kterou OECD pro ČR vede pod kohortou 50–74 (31,1 %; ženy 32,5, muži 29,4),
+se ve všech letech i po pohlavích shoduje s agregátem PPS-02-01 **bez horní věkové
+hranice** — ČR zřejmě do OECD posílá celou populaci 50+. Indikátor drží skutečnou
+kohortu 50–74 (32,5 %). Od 1. 1. 2026 je cílová populace programu 45–74 let (data za
+2026 zatím nejsou). Ruční seed benchmarky (cervix OECD 64,5 / EU 65, kolorektál OECD 42 /
+EU 38) neměly zdroj a byly nahrazeny.
+
 > Integritní oprava (2026-06-01): `rezistence_antibiotik_ecoli` měl `verified`,
 > ale `origin: seed`. Živý ECDC Atlas fetch (ESCCOL.FLUOROQUINOLONES) potvrdil
 > shodnou hodnotu 19,2 % (2024) i celý trend → přepnuto na `origin: live`.
