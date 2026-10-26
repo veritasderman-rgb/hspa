@@ -219,7 +219,7 @@ const PRIORITIES = [
   {
     num: 5, slug: 'dostupne-leky',
     name: 'Dostupné léky běžné i moderní',
-    deck: 'Dostupnost léčiv v Česku má více vrstev nedostatků: nejednotné lékárny, neznámý doplatek předem, omezené pravomoci lékárníků, chybějící systematická politika orphan léků a přes 2 200 aktivních výpadků (vs ~580 v 2019).',
+    deck: 'Dostupnost léčiv v Česku má více vrstev nedostatků: nejednotné lékárny, neznámý doplatek předem, omezené pravomoci lékárníků, chybějící systematická politika orphan léků a 1 420 aktivních výpadků (říjen 2026; konec 2019: 1 288).',
     why: {
       state: 'Léková dostupnost se za 7 let proměnila z přechodné anomálie ve strukturální slabost. SÚKL eviduje denně rostoucí počet hlášení o přerušení dodávek; podíl kriticky dostupných LP roste.',
       holds: 'Strukturální příčiny jsou globální (koncentrace výroby účinných látek v Asii) i domácí (malý trh, reexport, slabý Emergency Stock). 10–15 % postižených léčiv nemá v ČR registrovanou náhradu.',
@@ -413,7 +413,7 @@ const PRIORITIES = [
     ],
     inspirations: [
       { flag: '🇩🇪 Německo', name: 'KZV', text: 'Komplexní úhradový systém — pojišťovna hradí prevenci, restaurace, parodontologii. Pacient si platí jen kosmetiku/luxus.' },
-      { flag: '🇸🇪 Švédsko', name: 'Free dental until 23', text: 'Dentální péče plně zdarma do 23 let — komplexní prevence + restaurace + ortho. Dospělí mají bonus systém.' },
+      { flag: '🇸🇪 Švédsko', name: 'Free dental until 19', text: 'Dentální péče zdarma do konce roku, v němž dítě dovrší 19 let (od 1. 1. 2025; do roku 2024 do 23 let). Dospělí mají státní příspěvek (tandvårdsstöd).' },
       { flag: '🇬🇧 UK', name: 'NHS Dental', text: 'Model: tři pásma plateb (band 1, 2, 3), zbytek hradí stát. Pacient ví, kolik zaplatí předem.' },
     ],
     timeline: [
