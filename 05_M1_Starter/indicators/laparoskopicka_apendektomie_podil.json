@@ -1,0 +1,66 @@
+{
+  "id": "laparoskopicka_apendektomie_podil",
+  "name": "Podíl laparoskopických apendektomií",
+  "area": "Procesy",
+  "domain": "Nemocniční péče",
+  "subdomain": "Miniinvazivní chirurgie",
+  "definition": "Podíl apendektomií (operací slepého střeva) provedených laparoskopicky na všech apendektomiích provedených v nemocnicích za kalendářní rok. Čitatel: laparoskopické apendektomie (ICD-9-CM 47.01 a 47.11, v Eurostatu kód CM4701_4711). Jmenovatel: všechny apendektomie (ICD-9-CM 47.0 a 47.1, kód CM470_471). Počítají se výkony u hospitalizovaných i jednodenních pacientů (icha_hc=TOT_PAT). Indikátor měří, jak rychle systém přechází od otevřené k miniinvazivní chirurgii u jedné z nejčastějších akutních operací.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "eurostat",
+      "endpoint": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/hlth_co_proc3?format=JSON&geo=CZ&unit=NR&icha_hc=TOT_PAT&icd9cm=CM470_471&icd9cm=CM4701_4711&sinceTimePeriod=2015",
+      "dataset": "Eurostat hlth_co_proc3 — Surgical operations and procedures performed in hospitals by ICD-9-CM (unit NR, icha_hc TOT_PAT). Podíl = CM4701_4711 / CM470_471 × 100; dataset aktualizován 13. 7. 2026, stažen 26. 10. 2026.",
+      "dimensions": {
+        "geo": "CZ",
+        "unit": "NR",
+        "icha_hc": "TOT_PAT",
+        "icd9cm": [
+          "CM470_471",
+          "CM4701_4711"
+        ],
+        "time": "rok"
+      },
+      "note": "Ověřeno přes API 2026-10-26. ČR laparoskopické / celkem: 2015 7 435 / 14 875 · 2016 7 571 / 14 867 · 2017 7 547 / 14 535 · 2018 7 371 / 13 823 · 2019 8 090 / 14 342 · 2020 7 620 / 13 446 · 2021 8 305 / 14 239 · 2022 8 842 / 14 494 · 2023 9 335 / 14 437. Eurostat fetcher (ingest/fetchers/eurostat.js) zatím neumí podíl dvou řad, proto bez mappingu; hodnota je seed počítaný redakcí."
+    },
+    "fallback": {
+      "type": "oecd_sdmx2",
+      "dataflow": "OECD.ELS.HD,DSD_HEALTH_PROC@DF_SURG_PROC",
+      "url": "https://data-explorer.oecd.org/vis?df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HEALTH_PROC%40DF_SURG_PROC",
+      "note": "OECD Health Statistics — Surgical procedures, MEDICAL_PROCEDURE CM470_471 a CM4701_4711. ČR 2024: 9 986 laparoskopických z 14 699 apendektomií (67,9 %); na 100 000 obyvatel 2023 132,9 apendektomií celkem, z toho 85,9 laparoskopických. Data za ČR dodává ÚZIS z Národního registru hrazených zdravotních služeb."
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat",
+    "code": "hlth_co_proc3 CM4701_4711 / CM470_471, EU 2023",
+    "dataset": "Eurostat agregát EU pro laparoskopickou apendektomii nepublikuje. Benchmark spočítala redakce HSPA Monitoru jako souhrnný podíl 26 členských států EU s daty za rok 2023 (součet laparoskopických / součet všech apendektomií; Řecko data nemá) = 80,9 %. Nevážený průměr států 78,2 %, medián 82,4 %. Sousedé 2023: Německo 86,5 · Rakousko 78,3 · Slovensko 80,2 · Polsko 57,7. OECD průměr redakce neověřila, proto se neuvádí.",
+    "value": 80.9,
+    "url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_co_proc3/default/table"
+  },
+  "signal_thresholds": {
+    "good": 2,
+    "warn": 10
+  },
+  "frequency": "annual",
+  "stewards": [
+    "ÚZIS — Národní registr hrazených zdravotních služeb (NRHZS)",
+    "Eurostat — statistika chirurgických výkonů (hlth_co_proc3)",
+    "OECD Health Statistics — Surgical procedures"
+  ],
+  "method_notes": "Hlavní hodnota je rok 2023 (64,7 %; 9 335 z 14 437 apendektomií), protože pro něj existují data za 26 států EU a lze spočítat evropský benchmark. OECD má už rok 2024 (67,9 %; 9 986 z 14 699), Eurostat zatím končí rokem 2023; po zveřejnění roku 2024 v Eurostatu se hodnota posune. Signál: (64,7 − 80,9) / 80,9 = −20 % při směru higher_is_better → bad (prahy good 2 %, warn 10 %). Podíl i benchmark počítá redakce z počtů výkonů, oficiální podíl Eurostat ani OECD nepublikuje. Jednodenní apendektomie (mód DAY v OECD) jsou v ČR okrajové: 48 případů v roce 2023 a 50 v roce 2024, prakticky všechny výkony jsou hospitalizace.",
+  "limitations": "1. Mezinárodní srovnání stojí na převodu národních klasifikací výkonů do ICD-9-CM; ČR vykazuje výkony podle Seznamu zdravotních výkonů a CZ-DRG, převod dělá ÚZIS a jeho přesnost nelze z publikovaných dat ověřit. 2. Laparoskopie převedená během operace na otevřený výkon může být podle kódovacích zvyklostí vykázána různě. 3. Indikátor nerozlišuje děti a dospělé ani nekomplikovaný a komplikovaný zánět; rozdíly ve struktuře pacientů mezi státy nejsou očištěny. 4. Podíl i evropský benchmark počítá redakce z počtů výkonů; Eurostat ani OECD podíl nepublikují. 5. Indikátor neměří výsledek operace (komplikace, délku pobytu) ani nezohledňuje léčbu antibiotiky bez operace.",
+  "determinants": [
+    "Vybavení operačních sálů laparoskopickou technikou a její dostupnost i v noční a víkendové službě",
+    "Počet chirurgů zkušených v laparoskopii, zejména v menších nemocnicích s akutní chirurgií",
+    "Zvyklosti pracovišť a vzdělávání v miniinvazivní chirurgii",
+    "Úhradové nastavení (CZ-DRG) a to, zda rozlišuje laparoskopický a otevřený přístup",
+    "Struktura pacientů: věk, komplikovaný zánět, obezita, těhotenství",
+    "Organizace akutní chirurgie v kraji (síť nemocnic s nepřetržitou chirurgickou službou)"
+  ],
+  "importance": "Apendektomie patří k nejčastějším akutním břišním operacím a dobře ukazuje, jak rychle se v běžné péči prosazuje miniinvazivní chirurgie. Cochrane přehled randomizovaných studií (Jaschinski et al., 2018, DOI 10.1002/14651858.CD001546.pub4, PMID 30484855) uvádí u dospělých po laparoskopii méně infekcí rány a kratší pobyt v nemocnici zhruba o jeden den, zároveň ale vyšší výskyt nitrobřišních abscesů, a kvalitu důkazů hodnotí jako velmi nízkou až střední. Indikátor proto nečteme jako přímé měřítko výsledků, ale jako ukazatel dostupnosti moderní operační techniky v akutní chirurgii a regionálních rozdílů v ní.",
+  "patient_story": "Modelová situace, ne skutečný případ: dvaatřicetiletá žena přijde v noci na urgentní příjem okresní nemocnice s bolestí v pravém podbřišku, která začala u pupku a během dne se přesunula níž. Chirurg potvrdí zánět slepého střeva a ještě tu noc ji operuje. Jestli to bude laparoskopicky, přes tři malé vpichy s kamerou, nebo otevřeně, řezem v podbřišku, závisí méně na ní samotné a víc na tom, kdo má zrovna službu, jaké vybavení je na sále a jak je nemocnice v laparoskopii zvyklá operovat. Ve stejné situaci v Nizozemsku by šance na laparoskopii byla podstatně vyšší.\n\nData to ukazují jasně. Podle Eurostatu (hlth_co_proc3) bylo v Česku v roce 2023 provedeno 14 437 apendektomií, z toho 9 335 laparoskopicky. Podíl laparoskopických výkonů je tedy 64,7 %. Souhrnný podíl za 26 států EU s daty, který spočítala redakce, je 80,9 %, takže signál HSPA Monitoru je „bad“: Česko je asi o pětinu pod evropskou úrovní a ve stejném roce bylo čtvrté nejníže v EU (níže jen Bulharsko, Rumunsko a Polsko). Trend je přitom příznivý: v roce 2015 byl podíl 50,0 %, v roce 2019 56,4 % a v roce 2023 64,7 %. OECD za rok 2024 uvádí 67,9 %. Počet operací celkem se drží kolem 14 až 15 tisíc ročně, mění se jen způsob, jakým se operuje.\n\nProč Česko zaostává, data přímo neříkají. Pravděpodobně spolupůsobí vybavení a dostupnost laparoskopické věže i ve službě mimo pracovní dobu, počet chirurgů zkušených v laparoskopii v menších nemocnicích, zvyklosti jednotlivých pracovišť a úhradové nastavení, které nemusí rozdíl mezi oběma přístupy odrážet. Sousední Slovensko a Rakousko se mezi lety 2019 a 2023 posunuly z 65,7 a 62,3 % na 80,2 a 78,3 %, takže rychlý posun možný je. Ne každý pacient je pro laparoskopii vhodný a část výkonů se během operace převádí na otevřenou, cílem proto není 100 %.\n\nPáka je v organizaci akutní chirurgie. Cochrane přehled 85 randomizovaných studií (Jaschinski et al., 2018) uvádí u dospělých po laparoskopii méně infekcí rány a o zhruba den kratší pobyt v nemocnici, ale také častější nitrobřišní abscesy; kvalita důkazů je velmi nízká až střední. Zdravotní pojišťovny a ministerstvo mohou sledovat podíl laparoskopie po jednotlivých nemocnicích, chirurgická společnost může zveřejňovat srovnání pracovišť a kraje mohou při plánování akutní chirurgie počítat s tím, že laparoskopie potřebuje vybavení a zkušený tým i v noci.",
+  "framework": "hspa",
+  "dimension": "kvalita",
+  "verification_status": "preliminary"
+}
