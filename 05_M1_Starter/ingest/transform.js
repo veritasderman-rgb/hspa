@@ -477,13 +477,15 @@ export function parseAgeBand(raw) {
  * a děli celkovou populací.
  *
  * Konfigurace pres metadata indikátoru:
- *   primary.dataset = 'nrhzs_screening_kolorektal' nebo 'nrhzs_screening_mamograf'
+ *   primary.dataset = 'nrhzs_screening_kolorektal', 'nrhzs_screening_mamograf_pokryti'
+ *     nebo 'nrhzs_screening_cervix_trilete'
  *   primary.sex_filter = 'F'/'T'/'M' (volitelné)
  *   primary.age_filter = { from: 50, to: 69 } (volitelné) — do agregace jdou jen
  *     věkové skupiny zdroje, které celé leží v intervalu <from, to>. Věková skupina
  *     se čte ze sloupce `vek_nazev` (např. „50–54 let“), jinak `vek_kod`
  *     (např. „50-54“ nebo číselný kód ÚZIS 66050054). Bez age_filteru se agregují
- *     všechny skupiny (chování pro kolorektální a cervikální screening).
+ *     všechny skupiny. Všechny tři screeningy mají filtr podle kohorty OECD:
+ *     mamografie 50–69, cervix 20–69, kolorektál 50–74.
  *
  * Pro mamografický screening (pouze ženy) přepočet na pokrytí vyžaduje
  * mít cílovou populaci jako jmenovatel — pokud dataset nemá sloupec

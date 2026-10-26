@@ -230,9 +230,9 @@ test('extractFromNrhzsScreening: kolorektální pokrytí (% z populace)', () => 
     columns: ['rok', 'pohlavi', 'vek_kod', 'okres_lau_kod', 'kraj_nuts_kod', 'pocet_vysetrenych', 'populace'],
     records: [
       { rok: '2023', pohlavi: 'T', vek_kod: '50-54', okres_lau_kod: 'CZ010', kraj_nuts_kod: 'CZ010', pocet_vysetrenych: '50000', populace: '200000' },
-      { rok: '2023', pohlavi: 'T', vek_kod: '55+', okres_lau_kod: 'CZ010', kraj_nuts_kod: 'CZ010', pocet_vysetrenych: '70000', populace: '300000' },
+      { rok: '2023', pohlavi: 'T', vek_kod: '55-74', okres_lau_kod: 'CZ010', kraj_nuts_kod: 'CZ010', pocet_vysetrenych: '70000', populace: '300000' },
       { rok: '2024', pohlavi: 'T', vek_kod: '50-54', okres_lau_kod: 'CZ010', kraj_nuts_kod: 'CZ010', pocet_vysetrenych: '60000', populace: '200000' },
-      { rok: '2024', pohlavi: 'T', vek_kod: '55+', okres_lau_kod: 'CZ010', kraj_nuts_kod: 'CZ010', pocet_vysetrenych: '80000', populace: '300000' },
+      { rok: '2024', pohlavi: 'T', vek_kod: '55-74', okres_lau_kod: 'CZ010', kraj_nuts_kod: 'CZ010', pocet_vysetrenych: '80000', populace: '300000' },
     ],
   });
   try {
@@ -320,24 +320,60 @@ test('extractFromNrhzsScreening: age_filter bez sloupce věku ve zdroji → null
   }
 });
 
-test('extractFromNrhzsScreening: bez age_filteru (kolorektální) se agregují všechny věkové skupiny', () => {
+test('extractFromNrhzsScreening: kolorektální — age_filter 50–74 vynechá skupiny 75+ (kohorta OECD)', () => {
   ensureCacheDir();
   const card = JSON.parse(fs.readFileSync(path.join(ROOT, 'indicators', 'screening_kolorektalni.json'), 'utf8'));
-  assert.equal(card.data_source.primary.age_filter, undefined, 'filtr je volitelný, kolorektální ho nemá');
+  assert.deepEqual(card.data_source.primary.age_filter, { from: 50, to: 74 });
+  const row = (kod, nazev, pohlavi, vys, pop) => ({
+    rok: '2024', pohlavi, vek_kod: kod, vek_nazev: nazev,
+    okres_lau_kod: 'CZ0100', kraj_nuts_kod: 'CZ010', pocet_vysetrenych: String(vys), populace: String(pop),
+  });
   writeCache('uzis_nrhzs_screening_kolorektal.json', {
-    columns: ['rok', 'pohlavi', 'vek_kod', 'okres_lau_kod', 'kraj_nuts_kod', 'pocet_vysetrenych', 'populace'],
+    columns: ['rok', 'pohlavi', 'vek_kod', 'vek_nazev', 'okres_lau_kod', 'kraj_nuts_kod', 'pocet_vysetrenych', 'populace'],
     records: [
-      { rok: '2024', pohlavi: 'T', vek_kod: '45-49', okres_lau_kod: 'CZ010', kraj_nuts_kod: 'CZ010', pocet_vysetrenych: '10000', populace: '100000' },
-      { rok: '2024', pohlavi: 'T', vek_kod: '75-79', okres_lau_kod: 'CZ010', kraj_nuts_kod: 'CZ010', pocet_vysetrenych: '30000', populace: '100000' },
+      row('66050054', '50–54 let', 'M', 20000, 100000),
+      row('66070074', '70–74 let', 'Z', 40000, 100000),
+      row('66075079', '75–79 let', 'Z', 10000, 100000),
+      row('66085999', '85 let a více', 'M', 1000, 100000),
     ],
   });
   try {
     const out = extractFromNrhzsScreening('screening_kolorektalni');
     assert.ok(out);
-    // (10000+30000) / 200000 * 100 = 20 (pásma mimo 50–69 se počítají)
-    assert.equal(out.value, 20);
+    // jen 50–74, muži i ženy: (20000+40000) / 200000 × 100 = 30 (skupiny 75+ se nepočítají)
+    assert.equal(out.value, 30);
   } finally {
     fs.unlinkSync(cachePath('uzis_nrhzs_screening_kolorektal.json'));
+  }
+});
+
+test('extractFromNrhzsScreening: cervix — age_filter 20–69 vynechá 15–19 a 70+ (sloupec pocet_vysetreni)', () => {
+  ensureCacheDir();
+  const card = JSON.parse(fs.readFileSync(path.join(ROOT, 'indicators', 'screening_cervix.json'), 'utf8'));
+  assert.deepEqual(card.data_source.primary.age_filter, { from: 20, to: 69 });
+  // Formát reálné sady PPS-03-04: sloupec pocet_vysetreni (ne pocet_vysetrenych), jen ženy.
+  const row = (rok, kod, nazev, vys, pop) => ({
+    rok, pohlavi: 'Z', vek_kod: kod, vek_nazev: nazev,
+    okres_lau_kod: 'CZ0100', kraj_nuts_kod: 'CZ010', pocet_vysetreni: String(vys), populace: String(pop),
+  });
+  writeCache('uzis_nrhzs_screening_cervix_trilete.json', {
+    columns: ['rok', 'pohlavi', 'vek_kod', 'vek_nazev', 'okres_lau_kod', 'kraj_nuts_kod', 'pocet_vysetreni', 'populace'],
+    records: [
+      row('2024', '66015019', '15–19 let', 25000, 100000),
+      row('2024', '66020024', '20–24 let', 70000, 100000),
+      row('2024', '66065069', '65–69 let', 60000, 100000),
+      row('2024', '66070074', '70–74 let', 55000, 100000),
+      row('2024', '66085999', '85 let a více', 10000, 100000),
+    ],
+  });
+  try {
+    const out = extractFromNrhzsScreening('screening_cervix');
+    assert.ok(out);
+    // jen 20–69: (70000+60000) / 200000 × 100 = 65
+    assert.equal(out.value, 65);
+    assert.equal(out.year, 2024);
+  } finally {
+    fs.unlinkSync(cachePath('uzis_nrhzs_screening_cervix_trilete.json'));
   }
 });
 
