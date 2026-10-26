@@ -214,7 +214,7 @@ test('Real data: data/indicators.json obsahuje alespoň 80 indikátorů', () => 
 // M-NZIS-4: NRHZS screening (kolorektální + mamografický)
 // =================================================================
 
-import { extractFromNrhzsScreening } from '../ingest/transform.js';
+import { extractFromNrhzsScreening, parseAgeBand } from '../ingest/transform.js';
 
 beforeEach(() => {
   for (const name of ['uzis_nrhzs_screening_kolorektal.json', 'uzis_nrhzs_screening_mamograf.json']) {
@@ -269,6 +269,87 @@ test('extractFromNrhzsScreening: mamografie pokrytí — počítá % z populace'
   } finally {
     fs.unlinkSync(cachePath('uzis_nrhzs_screening_mamograf_pokryti.json'));
   }
+});
+
+test('extractFromNrhzsScreening: mamografie — age_filter 50–69 vynechá skupiny 45–49 a 70+ (kódování ÚZIS 66<od><do>)', () => {
+  ensureCacheDir();
+  // Karta screening_mamograficky má data_source.primary.age_filter {from:50,to:69}.
+  // Kódování věku jako v reálné sadě PPS-01-01: vek_kod 66<od><do>, vek_nazev „50–54 let“.
+  const row = (rok, kod, nazev, vys, pop) => ({
+    rok, pohlavi: 'Z', vek_kod: kod, vek_nazev: nazev,
+    okres_lau_kod: 'CZ0100', kraj_nuts_kod: 'CZ010', pocet_vysetrenych: String(vys), populace: String(pop),
+  });
+  writeCache('uzis_nrhzs_screening_mamograf_pokryti.json', {
+    columns: ['rok', 'pohlavi', 'vek_kod', 'vek_nazev', 'okres_lau_kod', 'kraj_nuts_kod', 'pocet_vysetrenych', 'populace'],
+    records: [
+      row('2023', '66045049', '45–49 let', 10000, 100000),
+      row('2023', '66050054', '50–54 let', 50000, 100000),
+      row('2023', '66065069', '65–69 let', 60000, 100000),
+      row('2023', '66070074', '70–74 let', 20000, 100000),
+      row('2024', '66045049', '45–49 let', 10000, 100000),
+      row('2024', '66050054', '50–54 let', 55000, 100000),
+      row('2024', '66055059', '55–59 let', 54000, 100000),
+      row('2024', '66060064', '60–64 let', 70000, 100000),
+      row('2024', '66065069', '65–69 let', 65000, 100000),
+      row('2024', '66085999', '85 let a více', 1000, 100000),
+    ],
+  });
+  try {
+    const out = extractFromNrhzsScreening('screening_mamograficky');
+    assert.ok(out);
+    // 2024, jen 50–69: (55000+54000+70000+65000) / (4 × 100000) × 100 = 61
+    assert.equal(out.value, 61);
+    assert.equal(out.year, 2024);
+    // 2023, jen 50–69: (50000+60000) / 200000 × 100 = 55
+    assert.equal(out.trend[0].value, 55);
+  } finally {
+    fs.unlinkSync(cachePath('uzis_nrhzs_screening_mamograf_pokryti.json'));
+  }
+});
+
+test('extractFromNrhzsScreening: age_filter bez sloupce věku ve zdroji → null (fallback na seed)', () => {
+  ensureCacheDir();
+  writeCache('uzis_nrhzs_screening_mamograf_pokryti.json', {
+    columns: ['rok', 'pohlavi', 'pocet_vysetrenych', 'populace'],
+    records: [{ rok: '2024', pohlavi: 'Z', pocet_vysetrenych: '55000', populace: '100000' }],
+  });
+  try {
+    assert.equal(extractFromNrhzsScreening('screening_mamograficky'), null);
+  } finally {
+    fs.unlinkSync(cachePath('uzis_nrhzs_screening_mamograf_pokryti.json'));
+  }
+});
+
+test('extractFromNrhzsScreening: bez age_filteru (kolorektální) se agregují všechny věkové skupiny', () => {
+  ensureCacheDir();
+  const card = JSON.parse(fs.readFileSync(path.join(ROOT, 'indicators', 'screening_kolorektalni.json'), 'utf8'));
+  assert.equal(card.data_source.primary.age_filter, undefined, 'filtr je volitelný, kolorektální ho nemá');
+  writeCache('uzis_nrhzs_screening_kolorektal.json', {
+    columns: ['rok', 'pohlavi', 'vek_kod', 'okres_lau_kod', 'kraj_nuts_kod', 'pocet_vysetrenych', 'populace'],
+    records: [
+      { rok: '2024', pohlavi: 'T', vek_kod: '45-49', okres_lau_kod: 'CZ010', kraj_nuts_kod: 'CZ010', pocet_vysetrenych: '10000', populace: '100000' },
+      { rok: '2024', pohlavi: 'T', vek_kod: '75-79', okres_lau_kod: 'CZ010', kraj_nuts_kod: 'CZ010', pocet_vysetrenych: '30000', populace: '100000' },
+    ],
+  });
+  try {
+    const out = extractFromNrhzsScreening('screening_kolorektalni');
+    assert.ok(out);
+    // (10000+30000) / 200000 * 100 = 20 (pásma mimo 50–69 se počítají)
+    assert.equal(out.value, 20);
+  } finally {
+    fs.unlinkSync(cachePath('uzis_nrhzs_screening_kolorektal.json'));
+  }
+});
+
+test('parseAgeBand: textové i číselné kódování věkových skupin', () => {
+  assert.deepEqual(parseAgeBand('50–54 let'), { from: 50, to: 54 });
+  assert.deepEqual(parseAgeBand('50-54'), { from: 50, to: 54 });
+  assert.deepEqual(parseAgeBand('66065069'), { from: 65, to: 69 });
+  assert.deepEqual(parseAgeBand('66085999'), { from: 85, to: Infinity });
+  assert.deepEqual(parseAgeBand('85 let a více'), { from: 85, to: Infinity });
+  assert.deepEqual(parseAgeBand('55+'), { from: 55, to: Infinity });
+  assert.equal(parseAgeBand(''), null);
+  assert.equal(parseAgeBand('celkem'), null);
 });
 
 test('extractFromNrhzsScreening: bez cache → null (fallback na seed)', () => {
