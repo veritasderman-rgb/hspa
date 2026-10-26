@@ -34,7 +34,7 @@
   zahrnoval všechny ženy 45+, a další (celkem 14 issues).
 - **Kde**: zhruba 30 souborů `05_M1_Starter/clanek-*.html`, `data/explainers.json`,
   `data/claims.json`, `indicators/*.json`, `jak-funguje.html`, `manifest/` · **Od kdy do kdy**:
-  různě od června do října 2026 → opraveno PR __PR__.
+  různě od června do října 2026 → opraveno PR #1318.
 - **Dopad**: publikované texty bez osob a bez přímého zdravotního rizika; největší dopad má
   změna sdělení u mamografického screeningu (indikátor přešel ze signálu „špatně“ na
   srovnání se stejně definovaným průměrem OECD) a u článku o reformě primární péče, který
@@ -43,8 +43,8 @@
   definice a roku; odkazy na předpisy bez otevření jejich textu; claims s `check: manual`
   nebo bez vazby na indikátor, takže drift-check rozpory nehlásil. Zjištěno křížovým
   ověřením při práci na studii v repu zdravko.
-- **Oprava**: PR __PR__ (třída B, obsah, karty, claims, extraktor screeningu s věkovým filtrem
-  50–69) a PR __PRC__ (třída C, přegenerované podstránky Manifestu). Publikované články
+- **Oprava**: PR #1318 (třída C kvůli podstránkám Manifestu a draftům: obsah, explainery,
+  karty, claims, extraktor screeningu s věkovým filtrem 50–69). Publikované články
   dostaly viditelnou poznámku „Oprava (26. 10. 2026)“.
 - **Prevence**: dotčené claims převedeny na `check: auto` s `indicator_id`, kde to jde;
   u právních tvrzení uvádět paragraf a odkaz na znění předpisu. Stejný problém s věkovou
