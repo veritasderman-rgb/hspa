@@ -11,15 +11,16 @@
     notes: "Fallback-audit 2026-06-02 (daily routine). Primárně ověřeno proti EU Country Cancer Profile 2025 (Czechia, JRC/OECD): věkově standardizovaná incidence karcinomu prsu ČR 133/100 000 vs EU27 148 (ČR o ~10 % POD průměrem), celková ASR onko-incidence ČR 565 vs EU 572. Opraven dashboard indikátor incidence_prsu (crude 145 vs ASR benchmark 90,7 → ASR 133 vs EU 148, signal bad→neutral, direction→context_dependent) a databox/metodická poznámka článku. Crude vs ASR caveat callout doplněn. Status review-pending — čeká na ruční schválení redakce."
     av_sweep2_2026-07-10: "Doplněny AV vizuály (článek měl hero figuru + crude/ASR caveat callout): av-bar-compare účast na screeningu (DK/SE/FI ≥80 / SI 77 / WHO cíl 70 / Vysočina 65,8 / ČR 60 / EU 58 / Karlovarský 52,9), av-data-table 3 reformní posuny (věk / risk-based / AI MASAI). Všechna čísla 1:1 z textu/databoxu, text nezměněn (aditivní), claims nedotčeny."
     evidence_audit_2026-10-11: "evidence-audit 2026-10-11: 6 tvrzení, 1 supported, 5 partial; viz data/evidence-audit.json. Běh ea-2026-10-11-01 (PubMed + Consensus). Vložena jedna upřesňující věta za větu o Lancetu 2026 (pokles intervalových karcinomů 0,88, 95% CI 0,65–1,18 není statisticky významný; prokázána neinferiorita a vyšší senzitivita; PMID 41620232) — čeká na schválení redakce, status review-pending. K redakci: číslo +29 % detekce pochází z plné kohorty (Hernström et al., Lancet Digit Health 2025), ne z interim analýzy 2023 (poměr 1,2, p=0,052) — atribuci v textu ponechává audit redakci; řádek av-data-table (−12 % intervalových ca) sladit s vloženou větou. Doplněna skupina Recenzovaná literatura (Hernström 2025, Camilloni 2013)."
+    fix_2026-10-26: "titulek beze změny; perex/deck/meta/og/JSON-LD/counter/databox: odstraněn benchmark „průměr OECD 68 / Nizozemsko přes 75“ (bez zdroje, jiný koncept — dotazníková data); indikátor screening_mamograficky nově 61,4 % (ženy 50–69, 2024, ÚZIS PPS-01-01), řada 58,6/59,0/60,0/60,3/61,4, OECD ~56 % (programová data; H@G 2025: 55 %), EU 56,6 % (medián 24 států, Eurostat hlth_ps_prev 2024); tvrzení „deset let stejných šedesát procent“ nahrazeno skutečnou řadou 2020–2024; přidán sloupec OECD do grafu; claim --03 (60 %, 2023) ponechán (OECD programová hodnota ČR 2023 je 60,3) (issue #1316)"
 -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Šedesát procent. Proč český mamograf naráží na pomyslný strop · HSPA Monitor</title>
-<meta name="description" content="Česká účast na mamografickém screeningu drží deset let stejných šedesát procent. V průměru OECD je to 68, v Nizozemsku přes 75. Co s tím a kde to drhne.">
+<meta name="description" content="Podle programových dat prošlo mamografickým screeningem v roce 2024 61,4 % žen ve věku 50–69 let: nad průměrem OECD (kolem 56 %), ale pod cílem WHO 70 % a daleko za severskými zeměmi. Co s tím a kde to drhne.">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Šedesát procent. Proč český mamograf naráží na pomyslný strop">
-<meta property="og:description" content="Česká účast na mamografickém screeningu drží deset let stejných šedesát procent. V průměru OECD je to 68, v Nizozemsku přes 75.">
+<meta property="og:description" content="Mamografickým screeningem prošlo v roce 2024 61,4 % žen ve věku 50–69 let: nad průměrem OECD (kolem 56 %), ale pod cílem WHO 70 %.">
 <meta property="og:locale" content="cs_CZ">
 <meta property="article:published_time" content="2026-05-07">
 <meta property="article:section" content="Onkologie">
@@ -45,7 +46,7 @@
       "@type": "NewsArticle",
       "@id": "https://skorezdravotnictvi.cz/clanek-mamograf-rakovina-prsu#article",
       "headline": "Šedesát procent. Proč český mamograf naráží na pomyslný strop",
-      "description": "Účast na mamografickém screeningu drží zhruba deset let stejných šedesát procent. V průměru OECD je to 68, v Nizozemsku přes 75. Tři důvody stagnace a tři reformní debaty.",
+      "description": "Účast na mamografickém screeningu se pohybuje kolem šedesáti procent: v roce 2024 to bylo 61,4 % žen ve věku 50–69 let, tedy nad průměrem OECD (kolem 56 %), ale pod cílem WHO 70 %. Tři důvody pomalého růstu a tři reformní debaty.",
       "inLanguage": "cs-CZ",
       "image": [
         "https://skorezdravotnictvi.cz/assets/covers/clanek-mamograf-rakovina-prsu.png"
@@ -134,7 +135,7 @@
       </div>
       <h1 class="article-title">Šedesát procent. Proč český mamograf naráží na pomyslný strop</h1>
       <p class="article-deck">
-        Česká účast na mamografickém screeningu drží zhruba deset let stejných šedesát procent. V průměru OECD je to 68, v Nizozemsku přes 75. Není to katastrofa — ale ani úspěch, který by se dal nechat vyhnít. Tři důvody, proč se to nehýbe.
+        Podle programových dat prošlo mamografickým screeningem v roce 2024 61,4 % žen ve věku 50–69 let — nad průměrem OECD (kolem 56 %), ale pod cílem WHO 70 % a daleko za Dánskem, Švédskem a Finskem (≥ 80 %). Není to katastrofa — ale ani úspěch, který by se dal nechat vyhnít. Tři důvody, proč se to hýbe jen pomalu.
       </p>
       <div class="article-meta">
         <span class="article-meta-date">7. května 2026</span>
@@ -148,7 +149,7 @@
     <div class="article-body">
 
       <p class="article-lead">
-        Národní onkologický registr ÚZIS evidoval za rok 2022 celkem 7 918 nových případů rakoviny prsu u žen — 144,5 na sto tisíc (hrubá míra). Mezinárodně srovnatelná věkově standardizovaná incidence ČR podle Globocan 2022 (kolem 80–85/100 000) zařazuje Česko do skupiny zemí střední a západní Evropy s vyšším výskytem, ne na špici. To, jestli je nemoc zachycena včas, ale závisí na jediném čísle: kolik žen v cílové skupině 45–69 let prochází mamografem každé dva roky. V roce 2023 to bylo 60 % (program-based data, NSC ÚZIS). A už řadu let se to nehýbe.
+        Národní onkologický registr ÚZIS evidoval za rok 2022 celkem 7 918 nových případů rakoviny prsu u žen — 144,5 na sto tisíc (hrubá míra). Mezinárodně srovnatelná věkově standardizovaná incidence ČR podle Globocan 2022 (kolem 80–85/100 000) zařazuje Česko do skupiny zemí střední a západní Evropy s vyšším výskytem, ne na špici. To, jestli je nemoc zachycena včas, ale závisí na jediném čísle: kolik žen ve věku 50–69 let prochází mamografem každé dva roky. V roce 2023 to bylo 60 % (program-based data, NSC ÚZIS). V roce 2024 pokrytí dosáhlo 61,4 % a za posledních pět let (58,6 % v roce 2020) vzrostlo jen o necelé tři procentní body.
       </p>
 
       <figure class="av-figure av-figure-wide" aria-labelledby="avMamoLeadH">
@@ -165,17 +166,17 @@
             <span class="av-counter-foot">ČR 2022, NOR ÚZIS</span>
           </div>
           <div class="av-counter-block av-counter-block-warn">
-            <span class="av-counter" data-value="60" data-suffix=" %">60 %</span>
-            <span class="av-counter-label">účast cílové skupiny 45–69</span>
-            <span class="av-counter-foot">NSC ÚZIS 2023</span>
+            <span class="av-counter" data-value="61.4" data-decimals="1" data-suffix=" %">61,4 %</span>
+            <span class="av-counter-label">pokrytí žen ve věku 50–69 let</span>
+            <span class="av-counter-foot">NSC ÚZIS 2024 · průměr OECD kolem 56 %</span>
           </div>
           <div class="av-counter-block av-counter-block-good">
             <span class="av-counter" data-value="70" data-suffix=" %">70 %</span>
             <span class="av-counter-label">cíl WHO pro účast</span>
-            <span class="av-counter-foot">+10 p.b. od dnešního stavu</span>
+            <span class="av-counter-foot">+8,6 p.b. od stavu v roce 2024</span>
           </div>
         </div>
-        <p class="av-figure-note"><strong>Zdroje:</strong> Národní onkologický registr ÚZIS (2022); Národní screeningové centrum ÚZIS (2023); WHO European Programme of Work 2020–2025.</p>
+        <p class="av-figure-note"><strong>Zdroje:</strong> Národní onkologický registr ÚZIS (2022); Národní screeningové centrum ÚZIS (2024); OECD Health Statistics (programová data); WHO European Programme of Work 2020–2025.</p>
       </figure>
 
       <aside class="article-callout article-callout-caveat" aria-label="Caveat — hrubá vs věkově standardizovaná incidence" style="margin:18px 0;padding:14px 18px;border-left:3px solid var(--ink);background:var(--paper);font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--ink-mut);">
@@ -198,7 +199,7 @@
       <h3>Šedesát versus osmdesát: rozdíl, který se počítá v životech</h3>
 
       <p>
-        Šedesát procent účasti není katastrofa — Česko je dokonce mírně nad průměrem EU (58 % v roce 2023 podle programmatických dat, OECD State of Health in the EU 2025). Nejvyšší účast hlásí Dánsko, Švédsko a Finsko (≥ 80 % v roce 2021–2023 podle OECD Health at a Glance 2023/2025), Slovinsko se pohybuje kolem 77 % (Eurostat 2023). Rozdíl mezi šedesátkou a osmdesátkou zní jako technikálie. V populaci, kde má rakovinu prsu během života zhruba každá osmá žena, se ale překládá na stovky pozdě diagnostikovaných nálezů ročně.
+        Šedesát procent účasti není katastrofa — Česko je nad průměrem OECD (kolem 56 % podle programových dat) a dokonce mírně nad průměrem EU (58 % v roce 2023 podle programmatických dat, OECD State of Health in the EU 2025). Nejvyšší účast hlásí Dánsko, Švédsko a Finsko (≥ 80 % v roce 2021–2023 podle OECD Health at a Glance 2023/2025), Slovinsko se pohybuje kolem 77 % (Eurostat 2023). Rozdíl mezi šedesátkou a osmdesátkou zní jako technikálie. V populaci, kde má rakovinu prsu během života zhruba každá osmá žena, se ale překládá na stovky pozdě diagnostikovaných nálezů ročně.
       </p>
 
       <figure class="av-figure">
@@ -208,11 +209,12 @@
           <li class="av-bar-row av-bar-row-good" data-value="77" data-label="Slovinsko"></li>
           <li class="av-bar-row" data-value="70" data-display="≥ 70" data-label="Cíl WHO"></li>
           <li class="av-bar-row" data-value="65.8" data-label="Vysočina (nejlepší kraj ČR)"></li>
-          <li class="av-bar-row av-bar-row-highlight" data-value="60" data-label="Česko ⌀" data-note="2023/2024, NSC ÚZIS"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="61.4" data-label="Česko ⌀ (50–69)" data-note="2024, NSC ÚZIS"></li>
           <li class="av-bar-row" data-value="58" data-label="EU ⌀"></li>
+          <li class="av-bar-row" data-value="56" data-label="OECD ⌀" data-note="programová data"></li>
           <li class="av-bar-row av-bar-row-bad" data-value="52.9" data-label="Karlovarský kraj (nejnižší)"></li>
         </ol>
-        <p class="av-figure-note"><strong>Zdroj:</strong> NSC ÚZIS (ČR + kraje, 2022/2023); OECD State of Health in the EU 2025; OECD H@G 2023/2025; Eurostat 2023.</p>
+        <p class="av-figure-note"><strong>Zdroj:</strong> NSC ÚZIS (ČR 2024, kraje 2022/2023 ve skupině 45–69); OECD State of Health in the EU 2025; OECD H@G 2023/2025; Eurostat 2023.</p>
       </figure>
 
       <p>
@@ -309,7 +311,7 @@
       <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
       <ul class="article-databox-list">
         <li><a href="indikator-incidence_prsu.html"><strong>Incidence rakoviny prsu</strong></a> — věkově standardizovaně (srovnatelně) <strong>133 / 100 000 žen v ČR vs. 148 v EU27</strong> (2022, EU Country Cancer Profile 2025) — tedy zhruba o 10 % <em>pod</em> evropským průměrem, nikoliv nad ním. Hrubá (crude) míra z NOR je 144,5/100 000 (2022), ta je ale kvůli věkové struktuře systematicky vyšší a není mezinárodně srovnatelná.</li>
-        <li><a href="indikator-screening_mamograficky.html"><strong>Účast na mamografickém screeningu (45–69)</strong></a> — 60 % (ČR 2023/2024, NSC ÚZIS) vs. OECD benchmark 68 % v dashboardu. Pro kontext: EU průměr 58 % v r. 2023 (OECD State of Health in the EU – Czechia 2025).</li>
+        <li><a href="indikator-screening_mamograficky.html"><strong>Pokrytí mamografickým screeningem (50–69)</strong></a> — 61,4 % žen ve věku 50–69 let (ČR 2024, programová data NSC ÚZIS) vs. průměr OECD kolem 56 % (programová data) a medián EU 56,6 % (Eurostat, 2024); cíl WHO ≥ 70 %. Pro kontext: EU průměr 58 % v r. 2023 (OECD State of Health in the EU – Czechia 2025).</li>
         <li><a href="indikator-mortalita_onkologicka.html"><strong>Onkologická mortalita</strong></a> — 250,4 / 100 000 vs. EU27 233,1 (Eurostat 2023, hodnota z dashboardu HSPA Monitoru).</li>
       </ul>
       <p class="article-databox-caveat"><strong>Metodická poznámka (crude vs. věkově standardizovaná míra):</strong> Hrubá incidence z ÚZIS NOR pro rok 2022 byla 7 918 nových případů, tj. 144,5/100 000 žen. Tato <em>crude</em> míra je kvůli stárnoucí populaci systematicky vyšší a NENÍ srovnatelná s věkově standardizovanými (ASR) mezinárodními průměry. Na srovnatelném ASR základě (European Standard Population, EU Country Cancer Profile 2025) je incidence v ČR 133/100 000 žen vs. EU27 148 — ČR je o ~10 % pod evropským průměrem. GLOBOCAN 2022 používá jinou standardní populaci (ASR-World) a uvádí ČR cca 80–85/100 000. Indikátor v dashboardu byl proto sjednocen na ASR základ (133 vs EU 148) se signálem <em>neutral</em> (incidence je context-dependent metrika).</p>
@@ -369,6 +371,9 @@
       </div>
       <p class="article-sources-disclaimer">
         <strong>Pozn. k revizi (2. června 2026):</strong> Datový audit proti primárnímu zdroji <strong>EU Country Cancer Profile 2025 (Czechia, JRC/OECD)</strong>. Opraveno klíčové metodické pochybení dashboardu: indikátor incidence rakoviny prsu porovnával <em>hrubou</em> míru ČR (145/100 000) s <em>věkově standardizovaným</em> průměrem OECD (90,7) a vykazoval signál „bad / dramaticky nad průměrem". Na srovnatelném věkově standardizovaném základě je ČR <strong>133/100 000 vs. EU27 148 — o ~10 % POD evropským průměrem</strong>; indikátor sjednocen na ASR základ (133 vs EU 148), signál neutral (context-dependent), databox a metodická poznámka opraveny. <em>(Předchozí revize 11. 5. 2026: institucionální zařazení NSC, cílová věková skupina, regionální rozpad pokrytí, MASAI DOI.)</em>
+      </p>
+      <p class="article-sources-disclaimer">
+        <strong>Oprava (26. 10. 2026):</strong> Článek uváděl, že průměr OECD v účasti na mamografickém screeningu je 68 procent a že se účast deset let nehýbe na šedesáti procentech. Číslo 68 procent nemělo dohledatelný zdroj a odpovídá jinému konceptu (dotazníková data). Podle programových dat ÚZIS (PPS-01-01) prošlo screeningem v roce 2024 61,4 % žen ve věku 50–69 let (v roce 2020 to bylo 58,6 %). Průměr OECD v programových datech činí kolem 56 % (Health at a Glance 2025 uvádí 55 %), medián 24 států EU 56,6 % (Eurostat, 2024). Česko je tedy nad průměrem OECD, ale pod cílem WHO 70 %.
       </p>
     </section>
 
