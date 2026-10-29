@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-10-29
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-10-29
+    creation_phase: rutina+article-write
+    form: article
+    primary_sources_count: 14
+    visual_elements_count: 5
+    fix_2026-10-29: "Na zadani vlastnika (resit body K rozhodnuti redakce z PR #1325): (1) merge konflikt s main vyresen v articles.json (oba nove zaznamy ponechany, Betty scheduled_for 31. 10., uhrady-2027 30. 10.); (2) dolozena registrace teplizumabu v EU primo z EMA EPAR Teizeild (https://www.ema.europa.eu/en/medicines/human/EPAR/teizeild, stazeno 29. 10. 2026): 'Teizeild received a marketing authorisation valid throughout the EU on 8 January 2026', indikace 'to delay the onset of stage 3 type 1 diabetes (T1D) in adult and paediatric patients 8 years of age and older with stage 2 T1D'; doplneno do odstavce o Herold 2019, do zdroju a do Pozn. k udajum; uhrada v CR neoverena a v textu to stoji; (3) poznamka o afiliaci spoluautora u farmaceuticke spolecnosti ponechana — strety zajmu se maji priznat, formulace je neutralni; (4) cesky podil ketoacidozy dal neuveden, citovane prace ho samostatne nepublikuji."
+    audit_k: "Nezavisly audit K 2026-10-29 (jina instance): vsech 13 PMID overeno v PubMed (autori, rok, casopis, rocnik/strany, typ; zadna retrakce/erratum); konsenzus PMID 42720753 Diabetologia 69(12):3370-3395 nese 20-67 % DKA, tretinu na JIP a endorsement Czech Diabetes Society (CDS); Cherubini 2020 plny text: 6 zemi signif. nize, 5 vyse, Cesko v zadne skupine. Opraveno: perex/description/JSON-LD zmekcen na observacni evidenci; seznam priznaku v perexu clanku zmekcen (bez primarniho zdroje); JDRF = nadace; Dovc HbA1c = upraveny prumer; Wentworth = 178 screenovanych pribuznych s propuklym DM1 (deti i mladi dospeli), kohorta AU/NZ; Fr1da: nizka DKA i bez edukace (Hummel plny text) -> preformulovana role sledovani; PLDD 65+ doplnen rok 2023. DOI odkazy 403 u vydavatelu (bot blok), DOI potvrzeny PubMedem."
+    notes: "Vytvoreno z discovery 2026-10-29: Berka B, Cinek O, Neuman V ... Ziegler AG, Sumnik Z. Population-Based Screening for Type 1 Diabetes in Czechia: Results From the First 1% of the Paediatric Population. Diabetes Obes Metab 2026 (online 27. 10. 2026), PMID 42935169, DOI 10.1111/dom.71463, typ Journal Article; abstrakt overen v PubMed 29. 10. 2026 (get_article_metadata). KPI (vse doslova z abstraktu): 19 044 kapilarnich vzorku = 1 % detske populace, duben 2024 - unor 2026; deti 2-17,9 let bez ohledu na rodinnou anamnezu; 270 odbernich mist, vetsinou primarni pece; domaci odber 4,1 %; 89,7 % bez prvostupnoveho pribuzneho s DM1; vicecetne autoprotilatky 0,39 % (95% CI 0,30-0,51) v obecne populaci, 2,8 % (2,1-3,7) u prvostupnovych pribuznych; z 201 deti s nenegativnim kapilarnim vzorkem 102 diagnostikovano casne stadium DM1 zilnim vzorkem; 83 se stagingem: 77 (93 %) stadium 1, 4 (4,8 %) stadium 2, 2 (2,4 %) stadium 3; dalsich 7 manifestovalo stadium 3 pred dokoncenim stagingu; vsechny rodiny, ktere prisly na staging a edukaci, souhlasily s dlouhodobym sledovanim. Spoluautor Goetz M uvadi i afiliaci Novo Nordisk Pharma GmbH (PubMed) - uvedeno v poznamce ke zdrojum. Vypocty redakce: 102/201 = 50,7 % (cca polovina); 2,8/0,39 = 7,2 (cca sedmkrat). BENCH a KONTEXT (vse overeno v PubMed 29. 10. 2026): Ziegler AG et al. JAMA 2020;323(4):339-351, PMID 31990315, DOI 10.1001/jama.2019.21565 (Fr1da, 90 632 deti 1,75-5,99 let, 280 = 0,31 % presymptomaticky DM1, trilete riziko stadia 3 24,9 %, 2 deti s DKA); Hummel S et al. Diabetologia 2023;66(9):1633-1642, PMID 37329450, DOI 10.1007/s00125-023-05953-0 (128 vs 736 deti, DKA 2,5 %, ketonurie 22,2 vs 78,4 %, HbA1c 6,8 vs 10,5 %); Wentworth JM et al. Pediatr Diabetes 2022;23(8):1594-1601, PMID 36175392, DOI 10.1111/pedi.13422 (pribuzni AU/NZ: DKA 9/178 = 5 % vs 31 % v obecne populaci, po adjustaci o vic nez 80 % mene); Birkebaek NH et al. Lancet Diabetes Endocrinol 2022;10(11):786-794, PMID 36202118, DOI 10.1016/S2213-8587(22)00246-7 (13 registru vc. Ceska, 104 290 deti, DKA 27,3 % 2006-2019, 39,4 % 2020, 38,9 % 2021); Cherubini V et al. Diabetologia 2020;63(8):1530-1541, PMID 32382815, DOI 10.1007/s00125-020-05152-1 (13 zemi 2006-2016, prumer 29,9 %; Cesko neni mezi zememi vyznamne nad ani pod prumerem - z plneho textu PMC7351855, tabulka s hodnotou za CZ nebyla v extrahovanem textu, cislo za CZ proto neuvadime); Dovc K, Neuman V et al. Diabetes Care 2025;48(4):648-654, PMID 39965057, DOI 10.2337/dc24-2483 (9 zemi vc. Ceska, 9 269 deti dg 2019-2020, DKA 34,2 %, tezka 12,8 %, HbA1c po 2 letech 7,58 vs 7,32 %); Cinek O et al. Pediatr Diabetes 2022;23(7):956-960, PMID 35982508, DOI 10.1111/pedi.13405 (CENDA, 956 deti 0-14,99 let v 2020-2021, incidence 27,2/100 000/rok, IRR 1,16); Insel RA et al. Diabetes Care 2015;38(10):1964-74, PMID 26404926, DOI 10.2337/dc15-1419 (staging, typ Review); Herold KC et al. NEJM 2019;381(7):603-613, PMID 31180194, DOI 10.1056/NEJMoa1902226 (RCT faze 2, 76 ucastniku, median 48,4 vs 24,4 mesice, HR 0,41); Hoffmann L et al. BMJ Open 2025;15(1):e088522, PMID 39753267, DOI 10.1136/bmjopen-2024-088522 (EDENT1FI protokol, 8 zemi vc. CR, cca 200 000 deti 11/2023-10/2028); Ziegler AG et al. Diabetologia 2026;69(12):3370-3395, PMID 42720753, DOI 10.1007/s00125-026-06841-z (konsenzus, DKA pri diagnoze 20-67 %, tretina na JIP, podporila i Ceska diabetologicka spolecnost); Rewers M. Diabetes Obes Metab 2025;27 Suppl 6:69-77, PMID 40555704, DOI 10.1111/dom.16522 (review ekonomiky: pribuzni 10-15 % novych diagnoz, cost-effectiveness zavisi na prevalenci, DKA, cene testu; model DE screening ve 2 a 6 letech -61 % DKA). Consensus 29. 10. 2026 (1 dotaz, screening autoprotilatek a DKA): v souladu - nalezeny prace (Wentworth 2022, Hummel 2023, Rewers 2025) overeny v PubMed; vsechny jsou observacni, RCT screeningu s DKA jako vysledkem nenalezena - receno v textu. Teplizumab: regulacni stav v EU (EMA) neovereno -> vynechano. Uhrada screeningu z verejneho pojisteni neoverena -> text pouziva jen formulaci autoru. Databox: 5 indikatoru doslova z data/indicators.json (prevalence_diabetu 9,5 % 2023 vs EU 7,5 / OECD 7,0; umrtnost_diabetes 49,37 2023 vs EU 23,53; screening_kycli_troji_sito 73,7 % 2024; screening_sluchu_5let 24,5 % 2024; pldd_podil_65plus 34,6 % 2023). Forma: standardni clanek (8.2a) - chybi doložena ceska scena a overena ceska data o DKA za CR. Ceka na schvaleni redakce."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cukrovku 1. typu lze najít roky předem. Projekt Betty otestoval 1 % českých dětí a u 102 ji zachytil v časném stadiu · HSPA Monitor</title>
+<meta name="description" content="Projekt Betty z Fakultní nemocnice Motol a 2. lékařské fakulty UK vyšetřil od dubna 2024 do února 2026 kapku krve od 19 044 dětí ve věku 2 až 17 let, zhruba 1 % dětské populace Česka. Několik protilátek proti buňkám slinivky mělo 0,39 % dětí bez cukrovky v rodině a 2,8 % dětí, jejichž rodič nebo sourozenec má diabetes 1. typu. Časné stadium nemoci lékaři potvrdili u 102 dětí. Podle zahraničních observačních studií mají děti zachycené screeningem při stanovení diagnózy ketoacidózu výrazně méně často. Rutinní program to zatím není.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Cukrovku 1. typu lze najít roky předem. Projekt Betty otestoval 1 % českých dětí a u 102 ji zachytil v časném stadiu">
+<meta property="og:description" content="19 044 dětí, 0,39 % s více autoprotilátkami, 102 potvrzených časných stadií. První výsledky celostátního screeningu diabetu 1. typu v Česku (Diabetes, Obesity and Metabolism, 27. 10. 2026) a co říká evidence o ketoacidóze.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-screening-diabetu-1-typu-deti-betty-2026.html">
+<meta property="article:published_time" content="2026-10-31">
+<meta property="article:section" content="Dětské zdraví">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-screening-diabetu-1-typu-deti-betty-2026.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "Cukrovku 1. typu lze najít roky předem. Projekt Betty otestoval 1 % českých dětí a u 102 ji zachytil v časném stadiu",
+  "description": "Projekt Betty z Fakultní nemocnice Motol a 2. lékařské fakulty UK vyšetřil od dubna 2024 do února 2026 kapku krve od 19 044 dětí ve věku 2 až 17 let, zhruba 1 % dětské populace Česka. Několik protilátek proti buňkám slinivky mělo 0,39 % dětí bez cukrovky v rodině a 2,8 % dětí, jejichž rodič nebo sourozenec má diabetes 1. typu. Časné stadium nemoci lékaři potvrdili u 102 dětí. Podle zahraničních observačních studií mají děti zachycené screeningem při stanovení diagnózy ketoacidózu výrazně méně často. Rutinní program to zatím není.",
+  "datePublished": "2026-10-31T06:00:00+01:00",
+  "dateModified": "2026-10-29",
+  "inLanguage": "cs",
+  "articleSection": "Dětské zdraví",
+  "author": { "@type": "Organization", "name": "Redakce HSPA Monitoru" },
+  "publisher": { "@type": "Organization", "name": "HSPA Monitor · Skóre zdravotnictví", "url": "https://skorezdravotnictvi.cz" },
+  "mainEntityOfPage": "https://skorezdravotnictvi.cz/clanek-screening-diabetu-1-typu-deti-betty-2026.html"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Dětské zdraví</span>
+        <span class="article-tag article-tag-muted">diabetes 1. typu · screening · autoprotilátky · ketoacidóza · FN Motol · EDENT1FI</span>
+      </div>
+      <h1 class="article-title">Cukrovku 1. typu lze najít roky předem. Projekt Betty otestoval 1 % českých dětí a u 102 ji zachytil v časném stadiu</h1>
+      <p class="article-deck">
+        Projekt Betty z Fakultní nemocnice Motol a 2. lékařské fakulty UK vyšetřil od dubna 2024 do února 2026 kapku krve od 19 044 dětí ve věku 2 až 17 let, zhruba 1 % dětské populace Česka. Několik protilátek proti buňkám slinivky mělo 0,39 % dětí bez cukrovky v rodině a 2,8 % dětí, jejichž rodič nebo sourozenec má diabetes 1. typu. Časné stadium nemoci lékaři potvrdili u 102 dětí. Podle zahraničních observačních studií mají děti zachycené screeningem při stanovení diagnózy ketoacidózu výrazně méně často. Rutinní program to zatím není.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">31. října 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">8 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Diabetes 1. typu se u dětí obvykle pozná až podle příznaků. Než je rodiče a lékaři spojí s cukrovkou, část dětí skončí v nemocnici s diabetickou ketoacidózou, život ohrožujícím rozvratem vnitřního prostředí. Nemoc přitom podle odborné literatury postupuje měsíce až roky předtím, než ji kdokoli pozná (Rewers 2025). Imunitní systém napadá buňky slinivky, které tvoří inzulin, a v krvi se objeví protilátky, které lze změřit. Na tom stojí projekt Betty, první celostátní screening diabetu 1. typu u dětí v Česku. Jeho výsledky po prvním procentu dětské populace vyšly 27. října 2026 v časopise <em>Diabetes, Obesity and Metabolism</em> (Berka et al. 2026).
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avBettyCntH">
+        <figcaption class="av-figure-h" id="avBettyCntH">Projekt Betty po prvním 1 % dětské populace (duben 2024 – únor 2026; Berka et al., Diabetes Obes Metab, 27. 10. 2026)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="19044">19 044</span>
+            <span class="av-counter-label">kapilárních vzorků od dětí ve věku 2–17,9 roku</span>
+            <span class="av-counter-foot">270 odběrových míst, většinou v primární péči; 4,1 % odběrů doma</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="0.39" data-decimals="2" data-suffix=" %">0,39 %</span>
+            <span class="av-counter-label">dětí bez diabetu 1. typu v nejbližší rodině má více autoprotilátek</span>
+            <span class="av-counter-foot">95% interval spolehlivosti 0,30–0,51 %</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="2.8" data-decimals="1" data-suffix=" %">2,8 %</span>
+            <span class="av-counter-label">dětí, jejichž rodič nebo sourozenec má diabetes 1. typu</span>
+            <span class="av-counter-foot">95% interval spolehlivosti 2,1–3,7 %</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="102">102</span>
+            <span class="av-counter-label">dětí s potvrzeným časným stadiem diabetu 1. typu</span>
+            <span class="av-counter-foot">potvrzeno ze žilní krve; z 201 dětí s nenegativním prvním vzorkem</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Berka B, Cinek O, Neuman V et al., Diabetes, Obesity and Metabolism 2026, DOI 10.1111/dom.71463, PMID 42935169; abstrakt ověřen v PubMed 29. 10. 2026.</p>
+      </figure>
+
+      <h3>Co Betty změřila</h3>
+      <p>
+        Screening je určen dětem od 2 do 17,9 roku a nezáleží na tom, zda má diabetes někdo v rodině. Za necelé dva roky projekt nasbíral 19 044 kapilárních vzorků, tedy krev z prstu. Odběry probíhaly na 270 místech, většinou u praktických lékařů pro děti a dorost, a 4,1 % vzorků si rodiny odebraly doma. Velká většina zúčastněných dětí (89,7 %) neměla diabetes 1. typu u rodiče ani sourozence. Na tom záleží, protože program, který by testoval jen příbuzné, by většinu budoucích pacientů minul. Podle přehledu Rewerse (2025) tvoří příbuzní jen 10–15 % nových diagnóz.
+      </p>
+      <p>
+        Vyšetření má dvě úrovně. První test (ELISA) měří souhrnný signál tří autoprotilátek. Je-li pozitivní, stejný vzorek se přeměří v referenční laboratoři konsorcia EDENT1FI na čtyři jednotlivé autoprotilátky (proti GAD, IA-2, ZnT8 a inzulinu). Když se najde kterákoli z nich, lékaři si vyžádají žilní krev. Časné stadium diabetu 1. typu se diagnostikuje až tehdy, když se v ní potvrdí více autoprotilátek. Dítě pak dostane sledování podle odhadovaného tempa, jakým nemoc postupuje. Děti s jedinou potvrzenou protilátkou dostanou méně intenzivní sledování mimo protokol EDENT1FI.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avBettyFlowH">
+        <figcaption class="av-figure-h" id="avBettyFlowH">Cesta vzorku v projektu Betty: od kapky krve ke stagingu (Berka et al. 2026; protokol EDENT1FI, Hoffmann et al. 2025)</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Kapka krve z prstu</h4>
+            <p class="av-flow-desc">Odběr u lékaře nebo doma, děti 2–17,9 roku bez ohledu na rodinnou anamnézu.</p>
+            <span class="av-flow-tag">19 044 vzorků</span>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Screeningová ELISA</h4>
+            <p class="av-flow-desc">Souhrnný signál tří autoprotilátek; pozitivní vzorek jde dál.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Referenční laboratoř</h4>
+            <p class="av-flow-desc">Čtyři testy na jednotlivé autoprotilátky (LIPS nebo RBA) ze stejného vzorku.</p>
+            <span class="av-flow-tag">201 nenegativních</span>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Žilní odběr</h4>
+            <p class="av-flow-desc">Potvrzení; více autoprotilátek znamená diagnózu časného stadia.</p>
+            <span class="av-flow-tag">102 časných stadií</span>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Staging, edukace, sledování</h4>
+            <p class="av-flow-desc">Určení stadia 1–3, poučení rodiny, dlouhodobé sledování podle rizika.</p>
+            <span class="av-flow-tag">83 se stagingem</span>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Berka et al., Diabetes Obes Metab 2026, PMID 42935169 (počty k datu sepsání práce); Hoffmann et al., BMJ Open 2025, PMID 39753267 (společný protokol). Ověřeno v PubMed 29. 10. 2026.</p>
+      </figure>
+
+      <p>
+        Výsledek: více autoprotilátek mělo 0,39 % dětí z běžné populace a 2,8 % dětí s diabetem 1. typu u rodiče nebo sourozence, tedy zhruba sedmkrát víc (výpočet redakce). Ze 201 dětí, jejichž první vzorek nebyl negativní, lékaři k datu sepsání práce potvrdili časné stadium u 102, tedy zhruba u poloviny. Stadium bylo určeno u 83 z nich a 77 (93 %) bylo ve stadiu 1. Dalších sedm dětí, které screening zachytil, onemocnělo plným diabetem dřív, než se staging stihl dokončit. Všechny rodiny, které přišly na staging a edukaci, souhlasily s dlouhodobým sledováním.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-good">
+          <span class="av-counter" data-value="93" data-suffix=" %">93 %</span>
+          <span class="av-counter-label">dětí se stagingem bylo ve stadiu 1, tedy s normální hladinou cukru</span>
+          <span class="av-counter-foot">77 z 83; stadium 2 měly 4 děti (4,8 %), stadium 3 dvě (2,4 %). Berka et al. 2026.</span>
+        </div>
+      </aside>
+
+      <h3>Tři stadia jedné nemoci</h3>
+      <p>
+        Screening dává smysl díky tomu, jak se dnes diabetes 1. typu klasifikuje. Nadace JDRF a odborné společnosti Endocrine Society a Americká diabetologická asociace v roce 2015 popsaly nemoc jako kontinuum se třemi stadii (Insel et al. 2015, <em>Diabetes Care</em>). Stadium 1 znamená dvě nebo více autoprotilátek při normální glykémii. Ve stadiu 2 jsou protilátky a porucha glukózové tolerance. Stadium 3 je klinicky zjevný diabetes s příznaky. První dvě stadia jsou bez příznaků, ale nemoc už probíhá.
+      </p>
+      <p>
+        Jak rychle děti mezi stadii postupují, ukázala bavorská studie Fr1da (Ziegler et al. 2020, <em>JAMA</em>). Mezi 90 632 dětmi ve věku přibližně dvou až šesti let mělo presymptomatický diabetes 280, tedy 0,31 %. Kumulativní riziko, že do tří let od zjištění onemocní klinickým diabetem, bylo 24,9 %. Česká hodnota 0,39 % s bavorskou přímo srovnatelná není: Betty testuje děti až do 17 let, Fr1da jen předškoláky.
+      </p>
+
+      <h3>Proč na tom záleží: ketoacidóza</h3>
+      <p>
+        Hlavní měřitelný přínos časného záchytu je, že dítě nepřijde do nemocnice v ketoacidóze. Mezinárodní konsenzus k populačnímu screeningu (Ziegler et al. 2026, <em>Diabetologia</em>), který podpořila i Česká diabetologická společnost, uvádí, že při stanovení diagnózy má ketoacidózu 20 až 67 % dětí a dospívajících a třetina z nich potřebuje intenzivní péči. Analýza 13 národních registrů včetně českého registru ČENDA (Birkebaek et al. 2022, <em>Lancet Diabetes &amp; Endocrinology</em>) našla ketoacidózu u 27,3 % ze 87 228 dětí diagnostikovaných v letech 2006–2019. V pandemických letech podíl vzrostl na 39,4 % (2020) a 38,9 % (2021).
+      </p>
+      <p>
+        Ketoacidóza při diagnóze není jen akutní epizoda. Registrová analýza 9 269 dětí z devíti zemí, mezi nimi i z Česka (Dovc et al. 2025, <em>Diabetes Care</em>), zjistila, že děti s těžkou ketoacidózou při diagnóze měly i po dvou letech horší kompenzaci. Upravený průměr glykovaného hemoglobinu měly 7,58 % proti 7,32 % u dětí bez ketoacidózy. V té kohortě mělo ketoacidózu při diagnóze 34,2 % dětí a těžkou formu 12,8 %. Česká čísla zvlášť v souhrnných výsledcích nejsou, starší analýza 13 zemí (Cherubini et al. 2020) ale Česko nezařadila ani mezi země s výrazně nižším, ani mezi země s výrazně vyšším výskytem, než byl celkový průměr 29,9 %.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avDkaTabH">
+        <figcaption class="av-figure-h" id="avDkaTabH">Ketoacidóza při diagnóze diabetu 1. typu u dětí: se screeningem a bez něj (vybrané studie ověřené v PubMed 29. 10. 2026)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr><th scope="col">Studie</th><th scope="col">Populace</th><th scope="col">Se screeningem</th><th scope="col">Bez screeningu</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Fr1da, Bavorsko (Hummel et al. 2023)</td><td>128 dětí se screeningem proti 736 dětem bez něj (DiMelli)</td><td><strong>2,5 %</strong></td><td>údaj o ketoacidóze v abstraktu není; ketonurie 78,4 % (se screeningem 22,2 %)</td></tr>
+              <tr><td>Příbuzní, Austrálie a Nový Zéland (Wentworth et al. 2022)</td><td>178 screenovaných příbuzných (děti i mladí dospělí), u nichž propukl diabetes, proti obecné populaci</td><td><strong>5 %</strong> (9 ze 178)</td><td>31 %</td></tr>
+              <tr><td>13 registrů vč. Česka (Birkebaek et al. 2022)</td><td>87 228 dětí bez screeningu, 2006–2019</td><td>—</td><td>27,3 %</td></tr>
+              <tr><td>9 registrů vč. Česka (Dovc et al. 2025)</td><td>9 269 dětí diagnostikovaných 2019–2020</td><td>—</td><td>34,2 % (těžká 12,8 %)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Hummel et al., Diabetologia 2023, PMID 37329450; Wentworth et al., Pediatr Diabetes 2022, PMID 36175392; Birkebaek et al., Lancet Diabetes Endocrinol 2022, PMID 36202118; Dovc et al., Diabetes Care 2025, PMID 39965057. Hodnoty pocházejí z různých studií s různými definicemi a obdobími; nejde o přímé srovnání.</p>
+      </figure>
+
+      <p>
+        Data o dětech se screeningem jsou výrazně lepší. V bavorské Fr1da mělo ze 128 dětí, které onemocněly po předchozím záchytu, ketoacidózu jen 2,5 %. Glykovaný hemoglobin při diagnóze měly 6,8 % proti 10,5 % u dětí bez screeningu (Hummel et al. 2023, <em>Diabetologia</em>). V Austrálii a na Novém Zélandu mělo ketoacidózu 5 % screenovaných příbuzných, u nichž diabetes propukl, proti 31 % v obecné populaci. Po zohlednění věku, pohlaví a rodinné anamnézy to vycházelo o víc než 80 % méně (Wentworth et al. 2022). Roli hraje i sledování po záchytu, nejen samotný test: v australsko-novozélandské kohortě sedm z devíti příbuzných s ketoacidózou na metabolické sledování nechodilo a v bavorské Fr1da měly děti, které edukaci a sledování odmítly, při diagnóze o něco horší hodnoty (autoři upozorňují na malý vzorek).
+      </p>
+
+      <div class="article-callout-caveat" role="note">
+        <strong>Co z dat plyne a co ne.</strong>
+        Všechny citované studie o ketoacidóze jsou observační. Srovnávají děti ze screeningu s jinými dětmi a randomizovanou studii, která by měřila vliv screeningu na ketoacidózu, jsme v literatuře nenašli. Kontrolní vyhledávání v databázi recenzované literatury přineslo jen další observační práce, které ukazují stejným směrem. Abstrakt práce o projektu Betty výskyt ketoacidózy u zachycených dětí zatím neuvádí; práce hodnotí hlavně proveditelnost screeningu. Děti nebyly vybrány náhodně, ale přišly k odběru, takže 0,39 % nelze bez výhrad přepočítat na celou dětskou populaci. Výsledky jsou navíc průběžné, staging ještě neproběhl u všech potvrzených dětí.
+      </div>
+
+      <h3>Co přijde po záchytu</h3>
+      <p>
+        Časný záchyt dnes nabízí především edukaci a sledování. Rodina pozná příznaky včas a léčba inzulinem může začít ambulantně, ne na jednotce intenzivní péče. Výzkum ale hledá i možnost nemoc oddálit. V randomizované studii fáze 2 se 76 příbuznými s vysokým rizikem (Herold et al. 2019, <em>New England Journal of Medicine</em>) oddálila jednorázová dvoutýdenní léčba protilátkou teplizumab klinický diabetes. Medián do diagnózy byl 48,4 měsíce proti 24,4 měsíce u placeba (poměr rizik 0,41). Šlo o malou studii u příbuzných pacientů. Evropská léková agentura přesto teplizumab pod názvem Teizeild registrovala: registrace platná v celé EU je z 8. ledna 2026 a týká se dospělých a dětí od 8 let ve 2. stadiu diabetu 1. typu, tedy části dětí, které screening zachytí, než se objeví příznaky. Lék má podle EMA oddálit přechod do 3. stadia, kdy už je potřeba inzulin. Registrace ale neznamená úhradu; zda a za jakých podmínek lék v Česku hradí zdravotní pojišťovny, jsme neověřili.
+      </p>
+      <p>
+        Betty je součástí evropského konsorcia EDENT1FI. Jeho společný protokol (Hoffmann et al. 2025, <em>BMJ Open</em>) počítá se screeningem v Česku, Dánsku, Německu, Itálii, Polsku, Portugalsku, Švédsku a Spojeném království a s přibližně 200 000 vyšetřenými dětmi mezi listopadem 2023 a říjnem 2028. Česko tak své výsledky získává podle stejné metodiky jako ostatní země a bude je moci srovnat.
+      </p>
+      <p>
+        V Česku podle dat registru ČENDA onemocnělo v pandemických letech 2020–2021 diabetem 1. typu 956 dětí do 15 let. Incidence 27,2 na 100 000 dětí ročně byla vyšší, než odpovídalo trendu z let 2010–2019 (Cinek et al. 2022, <em>Pediatric Diabetes</em>). Indikátor <a href="indicator.html?id=prevalence_diabetu">prevalence diabetu</a> (9,5 % lidí nad 15 let v roce 2023) typy diabetu nerozlišuje a dětskou cukrovku 1. typu z něj vyčíst nelze. O diabetu dospělých píšeme v článcích o <a href="clanek-spotreba-antidiabetik.html">spotřebě antidiabetik</a> a o <a href="clanek-umrtnost-diabetes-dvojnasobek-eu-2026.html">úmrtnosti na diabetes</a>.
+      </p>
+
+      <h3>Co s tím</h3>
+      <p>
+        <strong>Rozhodnout, zda a jak screening převzít do systému.</strong> Autoři píší, že výsledky jsou „důležitým základem pro možné budoucí zavedení rutinního populačního screeningu diabetu 1. typu v rámci českého zdravotního systému“. Rutinní program to tedy zatím není. Podkladem pro rozhodnutí o něm by měla být data, která Betty a EDENT1FI teprve sbírají: kolik dětí se screeningem nakonec přijde do nemocnice v ketoacidóze a kolik to stojí. Přehled ekonomických analýz (Rewers 2025, <em>Diabetes, Obesity and Metabolism</em>) uvádí, že nákladová efektivita závisí na prevalenci nemoci, na tom, jak častá je ketoacidóza bez screeningu, a na ceně a přesnosti testu. Proto potřebujeme česká data, ne převzatá.
+      </p>
+      <p>
+        <strong>Využít infrastrukturu, která už existuje.</strong> Česko má zavedené dětské screeningy u praktických lékařů pro děti a dorost a víme, jak se jim daří. <a href="indicator.html?id=screening_kycli_troji_sito">Trojí síto kyčlí</a> dokončí 73,7 % dětí a <a href="indicator.html?id=screening_sluchu_5let">screeningem sluchu v pěti letech</a> projde jen 24,5 % (rozbor v článcích o <a href="clanek-screening-kycli.html">kyčlích</a> a o <a href="clanek-screening-sluchu-deti.html">sluchu</a>). Betty už teď sbírá vzorky hlavně v ordinacích primární péče. Pokud by se screening rozšířil ve stejné podobě, nesly by odběry tytéž ordinace. Z praktických lékařů pro děti a dorost bylo přitom v roce 2023 34,6 % starších 65 let.
+      </p>
+      <p>
+        <strong>Pohlídat sledování, ne jen test.</strong> Australsko-novozélandská i bavorská data naznačují, že k nižšímu výskytu ketoacidózy přispívá pravidelné sledování a poučená rodina, nejen samotná pozitivní zkouška. Rodiče dětí se dvěma a více protilátkami potřebují vědět, kdo je bude sledovat, jak často a kam zavolat, když se objeví příznaky. Studie Fr1da zaznamenala u matek dětí s pozitivním výsledkem zvýšený stres v době stagingu, který po roce sledování opadl (Ziegler et al. 2020). I to je náklad, se kterým musí program počítat.
+      </p>
+      <p>
+        <strong>Rodiče se mohou rozhodnout už dnes.</strong> Projekt Betty je výzkumný program pro děti od 2 do 17,9 roku. Dokud nejde o rutinní program, je na rodičích, zda dítě do výzkumu přihlásí; poradit se mohou s pediatrem. Bez ohledu na screening platí, že když má rodič podezření na cukrovku (například nápadná žízeň, časté močení nebo hubnutí), je namístě návštěva lékaře, který změří cukr.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=prevalence_diabetu"><strong>Prevalence diabetu (15+)</strong></a> — 9,5 % (2023) proti 7,5 % v EU a 7,0 % v OECD · EHIS · SZÚ · zahrnuje hlavně diabetes 2. typu</li>
+        <li><a href="indicator.html?id=umrtnost_diabetes"><strong>Úmrtnost na diabetes mellitus (standardizovaná)</strong></a> — 49,37 na 100 000 ob. (2023) proti 23,53 v EU-27 · Eurostat hlth_cd_asdr2</li>
+        <li><a href="indicator.html?id=screening_kycli_troji_sito"><strong>Dokončené „trojí síto“ screeningu kyčlí</strong></a> — 73,7 % dětí (2024) · ÚZIS ČR, NZIS Open</li>
+        <li><a href="indicator.html?id=screening_sluchu_5let"><strong>Screening sluchu v 5 letech — pokrytí cílové populace</strong></a> — 24,5 % (2024) · ÚZIS ČR, NZIS Open</li>
+        <li><a href="indicator.html?id=pldd_podil_65plus"><strong>Podíl praktických lékařů pro děti a dorost ve věku 65+</strong></a> — 34,6 % (2023) · ÚZIS ČR</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Projekt Betty a EDENT1FI</h5>
+        <ul class="article-sources-list">
+          <li><strong>Berka B, Cinek O, Neuman V, Hubáčková K, Čermáková A, Radková A, Owoeye S, Goetz M, Haupt F, Achenbach P, Vercauteren J, Overbergh L, Mathieu C, Ziegler AG, Šumník Z et al. Population-Based Screening for Type 1 Diabetes in Czechia: Results From the First 1% of the Paediatric Population.</strong> <em>Diabetes, Obesity and Metabolism</em>. 2026 (online 27. 10. 2026). DOI 10.1111/dom.71463. PMID 42935169. Původní práce (Journal Article); ověřeno v PubMed 29. 10. 2026. <a href="https://doi.org/10.1111/dom.71463" target="_blank" rel="noopener">doi.org ↗</a> · <a href="https://pubmed.ncbi.nlm.nih.gov/42935169/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+          <li><strong>Hoffmann L, Kohls M, Arnolds S, Achenbach P, Bergholdt R, Bonifacio E et al. EDENT1FI Master Protocol for screening of presymptomatic early-stage type 1 diabetes in children and adolescents.</strong> <em>BMJ Open</em>. 2025;15(1):e088522. DOI 10.1136/bmjopen-2024-088522. PMID 39753267. Ověřeno v PubMed 29. 10. 2026. <a href="https://doi.org/10.1136/bmjopen-2024-088522" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Ziegler AG, Rewers MJ, Achenbach P, Bell KJ, Bonifacio E, DiMeglio LA et al. International consensus guidance for general population screening for islet autoantibodies to diagnose early-stage type 1 diabetes: a nominal group technique process.</strong> <em>Diabetologia</em>. 2026;69(12):3370–3395. DOI 10.1007/s00125-026-06841-z. PMID 42720753. Konsenzuální stanovisko; ověřeno v PubMed 29. 10. 2026. <a href="https://doi.org/10.1007/s00125-026-06841-z" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Stadia, ketoacidóza, výskyt v Česku</h5>
+        <ul class="article-sources-list">
+          <li><strong>Insel RA, Dunne JL, Atkinson MA et al. Staging presymptomatic type 1 diabetes: a scientific statement of JDRF, the Endocrine Society, and the American Diabetes Association.</strong> <em>Diabetes Care</em>. 2015;38(10):1964–1974. DOI 10.2337/dc15-1419. PMID 26404926. Ověřeno v PubMed 29. 10. 2026. <a href="https://doi.org/10.2337/dc15-1419" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Birkebaek NH, Kamrath C, Grimsmann JM et al. Impact of the COVID-19 pandemic on long-term trends in the prevalence of diabetic ketoacidosis at diagnosis of paediatric type 1 diabetes: an international multicentre study based on data from 13 national diabetes registries.</strong> <em>Lancet Diabetes &amp; Endocrinology</em>. 2022;10(11):786–794. DOI 10.1016/S2213-8587(22)00246-7. PMID 36202118. Ověřeno v PubMed 29. 10. 2026. <a href="https://doi.org/10.1016/S2213-8587(22)00246-7" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Cherubini V, Grimsmann JM, Åkesson K et al. Temporal trends in diabetic ketoacidosis at diagnosis of paediatric type 1 diabetes between 2006 and 2016: results from 13 countries in three continents.</strong> <em>Diabetologia</em>. 2020;63(8):1530–1541. DOI 10.1007/s00125-020-05152-1. PMID 32382815. Ověřeno v PubMed 29. 10. 2026 (plný text PMC7351855). <a href="https://doi.org/10.1007/s00125-020-05152-1" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Dovc K, Neuman V, Gita A et al. Association of Diabetic Ketoacidosis at Onset, Diabetes Technology Uptake, and Clinical Outcomes After 1 and 2 Years of Follow-up: A Collaborative Analysis of Pediatric Registries Involving 9,269 Children With Type 1 Diabetes From Nine Countries.</strong> <em>Diabetes Care</em>. 2025;48(4):648–654. DOI 10.2337/dc24-2483. PMID 39965057. Ověřeno v PubMed 29. 10. 2026. <a href="https://doi.org/10.2337/dc24-2483" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Cinek O, Slavenko M, Pomahačová R et al. Type 1 diabetes incidence increased during the COVID-19 pandemic years 2020–2021 in Czechia: Results from a large population-based pediatric register.</strong> <em>Pediatric Diabetes</em>. 2022;23(7):956–960. DOI 10.1111/pedi.13405. PMID 35982508. Ověřeno v PubMed 29. 10. 2026. <a href="https://doi.org/10.1111/pedi.13405" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Evidence o screeningu a léčbě</h5>
+        <ul class="article-sources-list">
+          <li><strong>Ziegler AG, Kick K, Bonifacio E et al. Yield of a Public Health Screening of Children for Islet Autoantibodies in Bavaria, Germany.</strong> <em>JAMA</em>. 2020;323(4):339–351. DOI 10.1001/jama.2019.21565. PMID 31990315. Ověřeno v PubMed 29. 10. 2026. <a href="https://doi.org/10.1001/jama.2019.21565" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Hummel S, Carl J, Friedl N et al. Children diagnosed with presymptomatic type 1 diabetes through public health screening have milder diabetes at clinical manifestation.</strong> <em>Diabetologia</em>. 2023;66(9):1633–1642. DOI 10.1007/s00125-023-05953-0. PMID 37329450. Ověřeno v PubMed 29. 10. 2026. <a href="https://doi.org/10.1007/s00125-023-05953-0" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Wentworth JM, Oakey H, Craig ME et al. Decreased occurrence of ketoacidosis and preservation of beta cell function in relatives screened and monitored for type 1 diabetes in Australia and New Zealand.</strong> <em>Pediatric Diabetes</em>. 2022;23(8):1594–1601. DOI 10.1111/pedi.13422. PMID 36175392. Ověřeno v PubMed 29. 10. 2026. <a href="https://doi.org/10.1111/pedi.13422" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Herold KC, Bundy BN, Long SA et al. An Anti-CD3 Antibody, Teplizumab, in Relatives at Risk for Type 1 Diabetes.</strong> <em>New England Journal of Medicine</em>. 2019;381(7):603–613. DOI 10.1056/NEJMoa1902226. PMID 31180194. Randomizovaná studie fáze 2; ověřeno v PubMed 29. 10. 2026. <a href="https://doi.org/10.1056/NEJMoa1902226" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>European Medicines Agency: Teizeild (teplizumab), EPAR — souhrn pro veřejnost.</strong> Registrace platná v celé EU od 8. 1. 2026; indikace: oddálení nástupu 3. stadia diabetu 1. typu u dospělých a dětí od 8 let ve 2. stadiu. Ověřeno 29. 10. 2026. <a href="https://www.ema.europa.eu/en/medicines/human/EPAR/teizeild" target="_blank" rel="noopener">ema.europa.eu ↗</a></li>
+          <li><strong>Rewers M. Health economic considerations of screening for early type 1 diabetes.</strong> <em>Diabetes, Obesity and Metabolism</em>. 2025;27 Suppl 6:69–77. DOI 10.1111/dom.16522. PMID 40555704. Přehledový článek; ověřeno v PubMed 29. 10. 2026. <a href="https://doi.org/10.1111/dom.16522" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Všechna čísla o projektu Betty pocházejí z abstraktu práce Berka et al. (2026) a platí k datu jejího sepsání. Poměr výskytu u příbuzných a v běžné populaci (zhruba sedminásobek) a podíl potvrzených dětí z nenegativních vzorků (zhruba polovina) jsou výpočty redakce. Hodnoty ketoacidózy v tabulce pocházejí z různých studií, období a definic a nejsou přímo srovnatelné. Hodnotu ketoacidózy zvlášť za Česko uvedené práce v textu nepublikují, proto ji neuvádíme. Jeden ze spoluautorů práce o projektu Betty uvádí vedle akademického pracoviště i afiliaci u farmaceutické společnosti (podle záznamu v PubMed). Registraci teplizumabu (Teizeild) v EU jsme ověřili v souhrnné zprávě EMA (EPAR) 29. 10. 2026. Úhradu léku ani screeningu z veřejného zdravotního pojištění jsme neověřovali, a proto o ní text nic netvrdí.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
