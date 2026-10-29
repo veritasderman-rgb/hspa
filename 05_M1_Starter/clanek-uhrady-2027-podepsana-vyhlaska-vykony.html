@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-10-28
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-10-28
+    creation_phase: rutina+article-write
+    form: article
+    primary_sources_count: 6
+    visual_elements_count: 6
+    notes: "Vytvoreno z discovery 2026-10-28: TZ MZ 26. 10. 2026 (podpis uhradove vyhlasky 2027) a TZ MZ 27. 10. 2026 (112 novych vykonu). Obe TZ stazeny curlem z mzd.gov.cz 28. 10. 2026 a ctene cele. KPI: rust uhrad regionalnich nemocnic s urgentnim prijmem 5,36 %, fakultnich 2,45 % (TZ 26. 10.). Bench: navrh do pripominkoveho rizeni 9. 9. 2026 (VeKLEP ALBSDXRFYLM6, priloha zd_ALBSDXRFYLM6.docx, tabulka 'Dopady na nemocnice - zmena uhrad 2027/2026': FN 101,55 / spec. ustavy 95,29 / velke krajske 103,65 / reg. s UP 106,86 / reg. bez UP 105,98 / psychiatricke 93,70 / celkem 103,50 %) proti verzi pro jednani pracovnich komisi LRV 12. 10. 2026 (priloha zd_KORNDYPFBRNS.docx: 102,45 / 97,44 / 104,33 / 105,36 / 104,47 / 106,95 / 103,59 %). Ctyri hodnoty z TZ (5,36; 4,47; 4,33; 2,45) se shoduji s verzi z 12. 10.; podepsany text neni zverejnen, srovnani 'navrh vs. podepsane zneni' je proto v clanku vyslovne 'navrh vs. verze pro PK, jejiz cisla TZ potvrzuje'. Texty priloh cteny pres hlidacstatu.cz (dataset veklep, get_veklep_legislation_detail ALBSDXRFYLM6 a KORNDVL9Q4OE, dotaz 28. 10. 2026): oba materialy stav '9PK - projednano PK', datumPosledniUpravy 2026-10-23. Novela SZV: navrh 2. 7. 2026 (zd_KORNDVL9Q4OE.doc: 65 novych, 225 aktualizovanych, 18 zrusenych, dopad 249-266 mil. Kc) vs verze pro PK 2. 10. 2026 (zd_ALBSDYDDFEFT.doc: 112 / 256 / 19, dopad 627-644 mil. Kc vcetne 323 mil. screening plic a 55 mil. kolorektalni screening). Vyhlaseni ve Sbirce zakonu NEOVERENO (e-sbirka.gov.cz je JS aplikace, zakonyprolidi.cz vraci 403); cislo vyhlasky v clanku neuvadime. NESOULAD k redakci: TZ 26. 10. pise u TEP '15% bonifikace pro velke nemocnice', oduvodneni verze z 12. 10. pise o 15% nakladovem modifikatoru a o uhrade pro velke poskytovatele o 20 % nizsi (-12,5 - 10 + 2,5) - v clanku uvedeno obe s odkazem. Drobny nesoulad: 112 + 256 + 19 = 387, oduvodneni SZV uvadi 386 vykonu celkem. Esej ne: chybi dolozena scena a obrat ve vyzkumu (8.2a). Ceka na schvaleni redakce."
+    audit_k_2026-10-28: "Nezavisly audit (blok K): TZ MZ 26. a 27. 10. 2026 (HTTP 200, ctene cele), VeKLEP ALBSDXRFYLM6 + KORNDVL9Q4OE pres hlidac-statu (zd_ALBSDXRFYLM6, zd_KORNDYPFBRNS, zd_KORNDVL9Q4OE, zd_ALBSDYDDFEFT, ma_* ucinnost) - vsechna cisla sedi. Opraveno 5 drobnosti: data-decimals u citacu 5,36 a 12,5 (animace by zaokrouhlila na 5 a 13); doslovna citace 'pokracujici pad relativnich vah'; zdroj ucinnosti 1. 1. 2027 = texty predpisu ve VeKLEP (TZ 26. 10. ucinnost neuvadi; SZV cast od 1. 7. 2027); lead netvrdi, ze novela SZV je 'hotova'; do textu doplneny hodnoty 3,65/5,98/3,50/3,59 %, ktere byly jen ve vizualech."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Úhrady 2027 jsou podepsané: regionální nemocnice +5,36 %, fakultní +2,45 %. Co se změnilo proti návrhu · HSPA Monitor</title>
+<meta name="description" content="Ministr zdravotnictví 26. října podepsal úhradovou vyhlášku pro rok 2027. Systém veřejného zdravotního pojištění má mít příjmy 605 miliard a náklady 604,9 miliardy korun. Úhrady regionálních nemocnic s urgentním příjmem mají růst o 5,36 %, fakultních nemocnic o 2,45 %. Proti zářijovému návrhu se rozdíl mezi nimi zúžil a psychiatrické nemocnice se podle podkladů z registru VeKLEP dostaly z poklesu o 6,3 % na růst o 6,95 %. Novela seznamu výkonů přidává od ledna 112 nových výkonů s odhadovaným dopadem 627 až 644 milionů korun.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Úhrady 2027 jsou podepsané: regionální nemocnice +5,36 %, fakultní +2,45 %. Co se změnilo proti návrhu">
+<meta property="og:description" content="Úhradová vyhláška 2027 a novela seznamu výkonů: kdo dostane víc, co se po připomínkách změnilo a co tiskové zprávy neříkají.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-uhrady-2027-podepsana-vyhlaska-vykony.html">
+<meta property="article:published_time" content="2026-10-30">
+<meta property="article:section" content="Financování">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-uhrady-2027-podepsana-vyhlaska-vykony.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "Úhrady 2027 jsou podepsané: regionální nemocnice +5,36 %, fakultní +2,45 %. Co se změnilo proti návrhu",
+  "description": "Ministr zdravotnictví 26. října podepsal úhradovou vyhlášku pro rok 2027. Systém veřejného zdravotního pojištění má mít příjmy 605 miliard a náklady 604,9 miliardy korun. Úhrady regionálních nemocnic s urgentním příjmem mají růst o 5,36 %, fakultních nemocnic o 2,45 %. Proti zářijovému návrhu se rozdíl mezi nimi zúžil a psychiatrické nemocnice se podle podkladů z registru VeKLEP dostaly z poklesu o 6,3 % na růst o 6,95 %. Novela seznamu výkonů přidává od ledna 112 nových výkonů s odhadovaným dopadem 627 až 644 milionů korun.",
+  "datePublished": "2026-10-30T06:00:00+01:00",
+  "dateModified": "2026-10-28",
+  "inLanguage": "cs",
+  "articleSection": "Financování",
+  "author": { "@type": "Organization", "name": "Redakce HSPA Monitoru" },
+  "publisher": { "@type": "Organization", "name": "HSPA Monitor · Skóre zdravotnictví", "url": "https://skorezdravotnictvi.cz" },
+  "mainEntityOfPage": "https://skorezdravotnictvi.cz/clanek-uhrady-2027-podepsana-vyhlaska-vykony.html"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Financování</span>
+        <span class="article-tag article-tag-muted">úhradová vyhláška 2027 · seznam zdravotních výkonů · CZ-DRG · regionální nemocnice · centralizace</span>
+      </div>
+      <h1 class="article-title">Úhrady 2027 jsou podepsané: regionální nemocnice +5,36 %, fakultní +2,45 %. Co se změnilo proti návrhu</h1>
+      <p class="article-deck">
+        Ministr zdravotnictví 26. října podepsal úhradovou vyhlášku pro rok 2027. Systém veřejného zdravotního pojištění má mít příjmy 605 miliard a náklady 604,9 miliardy korun. Úhrady regionálních nemocnic s urgentním příjmem mají růst o 5,36 %, fakultních nemocnic o 2,45 %. Proti zářijovému návrhu se rozdíl mezi nimi zúžil a psychiatrické nemocnice se podle podkladů z registru VeKLEP dostaly z poklesu o 6,3 % na růst o 6,95 %. Novela seznamu výkonů přidává od ledna 112 nových výkonů s odhadovaným dopadem 627 až 644 milionů korun.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">30. října 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">10 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+      <p class="article-lead">
+        Dva předpisy rozhodují o tom, kolik dostane nemocnice, praktik nebo laboratoř za péči v příštím roce. Úhradová vyhláška stanoví ceny a pravidla plateb, seznam zdravotních výkonů říká, co se vůbec dá vykázat a kolik to má bodů. Ministerstvo zdravotnictví 26. října oznámilo podpis úhradové vyhlášky a 27. října, že od ledna bude hrazeno 112 nových výkonů. Návrh úhradové vyhlášky jsme rozebrali v <a href="clanek-uhradova-vyhlaska-2027.html">září</a>. Teď jsme porovnali, co se mezi návrhem a konečnou podobou změnilo. Podepsaný text zatím zveřejněn není. Porovnávali jsme proto zářijový návrh s verzí z 12. října, kterou ministerstvo vložilo do registru VeKLEP pro jednání pracovních komisí Legislativní rady vlády. Čísla, která uvádí tisková zpráva o podpisu, se s touto verzí shodují.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avUh27CntH">
+        <figcaption class="av-figure-h" id="avUh27CntH">Úhrady 2027 ve čtyřech číslech (TZ MZ 26. a 27. 10. 2026)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="605" data-suffix=" mld. Kč">605 mld. Kč</span>
+            <span class="av-counter-label">očekávané příjmy veřejného zdravotního pojištění v roce 2027</span>
+            <span class="av-counter-foot">náklady 604,9 mld. Kč, saldo +100 mil. Kč</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="5.36" data-decimals="2" data-prefix="+" data-suffix=" %">+5,36 %</span>
+            <span class="av-counter-label">předpokládaný růst úhrad regionálních nemocnic s urgentním příjmem</span>
+            <span class="av-counter-foot">fakultní nemocnice +2,45 %</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="112">112</span>
+            <span class="av-counter-label">nových výkonů v seznamu zdravotních výkonů od 1. 1. 2027</span>
+            <span class="av-counter-foot">256 modernizovaných, 19 zrušených</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-display="627–644 mil. Kč">627–644 mil. Kč</span>
+            <span class="av-counter-label">odhadovaný dopad novely seznamu výkonů do pojištění v roce 2027</span>
+            <span class="av-counter-foot">v červencovém návrhu 249–266 mil. Kč</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Ministerstvo zdravotnictví, tiskové zprávy z 26. 10. 2026 (úhradová vyhláška) a 27. 10. 2026 (seznam výkonů); odůvodnění návrhu novely seznamu výkonů, VeKLEP KORNDVL9Q4OE, verze z 2. 7. 2026. Čteno 28. 10. 2026.</p>
+      </figure>
+
+      <h3>Rámec: vyrovnáno o sto milionů</h3>
+      <p>
+        Finanční rámec se proti návrhu téměř nepohnul. Příjmy systému zůstávají na 605 miliardách korun, náklady stouply ze 604,8 na 604,9 miliardy. Přebytek, který v zářijovém návrhu činil dvě desetiny miliardy, tak klesl na sto milionů korun. Ministerstvo hospodaření popisuje jako „prakticky vyrovnané“. Samotné náklady na zdravotní služby mají podle odůvodnění verze z 12. října dosáhnout 583,7 miliardy a vzrůst o 27,5 miliardy, v návrhu to bylo 583,5 miliardy a růst o 27,1 miliardy. Tisková zpráva to shrnuje jako meziroční růst „přibližně o 5 procent“.
+      </p>
+      <p>
+        Do příjmů ministerstvo započítává mimořádné navýšení platby státu za státní pojištěnce o 13 miliard korun. Na jakém zákonném základu tato částka stojí a jak se liší od dřívějších čísel, jsme rozebrali v článku <a href="clanek-platba-statni-pojistenci-2027-tri-cisla.html">Jedna platba, čtyři čísla</a>.
+      </p>
+      <p>
+        Akutní lůžková péče, tedy objemově největší segment, dostala stejně jako v návrhu tolik, kolik zbylo do vyrovnaného salda. Odůvodnění to říká výslovně a uvádí, že to vychází na růst o 3,6 %, v návrhu o 3,5 %. Pro představu o váze segmentu: lůžková péče tvořila v roce 2024 podle dat ÚZIS 56,3 % nákladů zdravotních pojišťoven.
+      </p>
+
+      <h3>Legislativní rámec a stav procesu</h3>
+      <p>
+        Úhradovou vyhlášku vydává ministerstvo každý rok na základě § 17 odst. 5 zákona č. 48/1997 Sb., o veřejném zdravotním pojištění. Vychází z dohodovacího řízení mezi pojišťovnami a poskytovateli. Pro rok 2027 skončilo úplnou dohodou v 11 z 15 segmentů a částečnou dohodou pro laboratorní péči. Bez dohody zůstaly akutní lůžková péče, následná lůžková péče a ambulantní specialisté. Podle tiskové zprávy ministerstvo dohody převzalo „bez zásahů“ a ve zbylých třech segmentech stanovilo úhrady samo. V následné péči se poprvé pilotně vyzkoušel rozhodčí panel: v koridoru růstu nákladů mezi 3 a 8 % vybral návrh pojišťoven. Průběh řízení jsme popsali v článku <a href="clanek-dohodovaci-rizeni-2027-vysledek.html">o dohodě ve 12 z 15 segmentů</a>.
+      </p>
+      <p>
+        Podpis ještě není vyhlášení. Tisková zpráva z 26. října uvádí, že vyhláška bude „v následujících dnech“ zveřejněna ve Sbírce zákonů a mezinárodních smluv. Ke dni přípravy článku, 28. října, jsme vyhlášení ve Sbírce neověřili, a proto číslo vyhlášky neuvádíme. Registr VeKLEP vede úhradovou vyhlášku i novelu seznamu výkonů ve stavu „9PK – projednáno PK“, obě s poslední úpravou 23. října. U novely seznamu výkonů tisková zpráva z 27. října o podpisu nemluví, oznamuje jen, že nové výkony budou hrazeny od 1. ledna 2027.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avUh27TlH">
+        <figcaption class="av-figure-h" id="avUh27TlH">Cesta dvou předpisů pro rok 2027 (VeKLEP a TZ MZ, stav k 28. 10. 2026)</figcaption>
+        <ol class="av-timeline">
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">2. 7. 2026</time>
+            <h4 class="av-timeline-title">Návrh novely seznamu výkonů</h4>
+            <p class="av-timeline-desc">65 nových výkonů, dopad 249–266 mil. Kč.</p>
+            <span class="av-timeline-tag">VeKLEP</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">9. 9. 2026</time>
+            <h4 class="av-timeline-title">Návrh úhradové vyhlášky</h4>
+            <p class="av-timeline-desc">Připomínkové řízení do 23. 9.</p>
+            <span class="av-timeline-tag">VeKLEP</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">2. a 12. 10. 2026</time>
+            <h4 class="av-timeline-title">Verze pro pracovní komise</h4>
+            <p class="av-timeline-desc">Seznam výkonů 2. 10., úhradová vyhláška 12. 10., s vypořádáním připomínek.</p>
+            <span class="av-timeline-tag">VeKLEP</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">26. 10. 2026</time>
+            <h4 class="av-timeline-title">Podpis úhradové vyhlášky</h4>
+            <p class="av-timeline-desc">Vyhlášení ve Sbírce „v následujících dnech“.</p>
+            <span class="av-timeline-tag">MZ</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-now">
+            <time class="av-timeline-date">27. 10. 2026</time>
+            <h4 class="av-timeline-title">Oznámení 112 nových výkonů</h4>
+            <p class="av-timeline-desc">Tisková zpráva k novele seznamu výkonů.</p>
+            <span class="av-timeline-tag">MZ</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-future">
+            <time class="av-timeline-date">1. 1. 2027</time>
+            <h4 class="av-timeline-title">Účinnost obou předpisů</h4>
+            <p class="av-timeline-desc">Podle textů obou předpisů ve VeKLEP; část změn seznamu výkonů až od 1. 7. 2027.</p>
+            <span class="av-timeline-tag">ČR</span>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> VeKLEP, materiály ALBSDXRFYLM6 a KORNDVL9Q4OE (hlidacstatu.cz, dataset veklep, dotaz 28. 10. 2026); TZ MZ 26. a 27. 10. 2026.</p>
+      </figure>
+
+      <h3>Kdo dostane víc: nemocnice podle typu</h3>
+      <p>
+        Hlavní sdělení tiskové zprávy je podpora regionálních nemocnic. Regionálním nemocnicím s urgentním příjmem mají úhrady meziročně vzrůst o 5,36 %, regionálním nemocnicím bez urgentního příjmu o 4,47 %, velkým krajským nemocnicím o 4,33 % a fakultním nemocnicím o 2,45 %. Jde o předpokládaný růst modelovaný ministerstvem, ne o garanci pro konkrétní nemocnici. Skutečná úhrada závisí na smlouvě s pojišťovnou a na objemu péče.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avUh27BarH">
+        <figcaption class="av-figure-h" id="avUh27BarH">Předpokládaný růst úhrad nemocnic 2027/2026 podle typu (v %)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="8" data-unit=" %">
+          <li class="av-bar-row" data-value="6.95" data-display="+6,95 %" data-label="Psychiatrické nemocnice"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="5.36" data-display="+5,36 %" data-label="Regionální s urgentním příjmem"></li>
+          <li class="av-bar-row" data-value="4.47" data-display="+4,47 %" data-label="Regionální bez urgentního příjmu"></li>
+          <li class="av-bar-row" data-value="4.33" data-display="+4,33 %" data-label="Velké krajské nemocnice"></li>
+          <li class="av-bar-row" data-value="3.59" data-display="+3,59 %" data-label="Nemocnice celkem"></li>
+          <li class="av-bar-row" data-value="2.45" data-display="+2,45 %" data-label="Fakultní nemocnice"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> TZ MZ 26. 10. 2026 (regionální, krajské a fakultní nemocnice); odůvodnění úhradové vyhlášky, verze pro pracovní komise z 12. 10. 2026, tabulka „Dopady na nemocnice – změna úhrad 2027/2026“ (psychiatrické nemocnice, celkem). Specializované ústavy mají pokles o 2,56 %, viz tabulka níže. Čteno 28. 10. 2026.</p>
+      </figure>
+
+      <p>
+        Rozdíl mezi regionálními a fakultními nemocnicemi je ale menší, než byl v návrhu. V zářijovém návrhu měly regionální nemocnice s urgentním příjmem růst o 6,86 % a fakultní o 1,55 %, tedy rozdíl 5,31 procentního bodu. Ve verzi z 12. října je to 5,36 % proti 2,45 % a rozdíl 2,91 procentního bodu (dopočet redakce). Regionálním nemocnicím s urgentním příjmem růst klesl o 1,5 procentního bodu, fakultním o 0,9 bodu stoupl. Velkým krajským nemocnicím se růst zvýšil z 3,65 na 4,33 %, regionálním bez urgentního příjmu klesl z 5,98 na 4,47 %. Za všechny nemocnice dohromady vychází růst úhrad 3,59 %, v návrhu 3,50 %.
+      </p>
+      <p>
+        Největší posun se týká psychiatrických nemocnic, o kterých tisková zpráva nemluví. V návrhu jim úhrady klesaly o 6,30 % a odůvodnění jako důvod uvádělo „pokračující pád relativních vah DRG klasifikace“. Ve verzi z 12. října mají růst o 6,95 %. Odůvodnění vysvětluje, že ministerstvo „na základě připomínek“ oblast znovu přepočítalo a zjistilo, že k velkému propadu úhrad psychiatrie dochází už v roce 2026, a ne převážně až v roce 2027, jak původně čekalo. Proto zvýšilo část koeficientu transformace a koeficientu za plnění kvalitativních kritérií. Specializované ústavy zůstávají jediným typem s poklesem, mírnějším než v návrhu: −2,56 % místo −4,71 %. Odůvodnění ho vysvětluje sjednocováním základních sazeb a částečným omezením nákladových modifikátorů.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avUh27TabH">
+        <figcaption class="av-figure-h" id="avUh27TabH">Změna úhrad nemocnic 2027/2026: zářijový návrh proti verzi z 12. října</figcaption>
+        <table class="av-data-table">
+          <thead>
+            <tr><th scope="col">Typ nemocnice</th><th scope="col">Návrh 9. 9. 2026</th><th scope="col">Verze 12. 10. 2026</th><th scope="col">Posun (p. b.)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Psychiatrické nemocnice</td><td>−6,30 %</td><td>+6,95 %</td><td>+13,25</td></tr>
+            <tr><td>Specializované ústavy</td><td>−4,71 %</td><td>−2,56 %</td><td>+2,15</td></tr>
+            <tr><td>Fakultní nemocnice</td><td>+1,55 %</td><td>+2,45 %</td><td>+0,90</td></tr>
+            <tr><td>Velké krajské nemocnice</td><td>+3,65 %</td><td>+4,33 %</td><td>+0,68</td></tr>
+            <tr><td>Regionální bez urgentního příjmu</td><td>+5,98 %</td><td>+4,47 %</td><td>−1,51</td></tr>
+            <tr><td>Regionální s urgentním příjmem</td><td>+6,86 %</td><td>+5,36 %</td><td>−1,50</td></tr>
+            <tr><td><strong>Celkem</strong></td><td>+3,50 %</td><td>+3,59 %</td><td>+0,09</td></tr>
+          </tbody>
+        </table>
+        <p class="av-figure-note"><strong>Zdroj:</strong> odůvodnění úhradové vyhlášky 2027, příloha zd_ALBSDXRFYLM6 (návrh 9. 9. 2026) a zd_KORNDYPFBRNS (verze pro pracovní komise 12. 10. 2026), VeKLEP ALBSDXRFYLM6. MZ uvádí indexy (např. 105,36 %), redakce je převedla na procentní změnu a dopočítala posun. Čteno 28. 10. 2026.</p>
+      </figure>
+
+      <h3>Co se po připomínkách změnilo</h3>
+      <p>
+        <strong>Kyčle a kolena.</strong> Totální endoprotézy kyčle a kolena se v roce 2027 mají hradit podle individuální dohody pojišťovny s nemocnicí. V zářijovém návrhu to byla jediná cesta. Verze z 12. října doplnila pojistku, podle odůvodnění „na základě připomínkového řízení“: když se nemocnice s pojišťovnou nedohodnou do 31. března 2027, platí minimální úhrada stanovená vyhláškou. Ta je o 12,5 % nižší než standardní úhrada. Odůvodnění to zdůvodňuje tím, že pokles odpovídá zkrácení pobytu po operaci z 9 na 6 dní a že „hrozba poklesu úhrad o 12,5 %“ má nemocnice přimět k jednání. Tisková zpráva k tomu uvádí 15% bonifikaci pro velké nemocnice. Odůvodnění popisuje 15 % jako snížený nákladový modifikátor a dodává, že po započtení všech složek je minimální úhrada pro velké poskytovatele o 20 % nižší, než kdyby se péče hradila dosavadním způsobem. K minimální úhradě patří i bonifikace za hlášení údajů o pacientech, například BMI, ASA skóre a použití protokolu ERAS.
+      </p>
+      <p>
+        <strong>Bonusy za centralizaci.</strong> Náročné výkony, hlavně v onkologii a kardiologii, mají dál směřovat do specializovaných center. Nástrojem jsou koeficienty centralizace: nemocnice mimo centrum dostane u vybrané péče jen zlomek úhrady, centrum příplatek. Po připomínkách se kladné koeficienty zvýšily. Zbývá-li do center přesunout posledních 5 % péče, je koeficient 1,03 místo 1, do 10 % péče 1,05 místo 1,03, do 20 % péče 1,10 místo 1,05 a nad 20 % péče 1,15 místo 1,10. U ledvin a prostaty stoupl jednotný koeficient z 1,03 na 1,05. U oborů, které se mají od roku 2027 plně přesunout do center, zůstal koeficient 0,2, tedy 80% srážka z úhrady. Podle odůvodnění je při této výši „nerealistické, aby tuto péči někdo prováděl“. Týká se to mimo jiné onkochirurgie konečníku, jícnu a jater, slinivky a žlučových cest. Jak se stěhuje onkochirurgie, jsme popsali v článku <a href="clanek-centralizace-onkochirurgie-2030.html">o čtyřech tisících operací</a>.
+      </p>
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-warn">
+          <span class="av-counter" data-value="12.5" data-decimals="1" data-prefix="−" data-suffix=" %">−12,5 %</span>
+          <span class="av-counter-label">minimální úhrada endoprotéz kyčle a kolena, pokud nevznikne dohoda do 31. 3. 2027</span>
+          <span class="av-counter-foot">doplněno po připomínkovém řízení</span>
+        </div>
+      </aside>
+
+      <h3>Co se mění pro ambulance, praktiky a pacienty</h3>
+      <p>
+        Část novinek byla v návrhu už v září a po připomínkách zůstala. Praktičtí lékaři budou mít nově hrazenou terénní sestru, která má chodit hlavně za seniory, chronicky nemocnými a imobilními pacienty domů. Pojišťovny odhadují náklady v řádu desítek milionů korun. Ministerstvo v citlivostní analýze počítá s rizikem až o půl miliardy vyšších výdajů, pokud se služba rozšíří víc. Poskytovatelé domácí péče podle odůvodnění v dohodovacím řízení proti této novince protestovali. Obávali se, že terénní sestry převezmou lehčí pacienty a domácí péči zůstanou jen náročné případy.
+      </p>
+      <p>
+        Vyhláška dál podporuje týmové gynekologické praxe a rozšiřuje jednodenní chirurgii, tedy výkony, po kterých jde pacient domů ještě týž den. Běžnější operace, například odstranění mandlí, slepého střeva, žlučníku nebo štítné žlázy, se mají hradit případovým paušálem s jednotnou základní sazbou, tedy podle tiskové zprávy „za sjednocených podmínek napříč nemocnicemi“. Velkým nemocnicím podle odůvodnění zmizí ekonomický zájem tyto výkony navyšovat a mohou uvolnit kapacitu pro složitou péči.
+      </p>
+      <p>
+        Přibývají platby za kvalitu. Nemocnice dostane bonus 5 % z úhrady za léčbu cévní mozkové příhody, když u aspoň 90 % pacientů vykáže funkční stav podle modifikované Rankinovy škály při propuštění a po 90 dnech. Nemocniční úmrtnost po cévní mozkové příhodě byla v roce 2024 podle ÚZIS 9,9 %. Nová data mají ukázat i to, v jakém stavu pacienti nemocnici opouštějí. Druhý bonus míří na očkování personálu proti chřipce. Centrální základní sazba vzroste o 1 000 Kč, pokud proočkovanost v nemocnicích dosáhne k 31. prosinci 2027 33 % u lékařů a 15 % u nelékařů. Dnes je to podle odůvodnění 24 % u lékařů a 7,7 % u sester. Pokud se cíle dosáhne, bude to systém stát 1,3 miliardy korun.
+      </p>
+      <p>
+        U drahých centrových léků pokračuje mechanismus zavedený v roce 2026: index cenové slevy vrací do systému část rozdílu mezi cenou, za kterou nemocnice lék nakoupí, a cenou, kterou vykáže. Tisková zpráva o něm píše jako o „zavedení“, odůvodnění jako o pokračování. Náklady na centrové léky mají v roce 2027 po započtení slev vzrůst o 6,3 %.
+      </p>
+
+      <h3>112 nových výkonů: co přibývá a za kolik</h3>
+      <p>
+        Novela seznamu zdravotních výkonů podle tiskové zprávy přidává 112 nových výkonů, 256 stávajících modernizuje a 19 ruší. Ministerstvo zmiňuje cílenou léčbu pokročilé rakoviny prostaty, 3D navigovanou bronchoskopii pro diagnostiku nádorů plic, výkony ve screeningu rakoviny plic a tlustého střeva, šetrnou léčbu děložních myomů bez odstranění dělohy, zákroky pro diabetiky, které mají snižovat riziko amputace, a přesnější diagnostiku infekcí.
+      </p>
+      <p>
+        Proti červencovému návrhu se novela výrazně rozrostla. Tehdy obsahovala 65 nových výkonů, 225 aktualizovaných a 18 zrušených a odhadovaný dopad byl 249 až 266 milionů korun. Verze z 2. října, z níž vycházejí čísla tiskové zprávy, odhaduje dopad na 627 až 644 milionů korun. Rozdíl tvoří hlavně dva screeningové programy. Změny v programu časného záchytu rakoviny plic, včetně rozšíření cílové skupiny na lidi ve věku 50 až 79 let a zapojení dalších odborností od 1. července 2027, mají stát přibližně 323 milionů korun. Kolorektální screening má výdaje zvýšit asi o 55 milionů, model ministerstva přitom pro rok 2032 počítá s úsporou kolem 16 milionů díky lepšímu využití kapacit pro kolonoskopie. Na kolonoskopii po pozitivním testu se v roce 2024 čekalo v průměru 84,2 dne a kolorektálním screeningem bylo pokryto 32,5 % lidí ve věku 50 až 74 let.
+      </p>
+      <p>
+        Nejdražším jednotlivým novým výkonem je laboratorní vyšetření TRACP5b pro pacienty s chronickým selháním ledvin, s dopadem 88 milionů korun při očekávaných 208 tisících vyšetření ročně. O tom, které návrhy se do seznamu dostanou, rozhoduje pracovní skupina ministerstva, v níž mají pojišťovny podle jednacího řádu fakticky právo veta. Popsali jsme to v článku <a href="clanek-veto-platcu-szv-2026.html">Dva hlasy stačí</a>.
+      </p>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Upozornění na limity">
+        <p class="article-callout-h">Co tiskové zprávy neříkají</p>
+        <p>
+          Podepsané znění úhradové vyhlášky zatím není veřejné. Srovnání v tomto článku stojí na verzi z 12. října, jejíž čísla tisková zpráva potvrzuje. Zda se podepsaný text liší jinde, ověříme až po vyhlášení ve Sbírce zákonů. Procenta růstu podle typu nemocnice jsou modelace ministerstva. Skutečná úhrada konkrétní nemocnice závisí na smlouvě s pojišťovnou. Odůvodnění samo upozorňuje, že dopady závisejí na smluvním nastavení a plnění kvalitativních ukazatelů, „které jde pouze obtížně předvídat“.
+        </p>
+        <p>
+          Tisková zpráva o výkonech zdůrazňuje ochranu nejmenších dětí před respiračními infekcemi a psychologickou pomoc dětem u praktického lékaře. Odůvodnění novely přitom uvádí aplikaci monoklonální protilátky proti RSV a podpůrnou intervenci u dětí s psychickými potížemi mezi výkony, které pojišťovny „již nyní“ hradí. U těchto dvou výkonů tedy jde hlavně o jejich zařazení do seznamu. Tisková zpráva uvádí 112 nových, 256 modernizovaných a 19 zrušených výkonů, dohromady 387. Odůvodnění uvádí celkem 386 výkonů, rozdíl jsme nevysvětlili. U endoprotéz se tisková zpráva a odůvodnění liší v popisu 15% složky, viz výše.
+        </p>
+      </aside>
+
+      <h3>Co s tím</h3>
+      <p>
+        <strong>Ministerstvo zdravotnictví:</strong> zveřejnit podepsané znění úhradové vyhlášky i novely seznamu výkonů spolu s vypořádáním připomínek hned po vyhlášení. Posun u psychiatrických nemocnic odůvodnění vysvětluje, tisková zpráva ho ale vůbec nezmiňuje. Ministerstvo by mělo sjednotit popis úhrady endoprotéz v tiskové zprávě a v odůvodnění.
+      </p>
+      <p>
+        <strong>Nemocnice a pojišťovny:</strong> u endoprotéz kyčle a kolena mají čas do 31. března 2027. Pak platí minimální úhrada. Regionální nemocnice by měly v rozpisu úhrad od pojišťoven ověřit, zda dostanou to, co předpokládá model ministerstva.
+      </p>
+      <p>
+        <strong>Pacienti:</strong> u plánované náhrady kloubu se vyplatí zeptat, zda má nemocnice s pojišťovnou uzavřenou dohodu. Senioři a chronicky nemocní se mohou u svého praktika zeptat, zda bude mít terénní sestru.
+      </p>
+      <p>
+        <strong>HSPA Monitor:</strong> po vyhlášení ve Sbírce zkontrolujeme podepsaný text proti verzi z 12. října a článek doplníme. Sledujeme náklady pojišťoven na pojištěnce, podíl lůžkové péče a nemocniční úmrtnost po cévní mozkové příhodě. Až pojišťovny začnou vykazovat Rankinovu škálu, navrhneme z ní nový indikátor výsledků péče.
+      </p>
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=uhrada_zp_per_pojistenec"><strong>Úhrada zdravotních pojišťoven na pojištěnce</strong></a> — 46 529 Kč na pojištěnce a rok (2024, MZ ČR, Hodnocení vývoje systému veřejného zdravotního pojištění)</li>
+        <li><a href="indicator.html?id=podil_vydaje_luzkova_pece"><strong>Podíl výdajů ZP na lůžkovou péči</strong></a> — 56,3 % (2024, ÚZIS · NRHZS)</li>
+        <li><a href="indicator.html?id=mortalita_inhosp_cmp"><strong>Nemocniční úmrtnost po cévní mozkové příhodě</strong></a> — 9,9 % (2024, ÚZIS · NRH)</li>
+        <li><a href="indicator.html?id=screening_kolorektalni"><strong>Pokrytí kolorektálním screeningem (50–74)</strong></a> — 32,5 % (2024, ÚZIS · NRHZS)</li>
+        <li><a href="indicator.html?id=cekaci_doba_toks_kolonoskopie"><strong>Čekací doba na kolonoskopii po pozitivním testu ve screeningu</strong></a> — 84,2 dne (2024, ÚZIS · NZIS Open)</li>
+      </ul>
+      <p>Související články: <a href="clanek-uhradova-vyhlaska-2027.html">Návrh úhradové vyhlášky 2027</a> · <a href="clanek-platba-statni-pojistenci-2027-tri-cisla.html">Platba za státní pojištěnce</a> · <a href="clanek-dohodovaci-rizeni-2027-vysledek.html">Dohodovací řízení 2027</a> · <a href="clanek-veto-platcu-szv-2026.html">Veto plátců nad seznamem výkonů</a> · <a href="clanek-centralizace-onkochirurgie-2030.html">Centralizace onkochirurgie</a></p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Ministerstvo zdravotnictví (čteno 28. 10. 2026)</h5>
+        <ul class="article-sources-list">
+          <li><strong>Tisková zpráva MZ z 26. 10. 2026</strong> — Ministr Vojtěch podepsal úhradovou vyhlášku pro rok 2027: finanční rámec, dohodovací řízení, růst úhrad podle typu nemocnice, endoprotézy, bonifikace za kvalitu. <a href="https://mzd.gov.cz/tiskove-centrum-mz/ministr-vojtech-podepsal-uhradovou-vyhlasku-pro-rok-2027-prioritou-je-financni-stabilita-dostupnejsi-pece-a-podpora-regionalnich-nemocnic/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+          <li><strong>Tisková zpráva MZ z 27. 10. 2026</strong> — Od ledna bude hrazeno 112 nových zdravotních výkonů: počty výkonů, příklady, finanční dopad. <a href="https://mzd.gov.cz/tiskove-centrum-mz/modernejsi-lecba-presnejsi-diagnostika-od-ledna-bude-hrazeno-112-novych-zdravotnich-vykonu/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Legislativní proces (VeKLEP)</h5>
+        <ul class="article-sources-list">
+          <li><strong>Návrh vyhlášky o stanovení hodnot bodu, výše úhrad hrazených služeb, výše záloh a regulačních omezení pro rok 2027</strong> — čj. MZDR 25287/2026-1/LEG; odůvodnění návrhu z 9. 9. 2026 a verze pro jednání pracovních komisí z 12. 10. 2026 (oddíly o finančním dopadu, CZ-DRG, koeficientech centralizace, endoprotézách, centrových lécích a tabulka dopadů na nemocnice); stav „9PK – projednáno PK“. <a href="https://odok.cz/portal/veklep/material/ALBSDXRFYLM6/" target="_blank" rel="noopener">odok.cz ↗</a></li>
+          <li><strong>Návrh vyhlášky, kterou se mění vyhláška č. 134/1998 Sb., kterou se vydává seznam zdravotních výkonů s bodovými hodnotami</strong> — odůvodnění návrhu z 2. 7. 2026 a verze pro pracovní komise z 2. 10. 2026 (počty výkonů, dopady, screeningové programy); stav „9PK – projednáno PK“. <a href="https://odok.cz/portal/veklep/material/KORNDVL9Q4OE/" target="_blank" rel="noopener">odok.cz ↗</a></li>
+          <li><strong>Hlídač státu, dataset VeKLEP</strong> — strojově čitelné texty příloh obou materiálů a stav procesu, dotaz 28. 10. 2026. <a href="https://www.hlidacstatu.cz/data/Hledat/veklep?Q=ALBSDXRFYLM6" target="_blank" rel="noopener">hlidacstatu.cz ↗</a></li>
+          <li><strong>Zákon č. 48/1997 Sb., o veřejném zdravotním pojištění</strong> — § 17 odst. 5, zmocnění k vydání úhradové vyhlášky. <a href="https://www.zakonyprolidi.cz/cs/1997-48" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Data indikátorů</h5>
+        <ul class="article-sources-list">
+          <li><strong>ÚZIS · NZIP, Náklady zdravotních pojišťoven podle segmentů</strong> — podíl lůžkové péče na nákladech (2024). <a href="https://www.nzip.cz/data/2394-naklady-zdravotni-pojistovny-segmenty-datovy-souhrn" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+          <li><strong>ÚZIS · NZIS Open, PPS-02-07</strong> — průměrná čekací doba na kolonoskopii po pozitivním screeningovém testu (2024). <a href="https://datanzis.uzis.gov.cz/data/PPS-02-KRK/PPS-02-07/Otevrena-data-PPS-02-07-kolorektum-cekaci-doba.csv" target="_blank" rel="noopener">datanzis.uzis.gov.cz ↗</a></li>
+          <li><strong>MZ ČR, Hodnocení vývoje systému veřejného zdravotního pojištění v roce 2024</strong> — úhrada na pojištěnce. <a href="https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Podepsané znění úhradové vyhlášky ke dni přípravy článku nebylo zveřejněno a vyhlášení ve Sbírce zákonů jsme neověřili. Srovnání návrhu a konečné podoby vychází z verzí v registru VeKLEP. Procentní změny a posuny v procentních bodech dopočítala redakce z indexů, které uvádí ministerstvo.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+  </article>
+</main>
+<footer class="bottom" id="siteFooter"></footer>
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
