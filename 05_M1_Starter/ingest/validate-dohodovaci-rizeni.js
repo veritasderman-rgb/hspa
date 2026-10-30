@@ -91,6 +91,26 @@ for (const ds of datasets) {
   }
 }
 
+// ohlášené (zatím nepublikované) sady — každá musí mít zdroj stavu a datum kontroly
+if (data.announced) {
+  const a = data.announced;
+  if (!a.source?.url) errors.push('announced: missing source.url');
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(a.checked_at || '')) errors.push('announced: checked_at must be YYYY-MM-DD');
+  for (const it of a.items || []) {
+    const tag = `announced[${it.number ?? '?'}]`;
+    for (const f of ['number', 'dimension', 'title', 'description', 'status']) {
+      if (!it[f]) errors.push(`${tag}: missing '${f}'`);
+    }
+    if (it.dimension && !dimIds.has(it.dimension)) errors.push(`${tag}: unknown dimension '${it.dimension}'`);
+  }
+}
+for (const n of data.edition_notes || []) {
+  if (!n.ois_code || !n.title || !n.text) errors.push(`edition_notes[${n.ois_code ?? '?'}]: missing ois_code/title/text`);
+  else if (!datasets.some((ds) => ds.ois_code === n.ois_code)) {
+    errors.push(`edition_notes[${n.ois_code}]: unknown ois_code`);
+  }
+}
+
 if (errors.length) {
   console.error(`FAIL: ${errors.length} validation error(s):`);
   errors.forEach((e) => console.error('  -', e));

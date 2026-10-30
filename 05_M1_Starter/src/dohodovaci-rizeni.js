@@ -142,7 +142,23 @@ function renderLanding(root, data) {
           <p>Data jsou agregovaná, bez osobních údajů. Nejde o HSPA indikátory výkonnosti — viz <a href="index.html">Indikátory</a> a <a href="hspa-prehled.html">HSPA přehled</a>.</p>
         </div>
       </div>
+      ${
+        data.data_policy
+          ? `<div class="dr-policy">
+              <h4>${escapeHtml(data.data_policy.title)}</h4>
+              <p>${escapeHtml(data.data_policy.text)}
+                <a href="${escapeHtml(data.data_policy.url)}" target="_blank" rel="noopener">Koncepce na NZIP ↗</a>${
+                  data.data_policy.pdf
+                    ? ` · <a href="${escapeHtml(data.data_policy.pdf)}" target="_blank" rel="noopener">PDF ↗</a>`
+                    : ''
+                }</p>
+            </div>`
+          : ''
+      }
     </section>`;
+
+  const announcedHtml = renderAnnounced(data.announced, dims);
+  const editionNotesHtml = renderEditionNotes(data.edition_notes, byOis(datasets));
 
   const interactive = data.interactive_only || [];
   const interactiveHtml = interactive.length
@@ -173,7 +189,80 @@ function renderLanding(root, data) {
     : '';
 
   root.innerHTML =
-    heroHtml + analyzaCtaHtml + dimsGridHtml + sectionsHtml + interactiveHtml + provenanceHtml;
+    heroHtml +
+    analyzaCtaHtml +
+    dimsGridHtml +
+    sectionsHtml +
+    announcedHtml +
+    interactiveHtml +
+    editionNotesHtml +
+    provenanceHtml;
+}
+
+function byOis(datasets) {
+  return new Map(datasets.map((d) => [d.ois_code, d]));
+}
+
+/* Sady, které ÚZIS ohlásil, ale zatím nepublikoval — stav přebírá veřejnou prezentaci ÚZIS. */
+function renderAnnounced(announced, dims) {
+  const items = announced?.items || [];
+  if (!items.length) return '';
+  const dimOf = new Map(dims.map((d) => [d.id, d]));
+  const checked = announced.checked_at ? formatIsoDate(announced.checked_at) : '';
+  return `
+    <section class="dr-announced" id="ohlasene" aria-labelledby="drAnnHead">
+      <div class="ed-kicker">Ve vývoji</div>
+      <h3 id="drAnnHead">Ohlášené, zatím nepublikované sady</h3>
+      <p class="dr-dim-section-desc">${items.length} ${plural(items.length, 'sada', 'sady', 'sad')}, které ÚZIS zařadil do datové podpory dohodovacího řízení, ale zatím nevydal${
+        checked ? ` (kontrola NZIP ${escapeHtml(checked)})` : ''
+      }. Stav podle <a href="${escapeHtml(announced.source?.url || '')}" target="_blank" rel="noopener">${escapeHtml(
+        announced.source?.title || 'prezentace ÚZIS',
+      )} ↗</a>.</p>
+      <ul class="dr-announced-list">
+        ${items
+          .map((it) => {
+            const dim = dimOf.get(it.dimension);
+            const style = dim ? ` style="--dr-dim-color:${escapeHtml(dim.color)}"` : '';
+            return `<li class="dr-announced-item"${style}>
+              <span class="dr-announced-num">${escapeHtml(it.number)}</span>
+              <div>
+                <strong>${escapeHtml(it.title)}</strong>
+                <p>${escapeHtml(it.description)}</p>
+                <p class="dr-announced-status">${escapeHtml(it.status)}</p>
+                ${it.hspa_relevance ? `<p class="dr-announced-why">Proč na tom záleží: ${escapeHtml(it.hspa_relevance)}</p>` : ''}
+              </div>
+            </li>`;
+          })
+          .join('')}
+      </ul>
+    </section>`;
+}
+
+/* Poznámky k edicím: revize starších let, zlomy řad, zadržené edice, opravy převodu. */
+function renderEditionNotes(notes, datasetsByOis) {
+  if (!notes?.length) return '';
+  return `
+    <section class="dr-edition-notes" aria-labelledby="drEdHead">
+      <div class="ed-kicker">Metodické poznámky</div>
+      <h3 id="drEdHead">Co se mezi edicemi změnilo</h3>
+      <ul class="dr-interactive-list">
+        ${notes
+          .map((n) => {
+            const ds = datasetsByOis.get(n.ois_code);
+            const link = ds ? `dohodovaci-rizeni.html?id=${encodeURIComponent(ds.id)}` : null;
+            const head = link
+              ? `<a href="${escapeHtml(link)}">${escapeHtml(n.ois_code)} · ${escapeHtml(n.title)}</a>`
+              : `<strong>${escapeHtml(n.ois_code)} · ${escapeHtml(n.title)}</strong>`;
+            return `<li class="dr-edition-note">${head}<p>${escapeHtml(n.text)}</p></li>`;
+          })
+          .join('')}
+      </ul>
+    </section>`;
+}
+
+function formatIsoDate(iso) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+  return m ? `${Number(m[3])}. ${Number(m[2])}. ${m[1]}` : iso;
 }
 
 /* ======================= STRATEGICKÁ ANALÝZA ======================= */
@@ -597,6 +686,13 @@ function renderDetail(root, data, id) {
 
   const vizHtml = renderViz(ds);
 
+  const notes = (data.edition_notes || []).filter((n) => n.ois_code === ds.ois_code);
+  const editionHtml = notes.length
+    ? `<div class="dr-detail-block dr-detail-edition"><h3>Poznámka k edici</h3>${notes
+        .map((n) => `<p><strong>${escapeHtml(n.title)}.</strong> ${escapeHtml(n.text)}</p>`)
+        .join('')}</div>`
+    : '';
+
   const intlHtml = renderInternational(ds.international);
 
   const externalHtml =
@@ -647,6 +743,7 @@ function renderDetail(root, data, id) {
       ${headline}
       ${roleHtml}
       ${saysHtml}
+      ${editionHtml}
       ${vizHtml}
       ${intlHtml}
       ${externalHtml}

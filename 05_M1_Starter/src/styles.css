@@ -22275,3 +22275,32 @@ h6.pop-doc-h { font-size: 16px; font-style: italic; }
 @media (prefers-reduced-motion: reduce) {
   .pop-doc > summary::before { transition: none; }
 }
+
+/* Dohodovací řízení — ohlášené sady, poznámky k edicím, rámec NZIS */
+.dr-announced, .dr-edition-notes { margin-bottom: 40px; border-top: 1px solid var(--rule); padding-top: 20px; }
+.dr-announced-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 18px 28px;
+  margin-top: 14px;
+}
+.dr-announced-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  border-left: 3px solid var(--dr-dim-color, var(--rule));
+  padding-left: 12px;
+}
+.dr-announced-num { font-family: var(--sans); font-size: 12px; font-weight: 700; color: var(--dr-dim-color, var(--ink-mut)); }
+.dr-announced-item strong { font-family: var(--sans); font-size: 14px; color: var(--ink); }
+.dr-announced-item p { font-family: var(--serif); font-size: 14px; line-height: 1.5; color: var(--ink-mut); margin-top: 4px; }
+.dr-announced-item .dr-announced-status { font-family: var(--sans); font-size: 12px; color: var(--ink); }
+.dr-announced-item .dr-announced-why { font-size: 13px; font-style: italic; }
+.dr-edition-note p { font-family: var(--serif); font-size: 14px; line-height: 1.5; color: var(--ink-mut); padding: 4px 0 8px; }
+.dr-policy { margin-top: 22px; }
+.dr-policy h4 { font-family: var(--sans); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--red); margin-bottom: 6px; }
+.dr-policy p { font-family: var(--serif); font-size: 14px; line-height: 1.55; color: var(--ink-mut); max-width: 880px; }
+@media (max-width: 640px) {
+  .dr-announced-list { grid-template-columns: 1fr; }
+}
