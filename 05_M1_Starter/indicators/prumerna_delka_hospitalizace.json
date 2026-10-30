@@ -4,23 +4,33 @@
   "area": "Výstupy",
   "domain": "Nemocniční péče",
   "subdomain": "Efektivita",
-  "definition": "Průměrný počet dní strávených v nemocnici na jednu hospitalizaci (ALOS – Average Length of Stay) v zařízeních akutní péče.",
+  "definition": "Průměrný počet dní na jednu hospitalizaci v léčebné (akutní) lůžkové péči (ALOS – Average Length of Stay, funkce HC.1 podle OECD).",
   "unit": "dní",
   "direction": "lower_is_better",
   "data_source": {
     "primary": {
-      "type": "uzis_nzis",
-      "note": "NRH, průměr přes všechny akutní DRG skupiny."
+      "type": "oecd_sdmx2",
+      "agency": "OECD.ELS.HD",
+      "dataflow": "DSD_HEALTH_PROC@DF_KEY_INDIC",
+      "dims": {
+        "MEASURE": "STAY",
+        "UNIT_MEASURE": "D",
+        "FUNCTION": "HC1",
+        "CARE_TYPE": "_T",
+        "MODE_PROVISION": "_T",
+        "DIAGNOSTIC_TYPE": "_Z"
+      },
+      "note": "OECD Health Statistics, průměrná délka hospitalizace v léčebné péči. Ověřeno živě 2026-10-30: ČR 5,7 dne (2024), průměr OECD 6,55 (30 zemí). OECD přebírá české údaje z NZIS."
     },
     "fallback": {
-      "type": "oecd",
-      "code": "ALOS"
+      "type": "csu",
+      "note": "ČSÚ — Zdravotnictví ČR (Healthcare 2024) uvádí pro akutní péči 5,5 dne (2024)."
     }
   },
   "benchmark_source": {
-    "type": "oecd",
-    "code": "ALOS",
-    "dataset": "HEALTH_HCQU"
+    "type": "oecd_sdmx2",
+    "dataflow": "DSD_HEALTH_PROC@DF_KEY_INDIC",
+    "note": "OECD průměr = prostý průměr členských zemí s údajem za rok 2024 (30 zemí). Průměr EU = prostý průměr členských zemí EU v datech OECD (22 zemí), ne vážený agregát Eurostatu."
   },
   "signal_thresholds": {
     "good": 3,
@@ -29,11 +39,11 @@
   "frequency": "yearly",
   "stewards": [
     "ÚZIS",
-    "MZ ČR"
+    "OECD"
   ],
-  "method_notes": "ALOS je proxy efektivity — kratší pobyt při zachování kvality = lepší. Trend v ČR klesá díky DRG reformě.",
-  "limitations": "Srovnání ovlivněno case-mixem. Kratší hospitalizace nemusí vždy znamenat lepší výsledky pro pacienta.",
-  "patient_story": "Interní oddělení, pacientka po dekompenzaci srdečního selhání, propouštění po 9 dnech. To je v ČR typická délka hospitalizace pro tuto diagnózu. Průměr napříč všemi diagnózami v ČR je 7 dní — mírně nad OECD průměrem 6,5. Délka hospitalizace je proxy efektivity nemocniční péče a koordinace s ambulantním sektorem.\n\nPrůměrná délka hospitalizace v ČR je 7 dní (ÚZIS NRH, 2024). OECD průměr 6,5, EU 6,8 — Česko signal warn. Trend pomalu klesající (2010: 8,2; 2024: 7), tempo nedostatečné. Mezi diagnózami rozptyl: porody 3 dny, ortopedie 5–7 dnů, kardiochirurgie 8–10 dnů, akutní psychiatrie 25–35 dnů.\n\nStrukturálně český systém má delší hospitalizace než OECD průměr kvůli: vyššímu věku pacientů, multimorbiditě, defenzivní medicíně (delší observace „pro jistotu\"), pomalejšímu propouštění (čekání na sociální umístění — viz nevyuzite_osetrovaci_dny_ip), nedostatečné ambulantní rehabilitaci. Jednodenní chirurgie je v ČR podrozvinutá oproti UK NHS Best Practice Tariffs.\n\nDelší hospitalizace zvyšuje náklady (lůžkový den ~7 000 Kč v okresní, ~12 000 Kč ve fakultní) a riziko nozokomiálních infekcí (viz infekce_nosokomialni). Politické páky: rozšíření jednodenní chirurgie (model UK Day Surgery 70 % indikovaných); enhanced recovery after surgery (ERAS) protokoly; investice do ambulantní rehabilitace; integrace s LTC a domácí péčí (zkrácení sociálních hospitalizací). Indikátor v HSPA dashboardu sleduje délku hospitalizace jako klíčový ukazatel efektivity nemocniční péče.",
+  "method_notes": "Do 30. 10. 2026 indikátor uváděl seed 7 dní (2024) proti průměru OECD 6,5 se signálem warn. Hodnota 7 dní slučovala akutní a následnou péči, kdežto benchmark OECD platí jen pro léčebnou (akutní) péči, takže srovnání nebylo stejnorodé a signál byl obrácený. Od 30. 10. 2026 bere indikátor řadu OECD pro léčebnou péči (HC.1), ve které je Česko pod průměrem OECD. Kratší pobyt při zachování kvality je známkou efektivity, sám o sobě ale o kvalitě péče nevypovídá.",
+  "limitations": "Srovnání ovlivňuje skladba případů (case-mix) a to, jak země vymezují akutní lůžko a započítávají jednodenní péči. Kratší hospitalizace nemusí znamenat lepší výsledek pro pacienta: může jít i o dřívější překlad na lůžko následné péče, které se do akutní délky pobytu nezapočítá. Indikátor nezahrnuje psychiatrickou ani následnou a dlouhodobou lůžkovou péči.",
+  "patient_story": "Když pacientku po operaci kyčle převezou po pár dnech z chirurgie na rehabilitační lůžko, v datech o akutní péči tím její hospitalizace končí. Česko mělo v roce 2024 podle OECD průměrnou délku hospitalizace v léčebné (akutní) péči 5,7 dne. Průměr zemí OECD je 6,55 dne, průměr zemí Evropské unie 6,15 dne.\n\nČíslo je v posledních letech stabilní: 5,7 dne v roce 2019, 5,9 dne v covidovém roce 2021 a znovu 5,7 dne v roce 2024. Ze sousedů je kratší jen Polsko (4,8 dne), Maďarsko má stejně jako Česko. Rakousko vykazuje 6,1 dne, Slovensko 6,4, Slovinsko 6,5 a Německo 7,4 dne.\n\nŘadu let se o Česku tradovalo, že pacienty v nemocnicích drží zbytečně dlouho. Tento portál do října 2026 uváděl 7 dní proti průměru OECD 6,5, jenže to číslo slučovalo akutní a následnou péči. Při srovnání stejných věcí je akutní pobyt v Česku kratší než v průměrné zemi OECD. Problém vysoké spotřeby lůžkové péče v Česku leží jinde: v počtu hospitalizací na obyvatele, který patří k nejvyšším v OECD, a v tom, kolik pacientů po akutní fázi zůstává na lůžkách následné péče.\n\nDélka pobytu je užitečná hlavně jako kontrolní ukazatel. Když klesá, je dobré sledovat, jestli zároveň nestoupají rehospitalizace a překlady na následná lůžka. Kratší akutní pobyt je přínosem jen tehdy, když pacient odchází do péče, která na nemocnici plynule navazuje.",
   "framework": "hspa",
   "dimension": "kvalita"
 }

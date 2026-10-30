@@ -6,6 +6,15 @@ Formát: každá položka má `Datum`, `PR`, `Co`, `Proč`, `Důsledek`.
 
 ---
 
+## 2026-10-30 — Délka hospitalizace a zubaři podle OECD; průměr OECD pod 10 na dvě desetinná místa
+
+- **PR**: `claude/gallant-heisenberg-wibiow` (navazuje na opravu CT/MR)
+- **Co**: `prumerna_delka_hospitalizace` přešla ze seedu 7 dní (akutní + následná péče) proti OECD 6,5 na OECD `DF_KEY_INDIC`, léčebná péče HC.1: 5,7 dne proti průměru OECD 6,55 (2024), signál warn → good. `stomatologove_per_1000` ze seedu 0,78 („nadprůměr“, OECD 0,71) na OECD `DF_DNST`: 0,76, průměr OECD 0,76, EU 0,88, signál good → warn. Opraveny čtyři články s viditelnou poznámkou (domácí péče, hospitalizujeme nejvíc, občan v síti, okresní nemocnice), u přesunu péče z lůžek aktualizace. Fetcher `oecd_sdmx2` zaokrouhloval průměr OECD vždy na jedno desetinné místo (0,756 → 0,8) — pod 10 nově na dvě. Statické stránky `indikator-*.html` přegenerovány (zaostávaly i u CT/MR).
+- **Proč**: Seed nebyl srovnatelný s benchmarkem a obracel signál. Ostatních osm seed indikátorů ověřených týž den proti OECD (lékaři, sestry, výdaje % HDP, léky % HDP, přímé platby, psychiatrická lůžka, podíl praktiků, lékaři 55+) sedí; rozdíly v EU benchmarku jsou dané váženým agregátem EU27 vs. prostým průměrem, ne chybou.
+- **Důsledek**: **NEVRACET** tvrzení „Češi leží v nemocnici déle než průměr OECD“ — akutní pobyt je kratší. Nadužívání lůžek dokládá počet hospitalizací, ne jejich délka. Průměr EU u nových OECD indikátorů = prostý průměr členských zemí EU v datech OECD, napsat to do `benchmark_source.note`.
+
+---
+
 ## 2026-10-30 — CT a MR na milion obyvatel: živá data OECD místo seedu, oprava čtyř článků
 
 - **PR**: `claude/gallant-heisenberg-wibiow` (doladění dat DŘ + covery s grafy)

@@ -40,6 +40,11 @@ const OECD_MEMBERS = new Set([
   'SVK', 'SVN', 'ESP', 'SWE', 'CHE', 'TUR', 'GBR', 'USA',
 ]);
 
+function roundMean(v) {
+  const f = Math.abs(v) < 10 ? 100 : 10;
+  return Math.round(v * f) / f;
+}
+
 export function loadOecdSdmx2Mapping() {
   const file = path.join(ROOT, 'ingest', 'mapping', 'oecd_sdmx2_codes.json');
   if (!fs.existsSync(file)) return {};
@@ -124,7 +129,8 @@ export function parseOecdSdmx2(json, { dims = {}, refArea = 'CZE', trendYears = 
   const yearVals = byYearCountry[latestYear];
   if (yearVals) {
     const vals = Object.values(yearVals);
-    if (vals.length >= 5) oecd = Math.round((vals.reduce((a, b) => a + b, 0) / vals.length) * 10) / 10;
+    // pod 10 na dvě desetinná místa — 0,76 zaokrouhlené na 0,8 by obrátilo srovnání s ČR (0,76)
+    if (vals.length >= 5) oecd = roundMean(vals.reduce((a, b) => a + b, 0) / vals.length);
   }
 
   return {

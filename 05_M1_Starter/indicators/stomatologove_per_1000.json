@@ -9,12 +9,19 @@
   "direction": "higher_is_better",
   "data_source": {
     "primary": {
-      "type": "uzis_nrzp",
-      "note": "ÚZIS NRZP — sekce Zubní lékaři. ČSK paralelně publikuje seznam aktivních členů; obě evidence se kvůli režimu členství v komoře a registrace v NRZP překrývají, ale nejsou identické."
+      "type": "oecd_sdmx2",
+      "agency": "OECD.ELS.HD",
+      "dataflow": "DSD_HEALTH_REAC_EMP@DF_DNST",
+      "dims": {
+        "UNIT_MEASURE": "10P3HB",
+        "HEALTH_PROF": "DNST",
+        "HEALTH_PROF_ACTIVITY_STATUS": "P"
+      },
+      "note": "OECD Health Statistics, praktikující zubní lékaři na 1 000 obyvatel. Ověřeno živě 2026-10-30: ČR 0,76 (2024; 8 289 osob), průměr OECD 0,76 (32 zemí). OECD přebírá české údaje z NRZP."
     },
     "fallback": {
-      "type": "oecd",
-      "code": "DENTISTS_HEAD"
+      "type": "uzis_nrzp",
+      "note": "ÚZIS NRZP — sekce Zubní lékaři. ČSK paralelně publikuje seznam aktivních členů; obě evidence se překrývají, ale nejsou identické."
     },
     "regional": {
       "type": "csk_komora",
@@ -22,9 +29,9 @@
     }
   },
   "benchmark_source": {
-    "type": "oecd",
-    "code": "DENTISTS_HEAD",
-    "dataset": "HEALTH_STAT"
+    "type": "oecd_sdmx2",
+    "dataflow": "DSD_HEALTH_REAC_EMP@DF_DNST",
+    "note": "OECD průměr = prostý průměr členských zemí s údajem za rok 2024 (32 zemí). Průměr EU = prostý průměr členských zemí EU v datech OECD (26 zemí)."
   },
   "signal_thresholds": {
     "good": 2,
@@ -36,11 +43,11 @@
     "ČSK",
     "OECD"
   ],
-  "method_notes": "Hodnota za rok 2024 je head count, zahrnuje všechny aktivní stomatology bez ohledu na FTE. Zahrnuti jsou stomatologové ve smluvním vztahu s VZP/SZP i nesmluvní privátní praxe. Zubní instrumentářky a dentální hygienistky nejsou v indikátoru zahrnuty.",
-  "limitations": "Indikátor neodhaluje (1) věkovou strukturu (medián věku stomatologa v ČR překračuje 53 let, nad 60 let je více než 28 % aktivních stomatologů — ČSK 2024); (2) FTE — řada stomatologů nad 65 let pracuje na zkrácený úvazek; (3) regionální distribuci — Praha 1,3 / 1 000 vs. Karlovarský / Ústecký kraj 0,55–0,60 / 1 000; (4) podíl stomatologů přijímajících nové pacienty z VZP/SZP — odhady ČSK uvádějí, že v krajích s nejnižší dostupností je nových pacientů schopno přijmout < 15 % stomatologů.",
+  "method_notes": "Počet osob (head count) praktikujících zubních lékařů bez ohledu na úvazek, včetně nesmluvních praxí. Zubní instrumentářky a dentální hygienistky nejsou zahrnuty. Do 30. 10. 2026 indikátor uváděl seed 0,78 proti průměru OECD 0,71 a EU 0,74 se signálem good („nadprůměrná hustota“); podle OECD je Česko přesně na průměru OECD a pod průměrem EU.",
+  "limitations": "Indikátor neukazuje věkovou strukturu zubních lékařů, jejich úvazky, rozmístění mezi kraji ani to, kolik z nich má smlouvu se zdravotní pojišťovnou a přijímá nové pacienty. Právě to přitom o dostupnosti hrazené zubní péče rozhoduje víc než celkový počet.",
   "determinants": "**Demografie a stárnutí stomatologického stavu** — průměrný věk stomatologa v ČR roste o cca 0,3 roku ročně; absolventi LF (cca 280–310 ročně, ÚZIS) nestačí pokrývat odchody do důchodu (cca 320–370 ročně podle ČSK). \n\n**Migrace a praxe za hranicemi** — část absolventů odchází do Německa nebo Rakouska, kde výnos privátní praxe překračuje český průměr o 40–80 % (ČSK 2024). \n\n**Úhradové podmínky** — kapitační platba praktického stomatologa od pojišťoven (cca 64–72 Kč/měsíc/pojištěnec v 2026) je výrazně nižší než reálné náklady ordinace; přibližně 35–45 % výnosu praktické stomatologie tvoří přímé platby pacienta nebo příplatky (kompozit, endodoncie, extrakce zubu osmičky). \n\n**Vstupní kapacita LF** — počet uchazečů o zubní lékařství dlouhodobě převažuje, ale počet otevíraných míst je limitován kapacitou klinických cvičení (4 fakulty: LF UK Praha, LF UK Hradec Králové, LF MU Brno, LF UP Olomouc).",
   "importance": "Stomatologická péče je jediná část primární péče, kde Česká republika již dnes čelí strukturální nedostupnosti v plošně významném měřítku. Na rozdíl od specializované péče (kde čekací lhůty signalizují kapacitní problém) je u stomatologů problém v tom, že **noví pacienti nejsou vůbec přijímáni**. \n\nIndikátor odráží **rovnováhu mezi vstupy a odchody** v profesní pracovní síle a slouží jako predikční signál pro plánování kapacit lékařských fakult i pro úhradovou politiku. Zhoršující se hodnota je včasným varováním pro veřejné zdraví: nedostupnost preventivní stomatologické péče vede k vyšší prevalenci pokročilého kazu, parodontitidy a v populačním měřítku i ke zvýšené incidenci orofaciálních karcinomů, které se diagnostikují pozdě. \n\nPro regionální politiku je indikátor klíčový — Karlovarský, Ústecký a Liberecký kraj mají hustotu stomatologů 35–45 % pod průměrem ČR, což odpovídá deficitu cca 80–120 plných úvazků v každém z těchto krajů.",
-  "patient_story": "Stomatologická ambulance v menším městě Plzeňského kraje, 7 měsíců na nového pacienta. „Bohužel registrujeme jen omezený počet.\" Pacientka jde do druhé, do třetí ordinace — stejná odpověď. Nakonec se zaregistruje v samoplatebním režimu, ošetření 4 500 Kč za prohlídku a hygienu. To je v Česku reálná dostupnost — i přes nadprůměrnou hustotu stomatologů.\n\nHustota stomatologů v ČR je 0,78 na 1 000 obyvatel (ÚZIS NRPZS, 2024). OECD průměr 0,71, EU 0,74 — Česko signal good, nadprůměrné. Trend stabilní (2010: 0,73; 2024: 0,78). Paradox: dostatek stomatologů celkově, ale nedostatek v hrazené síti pro pojištěnce. Cca 20–25 % stomatologů přešlo na převážně samoplatební model (cosmetic dentistry, implantáty), což snižuje kapacitu pro běžnou hrazenou péči.\n\nStrukturálně český stomatologický systém má dvě paralelní vrstvy: hrazenou (pojišťovny hradí standardní stomatologickou péči — amalgamové výplně, extrakce, RTG), a samoplatební (estetické zákroky, implantáty, kovokeramické a metal-free korunky, ortodoncie pro dospělé). Standardní hrazený balík je technologicky zastaralý — pacient, který chce moderní materiály, doplácí. Stomatologové se přirozeně přesouvají do segmentu, kde mají vyšší výnos.\n\nStomatologie je v ČR specifický příklad dvourychlostní péče. Politické páky: reforma standardu hrazené stomatologie (rozšíření o sklo-ionomerové výplně, kompozity v viditelných lokalizacích); úprava úhradových sazeb (současné podfinancování standardu); rozšíření školní stomatologické prevence (dnes marginalizovaná); investice do regionálních vzdělávacích programů pro stomatology v hrazené síti. Indikátor v HSPA dashboardu sleduje hustotu stomatologů jako kontextový ukazatel kapacity — interpretovat nutno s rozlišením hrazené vs. samoplatební vrstvy.",
+  "patient_story": "Pacientka se přestěhuje do menšího města a hledá zubaře. Ve dvou ordinacích jí řeknou, že nové pacienty neberou, ve třetí ji vezmou jen za přímou platbu. Přitom zubních lékařů má Česko na obyvatele zhruba tolik jako průměrná vyspělá země. V roce 2024 jich podle OECD praktikovalo 8 289, tedy 0,76 na 1 000 obyvatel. Průměr zemí OECD je také 0,76, průměr zemí Evropské unie 0,88.\n\nPočet zubařů pomalu roste: v roce 2019 jich bylo 7 825 (0,73 na 1 000 obyvatel). Ze sousedů má víc Polsko (1,01) a Německo (0,86), zhruba stejně Maďarsko (0,79) a Slovinsko (0,77), méně Rakousko (0,63).\n\nTento portál do října 2026 uváděl, že Česko má zubařů nadprůměrně (0,78 proti průměru OECD 0,71 a EU 0,74). Podle dat OECD je to jinak: Česko je přesně na průměru OECD a pod průměrem EU.\n\nO tom, jestli se pacient k zubaři dostane, rozhoduje víc než celkový počet. Záleží na tom, kolik zubařů má smlouvu se zdravotní pojišťovnou, kolik jich ještě přijímá nové pacienty, jak jsou rozmístění mezi kraji a kolik jich se v příštích letech chystá do důchodu. Tato data indikátor neukazuje. Proto ho dobře doplňuje ukazatel nesplněné potřeby zubní péče: kolik lidí zubaře potřebovalo, a nedostalo se k němu.",
   "framework": "hspa",
   "dimension": "efektivita"
 }

@@ -3,6 +3,7 @@
 <head>
 <!--
   audit:
+    - OPRAVA 2026-10-30: indikátor prumerna_delka_hospitalizace byl seed 7 dní (akutní + následná péče) proti OECD 6,5 pro akutní péči, signál warn. Přepnut na OECD DF_KEY_INDIC, léčebná péče HC.1: ČR 5,7 dne (2024), průměr OECD 6,55, EU 6,15. Aktualizace (ne oprava chyby): text popisoval stav dashboardu správně; doplněna nová hodnota.
     last_reviewed: 2026-08-16
     reviewer: claude-code-agent
     status: draft
@@ -56,7 +57,7 @@
         "@id": "https://skorezdravotnictvi.cz/clanek-presun-pece-z-luzek"
       },
       "datePublished": "2026-08-16",
-      "dateModified": "2026-08-16",
+      "dateModified": "2026-10-30",
       "author": {
         "@type": "Organization",
         "name": "HSPA Monitor",
@@ -296,7 +297,7 @@
       <aside class="article-callout article-callout-caveat" aria-label="Metodická poznámka k délce hospitalizace">
         <p class="article-callout-h">Proč v tomto článku nenajdete „ležíme déle než OECD"</p>
         <p>
-          Do argumentace o nadužívání lůžek se běžně přidává průměrná délka hospitalizace: dashboard nese pro Česko 7,0 dne proti 6,5 dne v průměru OECD. <strong>Ta dvě čísla ale nejsou srovnatelná.</strong> Česká hodnota podle auditu z června 2026 agreguje akutní i následnou péči, zatímco benchmark OECD se týká výhradně akutní péče. Harmonizovaný český údaj ČSÚ za rok 2024 činí pro akutní péči <strong>5,5 dne</strong> (z 6,6 dne v roce 2010) — tedy pod průměrem OECD, s opačným znaménkem, než jaké by naivní srovnání naznačovalo. Argument o nadužívání lůžek stojí na <em>počtu</em> hospitalizací a jejich skladbě, ne na jejich délce; proto tu délku nepoužíváme.
+          Do argumentace o nadužívání lůžek se běžně přidává průměrná délka hospitalizace. Dashboard do října 2026 nesl pro Česko 7,0 dne proti 6,5 dne v průměru OECD, <strong>ta dvě čísla ale nebyla srovnatelná</strong>: česká hodnota slučovala akutní i následnou péči, benchmark OECD se týká jen akutní péče. Od 30. října 2026 dashboard uvádí řadu OECD pro akutní péči: 5,7 dne proti průměru 6,55. Harmonizovaný český údaj ČSÚ za rok 2024 činí pro akutní péči <strong>5,5 dne</strong> (z 6,6 dne v roce 2010) — tedy pod průměrem OECD, s opačným znaménkem, než jaké by naivní srovnání naznačovalo. Argument o nadužívání lůžek stojí na <em>počtu</em> hospitalizací a jejich skladbě, ne na jejich délce; proto tu délku nepoužíváme.
         </p>
       </aside>
 
