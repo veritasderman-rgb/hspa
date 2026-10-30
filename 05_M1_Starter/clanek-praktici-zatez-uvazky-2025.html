@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-10-30
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-10-30
+    creation_phase: refresh datove podpory dohodovaciho rizeni (NZIP, data k 31. 12. 2025)
+    form: analysis
+    primary_sources_count: 3
+    visual_elements_count: 3
+    notes: "Cisla spocetena primo z XLSX OIS-11-20 Zatez PLD: edice 2026-02 (Obdobi: rok 2025, zpracovano UZIS 24. 6. 2026) a edice 2026-01 (Obdobi: rok 2024), list Data, 86 okresu, bez zaverecneho radku 'Celkovy soucet'. Sloupce: 'Kapitace YYYY celkem' (26), 'Uvazek celkem' (20 = L1+L2+L3), 'PZS celkem' (8). 2025: kapitace 8 233 190, uvazky 5 353,8, PZS 5 525, kapitace/uvazek 1 538; 2024: 8 231 743 / 5 520,5 / 5 588 / 1 491. Zmena uvazku -3,0 %, kapitace +0,02 %, pomer +3,1 %. Kraje 2025: Praha 1 394, Olomoucky 1 449, Jihocesky 1 467, Kralovehradecky 1 485, Jihomoravsky 1 523, Moravskoslezsky 1 555, Plzensky 1 561, Liberecky 1 569, Zlinsky 1 575, Karlovarsky 1 578, Vysocina 1 585, Pardubicky 1 627, Stredocesky 1 645, Ustecky 1 716. Okresy 2025 max: Teplice 1 859, Kolin 1 837, Plzen-sever 1 828; min: Praha 1 1 126, Praha 6 1 168, Cesky Krumlov 1 220. Fyzicke osoby se scitaji po okresech a mohou dvojit lekare pusobici ve vice okresech, v textu proto neuvadime. Puvodni prevod UZIS dat v repu scital i radek Celkovy soucet (zdvojeni poctu poskytovatelu) - opraveno ve stejnem PR; pomery to neovlivnilo. Indikator registrovani_na_uvazek_pld. Esej ne. Ceka na schvaleni redakce."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pacientů stejně, praktiků méně. Na jeden úvazek připadá 1 538 lidí · HSPA Monitor</title>
+<meta name="description" content="Na jeden přepočtený úvazek praktického lékaře pro dospělé připadalo v roce 2025 v průměru 1 538 registrovaných pojištěnců, o 3,1 % víc než o rok dřív. Registrovaných lidí bylo stejně, úvazků ubylo o 3 %. Nejvytíženější jsou Ústecký a Středočeský kraj, nejméně Praha. Nová data ÚZIS.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Pacientů stejně, praktiků méně. Na jeden úvazek připadá 1 538 lidí">
+<meta property="og:description" content="Úvazků praktiků pro dospělé ubylo za rok o 3 %, registrovaných pojištěnců ne. V Ústeckém kraji připadá na úvazek o 322 lidí víc než v Praze.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-praktici-zatez-uvazky-2025.html">
+<meta property="article:section" content="Primární péče">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-praktici-zatez-uvazky-2025.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Primární péče</span>
+        <span class="article-tag article-tag-muted">praktičtí lékaři · kapitace · personální kapacity · kraje · dohodovací řízení</span>
+      </div>
+      <h1 class="article-title">Pacientů stejně, praktiků méně. Na jeden úvazek připadá 1 538 lidí</h1>
+      <p class="article-deck">
+        Na jeden přepočtený úvazek praktického lékaře pro dospělé připadalo v roce 2025 v průměru 1 538 registrovaných pojištěnců, o 3,1 % víc než o rok dřív. Registrovaných lidí bylo stejně, úvazků lékařů ubylo o 3 %. Nejvytíženější jsou ordinace v Ústeckém a Středočeském kraji, nejméně pražské.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">30. října 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">5 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+      <p class="article-lead">
+        Kolik lidí obslouží jeden praktik? Ústav zdravotnických informací a statistiky (ÚZIS) to zveřejňuje pro každý okres jako součást datové podpory dohodovacího řízení. Sada spojuje registrované pojištěnce, za které pojišťovny platí praktikům kapitaci, s přepočtenými úvazky lékařů v ordinacích. Máme teď dva roky, 2024 a 2025, a mezi nimi je vidět posun, který pacienti znají z telefonů do ordinací: lidí je stejně, lékařské kapacity ubylo.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avPldCntH">
+        <figcaption class="av-figure-h" id="avPldCntH">Praktici pro dospělé, 2024 → 2025 (ÚZIS, OIS-11-20)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="1538">1 538</span>
+            <span class="av-counter-label">registrovaných pojištěnců na 1 přepočtený úvazek lékaře (2025)</span>
+            <span class="av-counter-foot">2024: 1 491, tedy +3,1 %</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-display="5 354">5 354</span>
+            <span class="av-counter-label">přepočtených úvazků lékařů v ordinacích praktiků pro dospělé (2025)</span>
+            <span class="av-counter-foot">2024: 5 521, tedy −3,0 %</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-display="8,23 mil.">8,23 mil.</span>
+            <span class="av-counter-label">registrovaných pojištěnců (kapitace)</span>
+            <span class="av-counter-foot">prakticky beze změny proti roku 2024</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS ČR, datový souhrn OIS-11-20 Zátěž poskytovatelů — praktický lékař pro dospělé, edice 2026-01 (rok 2024) a 2026-02 (rok 2025). Výpočet redakce ze součtů za 86 okresů.</p>
+      </figure>
+
+      <h3>Ubývá kapacita, ne pacienti</h3>
+      <p>
+        V roce 2024 měli praktici pro dospělé zaregistrováno 8 231 743 pojištěnců, v roce 2025 8 233 190. Rozdíl je zanedbatelný. Přepočtených úvazků lékařů ale ubylo z 5 521 na 5 354, tedy o zhruba 167 plných úvazků. Zátěž jednoho úvazku proto vzrostla z 1 491 na 1 538 registrovaných.
+      </p>
+      <p>
+        Přepočtený úvazek není totéž co lékař. Praktik, který přešel na zkrácený úvazek, nebo lékař v důchodovém věku, který ordinuje jen tři dny v týdnu, sníží kapacitu, i když zůstane v registru. Data ÚZIS proto spíš než odchody lékařů měří, kolik práce systém dokáže nabídnout.
+      </p>
+
+      <h3>Ústecký kraj o 322 lidí na úvazek víc než Praha</h3>
+      <figure class="av-figure av-figure-wide" aria-labelledby="avPldKrajH">
+        <figcaption class="av-figure-h" id="avPldKrajH">Registrovaní pojištěnci na 1 úvazek praktika pro dospělé podle kraje, 2025</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="1800">
+          <li class="av-bar-row av-bar-row-bad" data-value="1716" data-display="1 716" data-label="Ústecký kraj"></li>
+          <li class="av-bar-row av-bar-row-bad" data-value="1645" data-display="1 645" data-label="Středočeský kraj"></li>
+          <li class="av-bar-row" data-value="1627" data-display="1 627" data-label="Pardubický kraj"></li>
+          <li class="av-bar-row" data-value="1585" data-display="1 585" data-label="Kraj Vysočina"></li>
+          <li class="av-bar-row" data-value="1578" data-display="1 578" data-label="Karlovarský kraj"></li>
+          <li class="av-bar-row" data-value="1575" data-display="1 575" data-label="Zlínský kraj"></li>
+          <li class="av-bar-row" data-value="1569" data-display="1 569" data-label="Liberecký kraj"></li>
+          <li class="av-bar-row" data-value="1561" data-display="1 561" data-label="Plzeňský kraj"></li>
+          <li class="av-bar-row" data-value="1555" data-display="1 555" data-label="Moravskoslezský kraj"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="1538" data-display="1 538" data-label="Česko"></li>
+          <li class="av-bar-row" data-value="1523" data-display="1 523" data-label="Jihomoravský kraj"></li>
+          <li class="av-bar-row" data-value="1485" data-display="1 485" data-label="Královéhradecký kraj"></li>
+          <li class="av-bar-row" data-value="1467" data-display="1 467" data-label="Jihočeský kraj"></li>
+          <li class="av-bar-row" data-value="1449" data-display="1 449" data-label="Olomoucký kraj"></li>
+          <li class="av-bar-row av-bar-row-good" data-value="1394" data-display="1 394" data-label="Hlavní město Praha"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS ČR, OIS-11-20, edice 2026-02. Kraj podle místa poskytování péče, ne podle bydliště pacienta.</p>
+      </figure>
+      <p>
+        Mezi kraji se zátěž liší víc, než se za rok změnil celostátní průměr. V Praze připadá na úvazek 1 394 registrovaných, v Ústeckém kraji 1 716. Ve všech krajích kromě Prahy, kde se hodnota téměř nepohnula, zátěž v roce 2025 vzrostla. Nejvíc v Ústeckém kraji (z 1 609) a v Libereckém kraji (z 1 466 na 1 569).
+      </p>
+      <p>
+        Na úrovni okresů jsou rozdíly ještě větší. Nejvíc registrovaných na úvazek měly v roce 2025 Teplice (1 859), Kolín (1 837) a Plzeň-sever (1 828), nejméně Praha 1 (1 126), Praha 6 (1 168) a Český Krumlov (1 220). Okresní čísla je třeba číst opatrně: pacienti dojíždějí za lékařem přes hranice okresů, a kde stojí ordinace, nemusí ještě říkat, kde bydlí její pacienti.
+      </p>
+
+      <h3>Co data neukazují</h3>
+      <p>
+        Kapitace počítá jen lidi, kteří praktika mají. Kdo se nemá kam zaregistrovat, v čísle chybí, a když takových lidí přibývá, zátěž na úvazek se tím paradoxně nezvýší. Údaj také neváží věk pacientů. Senior nad 80 let potřebuje péči častěji než třicátník, takže stejný počet registrovaných může v okrese se starší populací znamenat víc práce. A úvazek neříká, kolik hodin ordinace skutečně nabízí ani kolik práce převezme sestra.
+      </p>
+
+      <h3>Co z toho plyne</h3>
+      <p>
+        <strong>Pro pojišťovny a kraje:</strong> okresy jako Teplice nebo Kolín jsou kandidáty na cílené programy pro lékaře, kteří převezmou praxi, a na podporu sdružených praxí. Rozdíl mezi krajem s nejnižší a nejvyšší zátěží je přes 300 pacientů na úvazek.
+      </p>
+      <p>
+        <strong>Pro ministerstvo:</strong> data teď existují po okresech a ročně. Hodí se jako měřítko pro rozmisťování rezidenčních míst a pro hodnocení, zda bonifikace v úhradové vyhlášce přivádějí lékaře tam, kde chybí.
+      </p>
+      <p>
+        <strong>HSPA Monitor:</strong> zátěž praktiků sledujeme jako nový indikátor <a href="indicator.html?id=registrovani_na_uvazek_pld">Registrovaní pojištěnci na 1 úvazek praktického lékaře pro dospělé</a>. Generační obměnu v dětské primární péči ukazuje indikátor <a href="indicator.html?id=pldd_podil_65plus">podíl praktických lékařů pro děti a dorost ve věku 65+</a>.
+      </p>
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=registrovani_na_uvazek_pld"><strong>Registrovaní pojištěnci na 1 úvazek praktického lékaře pro dospělé</strong></a> — 1 538 (2025, ÚZIS · OIS-11-20)</li>
+        <li><a href="indicator.html?id=pldd_podil_65plus"><strong>Podíl praktických lékařů pro děti a dorost ve věku 65+</strong></a> — 34,6 % (2023, ÚZIS)</li>
+        <li><a href="indicator.html?id=podil_lekaru_55plus"><strong>Podíl lékařů ve věku 55 a více let</strong></a></li>
+      </ul>
+      <p>Související články: <a href="clanek-starnuti-lekaru.html">Skoro každý druhý praktik brzy do důchodu</a> · <a href="clanek-reforma-primarni-pece-2027.html">Praktik jako uzel systému</a> · <a href="clanek-podil-prakticti-lekari.html">Málo praktiků, hodně specialistů</a></p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">ÚZIS ČR · NZIP, datová podpora dohodovacího řízení (staženo 30. 10. 2026)</h5>
+        <ul class="article-sources-list">
+          <li><strong>OIS-11-20 Zátěž vybraných poskytovatelů zdravotních služeb — praktický lékař pro dospělé</strong> — edice 2026-02 (rok 2025) a 2026-01 (rok 2024); okresy, úvazky lékařů L1–L3, kapitace podle věku. <a href="https://www.nzip.cz/data/2362-primarni-pece-zatez-pld-datovy-souhrn" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+          <li><strong>Datová podpora dohodovacího řízení</strong> — přehled všech sad a jejich edic. <a href="https://www.nzip.cz/dohodovaci-rizeni" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Poměry dopočítala redakce jako součet kapitací dělený součtem přepočtených úvazků za všechny okresy; závěrečný souhrnný řádek souboru se nezapočítává. Krajské hodnoty jsou vážené stejně.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+  </article>
+</main>
+<footer class="bottom" id="siteFooter"></footer>
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
