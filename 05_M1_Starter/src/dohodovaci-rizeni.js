@@ -17,6 +17,8 @@ const STATUS_LABEL = {
 };
 
 let _chart = null;
+// detail sady může mít víc grafů najednou (řady po jednotkách + žebříček)
+let _detailCharts = [];
 
 async function init() {
   if (typeof window === 'undefined') return;
@@ -142,7 +144,23 @@ function renderLanding(root, data) {
           <p>Data jsou agregovaná, bez osobních údajů. Nejde o HSPA indikátory výkonnosti — viz <a href="index.html">Indikátory</a> a <a href="hspa-prehled.html">HSPA přehled</a>.</p>
         </div>
       </div>
+      ${
+        data.data_policy
+          ? `<div class="dr-policy">
+              <h4>${escapeHtml(data.data_policy.title)}</h4>
+              <p>${escapeHtml(data.data_policy.text)}
+                <a href="${escapeHtml(data.data_policy.url)}" target="_blank" rel="noopener">Koncepce na NZIP ↗</a>${
+                  data.data_policy.pdf
+                    ? ` · <a href="${escapeHtml(data.data_policy.pdf)}" target="_blank" rel="noopener">PDF ↗</a>`
+                    : ''
+                }</p>
+            </div>`
+          : ''
+      }
     </section>`;
+
+  const announcedHtml = renderAnnounced(data.announced, dims);
+  const editionNotesHtml = renderEditionNotes(data.edition_notes, byOis(datasets));
 
   const interactive = data.interactive_only || [];
   const interactiveHtml = interactive.length
@@ -173,7 +191,80 @@ function renderLanding(root, data) {
     : '';
 
   root.innerHTML =
-    heroHtml + analyzaCtaHtml + dimsGridHtml + sectionsHtml + interactiveHtml + provenanceHtml;
+    heroHtml +
+    analyzaCtaHtml +
+    dimsGridHtml +
+    sectionsHtml +
+    announcedHtml +
+    interactiveHtml +
+    editionNotesHtml +
+    provenanceHtml;
+}
+
+function byOis(datasets) {
+  return new Map(datasets.map((d) => [d.ois_code, d]));
+}
+
+/* Sady, které ÚZIS ohlásil, ale zatím nepublikoval — stav přebírá veřejnou prezentaci ÚZIS. */
+function renderAnnounced(announced, dims) {
+  const items = announced?.items || [];
+  if (!items.length) return '';
+  const dimOf = new Map(dims.map((d) => [d.id, d]));
+  const checked = announced.checked_at ? formatIsoDate(announced.checked_at) : '';
+  return `
+    <section class="dr-announced" id="ohlasene" aria-labelledby="drAnnHead">
+      <div class="ed-kicker">Ve vývoji</div>
+      <h3 id="drAnnHead">Ohlášené, zatím nepublikované sady</h3>
+      <p class="dr-dim-section-desc">${items.length} ${plural(items.length, 'sada', 'sady', 'sad')}, které ÚZIS zařadil do datové podpory dohodovacího řízení, ale zatím nevydal${
+        checked ? ` (kontrola NZIP ${escapeHtml(checked)})` : ''
+      }. Stav podle <a href="${escapeHtml(announced.source?.url || '')}" target="_blank" rel="noopener">${escapeHtml(
+        announced.source?.title || 'prezentace ÚZIS',
+      )} ↗</a>.</p>
+      <ul class="dr-announced-list">
+        ${items
+          .map((it) => {
+            const dim = dimOf.get(it.dimension);
+            const style = dim ? ` style="--dr-dim-color:${escapeHtml(dim.color)}"` : '';
+            return `<li class="dr-announced-item"${style}>
+              <span class="dr-announced-num">${escapeHtml(it.number)}</span>
+              <div>
+                <strong>${escapeHtml(it.title)}</strong>
+                <p>${escapeHtml(it.description)}</p>
+                <p class="dr-announced-status">${escapeHtml(it.status)}</p>
+                ${it.hspa_relevance ? `<p class="dr-announced-why">Proč na tom záleží: ${escapeHtml(it.hspa_relevance)}</p>` : ''}
+              </div>
+            </li>`;
+          })
+          .join('')}
+      </ul>
+    </section>`;
+}
+
+/* Poznámky k edicím: revize starších let, zlomy řad, zadržené edice, opravy převodu. */
+function renderEditionNotes(notes, datasetsByOis) {
+  if (!notes?.length) return '';
+  return `
+    <section class="dr-edition-notes" aria-labelledby="drEdHead">
+      <div class="ed-kicker">Metodické poznámky</div>
+      <h3 id="drEdHead">Co se mezi edicemi změnilo</h3>
+      <ul class="dr-interactive-list">
+        ${notes
+          .map((n) => {
+            const ds = datasetsByOis.get(n.ois_code);
+            const link = ds ? `dohodovaci-rizeni.html?id=${encodeURIComponent(ds.id)}` : null;
+            const head = link
+              ? `<a href="${escapeHtml(link)}">${escapeHtml(n.ois_code)} · ${escapeHtml(n.title)}</a>`
+              : `<strong>${escapeHtml(n.ois_code)} · ${escapeHtml(n.title)}</strong>`;
+            return `<li class="dr-edition-note">${head}<p>${escapeHtml(n.text)}</p></li>`;
+          })
+          .join('')}
+      </ul>
+    </section>`;
+}
+
+function formatIsoDate(iso) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+  return m ? `${Number(m[3])}. ${Number(m[2])}. ${m[1]}` : iso;
 }
 
 /* ======================= STRATEGICKÁ ANALÝZA ======================= */
@@ -597,6 +688,13 @@ function renderDetail(root, data, id) {
 
   const vizHtml = renderViz(ds);
 
+  const notes = (data.edition_notes || []).filter((n) => n.ois_code === ds.ois_code);
+  const editionHtml = notes.length
+    ? `<div class="dr-detail-block dr-detail-edition"><h3>Poznámka k edici</h3>${notes
+        .map((n) => `<p><strong>${escapeHtml(n.title)}.</strong> ${escapeHtml(n.text)}</p>`)
+        .join('')}</div>`
+    : '';
+
   const intlHtml = renderInternational(ds.international);
 
   const externalHtml =
@@ -647,6 +745,7 @@ function renderDetail(root, data, id) {
       ${headline}
       ${roleHtml}
       ${saysHtml}
+      ${editionHtml}
       ${vizHtml}
       ${intlHtml}
       ${externalHtml}
@@ -665,8 +764,21 @@ function renderViz(ds) {
     ? `<p class="dr-method-note">${escapeHtml(ds.method_note)}</p>`
     : '';
   if (Array.isArray(ds.series) && ds.series.length) {
-    return `<div class="dr-detail-block"><h3>Časová řada</h3>
-      <div class="dr-chart-wrap"><canvas id="drChart" aria-label="Graf časové řady"></canvas></div>${note}</div>`;
+    // řady s různou jednotkou (např. pacientoměsíce a mld. Kč) nesdílejí osu — graf na jednotku
+    const groups = seriesByUnit(ds.series);
+    const charts = groups
+      .map(
+        (g, i) => `<div class="dr-chart-wrap"><canvas id="drChartS${i}" aria-label="Graf časové řady — ${escapeHtml(
+          g.unit,
+        )}"></canvas></div>`,
+      )
+      .join('');
+    const hasRanked = ds.ranked && Array.isArray(ds.ranked.items) && ds.ranked.items.length;
+    const rankedHtml = hasRanked
+      ? `<div class="dr-detail-block"><h3>${escapeHtml(ds.ranked.label || 'Žebříček')}</h3>
+      <div class="dr-chart-wrap dr-chart-tall"><canvas id="drChartR" aria-label="Žebříčkový graf"></canvas></div></div>`
+      : '';
+    return `<div class="dr-detail-block"><h3>Časová řada</h3>${charts}${note}</div>${rankedHtml}`;
   }
   if (ds.pyramid) {
     return `<div class="dr-detail-block"><h3>Věková pyramida pracovníků</h3>
@@ -683,10 +795,25 @@ function renderViz(ds) {
   return '';
 }
 
+function seriesByUnit(series) {
+  const groups = [];
+  for (const s of series) {
+    const unit = s.unit || '';
+    let g = groups.find((x) => x.unit === unit);
+    if (!g) groups.push((g = { unit, series: [] }));
+    g.series.push(s);
+  }
+  return groups;
+}
+
 function wireViz(ds) {
   if (ds.status !== 'ready') return;
-  if (Array.isArray(ds.series) && ds.series.length) drawLineChart(ds);
-  else if (ds.pyramid) drawPyramid(ds);
+  _detailCharts.forEach((c) => c.destroy());
+  _detailCharts = [];
+  if (Array.isArray(ds.series) && ds.series.length) {
+    seriesByUnit(ds.series).forEach((g, i) => drawLineChart(g.series, g.unit, `drChartS${i}`));
+    if (ds.ranked && Array.isArray(ds.ranked.items) && ds.ranked.items.length) drawRankedBars(ds, 'drChartR');
+  } else if (ds.pyramid) drawPyramid(ds);
   else if (ds.ranked && Array.isArray(ds.ranked.items) && ds.ranked.items.length) drawRankedBars(ds);
 }
 
@@ -709,12 +836,12 @@ function reduceMotion() {
   return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
-function drawLineChart(ds) {
-  const canvas = document.getElementById('drChart');
+function drawLineChart(series, unit, canvasId) {
+  const canvas = document.getElementById(canvasId);
   if (!canvas || typeof window.Chart === 'undefined') return;
   const palette = ['#b8361e', '#0b5394', '#1f7a4d', '#a05a08', '#7c3a8d'];
-  const years = ds.series[0]?.points.map((p) => p.year) || [];
-  const datasets = ds.series.map((s, i) => ({
+  const years = series[0]?.points.map((p) => p.year) || [];
+  const datasets = series.map((s, i) => ({
     label: s.label,
     data: s.points.map((p) => p.value),
     borderColor: palette[i % palette.length],
@@ -723,8 +850,7 @@ function drawLineChart(ds) {
     pointRadius: 2,
     tension: 0.25,
   }));
-  if (_chart) _chart.destroy();
-  _chart = new window.Chart(canvas.getContext('2d'), {
+  const chart = new window.Chart(canvas.getContext('2d'), {
     type: 'line',
     data: { labels: years, datasets },
     options: {
@@ -733,9 +859,10 @@ function drawLineChart(ds) {
       animation: reduceMotion() ? false : { duration: 900 },
       interaction: { mode: 'index', intersect: false },
       plugins: { legend: { position: 'bottom' } },
-      scales: { y: { beginAtZero: true, title: { display: true, text: ds.series[0]?.unit || '' } } },
+      scales: { y: { beginAtZero: true, title: { display: true, text: unit || '' } } },
     },
   });
+  _detailCharts.push(chart);
 }
 
 function drawPyramid(ds) {
@@ -813,12 +940,12 @@ function renderInternational(intl) {
     ${intl.source?.name ? `<p class="dr-intl-src">Zdroj srovnání: ${escapeHtml(intl.source.name)}</p>` : ''}</div>`;
 }
 
-function drawRankedBars(ds) {
-  const canvas = document.getElementById('drChart');
+function drawRankedBars(ds, canvasId = 'drChart') {
+  const canvas = document.getElementById(canvasId);
   if (!canvas || typeof window.Chart === 'undefined') return;
   const items = ds.ranked.items;
-  if (_chart) _chart.destroy();
-  _chart = new window.Chart(canvas.getContext('2d'), {
+  if (canvasId === 'drChart' && _chart) _chart.destroy();
+  const chart = new window.Chart(canvas.getContext('2d'), {
     type: 'bar',
     data: {
       labels: items.map((it) => it.name),
@@ -841,6 +968,8 @@ function drawRankedBars(ds) {
       },
     },
   });
+  if (canvasId === 'drChart') _chart = chart;
+  else _detailCharts.push(chart);
 }
 
 /* ======================= POMOCNÉ ======================= */

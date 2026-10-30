@@ -5,6 +5,7 @@
 //   ingest/mapping/nzip_dohodovaci_rizeni_catalog.json  — katalog 44 sad (crawl NZIP)
 //   ingest/nzip-extracts/*.json                         — datové extrakty (transform)
 //   ingest/dohodovaci-rizeni-content.json               — redakční overlay (ručně psaný)
+//   ingest/dohodovaci-rizeni-ohlasene.json              — ohlášené sady, poznámky k edicím, rámec NZIS
 //
 // Výstup: data/dohodovaci-rizeni.json
 //
@@ -23,6 +24,7 @@ const STARTER = path.resolve(__dirname, '..');
 const CATALOG = path.join(__dirname, 'mapping', 'nzip_dohodovaci_rizeni_catalog.json');
 const CONTENT = path.join(__dirname, 'dohodovaci-rizeni-content.json');
 const ANALYZA = path.join(__dirname, 'dohodovaci-rizeni-analyza.json');
+const OHLASENE = path.join(__dirname, 'dohodovaci-rizeni-ohlasene.json');
 const EXTRACTS = path.join(__dirname, 'nzip-extracts');
 const PRISTROJE = path.join(EXTRACTS, 'sss-04-02-pristroje-vyvoj-cr.json');
 const OUT = path.join(STARTER, 'data', 'dohodovaci-rizeni.json');
@@ -185,6 +187,8 @@ function main() {
     dataset_ids: datasets.filter((ds) => ds.dimension === dim.id).map((ds) => ds.id),
   }));
 
+  const ohlasene = fs.existsSync(OHLASENE) ? JSON.parse(fs.readFileSync(OHLASENE, 'utf8')) : {};
+
   const out = {
     version: '1.0',
     generated_at: new Date().toISOString(),
@@ -210,6 +214,9 @@ function main() {
     strategic_analysis: fs.existsSync(ANALYZA)
       ? JSON.parse(fs.readFileSync(ANALYZA, 'utf8')).strategic_analysis
       : null,
+    announced: ohlasene.announced || null,
+    edition_notes: ohlasene.edition_notes || [],
+    data_policy: ohlasene.data_policy || null,
     interactive_only: (catalog.interactive_visualizations || []).map((v) => ({
       page_id: v.page_id,
       title: v.title,

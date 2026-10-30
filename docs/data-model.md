@@ -574,9 +574,20 @@ indikátory** — jde o provozní a ekonomická data dohodovacího řízení (zd
                        "uses_3d": false, "engine": "chartjs", "fallback_2d": "...", "rationale": "..." },
     "source": { "name": "...", "publisher": "...", "nzip_page": "...", "latest_file": "..." }
   }],
+  "announced": { "source": { "title": "...", "url": "...", "as_of": "2026-02-25" }, "checked_at": "2026-10-30",
+                 "items": [ { "number": "6.4", "dimension": "d6", "title": "...", "description": "...",
+                              "status": "...", "hspa_relevance": "..." } ] },
+  "edition_notes": [ { "ois_code": "OIS-11-06", "title": "...", "text": "..." } ],
+  "data_policy": { "title": "...", "text": "...", "url": "...", "pdf": "..." },
   "interactive_only": [ { "page_id": "1909", "title": "...", "nzip_page": "..." } ]
 }
 ```
+
+`announced`, `edition_notes` a `data_policy` přebírá builder z ručně psaného
+`ingest/dohodovaci-rizeni-ohlasene.json` (ohlášené, zatím nepublikované sady se
+stavem podle veřejné prezentace ÚZIS; poznámky k revizím, zlomům a zadrženým
+edicím; rámec zveřejňování dat NZIS). Když ohlášená sada vyjde, přesune se
+z `announced.items` do katalogu.
 
 Pipeline:
 
@@ -586,7 +597,11 @@ ingest/transform_dohodovaci_rizeni.js       XLSX → ingest/nzip-extracts/{OIS}.
 ingest/build-dohodovaci-rizeni.js           katalog + extrakty + overlay → data/dohodovaci-rizeni.json
 ```
 
-Spuštění celé pipeline: `npm run data:dohodovaci-rizeni`. Redakční overlay
+Spuštění celé pipeline: `npm run data:dohodovaci-rizeni`. Transform u sad
+z refreshe 2026-10 čte roky ze souboru (záhlaví „Rok 2025 – …“, listy „Rok 2025“,
+titulní řádek „Hodnocené období: rok 2025“) — nová edice proto nevyžaduje úpravu
+kódu, dokud ÚZIS nezmění rozvržení tabulky. Edici, která v titulku uvádí podezřelé
+období, lze v katalogu zadržet (vynechat z `editions`, důvod do `edition_hold_note`). Redakční overlay
 (role, interpretace, mezinárodní srovnání, vizualizační rozvaha) je ručně psaný
 `ingest/dohodovaci-rizeni-content.json`. XLSX parsuje `ingest/lib/xlsx.js`
 (wrapper nad SheetJS). Validátor: `npm run validate:dohodovaci-rizeni`.

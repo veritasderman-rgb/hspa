@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-10-30
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-10-30
+    creation_phase: refresh datove podpory dohodovaciho rizeni (NZIP, data k 31. 12. 2025)
+    form: analysis
+    primary_sources_count: 10
+    visual_elements_count: 2
+    notes: "Vsechna cisla z primarnich XLSX datove podpory DR na NZIP, stazeno 30. 10. 2026, prevod ingest/transform_dohodovaci_rizeni.js (extrakty ingest/nzip-extracts/*.json): OIS-11-50 ed. 2026-02 celkove naklady ALP 2021 251,3 / 2024 298,5 / 2025 323,3 mld (+8,3 % r/r, +29 % od 2021); OIS-11-17 ed. 2026-01 osobni naklady luzkove pece 2019 107,6 / 2024 167,41 / 2025 180,12 mld (+7,6 %); OIS-11-12 ed. 2026-01 vazeny prumer platu (platova sfera, vahy uvazky 2024 z OIS-11-13) lekar 2024 126 722 / 2025 131 693 (+3,9 %), 2023 107 164 (2024 +18,3 %), sestra 2024 61 738 / 2025 64 029 (+3,7 %), pomer 2,06; OIS-11-28 ed. 2026-03 nasmlouvana luzka akutni 2010 54 136 / 2019 47 376 / 2024 48 036 / 2025 46 018 (-2 018, -4,2 %; minimum rady), nasledna a dlouhodoba 2024 28 551 / 2025 29 096; OIS-11-25 ed. 2026-02 HP ALP 2025 1 775 868 (CZ-DRG 2026) vs ed. 2026-01 2024 1 792 276 (-0,9 %); OIS-11-06 ed. 2026-01 uhrady centrove leky 2023 36,14 / 2024 40,70 / 2025 43,82 mld (+7,7 %), predchozi edice 2024 39,81; OIS-11-41 vyjezdy ZZS 2025 1 088 908 (ed. 2026-02) vs 2024 1 055 707 (ed. 2026-01) +3,1 %; OIS-11-38 prevzeti od ZZS na UP 2025 846 030 vs 2024 825 011 +2,5 %; OIS-11-08 ZUM 2023 17,4 / 2024 18,7 / 2025 20,6 mld (+10,2 %); OIS-11-30 kontakty komunitni osetrovatelske pece 2023 7,38 / 2024 8,05 / 2025 8,71 mil. (+8,3 %); OIS-11-51 centralizace 92,3 % (2025); OIS-11-20 1 538 registrovanych/uvazek PLD. Ohlasene sady: verejna prezentace UZIS na NZIP (prehled k 25. 2. 2026), hub zkontrolovan 30. 10. 2026. Nominalni hodnoty bez ocisteni o inflaci. Esej ne. Ceka na schvaleni redakce."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nemocnice za 323 miliard, o dva tisíce akutních lůžek méně. Co ukazují nová data pro jednání o úhradách · HSPA Monitor</title>
+<meta name="description" content="ÚZIS vydal datovou podporu dohodovacího řízení s daty za rok 2025. Náklady nemocnic akutní péče vzrostly na 323 miliard korun, o 8,3 % za rok. Platy lékařů a sester rostly o necelá 4 %. Akutních lůžek ubylo dva tisíce, nejvíc od roku 2013. Centrové léky stály 43,8 miliardy. Přehled toho, co nová data ukazují a co v nich zatím chybí.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Nemocnice za 323 miliard, o dva tisíce akutních lůžek méně. Co ukazují nová data pro jednání o úhradách">
+<meta property="og:description" content="Datová podpora dohodovacího řízení za rok 2025: náklady nemocnic +8,3 %, platy +4 %, akutní lůžka −2 018, centrové léky 43,8 mld. Kč.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-data-dohodovaci-rizeni-2025.html">
+<meta property="article:section" content="Financování">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-data-dohodovaci-rizeni-2025.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Financování</span>
+        <span class="article-tag article-tag-muted">dohodovací řízení · ÚZIS · náklady nemocnic · platy · lůžkový fond · centrové léky</span>
+      </div>
+      <h1 class="article-title">Nemocnice za 323 miliard, o dva tisíce akutních lůžek méně. Co ukazují nová data pro jednání o úhradách</h1>
+      <p class="article-deck">
+        ÚZIS vydal novou datovou podporu dohodovacího řízení s daty za rok 2025. Náklady nemocnic akutní péče vzrostly na 323 miliard korun, o 8,3 % za rok. Průměrné platy lékařů a sester v platové sféře rostly o necelá 4 %. Akutních lůžek ubylo přes dva tisíce, nejvíc od roku 2013, a je jich nejméně od roku 2010, kdy začíná řada. Centrové léky stály 43,8 miliardy.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">30. října 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">7 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+      <p class="article-lead">
+        Pojišťovny a poskytovatelé každý rok vyjednávají o úhradách na další rok. Aby se nepřeli o čísla, zveřejňuje Ústav zdravotnických informací a statistiky (ÚZIS) na portálu NZIP desítky datových souhrnů: o cenách léků, platech, výkonech, lůžkách a nákladech nemocnic. Většina z nich teď poprvé obsahuje celý rok 2025. Prošli jsme všech 44 sad, které HSPA Monitor zpracovává, a 25 z nich jsme obnovili. Tady je výběr toho, co nového ukazují.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avDr25TabH">
+        <figcaption class="av-figure-h" id="avDr25TabH">Rok 2025 v datech pro dohodovací řízení</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Ukazatel</th>
+                <th scope="col" class="av-num">2024</th>
+                <th scope="col" class="av-num">2025</th>
+                <th scope="col" class="av-num">Změna</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Celkové náklady nemocnic akutní péče</th><td class="av-num">298,5 mld. Kč</td><td class="av-num">323,3 mld. Kč</td><td class="av-num av-bad">+8,3 %</td></tr>
+              <tr><th scope="row">Osobní náklady poskytovatelů lůžkové péče</th><td class="av-num">167,4 mld. Kč</td><td class="av-num">180,1 mld. Kč</td><td class="av-num">+7,6 %</td></tr>
+              <tr><th scope="row">Průměrný plat lékaře (platová sféra)</th><td class="av-num">126 722 Kč</td><td class="av-num">131 693 Kč</td><td class="av-num">+3,9 %</td></tr>
+              <tr><th scope="row">Průměrný plat sestry (platová sféra)</th><td class="av-num">61 738 Kč</td><td class="av-num">64 029 Kč</td><td class="av-num">+3,7 %</td></tr>
+              <tr><th scope="row">Nasmlouvaná akutní lůžka</th><td class="av-num">48 036</td><td class="av-num">46 018</td><td class="av-num av-bad">−4,2 %</td></tr>
+              <tr><th scope="row">Hospitalizace v akutní lůžkové péči</th><td class="av-num">1,79 mil.</td><td class="av-num">1,78 mil.</td><td class="av-num">−0,9 %</td></tr>
+              <tr><th scope="row">Úhrady za centrové léky</th><td class="av-num">40,7 mld. Kč</td><td class="av-num">43,8 mld. Kč</td><td class="av-num">+7,7 %</td></tr>
+              <tr><th scope="row">Úhrady za zvlášť účtovaný materiál</th><td class="av-num">18,7 mld. Kč</td><td class="av-num">20,6 mld. Kč</td><td class="av-num">+10,2 %</td></tr>
+              <tr><th scope="row">Výjezdy záchranné služby</th><td class="av-num">1,06 mil.</td><td class="av-num">1,09 mil.</td><td class="av-num">+3,1 %</td></tr>
+              <tr><th scope="row">Kontakty komunitní ošetřovatelské péče</th><td class="av-num">8,05 mil.</td><td class="av-num">8,71 mil.</td><td class="av-num av-good">+8,3 %</td></tr>
+              <tr><th scope="row">Registrovaní na 1 úvazek praktika pro dospělé</th><td class="av-num">1 491</td><td class="av-num">1 538</td><td class="av-num av-bad">+3,1 %</td></tr>
+              <tr><th scope="row">Péče určená k centralizaci provedená v centrech</th><td class="av-num">91,8 %</td><td class="av-num">92,3 %</td><td class="av-num">+0,5 p. b.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS ČR, datová podpora dohodovacího řízení na NZIP (sady OIS-11-50, 11-17, 11-12, 11-28, 11-25, 11-06, 11-08, 11-41, 11-30, 11-20, 11-51), edice 2026-01 až 2026-03, staženo 30. 10. 2026. Nominální hodnoty. Výpočet redakce.</p>
+      </figure>
+
+      <h3>Nemocnice zdražují rychleji než platy</h3>
+      <p>
+        Celkové náklady poskytovatelů akutní lůžkové péče dosáhly v roce 2025 podle výkazů 323,3 miliardy korun. Rok předtím to bylo 298,5 miliardy, v roce 2021 251,3 miliardy. Za čtyři roky tak náklady vzrostly o 29 %, bez očištění o inflaci. Největší položkou jsou osobní náklady: u všech poskytovatelů lůžkové péče vzrostly za rok o 7,6 % na 180,1 miliardy.
+      </p>
+      <p>
+        Průměrné platy přitom rostly zhruba poloviční rychlostí. Lékař v nemocnici, která je příspěvkovou organizací, bral v roce 2025 průměrně 131 693 Kč měsíčně, o 3,9 % víc než v roce 2024. Sestra nebo porodní asistentka 64 029 Kč, o 3,7 % víc. Data neříkají, proč osobní náklady rostou rychleji. Mohou za tím být přesčasy, noví zaměstnanci, odvody nebo nemocnice v obchodních společnostech, které odměňují mzdou a do průměrných platů nespadají.
+      </p>
+      <p>
+        Rok 2025 byl pro lékaře klidnější než předchozí. Mezi lety 2023 a 2024 vzrostl jejich průměrný plat o 18,3 %, po sporu o přesčasovou práci. Sestry ve stejném roce dostaly o 5,6 % víc. Lékař tak dnes v průměru bere 2,06násobek platu sestry, v roce 2023 to bylo 1,83násobku. Obě řady sledujeme jako nové indikátory <a href="indicator.html?id=plat_lekare_platova_sfera">plat lékaře</a> a <a href="indicator.html?id=plat_sestry_platova_sfera">plat sestry</a>.
+      </p>
+
+      <h3>Akutních lůžek je nejméně od roku 2010</h3>
+      <p>
+        Sada o lůžkovém fondu nově sahá až do roku 2010. Počet nasmlouvaných akutních lůžek v ní klesal do roku 2019 (z 54 136 na 47 376), pak se zastavil kolem 48 tisíc. V roce 2025 ho ale ubylo 2 018 na 46 018. Tak velký meziroční pokles data ukazují naposledy v roce 2013 a tak nízký stav za celé období od roku 2010 ne. Následných a dlouhodobých lůžek mírně přibylo, z 28 551 na 29 096. Hospitalizací v akutní péči bylo o 0,9 % méně, kolem 1,78 milionu.
+      </p>
+      <p>
+        Pokles může odrážet přeměnu akutních lůžek na následná, kterou ministerstvo i pojišťovny podporují, ale také rušení oddělení kvůli nedostatku sester. Data ÚZIS příčinu neuvádějí a nerozlišují ani, zda se lůžko zrušilo, nebo jen přestalo být nasmlouvané. Krajský rozpad i vývoj obložnosti zveřejňuje sada <a href="dohodovaci-rizeni.html?id=ois-11-28">Lůžkový fond akutní, následné a dlouhodobé péče</a>.
+      </p>
+
+      <h3>Léky a materiál: dvojciferné tempo</h3>
+      <p>
+        Za centrové léky, tedy biologickou a cílenou léčbu vázanou na specializovaná centra, zaplatily pojišťovny v roce 2025 43,8 miliardy korun, o 7,7 % víc než o rok dřív. Nová edice přitom přepočítala i starší roky a rozšířila počet terapeutických oblastí. Rok 2024 v ní vychází na 40,7 miliardy, ne na 39,8 miliardy, jak uváděla starší edice a náš srpnový <a href="clanek-centrove-leky-2026.html">článek o centrových lécích</a>. Nejvíc rostla léčba krevních nádorů, z 6,8 na 8,3 miliardy. Léčba spinální svalové atrofie naopak druhý rok po sobě zlevnila, z 2,1 miliardy v roce 2023 na 1,4 miliardy v roce 2025, při zhruba stejném počtu 230 až 240 pacientů.
+      </p>
+      <p>
+        Úhrady za zvlášť účtovaný materiál, tedy implantáty, kardiostimulátory nebo materiál pro katetrizace, vzrostly o 10,2 % na 20,6 miliardy. Nejdražší skupinou jsou prostředky pro intenzivní a invazivní kardiologii za 4 miliardy korun.
+      </p>
+
+      <h3>Víc výjezdů, víc péče doma</h3>
+      <p>
+        Záchranná služba vyjela v roce 2025 1 088 908krát, o 3,1 % víc než v roce 2024. Urgentní příjmy nemocnic vykázaly 846 tisíc převzetí pacienta od záchranky. Rychle roste komunitní ošetřovatelská péče, tedy hlavně domácí péče: počet kontaktů stoupl za dva roky z 7,4 na 8,7 milionu. Její náklady ÚZIS zatím nezveřejňuje. Čekají na referenční síť poskytovatelů, kterou ústav buduje od roku 2025.
+      </p>
+
+      <h3>Co v datech zatím chybí</h3>
+      <p>
+        ÚZIS ohlásil deset dalších sad, které zatím nevyšly. Pro hodnocení výkonnosti systému jsou tři nejdůležitější. <strong>Čekací lhůty</strong> na vybrané služby v nemocnicích, které závisejí na tom, jak se rozjede elektronická žádanka. <strong>Míra rehospitalizací</strong> po jednodenní péči, tedy zda se pacienti po rychlém zákroku nevracejí do nemocnice. A <strong>náklady pro přerozdělování pojistného</strong>, podle kterých se dělí vybrané peníze mezi pojišťovny. Poslední sada má podle ÚZIS vyjít ve druhé polovině roku 2026 po ověření pojišťovnami. Celý seznam s jejich stavem udržujeme na stránce <a href="dohodovaci-rizeni.html#ohlasene">datové podpory dohodovacího řízení</a>.
+      </p>
+      <p>
+        U několika sad jsme narazili na problémy, které jsme ÚZIS nemohli ověřit. V sadě o lázních má rok 2025 do posledního čísla stejné hodnoty jako rok 2024, proto ho nezobrazujeme. Dvě sady o jednodenní péči a krátkých hospitalizacích uvádějí v nejnovějších edicích starší období než edice předchozí. Na stránce proto necháváme ověřenou předchozí edici. A objem výkonů jednodenní péče se v roce 2025 zdvojnásobil, hlavně kvůli novému vykazování anesteziologických výkonů. Jako růst zákroků ho proto nečteme.
+      </p>
+
+      <h3>Co z toho plyne</h3>
+      <p>
+        <strong>Pro jednání o úhradách:</strong> náklady nemocnic rostou o 8 % ročně, zatímco celé úhrady v roce 2027 mají podle ministerstva vzrůst přibližně o 5 %. Rozdíl budou nemocnice hledat v počtu lůžek, personálu a materiálu.
+      </p>
+      <p>
+        <strong>Pro ÚZIS:</strong> sady by měly mít jednotné označení období v titulku a souboru a u revizí poznámku, co se proti předchozí edici změnilo. U centrových léků a genových terapií se bez ní nedá poznat, zda jde o vývoj, nebo o přepočet.
+      </p>
+      <p>
+        <strong>HSPA Monitor:</strong> z této vlny dat přibyly čtyři indikátory: <a href="indicator.html?id=centralizace_cvsp_podil">centralizace péče</a>, <a href="indicator.html?id=registrovani_na_uvazek_pld">zátěž praktiků</a> a platy <a href="indicator.html?id=plat_lekare_platova_sfera">lékařů</a> a <a href="indicator.html?id=plat_sestry_platova_sfera">sester</a>. Podrobně o nich píšeme v článcích <a href="clanek-centralizace-cvsp-data-2025.html">Infarkt jede do centra, nádor často ne</a> a <a href="clanek-praktici-zatez-uvazky-2025.html">Pacientů stejně, praktiků méně</a>.
+      </p>
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=plat_lekare_platova_sfera"><strong>Průměrný měsíční plat lékaře (platová sféra)</strong></a> — 131 693 Kč (2025, ÚZIS · OIS-11-12)</li>
+        <li><a href="indicator.html?id=plat_sestry_platova_sfera"><strong>Průměrný měsíční plat sestry a porodní asistentky (platová sféra)</strong></a> — 64 029 Kč (2025, ÚZIS · OIS-11-12)</li>
+        <li><a href="indicator.html?id=naklady_centrove_leky_total"><strong>Úhrady za centrové léky</strong></a> — 43,8 mld. Kč (2025, ÚZIS · OIS-11-06)</li>
+        <li><a href="indicator.html?id=registrovani_na_uvazek_pld"><strong>Registrovaní pojištěnci na 1 úvazek praktického lékaře pro dospělé</strong></a> — 1 538 (2025, ÚZIS · OIS-11-20)</li>
+        <li><a href="indicator.html?id=centralizace_cvsp_podil"><strong>Péče určená k centralizaci provedená v centrech</strong></a> — 92,3 % (2025, ÚZIS · OIS-11-51)</li>
+      </ul>
+      <p>Související články: <a href="clanek-uhrady-2027-podepsana-vyhlaska-vykony.html">Úhrady 2027 jsou podepsané</a> · <a href="clanek-dohodovaci-rizeni-2027-vysledek.html">Dohodovací řízení 2027</a> · <a href="clanek-centrove-leky-2026.html">Centrové léky</a></p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">ÚZIS ČR · NZIP, datová podpora dohodovacího řízení (staženo 30. 10. 2026)</h5>
+        <ul class="article-sources-list">
+          <li><strong>OIS-11-50 Komplexní datový výstup poskytovatelů akutní lůžkové péče</strong> — edice 2026-02, roky 2021–2025, celkové náklady dle výkazu E 6-02. <a href="https://www.nzip.cz/data/2714-palp-komplexni-vystup-datovy-souhrn" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+          <li><strong>OIS-11-17 Nákladová struktura poskytovatelů lůžkové péče</strong> — edice 2026-01, roky 2019–2025. <a href="https://www.nzip.cz/data/2376-luzkova-pece-nakladova-struktura-datovy-souhrn" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+          <li><strong>OIS-11-12 Vývoj průměrných platů a mezd — odměňování</strong> — edice 2026-01, roky 2019–2025. <a href="https://www.nzip.cz/clanek/2371-odmenovani-platy-mzdy-datovy-souhrn" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+          <li><strong>OIS-11-28 Lůžkový fond akutní, následné a dlouhodobé péče</strong> — edice 2026-03, roky 2010–2025. <a href="https://www.nzip.cz/data/2378-luzkovy-fond-akutni-nasledna-dlouhodoba-pece-datovy-souhrn" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+          <li><strong>OIS-11-25 Hospitalizační případy akutní lůžkové péče dle IČZ a CZ-DRG</strong> — edice 2026-02 (rok 2025) a 2026-01 (rok 2024). <a href="https://www.nzip.cz/data/2364-hospitalizacni-pripady-akutni-pece-icz-cz-drg-datovy-souhrn" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+          <li><strong>OIS-11-06 Centrové léky</strong> — edice 2026-01, roky 2023–2025. <a href="https://www.nzip.cz/data/2367-centrove-leky-datovy-souhrn" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+          <li><strong>OIS-11-08 Prostředky zdravotnické techniky (zvlášť účtovaný materiál)</strong> — edice 2026-01, roky 2023–2025. <a href="https://www.nzip.cz/data/2359-prostredky-zdravotnicke-techniky-zvlast-uctovany-material-datovy-souhrn" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+          <li><strong>OIS-11-41 Produkce poskytovatelů ZZS a přepravy</strong> a <strong>OIS-11-38 Data o urgentních příjmech</strong> — edice 2026-02 (rok 2025) a 2026-01 (rok 2024). <a href="https://www.nzip.cz/data/2658-produkce-poskytovatele-zzs-datovy-souhrn" target="_blank" rel="noopener">nzip.cz ↗</a> · <a href="https://www.nzip.cz/data/2384-urgentni-prijmy-datovy-souhrn" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+          <li><strong>OIS-11-30 Vývoj produkce poskytovatelů ošetřovatelské péče</strong> — edice 2026-01, roky 2023–2025. <a href="https://www.nzip.cz/clanek/2379-produkce-poskytovatele-zdravotnich-sluzeb-osetrovatelska-pece-datovy-souhrn" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+          <li><strong>Otevřená data NZIS pro účely dohodovacího řízení</strong> — úvodní prezentace ÚZIS, přehled sad a jejich stavu k 25. 2. 2026 (ohlášené sady). <a href="https://www.nzip.cz/data/dohodovaci-rizeni/uvodni-prezentace/uvodni-prezentace.pdf" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Ministerstvo zdravotnictví</h5>
+        <ul class="article-sources-list">
+          <li><strong>Tisková zpráva MZ z 26. 10. 2026</strong> — podpis úhradové vyhlášky pro rok 2027, růst nákladů na zdravotní služby „přibližně o 5 procent“. <a href="https://mzd.gov.cz/tiskove-centrum-mz/ministr-vojtech-podepsal-uhradovou-vyhlasku-pro-rok-2027-prioritou-je-financni-stabilita-dostupnejsi-pece-a-podpora-regionalnich-nemocnic/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Všechny hodnoty jsou nominální. Meziroční změny dopočítala redakce. U výjezdů záchranné služby, urgentních příjmů a hospitalizací pochází rok 2024 z předchozí edice téže sady. Platy jsou vážené průměry za příspěvkové organizace, ne mzdy v soukromých nemocnicích.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+  </article>
+</main>
+<footer class="bottom" id="siteFooter"></footer>
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>

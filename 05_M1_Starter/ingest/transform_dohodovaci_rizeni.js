@@ -5,12 +5,17 @@
 //
 // Vlna 1: dimenze 2 — personální zabezpečení (OIS 11-12 … 11-16).
 //
+// Refresh 2026-10 (edice s daty k 31. 12. 2025): sady, které ÚZIS vydal
+// znovu, čtou rok ze souboru — ze záhlaví sloupců („Rok 2025 – …"), z názvů
+// listů („Rok 2025", „2025") nebo z titulního řádku („Hodnocené období: rok
+// 2025"). Pevné roky zůstávají jen u sad, jejichž edice se nezměnila.
+//
 // Spuštění:  node ingest/transform_dohodovaci_rizeni.js
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { readSheet, findHeaderRow, num, txt } from './lib/xlsx.js';
+import { readSheet, sheetNames, findHeaderRow, num, txt } from './lib/xlsx.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -18,6 +23,60 @@ const CACHE = path.join(ROOT, 'ingest', 'cache', 'dohodovaci-rizeni');
 const OUT = path.join(ROOT, 'ingest', 'nzip-extracts');
 
 const YEARS_19_24 = [2019, 2020, 2021, 2022, 2023, 2024];
+
+/* sloupce, jejichž záhlaví nese rok: [{ year, col }] vzestupně podle roku */
+function yearCols(headerRow, mustContain = '') {
+  const out = [];
+  (headerRow || []).forEach((c, col) => {
+    const t = txt(c);
+    if (mustContain && !t.includes(mustContain)) return;
+    const m = /\b(20\d{2})\b/.exec(t);
+    if (m) out.push({ year: Number(m[1]), col });
+  });
+  return out.sort((a, b) => a.year - b.year || a.col - b.col);
+}
+
+/* listy pojmenované rokem („2025", „Rok 2025", „rok 2025") → [{ sheet, year }] vzestupně */
+function yearSheets(file) {
+  return sheetNames(path.join(CACHE, file))
+    .map((sheet) => {
+      const m = /^\s*(?:rok\s*)?(20\d{2})\s*$/i.exec(sheet);
+      return m ? { sheet, year: Number(m[1]) } : null;
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.year - b.year);
+}
+
+/* referenční rok z titulních řádků listu („Rok 2025", „Hodnocené období: rok 2025",
+   „Období: rok 2025") — bere jen řádek s jediným rokem, rozsah „2019–2025" ignoruje */
+function periodYear(rows) {
+  for (const r of rows.slice(0, 20)) {
+    if (!r) continue;
+    for (const c of r) {
+      const t = txt(c);
+      const m = /^(?:hodnocené\s+)?(?:období:\s*)?rok\s+(20\d{2})$/i.exec(t);
+      if (m) return Number(m[1]);
+    }
+  }
+  return null;
+}
+
+/* součet hodnot ve sloupcích idx; je-li poslední sloupec souhrnem ostatních
+   (blok „CELKEM" za pojišťovnami), vezme jen ten — jinak by se dvojitě sčítalo */
+function sumExclTotal(row, idx) {
+  const vals = idx.map((i) => num(row[i]) || 0);
+  if (vals.length > 2) {
+    const last = vals[vals.length - 1];
+    const rest = vals.slice(0, -1).reduce((a, b) => a + b, 0);
+    if (last > 0 && Math.abs(last - rest) <= Math.max(1, rest * 0.005)) return last;
+  }
+  return vals.reduce((a, b) => a + b, 0);
+}
+
+/* index sloupce podle (části) názvu v záhlaví */
+function colOf(headerRow, label) {
+  return (headerRow || []).findIndex((c) => txt(c).includes(label));
+}
 
 /* ---- OIS-11-13: kapacity / úvazky (FTE) — zároveň váhy pro 11-12 ---- */
 function readUvazky() {
@@ -87,30 +146,31 @@ function transformOIS1112(weights) {
   const rows = readSheet(path.join(CACHE, 'OIS-11-12.xlsx'), 'data');
   const h = findHeaderRow(rows, { mustContain: ['Kód DRZAR', 'Odměňování'] });
   const body = rows.slice(h + 1);
-  // sloupce: 0 DRZAR, 3 kategorie, 4 povolání, 5 odměňování, 6..11 = 2019..2024
+  // sloupce dle záhlaví (edice 2026-01 posunula tabulku o sloupec a přidala rok 2025)
+  const hr = rows[h];
+  const cDrzar = colOf(hr, 'Kód DRZAR');
+  const cKat = colOf(hr, 'Kategorie název');
+  const cPov = colOf(hr, 'Povolání');
+  const cOdm = colOf(hr, 'Odměňování');
+  const ycols = yearCols(hr, 'Rok');
   const cats = [
     { cat: 'Lékaři', key: 'lekari', label: 'Lékaři' },
     { cat: 'ZPBD - Sestry a porodní asistentky', key: 'sestry', label: 'Sestry a porodní asistentky' },
     { cat: 'Farmaceuti', key: 'farmaceuti', label: 'Farmaceuti' },
   ];
   const series = [];
-  let coverage = { matched: 0, total: 0 };
   for (const { cat, key, label } of cats) {
-    const points = YEARS_19_24.map((y, yi) => {
+    const points = ycols.map(({ year: y, col }) => {
       let wSum = 0;
       let wxSum = 0;
       for (const r of body) {
-        if (!r || txt(r[3]) !== cat || txt(r[5]) !== 'Plat') continue;
-        const wkey = `${txt(r[0])}|${txt(r[4])}|${txt(r[5])}`;
+        if (!r || txt(r[cKat]) !== cat || txt(r[cOdm]) !== 'Plat') continue;
+        const wkey = `${txt(r[cDrzar])}|${txt(r[cPov])}|${txt(r[cOdm])}`;
         const w = weights.get(wkey) || 0;
-        const val = num(r[6 + yi]);
+        const val = num(r[col]);
         if (val == null || w <= 0) continue;
         wSum += w;
         wxSum += val * w;
-        if (yi === 5) {
-          coverage.total++;
-          coverage.matched++;
-        }
       }
       return { year: y, value: wSum > 0 ? round(wxSum / wSum, 0) : null };
     }).filter((p) => p.value != null);
@@ -122,11 +182,11 @@ function transformOIS1112(weights) {
     source_file: 'OIS-11-12.xlsx',
     extracted_at: new Date().toISOString(),
     method_note:
-      'Národní průměr vážený přepočtenými úvazky (zdroj vah: OIS 11-13, rok 2024). Pouze platová sféra (příspěvkové organizace).',
+      'Národní průměr vážený přepočtenými úvazky (zdroj vah: OIS 11-13, rok 2024 — sada úvazků zatím rok 2025 neobsahuje, váhy se proto drží na roce 2024 pro celou řadu). Pouze platová sféra (příspěvkové organizace). Zdroj odměn: roční výkazy E (MZ) 2-01, 3-01, 4-01.',
     headline: {
       value: lekariLast?.value ?? null,
       unit: 'Kč / měsíc',
-      year: lekariLast?.year ?? 2024,
+      year: lekariLast?.year ?? null,
       label: 'Průměrný plat lékaře (vážený)',
     },
     series,
@@ -141,11 +201,16 @@ function transformISPV(file, oisCode, kind) {
     { code: '2212', label: 'Lékaři specialisté' },
     { code: '2221', label: 'Všeobecné sestry' },
   ];
-  const periods = [
-    { sheet: 0, label: '1. pol. 2024' },
-    { sheet: 1, label: 'rok 2024' },
-    { sheet: 2, label: '1. pol. 2025' },
-  ];
+  // období z názvů listů: „Mzda_1.pol.2024" → 1. pol. 2024, „Plat_2025" → rok 2025
+  const periods = sheetNames(path.join(CACHE, file))
+    .map((name, sheet) => {
+      const half = /1\.\s*pol\.?\s*(20\d{2})/i.exec(name);
+      if (half) return { sheet, label: `1. pol. ${half[1]}`, year: Number(half[1]), full: false };
+      const yr = /_(20\d{2})\s*$/.exec(name);
+      return yr ? { sheet, label: `rok ${yr[1]}`, year: Number(yr[1]), full: true } : null;
+    })
+    .filter(Boolean);
+  const lastFull = periods.filter((p) => p.full).slice(-1)[0];
   const series = wantGroups.map((g) => ({ key: g.code, label: g.label, unit: 'Kč / měsíc (medián)', points: [] }));
   let pravePraktici = null;
   for (const per of periods) {
@@ -167,7 +232,7 @@ function transformISPV(file, oisCode, kind) {
       const median = num(r[2]);
       const s = series.find((x) => x.key === grp.code);
       if (median != null) s.points.push({ period: per.label, value: round(median, 0) });
-      if (grp.code === '2212' && per.sheet === 1) pravePraktici = median;
+      if (grp.code === '2212' && per === lastFull) pravePraktici = median;
     }
   }
   const filled = series.filter((s) => s.points.length > 0);
@@ -181,7 +246,7 @@ function transformISPV(file, oisCode, kind) {
     headline: {
       value: pravePraktici != null ? round(pravePraktici, 0) : filled[0]?.points.slice(-1)[0]?.value ?? null,
       unit: 'Kč / měsíc',
-      year: 2024,
+      year: lastFull?.year ?? null,
       label: `Medián ${kind === 'plat' ? 'platu' : 'mzdy'} — lékaři specialisté`,
     },
     series_periods: filled,
@@ -300,7 +365,9 @@ function transformOIS1127() {
   const rows = readSheet(path.join(CACHE, 'OIS-11-27.xlsx'), 'ošetřovací dny');
   const h = findHeaderRow(rows, { mustContain: ['PZS IČO', 'oš.dnů'] });
   const body = rows.slice(h + 1);
-  const years = YEARS_19_24;
+  const ycols = yearCols(rows[h], 'oš.dnů');
+  const years = ycols.map((c) => c.year);
+  const last = years.length - 1;
   const byObor = new Map();
   const totals = years.map(() => 0);
   for (const r of body) {
@@ -308,15 +375,15 @@ function transformOIS1127() {
     const obor = txt(r[8]) || 'neuvedeno';
     if (!byObor.has(obor)) byObor.set(obor, years.map(() => 0));
     const acc = byObor.get(obor);
-    years.forEach((y, i) => {
-      const v = num(r[10 + i]);
+    ycols.forEach(({ col }, i) => {
+      const v = num(r[col]);
       if (v != null) {
         acc[i] += v;
         totals[i] += v;
       }
     });
   }
-  const top = [...byObor.entries()].sort((a, b) => b[1][5] - a[1][5]).slice(0, 4);
+  const top = [...byObor.entries()].sort((a, b) => b[1][last] - a[1][last]).slice(0, 4);
   const series = [
     { key: 'celkem', label: 'Celkem ČR', unit: 'ošetřovací dny', points: years.map((y, i) => ({ year: y, value: totals[i] })) },
     ...top.map(([obor, vals], i) => ({
@@ -332,9 +399,9 @@ function transformOIS1127() {
     extracted_at: new Date().toISOString(),
     method_note: 'Součet ošetřovacích dnů následné a dlouhodobé lůžkové péče za ČR a top 4 obory pracoviště.',
     headline: {
-      value: totals[5],
+      value: totals[last],
       unit: 'ošetřovacích dnů',
-      year: 2024,
+      year: years[last],
       label: 'Produkce následné a dlouhodobé péče',
     },
     series,
@@ -346,28 +413,41 @@ function transformOIS1140() {
   const rows = readSheet(path.join(CACHE, 'OIS-11-40.xlsx'), 'data');
   const h = findHeaderRow(rows, { mustContain: ['PZS IČO'] });
   const body = rows.slice(h + 1);
-  const years = [2019, 2020, 2021, 2022];
+  const ycols = yearCols(rows[h], 'množství');
+  const years = ycols.map((c) => c.year);
+  let last = years.length - 1;
   const pat = years.map(() => 0);
   const leceni = years.map(() => 0);
   for (const r of body) {
     if (!r || r[0] == null) continue;
     const druh = txt(r[8]);
     const nazev = txt(r[9]);
-    years.forEach((y, i) => {
-      const v = num(r[10 + i]) || 0;
+    ycols.forEach(({ col }, i) => {
+      const v = num(r[col]) || 0;
       if (druh === 'Unikátní pacienti') pat[i] += v;
       if (nazev.includes('za léčení')) leceni[i] += v;
     });
+  }
+  // edice 2026-02 má sloupec 2025 shodný s 2024 do posledního čísla (zjevně nevyplněný) —
+  // poslední rok, který přesně kopíruje předchozí v obou řadách, se nepublikuje
+  let heldYear = null;
+  if (last > 0 && pat[last] === pat[last - 1] && leceni[last] === leceni[last - 1]) {
+    heldYear = years.pop();
+    pat.pop();
+    leceni.pop();
+    last -= 1;
   }
   return {
     ois_code: 'OIS-11-40',
     source_file: 'OIS-11-40.xlsx',
     extracted_at: new Date().toISOString(),
-    method_note: 'Unikátní pacienti a ošetřovací dny (položka „za léčení") lázeňské a ozdravné péče, ČR.',
+    method_note: `Unikátní pacienti a ošetřovací dny (položka „za léčení") lázeňské a ozdravné péče, ČR.${
+      heldYear ? ` Sloupec ${heldYear} je v souboru ÚZIS totožný s předchozím rokem (pravděpodobně nevyplněný), proto se nezobrazuje.` : ''
+    }`,
     headline: {
-      value: pat[3],
+      value: pat[last],
       unit: 'unikátních pacientů',
-      year: 2022,
+      year: years[last],
       label: 'Pacienti lázeňské a ozdravné péče',
     },
     series: [
@@ -414,32 +494,48 @@ function transformOIS1137() {
 
 /* ---- OIS-11-51: centralizace DRG skupin ---- */
 function transformOIS1151() {
-  const rows = readSheet(path.join(CACHE, 'OIS-11-51.xlsx'), 'Sheet1');
-  const h = findHeaderRow(rows, { mustContain: ['DRG skupina'] });
-  const body = rows.slice(h + 1).filter((r) => r && r[0] != null);
-  // 2 centralizace ano/ne, 4 HP celkem, 6 HP v CVSP, 8 HP mimo CVSP
-  let hpAno = 0;
-  let hpIn = 0;
-  const items = [];
-  for (const r of body) {
-    if (txt(r[2]).toLowerCase() !== 'ano') continue;
-    hpAno += num(r[4]) || 0;
-    hpIn += num(r[6]) || 0;
-    items.push({ name: txt(r[1]), value: num(r[8]) || 0 });
+  // edice 2026-02: jeden list na rok („rok 2024", „rok 2025"); starší edice měla jediný „Sheet1"
+  const file = 'OIS-11-51.xlsx';
+  const sheets = yearSheets(file);
+  const plan = sheets.length ? sheets : [{ sheet: 'Sheet1', year: null }];
+  const points = [];
+  let items = [];
+  let lastStats = null;
+  for (const { sheet, year } of plan) {
+    const rows = readSheet(path.join(CACHE, file), sheet);
+    const h = findHeaderRow(rows, { mustContain: ['DRG skupina'] });
+    const body = rows.slice(h + 1).filter((r) => r && r[0] != null);
+    // 2 centralizace ano/ne, 4 HP celkem, 6 HP v CVSP, 8 HP mimo CVSP
+    let hpAno = 0;
+    let hpIn = 0;
+    const its = [];
+    for (const r of body) {
+      if (txt(r[2]).toLowerCase() !== 'ano') continue;
+      hpAno += num(r[4]) || 0;
+      hpIn += num(r[6]) || 0;
+      its.push({ name: txt(r[1]), value: num(r[8]) || 0 });
+    }
+    its.sort((a, b) => b.value - a.value);
+    const y = year ?? periodYear(rows);
+    points.push({ year: y, value: round((hpIn / hpAno) * 100, 1) });
+    items = its;
+    lastStats = { year: y, hp_urcene: Math.round(hpAno), hp_v_cvsp: Math.round(hpIn), hp_mimo_cvsp: Math.round(hpAno - hpIn) };
   }
-  items.sort((a, b) => b.value - a.value);
+  const last = points[points.length - 1];
   return {
     ois_code: 'OIS-11-51',
-    source_file: 'OIS-11-51.xlsx',
+    source_file: file,
     extracted_at: new Date().toISOString(),
     method_note:
-      'Pouze DRG skupiny určené k centralizaci dle úhradové vyhlášky. Centralizace = podíl hospitalizačních případů v centrech vysoce specializované péče (CVSP).',
+      'Pouze DRG skupiny určené k centralizaci dle úhradové vyhlášky. Centralizace = podíl hospitalizačních případů v centrech vysoce specializované péče (CVSP). Edice 2026-02 počítá oba roky (2024 i 2025) ve stejné verzi CZ-DRG 2026, roky jsou proto srovnatelné; starší edice (CZ-DRG 6.0) dávala pro rok 2024 podobných 91,8 %.',
     headline: {
-      value: round((hpIn / hpAno) * 100, 1),
+      value: last?.value ?? null,
       unit: '% případů v centrech',
-      year: null,
+      year: last?.year ?? null,
       label: 'Centralizace péče určené k soustředění',
     },
+    snapshot: lastStats,
+    series: [{ key: 'podil_cvsp', label: 'Podíl případů v centrech (CVSP)', unit: '%', points }],
     ranked: {
       label: 'Top 12 určených DRG dle počtu případů mimo centra',
       unit: 'hospitalizačních případů',
@@ -478,16 +574,19 @@ const STAMP = () => new Date().toISOString();
 
 /* ---- OIS-11-25: počty hospitalizačních případů akutní lůžkové péče ---- */
 function transformOIS1125() {
-  const rows = readSheet(path.join(CACHE, 'OIS-11-25.xlsx'), 'CZ-DRG 6.0');
+  // první list = verze CZ-DRG platná pro hodnocený rok (2026-02: „CZ-DRG 2026"; další list je výhled)
+  const sheet = sheetNames(path.join(CACHE, 'OIS-11-25.xlsx')).find((s) => s.startsWith('CZ-DRG'));
+  const rows = readSheet(path.join(CACHE, 'OIS-11-25.xlsx'), sheet);
   const h = findHeaderRow(rows, { mustContain: ['IČZ', 'Počet HP'] });
   const body = rows.slice(h + 2).filter((r) => r && r[3] != null);
   const totHP = sumCol(body, 5);
+  const year = yearCols(rows[h], 'Počet HP')[0]?.year ?? periodYear(rows);
   return {
     ois_code: 'OIS-11-25',
     source_file: 'OIS-11-25.xlsx',
     extracted_at: STAMP(),
-    method_note: 'Hospitalizační případy akutní lůžkové péče dle CZ-DRG, rok 2024 (NRHZS).',
-    headline: { value: totHP, unit: 'hospitalizačních případů', year: 2024, label: 'Akutní hospitalizace ČR' },
+    method_note: `Hospitalizační případy akutní lůžkové péče dle ${sheet}, rok ${year} (NRHZS).`,
+    headline: { value: totHP, unit: 'hospitalizačních případů', year, label: 'Akutní hospitalizace ČR' },
     ranked: { label: 'Top 12 DRG skupin dle počtu hospitalizací', unit: 'hospitalizačních případů', items: rankedBy(body, 4, 5) },
   };
 }
@@ -536,7 +635,7 @@ function transformOIS1138() {
     source_file: 'OIS-11-38.xlsx',
     extracted_at: STAMP(),
     method_note: 'Výkony 09564 (péče spojená s převzetím pacienta od ZZS) vykázané na urgentních příjmech, celé IČZ.',
-    headline: { value: Math.round(sumCol(body, 8)), unit: 'výkonů převzetí od ZZS', year: 2024, label: 'Převzetí pacientů od ZZS' },
+    headline: { value: Math.round(sumCol(body, 8)), unit: 'výkonů převzetí od ZZS', year: periodYear(rows), label: 'Převzetí pacientů od ZZS' },
     ranked: { label: 'Top 12 pracovišť dle převzetí pacientů od ZZS', unit: 'výkonů', items: rankedBy(body, 3, 8) },
   };
 }
@@ -552,8 +651,8 @@ function transformOIS1139() {
     ois_code: 'OIS-11-39',
     source_file: 'OIS-11-39.xlsx',
     extracted_at: STAMP(),
-    method_note: 'Pokrytí hospitalizačních případů referenčními nemocnicemi (RN) jako podíl z celkového počtu HP ČR.',
-    headline: { value: round((hpRN / hpCR) * 100, 1), unit: '% případů v referenční síti', year: 2024, label: 'Pokrytí referenční sítí' },
+    method_note: 'Pokrytí hospitalizačních případů referenčními nemocnicemi (RN) jako podíl z celkového počtu HP ČR. Od edice 2026-02 ÚZIS uvádí dva scénáře složení sítě; použit scénář 1.',
+    headline: { value: round((hpRN / hpCR) * 100, 1), unit: '% případů v referenční síti', year: periodYear(rows), label: 'Pokrytí referenční sítí' },
     ranked: { label: 'Top 12 DRG skupin dle počtu hospitalizací ČR', unit: 'hospitalizačních případů', items: rankedBy(body, 1, 2) },
   };
 }
@@ -568,7 +667,7 @@ function transformOIS1145() {
     source_file: 'OIS-11-45.xlsx',
     extracted_at: STAMP(),
     method_note: 'Hospitalizační případy ve skupinách sledovaných z hlediska centralizace do center vysoce specializované péče.',
-    headline: { value: Math.round(sumCol(body, 2)), unit: 'hospitalizačních případů', year: 2024, label: 'Případy sledované pro centralizaci' },
+    headline: { value: Math.round(sumCol(body, 2)), unit: 'hospitalizačních případů', year: periodYear(rows), label: 'Případy sledované pro centralizaci' },
     ranked: { label: 'Top 12 DRG skupin dle počtu hospitalizací', unit: 'hospitalizačních případů', items: rankedBy(body, 1, 2) },
   };
 }
@@ -636,20 +735,35 @@ function transformOIS1149() {
 
 /* ---- OIS-11-50: komplexní výstup poskytovatelů akutní lůžkové péče ---- */
 function transformOIS1150() {
-  const rows = readSheet(path.join(CACHE, 'OIS-11-50.xlsx'), '2024');
+  // edice 2026-02: jediný list „2021–2025" se sloupcem Rok (0); starší edice měla list za rok
+  const file = 'OIS-11-50.xlsx';
+  const sheet = sheetNames(path.join(CACHE, file))[0];
+  const rows = readSheet(path.join(CACHE, file), sheet);
   const h = findHeaderRow(rows, { minCells: 8, mustContain: ['IČO', 'Kraj', 'Zřizovatel'] });
+  const hasRok = txt(rows[h][0]) === 'Rok';
   const body = rows.slice(h + 1).filter((r) => r && r[0] != null && num(r[12]) != null);
-  const totNakladyTis = sumCol(body, 12);
+  const byYear = new Map();
+  for (const r of body) {
+    const y = hasRok ? num(r[0]) : Number(sheet);
+    if (!y) continue;
+    if (!byYear.has(y)) byYear.set(y, []);
+    byYear.get(y).push(r);
+  }
+  const years = [...byYear.keys()].sort((a, b) => a - b);
+  const lastYear = years[years.length - 1];
+  const lastBody = byYear.get(lastYear) || [];
+  const points = years.map((y) => ({ year: y, value: round(sumCol(byYear.get(y), 12) / 1e6, 1) }));
   return {
     ois_code: 'OIS-11-50',
-    source_file: 'OIS-11-50.xlsx',
+    source_file: file,
     extracted_at: STAMP(),
-    method_note: 'Celkové náklady poskytovatelů akutní lůžkové péče dle výkazu E 6-02, převedeno z tis. Kč na mld. Kč.',
-    headline: { value: round(totNakladyTis / 1e6, 1), unit: 'mld. Kč', year: 2024, label: 'Celkové náklady akutní lůžkové péče' },
+    method_note: 'Celkové náklady poskytovatelů akutní lůžkové péče dle výkazu E 6-02, převedeno z tis. Kč na mld. Kč. Nominální hodnoty (bez očištění o inflaci).',
+    headline: { value: points[points.length - 1]?.value ?? null, unit: 'mld. Kč', year: lastYear, label: 'Celkové náklady akutní lůžkové péče' },
+    series: [{ key: 'naklady', label: 'Celkové náklady akutní lůžkové péče', unit: 'mld. Kč', points }],
     ranked: {
       label: 'Náklady akutní lůžkové péče dle kraje',
       unit: 'mld. Kč',
-      items: rankedBy(body, 4, 12).map((it) => ({ name: it.name, value: round(it.value / 1e6, 2) })),
+      items: rankedBy(lastBody, 4, 12).map((it) => ({ name: it.name, value: round(it.value / 1e6, 2) })),
     },
   };
 }
@@ -705,19 +819,37 @@ function rankedRowTotal(body, nameIdx, fromCol, topN = 12) {
 
 /* ================= DIMENZE 1 — CENY A OBJEMY ================= */
 function transformOIS1106() {
-  const rows = readSheet(path.join(CACHE, 'OIS-11-06.xlsx'), 'Rok 2022-2024 ATC');
-  const h = findRowWith(rows, 'Počet pacientoměsíců 2024');
-  const hr = rows[h];
-  const body = rows.slice(h + 1).filter((r) => r && r[2] != null);
-  const series = [2022, 2023, 2024].map((y) => ({
-    year: y,
-    value: Math.round(sumCols(body, colsMatching(hr, ['pacientoměsíců', String(y)]))),
-  }));
+  // listy „Rok 2023–2025 ATC" / „… Segment" (rozsah let se posouvá s edicí);
+  // od edice 2026-01 má každý list za pojišťovnami i blok CELKEM — sčítá se buď on, nebo pojišťovny
+  const file = 'OIS-11-06.xlsx';
+  const names = sheetNames(path.join(CACHE, file));
+  const atcSheet = names.find((s) => /ATC\s*$/.test(s));
+  const segSheet = names.find((s) => /Segment\s*$/.test(s));
+  const sumByYear = (sheet, keyword, keyCol) => {
+    const rows = readSheet(path.join(CACHE, file), sheet);
+    const h = findRowWith(rows, keyword);
+    const hr = rows[h];
+    const body = rows.slice(h + 1).filter((r) => r && r[keyCol] != null && !/celkem/i.test(txt(r[0])));
+    const years = [...new Set(yearCols(hr, keyword).map((c) => c.year))];
+    return years.map((y) => {
+      const idx = colsMatching(hr, [keyword, String(y)]);
+      return { year: y, value: body.reduce((s, r) => s + sumExclTotal(r, idx), 0) };
+    });
+  };
+  const pm = sumByYear(atcSheet, 'pacientoměsíců', 2).map((p) => ({ year: p.year, value: Math.round(p.value) }));
+  const uhrady = segSheet
+    ? sumByYear(segSheet, 'Úhrady v tis. Kč', 0).map((p) => ({ year: p.year, value: round(p.value / 1e6, 2) }))
+    : [];
+  const last = pm[pm.length - 1];
   return {
-    ois_code: 'OIS-11-06', source_file: 'OIS-11-06.xlsx', extracted_at: STAMP(),
-    method_note: 'Pacientoměsíce léčby centrovými léky, součet napříč ATC skupinami a zdravotními pojišťovnami.',
-    headline: { value: series[2].value, unit: 'pacientoměsíců', year: 2024, label: 'Léčba centrovými léky' },
-    series: [{ key: 'pm', label: 'Pacientoměsíce centrové léčby', unit: 'pacientoměsíce', points: series }],
+    ois_code: 'OIS-11-06', source_file: file, extracted_at: STAMP(),
+    method_note:
+      'Pacientoměsíce léčby centrovými léky (list ATC) a úhrady zdravotních pojišťoven v mld. Kč (list Segment), součet napříč terapeutickými oblastmi a pojišťovnami. Každá edice přepočítává celé tříleté okno — hodnoty starších let se mezi edicemi mění (edice 2026-01 rozšířila počet terapeutických oblastí a změnila výpočet pacientoměsíců).',
+    headline: { value: last?.value ?? null, unit: 'pacientoměsíců', year: last?.year ?? null, label: 'Léčba centrovými léky' },
+    series: [
+      { key: 'pm', label: 'Pacientoměsíce centrové léčby', unit: 'pacientoměsíce', points: pm },
+      ...(uhrady.length ? [{ key: 'uhrady', label: 'Úhrady za centrové léky', unit: 'mld. Kč', points: uhrady }] : []),
+    ],
   };
 }
 function transformOIS1107() {
@@ -726,16 +858,18 @@ function transformOIS1107() {
   const hr = rows[h];
   const totalRow = rows.slice(h + 1).find((r) => r && txt(r[0]).includes('Všechna ATC'));
   if (!totalRow) throw new Error('11-07: souhrnný řádek nenalezen');
-  const series = [2022, 2023, 2024].map((y) => {
+  const years = [...new Set(yearCols(hr, 'Náklady').map((c) => c.year))];
+  // edice 2026-02 přidala za pojišťovny souhrnný blok — sumExclTotal ho nesčítá dvakrát
+  const series = years.map((y) => {
     const idx = colsMatching(hr, ['Náklady', String(y)]);
-    let v = 0;
-    for (const i of idx) v += num(totalRow[i]) || 0;
-    return { year: y, value: round(v / 1e6, 1) };
+    return { year: y, value: round(sumExclTotal(totalRow, idx) / 1e6, 1) };
   });
+  const last = series[series.length - 1];
   return {
     ois_code: 'OIS-11-07', source_file: 'OIS-11-07.xlsx', extracted_at: STAMP(),
-    method_note: 'Náklady na genové a personalizované kurativní terapie na úrovni maximální stanovené ceny, mil. Kč.',
-    headline: { value: series[2].value, unit: 'mil. Kč', year: 2024, label: 'Náklady na genové terapie' },
+    method_note:
+      'Náklady na genové a personalizované kurativní terapie na úrovni maximální stanovené ceny, mil. Kč. Každá edice přepočítává celé tříleté okno, hodnoty starších let se mezi edicemi mění.',
+    headline: { value: last?.value ?? null, unit: 'mil. Kč', year: last?.year ?? null, label: 'Náklady na genové terapie' },
     series: [{ key: 'nakl', label: 'Náklady na genové terapie', unit: 'mil. Kč', points: series }],
   };
 }
@@ -757,13 +891,14 @@ function findBlockRange(blockRow, keyword) {
 function transformOIS1108() {
   const series = [];
   const m = new Map();
-  for (const [sheet, year] of [['Rok 2023', 2023], ['Rok 2024', 2024]]) {
-    let rows;
-    try { rows = readSheet(path.join(CACHE, 'OIS-11-08.xlsx'), sheet); } catch { continue; }
+  const sheets = yearSheets('OIS-11-08.xlsx');
+  const lastYear = sheets[sheets.length - 1]?.year ?? null;
+  for (const { sheet, year } of sheets) {
+    const rows = readSheet(path.join(CACHE, 'OIS-11-08.xlsx'), sheet);
     const h = findHeaderRow(rows, { mustContain: ['Typ PZT'] });
     const body = rows.slice(h + 1).filter((r) => r && r[0] != null);
     series.push({ year, value: round(sumCol(body, 10) / 1e9, 1) });
-    if (year === 2024) for (const r of body) {
+    if (year === lastYear) for (const r of body) {
       const n = txt(r[1]);
       if (n) m.set(n, (m.get(n) || 0) + (num(r[10]) || 0));
     }
@@ -772,7 +907,8 @@ function transformOIS1108() {
   return {
     ois_code: 'OIS-11-08', source_file: 'OIS-11-08.xlsx', extracted_at: STAMP(),
     method_note: 'Úhrada za prostředky zdravotnické techniky (zvlášť účtovaný materiál), mld. Kč.',
-    headline: { value: series[series.length - 1]?.value ?? null, unit: 'mld. Kč', year: 2024, label: 'Úhrady za zdravotnický materiál' },
+    headline: { value: series[series.length - 1]?.value ?? null, unit: 'mld. Kč', year: lastYear, label: 'Úhrady za zdravotnický materiál' },
+    series: [{ key: 'uhrady', label: 'Úhrady za zvlášť účtovaný materiál', unit: 'mld. Kč', points: series }],
     ranked: { label: 'Top 12 typů zdravotnického materiálu dle úhrad', unit: 'mil. Kč', items: items.slice(0, 12) },
   };
 }
@@ -823,7 +959,7 @@ function transformOIS1136() {
   return {
     ois_code: 'OIS-11-36', source_file: 'OIS-11-36.xlsx', extracted_at: STAMP(),
     method_note: 'Úhrada zdravotních pojišťoven za léčiva na recept (HVLP) dle předepisujícího oboru, mil. Kč.',
-    headline: { value: round(grand / 1e9, 1), unit: 'mld. Kč', year: 2024, label: 'Úhrady za léky na recept (HVLP)' },
+    headline: { value: round(grand / 1e9, 1), unit: 'mld. Kč', year: periodYear(rows), label: 'Úhrady za léky na recept (HVLP)' },
     ranked: { label: 'Top 12 předepisujících oborů dle úhrad za léky', unit: 'mil. Kč', items: items.slice(0, 12) },
   };
 }
@@ -881,9 +1017,8 @@ function transformOIS1118() {
 }
 function transformOIS1119() {
   const series = [];
-  for (const [sheet, year] of [['2023', 2023], ['2024', 2024]]) {
-    let rows;
-    try { rows = readSheet(path.join(CACHE, 'OIS-11-19.xlsx'), sheet); } catch { continue; }
+  for (const { sheet, year } of yearSheets('OIS-11-19.xlsx')) {
+    const rows = readSheet(path.join(CACHE, 'OIS-11-19.xlsx'), sheet);
     const h = findHeaderRow(rows, { mustContain: ['IČO', 'receptů'] });
     const body = rows.slice(h + 1).filter((r) => r && r[0] != null);
     series.push({ year, value: Math.round(sumCols(body, colsMatching(rows[h], ['receptů']))) });
@@ -891,12 +1026,13 @@ function transformOIS1119() {
   return {
     ois_code: 'OIS-11-19', source_file: 'OIS-11-19.xlsx', extracted_at: STAMP(),
     method_note: 'Počet vykázaných receptů v lékárnách a výdejnách.',
-    headline: { value: series[series.length - 1]?.value ?? null, unit: 'receptů', year: 2024, label: 'Vykázané recepty v lékárnách' },
+    headline: { value: series[series.length - 1]?.value ?? null, unit: 'receptů', year: series[series.length - 1]?.year ?? null, label: 'Vykázané recepty v lékárnách' },
     series: [{ key: 'recepty', label: 'Vykázané recepty', unit: 'recepty', points: series }],
   };
 }
 function transformZatez(file, oisCode, label) {
-  const rows = readSheet(path.join(CACHE, file), 'Data');
+  // list „Data" (11-42 od edice 2026-02 „List1") — bere se první list
+  const rows = readSheet(path.join(CACHE, file), 0);
   const h = findHeaderRow(rows, { mustContain: ['PZS'] });
   // 'PZS celkem' může být v hlavičkovém řádku nebo v podřádku
   let pzsIdx = colsMatching(rows[h], ['PZS celkem']);
@@ -905,7 +1041,11 @@ function transformZatez(file, oisCode, label) {
     pzsIdx = colsMatching(rows[h + 1], ['PZS celkem']);
     dataStart = h + 2;
   }
-  const body = rows.slice(dataStart).filter((r) => r && r[0] != null);
+  // souhrnný řádek na konci listu („Celkový součet", „CELKEM") se nesčítá — jinak by se ČR započítala dvakrát
+  const body = rows.slice(dataStart).filter((r) => r && r[0] != null && !/^celk/i.test(txt(r[0])));
+  const hdr = rows[dataStart - 1];
+  const kapIdx = colsMatching(hdr, ['Kapitace', 'celkem']).slice(0, 1);
+  const uvIdx = colsMatching(hdr, ['Úvazek celkem']).slice(0, 1);
   const m = new Map();
   let grand = 0;
   for (const r of body) {
@@ -915,10 +1055,17 @@ function transformZatez(file, oisCode, label) {
     grand += v;
   }
   const items = [...m.entries()].map(([name, v]) => ({ name, value: Math.round(v) })).sort((a, b) => b.value - a.value);
+  // registrovaní pojištěnci (kapitace) na 1 přepočtený úvazek lékaře — zátěž ambulance
+  const kap = sumCols(body, kapIdx);
+  const uv = sumCols(body, uvIdx);
+  const snapshot = kapIdx.length && uvIdx.length && uv > 0
+    ? { kapitace_celkem: Math.round(kap), uvazky_celkem: round(uv, 1), kapitace_na_uvazek: Math.round(kap / uv) }
+    : null;
   return {
     ois_code: oisCode, source_file: file, extracted_at: STAMP(),
+    snapshot,
     method_note: 'Počet poskytovatelů zdravotních služeb (PZS) dle kraje pracoviště.',
-    headline: { value: grand, unit: 'poskytovatelů', year: 2024, label },
+    headline: { value: grand, unit: 'poskytovatelů', year: periodYear(rows), label },
     ranked: { label: 'Počet poskytovatelů dle kraje', unit: 'poskytovatelé', items: items.slice(0, 14) },
   };
 }
@@ -938,7 +1085,7 @@ function transformOIS1141() {
   return {
     ois_code: 'OIS-11-41', source_file: 'OIS-11-41.xlsx', extracted_at: STAMP(),
     method_note: 'Počet výjezdů zdravotnické záchranné služby (doklad 37, kódy 70/72/74/77).',
-    headline: { value: grand, unit: 'výjezdů ZZS', year: 2024, label: 'Výjezdy záchranné služby' },
+    headline: { value: grand, unit: 'výjezdů ZZS', year: periodYear(rows), label: 'Výjezdy záchranné služby' },
     ranked: { label: 'Výjezdy ZZS dle kraje', unit: 'výjezdy', items: items.slice(0, 14) },
   };
 }
@@ -969,9 +1116,8 @@ function transformOIS1124() {
 /* ================= DIMENZE 7 — KOMUNITNÍ PÉČE ================= */
 function transformOIS1130() {
   const series = [];
-  for (const [sheet, year] of [['2023', 2023], ['2024', 2024]]) {
-    let rows;
-    try { rows = readSheet(path.join(CACHE, 'OIS-11-30.xlsx'), sheet); } catch { continue; }
+  for (const { sheet, year } of yearSheets('OIS-11-30.xlsx')) {
+    const rows = readSheet(path.join(CACHE, 'OIS-11-30.xlsx'), sheet);
     const h = findRowWith(rows, 'Kontakty');
     const body = rows.slice(h + 1).filter((r) => r && r[0] != null);
     series.push({ year, value: Math.round(sumCols(body, colsMatching(rows[h], ['Kontakty']))) });
@@ -979,7 +1125,7 @@ function transformOIS1130() {
   return {
     ois_code: 'OIS-11-30', source_file: 'OIS-11-30.xlsx', extracted_at: STAMP(),
     method_note: 'Počet kontaktů ošetřovatelské a rehabilitační péče (odbornosti 913 a 925).',
-    headline: { value: series[series.length - 1]?.value ?? null, unit: 'kontaktů', year: 2024, label: 'Kontakty ošetřovatelské péče' },
+    headline: { value: series[series.length - 1]?.value ?? null, unit: 'kontaktů', year: series[series.length - 1]?.year ?? null, label: 'Kontakty ošetřovatelské péče' },
     series: [{ key: 'kontakty', label: 'Kontakty ošetřovatelské péče', unit: 'kontakty', points: series }],
   };
 }
@@ -1020,19 +1166,26 @@ function transformOIS1133() {
   const rows = readSheet(path.join(CACHE, 'OIS-11-33.xlsx'), 'List1');
   const h = findHeaderRow(rows, { mustContain: ['Kód výkonu', 'Odbornost'] });
   const body = rows.slice(h + 2).filter((r) => r && r[7] != null);
-  const years = [2019, 2020, 2021, 2022, 2023, 2024];
-  const series = years.map((y, i) => ({ year: y, value: Math.round(sumCol(body, 10 + i * 2)) }));
+  // záhlaví nese rok nad dvojicí sloupců (množství výkonů, unikátní pacienti) — bere se první z dvojice
+  const ycols = yearCols(rows[h]).filter((c, i, arr) => i === 0 || arr[i - 1].year !== c.year);
+  const series = ycols.map(({ year, col }) => ({ year, value: Math.round(sumCol(body, col)) }));
+  const patients = ycols.map(({ year, col }) => ({ year, value: Math.round(sumCol(body, col + 1)) }));
   return {
     ois_code: 'OIS-11-33', source_file: 'OIS-11-33.xlsx', extracted_at: STAMP(),
-    method_note: 'Množství výkonů jednodenní péče na pracovištích s odborností jednodenní péče.',
-    headline: { value: series[5].value, unit: 'výkonů', year: 2024, label: 'Produkce jednodenní péče' },
-    series: [{ key: 'vykony', label: 'Množství výkonů jednodenní péče', unit: 'výkony', points: series }],
+    method_note:
+      'Množství výkonů jednodenní péče na pracovištích s odborností jednodenní péče. Řada „pacienti" je součet unikátních pacientů přes výkony a pracoviště, ne počet osob. Rok 2025 je zlom: objem výkonů se zdvojnásobil hlavně v anesteziologických výkonech (78xxx) a v ošetřovacím dni jednodenní péče (00340), tedy ve vykazování na pracovištích s odborností J — nejde o srovnatelný meziroční růst zákroků.',
+    headline: { value: series[series.length - 1]?.value ?? null, unit: 'výkonů', year: series[series.length - 1]?.year ?? null, label: 'Produkce jednodenní péče' },
+    series: [
+      { key: 'vykony', label: 'Množství výkonů jednodenní péče', unit: 'výkony', points: series },
+      { key: 'pacienti', label: 'Unikátní pacienti (součet přes výkony a pracoviště)', unit: 'osoby', points: patients },
+    ],
   };
 }
 
 /* ================= REGISTRY ================= */
 function transformOIS0301() {
-  const rows = readSheet(path.join(CACHE, 'OIS-03-01.xlsx'), 'CVSP – datový souhrn');
+  // název listu se mezi edicemi liší pomlčkou („CVSP – …" / „CVSP - …") — bere se první list
+  const rows = readSheet(path.join(CACHE, 'OIS-03-01.xlsx'), 0);
   const h = findHeaderRow(rows, { mustContain: ['IČO', 'Typ centra'] });
   const body = rows.slice(h + 1).filter((r) => r && r[0] != null);
   const m = new Map();
@@ -1043,8 +1196,8 @@ function transformOIS0301() {
   const items = [...m.entries()].map(([name, v]) => ({ name, value: v })).sort((a, b) => b.value - a.value);
   return {
     ois_code: 'OIS-03-01', source_file: 'OIS-03-01.xlsx', extracted_at: STAMP(),
-    method_note: 'Centra vysoce specializované péče dle Věstníku MZ ČR — počet center podle typu.',
-    headline: { value: body.length, unit: 'center', year: 2024, label: 'Centra vysoce specializované péče' },
+    method_note: 'Centra vysoce specializované péče dle Věstníku MZ ČR — počet záznamů (IČZ × typ centra) podle typu, stav podle poslední edice souhrnu (2026-03, NZIP aktualizováno 7. 10. 2026).',
+    headline: { value: body.length, unit: 'center', year: 2026, label: 'Centra vysoce specializované péče' },
     ranked: { label: 'Počet center vysoce specializované péče dle typu', unit: 'center', items: items.slice(0, 12) },
   };
 }

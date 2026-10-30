@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-10-30
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-10-30
+    creation_phase: refresh datove podpory dohodovaciho rizeni (NZIP, data k 31. 12. 2025)
+    form: analysis
+    primary_sources_count: 4
+    visual_elements_count: 3
+    notes: "Vsechna cisla spocetena primo z XLSX OIS-11-51 edice 2026-02 (NZIP stranka 2762, listy 'rok 2024' a 'rok 2025', oba ve verzi CZ-DRG 2026; zpracovano UZIS 30. 4. a 30. 6. 2026; stazeno 30. 10. 2026). Metodika: radky se sloupcem 'Centralizace DRG skupiny dle UV' = ano (258 skupin), soucet 'Pocet HP celkem' a 'Pocet HP v CVSP', seskupeno podle sloupce 'Typ CVSP'. 2025: 64 527 HP, z toho 59 577 v CVSP (92,3 %), mimo 4 950; 2024: 63 758 / 58 501 (91,8 %), mimo 5 257. Podily podle typu centra 2024 -> 2025: komplexni kardiovaskularni + kardio 95,0 -> 95,3 (28 179 -> 28 474 HP); cerebro + iktus 99,8 -> 99,9 (1 770 -> 1 772); intenzivni + intermediarni perinatologie 99,0 -> 98,7 (2 294 -> 2 453); trauma dosp. + deti 97,6 -> 97,4 (1 232 -> 1 176); spondylochirurgie 86,3 -> 89,0 (2 932 -> 3 115); onkogynekologie 80,5 -> 81,9 (3 384 -> 3 319); rektum 79,5 -> 82,9 (1 678 -> 1 687); HPB 78,8 -> 77,6 (1 411 -> 1 426); jicen 74,1 -> 76,5 (166 -> 170); pneumoonko 75,0 -> 76,8 (2 736 -> 2 894); onkologie dospeli 80,1 -> 82,3 (4 780 -> 4 846); transplantace a hematoonko 100 %. Top DRG mimo centra 2025: angioplastika 1 vencite tepny pri jinem onemocneni 559 HP, angioplastika 2+ tepen 300, neradikalni vykon pro ZN delozniho... 296, angioplastika pri akutnim infarktu 220, resekce konecniku 211. Uplna centralizace jater, slinivky a jicnu od 1. 9. 2026 a odsmluvneni k 31. 8. 2026: Vestnik MZD c. 10/2026 a TZ MZ (citovano v clanku clanek-centralizace-chirurgie-2027, aktualizace 27. 8. 2026). Hodnoty v textu zaokrouhleny na 1 des. misto. Esej ne: chybi dolozena scena. Ceka na schvaleni redakce."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infarkt jede do centra, nádor často ne. Kde centralizace péče funguje a kde ne · HSPA Monitor</title>
+<meta name="description" content="V roce 2025 proběhlo 92,3 % hospitalizací, které úhradová vyhláška směruje do center vysoce specializované péče, opravdu v centrech. U mrtvice, infarktu a rizikových porodů jde skoro o všechny. U operací slinivky, jater, jícnu a plic se ale každý čtvrtý pacient léčil mimo centrum. Rozbor nových dat ÚZIS.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Infarkt jede do centra, nádor často ne. Kde centralizace péče funguje a kde ne">
+<meta property="og:description" content="Nová data ÚZIS za rok 2025: 92,3 % péče určené k centralizaci proběhlo v centrech. U onkochirurgie jen tři čtvrtiny až čtyři pětiny.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-centralizace-cvsp-data-2025.html">
+<meta property="article:section" content="Kvalita péče">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-centralizace-cvsp-data-2025.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Kvalita péče</span>
+        <span class="article-tag article-tag-muted">centralizace · centra vysoce specializované péče · CZ-DRG · onkochirurgie · dohodovací řízení</span>
+      </div>
+      <h1 class="article-title">Infarkt jede do centra, nádor často ne. Kde centralizace péče funguje a kde ne</h1>
+      <p class="article-deck">
+        V roce 2025 proběhlo 92,3 % hospitalizací, které úhradová vyhláška směruje do center vysoce specializované péče, opravdu v centrech. U mrtvice, infarktu a rizikových porodů jde skoro o všechny. U operací slinivky, jater, jícnu a plic se ale každý čtvrtý pacient léčil mimo centrum. Ukazují to nová data ÚZIS pro dohodovací řízení.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">30. října 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">6 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+      <p class="article-lead">
+        Úhradová vyhláška určuje 258 skupin hospitalizací podle klasifikace CZ-DRG, které se mají soustřeďovat do center vysoce specializované péče. Jde o péči, u které výsledek závisí na zkušenosti týmu a vybavení: transplantace, léčbu cévní mozkové příhody, srdeční výkony, rizikové porody, těžké úrazy a velké nádorové operace. Ústav zdravotnických informací a statistiky (ÚZIS) letos zveřejnil, jak se to v letech 2024 a 2025 dařilo. Oba roky počítá ve stejné verzi klasifikace, dají se proto přímo srovnat.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCvspCntH">
+        <figcaption class="av-figure-h" id="avCvspCntH">Centralizace v roce 2025 (ÚZIS, OIS-11-51)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="92.3" data-decimals="1" data-suffix=" %">92,3 %</span>
+            <span class="av-counter-label">hospitalizací určených k centralizaci proběhlo v centru</span>
+            <span class="av-counter-foot">2024: 91,8 %</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="64527">64 527</span>
+            <span class="av-counter-label">hospitalizací ve 258 skupinách určených k centralizaci</span>
+            <span class="av-counter-foot">2024: 63 758</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="4950">4 950</span>
+            <span class="av-counter-label">z nich proběhlo mimo centrum</span>
+            <span class="av-counter-foot">2024: 5 257</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS ČR, datový souhrn OIS-11-51, edice 2026-02 (NRHZS, CZ-DRG 2026). Výpočet redakce.</p>
+      </figure>
+
+      <h3>Celkové číslo táhne nahoru kardiologie</h3>
+      <p>
+        Souhrnných 92,3 % vypadá jako hotová věc. Číslo ale skoro z poloviny tvoří jediná skupina péče v komplexních kardiovaskulárních a kardiologických centrech, hlavně angioplastiky a další katetrizační výkony. Na ni připadá 28 474 z 64 527 hospitalizací a v centrech jich proběhlo 95,3 %. Infarkty a mrtvice mají zavedenou cestu: záchranná služba veze pacienta rovnou do kardiocentra nebo iktového centra. U cévní mozkové příhody tak v centrech proběhlo 99,9 % sledovaných případů, u rizikových porodů 98,7 % a u těžkých úrazů 97,4 %.
+      </p>
+      <p>
+        U plánovaných nádorových operací je obraz jiný. Rozhoduje se o nich v ambulanci, často v nemocnici, kde byl nádor zjištěn, a pacient si může vybrat. Tady se podíl center drží mezi třemi čtvrtinami a čtyřmi pětinami.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avCvspBarsH">
+        <figcaption class="av-figure-h" id="avCvspBarsH">Podíl hospitalizací provedených v centru podle typu péče, 2025 (%)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="100" data-unit="%">
+          <li class="av-bar-row av-bar-row-good" data-value="99.9" data-label="Cévní mozková příhoda" data-note="1 772 hospitalizací"></li>
+          <li class="av-bar-row av-bar-row-good" data-value="98.7" data-label="Rizikové porody (perinatologie)" data-note="2 453 hospitalizací"></li>
+          <li class="av-bar-row av-bar-row-good" data-value="97.4" data-label="Těžké úrazy (traumatologie)" data-note="1 176 hospitalizací"></li>
+          <li class="av-bar-row av-bar-row-good" data-value="95.3" data-label="Kardiovaskulární péče" data-note="28 474 hospitalizací"></li>
+          <li class="av-bar-row" data-value="89" data-display="89,0 %" data-label="Páteřní chirurgie" data-note="3 115 hospitalizací"></li>
+          <li class="av-bar-row" data-value="82.9" data-label="Chirurgie konečníku" data-note="1 687 hospitalizací"></li>
+          <li class="av-bar-row" data-value="81.9" data-label="Onkogynekologie" data-note="3 319 hospitalizací"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="77.6" data-label="Játra, slinivka, žlučové cesty" data-note="1 426 hospitalizací"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="76.8" data-label="Plicní onkochirurgie" data-note="2 894 hospitalizací"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="76.5" data-label="Jícen" data-note="170 hospitalizací"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS ČR, OIS-11-51, list „rok 2025“. Skupiny podle typu centra, které ÚZIS přiřazuje každé DRG skupině; výběr. Transplantace a hematoonkologie proběhly v centrech ze 100 %.</p>
+      </figure>
+
+      <h3>Rok 2025 byl posledním rokem „po staru“</h3>
+      <p>
+        Mezi lety 2024 a 2025 se podíl center zvýšil u většiny nádorových oborů: u konečníku z 79,5 na 82,9 %, u jícnu ze 74,1 na 76,5 %, u plic ze 75,0 na 76,8 % a u páteřní chirurgie z 86,3 na 89,0 %. Jedinou výjimkou je chirurgie jater, slinivky a žlučových cest, kde podíl mírně klesl ze 78,8 na 77,6 %.
+      </p>
+      <p>
+        Právě u jater, slinivky a jícnu ministerstvo od 1. září 2026 centralizaci dokončilo. Podle Věstníku MZD č. 10/2026 pojišťovny tyto výkony nemocnicím bez statutu centra k 31. srpnu odsmluvnily. Data za rok 2025 jsou tedy výchozí čára: ukazují, kolik pacientů se má přesunout. U slinivky, jater a žlučových cest to bylo kolem 320 hospitalizací ročně, u jícnu kolem 40. Harmonogram dalších oborů do roku 2030 a otázku, zda centra dosáhnou doporučených objemů, jsme rozebrali v článku <a href="clanek-centralizace-onkochirurgie-2030.html">Čtyři tisíce operací se stěhují do center</a>.
+      </p>
+
+      <h3>Mimo centra hlavně srdce a dělohy</h3>
+      <p>
+        Nejvíc hospitalizací mimo centra v počtech případů nepřipadá na nádory, ale na srdce. Angioplastika jedné věnčité tepny u pacienta, který byl v nemocnici kvůli jinému onemocnění, proběhla mimo centrum 559krát, angioplastika dvou a více tepen 300krát a angioplastika při akutním infarktu 220krát. Následují neradikální výkony pro zhoubný nádor dělohy (296 případů) a resekce konečníku (211).
+      </p>
+      <p>
+        U akutního infarktu může být výkon v nejbližší nemocnici s katetrizační laboratoří pro pacienta lepší než delší převoz. Data o tom, zda šlo o nemocnici bez statutu, ale bez kvalifikovaného týmu, neříkají. U plánovaných nádorových operací takové vysvětlení obvykle neplatí.
+      </p>
+
+      <h3>Co data neukazují</h3>
+      <p>
+        Indikátor měří, zda pacient skončil u držitele statutu centra. Neříká, jak dopadl. Mortalitu a komplikace jednotlivých pracovišť ÚZIS v této sadě nezveřejňuje. Nezachycuje ani to, kolik pacientů se na operaci do centra nedostalo vůbec, třeba proto, že byli léčeni jinak. Souhrnné číslo se navíc každý rok počítá nad seznamem skupin, který určuje úhradová vyhláška. Když se seznam rozšíří, podíl se může změnit, i když se v nemocnicích nic nestalo.
+      </p>
+
+      <h3>Co z toho plyne</h3>
+      <p>
+        <strong>Pro pacienty:</strong> u plánované operace nádoru slinivky, jater, jícnu, plic, konečníku nebo gynekologického nádoru se vyplatí zeptat, zda má nemocnice statut centra a kolik takových operací ročně dělá. Seznam center zveřejňuje ministerstvo ve Věstníku.
+      </p>
+      <p>
+        <strong>Pro ministerstvo a pojišťovny:</strong> data za rok 2026 ukážou, zda zářijové odsmluvnění u jater, slinivky a jícnu přesunulo zbývající pacienty. U plicní onkochirurgie a onkogynekologie zůstává mimo centra zhruba pětina až čtvrtina případů.
+      </p>
+      <p>
+        <strong>HSPA Monitor:</strong> podíl péče provedené v centrech sledujeme jako nový indikátor <a href="indicator.html?id=centralizace_cvsp_podil">Péče určená k centralizaci provedená v centrech</a>. Rozpad podle typu center najdete na stránce <a href="dohodovaci-rizeni.html?id=ois-11-51">datové podpory dohodovacího řízení</a>.
+      </p>
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=centralizace_cvsp_podil"><strong>Péče určená k centralizaci provedená v centrech vysoce specializované péče</strong></a> — 92,3 % (2025, ÚZIS · OIS-11-51)</li>
+        <li><a href="indicator.html?id=centralizace_velmi_predcasnych_porodu"><strong>Centralizace velmi předčasných porodů</strong></a> — porody do perinatologických center (ÚZIS · NRRZ)</li>
+      </ul>
+      <p>Související články: <a href="clanek-centralizace-onkochirurgie-2030.html">Čtyři tisíce operací se stěhují do center</a> · <a href="clanek-centralizace-chirurgie-2027.html">Centralizace onkologické chirurgie</a> · <a href="clanek-obcan-v-siti-centralizace-2026.html">Na operaci do centra, na zbytek domů</a></p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">ÚZIS ČR · NZIP, datová podpora dohodovacího řízení (staženo 30. 10. 2026)</h5>
+        <ul class="article-sources-list">
+          <li><strong>OIS-11-51 Počty hospitalizačních případů akutní lůžkové péče dle CZ-DRG a provedení v centru vysoce specializované péče</strong> — edice 2026-02, listy „rok 2024“ a „rok 2025“, oba v CZ-DRG 2026. <a href="https://www.nzip.cz/data/2762-hospitalizacni-pripady-alp-cz-drg-cvsp-datovy-souhrn" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+          <li><strong>OIS-03-01 Centra vysoce specializované péče v ČR</strong> — seznam center podle typu, edice 2026-03. <a href="https://www.nzip.cz/data/2645-vysoce-specializovana-pece-centra-datovy-souhrn" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Ministerstvo zdravotnictví</h5>
+        <ul class="article-sources-list">
+          <li><strong>Věstník MZD č. 10/2026</strong> — metodický pokyn k centralizaci chirurgie jater, slinivky a jícnu od 1. 9. 2026. <a href="https://mzd.gov.cz/vestnik/vestnik-10-2026/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+          <li><strong>Přehled věstníků MZ</strong> — seznamy center vysoce specializované péče. <a href="https://mzd.gov.cz/vestniky/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Podíly a počty přesunů dopočítala redakce z primárního souboru ÚZIS. „Kolem 320“ a „kolem 40“ hospitalizací je rozdíl mezi všemi případy a případy v centrech v roce 2025 (1 426 − 1 107 a 170 − 130), zaokrouhleno.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+  </article>
+</main>
+<footer class="bottom" id="siteFooter"></footer>
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>

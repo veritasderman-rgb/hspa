@@ -6,6 +6,17 @@ Analýza zdroje **<https://www.nzip.cz/dohodovaci-rizeni>** a všech jeho podstr
 
 Strojově čitelný katalog: [`05_M1_Starter/ingest/mapping/nzip_dohodovaci_rizeni_catalog.json`](../05_M1_Starter/ingest/mapping/nzip_dohodovaci_rizeni_catalog.json)
 
+> **Refresh 2026-10-30:** katalog posunut na nejnovější edice — 27 sad dostalo novou
+> edici, většina s daty za rok 2025 (např. OIS-11-12 platy 2019–2025, OIS-11-28
+> lůžkový fond 2010–2025, OIS-11-50 náklady ALP 2021–2025). OIS-11-32 a OIS-11-46
+> jsou drženy na edici 2026-01, protože nejnovější soubory uvádějí starší období
+> (viz `edition_hold_note` v katalogu). Ohlášené, zatím nevydané sady (čekací
+> lhůty, přerozdělování, kvalita jednodenní péče…) vede
+> `05_M1_Starter/ingest/dohodovaci-rizeni-ohlasene.json`. Z výtahů vznikly
+> indikátory `centralizace_cvsp_podil`, `registrovani_na_uvazek_pld`,
+> `plat_lekare_platova_sfera`, `plat_sestry_platova_sfera`; `naklady_centrove_leky_total`
+> přešel na rok 2025.
+
 ## Co bylo procházeno
 
 | | Počet |

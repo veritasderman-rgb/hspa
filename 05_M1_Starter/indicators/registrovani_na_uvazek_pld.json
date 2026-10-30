@@ -1,0 +1,50 @@
+{
+  "id": "registrovani_na_uvazek_pld",
+  "name": "Registrovaní pojištěnci na 1 úvazek praktického lékaře pro dospělé",
+  "area": "Struktury",
+  "domain": "Pracovní síla",
+  "subdomain": "Primární péče",
+  "definition": "Průměrný počet registrovaných pojištěnců (pojištěnců s vykázanou kapitací) připadající na jeden přepočtený úvazek lékaře v ordinacích praktického lékaře pro dospělé (odbornost 001), ČR celkem. Čitatel: součet kapitace všech věkových skupin za rok. Jmenovatel: součet přepočtených úvazků lékařů L1–L3 vykázaných poskytovateli této odbornosti. Indikátor měří zátěž sítě všeobecných praktiků — kolik lidí obslouží jeden plný úvazek — a tím nepřímo dostupnost primární péče.",
+  "unit": "pojištěnců / úvazek",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "nzip_dohodovaci_rizeni",
+      "endpoint": "https://www.nzip.cz/data/2362-primarni-pece-zatez-pld-datovy-souhrn",
+      "dataset": "ÚZIS ČR — Datová podpora dohodovacího řízení, datový souhrn OIS-11-20 Zátěž vybraných poskytovatelů zdravotních služeb — praktický lékař pro dospělé (zdroj: NRHZS, NRZP)",
+      "dimensions": {
+        "uzemi": "okres místa poskytování (IČP), kraj, ČR",
+        "personal": "fyzické osoby a přepočtené úvazky lékařů L1, L2, L3; průměrný věk",
+        "kapitace": "registrovaní pojištěnci podle věku 0–19, 20–64, 65–79, 80+",
+        "obdobi": "jedna edice = jeden rok (2026-01: rok 2024; 2026-02: rok 2025)"
+      },
+      "note": "Hodnoty spočteny z primárních XLSX (edice 2026-02 pro rok 2025, zpracováno ÚZIS 24. 6. 2026; edice 2026-01 pro rok 2024) transformem ingest/transform_dohodovaci_rizeni.js, list Data, součet přes 86 okresů bez závěrečného řádku „Celkový součet“: 2025 = 8 233 190 kapitací / 5 353,8 úvazku = 1 538; 2024 = 8 231 743 / 5 520,5 = 1 491. Krajský rozptyl 2025: Praha 1 394 až Ústecký kraj 1 716."
+    }
+  },
+  "benchmark_source": {
+    "type": "narrative_only",
+    "code": "no_direct_benchmark",
+    "dataset": "Srovnatelný mezinárodní ukazatel (registrovaní pacienti na úvazek praktika) OECD ani Eurostat nepublikují — registrace k praktikovi existuje jen v části zemí a liší se definice úvazku. Indikátor se hodnotí proti vlastní časové řadě a krajskému rozptylu.",
+    "value": null,
+    "url": null
+  },
+  "signal_thresholds": {
+    "good": 2,
+    "warn": 5
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "Ministerstvo zdravotnictví ČR (rezidenční místa, podpora primární péče)",
+    "zdravotní pojišťovny (kapitační platba, smluvní politika, bonifikace)",
+    "kraje (zajištění dostupnosti péče, místní programy)",
+    "Sdružení praktických lékařů ČR, SVL ČLS JEP",
+    "ÚZIS ČR (NRHZS, NRZP)"
+  ],
+  "method_notes": "Hodnota 2025: 1 538 registrovaných pojištěnců na úvazek (2024: 1 491, tj. +3,1 %). Počet registrovaných zůstal prakticky stejný (8,23 mil.), přepočtených úvazků lékařů ubylo z 5 520,5 na 5 353,8 (−3,0 %). Úvazky L1 (lékaři v předatestační přípravě) jsou zanedbatelné (12,3 v roce 2024, 6,4 v roce 2025). Data jsou agregována po okresech místa poskytování; hodnota ČR je vážený poměr součtů, ne průměr okresních průměrů. Řádek „Celkový součet“ na konci listu se nezapočítává (dřívější verze převodu ho omylem sčítala, což zdvojovalo počty poskytovatelů, ne však tento poměr). Signál neutral: chybí cílová hodnota i benchmark.",
+  "limitations": "1. **Krátká řada** — souhrn existuje od edice za rok 2024; meziroční změna je zatím jediný srovnávací bod. 2. **Kapitace ≠ potřeba péče** — stejný počet registrovaných znamená jinou zátěž podle věkové struktury (senioři 80+ potřebují péči výrazně častěji); indikátor věk neváží. 3. **Úvazek ≠ ordinační doba** — přepočtený úvazek vychází z výkazů personálu; nezachycuje, kolik hodin ordinace skutečně nabízí, ani podíl práce sester a delegovaných činností. 4. **Neregistrovaní** — lidé, kteří praktika nemají, v čitateli chybějí; rostoucí počet neregistrovaných by poměr uměle snižoval. 5. **Okres místa poskytování** — pacienti dojíždějí přes hranice okresů, takže okresní hodnoty mohou zkreslovat lokální situaci.",
+  "determinants": "**Generační obměna.** Velká část praktiků je v důchodovém věku; odchod lékaře bez nástupce rozdělí jeho pacienty mezi okolní ordinace a zvýší jejich zátěž.\n\n**Přítok nových lékařů.** Počet rezidenčních míst a atraktivita oboru (kapitační platba, výkonové bonifikace, administrativa) rozhodují, zda úvazky přibývají.\n\n**Regionální atraktivita.** Ve Středočeském a Ústeckém kraji připadá na úvazek nejvíc pojištěnců (1 645, resp. 1 716 v roce 2025), v Praze nejméně (1 394) — rozdíl odráží jak hustotu ordinací, tak migraci obyvatel za prací a bydlením.\n\n**Organizace práce.** Sdružené praxe, sestry s rozšířenou kompetencí a telemedicína mohou zvýšit kapacitu jednoho úvazku, aniž by se zhoršila dostupnost.",
+  "importance": "Praktický lékař je vstupní branou do systému: registruje pacienta, dělá preventivní prohlídky, předepisuje chronickou medikaci a rozhoduje o odeslání ke specialistovi. Když na jeden úvazek připadá víc lidí, prodlužují se objednací lhůty, ubývá času na prevenci a víc pacientů končí na pohotovostech a u specialistů. Indikátor patří do dimenze **dostupnosti** HSPA a je citlivý na jednu z největších strukturálních hrozeb českého zdravotnictví — stárnutí a úbytek praktiků.\n\nV roce 2025 připadalo na úvazek praktika 1 538 registrovaných, o 3,1 % víc než rok předtím, protože úvazků ubylo a pacientů ne. Rozdíl mezi Prahou a Ústeckým krajem přesahuje 300 pojištěnců na úvazek.",
+  "patient_story": "Modelová situace. Paní Jana z Teplic, sedmdesát dva let, potřebuje každé tři měsíce kontrolu tlaku a předpis léků. Její praktička odešla do důchodu a ordinaci nikdo nepřevzal. Paní Jana obvolala čtyři okolní ordinace; dvě nové pacienty neberou, třetí ji zaregistruje, ale na první objednání čeká měsíc. Lék na tlak jí mezitím předepíše lékař na pohotovosti.\n\nData ÚZIS za rok 2025 ukazují, že její zkušenost není výjimka. Na jeden přepočtený úvazek praktického lékaře pro dospělé připadalo v Česku 1 538 registrovaných pojištěnců, o 3,1 % víc než v roce 2024 (1 491). Registrovaných lidí bylo prakticky stejně, kolem 8,23 milionu, ale úvazků lékařů ubylo z 5 520 na 5 354. Systém tedy neztratil pacienty, ztratil kapacitu.\n\nRozdíly mezi regiony jsou větší než celostátní posun. V Praze připadalo na úvazek 1 394 lidí, ve Středočeském kraji 1 645 a v Ústeckém kraji 1 716. Okres Teplice, kde bydlí paní Jana, patřil s 1 859 registrovanými na úvazek k nejvytíženějším v zemi. Pro pacienta to znamená delší čekání a menší ochotu ordinací přijímat nové lidi; pro lékaře méně času na prevenci, která se pak přesouvá na specialisty a pohotovosti.\n\nPáky existují: rezidenční místa a jejich rozmístění, kapitační platba a bonifikace za prevenci, podpora sdružených praxí a sester s rozšířenými kompetencemi, krajské programy pro lékaře, kteří převezmou praxi v odlehlém okrese. Indikátor ukáže, zda zaberou — zatím se křivka pohybuje špatným směrem.",
+  "framework": "hspa",
+  "dimension": "dostupnost"
+}
