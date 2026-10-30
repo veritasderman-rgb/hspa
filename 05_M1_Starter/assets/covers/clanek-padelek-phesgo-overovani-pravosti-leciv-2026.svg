@@ -31,10 +31,11 @@
       .viz-timeline-dot-3 { animation-delay: 1.0s; }
       .viz-timeline-dot-4 { animation-delay: 1.25s; }
       .viz-timeline-line { stroke-dasharray: 400; stroke-dashoffset: 400; animation: drawIn 1.2s ease-out 0.3s forwards; }
+      .viz-line { stroke-dasharray: 1400; stroke-dashoffset: 1400; animation: drawIn 1.4s ease-out 0.4s forwards; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .accent-bar, .title-underline, .pulse-dot, .viz-bar, .viz-donut-segment, .viz-timeline-dot, .viz-timeline-line { animation: none !important; }
-      .title-underline, .viz-timeline-line { stroke-dashoffset: 0; }
+      .accent-bar, .title-underline, .pulse-dot, .viz-bar, .viz-donut-segment, .viz-timeline-dot, .viz-timeline-line, .viz-line { animation: none !important; }
+      .title-underline, .viz-timeline-line, .viz-line { stroke-dashoffset: 0; }
       .viz-donut-segment { stroke-dashoffset: 0; }
     }
     @keyframes barGrow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
@@ -58,7 +59,7 @@
   <rect width="1200" height="630" fill="url(#grain)"/>
 
   <!-- Top border (editorial rule) -->
-  <line x1="80" y1="60" x2="1060" y2="60" stroke="#1f1a14" stroke-width="2"/>
+  <line x1="80" y1="60" x2="660" y2="60" stroke="#1f1a14" stroke-width="2"/>
 
   <!-- Kicker row: tag + article number -->
   <g class="root">
@@ -71,18 +72,31 @@
 
   <!-- Headline -->
   <g class="root">
-    <text class="title" x="80" y="204" font-size="44">
-      <tspan x="80" dy="0">88 výstrah, žádný</tspan><tspan x="80" dy="47">nález v českém</tspan><tspan x="80" dy="47">řetězci. Kauza Phesgo</tspan><tspan x="80" dy="47">a jak funguje</tspan><tspan x="80" dy="47">ověřování pravosti</tspan><tspan x="80" dy="47">léků</tspan>
+    <text class="title" x="80" y="160" font-size="36">
+      <tspan x="80" dy="0">88 výstrah, žádný</tspan><tspan x="80" dy="38">nález v českém</tspan><tspan x="80" dy="38">řetězci. Kauza</tspan><tspan x="80" dy="38">Phesgo a jak</tspan><tspan x="80" dy="38">funguje ověřování</tspan><tspan x="80" dy="38">pravosti léků</tspan>
     </text>
     <line class="title-underline"
-          x1="80" y1="461"
-          x2="280" y2="461"
+          x1="80" y1="372"
+          x2="280" y2="372"
           stroke="#6b6357" stroke-width="4" stroke-linecap="round"/>
     
   </g>
 
   <!-- Data viz panel (volitelně) -->
-  
+  <g>
+    <text x="670" y="144" class="viz-title">Aktivní výpadky léčiv hlášené SÚKL</text>
+    <line x1="678" y1="430" x2="1022.0" y2="430" stroke="rgba(31,26,20,0.13)" stroke-width="1"/>
+    
+    <path d="M678.0,332.6 L727.1,406.4 L776.3,409.3 L825.4,354.4 L874.6,326.1 L923.7,272.0 L972.9,236.7 L1022.0,284.7 L1022.0,430.0 L678.0,430.0 Z" fill="#6b6357" opacity="0.08"/>
+    <path class="viz-line" d="M678.0,332.6 L727.1,406.4 L776.3,409.3 L825.4,354.4 L874.6,326.1 L923.7,272.0 L972.9,236.7 L1022.0,284.7" fill="none" stroke="#1f1a14" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="678.0" cy="332.6" r="4" fill="#1f1a14"/>
+    <text x="678.0" y="320.6" class="viz-label">1 288</text>
+    <circle cx="1022.0" cy="284.7" r="7" fill="#6b6357"/>
+    <text x="1022.0" y="200.0" text-anchor="end" class="viz-value" font-size="28" fill="#6b6357">1 420<tspan dx="6" font-size="14" fill="#5f574e" font-weight="500">počet LP</tspan></text>
+    <text x="678" y="452" class="viz-sub">2019</text>
+    <text x="1022.0" y="452" text-anchor="end" class="viz-sub">2026</text>
+    <text x="670" y="490" class="viz-sub" style="text-transform:none;letter-spacing:0">Zdroj: SÚKL · Open data — hlášení o dodávkách LP (MR feed)</text>
+  </g>
 
   <!-- Bottom: branding + date -->
   <g class="root">

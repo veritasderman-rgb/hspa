@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="Nejvíc CT, nejmíň magnetických rezonancí. Česko má 12 MRI na milion lidí — pod OECD i EU">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="CT i magnetických rezonancí má Česko méně než průměr OECD. Rezonancí aspoň přibývá">
   <defs>
     <style>
       .root { font-family: 'Source Serif 4', 'Source Serif Pro', Georgia, 'Times New Roman', serif; }
@@ -31,10 +31,11 @@
       .viz-timeline-dot-3 { animation-delay: 1.0s; }
       .viz-timeline-dot-4 { animation-delay: 1.25s; }
       .viz-timeline-line { stroke-dasharray: 400; stroke-dashoffset: 400; animation: drawIn 1.2s ease-out 0.3s forwards; }
+      .viz-line { stroke-dasharray: 1400; stroke-dashoffset: 1400; animation: drawIn 1.4s ease-out 0.4s forwards; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .accent-bar, .title-underline, .pulse-dot, .viz-bar, .viz-donut-segment, .viz-timeline-dot, .viz-timeline-line { animation: none !important; }
-      .title-underline, .viz-timeline-line { stroke-dashoffset: 0; }
+      .accent-bar, .title-underline, .pulse-dot, .viz-bar, .viz-donut-segment, .viz-timeline-dot, .viz-timeline-line, .viz-line { animation: none !important; }
+      .title-underline, .viz-timeline-line, .viz-line { stroke-dashoffset: 0; }
       .viz-donut-segment { stroke-dashoffset: 0; }
     }
     @keyframes barGrow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
@@ -72,40 +73,48 @@
   <!-- Headline -->
   <g class="root">
     <text class="title" x="80" y="160" font-size="36">
-      <tspan x="80" dy="0">Nejvíc CT, nejmíň</tspan><tspan x="80" dy="38">magnetických</tspan><tspan x="80" dy="38">rezonancí. Česko</tspan><tspan x="80" dy="38">má 12 MRI na</tspan><tspan x="80" dy="38">milion lidí — pod</tspan><tspan x="80" dy="38">OECD i EU</tspan>
+      <tspan x="80" dy="0">CT i magnetických</tspan><tspan x="80" dy="38">rezonancí má Česko</tspan><tspan x="80" dy="38">méně než průměr</tspan><tspan x="80" dy="38">OECD. Rezonancí</tspan><tspan x="80" dy="38">aspoň přibývá</tspan>
     </text>
     <line class="title-underline"
-          x1="80" y1="372"
-          x2="280" y2="372"
+          x1="80" y1="334"
+          x2="280" y2="334"
           stroke="#2c5a8a" stroke-width="4" stroke-linecap="round"/>
     
   </g>
 
   <!-- Data viz panel (volitelně) -->
-  <g><text x="670" y="144" class="viz-title">MRI na milion obyvatel — Česko vs mezinárodní průměr</text>
-      <text x="670" y="219.5" class="viz-label">Průměr OECD</text>
+  <g><text x="670" y="144" class="viz-title">CT na milion obyvatel (2024)</text>
+      <text x="670" y="190.5" class="viz-label">Německo</text>
       
       <rect class="viz-bar viz-bar-1"
-            x="850" y="214"
-            width="160" height="18"
+            x="850" y="185"
+            width="171" height="18"
             fill="#5f574e" rx="2" opacity="0.55"/>
-      <text x="1022" y="231" class="viz-value" fill="#1f1a14">16</text>
+      <text x="1033" y="202" class="viz-value" fill="#1f1a14">38</text>
     
-      <text x="670" y="305.5" class="viz-label">Průměr EU</text>
+      <text x="670" y="276.5" class="viz-label">Průměr OECD</text>
       
       <rect class="viz-bar viz-bar-2"
-            x="850" y="300"
-            width="145" height="18"
+            x="850" y="271"
+            width="130" height="18"
             fill="#5f574e" rx="2" opacity="0.55"/>
-      <text x="1007" y="317" class="viz-value" fill="#1f1a14">14,5</text>
+      <text x="992" y="288" class="viz-value" fill="#1f1a14">28,8</text>
     
-      <text x="670" y="391.5" class="viz-label">Česko</text>
+      <text x="670" y="362.5" class="viz-label">Slovensko</text>
       
       <rect class="viz-bar viz-bar-3"
-            x="850" y="386"
-            width="120" height="18"
+            x="850" y="357"
+            width="89" height="18"
+            fill="#5f574e" rx="2" opacity="0.55"/>
+      <text x="951" y="374" class="viz-value" fill="#1f1a14">19,7</text>
+    
+      <text x="670" y="448.5" class="viz-label">Česko</text>
+      
+      <rect class="viz-bar viz-bar-4"
+            x="850" y="443"
+            width="74" height="18"
             fill="#2c5a8a" rx="2" opacity="1"/>
-      <text x="982" y="403" class="viz-value" fill="#2c5a8a">12</text>
+      <text x="936" y="460" class="viz-value" fill="#2c5a8a">16,4</text>
     </g>
 
   <!-- Bottom: branding + date -->

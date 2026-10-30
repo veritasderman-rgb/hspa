@@ -1,0 +1,110 @@
+{
+  "_doc": "Historie headline hodnot sad, které ÚZIS publikuje vždy jen za jeden rok (každá edice = jiný rok). Transform ingest/transform_dohodovaci_rizeni.js při každém běhu zapíše headline aktuální edice (upsert podle roku), builder ingest/build-dohodovaci-rizeni.js z historie složí časovou řadu napříč edicemi. Seed z edic 2026-01 (rok 2024, u 11-37 rok 2023) převedených stejným transformem 30. 10. 2026 a z aktuálních edic. Transform zapíše i headline extraktu, který právě přepisuje, takže rok dosavadní edice se neztratí. Sada se sem zařadí jen tehdy, když je definice ukazatele mezi edicemi stejná: 11-39 (pokrytí referenční sítí) mezi edicemi změnila scénář výběru nemocnic a 11-42 (zubní lékaři) okruh pracovišť (stomatolog → klinická stomatologie), proto tu nejsou.",
+  "sets": {
+    "OIS-11-20": {
+      "note": "Počet poskytovatelů s pracovištěm praktického lékaře pro dospělé.",
+      "points": [
+        {
+          "year": 2024,
+          "value": 5588,
+          "edition": "2026-01"
+        },
+        {
+          "year": 2025,
+          "value": 5525,
+          "edition": "2026-02"
+        }
+      ]
+    },
+    "OIS-11-21": {
+      "note": "Počet poskytovatelů s pracovištěm praktického lékaře pro děti a dorost.",
+      "points": [
+        {
+          "year": 2024,
+          "value": 2160,
+          "edition": "2026-01"
+        },
+        {
+          "year": 2025,
+          "value": 2116,
+          "edition": "2026-02"
+        }
+      ]
+    },
+    "OIS-11-25": {
+      "note": "Počet hospitalizačních případů akutní lůžkové péče. Edice se liší verzí klasifikace CZ-DRG (rok 2024 ve verzi 6.0, rok 2025 ve verzi 2026); celkový počet případů na verzi klasifikace nezávisí, rozdělení do skupin ano.",
+      "points": [
+        {
+          "year": 2024,
+          "value": 1792276,
+          "edition": "2026-01"
+        },
+        {
+          "year": 2025,
+          "value": 1775868,
+          "edition": "2026-02"
+        }
+      ]
+    },
+    "OIS-11-37": {
+      "note": "Hospitalizační případy zahrnuté do analýzy nákladovosti. Rok 2023 je ve verzi CZ-DRG 5.0, rok 2024 ve verzi 6.0.",
+      "points": [
+        {
+          "year": 2023,
+          "value": 1789299,
+          "edition": "2025-01"
+        },
+        {
+          "year": 2024,
+          "value": 1808472,
+          "edition": "2026-01"
+        }
+      ]
+    },
+    "OIS-11-38": {
+      "note": "Výkony převzetí pacienta od zdravotnické záchranné služby na urgentních příjmech.",
+      "points": [
+        {
+          "year": 2024,
+          "value": 825011,
+          "edition": "2026-01"
+        },
+        {
+          "year": 2025,
+          "value": 846030,
+          "edition": "2026-02"
+        }
+      ]
+    },
+    "OIS-11-41": {
+      "note": "Výjezdy zdravotnické záchranné služby.",
+      "points": [
+        {
+          "year": 2024,
+          "value": 1055707,
+          "edition": "2026-01"
+        },
+        {
+          "year": 2025,
+          "value": 1088908,
+          "edition": "2026-02"
+        }
+      ]
+    },
+    "OIS-11-45": {
+      "note": "Hospitalizační případy sledované pro centralizaci. Rok 2024 ve verzi CZ-DRG 6.0, rok 2025 ve verzi 7.0.",
+      "points": [
+        {
+          "year": 2024,
+          "value": 1789575,
+          "edition": "2026-01"
+        },
+        {
+          "year": 2025,
+          "value": 1789225,
+          "edition": "2026-02"
+        }
+      ]
+    }
+  }
+}
