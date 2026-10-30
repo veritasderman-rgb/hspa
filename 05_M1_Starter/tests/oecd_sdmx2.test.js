@@ -254,3 +254,21 @@ test('fetchHttp2 normalizuje názvy hlaviček na lowercase (HTTP/2 zakazuje velk
     fs.readFileSync(new URL('../ingest/lib/http.js', import.meta.url), 'utf8'));
   assert.match(src, /toLowerCase\(\)/, 'fetchHttp2 musí názvy hlaviček normalizovat');
 });
+
+test('parseOecdSdmx2: průměr pod 10 drží dvě desetinná místa', () => {
+  // ČR 0,76 a průměr 0,756 — zaokrouhlení na 0,8 by z ČR udělalo zemi pod průměrem.
+  const json = {
+    data: {
+      structures: [{ dimensions: { observation: [
+        { id: 'REF_AREA', values: ['CZE', 'AUT', 'DEU', 'POL', 'SVK', 'HUN'].map((id) => ({ id })) },
+        { id: 'TIME_PERIOD', values: [{ id: '2024' }] },
+      ] } }],
+      dataSets: [{ observations: {
+        '0:0': [0.76], '1:0': [0.6], '2:0': [0.86], '3:0': [0.9], '4:0': [0.7], '5:0': [0.72],
+      } }],
+    },
+  };
+  const r = parseOecdSdmx2(json, {});
+  assert.equal(r.cz.value, 0.76);
+  assert.equal(r.benchmark.oecd, 0.76);
+});
