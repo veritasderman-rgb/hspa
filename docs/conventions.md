@@ -161,7 +161,7 @@ korpusu, blok K audit A2).
 Hodnota v `data/indicators.json` se `source.origin: "seed"` bez `verification_status: "verified"` je **neověřený seed**, ne fakt. Tři takové hodnoty (CT/MR, délka hospitalizace, zubaři) se v říjnu 2026 dostaly do publikovaných článků jako chybná čísla. Proto:
 
 - Než článek zopakuje hodnotu nebo benchmark indikátoru, zkontroluj, že indikátor je živý (`origin: live`) nebo ověřený. Seed nejdřív ověř proti primárnímu zdroji podle `docs/seed-audit.md`.
-- `npm run validate:seed-claims` (součást `validate:all`) odmítne nové tvrzení v `data/claims.json` s `relation: exact | derived`, které stojí na neověřeném seedu. Stávající případy drží baseline `data/seed-claims-baseline.json`, ta se smí jen zmenšovat (`node ingest/validate-seed-claims.js --update` po ověření indikátoru).
+- `npm run validate:claims` (součást `validate:all`, kontrola `ingest/validate-seed-claims.js`) odmítne nové tvrzení v `data/claims.json` s `relation: exact | derived`, které stojí na neověřeném seedu. Stávající případy drží baseline `data/seed-claims-baseline.json`, ta se smí jen zmenšovat (`node ingest/validate-seed-claims.js --update` po ověření indikátoru).
 - Covery článků berou graf jen z ověřených nebo živých indikátorů (`generate-article-cover.js`).
 
 ### Scraped data

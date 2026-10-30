@@ -11,6 +11,7 @@
 // baseline neprojde: indikátor nejdřív ověř, nebo tvrzení navaž jinak. Baseline se
 // smí jen zmenšovat — položku, která už seed nepoužívá, odstraní:
 //   node ingest/validate-seed-claims.js --update
+// Kontrolu spouští ingest/validate-claims.js (npm run validate:claims, součást validate:all).
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -44,40 +45,46 @@ export function compareBaseline(current, baseline) {
   };
 }
 
-function main() {
+function load() {
   const claims = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'claims.json'), 'utf8')).claims || [];
   const indicators = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'indicators.json'), 'utf8')).indicators || [];
-  const current = seedClaims(claims, indicators);
   const baseline = fs.existsSync(BASELINE) ? JSON.parse(fs.readFileSync(BASELINE, 'utf8')).claims || [] : [];
+  return { claims, indicators, baseline, current: seedClaims(claims, indicators) };
+}
+
+/* volá ingest/validate-claims.js (součást validate:all); vrací true, když je vše v pořádku */
+export function checkSeedClaims() {
+  const { claims, baseline, current } = load();
   const { added, stale } = compareBaseline(current, baseline);
-
-  if (process.argv.includes('--update')) {
-    if (added.length) {
-      console.error(`FAIL: --update baseline jen zmenšuje; ${added.length} nových tvrzení na neověřeném seedu:`);
-      added.forEach((id) => console.error('  -', id));
-      process.exit(1);
-    }
-    const next = baseline.filter((id) => !stale.includes(id));
-    const doc = JSON.parse(fs.readFileSync(BASELINE, 'utf8'));
-    fs.writeFileSync(BASELINE, JSON.stringify({ ...doc, claims: next }, null, 2) + '\n');
-    console.log(`OK: baseline zmenšena o ${stale.length} na ${next.length} tvrzení.`);
-    return;
-  }
-
   const byId = new Map(claims.map((c) => [c.id, c]));
-  let fail = false;
   if (added.length) {
-    fail = true;
     console.error(`FAIL: ${added.length} tvrzení stojí na neověřeném seedu (docs/seed-audit.md). Ověř indikátor proti zdroji, nebo tvrzení neopírej o seed:`);
     added.forEach((id) => console.error(`  - ${id} → ${byId.get(id)?.indicator_id}`));
   }
   if (stale.length) {
-    fail = true;
     console.error(`FAIL: ${stale.length} položek baseline už seed nepoužívá. Zmenši baseline: node ingest/validate-seed-claims.js --update`);
     stale.forEach((id) => console.error('  -', id));
   }
-  if (fail) process.exit(1);
+  if (added.length || stale.length) return false;
   console.log(`OK: žádné nové tvrzení na neověřeném seedu (baseline ${baseline.length}).`);
+  return true;
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
+function update() {
+  const { baseline, current } = load();
+  const { added, stale } = compareBaseline(current, baseline);
+  if (added.length) {
+    console.error(`FAIL: --update baseline jen zmenšuje; ${added.length} nových tvrzení na neověřeném seedu:`);
+    added.forEach((id) => console.error('  -', id));
+    process.exit(1);
+  }
+  const doc = JSON.parse(fs.readFileSync(BASELINE, 'utf8'));
+  const next = baseline.filter((id) => !stale.includes(id));
+  fs.writeFileSync(BASELINE, JSON.stringify({ ...doc, claims: next }, null, 2) + '\n');
+  console.log(`OK: baseline zmenšena o ${stale.length} na ${next.length} tvrzení.`);
+}
+
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  if (process.argv.includes('--update')) update();
+  else if (!checkSeedClaims()) process.exit(1);
+}
