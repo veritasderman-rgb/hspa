@@ -1,0 +1,50 @@
+{
+  "id": "plat_lekare_platova_sfera",
+  "name": "Průměrný měsíční plat lékaře (platová sféra)",
+  "area": "Struktury",
+  "domain": "Pracovní síla",
+  "subdomain": "Odměňování",
+  "definition": "Průměrný hrubý měsíční plat lékařů (kategorie „Lékaři“, povolání lékař) u poskytovatelů zdravotních služeb v platové sféře — příspěvkových organizacích — za kalendářní rok, v Kč. Národní hodnota je průměr přes druhy zdravotnických zařízení vážený přepočtenými úvazky lékařů (OIS-11-13, rok 2024). Zahrnuje všechny složky platu vykázané v ročním výkazu (tarif, příplatky, odměny, přesčasy).",
+  "unit": "Kč / měsíc",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "nzip_dohodovaci_rizeni",
+      "endpoint": "https://www.nzip.cz/clanek/2371-odmenovani-platy-mzdy-datovy-souhrn",
+      "dataset": "ÚZIS ČR — Datová podpora dohodovacího řízení, datový souhrn OIS-11-12 Vývoj průměrných platů a mezd — odměňování (zdroj: roční výkazy E (MZ) 2-01, 3-01, 4-01); váhy: OIS-11-13 Vývoj průměrných platů a mezd — kapacity, úvazky",
+      "dimensions": {
+        "druh_zarizeni": "druh zdravotnického zařízení (DRZAR: fakultní nemocnice, nemocnice, odborné léčebné ústavy, …)",
+        "kategorie": "lékaři, zubní lékaři, farmaceuti, sestry a porodní asistentky, …",
+        "odmenovani": "plat (platová sféra — příspěvkové organizace) / mzda (mzdová sféra)",
+        "obdobi": "edice 2026-01: roky 2019–2025 (zpracováno ÚZIS 25. 6. 2026)"
+      },
+      "note": "Hodnoty spočteny z primárního XLSX transformem ingest/transform_dohodovaci_rizeni.js (list data, řádky kategorie „Lékaři“ a odměňování „Plat“, vážený průměr úvazky 2024 z OIS-11-13): 2019 = 86 110; 2020 = 94 950; 2021 = 104 352; 2022 = 103 078; 2023 = 107 164; 2024 = 126 722; 2025 = 131 693 Kč. Edice 2026-01 přidala rok 2025 a posunula tabulku o jeden sloupec; převod čte sloupce podle záhlaví."
+    }
+  },
+  "benchmark_source": {
+    "type": "narrative_only",
+    "code": "see_oecd_ratio",
+    "dataset": "Mezinárodní srovnání v Kč nedává smysl (rozdílné cenové hladiny). Pro mezinárodní kontext slouží indikátory odmenovani_lekaru_nasobek_mzdy a odmenovani_sester_nasobek_mzdy (OECD Health Statistics, odměna jako násobek průměrné mzdy v ekonomice). Tento indikátor doplňuje domácí řadu v korunách s ročním zpožděním jen několika měsíců.",
+    "value": null,
+    "url": null
+  },
+  "signal_thresholds": {
+    "good": 2,
+    "warn": 5
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "Vláda ČR a MPSV (nařízení o platech, tarifní tabulky platové sféry)",
+    "Ministerstvo zdravotnictví ČR (úhradová vyhláška, zřizovatel přímo řízených nemocnic)",
+    "kraje a obce jako zřizovatelé příspěvkových organizací",
+    "odborové organizace (LOK-SČL, OSZSP ČR)",
+    "ÚZIS ČR (resortní výkazy E (MZ))"
+  ],
+  "method_notes": "Hodnota 2025: 131 693 Kč měsíčně, o 3,9 % víc než v roce 2024 a o 52,9 % víc než v roce 2019 (86 110 Kč). Nejvýraznější skok přišel mezi lety 2023 a 2024 (+18,3 %), časově shodný s navýšením platů lékařů po sporu o přesčasovou práci na přelomu let 2023/2024. Rok 2022 je jediný s poklesem (−1,2 %). Poměr k průměrnému platu sester a porodních asistentek (indikátor plat_sestry_platova_sfera) vzrostl z 1,86 (2019) na 2,06 (2025). Signál neutral — směr context_dependent: vyšší platy pomáhají udržet lékaře v systému, zároveň tvoří největší nákladovou položku nemocnic.",
+  "limitations": "1. **Jen platová sféra** — zahrnuje příspěvkové organizace (fakultní nemocnice, příspěvkové nemocnice a další státní a krajské zařízení); nemocnice v obchodních společnostech odměňují mzdou a patří do mzdové sféry, kterou tento indikátor nezachycuje. 2. **Váhy z roku 2024** — národní průměr je vážen přepočtenými úvazky podle druhu zařízení a povolání ze souhrnu OIS-11-13, který zatím končí rokem 2024; pro celou řadu 2019–2025 se proto používají váhy 2024 a meziroční změny neodrážejí přesuny personálu mezi druhy zařízení. 3. **Průměr, ne medián** — vysoké příplatky a přesčasy zvyšují průměr; medián platu z ISPV uvádí souhrn OIS-11-15. 4. **Nominální hodnoty** — bez očištění o inflaci. 5. **Posuvná metodika** — ÚZIS sady datové podpory průběžně přepracovává (změna rozvržení tabulky, nové roky); při změně zdroje nebo definice by nová edice nemusela být s touto řadou souměřitelná, převod proto ověřuje záhlaví sloupců při každém refreshi.",
+  "determinants": "**Platové předpisy.** V platové sféře určují tarif nařízení vlády a zákoník práce; mimořádné kroky (navýšení po sporu o přesčasy 2023/2024, pandemické odměny 2020–2021) vytvářejí skoky v řadě.\n\n**Úhrady.** Nemocnice platy financují hlavně z úhrad pojišťoven; úhradová vyhláška a výsledek dohodovacího řízení určují, kolik prostoru na růst platů zbude.\n\n**Trh práce.** Konkurence soukromých nemocnic, ambulancí a zahraničí (Německo, Rakousko) tlačí na odměny zejména v příhraničních krajích.\n\n**Struktura personálu.** Přesčasy a směnnost zvyšují průměrný plat — při nedostatku personálu průměr roste i bez zvýšení tarifu.",
+  "importance": "Odměňování je hlavní páka, kterou stát a zřizovatelé ovlivňují, zda lékaři zůstanou ve veřejných nemocnicích, neodejdou do zahraničí nebo do soukromé sféry. Zároveň jsou osobní náklady největší položkou rozpočtu nemocnic: u poskytovatelů lůžkové péče vzrostly ze 108 mld. Kč v roce 2019 na 180 mld. Kč v roce 2025 (OIS-11-17). Indikátor proto stojí na průsečíku dimenzí **dostupnosti** (personální kapacita) a **efektivity** (náklady systému).\n\nPrůměrný plat lékaře v platové sféře dosáhl v roce 2025 131 693 Kč. Po skoku o 18,3 % v roce 2024 se růst vrátil ke 3,9 % ročně.",
+  "patient_story": "Modelová situace. Tomáš je internista v krajské nemocnici, která je příspěvkovou organizací kraje. V roce 2023 zvažoval s kolegy odchod do soukromé nemocnice nebo do Německa; spor o přesčasy na přelomu let 2023 a 2024 skončil navýšením platů a Tomáš zůstal. Nemocnice ale musela najít peníze: osobní náklady jsou její největší výdaj a úhrady pojišťoven rostou pomaleji, než by si přála.\n\nData ÚZIS za rok 2025 ukazují obě strany. Průměrný měsíční plat lékaře v platové sféře dosáhl 131 693 Kč, o 3,9 % víc než v roce 2024 (126 722 Kč) a o 52,9 % víc než v roce 2019 (86 110 Kč). Zlom je vidět jasně: mezi lety 2023 a 2024 vzrostl průměr o 18,3 %, zatímco v ostatních letech rostl o jednotky procent a v roce 2022 dokonce mírně klesl. Sestry si za stejnou dobu polepšily pomaleji — jejich průměrný plat je zhruba poloviční a poměr mezi lékařem a sestrou se zvýšil z 1,86 na 2,06.\n\nNa straně nákladů to je znát v účetnictví nemocnic: osobní náklady poskytovatelů lůžkové péče vzrostly ze 108 miliard korun v roce 2019 na 180 miliard v roce 2025. Platy tak nejsou jen otázkou spravedlnosti vůči lékařům, ale i hlavní položkou, o které se jedná v dohodovacím řízení o úhradách na další rok.\n\nPáky jsou tarifní tabulky a nařízení vlády pro platovou sféru, úhradová vyhláška, ze které nemocnice platy financují, a rovnováha mezi lékaři a nelékařským personálem. Indikátor ukáže, zda se po jednorázovém skoku platy drží reálné hodnoty — a zda nerozevírají nůžky vůči sestrám.",
+  "framework": "monitoring",
+  "dimension": "dostupnost"
+}

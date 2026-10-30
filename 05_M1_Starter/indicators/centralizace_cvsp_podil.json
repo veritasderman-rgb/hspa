@@ -1,0 +1,49 @@
+{
+  "id": "centralizace_cvsp_podil",
+  "name": "Péče určená k centralizaci provedená v centrech vysoce specializované péče",
+  "area": "Procesy",
+  "domain": "Kvalita péče",
+  "subdomain": "Centralizace specializované péče",
+  "definition": "Podíl hospitalizačních případů akutní lůžkové péče v DRG skupinách, které úhradová vyhláška určuje k centralizaci, jež proběhly u poskytovatele se statutem centra vysoce specializované péče (CVSP) příslušného typu (v %). Jmenovatel: všechny hospitalizační případy v DRG skupinách s příznakem centralizace dle úhradové vyhlášky. Čitatel: z nich případy provedené v CVSP. Indikátor měří, nakolik se náročná péče, u níž existuje doložený vztah mezi objemem pracoviště a výsledkem (onkochirurgie, kardiovaskulární a cerebrovaskulární péče, traumatologie, perinatologie, transplantace), skutečně soustřeďuje tam, kam ji systém směruje.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "nzip_dohodovaci_rizeni",
+      "endpoint": "https://www.nzip.cz/data/2762-hospitalizacni-pripady-alp-cz-drg-cvsp-datovy-souhrn",
+      "dataset": "ÚZIS ČR — Datová podpora dohodovacího řízení, datový souhrn OIS-11-51 Počty hospitalizačních případů akutní lůžkové péče dle klasifikačního systému CZ-DRG a provedení v centru vysoce specializované péče (zdroj: Národní registr hrazených zdravotních služeb, NRHZS)",
+      "dimensions": {
+        "drg_skupina": "258 DRG skupin s příznakem centralizace dle úhradové vyhlášky (sloupec „Centralizace DRG skupiny dle ÚV“ = ano)",
+        "typ_cvsp": "typ centra (onkologie, onkogynekologie, HPB chirurgie, jícen, rektum, komplexní kardiovaskulární, cerebrovaskulární, traumatologie, perinatologie, transplantace …)",
+        "metrika": "počet hospitalizačních případů celkem, v CVSP a mimo CVSP; casemix",
+        "obdobi": "edice 2026-02: listy „rok 2024“ a „rok 2025“, oba ve verzi CZ-DRG 2026"
+      },
+      "note": "Hodnoty spočteny z primárního XLSX (edice 2026-02, list rok 2025 zpracován ÚZIS 30. 6. 2026, list rok 2024 30. 4. 2026; staženo 30. 10. 2026) transformem ingest/transform_dohodovaci_rizeni.js: součet sloupce „Počet HP v CVSP“ / součet „Počet HP celkem“ přes řádky s centralizací = ano. 2025: 59 577 / 64 527 = 92,3 % (mimo centra 4 950 případů); 2024: 58 501 / 63 758 = 91,8 % (mimo centra 5 257). Oba roky jsou v téže verzi CZ-DRG 2026, a tedy srovnatelné."
+    }
+  },
+  "benchmark_source": {
+    "type": "narrative_only",
+    "code": "no_direct_benchmark",
+    "dataset": "Mezinárodní benchmark neexistuje: seznam DRG skupin určených k centralizaci i síť CVSP jsou česká regulatorní konstrukce (úhradová vyhláška, Věstník MZ ČR). Mezinárodní literatura měří centralizaci po jednotlivých výkonech (např. podíl resekcí jícnu nebo slinivky v centrech s vysokým objemem), ne souhrnně. Indikátor se proto hodnotí proti vlastní časové řadě a po typech center.",
+    "value": null,
+    "url": null
+  },
+  "signal_thresholds": {
+    "good": 2,
+    "warn": 5
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "Ministerstvo zdravotnictví ČR (statuty CVSP, úhradová vyhláška, metodické pokyny k centralizaci)",
+    "zdravotní pojišťovny (smluvní politika, odsmluvnění výkonů mimo centra)",
+    "ÚZIS ČR (NRHZS, datová podpora dohodovacího řízení)",
+    "poskytovatelé akutní lůžkové péče"
+  ],
+  "method_notes": "Hodnota 2025 = 92,3 %, 2024 = 91,8 % (OIS-11-51, edice 2026-02, CZ-DRG 2026). Celek je silně vážen kardiovaskulární péčí: skupina komplexní kardiovaskulární + kardiologická centra tvoří 28 474 z 64 527 případů (2025) a dosahuje 95,3 %, zatímco onkochirurgické typy center jsou výrazně níž — jícen 76,5 %, HPB chirurgie 77,6 %, pneumoonkochirurgie 76,8 %, onkogynekologie 81,9 %, rektum 82,9 % (2025). Proto je vhodné číst indikátor spolu s rozpadem po typech center na stránce Dohodovací řízení (OIS-11-51). Předchozí edice souhrnu (2026-01, CZ-DRG 6.0, jediný list) dávala pro rok 2024 rovněž 91,8 %. Signál je neutral, dokud neexistuje cílová hodnota nebo benchmark — růst podílu je žádoucí, ale 100 % není realistický cíl (akutní stavy, převozy, pacienti nepřevozitelní).",
+  "limitations": "1. **Seznam skupin se mění** — DRG skupiny s příznakem centralizace určuje každoročně úhradová vyhláška; změna seznamu mění jmenovatel. Tato edice počítá oba roky nad stejným seznamem a stejnou verzí CZ-DRG. 2. **Statut centra ≠ kvalita pracoviště** — indikátor měří, zda péče proběhla u držitele statutu, ne výsledky (mortalitu, komplikace) jednotlivých pracovišť. 3. **Akutní případy** — část případů mimo centra jsou neodkladné stavy (např. angioplastika při akutním infarktu v nemocnici bez statutu), kde převoz nemusí být v zájmu pacienta. 4. **Agregace** — souhrnný podíl je vážen počty případů; dominantní kardiologie zakrývá slabší onkochirurgické typy. 5. **Data jsou administrativní** (vykázané hospitalizace v NRHZS), nezachycují soukromě hrazenou péči.",
+  "determinants": "**Regulace a úhrady.** Úhradová vyhláška a smluvní politika pojišťoven určují, zda nemocnice bez statutu centra dostane za centralizovaný výkon zaplaceno. Od 1. 9. 2026 MZ ČR podle Věstníku č. 10/2026 plně centralizovalo chirurgii jater, slinivky a jícnu a necentrová pracoviště byla k 31. 8. 2026 odsmluvněna — data za rok 2025 ukazují výchozí stav před tímto krokem.\n\n**Síť center.** Počet a rozmístění CVSP (Věstník MZ ČR) rozhoduje o dojezdu; v krajích s jediným centrem je tlak na ponechání péče v okresních nemocnicích vyšší.\n\n**Akutnost péče.** Kardiovaskulární a cerebrovaskulární péče je organizovaná přes záchrannou službu a směrování do center (iktová a kardiocentra), proto dosahuje vysokých podílů; plánovaná onkochirurgie závisí víc na rozhodnutí indikujícího lékaře a na místní nabídce.\n\n**Informovanost pacientů.** U plánovaných výkonů si pacient pracoviště volí; bez dostupné informace o objemu a výsledcích pracovišť volí často nejbližší nemocnici.",
+  "importance": "Centralizace je jedním z mála nástrojů, u nichž je vztah mezi organizací péče a přežitím doložen opakovaně: u náročných operací (jícen, slinivka, konečník, plíce) mají pracoviště s vysokým objemem nižší pooperační úmrtnost. Česká úhradová vyhláška proto určuje 258 DRG skupin, které se mají soustřeďovat do center vysoce specializované péče. Indikátor ukazuje, nakolik se to daří — a hlavně kde ne.\n\nZ pohledu HSPA patří do dimenze **kvality** (správná péče na správném místě) a nepřímo i **efektivity** (koncentrace drahé technologie a týmů). Souhrnných 92,3 % (2025) vypadá dobře, ale skrývá rozdíly: u operací jícnu, slinivky a jater se zhruba každý čtvrtý případ odehrál mimo centrum. Indikátor má přímou politickou páku — statut centra, smluvní politiku pojišťoven a úhradovou vyhlášku.",
+  "patient_story": "Modelová situace. Pan Karel, šedesát osm let, se dozvídá, že nádor na slinivce lze operovat. Okresní nemocnice, kde ho vyšetřili, operaci nabídne do tří týdnů; nejbližší centrum vysoce specializované péče je sedmdesát kilometrů daleko. Rodina je unavená z cest a nemocnice „za humny“ zní jako lepší volba. Pan Karel netuší, že u operací slinivky závisí riziko úmrtí po výkonu silně na tom, kolik jich pracoviště ročně provede — a že systém právě proto tuto péči směřuje do center.\n\nData ÚZIS za rok 2025 ukazují, jak často se to daří. Ve všech 258 DRG skupinách, které úhradová vyhláška určuje k centralizaci, proběhlo v centrech 92,3 % případů — o půl bodu víc než v roce 2024 (91,8 %). Mimo centra skončilo 4 950 hospitalizací. Celkové číslo ale táhne nahoru kardiologie, kde záchranka vozí infarkty rovnou do kardiocenter (95,3 %). U plánované onkochirurgie je obraz jiný: chirurgie jater, slinivky a žlučových cest (HPB) dosáhla v centrech 77,6 %, chirurgie jícnu 76,5 %, plicní onkochirurgie 76,8 %, onkogynekologie 81,9 %. Zhruba každý čtvrtý pacient jako pan Karel byl v roce 2025 operován mimo centrum.\n\nTo je důvod, proč ministerstvo od 1. září 2026 chirurgii jater, slinivky a jícnu centralizovalo úplně a necentrovým nemocnicím ji pojišťovny odsmluvnily. Data za rok 2025 jsou výchozí čára, proti které bude možné za rok změřit, zda krok zabral — a zda se podobný posun nepotřebuje i v onkogynekologii, plicní a rektální chirurgii.\n\nPro pacienta je otázka jednoduchá: „Kolik takových operací ročně u vás děláte a máte statut centra?“ Pro systém je otázka těžší: jak zajistit, aby centra měla kapacitu, dojezd byl únosný a pacient nečekal déle, než by čekal doma v okrese.",
+  "framework": "hspa",
+  "dimension": "kvalita"
+}
