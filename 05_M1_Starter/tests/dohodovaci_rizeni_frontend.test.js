@@ -186,9 +186,14 @@ test('dohodovaci-rizeni.json: citlivostní predikce má 3 scénáře + benchmark
   }
   assert.equal(fc.benchmark.values.length, n, 'benchmark délka');
   assert.ok(fc.gap_2030 && typeof fc.gap_2030.value === 'number', 'gap_2030');
-  // scénáře musí vycházet ze stejné hodnoty 2024 jako skutečnost
-  const i2024 = fc.labels.indexOf(2024);
-  assert.equal(fc.scenarios.base.values[i2024], fc.history[i2024], 'scénář navazuje na skutečnost 2024');
+  // scénáře musí vycházet ze stejné hodnoty jako poslední rok skutečnosti
+  const iLast = fc.history.reduce((acc, v, i) => (v != null ? i : acc), -1);
+  assert.ok(iLast >= 0, 'history má aspoň jeden pozorovaný rok');
+  for (const key of ['optimistic', 'base', 'risk']) {
+    assert.equal(fc.scenarios[key].values[iLast], fc.history[iLast], `scénář ${key} navazuje na skutečnost ${fc.labels[iLast]}`);
+    assert.equal(fc.scenarios[key].values[iLast - 1] ?? null, null, `scénář ${key} nezačíná před posledním pozorováním`);
+  }
+  assert.equal(fc.benchmark.values[iLast], fc.history[iLast], 'benchmark navazuje na skutečnost');
   // pořadí: rizikový ≥ základní ≥ optimistický ≥ udržitelný v roce 2030
   const i2030 = fc.labels.indexOf(2030);
   assert.ok(
