@@ -271,10 +271,10 @@ function formatIsoDate(iso) {
 
 // Velké animované číslo — hodnota zvlášť (animuje se), jednotka v menším spanu,
 // aby dlouhé hodnoty typu „~1 800/rok" nepřetékaly z boxu.
-function bignumValueHtml({ value, prefix = '', suffix = '', cls = '' }) {
+function bignumValueHtml({ value, prefix = '', suffix = '', cls = '', decimals = 0 }) {
   const s = escapeHtml(suffix || '');
   return `<div class="dr-bignum-value${cls ? ' ' + cls : ''}">`
-    + `<span class="dr-bignum-num" data-target="${value}" data-prefix="${escapeHtml(prefix || '')}">0</span>`
+    + `<span class="dr-bignum-num" data-target="${value}" data-decimals="${Number(decimals) || 0}" data-prefix="${escapeHtml(prefix || '')}">0</span>`
     + (s ? `<span class="dr-bignum-unit">${s}</span>` : '')
     + '</div>';
 }
@@ -291,7 +291,7 @@ function renderAnalysis(root, data) {
     .map(
       (n) => `
       <div class="dr-bignum dr-bignum-${escapeHtml(n.tone || 'neutral')}">
-        ${bignumValueHtml({ value: n.value, prefix: n.prefix, suffix: n.suffix })}
+        ${bignumValueHtml({ value: n.value, prefix: n.prefix, suffix: n.suffix, decimals: n.decimals })}
         <div class="dr-bignum-label">${escapeHtml(n.label)}</div>
         <div class="dr-bignum-plain">${escapeHtml(n.plain)}</div>
       </div>`,
@@ -385,7 +385,7 @@ function renderAnalysis(root, data) {
     .map(
       (n) => `
       <div class="dr-bignum dr-bignum-${escapeHtml(n.tone || 'neutral')}">
-        ${bignumValueHtml({ value: n.value, prefix: n.prefix, suffix: n.suffix })}
+        ${bignumValueHtml({ value: n.value, prefix: n.prefix, suffix: n.suffix, decimals: n.decimals })}
         <div class="dr-bignum-label">${escapeHtml(n.label)}</div>
         <div class="dr-bignum-plain">${escapeHtml(n.plain)}</div>
       </div>`,
@@ -532,7 +532,7 @@ function drawCagr(cg) {
         legend: { display: false },
         tooltip: { callbacks: { label: (c) => `${c.parsed.x > 0 ? '+' : ''}${c.parsed.x} %/rok` } },
       },
-      scales: { x: { title: { display: true, text: '% ročně (CAGR 2019–2024)' } } },
+      scales: { x: { title: { display: true, text: `% ročně (CAGR${cg.period ? ' ' + cg.period : ''})` } } },
     },
   });
 }
@@ -587,7 +587,9 @@ function drawRetirement(pc) {
 function animateCount(el) {
   const target = parseFloat(el.dataset.target);
   const prefix = el.dataset.prefix || '';
-  const fmt = (v) => prefix + Math.round(v).toLocaleString('cs-CZ');
+  const dec = Number(el.dataset.decimals) || 0;
+  const fmt = (v) =>
+    prefix + v.toLocaleString('cs-CZ', { minimumFractionDigits: dec, maximumFractionDigits: dec });
   if (reduceMotion()) {
     el.textContent = fmt(target);
     return;

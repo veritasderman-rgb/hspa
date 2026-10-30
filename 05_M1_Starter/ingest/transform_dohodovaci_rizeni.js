@@ -1095,21 +1095,34 @@ function transformOIS1124() {
   const rows = readSheet(path.join(CACHE, 'OIS-11-24.xlsx'), 'Úhradová data – souhrn');
   const h = findHeaderRow(rows, { mustContain: ['CPO', 'Úhrada'] });
   const body = rows.slice(h + 1).filter((r) => r && r[0] != null);
-  const byZp = new Map();
-  let grand = 0;
+  // období „2023", „2024_pol" (pololetní dodávka pojišťoven); podsegment 1.7.1 je podle
+  // listu Metodika „z toho" uvnitř 1.7 a nesčítá se — jinak je celek nadhodnocen
+  const periodYear = (t) => Number((/^(20\d{2})/.exec(t) || [])[1]) || null;
+  const byYear = new Map();
   for (const r of body) {
-    if (txt(r[1]) !== '2023') continue;
+    const y = periodYear(txt(r[1]));
+    if (!y || txt(r[2]) === '1.7.1') continue;
+    if (!byYear.has(y)) byYear.set(y, { label: txt(r[1]), rows: [] });
+    byYear.get(y).rows.push(r);
+  }
+  const years = [...byYear.keys()].sort((a, b) => a - b);
+  const last = years[years.length - 1];
+  const sum = (rs) => rs.reduce((a, r) => a + (num(r[3]) || 0), 0);
+  const byZp = new Map();
+  for (const r of byYear.get(last).rows) {
     const zp = ZP_NAMES[num(r[0])] || txt(r[0]);
-    const v = num(r[3]) || 0;
-    byZp.set(zp, (byZp.get(zp) || 0) + v);
-    grand += v;
+    byZp.set(zp, (byZp.get(zp) || 0) + (num(r[3]) || 0));
   }
   const items = [...byZp.entries()].map(([name, v]) => ({ name, value: round(v / 1e9, 1) })).sort((a, b) => b.value - a.value);
+  const prelim = /pol/i.test(byYear.get(last).label);
   return {
     ois_code: 'OIS-11-24', source_file: 'OIS-11-24.xlsx', extracted_at: STAMP(),
-    method_note: 'Úhrady zdravotních pojišťoven dle segmentů péče za rok 2023, agregováno podle pojišťovny.',
-    headline: { value: round(grand / 1e9, 1), unit: 'mld. Kč', year: 2023, label: 'Úhrady zdravotních pojišťoven' },
-    ranked: { label: 'Úhrady péče dle zdravotní pojišťovny (2023)', unit: 'mld. Kč', items },
+    method_note: `Úhrady zdravotních pojišťoven dle segmentů péče, součet bez podsegmentu 1.7.1 (metodika sady ho vede jako „z toho" uvnitř 1.7).${
+      prelim ? ` Rok ${last} vychází z pololetní dodávky pojišťoven (označení „${byYear.get(last).label}"), s vyšším podílem dohadných položek.` : ''
+    }`,
+    headline: { value: round(sum(byYear.get(last).rows) / 1e9, 1), unit: 'mld. Kč', year: last, label: 'Úhrady zdravotních pojišťoven' },
+    series: [{ key: 'uhrady', label: 'Úhrady zdravotních pojišťoven', unit: 'mld. Kč', points: years.map((y) => ({ year: y, value: round(sum(byYear.get(y).rows) / 1e9, 1) })) }],
+    ranked: { label: `Úhrady péče dle zdravotní pojišťovny (${last})`, unit: 'mld. Kč', items },
   };
 }
 
