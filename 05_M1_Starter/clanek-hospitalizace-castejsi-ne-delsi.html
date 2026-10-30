@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-10-30
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-10-30
+    creation_phase: oprava seed indikatoru + nova data DR (OECD, NZIP)
+    form: analysis
+    primary_sources_count: 3
+    visual_elements_count: 3
+    notes: "Cisla primo z OECD Health Statistics staženo 2026-10-30: DF_KEY_INDIC STAY HC1 _T (CZ 5,7 dne 2024; prumer OECD 6,55 z 30 zemi, EU 6,15 z 22); DISCHARGE DSC_10P5PS HC1 _T 2023 (CZ 15 870,7; OECD 13 465,6 z 32 zemi; poradi 6/32; POL 20 935,6, DEU 20 150,8, AUT 19 284,6, SVK 15 014,9, HUN 14 163,0, SVN 13 396,9); DF_BEDS_FUNC HC1 (CZ 4,0 2023, OECD 3,47). Katarakta 98,7 % (2022) z indikatoru jednodenni_chirurgie_katarakta (live, verified). Clanek doprovazi opravu indikatoru prumerna_delka_hospitalizace (seed 7 dni -> OECD 5,7) a titulku clanek-hospitalizujeme-nejvic."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neležíme v nemocnici déle. Ležíme v ní častěji · HSPA Monitor</title>
+<meta name="description" content="Akutní hospitalizace trvá v Česku v průměru 5,7 dne, méně než v průměru OECD (6,55). Do nemocnice se ale Češi dostávají častěji: 15 871 propuštění z akutní péče na 100 000 obyvatel proti 13 466 v OECD (2023). Oprava tradovaného omylu.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Neležíme v nemocnici déle. Ležíme v ní častěji">
+<meta property="og:description" content="Akutní pobyt 5,7 dne proti 6,55 v OECD, propuštění 15 871 proti 13 466 na 100 000 obyvatel. Problém lůžkové péče je v počtu přijetí, ne v délce pobytu.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-hospitalizace-castejsi-ne-delsi.html">
+<meta property="article:section" content="Nemocniční péče">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-hospitalizace-castejsi-ne-delsi.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Nemocniční péče</span>
+        <span class="article-tag article-tag-muted">hospitalizace · délka pobytu · OECD · lůžka</span>
+      </div>
+      <h1 class="article-title">Neležíme v nemocnici déle. Ležíme v ní častěji</h1>
+      <p class="article-deck">
+        Akutní hospitalizace trvá v Česku v průměru 5,7 dne, méně než v průměrné zemi OECD (6,55 dne). Do nemocnice se ale Češi dostávají častěji: na 100 000 obyvatel připadlo v roce 2023 15 871 propuštění z léčebné péče proti 13 466 v průměru OECD. Tento portál léta uváděl, že Češi v nemocnicích leží déle. Nebyla to pravda.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">30. října 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">5 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+      <p class="article-lead">
+        „České nemocnice drží pacienty zbytečně dlouho.“ Tahle věta zní v debatách o reformě lůžkové péče často a opakoval ji i HSPA Monitor. Na našem webu stálo, že průměrná hospitalizace trvá 7 dní, déle než průměr OECD 6,5 dne. Číslo 7 dní ale slučovalo akutní a následnou péči, zatímco srovnání OECD se týká jen akutní. Když se srovnávají stejné věci, vychází opak. Přiznáváme chybu a ukazujeme, co data skutečně říkají.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avHospCntH">
+        <figcaption class="av-figure-h" id="avHospCntH">Akutní lůžková péče v Česku a v OECD</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="5.7" data-decimals="1" data-suffix=" dne">5,7 dne</span>
+            <span class="av-counter-label">průměrná délka akutní hospitalizace (2024)</span>
+            <span class="av-counter-foot">průměr OECD 6,55 · EU 6,15</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-display="15 871">15 871</span>
+            <span class="av-counter-label">propuštění z akutní péče na 100 000 obyvatel (2023)</span>
+            <span class="av-counter-foot">průměr OECD 13 466 · 6. místo z 32 zemí</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="4" data-decimals="1">4,0</span>
+            <span class="av-counter-label">akutních lůžek na 1 000 obyvatel (2023)</span>
+            <span class="av-counter-foot">průměr OECD 3,5</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> OECD Health Statistics — Hospital average length of stay, Hospital discharges, Hospital beds by function (léčebná péče HC.1); průměr OECD = prostý průměr členských zemí s údajem. Staženo 30. 10. 2026.</p>
+      </figure>
+
+      <h3>Délka pobytu: kratší, než se tradovalo</h3>
+      <p>
+        Podle OECD trvala v roce 2024 hospitalizace v léčebné (akutní) péči v Česku průměrně 5,7 dne. Řada je stabilní: 5,7 dne v roce 2019, 5,9 dne v roce 2021 a znovu 5,7 dne v roce 2024. Průměr zemí OECD je 6,55 dne, průměr zemí Evropské unie 6,15 dne. Ze sousedů má kratší pobyty jen Polsko (4,8 dne), Maďarsko stejně jako Česko. Rakousko vykazuje 6,1 dne, Slovensko 6,4, Slovinsko 6,5 a Německo 7,4 dne.
+      </p>
+      <p>
+        Do akutní délky pobytu se nezapočítá to, co následuje: pacient, kterého z interny přeloží na lůžko následné péče, z akutní statistiky odchází. Krátký akutní pobyt proto může znamenat i to, že část péče se přesouvá jinam. Pro zhodnocení efektivity je délka pobytu užitečná hlavně jako kontrolní ukazatel, ne jako cíl.
+      </p>
+
+      <h3>Počet hospitalizací: vysoko nad průměrem, ale ne nejvýš</h3>
+      <p>
+        Jinak vychází počet hospitalizací. V roce 2023 připadlo v Česku na 100 000 obyvatel 15 871 propuštění z léčebné péče, o 18 % víc než v průměru OECD (13 466). Česko tím bylo šesté z 32 zemí s údajem. Víc hospitalizují mimo jiné Polsko, Německo a Rakousko, méně Slovensko, Maďarsko a Slovinsko. Ani tady neplatí tvrzení, že Česko „hospitalizuje nejvíc v OECD“, které se objevovalo i na našem webu.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avHospBarH">
+        <figcaption class="av-figure-h" id="avHospBarH">Propuštění z akutní (léčebné) péče na 100 000 obyvatel, 2023</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="22000">
+          <li class="av-bar-row" data-value="20936" data-display="20 936" data-label="Polsko"></li>
+          <li class="av-bar-row" data-value="20151" data-display="20 151" data-label="Německo"></li>
+          <li class="av-bar-row" data-value="19285" data-display="19 285" data-label="Rakousko"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="15871" data-display="15 871" data-label="Česko"></li>
+          <li class="av-bar-row" data-value="15015" data-display="15 015" data-label="Slovensko"></li>
+          <li class="av-bar-row" data-value="14163" data-display="14 163" data-label="Maďarsko"></li>
+          <li class="av-bar-row" data-value="13466" data-display="13 466" data-label="Průměr OECD"></li>
+          <li class="av-bar-row" data-value="13397" data-display="13 397" data-label="Slovinsko"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> OECD Health Statistics — Hospital discharges, léčebná péče (HC.1), 2023; průměr 32 členských zemí s údajem.</p>
+      </figure>
+
+      <p>
+        Domácí čísla ÚZIS jsou vyšší, než uvádí OECD (necelých 18 000 akutních hospitalizací na 100 000 obyvatel, viz indikátor <a href="indikator-hospitalizace_na_100k.html">míra hospitalizací</a>). Registr hospitalizovaných totiž vymezuje akutní péči jinak než mezinárodní statistika. Pro srovnání s jinými zeměmi proto používáme data OECD.
+      </p>
+
+      <h3>Co z toho plyne</h3>
+      <p>
+        Když se má lůžková péče zeštíhlit, je rozdíl, jestli se má zkracovat pobyt, nebo předcházet hospitalizacím. Data ukazují, že pobyty v Česku zkracovat netřeba: jsou už kratší než ve většině vyspělých zemí. Prostor je v počtu přijetí. Část hospitalizací by šla nahradit jednodenní nebo ambulantní péčí a část jim lze předejít lepší péčí o chronické nemoci u praktiků a v ambulancích. U operace šedého zákalu to Česko zvládlo: podle OECD ji dělá bez hospitalizace téměř vždy (98,7 % v roce 2022).
+      </p>
+      <p>
+        Vyšší počet hospitalizací souvisí i s tím, že Česko má víc akutních lůžek: 4,0 na 1 000 obyvatel proti průměru OECD 3,5. Kde lůžka jsou, tam se snáz plní. Proto má smysl sledovat obě věci zároveň: kolik lůžek systém drží a jak často se do nich pacienti dostávají.
+      </p>
+
+      <aside class="article-callout" aria-label="Jak jsme k chybě došli">
+        <div class="ed-kicker">Jak jsme k chybě došli</div>
+        <p>
+          Hodnotu 7 dní jsme do databáze indikátorů převzali jako výchozí odhad a neověřili ji proti zdroji. Až 30. října 2026 jsme indikátor napojili přímo na data OECD a čtyři články, které z chybného čísla vycházely, jsme opravili s poznámkou. Neověřená čísla teď na webu hlídá automatická kontrola: nové tvrzení v článku nesmí stát na indikátoru, který nikdo neověřil.
+        </p>
+      </aside>
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=prumerna_delka_hospitalizace"><strong>Průměrná délka hospitalizace (akutní péče)</strong></a> — 5,7 dne (2024, OECD) vs. průměr OECD 6,55</li>
+        <li><a href="indicator.html?id=postele_akutni_per_1000"><strong>Akutní lůžka na 1 000 obyvatel</strong></a> — 4,0 (2023, OECD) vs. průměr OECD 3,5</li>
+        <li><a href="indicator.html?id=hospitalizace_na_100k"><strong>Míra hospitalizací</strong></a> — domácí definice ÚZIS</li>
+        <li><a href="indicator.html?id=jednodenni_chirurgie_katarakta"><strong>Operace šedého zákalu bez hospitalizace</strong></a> — 98,7 % (2022, OECD)</li>
+      </ul>
+      <p>Související články: <a href="clanek-hospitalizujeme-nejvic.html">Osmnáct tisíc hospitalizací na sto tisíc obyvatel</a> · <a href="clanek-presun-pece-z-luzek.html">Přesun péče z lůžek</a> · <a href="clanek-prazdna-luzka-efektivita.html">Prázdná lůžka</a></p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">OECD Health Statistics (staženo 30. 10. 2026)</h5>
+        <ul class="article-sources-list">
+          <li><strong>Hospital average length of stay, Hospital discharges</strong> — dataflow DSD_HEALTH_PROC@DF_KEY_INDIC, léčebná péče (HC.1). <a href="https://data-explorer.oecd.org/vis?df[ds]=dsDisseminateFinalDMZ&amp;df[id]=DSD_HEALTH_PROC%40DF_KEY_INDIC" target="_blank" rel="noopener">data-explorer.oecd.org ↗</a></li>
+          <li><strong>Hospital beds by function</strong> — dataflow DSD_HEALTH_REAC_HOSP@DF_BEDS_FUNC. <a href="https://data-explorer.oecd.org/vis?df[ds]=dsDisseminateFinalDMZ&amp;df[id]=DSD_HEALTH_REAC_HOSP%40DF_BEDS_FUNC" target="_blank" rel="noopener">data-explorer.oecd.org ↗</a></li>
+          <li><strong>Surgical procedures (day cases)</strong> — dataflow DSD_HEALTH_PROC@DF_SURG_PROC. <a href="https://data-explorer.oecd.org/vis?df[ds]=dsDisseminateFinalDMZ&amp;df[id]=DSD_HEALTH_PROC%40DF_SURG_PROC" target="_blank" rel="noopener">data-explorer.oecd.org ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Průměry OECD a EU jsou prosté průměry členských zemí, které za daný rok údaj vykázaly (délka pobytu 2024: 30 zemí OECD, 22 zemí EU; propuštění 2023: 32 zemí OECD). Pořadí zemí se mezi roky mírně mění podle toho, kdo údaj vykázal.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+  </article>
+</main>
+<footer class="bottom" id="siteFooter"></footer>
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>

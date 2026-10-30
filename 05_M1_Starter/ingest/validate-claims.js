@@ -4,6 +4,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { checkSeedClaims } from './validate-seed-claims.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -94,6 +95,9 @@ function validate() {
   }
   const auto = data.claims.filter(c => c.check === 'auto').length;
   console.log(`OK: validated ${data.claims.length} claims (${auto} auto-checked).`);
+
+  // Tvrzení na neověřeném seedu (docs/seed-audit.md) — nové mimo baseline neprojde.
+  if (!checkSeedClaims()) process.exit(1);
 }
 
 validate();

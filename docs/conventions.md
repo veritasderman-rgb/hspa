@@ -156,6 +156,14 @@ korpusu, blok K audit A2).
 
 **Plošné ověření korpusu** dělá evidence-audit (`05_M1_Starter/PROMPT_EVIDENCE_AUDIT.md`): po dávkách projde všechny publikované články a indikátory, výsledky (studie + verdikt na tvrzení) drží `data/evidence-audit.json`. Rozpor s evidencí = flag + issue, nikdy tichý přepis.
 
+### Čísla z indikátorů: jen z ověřených
+
+Hodnota v `data/indicators.json` se `source.origin: "seed"` bez `verification_status: "verified"` je **neověřený seed**, ne fakt. Tři takové hodnoty (CT/MR, délka hospitalizace, zubaři) se v říjnu 2026 dostaly do publikovaných článků jako chybná čísla. Proto:
+
+- Než článek zopakuje hodnotu nebo benchmark indikátoru, zkontroluj, že indikátor je živý (`origin: live`) nebo ověřený. Seed nejdřív ověř proti primárnímu zdroji podle `docs/seed-audit.md`.
+- `npm run validate:claims` (součást `validate:all`, kontrola `ingest/validate-seed-claims.js`) odmítne nové tvrzení v `data/claims.json` s `relation: exact | derived`, které stojí na neověřeném seedu. Stávající případy drží baseline `data/seed-claims-baseline.json`, ta se smí jen zmenšovat (`node ingest/validate-seed-claims.js --update` po ověření indikátoru).
+- Covery článků berou graf jen z ověřených nebo živých indikátorů (`generate-article-cover.js`).
+
 ### Scraped data
 
 Pokud data scrapnuté (např. plánované PUK, INDIKO), v UI **viditelný disclaimer**:
