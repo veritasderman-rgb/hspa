@@ -3,6 +3,7 @@
 <head>
 <!--
   audit:
+    - OPRAVA 2026-10-30: psychiatri_per_100k seed 13 (OECD 17,3) nahrazen OECD DF_PHYS_CAT: 1 780 psychiatrů / 10,91 mil. = 16,3 na 100 000 (2024), průměr OECD 19,0 (35 zemí), EU 19,5. Čísla v textu opravena, viditelná poznámka o opravě.
     last_reviewed: 2026-09-01
     fix_2026-09-06: "OPRAVA HODNOTY INDIKÁTORU (issue #1132), řešeno společně s clanek-tamoxifen-vypadek.html. Počet aktivních výpadků 1 418 (stav 24. 8. 2026) → 1 404 (stav 6. 9. 2026). PŘÍČINA: hodnota 1 336 z ingestu 31. 8. 2026 12:29 UTC byla spočítána ze zastaralého dumpu feedu — SÚKL servíruje denně se měnící mr.zip s Cache-Control: max-age=1209600 (14 dní), takže mezilehlá cache může vrátit až dva týdny starý soubor, a aggregateMr porovnával TERMIN_OBNOVENI se systémovým časem, ne s PLATNOSTÍ dumpu; starý dump proto číslo systematicky podstřeluje (cca −4 až −5 LP na den zpoždění). NOVÁ HODNOTA: feed stažen 6. 9. 2026 09:14 UTC, PLATNOST=06.09.2026, sha256 ZIPu bfd8880a27f304902387810e18692120430874a1c58999f4ba48eb397c9e9db3, 83 075 řádků / 22 364 unikátních LP; agregace funkcemi parseMrCsv + aggregateMr dává 1 404. ZMĚNĚNO: věta o rostoucím seznamu výpadků a blok souvisejících indikátorů (číslo i datace); claim kvetiapin-vypadek--01 srovnán zároveň. NEZMĚNĚNO: žádné tvrzení ani číslo o kvetiapinu, roční hodnoty řady, mimořádný program, citace. Status zůstává review-pending, published beze změny."
     nightly_2026-09-01: "NOČNÍ REVIZE (FÁZE 3.3) — claims-drift, řešen společně s clanek-tamoxifen-vypadek.html (oba nesou tutéž hodnotu indikátoru vypadky_leciv_aktivni). ZDROJ (primární): SÚKL open data, MR feed (opendata.sukl.cz/soubory/MR/mr.zip, staženo 1. 9. 2026 00:12 UTC, mr_hlaseni_platnost.csv PLATNOST=01.09.2026, 82 961 řádků / 22 333 unikátních LP). NEZMĚNĚNO — číslo v textu zůstává 1 418 aktivních výpadků (stav 24. 8. 2026). Skener hlásí drift proti datovému kontraktu, který ranní ingest 31. 8. 2026 12:29 UTC přepsal na 1 336, tuto hodnotu se ale nepodařilo reprodukovat: kontrolní agregace touž metodou jako pipeline dává z dnešního feedu 1 382, nad týmž feedem s referenčním datem 31. 8. 2026 hodnotu 1 387, a noční kontrola nad feedem s PLATNOST 31.08.2026 dala 31. 8. hodnotu 1 427. Rozdíl 1 336 vs. 1 387 (3,8 %) nejde vysvětlit metodou ani posunem dne, takže podle FÁZE 3.3 (posun nejistý → flag, ne domněnka) číslo v textu neměním a nález jde do GitHub issue. Dále nezměněno: žádné tvrzení ani číslo o kvetiapinu, mimořádný program, citace. Status zůstává review-pending, published beze změny."
@@ -62,7 +63,7 @@
         "@id": "https://skorezdravotnictvi.cz/clanek-kvetiapin-vypadek"
       },
       "datePublished": "2026-08-16",
-      "dateModified": "2026-08-25",
+      "dateModified": "2026-10-30",
       "author": {
         "@type": "Organization",
         "name": "HSPA Monitor",
@@ -152,6 +153,13 @@
     </header>
 
     <div class="article-body">
+
+      <aside class="article-callout article-callout-update" aria-label="Oprava článku">
+        <div class="ed-kicker">Oprava · 30. října 2026</div>
+        <p>
+          Předchozí verze článku uváděla 13 psychiatrů na 100 000 obyvatel proti průměru OECD 17,3. Šlo o neověřenou výchozí hodnotu v naší databázi indikátorů. Podle OECD bylo v Česku v roce 2024 16,3 psychiatra na 100 000 obyvatel, průměr OECD je 19,0 a EU 19,5. Česko je tak pod průměrem zhruba o 14 %, ne o čtvrtinu; závěr, že psychiatrů je méně než v průměrné vyspělé zemi, platí.
+        </p>
+      </aside>
 
       <p class="article-lead">
         Před pár dny jsme popsali, jak stát mimořádným programem zachraňuje dostupnost tamoxifenu pro pacientky s rakovinou prsu. Teď se stejný scénář opakuje u úplně jiné diagnózy: kvetiapin — antipsychotikum, které se dlouhodobě užívá při schizofrenii, bipolární poruše i těžších depresích — není v „retardované" formě k dostání v žádné síle — a nejde o českou anomálii, ale o celoevropský výrobní problém. Článek ukazuje, co přesně je vidět v otevřených datech SÚKL, co stát dělá a proč se mimořádné lékové programy začínají z výjimky stávat rutinou.
@@ -351,7 +359,7 @@
       <h3>Proč to systém bolí právě u psychiatrie</h3>
 
       <p>
-        Výpadek dlouhodobě užívaného psychofarmaka dopadá na terén, který je v Česku napjatý sám o sobě. Psychiatrů je 13 na 100 000 obyvatel — proti 17,3 v průměru OECD — a každá změna zavedené medikace u stabilizovaného pacienta znamená kontrolu, titraci a riziko, že se stav rozhoupe. Dashboard k tomu přidává varovný signál z nemocnic: podíl pacientů se schizofrenií rehospitalizovaných do 30 dnů od propuštění stoupl z 12,1 % (2017) na 15,6 % (2021) a je nad průměrem OECD. Kontinuita léčby — včetně banální jistoty, že v lékárně dostanete svou krabičku — je přesně ten typ „procesní kvality", který se v takových číslech propisuje.
+        Výpadek dlouhodobě užívaného psychofarmaka dopadá na terén, který je v Česku napjatý sám o sobě. Psychiatrů je 16,3 na 100 000 obyvatel — proti 19,0 v průměru OECD — a každá změna zavedené medikace u stabilizovaného pacienta znamená kontrolu, titraci a riziko, že se stav rozhoupe. Dashboard k tomu přidává varovný signál z nemocnic: podíl pacientů se schizofrenií rehospitalizovaných do 30 dnů od propuštění stoupl z 12,1 % (2017) na 15,6 % (2021) a je nad průměrem OECD. Kontinuita léčby — včetně banální jistoty, že v lékárně dostanete svou krabičku — je přesně ten typ „procesní kvality", který se v takových číslech propisuje.
       </p>
 
       <p>
@@ -372,7 +380,7 @@
       <ul class="article-databox-list">
         <li><a href="indikator-vypadky_leciv_aktivni.html"><strong>Aktivní výpadky léčiv hlášené SÚKL</strong></a> — 1 404 přípravků (stav 6. 9. 2026, <code>origin: live</code>); řada 2021: 1 076 → 2025: 1 552. Kvetiapin XR je jednou z položek.</li>
         <li><a href="indikator-lpod_share_critical.html"><strong>Podíl léčiv s omezenou dostupností (LPOD)</strong></a> — strukturální míra zranitelnosti trhu. Indikátor je zatím veden jako <strong>ilustrativní</strong> (<code>origin: seed</code>): otevřený MR feed SÚKL příznak LPOD nenese, takže podíl z něj zatím nelze strojově odvodit. Konkrétní hodnotu proto neuvádíme, dokud indikátor nedostane ověřený primární zdroj.</li>
-        <li><a href="indikator-psychiatri_per_100k.html"><strong>Psychiatři na 100 000 obyvatel</strong></a> — 13 (2024, ÚZIS NRZP; OECD 17,3). Kapacita, na kterou dopadá každé přestavování medikace.</li>
+        <li><a href="indikator-psychiatri_per_100k.html"><strong>Psychiatři na 100 000 obyvatel</strong></a> — 16,3 (2024, OECD; průměr OECD 19,0). Kapacita, na kterou dopadá každé přestavování medikace.</li>
         <li><a href="indikator-rehospitalizace_schizofrenie_30d.html"><strong>Rehospitalizace do 30 dnů — schizofrenie</strong></a> — 15,6 % (2021, MZ ČR otevřená data / NRHZS; OECD 13 %). Ukazatel kontinuity péče, kterou výpadky léků podrývají.</li>
       </ul>
     </aside>
