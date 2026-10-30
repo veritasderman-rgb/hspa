@@ -17,6 +17,8 @@ const STATUS_LABEL = {
 };
 
 let _chart = null;
+// detail sady může mít víc grafů najednou (řady po jednotkách + žebříček)
+let _detailCharts = [];
 
 async function init() {
   if (typeof window === 'undefined') return;
@@ -762,8 +764,21 @@ function renderViz(ds) {
     ? `<p class="dr-method-note">${escapeHtml(ds.method_note)}</p>`
     : '';
   if (Array.isArray(ds.series) && ds.series.length) {
-    return `<div class="dr-detail-block"><h3>Časová řada</h3>
-      <div class="dr-chart-wrap"><canvas id="drChart" aria-label="Graf časové řady"></canvas></div>${note}</div>`;
+    // řady s různou jednotkou (např. pacientoměsíce a mld. Kč) nesdílejí osu — graf na jednotku
+    const groups = seriesByUnit(ds.series);
+    const charts = groups
+      .map(
+        (g, i) => `<div class="dr-chart-wrap"><canvas id="drChartS${i}" aria-label="Graf časové řady — ${escapeHtml(
+          g.unit,
+        )}"></canvas></div>`,
+      )
+      .join('');
+    const hasRanked = ds.ranked && Array.isArray(ds.ranked.items) && ds.ranked.items.length;
+    const rankedHtml = hasRanked
+      ? `<div class="dr-detail-block"><h3>${escapeHtml(ds.ranked.label || 'Žebříček')}</h3>
+      <div class="dr-chart-wrap dr-chart-tall"><canvas id="drChartR" aria-label="Žebříčkový graf"></canvas></div></div>`
+      : '';
+    return `<div class="dr-detail-block"><h3>Časová řada</h3>${charts}${note}</div>${rankedHtml}`;
   }
   if (ds.pyramid) {
     return `<div class="dr-detail-block"><h3>Věková pyramida pracovníků</h3>
@@ -780,10 +795,25 @@ function renderViz(ds) {
   return '';
 }
 
+function seriesByUnit(series) {
+  const groups = [];
+  for (const s of series) {
+    const unit = s.unit || '';
+    let g = groups.find((x) => x.unit === unit);
+    if (!g) groups.push((g = { unit, series: [] }));
+    g.series.push(s);
+  }
+  return groups;
+}
+
 function wireViz(ds) {
   if (ds.status !== 'ready') return;
-  if (Array.isArray(ds.series) && ds.series.length) drawLineChart(ds);
-  else if (ds.pyramid) drawPyramid(ds);
+  _detailCharts.forEach((c) => c.destroy());
+  _detailCharts = [];
+  if (Array.isArray(ds.series) && ds.series.length) {
+    seriesByUnit(ds.series).forEach((g, i) => drawLineChart(g.series, g.unit, `drChartS${i}`));
+    if (ds.ranked && Array.isArray(ds.ranked.items) && ds.ranked.items.length) drawRankedBars(ds, 'drChartR');
+  } else if (ds.pyramid) drawPyramid(ds);
   else if (ds.ranked && Array.isArray(ds.ranked.items) && ds.ranked.items.length) drawRankedBars(ds);
 }
 
@@ -806,12 +836,12 @@ function reduceMotion() {
   return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
-function drawLineChart(ds) {
-  const canvas = document.getElementById('drChart');
+function drawLineChart(series, unit, canvasId) {
+  const canvas = document.getElementById(canvasId);
   if (!canvas || typeof window.Chart === 'undefined') return;
   const palette = ['#b8361e', '#0b5394', '#1f7a4d', '#a05a08', '#7c3a8d'];
-  const years = ds.series[0]?.points.map((p) => p.year) || [];
-  const datasets = ds.series.map((s, i) => ({
+  const years = series[0]?.points.map((p) => p.year) || [];
+  const datasets = series.map((s, i) => ({
     label: s.label,
     data: s.points.map((p) => p.value),
     borderColor: palette[i % palette.length],
@@ -820,8 +850,7 @@ function drawLineChart(ds) {
     pointRadius: 2,
     tension: 0.25,
   }));
-  if (_chart) _chart.destroy();
-  _chart = new window.Chart(canvas.getContext('2d'), {
+  const chart = new window.Chart(canvas.getContext('2d'), {
     type: 'line',
     data: { labels: years, datasets },
     options: {
@@ -830,9 +859,10 @@ function drawLineChart(ds) {
       animation: reduceMotion() ? false : { duration: 900 },
       interaction: { mode: 'index', intersect: false },
       plugins: { legend: { position: 'bottom' } },
-      scales: { y: { beginAtZero: true, title: { display: true, text: ds.series[0]?.unit || '' } } },
+      scales: { y: { beginAtZero: true, title: { display: true, text: unit || '' } } },
     },
   });
+  _detailCharts.push(chart);
 }
 
 function drawPyramid(ds) {
@@ -910,12 +940,12 @@ function renderInternational(intl) {
     ${intl.source?.name ? `<p class="dr-intl-src">Zdroj srovnání: ${escapeHtml(intl.source.name)}</p>` : ''}</div>`;
 }
 
-function drawRankedBars(ds) {
-  const canvas = document.getElementById('drChart');
+function drawRankedBars(ds, canvasId = 'drChart') {
+  const canvas = document.getElementById(canvasId);
   if (!canvas || typeof window.Chart === 'undefined') return;
   const items = ds.ranked.items;
-  if (_chart) _chart.destroy();
-  _chart = new window.Chart(canvas.getContext('2d'), {
+  if (canvasId === 'drChart' && _chart) _chart.destroy();
+  const chart = new window.Chart(canvas.getContext('2d'), {
     type: 'bar',
     data: {
       labels: items.map((it) => it.name),
@@ -938,6 +968,8 @@ function drawRankedBars(ds) {
       },
     },
   });
+  if (canvasId === 'drChart') _chart = chart;
+  else _detailCharts.push(chart);
 }
 
 /* ======================= POMOCNÉ ======================= */
