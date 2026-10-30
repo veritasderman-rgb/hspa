@@ -6,6 +6,15 @@ Formát: každá položka má `Datum`, `PR`, `Co`, `Proč`, `Důsledek`.
 
 ---
 
+## 2026-10-30 — CT a MR na milion obyvatel: živá data OECD místo seedu, oprava čtyř článků
+
+- **PR**: `claude/gallant-heisenberg-wibiow` (doladění dat DŘ + covery s grafy)
+- **Co**: `ct_per_milion` a `mri_per_milion` přešly ze seedu (CT 28 / OECD 26 / EU 24, MR 12 / OECD 16 / EU 14,5) na OECD SDMX `DSD_HEALTH_REAC_HOSP@DF_MED_TECH` (mapping v `ingest/mapping/oecd_sdmx2_codes.json`): CT 16,41 proti průměru OECD 28,8, MR 13,48 proti 19,9 (2024). Hodnoty sedí s ÚZIS SSS-04-02 (179 CT, 147 MR). Opraveny publikované články `clanek-zobrazovaci-metody-ct-mri` (přepsán, padla teze „CT nad průměrem“), `clanek-rakovina-tlusteho-streva`, `clanek-mri-vysetreni-cesko` (115 přístrojů z TZ VZP není celý park) a `clanek-mamografy-nejmene-v-eu-2026`; každý má viditelnou poznámku o opravě.
+- **Proč**: Seed hodnoty neodpovídaly žádnému zdroji a ověřovací protokol z 20. 8. 2026 je mylně připsal ÚZIS. Publikované chybné číslo je incident (GOVERNANCE § 9) — zápis do `docs/incidents.md` patří editorovi.
+- **Důsledek**: **NEVRACET** seed hodnoty ani benchmark EU (fetcher ho nepočítá; při příštím ingestu by zmizel). Tvrzení „Česko má CT nad průměrem OECD“ je nepravdivé. Při ověřování indikátoru se hodnota vždy dohledá v primárním souboru, ne v `data/indicators.json`.
+
+---
+
 ## 2026-10-14 — Esej ve stylu Gladwella jako forma článku, když to data unesou
 
 - **PR**: `claude/determined-mayer-y0gud5` (vydání série „Co čísla neříkají“ + úprava rutiny)

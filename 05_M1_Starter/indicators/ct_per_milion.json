@@ -9,18 +9,28 @@
   "direction": "higher_is_better",
   "data_source": {
     "primary": {
-      "type": "uzis_nzis",
-      "note": "Registr zdravotnické techniky ÚZIS."
+      "type": "oecd_sdmx2",
+      "agency": "OECD.ELS.HD",
+      "dataflow": "DSD_HEALTH_REAC_HOSP@DF_MED_TECH",
+      "dims": {
+        "MEASURE": "MTU",
+        "UNIT_MEASURE": "10P6HB",
+        "MEDICAL_TECH": "CT_SCAN",
+        "HEALTH_CARE_PROVIDER": "_T"
+      },
+      "note": "OECD Health Statistics — Medical technology, CT scanners, všechna zařízení, na milion obyvatel. Ověřeno živě 2026-10-30: ČR 16,41 (2024), OECD ⌀ 28,8 (31 zemí). Shoduje se s ÚZIS SSS-04-02 (179 přístrojů / 10,91 mil. obyvatel)."
     },
     "fallback": {
-      "type": "oecd",
-      "code": "CT_SCAN"
+      "type": "nzip_xlsx",
+      "dataset": "SSS-04-02",
+      "url": "https://www.nzip.cz/data/2180-pristrojove-vybaveni-datovy-souhrn",
+      "note": "ÚZIS ČR, datový souhrn SSS-04-02 Přístrojové vybavení zdravotnických zařízení (roční výkaz T (MZ) 1-01), list Vývoj_v_ČR: počty přístrojů 2006–2024. Přepočet na obyvatele přes střední stav obyvatel ČSÚ dává stejnou hodnotu jako OECD."
     }
   },
   "benchmark_source": {
-    "type": "oecd",
-    "code": "CT_SCAN",
-    "dataset": "HEALTH_REAC"
+    "type": "oecd_sdmx2",
+    "dataflow": "DSD_HEALTH_REAC_HOSP@DF_MED_TECH",
+    "note": "OECD průměr = prostý průměr členských zemí, které za daný rok vykázaly údaj za všechna zařízení (_T)."
   },
   "signal_thresholds": {
     "good": 5,
@@ -29,11 +39,11 @@
   "frequency": "yearly",
   "stewards": [
     "ÚZIS",
-    "SÚKL"
+    "OECD"
   ],
-  "method_notes": "ČR překračuje OECD průměr, dostupnost CT pro urgentní diagnostiku je dobrá.",
-  "limitations": "Prostorová distribuce není rovnoměrná — koncentrace v krajských nemocnicích. Nezahrnuje mobilní CT.",
-  "patient_story": "Krajská nemocnice, 24/7 CT službů. ČR má 28 CT skenerů na milion obyvatel — nad OECD průměrem (26), nad EU (24). Dostupnost CT diagnostiky je v Česku dobrá. Otázka kvality není v zařízení samotném — je v indikaci, interpretaci a kontroly radiační zátěže.\n\nHustota CT skenerů v ČR je 28 na milion obyvatel (SÚKL+ÚZIS, 2024). OECD průměr 26, EU 24 — Česko signal good. Trend rostoucí (2010: 18; 2024: 28). Distribuce mezi kraji relativně rovnoměrná (1 CT na 30–50 tisíc obyvatel ve většině krajských nemocnic). Roční počet CT vyšetření v ČR cca 1,9 milionu — výrazně víc na obyvatele než v Nizozemsku nebo Velké Británii.\n\nStrukturálně český systém má dostatek CT zařízení (private + veřejná síť), výborné radiologie. Mezery: variabilita v indikacích (přesah doporučení EAR appropriateness criteria), radiologové neminimalizují radiační dávku (otázka kvalita vyšetření vs. radiation safety), čekací doby na elektivní CT (i přes hustotu) v některých regionech.\n\nVysoká hustota CT je dvojsmyslná: dostupnost je dobrá, ale overuse a radiační zátěž jsou rizika. Politické páky: audit appropriateness indikací (ESR EuroSafe Imaging); standardizace technických protokolů (dose reduction); rozšíření MRI namísto CT u indikací, kde MRI je vhodnější (méně radiační zátěže); rozšíření teleradiologie pro 24/7 expertní interpretaci. Indikátor v HSPA dashboardu sleduje CT hustotu jako klíčový ukazatel diagnostické kapacity.",
+  "method_notes": "ČR má CT skenerů na obyvatele zhruba o 43 % méně, než je průměr OECD, a počet se od roku 2019 prakticky nemění (175 → 179 přístrojů). Do 30. 10. 2026 portál uváděl seed hodnotu 28 na milion s benchmarkem OECD 26, která neodpovídala žádnému zdroji; opraveno podle OECD a ÚZIS. Signál je strukturní: hustota přístrojů neříká, kolik vyšetření se na nich udělá ani jak dlouho se na ně čeká.",
+  "limitations": "Počítá přístroje, ne vyšetření ani provozní hodiny — jeden CT v nepřetržitém provozu může odvést víc práce než dva přístroje s jednou směnou. Rozložení mezi kraji indikátor neukazuje. Srovnání s OECD ovlivňuje, že některé země započítávají i přístroje mimo nemocnice jinak (u nemocničních CT je ČR 15,5 proti 20,5 v OECD). Rozšíření sady SSS-04-02 o výkony a personál ÚZIS ohlásil, ale k 30. 10. 2026 nevyšlo.",
+  "patient_story": "Když lékař na urgentním příjmu potřebuje vyloučit krvácení do mozku nebo plicní embolii, sahá po CT. V Česku k tomu měl v roce 2024 k dispozici 179 přístrojů, tedy 16,41 CT na milion obyvatel. Průměr zemí OECD je 28,8. Česko má tedy na hlavu zhruba o 40 % méně přístrojů než průměrná vyspělá země.\n\nMéně než Česko mají v OECD například Maďarsko (11,5) nebo Velká Británie (10,4). Slovensko vykazuje 19,7, Polsko 26,4, Rakousko 28,8 a Německo 38,0. Počet přístrojů se u nás od roku 2019 skoro nehnul: tehdy jich bylo 175, o pět let později 179. Protože mezitím přibyli obyvatelé, hustota zůstává na 16–17 na milion. V roce 2006 to bylo 13,0, takže za dvě dekády vzrostla jen mírně.\n\nNízký počet přístrojů automaticky neznamená špatnou dostupnost. CT je rychlé vyšetření a jeden přístroj v nepřetržitém provozu zvládne mnoho pacientů denně. Hustota také neříká, jestli se vyšetření indikují správně. Vysoké počty v Japonsku nebo Koreji jsou spíš otázkou, zda se CT nepoužívá i tam, kde by stačila jiná metoda s menší radiační zátěží. Pro Česko z toho plyne opačná otázka: zda omezený park přístrojů nevede k čekání tam, kde by mělo jít o hodiny.\n\nTo, kolik vyšetření na jeden přístroj připadá a kolik radiologů a radiologických asistentů je obsluhuje, zatím z veřejných dat nezjistíme. ÚZIS ohlásil rozšíření datové sady o přístrojích o výkony a personál, ale k říjnu 2026 nevyšlo. Do té doby indikátor ukazuje jen kapacitu, ne její využití.\n\nPortál do 30. 10. 2026 uváděl chybně 28 CT na milion a hodnotu nad průměrem OECD. Šlo o neověřenou výchozí hodnotu, kterou jsme nahradili daty OECD a ÚZIS.",
   "framework": "hspa",
   "dimension": "efektivita"
 }

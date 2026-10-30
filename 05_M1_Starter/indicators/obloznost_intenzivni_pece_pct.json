@@ -9,14 +9,15 @@
   "direction": "context_dependent",
   "data_source": {
     "primary": {
-      "type": "uzis_nrhzs",
-      "dataset": "NRHZS · OIS-11-50 PALP",
-      "endpoint": "https://www.nzip.cz/data/2712-intenzivni-pece-hodnoceni-datovy-souhrn",
-      "note": "Datový souhrn hodnocení pracovišť intenzivní péče (NZIP/ÚZIS). Hodnocení 2024 zahrnuje 91 pracovišť ARO a 125 pracovišť JIP."
+      "type": "nzip_dohodovaci_rizeni",
+      "dataset": "OIS-11-50",
+      "endpoint": "https://www.nzip.cz/data/2714-palp-komplexni-vystup-datovy-souhrn",
+      "note": "ÚZIS ČR, NZIP — datová podpora dohodovacího řízení, sada OIS-11-50 (Komplexní datový výstup PALP, edice 2026-02, list 2021–2025, zpracováno 11. 9. 2026). Celostátní hodnota = průměr využití intenzivních lůžek („Využití intenzivních lůžek“, sloupec CELKEM) vážený počtem intenzivních lůžek nemocnice („Intenzivní akutní lůžka dle hlavní smluvní odbornosti“, CELKEM). Kontrola: intenzivní ošetřovací dny / (lůžka × 365) dávají pro rok 2024 61,9 %."
     },
     "fallback": {
       "type": "csv",
-      "url": "https://www.nzip.cz/data/2226-osetrovaci-dny-akutni-intenzivni-pece-datovy-souhrn"
+      "url": "https://www.nzip.cz/data/1780-luzkovy-fond-obloznost-datovy-souhrn",
+      "note": "SSS-05-03 Obložnost lůžek — pro rok 2024 uvádí 62 %, shodně s OIS-11-50."
     }
   },
   "benchmark_source": {
@@ -32,9 +33,9 @@
     "ÚZIS · NRHZS / NRIP",
     "MZ ČR — pracovní skupina pro intenzivní péči (NIKEZ)"
   ],
-  "method_notes": "Hodnoty 2024 podle prezentace prof. Duška (VZ PS PČR, 13. 5. 2026): ARO 65 %, JIP 61 %, agregát IP přibližně 62–65 %. Hodnoty jsou převzaty z deckového podkladu — pro publikaci je nutné replikovat z OIS-11-50 PALP a hodnocení IP datasetu (NZIP 2712). 100% využití není cílem: kritická péče vyžaduje pohotovostní rezervu pro špičky, hromadná neštěstí a pandemické scénáře. Efektivně řízené pracoviště má typicky 70–85 % průměrné obložnosti.",
+  "method_notes": "Od 30. 10. 2026 počítáno z OIS-11-50 za roky 2021–2025; dřívější hodnota 62 % (2024) pocházela ze SSS-05-03 a prezentace prof. Duška (VZ PS PČR, 13. 5. 2026) a replikace z OIS-11-50 ji potvrzuje (61,8 %). Starší body řady ze SSS-05-03 (2020 62,3, 2021 67,8) nahrazeny řadou z OIS-11-50, aby celá řada měla jednu metodiku. 100% využití není cílem: kritická péče potřebuje rezervu pro špičky, hromadná neštěstí a epidemie.",
   "limitations": "Definice intenzivního lůžka v NRHZS se metodicky liší od OECD ICU (ESICM Level 2/3 standardně), proto přímá komparace s OECD číslem ~5–10 % lůžek nemocniční sítě je zavádějící. Hodnota agreguje různě komplexní pracoviště (multioborové JIP, oborové JIP, ARO) — interpretace vyžaduje desagregaci podle typu pracoviště a úrovně péče.",
-  "patient_story": "JIP fakultní nemocnice, ranní statistika. 8 z 12 lůžek obsazeno = 67 % obložnost. To je v Česku průměr — 63 %. To znamená rezervu pro krize (pandemie, hromadná nehoda, vlna respirační epidemie), ale také znamená, že stálé personální obsazení musí počítat s plnou kapacitou.\n\nObložnost intenzivní péče v ČR je 63 % (ÚZIS, 2024). OECD srovnatelný indikátor chybí (různá metodologie). Signal neutral. Optimální obložnost JIP je 70–80 % (vyšší znamená nedostatečnou rezervu, nižší inefficient využití kapacity). ČR je v evropském středu. Mezi nemocnicemi rozptyl 50–85 % — odráží regionální poptávku a sezónnost.\n\nStrukturálně český systém má rozsáhlou JIP kapacitu (viz luzka_jip_per_100k 35/100 000), což vytváří strukturní nedoužitost v běžných obdobích. Personální obsazení je fixní (ARO sestra musí být přítomna i u 50% obložnosti), takže nedoužité kapacity znamenají vyšší jednotkové náklady. V krizi (COVID 2020/2021) se 63 % rezerva ukázala jako kritická pro absorbovat vlnu pacientů.\n\nObložnost JIP je trade-off mezi efektivitou a resilience (připravenost na krize). Politické páky: harmonizace metodologie reportingu (OECD srovnatelnost); flexibilní step-down units; sdílená telemedicínská konzultace mezi malými JIP a centrem expertise; krizový plán pro elektivní redukci v případě epidemie. Indikátor v HSPA dashboardu sleduje obložnost JIP jako kontextový ukazatel využití intenzivní kapacity. Politicky relevantní je rozlišovat mezi tím, jak vysoká je obložnost v různých typech JIP — neonatologie má jiný profil než kardio-JIP, ARO má jiný profil než neurologická JIP. Jednoduchý průměr maskuje strukturní rozdíly, které jsou pro plánování kapacit klíčové. Pro mezinárodní srovnání je třeba harmonizovat metodologii.",
+  "patient_story": "Intenzivní lůžka jsou nejdražší kapacita nemocnice: u každého musí být nepřetržitě sestra a lékař v dosahu, i když je zrovna prázdné. V roce 2025 bylo v českých nemocnicích akutní péče nasmlouváno 5 723 intenzivních lůžek a jejich průměrné využití bylo 61,5 %. Zhruba každé třetí intenzivní lůžko tedy bylo v průměrném dni volné.\n\nČíslo se v posledních letech skoro nehýbe: 63,8 % v roce 2021, kdy nemocnice ještě zaplňovaly covidové vlny, 61,7 % v roce 2023 a 61,8 % v roce 2024. Mezi nemocnicemi jsou ale rozdíly. Fakultní nemocnice a centra měla v roce 2025 intenzivní lůžka využitá na 65,8 %, krajské nemocnice na 55,7 % a oblastní nemocnice na 59,0 %. Čtvrtina nemocnic měla využití pod 52,7 %, čtvrtina nad 69,0 %.\n\nNízké využití není automaticky plýtvání. Intenzivní péče musí mít rezervu pro dopravní nehodu s více zraněnými, chřipkovou sezónu nebo epidemii, a malá jednotka se šesti lůžky má při stejné poptávce výkyvy větší než velké centrum. Problém je spíš v tom, kde rezerva leží: menší intenzivní jednotky v oblastních nemocnicích drží personál pro lůžka, která část roku stojí, zatímco velká centra jsou plnější.\n\nIndikátor nerozlišuje typ intenzivního lůžka. Resuscitační lůžko, jednotka intenzivní péče vyššího stupně a intermediární péče se v něm sčítají, přestože mají jiné nároky na personál i jiné rozumné využití. Pro plánování kapacit je proto užitečnější rozpad podle typu pracoviště, který sada OIS-11-48 nabízí po jednotlivých pracovištích.",
   "framework": "hspa",
   "dimension": "efektivita",
   "verification_status": "review-pending"

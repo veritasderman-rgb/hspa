@@ -9,18 +9,28 @@
   "direction": "higher_is_better",
   "data_source": {
     "primary": {
-      "type": "uzis_nzis",
-      "note": "Registr zdravotnické techniky ÚZIS."
+      "type": "oecd_sdmx2",
+      "agency": "OECD.ELS.HD",
+      "dataflow": "DSD_HEALTH_REAC_HOSP@DF_MED_TECH",
+      "dims": {
+        "MEASURE": "MTU",
+        "UNIT_MEASURE": "10P6HB",
+        "MEDICAL_TECH": "MRI",
+        "HEALTH_CARE_PROVIDER": "_T"
+      },
+      "note": "OECD Health Statistics — Medical technology, MRI units, všechna zařízení, na milion obyvatel. Ověřeno živě 2026-10-30: ČR 13,48 (2024), OECD ⌀ 19,9 (29 zemí). Shoduje se s ÚZIS SSS-04-02 (147 přístrojů / 10,91 mil. obyvatel)."
     },
     "fallback": {
-      "type": "oecd",
-      "code": "MRI_UNIT"
+      "type": "nzip_xlsx",
+      "dataset": "SSS-04-02",
+      "url": "https://www.nzip.cz/data/2180-pristrojove-vybaveni-datovy-souhrn",
+      "note": "ÚZIS ČR, datový souhrn SSS-04-02 Přístrojové vybavení zdravotnických zařízení (roční výkaz T (MZ) 1-01), list Vývoj_v_ČR: počty přístrojů 2006–2024. Přepočet na obyvatele přes střední stav obyvatel ČSÚ dává stejnou hodnotu jako OECD."
     }
   },
   "benchmark_source": {
-    "type": "oecd",
-    "code": "MRI_UNIT",
-    "dataset": "HEALTH_REAC"
+    "type": "oecd_sdmx2",
+    "dataflow": "DSD_HEALTH_REAC_HOSP@DF_MED_TECH",
+    "note": "OECD průměr = prostý průměr členských zemí, které za daný rok vykázaly údaj za všechna zařízení (_T)."
   },
   "signal_thresholds": {
     "good": 5,
@@ -29,11 +39,11 @@
   "frequency": "yearly",
   "stewards": [
     "ÚZIS",
-    "SÚKL"
+    "OECD"
   ],
-  "method_notes": "ČR výrazně zaostává za OECD průměrem. Dlouhé čekací doby na MRI jsou opakovaně uváděny jako bariéra.",
-  "limitations": "Soukromé MRI, pro-pacient-pay ambulance nejsou vždy zahrnuty v registru.",
-  "patient_story": "Krajská nemocnice, MR pracoviště, čekací doba 6 týdnů na neurologické vyšetření. ČR má 12 MRI skenerů na milion obyvatel — pod OECD (16) i EU (14,5). Signal bad. Při potřebě neurologické nebo onkologické MRI diagnostiky stojí pacient ve frontě nebo platí samoplatebně cca 5 000 Kč.\n\nHustota MRI skenerů v ČR je 12 na milion obyvatel (SÚKL+ÚZIS, 2024). OECD průměr 16, EU 14,5 — Česko signal bad. Trend pomalu rostoucí (2010: 5; 2024: 12), tempo nedostatečné. Distribuce velmi nerovnoměrná — Praha a Brno mají kvalitní pokrytí, periferní regiony (Karlovarský, Vysočina) jen 1–2 přístroje na celý kraj.\n\nStrukturálně český systém má nižší MRI hustotu než většina OECD zemí, což má klinické důsledky: pozdější diagnostika neurologických onemocnění (mozkové nádory, demyelinizační onemocnění), karcinomu prsu (MRI je doplňková modalitě k mamografu), prostaty, muskuloskeletálních úrazů. Privátní MRI ambulance jsou dostupné v Praze, Brně, Olomouci do týdne, ale samoplatebně.\n\nNízká MRI hustota znamená delší čekání na klíčovou diagnostiku. Politické páky: investice do nových MRI přístrojů (cca 20 nových do 2030, prioritně periferní regiony); rozšíření hrazené nočních a víkendových směn (24/7 MRI v krajských centrech); rozšíření teleradiologie pro expertní hodnocení; standardizace indikací MRI (ESR appropriateness). Indikátor v HSPA dashboardu sleduje MRI hustotu jako klíčový ukazatel diagnostické kapacity.",
+  "method_notes": "Magnetických rezonancí přibývá rychle (111 přístrojů v roce 2019, 147 v roce 2024), ČR ale pořád zůstává zhruba o třetinu pod průměrem OECD. Do 30. 10. 2026 portál uváděl seed hodnotu 12 na milion s benchmarky OECD 16 a EU 14,5; opraveno podle OECD a ÚZIS. Signál je strukturní: neříká, kolik vyšetření se na přístrojích udělá ani jak dlouho se na ně čeká.",
+  "limitations": "Počítá přístroje, ne vyšetření ani provozní hodiny. Rozložení mezi kraji indikátor neukazuje. Nerozlišuje přístroje se smlouvou se zdravotní pojišťovnou a přístroje jen pro samoplátce — počet nasmlouvaných přístrojů uvádějí pojišťovny zvlášť a je nižší. Rozšíření sady SSS-04-02 o výkony a personál ÚZIS ohlásil, ale k 30. 10. 2026 nevyšlo.",
+  "patient_story": "Magnetická rezonance je metoda první volby u řady neurologických, onkologických a pohybových potíží a na rozdíl od CT pacienta nezatěžuje zářením. V Česku bylo v roce 2024 v provozu 147 přístrojů, tedy 13,48 MR na milion obyvatel. Průměr zemí OECD je 19,9. Česko je tak zhruba o třetinu pod průměrem.\n\nOproti CT se tu ale věci hýbou. V roce 2019 měla země 111 magnetických rezonancí, za pět let jich přibylo 36. V roce 2006 připadaly necelé čtyři přístroje na milion obyvatel, dnes je to víc než trojnásobek. Ze sousedů má méně Slovensko (9,0) a Maďarsko (6,1), zhruba stejně Polsko (14,5), víc Slovinsko (16,5), Rakousko (27,8) a Německo (37,9).\n\nPočet přístrojů není totéž co dostupnost. MR vyšetření trvá desítky minut, takže o čekání rozhoduje hlavně to, kolik hodin denně přístroj běží, kolik je k němu radiologů a radiologických asistentů a kolik vyšetření pojišťovna zaplatí. Část přístrojů navíc slouží jen samoplátcům; počet přístrojů se smlouvou s pojišťovnou je nižší než celkový počet.\n\nTo, kolik vyšetření na jeden přístroj připadá, z veřejných dat zatím nezjistíme. ÚZIS ohlásil rozšíření datové sady o přístrojích o výkony a personál, k říjnu 2026 ale nevyšlo.\n\nPortál do 30. 10. 2026 uváděl 12 MR na milion a srovnání s průměrem OECD 16. Šlo o neověřenou výchozí hodnotu; nahradili jsme ji daty OECD a ÚZIS. Skutečný odstup od průměru OECD je větší, než jsme psali, i když Česko samo má přístrojů víc.",
   "framework": "hspa",
   "dimension": "efektivita"
 }

@@ -244,6 +244,15 @@ node ingest/scripts/generate-article-cover.js {id} --style=data-hero
 node ingest/scripts/generate-article-cover.js --all   # batch pro všechny publikované
 ```
 
+**Graf na coveru (`cover_viz` v `articles.json`).** Typy: `bar-compare`, `donut`,
+`timeline`, `big-number` a `line` (časová řada). `line` stačí zadat jako
+`{ "type": "line", "indicator": "ct_per_milion" }`; řadu, jednotku a průměr OECD/EU
+doplní generátor z `data/indicators.json`. Článek bez podporovaného `cover_viz`
+(žádný, `stat-cards`, `stat`) dostane `line` automaticky z prvního ze dvou hlavních
+`linked_indicators`, který je **ověřený nebo živý** (`verification_status: verified`
+nebo `source.origin: live`) a má aspoň čtyři roky řady. Seed hodnoty se na cover
+nikdy nepropíšou; když žádný indikátor podmínku nesplní, cover zůstane jen s titulkem.
+
 ### Pro hub stránku / launch banner
 
 Existující skript `scripts/generate-launch-banner.js` (1200×630, editorial styl). Pro novou stránku duplikovat skript, upravit text a brand counters.

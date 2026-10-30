@@ -110,6 +110,22 @@ function buildPristrojeReady() {
   };
 }
 
+/* sady publikované vždy jen za jeden rok: řada napříč edicemi z dohodovaci-rizeni-history.json */
+const HISTORY = path.join(__dirname, 'dohodovaci-rizeni-history.json');
+const history = fs.existsSync(HISTORY) ? JSON.parse(fs.readFileSync(HISTORY, 'utf8')).sets || {} : {};
+function seriesFromHistory(oisCode, ds) {
+  const h = history[oisCode];
+  if (!h || ds.series.length || !ds.headline || ds.headline.year == null) return {};
+  const byYear = new Map(h.points.map((p) => [p.year, p.value]));
+  byYear.set(ds.headline.year, ds.headline.value);
+  if (byYear.size < 2) return {};
+  const points = [...byYear.entries()].sort((a, b) => a[0] - b[0]).map(([year, value]) => ({ year, value }));
+  return {
+    series: [{ key: 'edice', label: ds.headline.label, unit: ds.headline.unit, points }],
+    series_note: `Řada je složená z jednotlivých edic ÚZIS, každá pokrývá jeden rok. ${h.note || ''}`.trim(),
+  };
+}
+
 function main() {
   const catalog = JSON.parse(fs.readFileSync(CATALOG, 'utf8'));
   const contentOverlay = JSON.parse(fs.readFileSync(CONTENT, 'utf8')).content || {};
@@ -167,6 +183,7 @@ function main() {
         ds.ranked = ex.ranked || null;
         ds.snapshot = ex.snapshot || null;
         ds.method_note = ex.method_note || '';
+        Object.assign(ds, seriesFromHistory(d.ois_code, ds));
       }
     }
 

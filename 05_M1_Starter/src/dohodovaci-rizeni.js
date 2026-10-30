@@ -780,7 +780,8 @@ function renderViz(ds) {
       ? `<div class="dr-detail-block"><h3>${escapeHtml(ds.ranked.label || 'Žebříček')}</h3>
       <div class="dr-chart-wrap dr-chart-tall"><canvas id="drChartR" aria-label="Žebříčkový graf"></canvas></div></div>`
       : '';
-    return `<div class="dr-detail-block"><h3>Časová řada</h3>${charts}${note}</div>${rankedHtml}`;
+    const seriesNote = ds.series_note ? `<p class="dr-method-note">${escapeHtml(ds.series_note)}</p>` : '';
+    return `<div class="dr-detail-block"><h3>Časová řada</h3>${charts}${seriesNote}${note}</div>${rankedHtml}`;
   }
   if (ds.pyramid) {
     return `<div class="dr-detail-block"><h3>Věková pyramida pracovníků</h3>

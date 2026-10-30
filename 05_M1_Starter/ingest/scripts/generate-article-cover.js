@@ -21,6 +21,12 @@
 //   - donut:        { slices: [{label, value}], center?: {number, label} }
 //   - timeline:     { events: [{year, label}] }
 //   - big-number:   { number, unit?, label, trend?: '+6.4%' }
+//   - line:         { indicator?, points?: [{year, value}], unit?, title?, benchmark?: {label, value}, source? }
+//                   s `indicator` a bez `points` se řada doplní z data/indicators.json
+//
+// Článek bez podporované viz (žádná, stat-cards, stat) dostane automaticky `line`
+// z prvního ze dvou hlavních napojených indikátorů, který je ověřený nebo živý a má aspoň 4 roky
+// řady (autoLineViz). Seed hodnoty se do coveru nepropisují.
 //
 // Animace (jen mobile + ne při prefers-reduced-motion):
 //   - Accent bar narůstá zdola nahoru (1.2s ease-out)
@@ -41,6 +47,7 @@ import { renderIllustration, TAG_ILLUSTRATIONS } from './cover-illustrations.js'
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '../..');
 const ARTICLES_JSON = resolve(ROOT, 'data/articles.json');
+const INDICATORS_JSON = resolve(ROOT, 'data/indicators.json');
 const COVERS_DIR = resolve(ROOT, 'assets/covers');
 
 // --- Style tokens (sladěno s src/styles.css) ---
@@ -174,8 +181,78 @@ function deriveMeta(article) {
     date: formatCzDate(article.date),
     number: article.number,
     slug: article.slug,
-    viz: article.cover_viz || null,
+    viz: resolveViz(article),
   };
+}
+
+// =====================================================================
+//  Viz z indikátorů — skutečná časová řada místo stat karet
+// =====================================================================
+
+let _indicators = null;
+function indicatorsById() {
+  if (!_indicators) {
+    try {
+      const d = JSON.parse(readFileSync(INDICATORS_JSON, 'utf8'));
+      _indicators = new Map((d.indicators || []).map((i) => [i.id, i]));
+    } catch {
+      _indicators = new Map();
+    }
+  }
+  return _indicators;
+}
+
+/* jen ověřené nebo živě stažené hodnoty — seed se na cover nedostane */
+function isTrustedIndicator(ind) {
+  return ind && (ind.source?.origin === 'live' || ind.verification_status === 'verified');
+}
+
+/* řada indikátoru (trend + aktuální hodnota), vzestupně podle roku */
+function indicatorPoints(ind) {
+  const byYear = new Map();
+  for (const p of ind.trend || []) {
+    if (Number.isFinite(Number(p.year)) && Number.isFinite(Number(p.value))) byYear.set(Number(p.year), Number(p.value));
+  }
+  if (Number.isFinite(Number(ind.year)) && Number.isFinite(Number(ind.value))) byYear.set(Number(ind.year), Number(ind.value));
+  return [...byYear.entries()].sort((a, b) => a[0] - b[0]).map(([year, value]) => ({ year, value }));
+}
+
+function lineVizFromIndicator(ind, extra = {}) {
+  const points = indicatorPoints(ind);
+  const b = ind.benchmark || {};
+  const benchmark = b.oecd != null ? { label: 'průměr OECD', value: b.oecd } : b.eu != null ? { label: 'průměr EU', value: b.eu } : null;
+  return {
+    type: 'line',
+    title: ind.name,
+    unit: ind.unit || '',
+    points,
+    benchmark,
+    source: ind.source?.name || '',
+    ...extra,
+  };
+}
+
+export function autoLineViz(article) {
+  const ids = indicatorsById();
+  // jen první dva napojené indikátory — dál už graf od tématu článku obvykle odbíhá
+  for (const id of (article.linked_indicators || []).slice(0, 2)) {
+    const ind = ids.get(id);
+    if (!isTrustedIndicator(ind)) continue;
+    const points = indicatorPoints(ind);
+    if (points.length < 4 || points[points.length - 1].year - points[0].year < 3) continue;
+    return lineVizFromIndicator(ind, { auto: true, indicator: id });
+  }
+  return null;
+}
+
+function resolveViz(article) {
+  const v = article.cover_viz;
+  if (v && v.type === 'line' && v.indicator && !v.points) {
+    const ind = indicatorsById().get(v.indicator);
+    return ind ? lineVizFromIndicator(ind, v) : null;
+  }
+  if (v && VIZ_RENDERERS[v.type]) return v;
+  return autoLineViz(article) || v || null;
 }
 
 function formatCzDate(iso) {
@@ -253,10 +330,11 @@ function renderSvg(meta, { staticForPng = false } = {}) {
       .viz-timeline-dot-3 { animation-delay: 1.0s; }
       .viz-timeline-dot-4 { animation-delay: 1.25s; }
       .viz-timeline-line { stroke-dasharray: 400; stroke-dashoffset: 400; animation: drawIn 1.2s ease-out 0.3s forwards; }
+      .viz-line { stroke-dasharray: 1400; stroke-dashoffset: 1400; animation: drawIn 1.4s ease-out 0.4s forwards; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .accent-bar, .title-underline, .pulse-dot, .viz-bar, .viz-donut-segment, .viz-timeline-dot, .viz-timeline-line { animation: none !important; }
-      .title-underline, .viz-timeline-line { stroke-dashoffset: 0; }
+      .accent-bar, .title-underline, .pulse-dot, .viz-bar, .viz-donut-segment, .viz-timeline-dot, .viz-timeline-line, .viz-line { animation: none !important; }
+      .title-underline, .viz-timeline-line, .viz-line { stroke-dashoffset: 0; }
       .viz-donut-segment { stroke-dashoffset: 0; }
     }
     @keyframes barGrow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
@@ -1088,7 +1166,97 @@ const VIZ_RENDERERS = {
   'donut': renderDonutViz,
   'timeline': renderTimelineViz,
   'big-number': renderBigNumberViz,
+  'line': renderLineViz,
 };
+
+/* počet desetinných míst pro popisky řady: celá čísla → 0, jinak 1 (pod 10 až 2) */
+function lineDecimals(values) {
+  if (values.every((v) => Number.isInteger(v))) return 0;
+  const max = Math.max(...values.map((v) => Math.abs(v)));
+  const hasHundredths = values.some((v) => Math.round(v * 100) % 10 !== 0);
+  return max < 10 && hasHundredths ? 2 : 1;
+}
+
+function formatFixed(v, d) {
+  const s = Number(v).toFixed(d).replace('.', ',');
+  const [int, dec] = s.split(',');
+  const intSp = int.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  return dec ? `${intSp},${dec}` : intSp;
+}
+
+function truncate(s, n) {
+  const t = String(s || '');
+  if (t.length <= n) return t;
+  const cut = t.slice(0, n - 1);
+  return cut.slice(0, cut.lastIndexOf(' ') > n * 0.6 ? cut.lastIndexOf(' ') : cut.length) + '…';
+}
+
+/**
+ * Spojnicový graf časové řady (typicky z napojeného indikátoru).
+ * Data: { type: 'line', title?, unit?, points: [{year, value}], benchmark?: {label, value}, source? }
+ * Bez os a mřížky: řada, poslední bod zvýrazněný hodnotou, srovnání čárkovaně, první a poslední rok.
+ */
+function renderLineViz({ data, accent, x, y, width, height, large = false }) {
+  const pts = (data.points || []).filter((p) => Number.isFinite(p.value));
+  if (pts.length < 2) return '';
+  const titleH = data.title ? 34 : 0;
+  const footH = data.source ? 26 : 0;
+  const labelTop = large ? 64 : 52;              // místo nad grafem pro hodnotu posledního bodu
+  const px = x + 8;
+  const pw = width - (large ? 120 : 96);          // vpravo místo pro popisek srovnání
+  const py = y + titleH + labelTop;
+  const ph = Math.max(80, height - titleH - labelTop - footH - 34);
+
+  const vals = pts.map((p) => p.value);
+  const bench = data.benchmark && Number.isFinite(Number(data.benchmark.value)) ? Number(data.benchmark.value) : null;
+  const all = bench != null ? [...vals, bench] : vals;
+  let lo = Math.min(...all);
+  let hi = Math.max(...all);
+  const span = hi - lo || Math.abs(hi) || 1;
+  lo -= span * 0.12;
+  hi += span * 0.12;
+  if (Math.min(...all) >= 0 && lo < 0) lo = 0;
+  const y0 = pts[0].year;
+  const y1 = pts[pts.length - 1].year;
+  const sx = (year) => px + ((year - y0) / (y1 - y0 || 1)) * pw;
+  const sy = (v) => py + ph - ((v - lo) / (hi - lo)) * ph;
+
+  const d = lineDecimals(all);
+  const path = pts.map((p, i) => `${i ? 'L' : 'M'}${sx(p.year).toFixed(1)},${sy(p.value).toFixed(1)}`).join(' ');
+  const area = `${path} L${sx(y1).toFixed(1)},${(py + ph).toFixed(1)} L${sx(y0).toFixed(1)},${(py + ph).toFixed(1)} Z`;
+  const last = pts[pts.length - 1];
+  const first = pts[0];
+  const lx = sx(last.year);
+  const ly = sy(last.value);
+  const valueSize = large ? 34 : 28;
+
+  const titleSvg = data.title
+    ? `<text x="${x}" y="${y + 14}" class="viz-title">${escapeXml(truncate(data.title, large ? 64 : 52))}</text>`
+    : '';
+  const benchSvg = bench != null
+    ? `<line x1="${px}" y1="${sy(bench).toFixed(1)}" x2="${(px + pw).toFixed(1)}" y2="${sy(bench).toFixed(1)}" stroke="${INK_MUT}" stroke-width="1.5" stroke-dasharray="5 5"/>
+    <text x="${(px + pw + 10).toFixed(1)}" y="${(sy(bench) + 4).toFixed(1)}" class="viz-sub" style="text-transform:none;letter-spacing:0">${escapeXml(data.benchmark.label || '')}</text>
+    <text x="${(px + pw + 10).toFixed(1)}" y="${(sy(bench) + 20).toFixed(1)}" class="viz-label" font-weight="700">${escapeXml(formatFixed(bench, d))}</text>`
+    : '';
+  const footSvg = data.source
+    ? `<text x="${x}" y="${y + height}" class="viz-sub" style="text-transform:none;letter-spacing:0">Zdroj: ${escapeXml(truncate(data.source, large ? 80 : 62))}</text>`
+    : '';
+
+  return `<g>
+    ${titleSvg}
+    <line x1="${px}" y1="${py + ph}" x2="${(px + pw).toFixed(1)}" y2="${py + ph}" stroke="${RULE}" stroke-width="1"/>
+    ${benchSvg}
+    <path d="${area}" fill="${accent}" opacity="0.08"/>
+    <path class="viz-line" d="${path}" fill="none" stroke="${INK}" stroke-width="${large ? 4 : 3}" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${sx(first.year).toFixed(1)}" cy="${sy(first.value).toFixed(1)}" r="4" fill="${INK}"/>
+    <text x="${sx(first.year).toFixed(1)}" y="${(sy(first.value) - 12).toFixed(1)}" class="viz-label">${escapeXml(formatFixed(first.value, d))}</text>
+    <circle cx="${lx.toFixed(1)}" cy="${ly.toFixed(1)}" r="${large ? 8 : 7}" fill="${accent}"/>
+    <text x="${lx.toFixed(1)}" y="${(Math.min(ly, py) - 16).toFixed(1)}" text-anchor="end" class="viz-value" font-size="${valueSize}" fill="${accent}">${escapeXml(formatFixed(last.value, d))}<tspan dx="6" font-size="${Math.round(valueSize * 0.5)}" fill="${INK_MUT}" font-weight="500">${escapeXml(truncate(data.unit || '', 22))}</tspan></text>
+    <text x="${px}" y="${py + ph + 22}" class="viz-sub">${first.year}</text>
+    <text x="${(px + pw).toFixed(1)}" y="${py + ph + 22}" text-anchor="end" class="viz-sub">${last.year}</text>
+    ${footSvg}
+  </g>`;
+}
 
 /**
  * Horizontální srovnávací bary. Použití pro 2–4 srovnávané hodnoty.
