@@ -1362,13 +1362,18 @@ function main() {
     }
   }
 
+  // headline extraktu, který se právě přepíše — jinak by rok aktuální edice z historie zmizel
+  const previous = extracts
+    .map((ex) => path.join(OUT, `${ex.ois_code}.json`))
+    .filter((f) => fs.existsSync(f))
+    .map((f) => JSON.parse(fs.readFileSync(f, 'utf8')));
   for (const ex of extracts) {
     fs.writeFileSync(path.join(OUT, `${ex.ois_code}.json`), JSON.stringify(ex, null, 2) + '\n');
     const n = (ex.series || ex.series_periods || []).length;
     console.log(`  ✓ ${ex.ois_code} → headline ${ex.headline.value} ${ex.headline.unit}, ${n} řad`);
   }
   console.log(`transform dohodovací řízení: ${extracts.length} extraktů → ingest/nzip-extracts/`);
-  if (!process.env.DR_OUT) updateHistory(extracts);
+  if (!process.env.DR_OUT) updateHistory([...previous, ...extracts]);
 }
 
 /* headline aktuální edice do dohodovaci-rizeni-history.json (jen sady, které tam už jsou) —
@@ -1386,7 +1391,7 @@ function updateHistory(extracts) {
     const edition = (catalog.datasets.find((d) => d.ois_code === ex.ois_code)?.editions || []).slice(-1)[0]?.edition || null;
     const i = set.points.findIndex((p) => p.year === year);
     const point = { year, value, edition };
-    if (i >= 0 && set.points[i].value === value && set.points[i].edition === edition) continue;
+    if (i >= 0 && set.points[i].value === value) continue;
     if (i >= 0) set.points[i] = point;
     else set.points.push(point);
     set.points.sort((a, b) => a.year - b.year);
