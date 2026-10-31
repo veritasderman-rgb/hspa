@@ -12,10 +12,10 @@
 <meta property="og:locale" content="cs_CZ">
 <meta property="article:published_time" content="2026-05-07">
 <meta property="article:section" content="Životní styl">
-<meta name="article:audit-status" content="verified">
+<meta name="article:audit-status" content="review-pending">
 <!--
   audit:
-    last_reviewed: 2026-05-17
+    last_reviewed: 2026-10-31
     reviewer: claude-code-agent
     status: review-pending
     unverified_claims_removed: 0
@@ -25,6 +25,7 @@
     f1_2026-07-10: "Audit (F1): alkohol 11,2 l OECD H@G vs 14,4 l WHO korektně rozlišen s metodickou poznámkou (past decisions-log dodržena). KV mortalita 463,75, sebevražednost 11,59 sedí. OPRAVEN drift: preventabilní mortalita 195/168 (2022) → 174/151 EU (2023, Eurostat), claim --07 sladěn. Status review-pending → verified."
     fix_2026-10-26: "databox: preventabilní mortalita 195 vs. EU 168 (2022) → 173,9 vs. EU 150,9 (2023, Eurostat hlth_cd_apr); text a claim --07 už měly 174/151 (issue #1305)"
     reconcile_2026-07-12: "alkohol_spotreba 14,4/8,9 → recorded 11,2/8,5 (OECD H@G 2025, issue #690 varianta A); methodology caveat doplněn."
+    fallback_audit_2026-10-31: "Ověřeno proti primárním zdrojům (staženo 2026-10-31): OECD SDMX DF_HEALTH_LVNG_AC (https://sdmx.oecd.org/public/rest/data/OECD.ELS.HD,DSD_HEALTH_LVNG@DF_HEALTH_LVNG_AC,/all) — ČR 2021=11,6, 2022=11,6, 2023=11,2, 2024=10,6 (nová vlna OECD Health Statistics 2026; agregát OECD v datové sadě není); OECD H@G 2025 country profile Czechia 11,2 vs OECD 8,5 (2023) potvrzeno; WHO GSR 2024 odkaz 200 a obsah sedí; odkaz oecd.org/en/topics/health-statistics-and-data.html vrací 403 → nahrazen odkazem na OECD Data Explorer (200). ZMĚNY: (1) articles.json cover_viz 14,4/8,9/10,1 (míchal WHO total s OECD recorded, EU recorded průměr OECD nepublikuje) → 11,2/8,5 recorded/recorded, řádek EU odstraněn, cover přegenerován; (2) caveat, datový rámec a pozn. k hodnotám doplněny o novější hodnotu ČR 2024 = 10,6 l; (3) pozn. k hodnotám opravena — indikátor alkohol_spotreba už neukazuje 11,2, ale 10,6 (2024). Status verified → review-pending. K ROZHODNUTÍ REDAKCE: titulek Čtrnáct litrů / nejvíc v OECD (OECD 2023 recorded: ČR 4. ze 38 za PRT, LVA, AUT; 2024: ČR 10,6 mimo top 5); WHO total ~14 l a OECD ⌀ ~8,7 l (+60 %) neověřeno (WHO GHO API 500); národní odhad ČSÚ/SZÚ ~14,4 l bez dohledaného primárního zdroje (Souhrn Zprávy o alkoholu v ČR 2024, uv.gov.cz, uvádí ~10 l etanolu na obyvatele vč. dětí); věta o politice ČR (víno nulová spotřební daň) neověřována podrobně."
 -->
 <link rel="stylesheet" href="src/styles.min.css">
 <link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
@@ -140,7 +141,7 @@
       </p>
       <aside class="article-callout article-callout-caveat" aria-label="Caveat — OECD vs WHO metodika měření spotřeby alkoholu" style="margin:18px 0;padding:14px 18px;border-left:3px solid var(--ink);background:var(--paper);font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--ink-mut);">
         <p style="margin:0 0 6px 0;color:var(--ink);font-size:13px;letter-spacing:0.04em;text-transform:uppercase;">Caveat — která hodnota je „pravá"</p>
-        <p style="margin:0 0 6px 0;"><strong>OECD Health at a Glance 2025 (recorded):</strong> 11,2 l čistého alkoholu / obyv. 15+ pro ČR, OECD průměr 8,5 l. Vychází z národních prodejních a daňových statistik (v ČR: ČSÚ). Neobsahuje odhad neregistrované spotřeby.</p>
+        <p style="margin:0 0 6px 0;"><strong>OECD Health at a Glance 2025 (recorded):</strong> 11,2 l čistého alkoholu / obyv. 15+ pro ČR, OECD průměr 8,5 l (rok 2023). Vychází z národních prodejních a daňových statistik (v ČR: ČSÚ). Neobsahuje odhad neregistrované spotřeby. Novější vlna OECD Health Statistics 2026 uvádí pro ČR za rok 2024 <strong>10,6 l</strong>; průměr OECD za stejný rok datová sada neuvádí, proto srovnání s průměrem držíme u roku 2023.</p>
         <p style="margin:0 0 6px 0;"><strong>WHO Global Status Report on Alcohol / národní odhady (total):</strong> ~14 l pro ČR; národní odhad (ČSÚ/SZÚ) ~14,4 l. Kombinují registrovanou spotřebu s modelovým odhadem neregistrované (domácí destiláty, přeshraniční nákupy, turistický alkohol) — s průměrem OECD, který zahrnuje jen registrovanou spotřebu, je proto nelze přímo srovnávat.</p>
         <p style="margin:0;">Rozdíl 11,2 vs ~14 l není chyba — jsou to dva různě konstruované indikátory. V tomto článku používáme primárně <strong>OECD H@G 2025 hodnotu (11,2 l)</strong> jako srovnatelný indikátor napříč OECD zeměmi; tam, kde používáme „14 l" (titulek, některé pasáže), odkazujeme na WHO metodiku, která je v české veřejné debatě citovanější.</p>
       </aside>
@@ -266,7 +267,7 @@
       <div class="ed-kicker">Data v tomto článku</div>
       <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
       <ul class="article-databox-list">
-        <li><a href="indikator-alkohol_spotreba.html"><strong>Spotřeba alkoholu (čistý alkohol, 15+)</strong></a> — 11,2 l/os./rok (2023, registrovaná spotřeba) vs. OECD 8,5 (OECD Health at a Glance 2025)</li>
+        <li><a href="indikator-alkohol_spotreba.html"><strong>Spotřeba alkoholu (čistý alkohol, 15+)</strong></a> — 11,2 l/os./rok (2023, registrovaná spotřeba) vs. OECD 8,5 (OECD Health at a Glance 2025); za rok 2024 10,6 l (OECD Health Statistics 2026)</li>
         <li><a href="indikator-mortalita_kardiovaskularni.html"><strong>Kardiovaskulární mortalita (standardizovaná)</strong></a> — 463,75 / 100 000 vs. EU-27 312,95 (Eurostat, 2023)</li>
         <li><a href="indikator-mortalita_preventabilni.html"><strong>Preventabilní mortalita</strong></a> — 173,9 / 100 000 vs. EU 150,9 (Eurostat, 2023)</li>
         <li><a href="indikator-sebevrazdy_per_100k.html"><strong>Sebevraždy (standardizovaná míra)</strong></a> — 11,59 / 100 000 vs. EU 10,37 (Eurostat, 2023)</li>
@@ -282,7 +283,7 @@
       <div class="sources-group">
         <h5 class="sources-group-h">Data</h5>
         <ul class="article-sources-list">
-          <li><strong>OECD Health Statistics — Alcohol consumption</strong> — primární zdroj pro mezinárodní srovnání spotřeby. <a href="https://www.oecd.org/en/topics/health-statistics-and-data.html" target="_blank" rel="noopener">oecd.org ↗</a></li>
+          <li><strong>OECD Health Statistics — Alcohol consumption</strong> — primární zdroj pro mezinárodní srovnání spotřeby. <a href="https://data-explorer.oecd.org/vis?df[ds]=dsDisseminateFinalDMZ&amp;df[id]=DSD_HEALTH_LVNG%40DF_HEALTH_LVNG_AC&amp;df[ag]=OECD.ELS.HD" target="_blank" rel="noopener">data-explorer.oecd.org ↗</a></li>
           <li><strong>WHO Global Status Report on Alcohol and Health</strong> — globální monitoring spotřeby a souvisejících úmrtí. <a href="https://www.who.int/publications/i/item/9789240096745" target="_blank" rel="noopener">who.int ↗</a></li>
           <li><strong>SZÚ — Státní zdravotní ústav</strong> — domácí monitoring spotřeby a zdravotních dopadů. <a href="https://szu.cz/" target="_blank" rel="noopener">szu.cz ↗</a></li>
         </ul>
@@ -302,7 +303,7 @@
         </ul>
       </div>
       <p class="article-sources-disclaimer">
-        <strong>Pozn. k hodnotám:</strong> Číslo 11,2 l/os./rok (2023) pochází z indikátoru `alkohol_spotreba` v dashboardu HSPA Monitoru — registrovaná (recorded) spotřeba podle OECD <em>Health at a Glance 2025</em>, benchmark = průměr OECD 8,5 l. Národní odhad včetně neregistrované spotřeby (přeshraniční nákupy, domácí výroba; ČSÚ/SZÚ) činí ~14,4 l a s průměrem OECD ho nelze přímo srovnávat. Pro letošní aktuální čísla doporučujeme konzultovat OECD Health Statistics nebo WHO Global Status Report. Konkrétní výpočty etanolu v nápojích jsou orientační — záleží na obsahu alkoholu v daném produktu.
+        <strong>Pozn. k hodnotám:</strong> Číslo 11,2 l/os./rok (2023) je registrovaná (recorded) spotřeba podle OECD <em>Health at a Glance 2025</em>, benchmark = průměr OECD 8,5 l. Indikátor `alkohol_spotreba` v dashboardu HSPA Monitoru už ukazuje novější hodnotu 10,6 l za rok 2024 (OECD Health Statistics 2026). Národní odhad včetně neregistrované spotřeby (přeshraniční nákupy, domácí výroba; ČSÚ/SZÚ) činí ~14,4 l a s průměrem OECD ho nelze přímo srovnávat. Pro letošní aktuální čísla doporučujeme konzultovat OECD Health Statistics nebo WHO Global Status Report. Konkrétní výpočty etanolu v nápojích jsou orientační — záleží na obsahu alkoholu v daném produktu.
       </p>
       <p class="article-sources-disclaimer">
         <strong>Oprava (26. 10. 2026):</strong> V datovém rámci článku byla preventabilní mortalita uvedena podle starší hodnoty (195 / 100 000 vs. EU 168, rok 2022). Podle Eurostatu (hlth_cd_apr) je pro rok 2023 v ČR 173,9 a v EU-27 150,9 na 100 000 obyvatel; text článku už uváděl správné zaokrouhlené hodnoty 174 vs. 151.
