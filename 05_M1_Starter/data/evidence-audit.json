@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-10-25T00:00:00Z",
+  "generated_at": "2026-11-01T00:00:00Z",
   "_doc": "Registr evidence-auditu (PROMPT_EVIDENCE_AUDIT.md): pro každý ověřený článek / indikátor seznam tvrzení, které studie z PubMed/Consensus je řeší, a verdikt (supported / partial / contradicted / no-evidence / not-applicable / unclear). Zapisuje jen orchestrace (Sonnet hledá, Opus rozhoduje), mění se výhradně commitem. content_hash = sha1 souboru v době kontroly; scripts/evidence-audit-queue.js podle něj pozná, že se obsah změnil (stale). Consensus i PubMed jsou nástroje, ne zdroje — do registru patří jen ověřené studie s PMID/DOI, nikdy provozní texty nástrojů.",
   "items": [
     {
@@ -16420,6 +16420,1812 @@
       ],
       "followup": "Neověřeno: (a) český nebo evropský zdroj o vzdělanostním gradientu v účasti na mamografickém screeningu k tvrzení 3 (patient_story; PubMed dotaz vrátil 0 záznamů, Consensus v tomto běhu nepoužit) — interpretace „z velké části zrcadlem rovnosti v přístupu k prevenci“ bez opory, k posouzení redakcí; (b) číselné hodnoty karty (81 / 81,4 %, OECD 86 % vs. benchmark_source 84,3, EU24 83 %, NOR 2015–19 +4 p. b., 71 % pacientů v KOC, screening 60 % vs. 56 %) jsou mimo PubMed — patří do datové verifikace.",
       "notes": "Přečtena karta indikátoru (claims.json nehledáno, claim_id prázdné). PubMed: 8 volání (4 vyhledávání, 3 metadata včetně dávky 8 PMID, 1 prázdný dotaz); ČR-specifický dotaz na čisté přežití karcinomu prsu vrátil jen GBD 2023 (PMID 41785894, nepoužito, nerelevantní k tvrzením). Consensus nepoužit: strop PubMed vyčerpán, kandidáty by nešlo ověřit v PubMed. Tvrzení 3 vybráno místo směru/prahů (karta se na literaturu u prahů neodvolává). Číselné hodnoty karty (81,4 %, OECD 86 %, EU24 83 %, NOR 2015-19 +4 p.b.) nejsou v abstraktech doložitelné, jde o zdroje OECD/EU Country Cancer Profile/ÚZIS mimo PubMed. | Adjudikace (Opus), 3 volání PubMed: 2 vyhledávání a 1 dávka metadat (6 PMID). Tvrzení 1 zůstává supported. Tvrzení 2 měním z unclear na supported (medium) díky metodické práci Duffy 2008 (PMID 18504245) a evropské registrové studii Schumann 2024 (PMID 38611004). Tvrzení 3 zůstává partial (low): evidence je jen africká, neřeší účast na screeningu a interpretace „z velké části zrcadlem rovnosti“ není doložena. Prose_change nenavrhuji, protože jde o patient_story karty, ne o measurement limitations. Africkou metaanalýzu do literature nepřidávám (relation context, nepřenositelná). Do followup pro fázi 4 navrhuji: (a) český nebo evropský zdroj o vzdělanostním gradientu v účasti na mamografickém screeningu (dotaz v PubMed vrátil 0 záznamů, Consensus v tomto běhu nepoužit); (b) číselné hodnoty karty (81 / 81,4 %, OECD 86 % vs. benchmark_source 84,3, EU24 83 %, NOR 2015–19 +4 p. b., 71 % pacientů v KOC, screening 60 % vs. 56 %) jsou mimo PubMed, ověřit je patří do datové verifikace. Vedlejší nález pro redakci, mimo evidence-audit: method_notes a patient_story uvádějí benchmark OECD 86 %, benchmark_source ale nevážený průměr OECD 84,3 (n=34). Nesoulad stojí za kontrolu. Na kartu jsem nesahal, issue nezakládám (žádné tvrzení není contradicted). | Zápis (Opus): do karty přidáno pole literature se 3 studiemi (CONCORD-3, Duffy 2008, Schumann 2024); prose karty beze změny, issue nezakládáno (žádné contradicted)."
+    },
+    {
+      "id": "clanek-doktor-ktery-zustal.html",
+      "type": "article",
+      "checked_at": "2026-11-01",
+      "run_id": "ea-2026-11-01-01",
+      "content_hash": "353d8571de23f63cd07d435b97d1fa53d03f45c1",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 7,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Našli jich 190 z 8 420, tedy 2,3 %, s mediánem registrace 56,2 roku. Ti lidé byli nemocnější než srovnávací skupina padesátníků a starších, kteří do praxe přišli teprve před dvěma až čtyřmi lety: měli častěji víc chronických nemocí současně, depresi a cukrovku. A přesto nechodili k lékaři častěji, nebrali víc opakovaně předepisovaných léků a nevyužívali víc nemocnici.",
+          "location": "sekce „Zdánlivě jasná odpověď“",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "26895634",
+              "doi": "10.1093/fampra/cmw001",
+              "title": "Fifty years of longitudinal continuity in general practice: a retrospective observational study.",
+              "year": 2016,
+              "journal": "Family practice",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje rešerši: abstrakt doslova uvádí 190 z 8 420 (2,3 %), medián 56,2 roku, vyšší prevalenci multimorbidity, deprese a diabetu a žádný rozdíl v konzultacích, opakovaných lécích ani využití nemocnice. Jde o jednu praxi a observační design, což článek sám výslovně uvádí."
+        },
+        {
+          "claim_id": "",
+          "text": "Čím déle u jednoho lékaře, tím nižší šance na úmrtí, akutní hospitalizaci i noční cestu na pohotovost. U skupiny nad patnáct let o 25 až 30 %.",
+          "location": "sekce „Obrat: čtyři a půl milionu Norů a jedna křivka“ (graf OR podle délky vztahu a text kolem něj)",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "34607797",
+              "doi": "10.3399/BJGP.2021.0340",
+              "title": "Continuity in general practice as predictor of mortality, acute hospitalisation, and use of out-of-hours care: a registry-based observational study in Norway.",
+              "year": 2022,
+              "journal": "British Journal of General Practice",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Ověřeno v abstraktu i v open-access plném textu PMC8510690 (PubMed get_full_text_article): adjustované OR pro >15 let jsou 0,70 (LPS), 0,72 (akutní přijetí) a 0,75 (úmrtí); diskuse uvádí „reduced by 25–30%“. Plný text potvrzuje i další čísla z článku: tabulka 5 má OR úmrtí 0,92/0,90/0,85/0,81/0,75 a neadjustované OR 4,03; tabulka 2 uvádí úmrtí 0,7 % vs 1,4 % a průměrný věk 35,1 vs 56,3; vlastnosti lékaře výsledek významně neovlivnily; skupinové praxe 3–6 lékařů se společným elektronickým záznamem; dokumentace se při změně RGP zpravidla předává. Drobnost formulace: out-of-hours služba zahrnuje večery a víkendy, nejen noc, takže „noční cestu“ je zjednodušení. Na verdikt to nemá vliv."
+        },
+        {
+          "claim_id": "",
+          "text": "V prvním roce po odchodu lékaře přibylo o 3 % kontaktů s praktikem v běžné ordinační době, tedy 148 navíc na tisíc pacientů, a ten nárůst vydržel pět let. Plánované nemocniční kontakty vzrostly o 3 %. Akutní nemocniční kontakty o 5 %, hlavně v prvním roce, což odpovídá 13 navíc na tisíc pacientů. U lékařské pohotovosti byl odhad 1,04 s intervalem spolehlivosti od 0,99 do 1,09, tedy bez jistoty, že se něco změnilo. A úmrtnost? Ta se nezměnila ani za pět let.",
+          "location": "sekce „Druhý obrat: když doktor opravdu odejde“",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "39060027",
+              "doi": "10.1136/bmjqs-2023-017064",
+              "title": "General practitioners retiring or relocating and its association with healthcare use and mortality: a cohort study using Norwegian national data.",
+              "year": 2025,
+              "journal": "BMJ Quality & Safety",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje rešerši: abstrakt sedí číslo po čísle (819 + 228 odchodů, 1 165 295 osob, DiD, +3 % denních kontaktů = 148/1000 trvající 5 let, plánované +3 %, akutní +5 % = 13/1000, LPS RR 1,04 s CI 0,99–1,09, mortalita beze změny do 5 let). Abstrakt měří „dny s využitím péče“, ne jednotlivé kontakty, což je věcně totéž. Hodnocení DiD jako silnějšího observačního nástroje je metodický komentář redakce, ne tvrzení studie."
+        },
+        {
+          "claim_id": "",
+          "text": "U 757 873 Norů ve věku 60 až 90 let vyšel rozdíl výrazný: zvýšení indexu o 0,2 bodu podle klasické míry souviselo s 8,1% poklesem hospitalizací pro stavy zvládnutelné v ambulanci, podle nové míry jen s 1,9% poklesem. A s novou mírou vazba na úmrtnost zmizela úplně.",
+          "location": "sekce „Druhý obrat: když doktor opravdu odejde“",
+          "kind": "measurement",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "34857569",
+              "doi": "10.1136/bmjopen-2021-051958",
+              "title": "Continuity of care, measurement and association with hospital admission and mortality: a registry-based longitudinal cohort study.",
+              "year": 2021,
+              "journal": "BMJ Open",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje rešerši: abstrakt uvádí 757 873 pacientů ve věku 60–90 let, při +0,2 bodu −8,1 % (CI 7,1–9,1) vs −1,9 % (CI 0,2–3,5) akutních přijetí pro ACSC a u alternativní míry souvislost s mortalitou mizí. „Hospitalizace pro stavy zvládnutelné v ambulanci“ odpovídá akutním přijetím pro ACSC."
+        },
+        {
+          "claim_id": "",
+          "text": "Systematický přehled, který v roce 2018 sestavil právě tým z Exeteru, našel 22 studií o kontinuitě péče a úmrtnosti; 18 z nich ukázalo statisticky významně nižší úmrtnost při vyšší kontinuitě. Novější přehled švédských autorů z roku 2025 hodnotil důkazy metodou GRADE a dospěl k závěru, že vyšší osobní kontinuita s praktikem „pravděpodobně předchází“ předčasné úmrtnosti, se střední jistotou, na čtyřech studiích s 5 638 305 účastníky.",
+          "location": "sekce „Obrat: čtyři a půl milionu Norů a jedna křivka“",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "29959146",
+              "doi": "10.1136/bmjopen-2017-021161",
+              "title": "Continuity of care with doctors-a matter of life and death? A systematic review of continuity of care and mortality.",
+              "year": 2018,
+              "journal": "BMJ Open",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "40355250",
+              "doi": "10.3399/BJGP.2024.0568",
+              "title": "Personal GP continuity improves healthcare outcomes in primary care populations: a systematic review.",
+              "year": 2025,
+              "journal": "British Journal of General Practice",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje rešerši. Pereira Gray 2018: 22 zařazených studií, 18 (81,8 %) s významně nižší mortalitou, všechny observační, bez metaanalýzy. Engström 2025: GRADE se střední jistotou, mortalita ze 4 studií s 5 638 305 účastníky, „probably prevents premature mortality“. Obě čísla přesně sedí."
+        },
+        {
+          "claim_id": "",
+          "text": "Vyšší kontinuita s praktikem v ní souvisela s nižší úmrtností, ale samotná změna praktika úmrtnost významně neovlivnila. Autoři to vykládají tak, že systém seznamů ztrátu osobního vztahu částečně vyrovnává informační a řídicí kontinuitou.",
+          "location": "sekce „Kde je paměť uložená“",
+          "kind": "mechanism",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "38621803",
+              "doi": "10.3399/BJGP.2023.0211",
+              "title": "Continuity and breaches in GP care and their associations with mortality for patients with chronic disease: an observational study using Norwegian registry data.",
+              "year": 2024,
+              "journal": "British Journal of General Practice",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje rešerši: abstrakt uvádí, že nižší UPC souvisí s vyšší mortalitou (astma, CHOPN, diabetes, srdeční selhání), zatímco změna RGP mortalitu významně neovlivnila, „indicating a compensatory benefit of informational and management continuity in a patient list system“. Formulace článku „autoři to vykládají“ je přiměřeně opatrná."
+        },
+        {
+          "claim_id": "",
+          "text": "U 4 530 293 dospělých Dánů zjistila, že ti, kdo byli u současné praxe registrovaní jen nula až jeden rok, měli oproti registrovaným deset a více let o 21 % vyšší riziko úmrtí během roku 2022 (poměr rizik 1,21), o 25 % víc neplánovaných nemocničních kontaktů a o 21 % víc kontaktů s pohotovostí.",
+          "location": "sekce „Kde je paměť uložená“ a srovnávací tabulka „Pět studií, dvě odpovědi“",
+          "kind": "effect",
+          "verdict": "unclear",
+          "confidence": "low",
+          "evidence": [
+            {
+              "pmid": "37580711",
+              "doi": "10.1186/s12916-023-03021-3",
+              "title": "Healthcare fragmentation, multimorbidity, potentially inappropriate medication, and mortality: a Danish nationwide cohort study.",
+              "year": 2023,
+              "journal": "BMC Medicine",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "K posouzení redakcí. Citovaná studie Prior A et al., Lancet Prim Care 2025;1(2):100016 (DOI 10.1016/j.lanprc.2025.100016) není v PubMed indexovaná: převod DOI přes PubMed ID converter 1. 11. 2026 nevrátil žádné PMID a nevyšla ani při rešeršním hledání podle autora. Podle železného pravidla ji tedy audit nemůže ověřit ani zařadit do evidence. Čísla HR 1,21, IRR 1,25 a 1,21 zůstávají auditem nedoložená. Nejde o rozpor ani o neexistenci studie: článek otevřeně uvádí ověření přes Crossref a OpenAlex, a protože směr i řád velikosti odpovídají norským datům, verdikt contradicted nepřichází v úvahu. Prior 2023 (BMC Med, PMID 37580711) je jen kontext, protože měří fragmentaci kontaktů, ne délku registrace u praxe. Redakce může zvážit, zda tvrzení ponechat s výslovným označením „ověřeno mimo PubMed“ (článek to v tabulce i ve zdrojích již dělá), nebo počkat na indexaci časopisu."
+        },
+        {
+          "claim_id": "",
+          "text": "Sandvik v diskusi připomíná starší průzkum Hjortdahla mezi 133 norskými praktiky: vybudovat si o pacientovi pořádnou znalostní bázi trvá nejméně rok a často pět let.",
+          "location": "sekce „Obrat: čtyři a půl milionu Norů a jedna křivka“ (zopakováno v sekci „Zpátky v modelové obci“)",
+          "kind": "mechanism",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "1634024",
+              "doi": "10.1093/fampra/9.1.3",
+              "title": "Continuity of care: general practitioners' knowledge about, and sense of responsibility toward their patients.",
+              "year": 1992,
+              "journal": "Family Practice",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "34607797",
+              "doi": "10.3399/BJGP.2021.0340",
+              "title": "Continuity in general practice as predictor of mortality, acute hospitalisation, and use of out-of-hours care: a registry-based observational study in Norway.",
+              "year": 2022,
+              "journal": "British Journal of General Practice",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Confidence zvýšena z medium na high. Abstrakt Hjortdahl 1992 (133 norských praktiků) uvádí „at least one, and often 5 years ... to create such an extensive knowledge base“. Že to Sandvik cituje v diskusi, potvrdil plný text PMC8510690 (oddíl Comparison with existing literature). Jde o sebehodnocení lékařů v průřezovém šetření, ne o objektivní měření; slovo „průzkum“ v článku to vystihuje dostatečně. Studie dosud v article-sources chyběla, proto byla doplněna."
+        }
+      ],
+      "summary": {
+        "supported": 7,
+        "partial": 0,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 1
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Hjortdahl P. Fam Pract 1992;9(1):3–8 (PMID 1634024, DOI 10.1093/fampra/9.1.3) doplněn do article-sources, skupina „Recenzovaná literatura“, za White 2016 — k větě o průzkumu mezi 133 norskými praktiky.",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Ostatní supported tvrzení opírají studie, které článek už cituje s PMID a DOI (White 2016, Sandvik 2022, Vinjerui 2025, Hetlevik 2021, Pereira Gray 2018, Engström 2025, Pahlavanyali 2024), zdroje se nedoplňují. V data/claims.json pro článek nejsou záznamy, claim-note se nedělá. Prior 2025 zůstává unclear (mimo PubMed), bez flagu a issue. audit-status zůstává review-pending; do audit.notes (articles.json) a audit: komentáře připojena věta o evidence-auditu.",
+          "ref": ""
+        }
+      ],
+      "followup": "Prior 2025 (Lancet Prim Care, DOI 10.1016/j.lanprc.2025.100016) zatím není v PubMed; při příštím běhu znovu převést DOI na PMID a při indexaci ověřit HR 1,21 / IRR 1,25 / 1,21 v abstraktu.",
+      "notes": "PubMed dostupný, Consensus nepoužit (PubMed stačil; ověření mimo PubMed železné pravidlo nepřipouští). Rešerše 4 volání PubMed (metadata citovaných studií, hledání Prior a Hjortdahl), adjudikace 3 volání (převod DOI Prior 2025 bez PMID, plný text PMC8510690, hledání podle autora Prior A). Plný text Sandvik 2022 potvrdil i čísla mimo abstrakt (tabulky 2 a 5) a citaci Hjortdahla v diskusi. V data/claims.json pro článek žádná tvrzení, claim_id prázdné. Vynechána jako neodborná: data ÚZIS o věku praktiků, výpočet redakce 2 266 / 183 ≈ 12,4 roku, názory redakce. Finální verdikty: 7 supported, 1 unclear; bez prose_change, flagu a issue."
+    },
+    {
+      "id": "clanek-chopn-umrtnost-nad-eu-2026.html",
+      "type": "article",
+      "checked_at": "2026-11-01",
+      "run_id": "ea-2026-11-01-01",
+      "content_hash": "dc960ff861ec49270cc0b6fe1c01b12d07fcfbeb",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 9,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "chopn-umrtnost-nad-eu-2026--8",
+          "text": "zůstalo 81,4 % spirometricky prokázaných případů CHOPN bez diagnózy a jen 26,4 % účastníků kdy absolvovalo vyšetření plicních funkcí",
+          "location": "Co za číslem stojí: Pozdní diagnóza",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "25950276",
+              "doi": "10.1378/chest.14-2535",
+              "title": "Determinants of underdiagnosis of COPD in national and international surveys.",
+              "year": 2015,
+              "journal": "Chest",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje rešerši: abstrakt doslova uvádí 30 874 účastníků, 44 lokalit, 27 zemí, 81,4 % nediagnostikované spirometricky definované CHOPN a 26,4 % s dřívější spirometrií. Text výslovně říká, že Česko v šetření nebylo a česká data chybí, takže tvrzení o ČR nepřenáší."
+        },
+        {
+          "claim_id": "chopn-umrtnost-nad-eu-2026--9",
+          "text": "Po 14,5 roku byla celková úmrtnost ve skupině s programem nižší (8,83 proti 10,38 úmrtí na 1 000 osoboroků), přestože po pěti letech nekouřilo jen 21,7 % účastníků programu proti 5,4 % v kontrolní skupině.",
+          "location": "Co za číslem stojí: Kouření",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "15710956",
+              "doi": "10.7326/0003-4819-142-4-200502150-00005",
+              "title": "The effects of a smoking cessation intervention on 14.5-year mortality: a randomized clinical trial.",
+              "year": 2005,
+              "journal": "Annals of Internal Medicine",
+              "study_type": "rct",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje rešerši: 5 887 účastníků, 8,83 proti 10,38/1000 osoboroků (P=0,03), 21,7 % proti 5,4 % abstinence po 5 letech. Populace je střední věk s asymptomatickou obstrukcí a text ji tak popisuje. Platí i pro větu v sekci Co s tím o odvykání u lidí s obstrukcí."
+        },
+        {
+          "claim_id": "chopn-umrtnost-nad-eu-2026--10",
+          "text": "Cochranův přehled 20 randomizovaných studií s 1 477 pacienty (Puhan et al. 2016) ukázal, že plicní rehabilitace po exacerbaci snižuje počet opakovaných hospitalizací (OR 0,44, důkazy střední kvality) a výrazně zlepšuje kvalitu života i tělesnou výkonnost (chůze za šest minut v průměru o 62 metrů delší). Na úmrtnost prokazatelný vliv neměla (OR 0,68, interval spolehlivosti 0,28–1,67).",
+          "location": "Co za číslem stojí: Péče mezi zhoršeními",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "27930803",
+              "doi": "10.1002/14651858.CD005305.pub4",
+              "title": "Pulmonary rehabilitation following exacerbations of chronic obstructive pulmonary disease.",
+              "year": 2016,
+              "journal": "Cochrane Database of Systematic Reviews",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje rešerši: všechna čísla (20 RCT, 1 477 osob, readmise OR 0,44 střední kvalita, mortalita OR 0,68 s CI 0,28–1,67, 6MWD +62 m) jsou v abstraktu. Abstrakt upozorňuje na vysokou heterogenitu u readmisí (I2 77 %) a na menší efekt v novějších studiích. Text to neuvádí, ale věcně to nemění."
+        },
+        {
+          "claim_id": "",
+          "text": "Metaanalýza prospektivních kohortových studií (Park et al. 2021, Environmental Research; odhad pro PM2.5 ze šesti z nich) spojuje každých 10 µg/m³ PM2.5 navíc s o 18 % vyšším výskytem CHOPN (HR 1,18).",
+          "location": "Co za číslem stojí: Ovzduší",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "33417909",
+              "doi": "10.1016/j.envres.2020.110703",
+              "title": "Impact of long-term exposure to ambient air pollution on the incidence of chronic obstructive pulmonary disease: A systematic review and meta-analysis.",
+              "year": 2021,
+              "journal": "Environmental Research",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "V abstraktu je 7 kohort, z toho 6 s daty pro PM2.5, a pooled HR 1,18 (1,13–1,23) na +10 µg/m³. V PubMed se ztratily dolní indexy, přiřazení k PM2.5 je ale jednoznačné, protože PM10 (HR 0,95) i NO2 (HR 1,07) mají vlastní hodnoty. Jde o asociaci a text ji tak neutrálně formuluje („spojuje“)."
+        },
+        {
+          "claim_id": "",
+          "text": "Klasická studie zemí Evropského společenství (Mackenbach et al. 1987) rozeslala lékařům stejné modelové případy CHOPN a zjistila, že podíl případů, které skončily se správnou základní příčinou, se mezi zeměmi lišil od 60 do 92 %.",
+          "location": "Mezinárodní srovnání: rámeček Kódování úmrtních listů mění výsledek",
+          "kind": "measurement",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "3655636",
+              "doi": "10.1136/jech.41.2.156",
+              "title": "Certification and coding of two underlying causes of death in The Netherlands and other countries of the European Community.",
+              "year": 1987,
+              "journal": "Journal of Epidemiology and Community Health",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova uvádí rozeslání sad kazuistik certifikujícím lékařům v zemích ES, národní kódování i kódování referenčním centrem WHO a „detection fractions“ 60–92 % ve studii případů CHOPN. Převod „detection fraction“ na „podíl případů se správnou základní příčinou“ je věcně standardní výklad, abstrakt ho ale nedefinuje. Plný text v PMC (PMC1052602) nástroj nevrátil, proto confidence medium. Studie je z 80. let a z dnešních zemí EU pokrývá jen tehdejší ES (bez ČR, PL a SK). Text ji ale uvádí jen jako doklad obecného mechanismu."
+        },
+        {
+          "claim_id": "",
+          "text": "Dánská kohorta (Jensen et al. 2006, European Respiratory Journal) ukázala, že CHOPN byla příčinou smrti jen u 24,9 % lidí s alespoň těžkou CHOPN.",
+          "location": "Mezinárodní srovnání: rámeček Kódování úmrtních listů mění výsledek",
+          "kind": "measurement",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "16807258",
+              "doi": "10.1183/09031936.06.00152205",
+              "title": "Potential misclassification of causes of death from COPD.",
+              "year": 2006,
+              "journal": "European Respiratory Journal",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "34217049",
+              "doi": "10.1016/j.rmed.2021.106518",
+              "title": "Large underreporting of COPD as cause of death-results from a population-based cohort study.",
+              "year": 2021,
+              "journal": "Respiratory Medicine",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Jensen (Copenhagen City Heart Study): abstrakt doslova uvádí, že u lidí s alespoň těžkou CHOPN mělo CHOPN jako příčinu smrti jen 24,9 %, a autoři uzavírají, že je CHOPN na úmrtních listech podhlášená. Nezávislá švédská populační kohorta (Lindberg 2021) to potvrzuje: CHOPN byla uvedena na 28,2 % úmrtních listů, u GOLD 3–4 na 57,1 % (jako základní i vedlejší příčina). Obě studie podporují také větu v sekci Co s tím, že CHOPN je na úmrtních listech podhlášená."
+        },
+        {
+          "claim_id": "",
+          "text": "Je proto pravděpodobné, že se část rozdílu vysvětluje tím, jak se v různých zemích stejné úmrtí zapíše na úmrtní list.",
+          "location": "Mezinárodní srovnání: proč nečíst Polsko a Slovensko jako vzor",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "3655636",
+              "doi": "10.1136/jech.41.2.156",
+              "title": "Certification and coding of two underlying causes of death in The Netherlands and other countries of the European Community.",
+              "year": 1987,
+              "journal": "Journal of Epidemiology and Community Health",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "16807258",
+              "doi": "10.1183/09031936.06.00152205",
+              "title": "Potential misclassification of causes of death from COPD.",
+              "year": 2006,
+              "journal": "European Respiratory Journal",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "context",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "34217049",
+              "doi": "10.1016/j.rmed.2021.106518",
+              "title": "Large underreporting of COPD as cause of death-results from a population-based cohort study.",
+              "year": 2021,
+              "journal": "Respiratory Medicine",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Že se certifikace a kódování CHOPN mezi zeměmi liší (Mackenbach 1987) a že je CHOPN na úmrtních listech podhlášená (Jensen 2006, Lindberg 2021), literatura dokládá. Ověřená evidence ale nezahrnuje Polsko ani Slovensko a nekvantifikuje, jakou část rozdílu PL/SK proti ČR kódování vysvětluje. Jde o přenos obecného mechanismu ze západoevropských a skandinávských dat na středoevropské srovnání, proto partial s výhradou přenositelnosti. Alternativní vysvětlení (jiná diagnostická praxe, skutečně nižší výskyt) evidence nevylučuje. Prose se neupravuje, protože text už mluví jen o „části rozdílu“ a o „pravděpodobném“ vysvětlení a výslovně odrazuje od čtení PL/SK jako vzoru. Rozsah tvrzení tak není širší než evidence. Cílené hledání PL/SK v PubMed vrátilo 8 kandidátů, které ve stropu volání nešlo posoudit (followup)."
+        },
+        {
+          "claim_id": "",
+          "text": "Roky 2020 a 2021 je přitom třeba číst opatrně, protože lidé s chronickou plicní nemocí mohli v pandemii umírat se základní příčinou covid-19, což mohlo míru na čas snížit.",
+          "location": "Stav v Česku: pětina nad Evropou, odstup se nezužuje",
+          "kind": "measurement",
+          "verdict": "no-evidence",
+          "confidence": "low",
+          "evidence": [],
+          "note": "Rešerše použila 2 cílené dotazy v PubMed (pandemie a CHOPN jako příčina smrti; pandemie + Evropa) a nenašla relevantní studii pro ani proti tomu, že kódování covid-19 jako základní příčiny přesunulo úmrtí z J40–J47 a dočasně snížilo míru. Text tvrzení formuluje hypoteticky („mohli“, „mohlo“) a nepodává ho jako zjištění. K posouzení redakcí není nutné, při dalším běhu ale stojí za cílenější dotaz."
+        }
+      ],
+      "summary": {
+        "supported": 6,
+        "partial": 1,
+        "contradicted": 0,
+        "no_evidence": 1,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Lindberg A et al. Respir Med 2021;186:106518 (PMID 34217049, DOI 10.1016/j.rmed.2021.106518) doplněn do article-sources, do existující skupiny „Evidence“ (plní roli Recenzované literatury, nová skupina se nezakládala) za Jensen 2006 — k větě „CHOPN je na úmrtních listech podhlášená“ (sekce Co s tím).",
+          "ref": ""
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note doplněn o „evidence-audit 1. 11. 2026: supported (abstrakt)“ (PMID:25950276 / DOI:10.1378/chest.14-2535)",
+          "ref": "chopn-umrtnost-nad-eu-2026--8"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note doplněn o „evidence-audit 1. 11. 2026: supported (abstrakt)“ (PMID:15710956 / DOI:10.7326/0003-4819-142-4-200502150-00005)",
+          "ref": "chopn-umrtnost-nad-eu-2026--9"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note doplněn o „evidence-audit 1. 11. 2026: supported (abstrakt)“ (PMID:27930803 / DOI:10.1002/14651858.CD005305.pub4)",
+          "ref": "chopn-umrtnost-nad-eu-2026--10"
+        },
+        {
+          "type": "none",
+          "detail": "Bez flagu a issue (žádné contradicted), audit-status zůstává review-pending, prose beze změny. Do audit: komentáře článku a data/articles.json → audit.notes připojena věta „evidence-audit 2026-11-01: 8 tvrzení, 6 supported, 1 partial, 1 no-evidence; viz data/evidence-audit.json“. audit.last_reviewed beze změny.",
+          "ref": ""
+        }
+      ],
+      "followup": "(a) Tvrzení o části rozdílu PL/SK vysvětlené kódováním úmrtních listů (partial): posoudit kandidáty z PubMed, na které nezbyl strop volání — PMID 41899200, 40154769, 37229504, 33710385, 22246093, 17541911, 17356080, 16105731. (b) Tvrzení o pandemii 2020–2021 (covid-19 jako základní příčina snižující míru, no-evidence/low) zkusit cílenějším dotazem. (c) Mackenbach 1987: definice „detection fraction“ mimo abstrakt neověřena, plný text PMC1052602 nástroj nevrátil.",
+      "notes": "Použito 6 volání PubMed (2x get_article_metadata pro 6 citovaných studií + 4 vybrané výsledky, 4x search_articles: certifikace/podhlášení CHOPN na úmrtních listech, pandemie a CHOPN jako příčina smrti, česká data o CHOPN, pandemie+Evropa). Consensus nepoužit (PubMed dal dostatek). Všech 6 citovaných studií (PMID 25950276, 15710956, 27930803, 33417909, 3655636, 16807258) existuje v PubMed, žádná není retrahovaná podle metadat, DOI se shodují s článkem. Vynecháno: tvrzení o ESP standardizaci, Eurostat/ČSÚ číslech, kuřáctví/PM2.5 hodnotách, odvratitelných hospitalizacích, pokrytí screeningu (administrativní statistika). Neověřeno: tvrzení, že v pandemii 2020-2021 mohli lidé s plicní nemocí umírat se základní příčinou covid-19 a tím snížit míru (hledání nenašlo cílený zdroj, 0 relevantních výsledků ve zúžené verzi; text to formuluje opatrně 'mohlo'); věta o 'logice sdílené cílové skupiny' CT screening + spirometrie je explicitně označena jako nedoložená; tvrzení o vazbě skoku 2012->2013 na změnu úmrtního listu je správně nepřičítané. Nenalezena česká studie o podílu nediagnostikované CHOPN (hledání vrátilo jen nerelevantní práce, např. LUCAS registr plicní rakoviny, multimorbidita 2014-2023 BMJ Open 2026 PMID 41565329 jako kontext). Doporučená pozornost redakce: u Mackenbach 1987 dodat do textu, že jde o 'detection fraction' v modelové studii z 80. let. | Adjudikace (Opus) použila 3 volání PubMed. 1) get_article_metadata pro PMID 3655636, 16807258 a 34217049: abstrakty potvrzují čísla 60–92 % a 24,9 %, metadata Lindberg 2021 pro nový zdroj. 2) get_full_text_article PMC1052602 (Mackenbach): plný text nevrácen, jen abstrakt. 3) search_articles na kódování a srovnatelnost úmrtnosti na CHOPN v PL/SK/střední Evropě: 8 PMID bez posouzení (vyčerpaný strop). Výsledek: 6 supported, 1 partial (mechanismus PL/SK, výhrada přenositelnosti), 1 no-evidence (pandemický posun příčiny smrti, hypoteticky formulované). Bez contradicted, takže bez flagu a issue. prose_change se nenavrhuje, protože text už je u PL/SK opatrný („část rozdílu“, „pravděpodobné“). Všech 6 citovaných studií článek už v sekci Evidence má; přidává se jen Lindberg 2021 (PMID 34217049) k větě o podhlášení CHOPN na úmrtních listech. Článek používá skupinu „Evidence“ místo „Recenzovaná literatura“, proto se novou skupinu nezakládá a položka jde do existující. Redakci doporučuji zvážit, zda u Mackenbacha výslovně neuvést, že jde o modelovou studii z 80. let s „mírou zachycení“. To je jen doporučení, audit ho neprovádí."
+    },
+    {
+      "id": "clanek-napoje-5-co-pit.html",
+      "type": "article",
+      "checked_at": "2026-11-01",
+      "run_id": "ea-2026-11-01-01",
+      "content_hash": "0101930573cd0877e69c7655a73208da6e621740",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 6,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "napoje-5-co-pit--04",
+          "text": "−14 až −25 % rizika cukrovky 2. typu",
+          "location": "databox „Zdravé pití v číslech“ + Data v tomto článku + Zdroje",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "25944371",
+              "doi": "10.1007/s00125-015-3572-1",
+              "title": "Prospective associations and population impact of sweet beverage intake and type 2 diabetes, and effects of substitutions with alternative beverages.",
+              "year": 2015,
+              "journal": "Diabetologia",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova: náhrada jedné porce denně soft drinku nebo slazeného mléčného nápoje vodou či neslazeným čajem/kávou snížila incidenci diabetu 2. typu o 14–25 % (EPIC-Norfolk, 25 639 dospělých z UK, 847 případů za 10,8 roku). Databox („výměna limonády“) rozsahu odpovídá; popisek ve Zdrojích („slazeného nápoje“) je mírně širší, protože u slazeného čaje/kávy a džusu asociace nevyšla. Jde o pozorovací odhad modelované náhrady, ne o RCT, což článek v poznámce uvádí. Přenositelnost na českou populaci studie neověřuje."
+        },
+        {
+          "claim_id": "",
+          "text": "u dospělých je umírněná konzumace kávy spíš prospěšná než škodlivá — nejnižší riziko (včetně celkové a kardiovaskulární úmrtnosti) vychází kolem tří až čtyř šálků denně",
+          "location": "Čaj a káva: pro dospělé v pohodě; databox (3–4 šálky)",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "29167102",
+              "doi": "10.1136/bmj.j5024",
+              "title": "Coffee consumption and health: umbrella review of meta-analyses of multiple health outcomes.",
+              "year": 2017,
+              "journal": "BMJ",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Umbrella review (201 metaanalýz observačních a 17 intervenčních studií): největší relativní snížení rizika při 3–4 šálcích denně oproti žádné kávě (celková mortalita RR 0,83; KV mortalita 0,81; KVO 0,85); káva je „more likely to benefit health than harm“. Jde o asociace, autoři žádají RCT; článek v poznámce uvádí, že přínos kávy vychází z pozorovacích studií."
+        },
+        {
+          "claim_id": "",
+          "text": "Výjimkou je těhotenství, kdy se kofein má výrazně omezit.",
+          "location": "Čaj a káva: pro dospělé v pohodě",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "29167102",
+              "doi": "10.1136/bmj.j5024",
+              "title": "Coffee consumption and health: umbrella review of meta-analyses of multiple health outcomes.",
+              "year": 2017,
+              "journal": "BMJ",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt výslovně uvádí těhotenství jako výjimku: vysoká vs. nízká nebo žádná konzumace souvisí s nízkou porodní hmotností (OR 1,31), předčasným porodem (1. trimestr 1,22; 2. trimestr 1,12) a ztrátou těhotenství (OR 1,46). Studie podporuje směr tvrzení, míru omezení ale nestanovuje; tu článek opírá o stanovisko EFSA („těhotné méně“), které v PubMed není. Abstrakt navíc uvádí riziko zlomenin u žen, které článek v próze nezmiňuje (je jen v audit poznámce)."
+        },
+        {
+          "claim_id": "",
+          "text": "ani uměle slazené nápoje nevyšly jako čistá výhra a udržují chuť na sladké",
+          "location": "Časté otázky — „Dietní“ a „zero“ nápoje?",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "25944371",
+              "doi": "10.1007/s00125-015-3572-1",
+              "title": "Prospective associations and population impact of sweet beverage intake and type 2 diabetes, and effects of substitutions with alternative beverages.",
+              "year": 2015,
+              "journal": "Diabetologia",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "29566187",
+              "doi": "10.1093/ajcn/nqx031",
+              "title": "Sweet taste exposure and the subsequent acceptance and preference for sweet taste in the diet: systematic review of the published literature.",
+              "year": 2018,
+              "journal": "Am J Clin Nutr",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "41485871",
+              "doi": "10.1016/j.ajcnut.2025.09.041",
+              "title": "The Sweet Tooth Trial: A Parallel Randomized Controlled Trial Investigating the Effects of A 6-Month Low, Regular, or High Dietary Sweet Taste Exposure on Sweet Taste Liking, and Various Outcomes Related to Food Intake and Weight Status.",
+              "year": 2025,
+              "journal": "Am J Clin Nutr",
+              "study_type": "rct",
+              "found_via": "pubmed",
+              "relation": "contradicts",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "První část tvrzení je doložená: v EPIC-Norfolk měly uměle slazené nápoje HR 1,22, po úpravě o adipozitu 1,06 (nevýznamné), a jejich záměna za slazené nápoje incidenci nesnížila. Druhou část („udržují chuť na sladké“) literatura nepotvrzuje. Systematický přehled (21 studií) hodnotí vztah mezi expozicí sladké chuti a pozdější oblibou sladkého jako nejednoznačný. Šestiměsíční RCT (n = 180, sladká chuť i z nízkokalorických sladidel) nezjistila rozdíl v oblibě sladké chuti mezi skupinami s nízkou, běžnou a vysokou expozicí. Jedna RCT na verdikt contradicted nestačí, proto partial."
+        },
+        {
+          "claim_id": "",
+          "text": "přizpůsobení chuti na nižší sladkost je dobře popsané a je dočasné — pár týdnů, ne navždy",
+          "location": "Jak si odvyknout od sladkého (poznámka pod postupem; navazuje na prózu „jazyk se během několika týdnů přizpůsobí a dřív oblíbený nápoj začne chutnat až nepříjemně sladce“ a krok „Chuť se přizpůsobí“)",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "29566187",
+              "doi": "10.1093/ajcn/nqx031",
+              "title": "Sweet taste exposure and the subsequent acceptance and preference for sweet taste in the diet: systematic review of the published literature.",
+              "year": 2018,
+              "journal": "Am J Clin Nutr",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "41485871",
+              "doi": "10.1016/j.ajcnut.2025.09.041",
+              "title": "The Sweet Tooth Trial: A Parallel Randomized Controlled Trial Investigating the Effects of A 6-Month Low, Regular, or High Dietary Sweet Taste Exposure on Sweet Taste Liking, and Various Outcomes Related to Food Intake and Weight Status.",
+              "year": 2025,
+              "journal": "Am J Clin Nutr",
+              "study_type": "rct",
+              "found_via": "pubmed",
+              "relation": "contradicts",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Formulace „dobře popsané“ je širší, než evidence dovoluje. Appleton et al. 2018 (systematický přehled, 7 kohort a 14 kontrolovaných studií) hodnotí důkazy jako nejednoznačné co do existence i směru vztahu. Krátkodobé efekty ve studiích dokonce ukazují opačný směr (vyšší expozice → nižší preference) a dlouhodobé efekty jsou velmi omezené. Čad et al. 2025 (RCT, 180 dospělých, 6 měsíců) nezjistil po nízké expozici sladké chuti změnu obliby ani vnímané intenzity sladké chuti; účastníci se po intervenci spontánně vrátili k výchozímu příjmu sladkého. Postup odvykání jako praktická rada tím zpochybněn není, sporné je jen tvrzení o dobře popsaném přizpůsobení chuti. Kontradikci by vyžadovala převaha kvalitní evidence, proto partial. Do poznámky pod postupem doplněna jedna upřesňující věta s citací (Appleton 2018, Čad 2025); článek přepnut z verified na review-pending."
+        },
+        {
+          "claim_id": "napoje-5-co-pit--05",
+          "text": "Bezpečný denní strop kofeinu pro dospělého je podle EFSA kolem 400 miligramů (zhruba čtyři šálky).",
+          "location": "Čaj a káva: pro dospělé v pohodě; též Data v tomto článku a Zdroje (EFSA 2015)",
+          "kind": "policy",
+          "verdict": "not-applicable",
+          "confidence": "high",
+          "evidence": [],
+          "note": "Regulatorní limit z vědeckého stanoviska EFSA (2015). Nejde o tvrzení, o kterém rozhoduje recenzovaná literatura v PubMed, a citace regulatorních stanovisek se podle protokolu neověřuje. Zdroj je v článku uveden (efsa.europa.eu) a číslo hlídá záznam claims.json napoje-5-co-pit--05. Totéž platí pro napoje-5-co-pit--06 (EFSA 3 mg/kg u dětí)."
+        }
+      ],
+      "summary": {
+        "supported": 3,
+        "partial": 2,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 1,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "claim-note",
+          "detail": "source_note u napoje-5-co-pit--04 doplněn na „EPIC-Norfolk, Diabetologia 2015; PMID:25944371 / DOI:10.1007/s00125-015-3572-1, ověřeno 2026-11-01“",
+          "ref": "napoje-5-co-pit--04"
+        },
+        {
+          "type": "source-added",
+          "detail": "Appleton et al. Am J Clin Nutr 2018 (PMID 29566187, DOI 10.1093/ajcn/nqx031) do article-sources, skupina „Primární — recenzovaná literatura (PubMed)“",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "Čad et al. Am J Clin Nutr 2025 (PMID 41485871, DOI 10.1016/j.ajcnut.2025.09.041) do article-sources, skupina „Primární — recenzovaná literatura (PubMed)“",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Jedna upřesňující věta (partial, přizpůsobení chuti) vložena do poznámky pod postupem „Odvykání po malých krocích“; audit-status verified → review-pending (articles.json audit-status + audit.status, <meta name=\"article:audit-status\">, audit: komentář); evidence-audit poznámka připojena do audit.notes a audit: komentáře; audit.last_reviewed beze změny",
+          "ref": ""
+        }
+      ],
+      "followup": "Neověřeno: Wise et al. 2016 (snížený příjem cukru a vnímaná intenzita sladké chuti) — možná smíšená evidence k tvrzení o přizpůsobení chuti, neověřen kvůli stropu volání; claim napoje-5-co-pit--06 (EFSA 3 mg/kg u dětí, regulatorní, neověřováno); WHO 2015 volné cukry (guideline mimo PubMed); claim --07 (kostky cukru, přepočet z etiket) a --01 až --03 (administrativní statistika) vyřazeny jako neodborné.",
+      "notes": "PubMed 6 volání celkem (rešerše 3: lookup citací, metadata 2 PMID, 1 hledání EFSA kofein bez výsledku; adjudikace 3: metadata citovaných PMID, hledání sweet taste exposure / low-calorie sweeteners × sweet preference (SR/RCT), metadata 4 kandidátů). Consensus nepoužit. Z kandidátů relevantní 29566187 a 41485871; 36958330 a 34772324 se netýkají. Obě studie citované článkem existují, nejsou retrahované, DOI i abstrakty sedí (O'Connor 2015, Poole 2017). Adjudikace přidala tvrzení o přizpůsobení chuti (rešerše ho vynechala kvůli rozpočtu) a přeřadila EFSA 400 mg z unclear na not-applicable. Žádné contradicted, žádný flag ani issue. U tvrzení o sladidlech další věta nenavržena (povolena jedna na položku, týká se téhož mechanismu)."
+    },
+    {
+      "id": "clanek-car-t-carvykti-fn-brno-smlouva-2026.html",
+      "type": "article",
+      "checked_at": "2026-11-01",
+      "run_id": "ea-2026-11-01-01",
+      "content_hash": "09d1e5263a531c5a6e978673a91bc046269cb68d",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "write": "sonnet"
+      },
+      "calls": {
+        "pubmed": 2,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Otevřená studie CARTITUDE-1 (Berdeja et al., Lancet 2021) léčila 97 pacientů s relabujícím nebo refrakterním mnohočetným myelomem, kteří měli za sebou v mediánu šest předchozích léčeb. Na jednu infuzi odpovědělo 97 % z nich, u 67 % nastala přísná kompletní remise a po 12 měsících žilo bez progrese 77 %. Syndrom z uvolnění cytokinů prodělalo 95 % pacientů (4 % v závažném stupni), neurotoxicitu 21 %. Ve studii zemřelo 14 lidí, šest z nich na nežádoucí účinky léčby.",
+          "location": "Co terapie umí",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "34175021",
+              "doi": "10.1016/S0140-6736(21)00933-8",
+              "title": "Ciltacabtagene autoleucel, a B-cell maturation antigen-directed chimeric antigen receptor T-cell therapy in patients with relapsed or refractory multiple myeloma (CARTITUDE-1): a phase 1b/2 open-label study",
+              "year": 2021,
+              "journal": "Lancet",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova potvrzuje všechna čísla: n=97, medián 6 předchozích terapií, ORR 97 %, sCR 67 %, 12měsíční PFS 77 %, CRS 95 % (4 % stupeň 3–4), neurotoxicita 21 % (9 % stupeň 3–4), 14 úmrtí, z toho 6 kvůli nežádoucím účinkům léčby. Typ: jednoramenná fáze 1b/2 (v článku správně 'otevřená studie'). Bez retrakce. Pozn.: abstrakt uvádí financování Janssen R&D a Legend Biotech."
+        },
+        {
+          "claim_id": "",
+          "text": "Randomizovaná studie fáze 3 CARTITUDE-4 (San-Miguel et al., New England Journal of Medicine 2023) srovnala Carvykti se standardní léčbou u 419 pacientů po jedné až třech předchozích liniích, jejichž myelom přestal reagovat na lenalidomid. Riziko progrese nebo úmrtí bylo po jedné infuzi výrazně nižší (poměr rizik 0,26; 95% interval spolehlivosti 0,18–0,38). Bez progrese bylo po 12 měsících 75,9 % pacientů proti 48,6 %. U celkového přežití v době analýzy rozdíl průkazný nebyl (poměr rizik 0,78; interval 0,5–1,2).",
+          "location": "Co terapie umí",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "37272512",
+              "doi": "10.1056/NEJMoa2303379",
+              "title": "Cilta-cel or Standard Care in Lenalidomide-Refractory Multiple Myeloma",
+              "year": 2023,
+              "journal": "N Engl J Med",
+              "study_type": "rct",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: fáze 3 RCT, n=419 (208 vs 211), 1–3 předchozí linie, lenalidomid-refrakterní, HR 0,26 (0,18–0,38), PFS12 75,9 % vs 48,6 %, úmrtí HR 0,78 (0,5–1,2). Vše sedí. Medián follow-upu 15,9 měsíce – krátký, OS nezralé; článek to nepřehání. Tvrzení o financování CARTITUDE-4 v abstraktu neověřováno."
+        },
+        {
+          "claim_id": "",
+          "text": "Modelová studie Yamamota a kolegů (Transplantation and Cellular Therapy, 2023) pro Japonsko a USA vyšla u anti-BCMA CAR-T nákladově efektivní jen za předpokladu vysokého dlouhodobého přežití bez progrese. Výsledky podle autorů na tomto předpokladu silně závisejí.",
+          "location": "Co terapie umí",
+          "kind": "policy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "37802181",
+              "doi": "10.1016/j.jtct.2023.10.001",
+              "title": "Cost-Effectiveness of Anti-BCMA Chimeric Antigen Receptor T Cell Therapy in Relapsed/Refractory Multiple Myeloma",
+              "year": 2023,
+              "journal": "Transplant Cell Ther",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: Markovův model, Japonsko a USA, ≥3 předchozí linie; ICER pod prahem při 5leté PFS 40 % (cilta-cel), nad prahem při 15 % (ide-cel); 'results highly dependent on the PFS assumption'. Soulad s článkem. Nejde o RCT ani o českou analýzu – článek to sám uvádí. Meta-tvrzení o Consensus rešerši v tomto běhu neověřováno."
+        }
+      ],
+      "summary": {
+        "supported": 3,
+        "partial": 0,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [],
+      "notes": "Všechny tři studie už článek cituje v article-sources (nic nepřidáno). claims.json pro článek neobsahuje záznamy, claim_id prázdné. Vyřazeno jako administrativa: ceny a smlouvy z Registru smluv, DPH, zákony, objemy ÚZIS, OECD podíly; tvrzení o financování CARTITUDE-4 neověřeno. PubMed: první volání rate-limit, druhé uspělo; Consensus nepoužit. Poznámka zapsána do audit: komentáře článku (articles.json u položky nemá objekt audit)."
+    },
+    {
+      "id": "clanek-konopi-lecebne-390-kilogramu.html",
+      "type": "article",
+      "checked_at": "2026-11-01",
+      "run_id": "ea-2026-11-01-01",
+      "content_hash": "03163487f7e2d89e39b0ccd01922123fa5cb3350",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 7,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "u přípravků s převahou THC ani u vyvážených THC/CBD není jasný účinek na úlevu od bolesti o 50 % a víc (velmi nízká jistota důkazu)",
+          "location": "Co říká evidence — tabulka „Co říkají systematické přehledy o konopí u chronické bolesti“, řádek Ateş et al., Cochrane 2026",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "41548880",
+              "doi": "10.1002/14651858.CD012182.pub3",
+              "title": "Cannabis-based medicines for chronic neuropathic pain in adults.",
+              "year": 2026,
+              "journal": "Cochrane Database of Systematic Reviews",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt ověřen při adjudikaci: THC-dominantní vs placebo, úleva ≥ 50 %: RD 0,14 (95% CI −0,07 až 0,37); vyvážené THC/CBD RD 0,04 (0,00 až 0,08); u obou „no clear evidence“, velmi nízká jistota. 21 RCT, 2 187 osob sedí. Řádek tabulky správně uvádí neuropatickou bolest; nadpis tabulky mluví obecně o chronické bolesti, což je redakční zastřešení tří přehledů s různým rozsahem."
+        },
+        {
+          "claim_id": "",
+          "text": "přípravky s převahou THC mohou zvyšovat nežádoucí účinky na nervový systém",
+          "location": "Co říká evidence — tabulka, řádek Ateş et al., Cochrane 2026",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "41548880",
+              "doi": "10.1002/14651858.CD012182.pub3",
+              "title": "Cannabis-based medicines for chronic neuropathic pain in adults.",
+              "year": 2026,
+              "journal": "Cochrane Database of Systematic Reviews",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: „They may increase nervous system adverse events (RD 0.25, 95% CI 0.14 to 0.37; low-certainty evidence)“. Formulace „mohou“ odpovídá nízké jistotě."
+        },
+        {
+          "claim_id": "",
+          "text": "Cochrane přehled Ateşe a kolegů z ledna 2026 aktualizoval starší verzi z roku 2018 a u neuropatické bolesti nenašel jasný účinek na výraznou úlevu od bolesti u žádného typu přípravku; jistota důkazu je nízká až velmi nízká.",
+          "location": "Co říká evidence — odstavec pod tabulkou, 1. věta",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "41548880",
+              "doi": "10.1002/14651858.CD012182.pub3",
+              "title": "Cannabis-based medicines for chronic neuropathic pain in adults.",
+              "year": 2026,
+              "journal": "Cochrane Database of Systematic Reviews",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "29513392",
+              "doi": "10.1002/14651858.CD012182.pub2",
+              "title": "Cannabis-based medicines for chronic neuropathic pain in adults.",
+              "year": 2018,
+              "journal": "Cochrane Database of Systematic Reviews",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace povyšuje z partial na supported: „výrazná úleva“ odpovídá kritickému výstupu přehledu (úleva ≥ 50 %) a pro ten abstrakt u všech tří typů (THC-dominantní, vyvážené THC/CBD, CBD-dominantní) uvádí „no clear evidence“ s velmi nízkou jistotou; publikace 19. 1. 2026, aktualizace přehledu z roku 2018 (Mücke et al., PMID 29513392) potvrzena. Rozpětí „nízká až velmi nízká“ odpovídá celé sadě výstupů. Nuance, kterou věta vynechává: u vyvážených THC/CBD abstrakt uvádí možné zvýšení úlevy ≥ 30 % a PGIC (RD 0,07, nízká jistota), autoři je ale hodnotí jako klinicky nevýznamné — tvrzení tedy nezkresluje."
+        },
+        {
+          "claim_id": "",
+          "text": "neinhalované konopí vede k malému zlepšení bolesti (o 10 procentních bodů víc pacientů dosáhne klinicky významné úlevy, střední jistota); častější závratě, ospalost, nevolnost",
+          "location": "Co říká evidence — tabulka, řádek Wang et al., BMJ 2021",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "34497047",
+              "doi": "10.1136/bmj.n1034",
+              "title": "Medical cannabis or cannabinoids for chronic non-cancer and cancer related pain: a systematic review and meta-analysis of randomised clinical trials.",
+              "year": 2021,
+              "journal": "BMJ",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: modelované RD 10 % (95% CI 5–15 %) pro dosažení MID úlevy, střední jistota; ospalost RD 5 %, nevolnost RD 5 %, závratě RD 9 % / 28 % podle délky sledování. 32 RCT, 5 174 dospělých sedí; podání perorální (30) nebo topické (2)."
+        },
+        {
+          "claim_id": "",
+          "text": "Systematický přehled Wanga a kolegů v BMJ popisuje u chronické bolesti malé zlepšení bolesti, spánku a fyzického fungování, ale častější závratě — u studií trvajících tři měsíce a déle měla závrať o 28 procentních bodů víc pacientů než na placebu.",
+          "location": "Co říká evidence — odstavec pod tabulkou, 2. věta",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "34497047",
+              "doi": "10.1136/bmj.n1034",
+              "title": "Medical cannabis or cannabinoids for chronic non-cancer and cancer related pain: a systematic review and meta-analysis of randomised clinical trials.",
+              "year": 2021,
+              "journal": "BMJ",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: „small to very small improvement in pain relief, physical functioning, and sleep quality“; závratě RD 28 % (18–43 %) u studií ≥ 3 měsíce vs 9 % u kratších, vysoká jistota. U fyzického fungování abstrakt uvádí „very small“ (RD 4 %) — souhrnné „malé“ je v rozsahu „small to very small“ přijatelné. Přehled se týká neinhalovaného konopí."
+        },
+        {
+          "claim_id": "",
+          "text": "léčivé konopí je účinné mj. u chronické bolesti a roztroušené sklerózy, ale s nežádoucími účinky; vyhnout se mu v dospívání a rané dospělosti, u duševních poruch, v těhotenství a při řízení",
+          "location": "Co říká evidence — tabulka, řádek Solmi et al., BMJ 2023",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "37648266",
+              "doi": "10.1136/bmj-2022-072348",
+              "title": "Balancing risks and benefits of cannabis use: umbrella review of meta-analyses of randomised controlled trials and observational studies.",
+              "year": 2023,
+              "journal": "BMJ",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Závěr abstraktu téměř doslova: „Cannabis based medicines are effective in people with multiple sclerosis, chronic pain, inflammatory bowel disease, and in palliative medicine but not without adverse events“ a „avoidance of cannabis during adolescence and early adulthood, in people prone to or with mental health disorders, in pregnancy and before and while driving“. 101 metaanalýz sedí. Upozornění pro redakci: doporučení vyhnout se se v abstraktu týká konopí obecně a opírá se hlavně o observační studie (běžná populace, těhotné, řidiči), ne o RCT léčebných přípravků; přenesení na léčivé konopí je rozumné, ale jde o extrapolaci."
+        },
+        {
+          "claim_id": "",
+          "text": "Evidence tedy konopí jako léčbu nevylučuje; říká, že přínos je malý, nejistý a nese náklady v podobě nežádoucích účinků.",
+          "location": "Co říká evidence — odstavec pod tabulkou, poslední věta",
+          "kind": "efficacy",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "34497047",
+              "doi": "10.1136/bmj.n1034",
+              "title": "Medical cannabis or cannabinoids for chronic non-cancer and cancer related pain: a systematic review and meta-analysis of randomised clinical trials.",
+              "year": 2021,
+              "journal": "BMJ",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "41548880",
+              "doi": "10.1002/14651858.CD012182.pub3",
+              "title": "Cannabis-based medicines for chronic neuropathic pain in adults.",
+              "year": 2026,
+              "journal": "Cochrane Database of Systematic Reviews",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "37648266",
+              "doi": "10.1136/bmj-2022-072348",
+              "title": "Balancing risks and benefits of cannabis use: umbrella review of meta-analyses of randomised controlled trials and observational studies.",
+              "year": 2023,
+              "journal": "BMJ",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "29513392",
+              "doi": "10.1002/14651858.CD012182.pub2",
+              "title": "Cannabis-based medicines for chronic neuropathic pain in adults.",
+              "year": 2018,
+              "journal": "Cochrane Database of Systematic Reviews",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Redakční syntéza. „Malý“ a „nese nežádoucí účinky“ podporuje Wang 2021 (střední jistota) i Mücke 2018 („potential benefits ... might be outweighed by their potential harms“). „Nejistý“ platí pro neuropatickou bolest (Ateş 2026, velmi nízká jistota), ale Solmi 2023 hodnotí snížení chronické bolesti o 30 % s vysokou jistotou (GRADE high), takže nejistota se liší podle typu bolesti a výstupu. Proto partial. Upravovat text navrhuji jen opatrně. Tabulka nad větou Solmiho příznivý závěr čtenáři ukazuje, takže tvrzení není očividně širší než evidence. Upozornění pro redakci na přenositelnost: Wang hodnotí jen perorální a topické podání, Ateş a Mücke převážně oromukózní sprej a perorální kanabinoidy. Podle Mücke 2018 je u bylinného (inhalovaného) konopí účinek na intenzitu bolesti nejistý (velmi nízká kvalita, 2 studie). V ČR přitom tvoří většinu výdeje sušený květ (313,6 z 390 kg). Evidence k převažující české formě užití je tedy ještě slabší, než naznačuje tabulka."
+        }
+      ],
+      "summary": {
+        "supported": 6,
+        "partial": 1,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Mücke et al. Cochrane 2018 (CD012182.pub2, PMID 29513392) do article-sources, nová skupina „Recenzovaná literatura“ — k větě „aktualizoval starší verzi z roku 2018“",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Žádné contradicted: audit-status beze změny (review-pending), issue se nezakládá; data/claims.json k článku nemá záznamy, claim-note odpadá; prose beze změny. Do hlavičky audit: a articles.json audit.notes připojena věta „evidence-audit 2026-11-01: 7 tvrzení, 6 supported, 1 partial; viz data/evidence-audit.json“.",
+          "ref": ""
+        }
+      ],
+      "followup": "Neověřeno: tvrzení o přenositelnosti evidence na inhalovaný sušený květ (v ČR 313,6 z 390 kg výdeje) — Wang 2021 hodnotí jen neinhalované podání, Mücke 2018 uvádí u bylinného konopí velmi nízkou kvalitu důkazu; k posouzení redakcí. Doporučení vyhnout se konopí (Solmi 2023) platí pro konopí obecně a opírá se hlavně o observační data. Administrativní, legislativní a cenová data (SÚKL, BfArM, Eurostat) nejsou předmětem evidence-auditu.",
+      "notes": "Přečten článek, audit komentář a sekce Zdroje. V data/claims.json žádná tvrzení k tomuto článku (claim_id prázdné u všech). Vybrána jen odborná tvrzení z oddílu Co říkají systematické přehledy; administrativní data SÚKL/BfArM/Eurostat, legislativa a ceny neověřovány. PubMed (rešerše): 5 volání (1× metadata 3 citovaných PMID, 2× search, 1× metadata 29513392 + 30561481); hledání „Czech + medical cannabis dispensing“ bez výsledku; PMID 30561481 (opioidy, Busse JAMA 2018) vyřazen jako nerelevantní. Consensus nepoužit. Adjudikace (Opus) 1. 11. 2026: PubMed 2 volání (abstrakty PMID 41548880, 34497047, 37648266; pak 29513392). Výsledek: 6 supported, 1 partial (závěrečná syntéza „malý, nejistý“), 0 contradicted. Tvrzení 3 (Cochrane 2026, „žádný typ přípravku“) povýšeno z partial na supported — „výrazná úleva“ odpovídá výstupu úleva ≥ 50 %, ten je „no clear evidence“ u všech tří typů přípravků. Upřesňující věta nenavržena: rozsah tvrzení není očividně širší než evidence, Solmiho příznivý závěr stojí v tabulce."
+    },
+    {
+      "id": "clanek-enterokoky-gentamicin-rezistence.html",
+      "type": "article",
+      "checked_at": "2026-11-01",
+      "run_id": "ea-2026-11-01-01",
+      "content_hash": "c7d26d0e59cf1a303e9b286a7cfb10d2c2f8253d",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 5,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Mezi skupinami nebyl rozdíl v úmrtnosti během léčby (22 % vs 21 %) ani po třech měsících (8 % vs 7 %), v selhání léčby (1 % vs 2 %) ani v relapsech (3 % vs 4 %). Rozdíl byl jinde: přerušení léčby kvůli nežádoucím účinkům postihlo 25 % pacientů na gentamicinu proti 1 % na ceftriaxonu, především kvůli nově vzniklému renálnímu selhání (23 % vs 0 %).",
+          "location": "Co o náhradě gentamicinu ví literatura — a u jaké diagnózy",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "23392394",
+              "doi": "10.1093/cid/cit052",
+              "title": "Ampicillin plus ceftriaxone is as effective as ampicillin plus gentamicin for treating enterococcus faecalis infective endocarditis.",
+              "year": 2013,
+              "journal": "Clinical Infectious Diseases",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje: abstrakt doslova uvádí 159 vs 87 pacientů, 17 španělských a 1 italskou nemocnici, úmrtnost 22 % vs 21 % a 8 % vs 7 %, selhání 1 % vs 2 %, relapsy 3 % vs 4 %, přerušení 25 % vs 1 %, nové renální selhání 23 % vs 0 %. Observační nerandomizovaná kohorta; skupina s ceftriaxonem měla víc chronického renálního selhání, nádorů a nozokomiálních infekcí (v článku neuvedeno, čísla to nemění). Typ publikace: Comparative Study, Multicenter Study; retrakce v metadatech není."
+        },
+        {
+          "claim_id": "",
+          "text": "kombinaci s ceftriaxonem lze použít „regardless of the high-level aminoglycoside resistance status of E. faecalis“",
+          "location": "Co o náhradě gentamicinu ví literatura — a u jaké diagnózy",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "23392394",
+              "doi": "10.1093/cid/cit052",
+              "title": "Ampicillin plus ceftriaxone is as effective as ampicillin plus gentamicin for treating enterococcus faecalis infective endocarditis.",
+              "year": 2013,
+              "journal": "Clinical Infectious Diseases",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Citát je doslovně v závěru abstraktu („can be used with virtually no risk of renal failure and regardless of the high-level aminoglycoside resistance status of E. faecalis“). Platí pro infekční endokarditidu, což článek výslovně vymezuje."
+        },
+        {
+          "claim_id": "",
+          "text": "Metaanalýza z roku 2021 (Mirna M. et al.) uzavírá, že kombinace s ceftriaxonem je vůči kombinaci s gentamicinem non-inferiorní a je spojená s nižší nefrotoxicitou (poměr šancí 0,45; 95% interval spolehlivosti 0,26–0,77) i s nižším podílem vysazení pro nežádoucí účinky (0,11; 0,03–0,46).",
+          "location": "Co o náhradě gentamicinu ví literatura — a u jaké diagnózy",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "34751788",
+              "doi": "10.1007/s00392-021-01971-3",
+              "title": "Time to abandon ampicillin plus gentamicin in favour of ampicillin plus ceftriaxone in Enterococcus faecalis infective endocarditis? A meta-analysis of comparative trials.",
+              "year": 2021,
+              "journal": "Clinical Research in Cardiology",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova: non-inferiorita (bez rozdílu v nemocniční a tříměsíční mortalitě, relapsech a selhání), nefrotoxicita OR 0,45 [0,26–0,77], vysazení pro nežádoucí účinky OR 0,11 [0,03–0,46]. Věta článku o „rovnocenném doporučení třídy IB“ odpovídá úvodu abstraktu a článek ji správně váže na stav doporučení z roku 2021."
+        },
+        {
+          "claim_id": "",
+          "text": "Systematický přehled a metaanalýza z roku 2024 (Prosty C. et al.) shrnula deset observačních studií s 911 pacienty: proti ceftriaxonu měl gentamicin srovnatelnou celkovou úmrtnost (rozdíl rizik −0,8 bodu; 95% CI −5,0 až 3,5), srovnatelné relapsy i selhání léčby, ale o 26,3 bodu vyšší podíl přerušení léčby pro toxicitu (95% CI 19,8 až 32,7). Autoři zároveň otevřeně píší, že všech deset studií neslo vysoké riziko zkreslení a randomizovaná data chybějí.",
+          "location": "Co o náhradě gentamicinu ví literatura — a u jaké diagnózy",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "39041860",
+              "doi": "10.1093/cid/ciae379",
+              "title": "Revisiting the Evidence Base That Informs the Use of Adjunctive Therapy for Enterococcus faecalis Endocarditis: A Systematic Review and Meta-Analysis.",
+              "year": 2024,
+              "journal": "Clinical Infectious Diseases",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova: „10 observational studies at high risk of bias (911 patients)“, RD mortalita −0,8 % (−5,0 až 3,5), relaps −0,1 %, selhání 1,1 %, přerušení pro toxicitu 26,3 % (19,8–32,7); „Pending randomized evidence“ odpovídá formulaci, že randomizovaná data chybějí."
+        },
+        {
+          "claim_id": "",
+          "text": "publikovaná evidence, kterou tenhle článek cituje, se týká výhradně infekční endokarditidy způsobené E. faecalis. [...] Pro tu diagnózu je odpověď v recenzované literatuře poměrně jednotná a stará přes deset let: nahradit aminoglykosid druhým betalaktamem, konkrétně ceftriaxonem.",
+          "location": "Co o náhradě gentamicinu ví literatura — a u jaké diagnózy",
+          "kind": "policy",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "23392394",
+              "doi": "10.1093/cid/cit052",
+              "title": "Ampicillin plus ceftriaxone is as effective as ampicillin plus gentamicin for treating enterococcus faecalis infective endocarditis.",
+              "year": 2013,
+              "journal": "Clinical Infectious Diseases",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "34751788",
+              "doi": "10.1007/s00392-021-01971-3",
+              "title": "Time to abandon ampicillin plus gentamicin in favour of ampicillin plus ceftriaxone in Enterococcus faecalis infective endocarditis? A meta-analysis of comparative trials.",
+              "year": 2021,
+              "journal": "Clinical Research in Cardiology",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "39041860",
+              "doi": "10.1093/cid/ciae379",
+              "title": "Revisiting the Evidence Base That Informs the Use of Adjunctive Therapy for Enterococcus faecalis Endocarditis: A Systematic Review and Meta-Analysis.",
+              "year": 2024,
+              "journal": "Clinical Infectious Diseases",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace mění předběžné partial na supported (medium). Všechny tři práce (2013, 2021, 2024) míří stejným směrem: ceftriaxon srovnatelně účinný a méně toxický; Prosty 2024: „if adjunctive therapy is to be used, ceftriaxone appears to be a reasonable option“. Formulace je zmírněná („poměrně jednotná“), omezená na endokarditidu a článek o dvě věty dál sám uvádí, že jde o observační studie s vysokým rizikem zkreslení bez randomizovaných dat, takže čtenáři výhrada neunikne. Nuance pro redakci: Prosty 2024 zároveň píše, že evidence jasně nedokládá ani přínos přídatné léčby oproti monoterapii („does not clearly establish the superiority of either adjunctive therapy or monotherapy“); článek tuto otázku neřeší a netvrdí opak."
+        },
+        {
+          "claim_id": "",
+          "text": "Gentamicin sám o sobě na enterokoka nezabírá nikdy. Smysl dává jen v kombinaci s betalaktamem nebo glykopeptidem — a i tam jen za podmínky, že si bakterie nepořídila získaný enzym, který aminoglykosid rozkládá. [...] pozitivní test [...] říká, že bakterie si vyrobila enzym, který gentamicin rozbije [...] a že přidávat ho k ampicilinu už nemá smysl, protože dvojice přestala být synergická.",
+          "location": "Co ten test vlastně měří",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "3137246",
+              "doi": "10.1128/jcm.26.7.1287-1291.1988",
+              "title": "Multiply high-level-aminoglycoside-resistant enterococci isolated from patients in a university hospital.",
+              "year": 1988,
+              "journal": "Journal of Clinical Microbiology",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Tvrzení je v článku převzato a doslova citováno z normativního zdroje EUCAST Breakpoint tables v. 16.1 (poznámky u Enterococcus spp.), který není v PubMed a pro tento typ tvrzení je primární autoritou. Z recenzované literatury dohledáno jen dílčí potvrzení: Nachamkin et al. 1988 (PMID 3137246) v abstraktu uvádí, že testování synergie „confirmed the correlation between lack of synergy and high-level resistance“. Abstrakt nedokládá rezistenci enterokoků k aminoglykosidům v monoterapii ani enzymatický mechanismus; jde o jednocentrovou studii z roku 1988. Synergii jako „likely“, ne jistotu, článek popisuje věrně podle EUCAST. Prose beze změny; studie do zdrojů nedoplňována (stará, malá, pokrývá jen dílčí část tvrzení, které stojí na citovaném EUCAST)."
+        }
+      ],
+      "summary": {
+        "supported": 5,
+        "partial": 1,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "none",
+          "detail": "Všechny tři studie s verdiktem supported (Fernández-Hidalgo 2013, Mirna 2021, Prosty 2024) článek už v article-sources cituje, proto žádný zdroj nepřidán. Žádné tvrzení z data/claims.json neodpovídá ověřovaným větám (registr obsahuje jen surveillance čísla ECDC), proto bez claim-note. Bez contradicted, takže bez flagu a issue. Do audit: komentáře článku a do articles.json audit.notes připojena věta „evidence-audit 2026-11-01: 6 tvrzení, 5 supported, 1 partial; viz data/evidence-audit.json“; audit-status beze změny (review-pending).",
+          "ref": ""
+        }
+      ],
+      "notes": "Rešerše (Sonnet): PubMed 2 volání (metadata tří PMID citovaných článkem; jeden fulltextový dotaz na mechanismus vysoké rezistence a synergie bez výsledku kvůli příliš úzké konjunkci). Consensus nepoužit — tři citované studie ověřeny přímo v PubMed. Nevybírána (administrativní, mimo rozsah auditu): surveillance čísla ECDC EARS-Net (claims 01–06 z data/claims.json, hlídá nightly-scan), citace EUCAST, ESC 2023 (článek ji necituje), hemokultury na 1000 pacientodnů, pokrytí laboratoří testováním; claim_id prázdné, protože žádné tvrzení z registru claims není odborné. Adjudikace (Opus): 3 volání PubMed (metadata tří citovaných PMID, jedno hledání „enterococcus high-level aminoglycoside resistance synergy review“, metadata jediného výsledku PMID 3137246). Tvrzení 5 povýšeno z předběžného partial na supported (medium), tvrzení 6 z unclear na partial (primární autoritou je doslova citovaný EUCAST mimo PubMed). Žádná retrakce. prose_change prázdné — článek sám vymezuje diagnózu i sílu evidence. Volitelně (pro verdikt není nutné): novější recenzovaný přehled o mechanismu vysoké rezistence k aminoglykosidům a aminoglykosid-modifikujících enzymech u enterokoků."
+    },
+    {
+      "id": "indicator:prumerna_delka_hospitalizace",
+      "type": "indicator",
+      "checked_at": "2026-11-01",
+      "run_id": "ea-2026-11-01-01",
+      "content_hash": "1b0a0462d3ad200e746cad9dd2496528ea8a318e",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 11,
+        "consensus": 1
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Kratší pobyt při zachování kvality je známkou efektivity, sám o sobě ale o kvalitě péče nevypovídá.",
+          "location": "method_notes (validita ukazatele)",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "41338654",
+              "doi": "10.1136/bmjopen-2025-108020",
+              "title": "Promising solution for standardised length of hospital stay based on time-to-event models and contemporary Australian administrative data",
+              "year": 2025,
+              "journal": "BMJ Open",
+              "study_type": "cohort",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "33550244",
+              "doi": "10.1136/bmjopen-2020-041648",
+              "title": "Associations between hospital deaths (HSMR), readmission and length of stay (LOS): a longitudinal assessment of performance results and facility characteristics of teaching and large-sized hospitals in Canada between 2013-2014 and 2017-2018",
+              "year": 2021,
+              "journal": "BMJ Open",
+              "study_type": "cohort",
+              "found_via": "consensus",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "24743606",
+              "doi": "10.1097/SLA.0000000000000648",
+              "title": "Derivation and validation of a quality indicator of acute care length of stay to evaluate trauma care",
+              "year": 2014,
+              "journal": "Annals of Surgery",
+              "study_type": "cohort",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "PMID ověřeny v PubMed (get_article_metadata). Fekri 2021 (119 kanadských nemocnic): HSMR, readmise a LOS spolu korelují velmi slabě a nevýznamně, dobrý výsledek v jedné doméně neznamená dobrý v jiné, což podporuje část „sám o sobě o kvalitě nevypovídá“. Duke 2025 (219 nemocnic, Victoria): LOS je klíčový ukazatel efektivity i kvality, ale neupravená průměrná LOS je „jednoduchý popis, ale slabý komparátor“. Moore 2014 (57 traumacenter, Québec): rizikově upravená LOS koreluje s komplikacemi (r = 0,66), readmisemi a mortalitou, takže upravená LOS signál o kvalitě nese. Formulace karty tedy sedí na neupravenou průměrnou délku pobytu; evidence je na úrovni nemocnic, ne mezinárodního srovnání zemí OECD, a z ČR není."
+        },
+        {
+          "claim_id": "",
+          "text": "Srovnání ovlivňuje skladba případů (case-mix) a to, jak země vymezují akutní lůžko a započítávají jednodenní péči.",
+          "location": "limitations",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "41338654",
+              "doi": "10.1136/bmjopen-2025-108020",
+              "title": "Promising solution for standardised length of hospital stay based on time-to-event models and contemporary Australian administrative data",
+              "year": 2025,
+              "journal": "BMJ Open",
+              "study_type": "cohort",
+              "found_via": "consensus",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Část o case-mixu podpořena: Duke 2025 uvádí, že 61 % hodnot neupravené průměrné LOS za nemocnici a rok byly odlehlé hodnoty (> 3 SD), kdežto po rizikové úpravě jen 0,5 %, a že většina variability LOS je dána pacienty, ne nemocnicí. Část o vymezení akutního lůžka a započítání jednodenní péče mezi zeměmi v žádném abstraktu není; je to metodický fakt statistiky OECD (HC.1), který recenzovaná literatura v PubMed v tomto běhu nepokryla. Evidence je zahraniční a na úrovni nemocnic, ne zemí."
+        },
+        {
+          "claim_id": "",
+          "text": "Kratší hospitalizace nemusí znamenat lepší výsledek pro pacienta: může jít i o dřívější překlad na lůžko následné péče, které se do akutní délky pobytu nezapočítá.",
+          "location": "limitations / patient_story",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "12110788",
+              "doi": "10.1067/msy.2002.125358",
+              "title": "The effect of decreasing length of stay on discharge destination and readmission after coronary bypass operation",
+              "year": 2002,
+              "journal": "Surgery",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "33550244",
+              "doi": "10.1136/bmjopen-2020-041648",
+              "title": "Associations between hospital deaths (HSMR), readmission and length of stay (LOS): a longitudinal assessment of performance results and facility characteristics of teaching and large-sized hospitals in Canada between 2013-2014 and 2017-2018",
+              "year": 2021,
+              "journal": "BMJ Open",
+              "study_type": "cohort",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace dohledala Bohmer 2002 (Massachusetts, bypass koronárních tepen, 1993–1996): pooperační pobyt se zkrátil ze 7,4 na 6 dní (o 19 %), překlady do rehabilitačních nemocnic a zařízení následné péče vzrostly z 11,7 % na 23,8 % (u pojištěnců Medicare z 17,2 % na 38,5 %), readmise ani třicetidenní mortalita se nezměnily a úspory z kratšího pobytu vyrovnaly náklady na následnou péči. Přesně tak popisuje mechanismus karta: kratší akutní pobyt byl zčásti přesunem do následné péče, výsledek pro pacienta se nezlepšil (ani nezhoršil). Fekri 2021: LOS koreluje s výsledky (HSMR, readmise) jen velmi slabě. Jde o jednu starší americkou studii v úzké populaci, o přenositelnosti na celostátní ALOS v ČR rozhoduje redakce. Že se následná péče do akutní délky pobytu nepočítá, plyne z definice HC.1, ne z literatury."
+        }
+      ],
+      "summary": {
+        "supported": 0,
+        "partial": 3,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "indicators/prumerna_delka_hospitalizace.json → literature: {\"pmid\":\"41338654\",\"doi\":\"10.1136/bmjopen-2025-108020\",\"title\":\"Promising solution for standardised length of hospital stay based on time-to-event models and contemporary Australian administrative data\",\"year\":2025,\"journal\":\"BMJ Open\",\"study_type\":\"cohort\",\"note\":\"Neupravená průměrná délka pobytu je jednoduchý popis, ale slabý komparátor; většina variability je dána pacienty, ne nemocnicí (method_notes, limitations – case-mix).\",\"verified_at\":\"2026-11-01\"}",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/prumerna_delka_hospitalizace.json → literature: {\"pmid\":\"33550244\",\"doi\":\"10.1136/bmjopen-2020-041648\",\"title\":\"Associations between hospital deaths (HSMR), readmission and length of stay (LOS): a longitudinal assessment of performance results and facility characteristics of teaching and large-sized hospitals in Canada between 2013-2014 and 2017-2018\",\"year\":2021,\"journal\":\"BMJ Open\",\"study_type\":\"cohort\",\"note\":\"Délka pobytu koreluje s nemocniční mortalitou (HSMR) a readmisemi jen velmi slabě; sama o kvalitě výsledků nevypovídá (method_notes, limitations).\",\"verified_at\":\"2026-11-01\"}",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/prumerna_delka_hospitalizace.json → literature: {\"pmid\":\"12110788\",\"doi\":\"10.1067/msy.2002.125358\",\"title\":\"The effect of decreasing length of stay on discharge destination and readmission after coronary bypass operation\",\"year\":2002,\"journal\":\"Surgery\",\"study_type\":\"cohort\",\"note\":\"Zkrácení pobytu po bypassu o 19 % provázel nárůst překladů do následné a rehabilitační péče z 11,7 % na 23,8 % beze změny readmisí a mortality (limitations – překlad na lůžko následné péče).\",\"verified_at\":\"2026-11-01\"}",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/prumerna_delka_hospitalizace.json → literature: {\"pmid\":\"24743606\",\"doi\":\"10.1097/SLA.0000000000000648\",\"title\":\"Derivation and validation of a quality indicator of acute care length of stay to evaluate trauma care\",\"year\":2014,\"journal\":\"Annals of Surgery\",\"study_type\":\"cohort\",\"note\":\"Rizikově upravená délka pobytu v traumacentrech koreluje s komplikacemi, readmisemi a mortalitou; signál o kvalitě nese až upravená, ne prostá průměrná délka pobytu (method_notes).\",\"verified_at\":\"2026-11-01\"}",
+          "ref": ""
+        }
+      ],
+      "followup": "Neověřeno: (1) vymezení akutního lůžka a započítání jednodenní péče mezi zeměmi OECD (tvrzení 2) recenzovaná literatura v PubMed nepokryla; patří k němu metodika OECD (System of Health Accounts / OECD Health Statistics), ne studie. (2) Česká studie k délce akutní hospitalizace a překladům na lůžka následné péče nedohledána (tvrzení 1–3 stojí jen na zahraniční evidenci na úrovni nemocnic). (3) Kandidáti z rešerše Kossovsky 2002, Ansari 2018 a Shahnaz 2013 zůstávají neověření v PubMed a nepoužití. Strop PubMed v rešerši (8 volání) byl vyčerpán.",
+      "notes": "Karta neměla citace literatury, nic found_via article. Rešerše: PubMed 8 volání (strop vyčerpán), Consensus 1 dotaz. Dva dotazy (OECD srovnatelnost ALOS, ALOS jako indikátor kvality) vrátily 0 nálezů; systematické přehledy k LOS a readmisím byly mimo téma (chirurgie plic, COVID, geriatrie), nepoužity. Kandidáti z Consensu (Duke 2025, Fekri 2021, Moore 2014) dohledáni v PubMed podle DOI. Adjudikace (Opus) 2026-11-01: 3 volání PubMed (metadata 3 PMID z rešerše, 1 vyhledávání, metadata nového nálezu). Přiřazení PMID ověřeno: 41338654 = Duke et al. 2025, BMJ Open 15(12):e108020; 33550244 = Fekri, Manukyan, Klazinga 2021, BMJ Open 11(2):e041648; 24743606 = Moore et al. 2014, Ann Surg 260(6):1121-7; žádná retrakce ani komentář. Nově přidán Bohmer, Newell, Torchiana 2002, Surgery 132(1):10-5 (PMID 12110788), který dokládá mechanismus tvrzení 3; verdikt tvrzení 3 změněn z unclear na partial. Všechna tři tvrzení partial (směr potvrzen, evidence zahraniční, na úrovni nemocnic). Karta je formulovaná opatrně, upřesňující věta do limitations nenavržena. Indikátor nemá vlastní záznamy v data/claims.json, žádný claim-note. Zápis (Opus): karta dostala pole literature se 4 studiemi."
+    },
+    {
+      "id": "indicator:spokojenost_informovani",
+      "type": "indicator",
+      "checked_at": "2026-11-01",
+      "run_id": "ea-2026-11-01-01",
+      "content_hash": "fa23909d90a612ff8ec975765ca438ca8d295730",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 11,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Indikátor v HSPA dashboardu sleduje informování jako klíčový PREM parametr zkušenosti pacienta.",
+          "location": "patient_story (závěr) + definition",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "23293244",
+              "doi": "10.1136/bmjopen-2012-001570",
+              "title": "A systematic review of evidence on the links between patient experience and clinical safety and effectiveness.",
+              "year": 2013,
+              "journal": "BMJ Open",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje verdikt rešerše. Doyle et al. 2013 (55 studií) podle abstraktu podporuje, aby zkušenost pacienta byla jedním z ústředních pilířů kvality péče, tedy obecné zařazení PREM do HSPA. Abstrakt ale nedokládá, že právě informování je „klíčový“ parametr. Nedokládá ani validitu tohoto ukazatele (průzkum NRC, kategorie „dobré/výborné“) a jeho srovnatelnost s OECD PAT_EXP. Proto partial."
+        },
+        {
+          "claim_id": "",
+          "text": "Informování pacienta je klíčové pro adherenci ke léčbě, prevenci a sebepéči — bez něj selhává compliance, roste polypragmazie, snižuje se efektivita léčby.",
+          "location": "patient_story (4. odstavec)",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "19584762",
+              "doi": "10.1097/MLR.0b013e31819a5acc",
+              "title": "Physician communication and patient adherence to treatment: a meta-analysis.",
+              "year": 2009,
+              "journal": "Medical Care",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "23293244",
+              "doi": "10.1136/bmjopen-2012-001570",
+              "title": "A systematic review of evidence on the links between patient experience and clinical safety and effectiveness.",
+              "year": 2013,
+              "journal": "BMJ Open",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakty jsou ověřené v PubMed. Zolnierek & DiMatteo 2009 (106 korelačních studií, 21 intervencí): při špatné komunikaci lékaře je riziko non-adherence o 19 % vyšší a trénink komunikace zvyšuje šanci na adherenci (OR 1,62). Část o adherenci je tedy doložená metaanalýzou, včetně intervenčních studií. Doyle 2013 doplňuje pozitivní asociace zkušenosti pacienta s adherencí, preventivní péčí (screening, očkování) a klinickou účinností. Tím je doložena část o prevenci a o efektivitě léčby, ovšem jen jako asociace. Polypragmazie v žádném z abstraktů není. Obě studie se týkají komunikace a zkušenosti pacienta obecně, ne úzce informování. Formulace „bez něj selhává“ je kauzálně silnější než převážně korelační evidence. Evidence je zahraniční, přenositelnost na ČR je předpoklad. Rozsah tvrzení je širší než evidence, proto partial."
+        },
+        {
+          "claim_id": "",
+          "text": "Odpovídají jen ochotní respondenti — selection bias. Definice „informování\" se liší napříč zeměmi.",
+          "location": "limitations",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "low",
+          "evidence": [
+            {
+              "pmid": "42066517",
+              "doi": "10.1016/j.ijmedinf.2026.106459",
+              "title": "Maximising the patient voice in health care: A scoping review of secondary use of routinely collected qualitative open-ended patient reported experience measure comments.",
+              "year": 2026,
+              "journal": "International Journal of Medical Informatics",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace dohledala v PubMed scoping review Engstrom et al. 2026 (25 studií). Mezi omezeními rutinně sbíraných PREM průzkumů jmenuje výslovně „potential bias inherent in survey data (e.g. non-response bias)“. Tím podpírá první větu omezení. Review se ale týká sekundárního využití otevřených komentářů, ne skórů spokojenosti, takže jde o nepřímou oporu. Na druhou větu (odlišná definice informování napříč zeměmi, tj. mezinárodní srovnatelnost) adjudikace ověřenou studii nenašla, strop 3 volání byl vyčerpán. Nic tvrzení neodporuje, jde o konzervativní metodické omezení. Druhá věta je k posouzení redakcí, případně v příštím běhu (followup)."
+        }
+      ],
+      "summary": {
+        "supported": 0,
+        "partial": 3,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "indicators/spokojenost_informovani.json → literature: Zolnierek KB, DiMatteo MR. Physician communication and patient adherence to treatment: a meta-analysis. Med Care. 2009;47(8):826-34 (podklad pro větu o adherenci v patient_story; polypragmazii nedokládá)",
+          "ref": "PMID 19584762"
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/spokojenost_informovani.json → literature: Doyle C, Lennox L, Bell D. A systematic review of evidence on the links between patient experience and clinical safety and effectiveness. BMJ Open. 2013;3(1):e001570 (podklad pro zařazení PREM do HSPA a pro věty o prevenci a efektivitě léčby; asociace, ne kauzalita)",
+          "ref": "PMID 23293244"
+        },
+        {
+          "type": "none",
+          "detail": "Tvrzení v limitations (selection bias, mezinárodní srovnatelnost definice): Engstrom 2026 (PMID 42066517) je k větě o non-response bias jen nepřímá opora (review otevřených PREM komentářů), do literature karty se nepřidává. Věta v limitations zůstává beze změny, prose_change prázdný.",
+          "ref": ""
+        }
+      ],
+      "followup": "(1) limitations, věta 2: mezinárodní srovnatelnost definice „informování“ v PREM (OECD PAT_EXP vs. národní průzkumy) bez ověřené studie — strop volání adjudikace vyčerpán; (2) patient_story: tvrzení o růstu polypragmazie bez opory v literatuře, k posouzení redakcí; (3) Consensus v této položce nepoužit (0 volání).",
+      "notes": "PubMed dostupný (rešerše 8 volání + adjudikace 3 volání), Consensus nepoužit. Verdikty: 3× partial, 0 contradicted, žádný flagged ani issue. Karta indikátoru nemá vlastní odkaz na literaturu; směr a prahy (good 3 / warn 8) nejsou literaturou podložené a nebyly zařazeny jako tvrzení. Mimo rozsah literatury zůstávají seedová čísla karty (72 %, OECD 78 %, EU 76 %, Eurobarometr 2024, věkové podíly, 12 min na pacienta, norských 20 min); source.origin je seed a url prázdné — patří do datové verifikace, ne do evidence-auditu. Irelevantní záznamy z vyhledávání (28613384, 35048768, 36720282, 38640335, 40057305, 42913350, 42871900, 42858157, 42857913, 38199160, 36379642) nepoužity; PMID 19730284 se ukázalo jako chybné (Current world literature), nepoužito. Do karty přidáno pole literature (Zolnierek 2009, Doyle 2013); prose beze změny."
+    },
+    {
+      "id": "indicator:spokojenost_pece",
+      "type": "indicator",
+      "checked_at": "2026-11-01",
+      "run_id": "ea-2026-11-01-01",
+      "content_hash": "22c5678e1c93657d62f97863dd08f19cd25617c0",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 9,
+        "consensus": 1
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Spokojenost s péčí je PREM (patient-reported experience measure) — důležitý ukazatel kvality, který doplňuje klinické indikátory.",
+          "location": "patient_story (poslední odstavec)",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "23293244",
+              "doi": "10.1136/bmjopen-2012-001570",
+              "title": "A systematic review of evidence on the links between patient experience and clinical safety and effectiveness",
+              "year": 2013,
+              "journal": "BMJ Open",
+              "study_type": "systematic review",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "PMID 23293244 ověřen v PubMed (Doyle C, Lennox L, Bell D; BMJ Open 2013;3(1):e001570; PMC3549241). Abstrakt (55 studií) nachází konzistentní pozitivní asociace zkušenosti pacientů s klinickou účinností a bezpečností a podporuje zkušenost pacientů jako jeden z pilířů kvality, který se má hodnotit spolu s bezpečností a účinností. Druhá polovina tvrzení („důležitý ukazatel kvality, doplňuje klinické indikátory“) je tedy opřená. Zařazení indikátoru mezi PREM je ale širší, než evidence unese: přehled se týká zkušenosti pacientů s konkrétní péčí, kdežto indikátor podle definice měří populační spokojenost s dostupností kvalitní péče (Gallup World Poll), tedy vnímání respondentů, z nichž mnozí v daném období péči nevyužili. Proto partial."
+        },
+        {
+          "claim_id": "",
+          "text": "Subjektivní vnímání není totéž co objektivní kvalita.",
+          "location": "limitations",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "23293244",
+              "doi": "10.1136/bmjopen-2012-001570",
+              "title": "A systematic review of evidence on the links between patient experience and clinical safety and effectiveness",
+              "year": 2013,
+              "journal": "BMJ Open",
+              "study_type": "systematic review",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Výhrada je metodicky správná a abstrakt Doyle 2013 jí neodporuje: s technickou kvalitou péče a nežádoucími událostmi nachází přehled jen „some evidence“ pozitivní asociace, takže o totožnosti mluvit nelze. Abstrakt ale zároveň říká, že zkušenost pacientů s objektivními výsledky konzistentně souvisí, a varuje před jejím odbýváním jako „příliš subjektivní“. Holá věta v limitations tak může vyznít jako úplné oddělení obou veličin, což evidence nepodporuje. Partial; do limitations připojena jedna upřesňující věta s citací Doyle 2013 (Opus, measurement verdikt)."
+        }
+      ],
+      "summary": {
+        "supported": 0,
+        "partial": 2,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "indicators/spokojenost_pece.json → literature (pole založeno): Doyle C, Lennox L, Bell D. A systematic review of evidence on the links between patient experience and clinical safety and effectiveness. BMJ Open. 2013;3(1):e001570 (opora pro PREM a pro limitations; týká se zkušenosti s konkrétní péčí, ne populační spokojenosti s dostupností z Gallupu)",
+          "ref": "https://doi.org/10.1136/bmjopen-2012-001570"
+        },
+        {
+          "type": "card-note",
+          "detail": "indicators/spokojenost_pece.json → limitations: za větu „Subjektivní vnímání není totéž co objektivní kvalita.“ připojena jedna upřesňující věta (measurement verdikt, Opus) s citací Doyle et al., BMJ Open 2013, PMID 23293244.",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Pro redakci, mimo pravomoc auditu (karta se v tomto bodě nemění): patient_story cituje čísla 75 % / OECD 64 % / EU 67 % a trend 2010–2024 jako „Eurobarometer 2024“, kdežto definice a data_source uvádějí Gallup World Poll / OECD PERCEIVED_HEALTHCARE_QUALITY. Navíc text mluví jednou o „spokojenosti s posledním kontaktem s lékařem“ a jindy o „spokojenosti s dostupností“. Jde o datová tvrzení, literatura je neověřuje; nesoulad zdroje a definice je k posouzení redakcí.",
+          "ref": ""
+        }
+      ],
+      "notes": "PubMed dostupný (rešerše 8 volání, strop vyčerpán před ověřením PMID; adjudikace 1 volání get_article_metadata 23293244 → celkem 9), Consensus 1 dotaz. Verdikty: 2× partial (medium), 0 contradicted, žádný flagged ani issue. Karta cituje jen Gallup/OECD Health at a Glance, žádnou studii. Směr a prahy (good 2 / warn 5) literatura neřeší, jako tvrzení nezařazeny. Čísla v patient_story (75 %, OECD 64 %, EU 67 %, trend, věkové skupiny, hospitalizační péče 78 %, čekací doby 58 %) jsou datová tvrzení mimo rozsah evidence-auditu. Nesoulad zdroje Eurobarometer vs. Gallup/OECD a definice (poslední kontakt s lékařem vs. dostupnost) předán redakci (akce none). Do karty založeno pole literature (Doyle 2013) a do limitations připojena jedna upřesňující věta s citací; ostatní text karty beze změny."
+    },
+    {
+      "id": "indicator:vydaje_zdravotnictvi_hdp",
+      "type": "indicator",
+      "checked_at": "2026-11-01",
+      "run_id": "ea-2026-11-01-01",
+      "content_hash": "191e4e873edc053c4f23951c1a486f396fc1ff77",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 9,
+        "consensus": 1
+      },
+      "claims": [
+        {
+          "text": "Indikátor v HSPA dashboardu sleduje výdaje jako klíčový kontextový parametr funkčnosti systému.",
+          "location": "patient_story (poslední odstavec) + direction: context_dependent",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "40680755",
+              "doi": "10.1016/S2214-109X(25)00178-0",
+              "title": "Global, regional, and national health-care inefficiency and associated factors in 201 countries, 1995-2022: a stochastic frontier meta-analysis for the Global Burden of Disease Study 2023.",
+              "year": 2025,
+              "journal": "The Lancet. Global health",
+              "study_type": "meta-analysis",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "34128527",
+              "doi": "10.1093/aje/kwab179",
+              "title": "National Health Spending, Health-Care Resources, Service Utilization, and Health Outcomes.",
+              "year": 2022,
+              "journal": "American journal of epidemiology",
+              "study_type": "other",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "21447501",
+              "doi": "10.1136/bmjqs.2010.048363",
+              "title": "Health and social services expenditures: associations with health outcomes.",
+              "year": 2011,
+              "journal": "BMJ quality & safety",
+              "study_type": "cross-sectional",
+              "found_via": "consensus",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Literatura podporuje zařazení podílu výdajů na HDP jako kontextového (ne výkonového) ukazatele a tím i direction context_dependent: Lastuka 2025 (201 zemí) kladný vztah výdajů a HALE s klesajícími výnosy a neefektivitou ve většině zemí, efektivita souvisí s governance, podílem veřejných výdajů a prevencí; Tanaka 2022 (140 zemí, 1990–2014) variace výdajů jako % HDP nesouvisí s poklesem úmrtnosti; Bradley 2011 (30 zemí OECD) výdaje upravené na HDP souvisely s lepšími výsledky jen u 2 z 5 ukazatelů. Přívlastek „klíčový“ je hodnotící a literaturou se neověřuje. Evidence je zahraniční/mezinárodní, přenositelnost na ČR jako metodický princip je bez problému."
+        },
+        {
+          "text": "Vyšší výdaje neznamenají automaticky lepší výsledky. Direction kontextově závislý. (patient_story: Výdaje na zdravotnictví jsou debatní agenda — víc neznamená automaticky lépe)",
+          "location": "limitations; patient_story (předposlední odstavec)",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "40680755",
+              "doi": "10.1016/S2214-109X(25)00178-0",
+              "title": "Global, regional, and national health-care inefficiency and associated factors in 201 countries, 1995-2022: a stochastic frontier meta-analysis for the Global Burden of Disease Study 2023.",
+              "year": 2025,
+              "journal": "The Lancet. Global health",
+              "study_type": "meta-analysis",
+              "found_via": "consensus",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "34128527",
+              "doi": "10.1093/aje/kwab179",
+              "title": "National Health Spending, Health-Care Resources, Service Utilization, and Health Outcomes.",
+              "year": 2022,
+              "journal": "American journal of epidemiology",
+              "study_type": "other",
+              "found_via": "consensus",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "21447501",
+              "doi": "10.1136/bmjqs.2010.048363",
+              "title": "Health and social services expenditures: associations with health outcomes.",
+              "year": 2011,
+              "journal": "BMJ quality & safety",
+              "study_type": "cross-sectional",
+              "found_via": "consensus",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "24328639",
+              "doi": "10.2105/AJPH.2013.301494",
+              "title": "Analyzing whether countries are equally efficient at improving longevity for men and women.",
+              "year": 2013,
+              "journal": "American journal of public health",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "16429295",
+              "doi": "10.1007/s10198-005-0336-8",
+              "title": "The relationship between health care expenditure and health outcomes. Evidence and caveats for a causal link.",
+              "year": 2006,
+              "journal": "The European journal of health economics : HEPAC : health economics in prevention and care",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Pět nezávislých prací shodně: vztah výdajů a výsledků existuje, ale není automatický. Lastuka 2025: klesající výnosy, neefektivita ve většině zemí. Tanaka 2022: podíl výdajů na HDP nesouvisí s poklesem úmrtnosti. Bradley 2011: jen 2 z 5 ukazatelů. Barthold 2013 (27 zemí OECD, 1991–2007): 1% roční nárůst výdajů spojen se změnou naděje dožití od 0,020 % v USA po 0,121 % v Německu — výrazně rozdílná efektivita, USA nejnižší. Nixon & Ulmann 2006 (EU-15, 1980–1995): výdaje silně souvisejí s kojeneckou úmrtností, s nadějí dožití jen okrajově. Formulace „automaticky“ je přesná; silnější verze „výdaje nehrají roli“ by podpořena nebyla (Lastuka: vztah kladný na všech úrovních). Číslo „US 17 % HDP“ a srovnání výsledků s EU v závorce patient_story je administrativní statistika OECD, literaturou se neověřuje (mimo rozsah auditu); Barthold podporuje jen kvalitativně, že výdaje v USA přinášejí nejmenší přírůstek naděje dožití."
+        },
+        {
+          "text": "Česko by mělo směřovat k cca 9,5 % HDP do 2030 (CEFRES/MZ ČR analýza 2024), pokud chce dohnat západoevropský standard kvality.",
+          "location": "patient_story (poslední odstavec)",
+          "kind": "policy",
+          "verdict": "no-evidence",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "34128527",
+              "doi": "10.1093/aje/kwab179",
+              "title": "National Health Spending, Health-Care Resources, Service Utilization, and Health Outcomes.",
+              "year": 2022,
+              "journal": "American journal of epidemiology",
+              "study_type": "other",
+              "found_via": "consensus",
+              "relation": "context",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "40680755",
+              "doi": "10.1016/S2214-109X(25)00178-0",
+              "title": "Global, regional, and national health-care inefficiency and associated factors in 201 countries, 1995-2022: a stochastic frontier meta-analysis for the Global Burden of Disease Study 2023.",
+              "year": 2025,
+              "journal": "The Lancet. Global health",
+              "study_type": "meta-analysis",
+              "found_via": "consensus",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Normativní cíl z domácí analýzy (CEFRES/MZ ČR 2024), kterou PubMed ani Consensus neindexují. Recenzovaná studie stanovující práh podílu výdajů na HDP nutný k dosažení západoevropské kvality nalezena nebyla (dotazy rešerše: health expenditure share of GDP and health outcomes / efficiency / threshold). Nalezená literatura (Lastuka 2025, Tanaka 2022) tvrzení nevyvrací, ale ukazuje, že výsledky závisí na efektivitě a struktuře výdajů, ne na jednom procentu HDP. Verdikt se týká literatury, ne správnosti cíle. Citovaná analýza CEFRES/MZ ČR 2024 nemá v kartě odkaz — k posouzení redakcí (ověření primárního zdroje patří do registru claims / redakční revize, ne do evidence-auditu)."
+        }
+      ],
+      "summary": {
+        "supported": 1,
+        "partial": 1,
+        "contradicted": 0,
+        "no_evidence": 1,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "indicators/vydaje_zdravotnictvi_hdp.json → nové pole literature: Lastuka 2025 (PMID 40680755, Lancet Glob Health) — podklad pro limitations a context_dependent",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/vydaje_zdravotnictvi_hdp.json → literature: Tanaka 2022 (PMID 34128527, Am J Epidemiol) — podklad pro limitations a context_dependent",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/vydaje_zdravotnictvi_hdp.json → literature: Bradley 2011 (PMID 21447501, BMJ Qual Saf) — podklad pro limitations",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/vydaje_zdravotnictvi_hdp.json → literature: Barthold 2013 (PMID 24328639, Am J Public Health) — kvalitativní podklad pro větu patient_story „víc neznamená automaticky lépe“ (USA); číslo 17 % HDP z ní neplyne",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Žádná upřesňující věta, žádný flag ani issue: žádné tvrzení není contradicted; partial u tvrzení 1 se týká jen hodnotícího přívlastku „klíčový“, rozsah tvrzení není očividně širší než evidence. Tvrzení 3 (9,5 % HDP do 2030, CEFRES/MZ ČR 2024) je no-evidence v literatuře — odkaz na primární analýzu v kartě chybí, k posouzení redakcí mimo evidence-audit.",
+          "ref": ""
+        }
+      ],
+      "followup": "Tvrzení 3 (cca 9,5 % HDP do 2030, CEFRES/MZ ČR analýza 2024) literaturou neověřitelné a citovaná analýza nemá v kartě odkaz — redakce má doplnit odkaz na primární zdroj nebo větu přeformulovat (mimo pravomoc auditu). Číslo „US 17 % HDP“ je administrativní statistika OECD, mimo rozsah evidence-auditu.",
+      "notes": "Rešerše: PubMed 8 volání (3 search, 3 get_article_metadata, 1 lookup_article_by_citation, 1 dohledání Tanaka podle titulu), Consensus 1 dotaz. Kandidáti z Consensu Bradley 2011, Lastuka 2025 a Tanaka 2022 ověřeni v PubMed; Park 2025 (Health Serv Res) a Zarulli 2021 v PubMed neověřeny, nepoužity. Karta žádnou studii předtím necitovala. Validita ukazatele (SHA/OECD definice) je metodická, ne literární. Adjudikace: 1 volání PubMed (get_article_metadata pro 6 PMID) potvrdilo Lastuka 2025, Tanaka 2022 (Am J Epidemiol 191(3):386-396), Bradley 2011 (BMJ Qual Saf 20(10):826-31), žádná retrakce; z dříve nevyhodnocených kandidátů doplněny Barthold 2013 (AJPH 104(11):2163-9) a Nixon & Ulmann 2006 (Eur J Health Econ 7(1):7-18) jako podpora tvrzení 2; Lorenzoni & Dougherty 2022 (PMID 35783560, ceny vs. objemy, PPP) jen kontext, nepoužit. Tvrzení 2 povýšeno na confidence high. Zápis: karta dostala pole literature se 4 studiemi (Nixon & Ulmann jen v registru)."
     }
   ]
 }
