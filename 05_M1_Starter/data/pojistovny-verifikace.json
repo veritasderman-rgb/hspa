@@ -1,15 +1,15 @@
 {
   "version": "1.0",
-  "generated_at": "2026-11-02T19:58:03Z",
+  "generated_at": "2026-11-02T20:01:58Z",
   "_doc": "Výstup scripts/pojistovny-verify.js: každé číslo z data/pojistovny.json a data/pojistovny-prevence.json (fond prevence) hledané v textu výroční zprávy (ingest/manual/pojistovny/vz-text/). nalezeno: true = číslo je v textu VZ (tolerantně formát a tis./mil./mld.); false = VZ má text, číslo v něm není (signál pro redakci, ne chyba dat); \"bez-textu\" = sken nebo chybějící text; \"mimo-rozsah\" = zdroj není VZ (MZ hodnocení, sněmovní tisk, vlastní výpočet). souhrn.celkem = nalezeno + nenalezeno + bez_textu (bez mimo_rozsah). jistota (jen u nalezeno=true): \"vysoka\" = 5 a více platných číslic, nebo číslo z řádku tabulky potvrzené sousedním číslem téže položky (shoda_radku); \"stredni\" = 4 číslice; \"nizka\" = 3 a méně číslic — takové číslo je v textu VZ i náhodou, shoda je málo výpovědní.",
   "souhrn": {
     "celkem": 413,
-    "nalezeno": 371,
-    "nenalezeno": 1,
+    "nalezeno": 372,
+    "nenalezeno": 0,
     "bez_textu": 41,
     "mimo_rozsah": 136,
     "jistota": {
-      "vysoka": 167,
+      "vysoka": 168,
       "stredni": 26,
       "nizka": 178
     }
@@ -141,12 +141,12 @@
     "211": {
       "zkratka": "ZP MV ČR",
       "celkem": 20,
-      "nalezeno": 19,
-      "nenalezeno": 1,
+      "nalezeno": 20,
+      "nenalezeno": 0,
       "bez_textu": 0,
       "mimo_rozsah": 19,
       "jistota": {
-        "vysoka": 15,
+        "vysoka": 16,
         "stredni": 0,
         "nizka": 4
       },
@@ -1402,14 +1402,15 @@
     },
     {
       "cesta": "pojistovny[211].hospodareni.provozni_fond_naklady_mil",
-      "hodnota": 1426.8,
+      "hodnota": 1427.6,
       "rok": 2024,
       "kod": "211",
       "dokument": "211-2024",
-      "nalezeno": false,
+      "nalezeno": true,
       "jistota": "vysoka",
-      "pocet_shod": 0,
-      "kontext": null
+      "meritko": 1000,
+      "pocet_shod": 2,
+      "kontext": "převody mezi fondy 0 0 – III. Čerpání celkem = snížení zdrojů 1 688 546 1 427 562 84,5 Závazky zdravotní pojišťovny vyplývající ze zajištění provozní činnosti"
     },
     {
       "cesta": "pojistovny[211].hospodareni.provozni_naklady_pct",
