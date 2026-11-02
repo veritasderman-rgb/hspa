@@ -22,6 +22,7 @@
 // Grafy kreslí primitivy src/zp-viz.js (čisté funkce → HTML string). Příprava
 // vstupů je oddělená od renderu: heroTiles(), buildKmenCharts(), buildFinRows(),
 // sortFinRows() a pickYoyMetric() jsou čisté a testuje je tests/pojistovny.test.js.
+// Stáří dat (věta pod nadpisem a blok nad patičkou) skládá src/pojistovny-stari.js z těchže datasetů.
 // Interakce (Moje pojišťovna, tooltip, animace) dodává src/zp-interact.js —
 // initZpInteract() se volá po vyrenderování všech modulů (idempotentní).
 
@@ -33,6 +34,7 @@ import { statTiles, rankedBars, segmentedBar, indexedLines, dumbbell, isNum, pct
 import { initZpInteract, MOJE_EVENT } from './zp-interact.js';
 import { renderZpShell, legacyRedirect } from './pojistovny-shell.js';
 import { renderPrehled } from './pojistovny-prehled.js';
+import { renderStariDat } from './pojistovny-stari.js';
 
 // Re-export čistých funkcí kvůli tests/pojistovny.test.js.
 export { fmtKc, levelBadge, miniIndexSvg };
@@ -430,7 +432,9 @@ async function init() {
   doc.addEventListener(MOJE_EVENT, (e) => syncCards(e.detail?.kod ?? null));
   await initZpInteract(doc);
   syncCards(doc.querySelector('main')?.getAttribute('data-moje-zp') || null);
-  await shell;
+  // stáří dat: věta pod nadpisem + sbalená tabulka nad patičkou Zdroje, z datasetů, které stránka právě načetla
+  const stari = renderStariDat({ datasety: { pojistovny: d, prevence: p, aplikace: a, otazky: o } }).catch(() => null);
+  await Promise.all([shell, stari]);
 }
 
 if (typeof document !== 'undefined') {

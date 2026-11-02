@@ -660,8 +660,10 @@ export const HEAT_LEVELS = ['minimální', 'základní', 'silné', 'nejsilnějš
 /**
  * @param {Array<{kod?, key?, label, sub?}>} rows
  * @param {Array<{key, label}>} cols
- * @param {(row, col) => ({level: 0|1|2|3|null, text?, tip?}|null)} cell
- * @param {{title?, sub?, levels?, source?, sortable?, rowHeader?}} opts
+ * @param {(row, col) => ({level: 0|1|2|3|null, text?, tipText?, tip?}|null)} cell
+ *   level = barva (stupeň), text = co je v buňce (výchozí slovo stupně, může být číslo),
+ *   tipText = co za dvojtečkou v tooltipu (výchozí text), tip = popis za pomlčkou
+ * @param {{title?, sub?, levels?, source?, sortable?, rowHeader?, foot?}} opts  foot = věta pod legendou
  */
 export function heatmap(rows, cols, cell, opts = {}) {
   const { levels = HEAT_LEVELS, sortable = true, rowHeader = '' } = opts;
@@ -680,7 +682,7 @@ export function heatmap(rows, cols, cell, opts = {}) {
       return `<td class="zpv-cell" data-level="na"><span aria-hidden="true">—</span><span class="sr-only">${NA_TEXT}</span></td>`;
     }
     const text = v.text != null ? String(v.text) : (levels[lvl] ?? String(lvl));
-    const tip = [`${r.label} · ${c.label}: ${text}`, v.tip].filter(Boolean).join(' — ');
+    const tip = [`${r.label} · ${c.label}: ${v.tipText != null ? v.tipText : text}`, v.tip].filter(Boolean).join(' — ');
     const sr = v.tip ? `<span class="sr-only"> — ${esc(v.tip)}</span>` : '';
     // Fokus jen tam, kde tooltip přidá popis (v.tip): bez něj by tooltip jen
     // opakoval viditelný text buňky a Tab by procházel 63 zastávek naprázdno.
@@ -691,7 +693,8 @@ export function heatmap(rows, cols, cell, opts = {}) {
   const legend = `<ul class="zpv-legend zpv-legend--ramp" aria-label="Stupně">${levels.slice(0, 4).map((l, i) => `<li><i class="zpv-sw zpv-sw--ramp" data-level="${i}" aria-hidden="true"></i>${esc(l)}</li>`).join('')}</ul>`;
   const table = `<table class="zpv-matrix zpv-heat" aria-label="${esc(opts.title || 'Matice')}"><thead>${head}</thead><tbody>${body}</tbody></table>`;
   const note = sortable ? `<span class="zpv-sortnote" data-zpv-sortnote hidden>${esc(opts.sortNote || HEAT_SORT_NOTE)}</span>` : '';
-  return matrixFigure('heatmap', opts, table, legend, note);
+  const foot = opts.foot ? `<p class="zpv-foot">${esc(opts.foot)}</p>` : '';
+  return matrixFigure('heatmap', opts, table, legend + foot, note);
 }
 
 // ---------------------------------------------------------------------

@@ -13,11 +13,17 @@
 // přežije přechod mezi stránkami přes localStorage (src/zp-interact.js,
 // klíč hspa-moje-zp).
 //
-// Čisté funkce (testované bez DOM): zpStrankaById, zpShellHtml, zpTabsHtml,
-// zpZdrojeHtml, legacyRedirect.
+// Záložky jsou ve dvou skupinách (ZP_SKUPINY): „pro pojištěnce“ (Přehled, Kmen, Prevence,
+// Aplikace, Zdravotní gramotnost) vlevo a „pro redakci a data“ (Metodika, Indikátory) vpravo,
+// světlejším písmem a za svislým oddělovačem. Stáří dat pod nimi řeší src/pojistovny-stari.js.
+//
+// Čisté funkce (testované bez DOM): zpStrankaById, zpStrankyVSkupine, zpShellHtml,
+// zpTabsHtml, zpZdrojeHtml, legacyRedirect.
 
 import { renderModuleNav, renderMastheadDate, renderFooter, escapeHtml } from './page-shared.js';
 import { loadJson } from './pojistovny-shared.js';
+
+export { stariDatHtml } from './pojistovny-stari.js';
 
 const esc = escapeHtml;
 
@@ -25,38 +31,47 @@ export const DATA_URL = 'data/pojistovny.json';
 export const KICKER = 'Srovnávač zdravotních pojišťoven · pracovní verze';
 
 /**
- * Stránky srovnávače v pořadí záložek. `veta` a `co` čte rozcestník přehledu
- * (src/pojistovny-prehled.js), `kicker` je štítek karty rozcestníku.
+ * Skupiny záložek v pořadí zleva doprava. `pojistenci` je obsah pro čtenáře (pojištěnce),
+ * `redakce` pracovní podklady (metodika, semafor, inventář dat) pro redakci a pracovní skupinu.
+ */
+export const ZP_SKUPINY = [
+  { id: 'pojistenci', label: 'Pro pojištěnce' },
+  { id: 'redakce', label: 'Pro redakci a data' },
+];
+
+/**
+ * Stránky srovnávače v pořadí záložek; `skupina` je id z ZP_SKUPINY. `veta` a `co` čte
+ * rozcestník přehledu (src/pojistovny-prehled.js), `kicker` je štítek karty rozcestníku.
  */
 export const ZP_STRANKY = [
-  { id: 'prehled', href: 'pojistovny.html', label: 'Přehled' },
+  { id: 'prehled', skupina: 'pojistenci', href: 'pojistovny.html', label: 'Přehled' },
   {
-    id: 'kmen', href: 'pojistovny-kmen.html', label: 'Kmen a hospodaření', kicker: 'CRP 2025 · MZ a MF 2024 · ZPP 2026',
+    id: 'kmen', skupina: 'pojistenci', href: 'pojistovny-kmen.html', label: 'Kmen a hospodaření', kicker: 'CRP 2025 · MZ a MF 2024 · ZPP 2026',
     veta: 'Kdo koho pojišťuje, jak starý kmen nese, kolik stojí jeho péče a s jakou rezervou vstupuje do roku 2026.',
     co: 'Karty pojišťoven, vývoj kmene, hospodaření, kraje, síť odborností',
   },
   {
-    id: 'prevence', href: 'pojistovny-prevence.html', label: 'Prevence', kicker: 'Kolo 1 · weby a výroční zprávy',
+    id: 'prevence', skupina: 'pojistenci', href: 'pojistovny-prevence.html', label: 'Prevence', kicker: 'Kolo 1 · weby a výroční zprávy',
     veta: 'Co pojišťovny z fondu prevence nabízejí, kam peníze jdou a co o výsledcích samy uvádějí.',
     co: 'Nabídka 7 × 9, onkologie a duševní zdraví, struktura fondu, odpovědi z VZ',
   },
   {
-    id: 'aplikace', href: 'pojistovny-aplikace.html', label: 'Aplikace', kicker: 'První výstup PS',
+    id: 'aplikace', skupina: 'pojistenci', href: 'pojistovny-aplikace.html', label: 'Aplikace', kicker: 'První výstup PS',
     veta: 'Deset funkcí aplikací sedmi pojišťoven a návrh kritérií přívětivosti.',
     co: 'Matice funkcí, kritéria přívětivosti, rozpory a chybějící data',
   },
   {
-    id: 'gramotnost', href: 'pojistovny-gramotnost.html', label: 'Zdravotní gramotnost', kicker: 'V přípravě · druhé téma PS',
+    id: 'gramotnost', skupina: 'pojistenci', href: 'pojistovny-gramotnost.html', label: 'Zdravotní gramotnost', kicker: 'V přípravě · druhé téma PS',
     veta: 'Jak pojišťovny hledají rizikové pojištěnce a podporují zdravotní gramotnost.',
     co: 'Rizikové skupiny, návrh dotazníků, souhrnné odpovědi',
   },
   {
-    id: 'metodika', href: 'pojistovny-metodika.html', label: 'Metodika a semafor', kicker: 'Derivát metodiky Barometru',
+    id: 'metodika', skupina: 'redakce', href: 'pojistovny-metodika.html', label: 'Metodika a semafor', kicker: 'Derivát metodiky Barometru',
     veta: 'Šest oblastí, čtyři stavy a právo pojišťovny na odpověď; registr žádostí a ověření čísel.',
     co: 'Semafor 7 × 6, návrh dotazníků a vyhodnocení, stanoviska, žádosti, ověření proti VZ, plán',
   },
   {
-    id: 'indikatory', href: 'pojistovny-indikatory.html', label: 'Indikátory a data', kicker: 'Inventář · stav k 2. 11. 2026',
+    id: 'indikatory', skupina: 'redakce', href: 'pojistovny-indikatory.html', label: 'Indikátory a data', kicker: 'Inventář · stav k 2. 11. 2026',
     veta: 'Které údaje říkají, kdo je u koho pojištěn, které indikátory se pojišťoven týkají a jak pojišťovny publikují otevřená data.',
     co: 'Zdroje o kmeni, indikátory kontraktu, datové sady, navržené ukazatele, audit open dat',
   },
@@ -76,13 +91,27 @@ export function zpStrankaById(id) {
   return ZP_STRANKY.find((s) => s.id === id) || null;
 }
 
-/** Rozcestník témat jako záložky; neznámé `aktivni` = žádná aktivní. */
+/** Stránky jedné skupiny v pořadí záložek (neznámá skupina = prázdné pole). */
+export function zpStrankyVSkupine(skupina) {
+  return ZP_STRANKY.filter((s) => s.skupina === skupina);
+}
+
+/**
+ * Rozcestník témat jako záložky ve dvou skupinách (každá vlastní `<ul>` pojmenovaná skrytým
+ * popiskem skupiny pro čtečku; druhá, redakční, jde vpravo za svislým oddělovačem).
+ * Neznámé `aktivni` = žádná aktivní.
+ */
 export function zpTabsHtml(aktivni) {
-  const items = ZP_STRANKY.map((s) => {
-    const cur = s.id === aktivni ? ' aria-current="page"' : '';
-    return `<li><a class="zpc-tab" href="${esc(s.href)}"${cur}>${esc(s.label)}</a></li>`;
+  const groups = ZP_SKUPINY.map((g) => {
+    const items = zpStrankyVSkupine(g.id).map((s) => {
+      const cur = s.id === aktivni ? ' aria-current="page"' : '';
+      return `<li><a class="zpc-tab" href="${esc(s.href)}"${cur}>${esc(s.label)}</a></li>`;
+    }).join('');
+    if (!items) return '';
+    return `<span class="zpc-tabs-lbl sr-only" id="zpTabsLbl-${esc(g.id)}">${esc(g.label)}</span>`
+      + `<ul class="zpc-tabs-grp zpc-tabs-grp--${esc(g.id)}" data-skupina="${esc(g.id)}" aria-labelledby="zpTabsLbl-${esc(g.id)}">${items}</ul>`;
   }).join('');
-  return `<nav class="zpc-tabs" aria-label="Témata srovnávače"><ul>${items}</ul></nav>`;
+  return `<nav class="zpc-tabs" aria-label="Témata srovnávače">${groups}</nav>`;
 }
 
 /** Hlavička srovnávače: pásek pracovní verze, kicker, záložky. */
