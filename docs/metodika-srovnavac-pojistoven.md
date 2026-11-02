@@ -151,8 +151,8 @@ pojištěnců a odlišným podílem zvlášť nákladných hrazených služeb“
 tedy oficiální měřítko nákladovosti kmene, které v sobě má věk, pohlaví, farmaceuticko-nákladové
 skupiny i nákladné služby.
 
-**Data a skript.** `ingest/manual/pojistovny/prerozdeleni-mz.json` (měsíční řady 2023–2025,
-7 ZP + celkem, zdroj a datum ověření) → `ingest/transform_pojistovny_index_prerozdeleni.js`
+**Data a skript.** `ingest/manual/pojistovny/prerozdeleni-mz.json` (měsíční řady 2022–2026/10,
+7 ZP + celkem, zdroj a datum ověření; index používá jen rok hospodaření) → `ingest/transform_pojistovny_index_prerozdeleni.js`
 → `pojistovny[].hospodareni.index_prerozdeleni` {hodnota, rok, zdroj, poznamka, median_kc,
 median_cr_kc} a přepočet `*_std_kc` se stavem `index-prerozdeleni`.
 
@@ -175,6 +175,42 @@ na zdravotní služby spíš výhoda, u fondu prevence zůstává aproximace (§
 hodnota = základ × faktor a faktor = 1 / `index_prerozdeleni`. Až MZ indexy věkových skupin
 zveřejní, spustí se `transform_pojistovny_standardizace.js` s doloženými váhami a stav se
 přepne na `dolozeno`; index z přerozdělení zůstane jako kontrolní hodnota.
+
+### 4.3 Měsíční kmen z přerozdělení MZ (odvozený počet pojištěnců)
+
+_Zavedeno 2. 11. 2026; čeká na potvrzení odbornou skupinou._
+
+**K čemu.** MZ měsíční počty pojištěnců po pojišťovnách nezveřejňuje, ale ve stejných PDF
+publikuje výslednou částku po přerozdělení na **pojišťovnu** (tis. Kč) i na **jednoho
+pojištěnce** (Kč). Z podílu vychází, kolik pojištěnců MZ v daném měsíci pojišťovně přerozdělilo;
+řada dává kmen měsíc po měsíci a čistou změnu kmene v přestupních termínech (1. 1., 1. 7.),
+což roční stavy z CRP nedokážou. Slouží jako kontext (kdo roste, kdo ztrácí), ne k hodnocení
+pojišťoven.
+
+```
+počet pojištěnců (ZP, měsíc) = částka na pojišťovnu [tis. Kč] × 1000 / částka na pojištěnce [Kč]
+```
+
+**Přesnost.** Obě částky obsahují tytéž mimořádné položky (vyúčtování nákladných služeb, opravy
+chybných údajů, předsunutá platba 4/2026, mimořádné přerozdělování 6/2026), takže se v podílu
+vykrátí. Zbývá jen zaokrouhlení částky na pojištěnce na celé Kč, tj. asi ±0,02 %. Kontrola proti
+nezávislým zdrojům (test `tests/pojistovny-kmen-mesicni.test.js`, validátor): průměr 12 měsíců 2024
+se shoduje s průměrným počtem pojištěnců podle MZ (`hospodareni.pocet_pojistencu`) do 0,1 % u všech
+sedmi ZP (VZP ČR 6 144 163 proti 6 150 186); stav 12/2025 se od CRP 2025 liší o méně než 0,7 % u
+šesti ZP a o 1,06 % u VoZP (příčinu zdroj neuvádí, nejspíš jiný okamžik nebo definice počtu;
+neověřeno). Součet sedmi ZP odpovídá řádku „Celkem zdravotní pojišťovny“ s odchylkou do 0,2 %.
+
+**Co to není.** Počet je odvozená hodnota, ne publikovaný údaj; pole `zdroj` to říká a věta pod
+grafem také. Změna mezi prosincem a lednem a mezi červnem a červencem je čistá změna kmene, ne
+hrubé toky přestupů (zahrnuje narození, úmrtí, stěhování a opravy registru) a zdroj nerozlišuje
+příčinu; změny mimo přestupní termíny (např. VZP ČR v dubnu 2022 a 2023) nevysvětluje. Chybějící
+měsíc zůstane `null`, nic se nedomýšlí (dnes žádný nechybí; rok 2026 má zatím 10 měsíců).
+
+**Data a skript.** `ingest/manual/pojistovny/prerozdeleni-mz-pojistovna.json` + `prerozdeleni-mz.json`
+→ `ingest/transform_pojistovny_kmen_mesicni.js` → `data/pojistovny-kmen-mesicni.json` (schéma v
+`docs/data-model.md`, validace `validateKmenMesicni()`), zobrazení v `pojistovny-kmen.html` →
+„Kmen měsíc po měsíci (přerozdělení MZ)“ (graf indexu leden 2022 = 100 a tabulka změn k 1. 1. a
+1. 7. v posledních dvou letech; řazeno podle kódu pojišťovny, nejde o hodnocení).
 
 ### Otevřené otázky standardizace
 

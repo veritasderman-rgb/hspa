@@ -13,6 +13,9 @@
 //  - data/pojistovny-sit.json        (volitelný, P3.5 prototyp) matice ZP × odbornost × kraj, validateSit() na konci souboru
 //  - data/pojistovny-vek.json        (volitelný, P3.3) 7 ZP, součet struktury = celkem ±0,1 %,
 //                                    ČR celkem = součet ZP ±0,5 %; hospodareni.*_std_kc obálka s faktorem 0,5–2 a stavem
+//  - data/pojistovny-kmen-mesicni.json (volitelný, metodika § 4.3) 7 ZP, měsíce RRRR-MM bez mezer, stejná délka řad,
+//                                    kladné počty (null = nedohledáno), celkem ≈ součet ZP ±0,2 %, index a přestupy
+//                                    odpovídají počtům, průměr 2024 ≈ hospodareni.pocet_pojistencu ±0,5 %
 //
 // Chyby (FAIL) končí exit 1. Varování (WARN) proces nezastaví (např. součet položek fondu prevence
 // neodpovídá souhrnu ±1 % — některé výroční zprávy zaokrouhlují).
@@ -38,6 +41,7 @@ export const OPTIONAL_FILES = {
   zadosti: 'zadosti-106.json',
   verifikace: 'pojistovny-verifikace.json', // výstup scripts/pojistovny-verify.js (ověření čísel proti VZ)
   sit: 'pojistovny-sit.json',
+  kmenMesicni: 'pojistovny-kmen-mesicni.json', // měsíční kmen odvozený z přerozdělení MZ (§ 4.3)
 };
 export const STD_STAVY = ['dolozeno', 'placeholder-bez-vah', 'index-prerozdeleni'];
 
@@ -536,6 +540,13 @@ export function validateAll(datasets) {
     checks += sr.checks;
   }
 
+  if (datasets?.kmenMesicni != null) {
+    const kr = validateKmenMesicni(datasets.kmenMesicni, P);
+    errors.push(...kr.errors);
+    warnings.push(...kr.warnings);
+    checks += kr.checks;
+  }
+
   return { errors, warnings, checks };
 }
 
@@ -708,6 +719,115 @@ export function validateSit(S) {
       const sum = ['adresa', 'okres', 'jediny', 'nepriraditelne'].reduce((a, x) => a + (q[x] || 0), 0);
       ok(Number.isInteger(q.icz_smluvni) && sum === q.icz_smluvni, `${T} kvalita[${zp}]: adresa+okres+jediny+nepriraditelne (${sum}) ≠ icz_smluvni (${q.icz_smluvni})`);
       if (q.icz_smluvni > 0 && q.nepriraditelne / q.icz_smluvni > 0.25) warnings.push(`${T} kvalita[${zp}]: ${Math.round(100 * q.nepriraditelne / q.icz_smluvni)} % IČZ nepřiřazeno k místu NRPZS (> 25 %)`);
+    }
+  }
+  return { errors, warnings, checks };
+}
+
+/**
+ * Měsíční kmen pojišťoven odvozený z přerozdělení MZ (data/pojistovny-kmen-mesicni.json, volitelný dataset).
+ * Hlídá 7 ZP, měsíce RRRR-MM bez mezer, stejnou délku všech řad, kladné počty (null = nedohledáno, varování),
+ * celkem ≈ součet ZP (±0,2 %), index = počet / počet v 1. měsíci × 100, přestupy = rozdíl dvou měsíců řady
+ * a (když je k dispozici pojistovny.json) průměr roku hospodaření ≈ hospodareni.pocet_pojistencu (±0,5 %).
+ * (Konstanty jsou uvnitř funkce: main() se volá už při načtení modulu, před vyhodnocením konstant níže.)
+ */
+export function validateKmenMesicni(K, P) {
+  const errors = [];
+  const warnings = [];
+  let checks = 0;
+  const ok = (cond, msg) => { checks++; if (!cond) errors.push(msg); return !!cond; };
+  const warn = (msg) => warnings.push(msg);
+  const ZP = ['111', '201', '205', '207', '209', '211', '213'];
+  const T = 'pojistovny-kmen-mesicni.json';
+
+  if (!ok(isObj(K), `${T}: chybí nebo není objekt`)) return { errors, warnings, checks };
+  for (const f of ['version', 'generated_at', '_doc', 'zdroj', 'mesice', 'pojistovny', 'celkem', 'prestupy']) ok(K[f] != null, `${T} root: missing '${f}'`);
+  ok(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/.test(K.generated_at ?? ''), `${T}: generated_at není ISO 8601 UTC`);
+  if (ok(isObj(K.zdroj), `${T}.zdroj: musí být objekt`)) {
+    ok(isStr(K.zdroj.url) && /^https:\/\//.test(K.zdroj.url), `${T}.zdroj.url: chybí nebo není https`);
+    ok(Array.isArray(K.zdroj.soubory) && K.zdroj.soubory.length >= 2, `${T}.zdroj.soubory: očekávám aspoň 2 PDF`);
+    ok(isIsoDate(K.zdroj.overeno), `${T}.zdroj.overeno: není ISO datum`);
+  }
+
+  const mesice = Array.isArray(K.mesice) ? K.mesice : [];
+  if (!ok(mesice.length >= 12 && mesice.every((m) => /^\d{4}-(0[1-9]|1[0-2])$/.test(m)), `${T}.mesice: musí být pole RRRR-MM (aspoň 12)`)) return { errors, warnings, checks };
+  const ord = (m) => Number(m.slice(0, 4)) * 12 + Number(m.slice(5, 7));
+  ok(mesice.every((m, i) => i === 0 || ord(m) === ord(mesice[i - 1]) + 1), `${T}.mesice: musí jít po sobě bez mezer`);
+  const n = mesice.length;
+
+  const rada = (r, tag) => {
+    if (!ok(Array.isArray(r) && r.length === n, `${tag}: délka ${Array.isArray(r) ? r.length : '?'} ≠ počet měsíců ${n}`)) return false;
+    r.forEach((v, i) => {
+      if (v === null) warn(`${tag}[${mesice[i]}]: nedohledáno (null)`);
+      else ok(isNum(v) && v > 0, `${tag}[${mesice[i]}]: musí být kladné číslo nebo null (${JSON.stringify(v)})`);
+    });
+    return true;
+  };
+  const indexOk = (pocty, index, tag) => {
+    if (!rada(index, `${tag}.index_2022_01`)) return;
+    const z = pocty[0];
+    pocty.forEach((v, i) => {
+      if (isNum(v) && isNum(z) && isNum(index[i])) ok(Math.abs(index[i] - (v / z) * 100) <= 0.01, `${tag}.index_2022_01[${mesice[i]}]: ${index[i]} ≠ ${((v / z) * 100).toFixed(2)}`);
+    });
+  };
+  const prestupyOk = (zmeny, pocty, tag) => {
+    if (!ok(Array.isArray(zmeny) && zmeny.length > 0, `${tag}.zmeny: musí být neprázdné pole`)) return;
+    zmeny.forEach((c, i) => {
+      const t = `${tag}.zmeny[${i}]`;
+      if (!ok(isObj(c), `${t}: musí být objekt`)) return;
+      const iz = mesice.indexOf(c.z);
+      const ina = mesice.indexOf(c.na);
+      if (!ok(iz >= 0 && ina >= 0, `${t}: měsíc z/na (${c.z}/${c.na}) není v mesice[]`)) return;
+      ok(ina === iz + 1, `${t}: z a na musí být po sobě jdoucí měsíce`);
+      ok((c.termin === '1. 1.' && c.z.endsWith('-12') && c.na.endsWith('-01')) || (c.termin === '1. 7.' && c.z.endsWith('-06') && c.na.endsWith('-07')), `${t}: termín ${c.termin} neodpovídá měsícům ${c.z} → ${c.na}`);
+      ok(c.pred === pocty[iz] && c.po === pocty[ina], `${t}: pred/po neodpovídá řadě pocty`);
+      if (isNum(c.pred) && isNum(c.po)) {
+        ok(c.zmena === c.po - c.pred, `${t}.zmena: ${c.zmena} ≠ po − pred`);
+        ok(Math.abs(c.zmena_pct - (c.zmena / c.pred) * 100) <= 0.01, `${t}.zmena_pct: ${c.zmena_pct} ≠ ${((c.zmena / c.pred) * 100).toFixed(2)}`);
+      } else ok(c.zmena === null && c.zmena_pct === null, `${t}: chybějící počet musí dát zmena = null`);
+    });
+  };
+
+  const zps = Array.isArray(K.pojistovny) ? K.pojistovny : [];
+  ok(zps.length === 7, `${T}.pojistovny: očekáváno 7, nalezeno ${zps.length}`);
+  const seen = new Set();
+  const byKod = {};
+  zps.forEach((z, i) => {
+    const tag = `${T} pojistovny[${z?.kod ?? i}]`;
+    if (!ok(isObj(z), `${tag}: musí být objekt`)) return;
+    ok(ZP.includes(String(z.kod)), `${tag}: neznámý kód ZP`);
+    ok(!seen.has(z.kod), `${tag}: duplicitní kód`);
+    seen.add(z.kod);
+    ok(isStr(z.zkratka), `${tag}.zkratka: chybí`);
+    if (rada(z.pocty, `${tag}.pocty`)) { byKod[z.kod] = z; indexOk(z.pocty, z.index_2022_01, tag); }
+  });
+  const pz = Array.isArray(K.prestupy?.pojistovny) ? K.prestupy.pojistovny : [];
+  ok(pz.length === 7, `${T}.prestupy.pojistovny: očekáváno 7, nalezeno ${pz.length}`);
+  pz.forEach((p) => { if (byKod[p?.kod]) prestupyOk(p.zmeny, byKod[p.kod].pocty, `${T} prestupy[${p.kod}]`); else ok(false, `${T} prestupy: kód ${p?.kod} nemá řadu pocty`); });
+
+  const c = K.celkem;
+  if (ok(isObj(c), `${T}.celkem: musí být objekt`) && rada(c.pocty, `${T} celkem.pocty`)) {
+    indexOk(c.pocty, c.index_2022_01, `${T} celkem`);
+    for (let i = 0; i < n; i++) {
+      const sum = ZP.reduce((a, k) => a + (byKod[k]?.pocty?.[i] ?? NaN), 0);
+      if (Number.isFinite(sum) && isNum(c.pocty[i])) {
+        ok(Math.abs(sum - c.pocty[i]) / c.pocty[i] <= 0.002, `${T} celkem.pocty[${mesice[i]}]: ${c.pocty[i]} ≠ součet ZP ${sum} (±0,2 %)`);
+      }
+    }
+    prestupyOk(K.prestupy?.celkem?.zmeny, c.pocty, `${T} prestupy.celkem`);
+  }
+
+  // soulad s pojistovny.json: průměr roku hospodaření (MZ + MF, roční průměr pojištěnců) ±0,5 %
+  if (isObj(P) && Number.isInteger(P.rok_hospodareni)) {
+    const idx = mesice.map((m, i) => ({ m, i })).filter((x) => x.m.startsWith(`${P.rok_hospodareni}-`)).map((x) => x.i);
+    if (idx.length === 12) {
+      for (const z of P.pojistovny ?? []) {
+        const ref = z.hospodareni?.pocet_pojistencu?.hodnota;
+        const mine = byKod[z.kod]?.pocty;
+        if (!isNum(ref) || !mine || idx.some((i) => !isNum(mine[i]))) continue;
+        const avg = idx.reduce((a, i) => a + mine[i], 0) / 12;
+        ok(Math.abs(avg - ref) / ref <= 0.005, `${T} ZP ${z.kod}: průměr ${P.rok_hospodareni} ${Math.round(avg)} ≠ hospodareni.pocet_pojistencu ${ref} (±0,5 %)`);
+      }
     }
   }
   return { errors, warnings, checks };

@@ -1,5 +1,5 @@
 {
-  "_doc": "Výsledná částka po přerozdělení pojistného připadající na jednoho pojištěnce (Kč, měsíčně) podle zdravotních pojišťoven a celkem. Přepsáno z PDF Ministerstva zdravotnictví (stránka Přerozdělování pojistného na veřejné zdravotní pojištění, soubor prerozdelovani_pojistenec_vysledek_<rok>_<měsíc>.pdf; řada 2022–2024 v souboru 2024_12, řada 2024–2026 v souboru 2026_10). MZ k tabulce uvádí: „Nerovnoměrnosti v průměrných příjmech na pojištěnce mezi jednotlivými pojišťovnami jsou zapříčiněny rozdílnou strukturou pojištěnců a odlišným podílem zvlášť nákladných hrazených služeb.“ Podíl mediánu pojišťovny k mediánu všech pojišťoven je proto oficiální měřítko nákladovosti kmene (věk, pohlaví, farmaceuticko-nákladové skupiny, nákladné služby), použitelné pro standardizaci Kč na pojištěnce (metodika § 4.2), dokud MZ nezveřejní nákladové indexy věkových skupin. Medián místo průměru: jednotlivé měsíce obsahují mimořádná vyúčtování (např. RBP 10/2024, ZPŠ 11/2025, VoZP 11/2025), která s nákladovostí kmene nesouvisí.",
+  "_doc": "Výsledná částka po přerozdělení pojistného připadající na jednoho pojištěnce (Kč, měsíčně) podle zdravotních pojišťoven a celkem. Přepsáno z PDF Ministerstva zdravotnictví (stránka Přerozdělování pojistného na veřejné zdravotní pojištění, soubor prerozdelovani_pojistenec_vysledek_<rok>_<měsíc>.pdf; řada 2022–2024 v souboru 2024_12, řada 2024–2026 v souboru 2026_10). MZ k tabulce uvádí: „Nerovnoměrnosti v průměrných příjmech na pojištěnce mezi jednotlivými pojišťovnami jsou zapříčiněny rozdílnou strukturou pojištěnců a odlišným podílem zvlášť nákladných hrazených služeb.“ Podíl mediánu pojišťovny k mediánu všech pojišťoven je proto oficiální měřítko nákladovosti kmene (věk, pohlaví, farmaceuticko-nákladové skupiny, nákladné služby), použitelné pro standardizaci Kč na pojištěnce (metodika § 4.2), dokud MZ nezveřejní nákladové indexy věkových skupin. Medián místo průměru: jednotlivé měsíce obsahují mimořádná vyúčtování (např. RBP 10/2024, ZPŠ 11/2025, VoZP 11/2025), která s nákladovostí kmene nesouvisí. Roky 2022 a 2026 (leden až říjen) doplněny 2. 11. 2026 pro měsíční kmen (metodika § 4.3, ingest/transform_pojistovny_kmen_mesicni.js); index nákladovosti čte jen rok hospodaření.",
   "zdroj": {
     "nazev": "MZ ČR · Přerozdělování pojistného na veřejné zdravotní pojištění · Výsledná částka po přerozdělení připadající na jednoho pojištěnce",
     "url": "https://mzd.gov.cz/prerozdelovani-pojistneho-na-verejne-zdravotni-pojisteni/",
@@ -11,6 +11,16 @@
     "jednotka": "Kč na pojištěnce za měsíc"
   },
   "roky": {
+    "2022": {
+      "111": [3822, 3674, 3435, 3392, 3597, 3539, 3554, 3542, 2944, 3207, 3224, 3256],
+      "201": [3425, 3291, 3082, 3128, 3330, 3285, 3285, 3262, 2737, 2989, 3004, 3031],
+      "205": [3229, 3107, 2912, 2935, 3125, 3078, 3083, 2963, 2563, 2795, 2807, 2837],
+      "207": [3264, 3136, 2937, 2957, 3135, 3088, 3081, 3033, 2566, 2786, 2813, 2865],
+      "209": [3476, 3331, 3121, 3158, 3367, 3330, 3344, 3056, 2780, 3024, 3046, 3070],
+      "211": [3437, 3306, 3094, 3132, 3340, 3294, 3299, 3370, 2744, 2996, 3010, 3043],
+      "213": [3360, 3233, 3029, 3059, 3257, 3210, 3215, 4064, 2674, 2917, 2930, 2963],
+      "celkem": [3612, 3472, 3248, 3241, 3443, 3390, 3399, 3412, 2821, 3074, 3091, 3123]
+    },
     "2023": {
       "111": [3868, 3654, 3479, 3537, 3751, 3720, 3731, 3747, 3686, 3556, 3644, 3692],
       "201": [3626, 3373, 3199, 3234, 3444, 3410, 3425, 3441, 3392, 3226, 3362, 3410],
@@ -40,6 +50,16 @@
       "211": [4148, 3971, 3777, 3786, 4072, 4048, 4014, 4018, 4028, 3883, 4002, 3993],
       "213": [3944, 3779, 3590, 3604, 3869, 3837, 3819, 3825, 3839, 3699, 3693, 3798],
       "celkem": [4198, 4016, 3820, 3826, 4113, 4082, 4059, 4054, 4066, 3913, 3965, 4019]
+    },
+    "2026": {
+      "111": [4563, 4411, 4127, 5409, 4502, 3170, 4417, 4444, 4416, 4261],
+      "201": [4326, 4181, 3911, 5121, 4259, 5926, 4187, 4198, 4175, 4025],
+      "205": [4100, 3959, 3703, 4859, 4046, 5651, 3979, 4007, 3987, 3849],
+      "207": [4079, 3959, 3708, 4874, 4032, 5610, 3962, 4000, 3975, 3830],
+      "209": [4289, 4138, 3875, 5083, 4235, 5929, 4169, 4188, 4163, 4014],
+      "211": [4368, 4220, 3950, 5183, 4314, 6022, 4250, 4280, 4260, 4112],
+      "213": [4190, 4042, 3787, 4964, 4127, 5749, 4060, 4086, 4058, 3915],
+      "celkem": [4417, 4269, 3995, 5238, 4358, 4303, 4281, 4308, 4283, 4132]
     }
   }
 }

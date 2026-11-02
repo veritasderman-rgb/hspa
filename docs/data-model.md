@@ -1581,6 +1581,7 @@ nikdy 0). Každý soubor nese `version`, `generated_at`, `_doc` a `changelog[]{d
 | `pojistovny-otazky.json` | `sady[]{id, nazev, typ, verze, platne_od?, pravni_zaklad, otazky[] \| casti[].otazky[]}` — definice dotazníků (formulář renderuje `src/zp-dotaznik.js`) | `zp-dotaznik.js`, `api/dotaznik.js` |
 | `pojistovny-vek.json` | viz níže | `ingest/transform_pojistovny_crp.js` (výstup), standardizace § 4.1 |
 | `pojistovny-dotaznik-agregaty.json` | viz níže | `src/zp-dotaznik.js` |
+| `pojistovny-kmen-mesicni.json` | viz níže | `ingest/transform_pojistovny_kmen_mesicni.js` (výstup), `src/pojistovny-kmen-mesicni.js` |
 | `zadosti-106.json` | viz níže | `src/pojistovny-zadosti.js` |
 | `pojistovny-verifikace.json` | **plánovaný**, viz níže | — |
 
@@ -1608,6 +1609,43 @@ Standardizované hodnoty se zapisují do `pojistovny.json` jako
 s polem `stav`. Dokud nákladové indexy nejsou doložené, je `stav: "placeholder-bez-vah"`
 (faktor 1, hodnota = nestandardizovaná) a **frontend číslo nezobrazí** — `stdInfo()`
 v `src/pojistovny.js` bere jen `stav: "dolozeno"`, jinak ukáže štítek „nestandardizováno“.
+
+### `data/pojistovny-kmen-mesicni.json` — měsíční kmen z přerozdělení MZ (generovaný, volitelný)
+
+Výstup `ingest/transform_pojistovny_kmen_mesicni.js` (metodika § 4.3). Měsíční počet pojištěnců
+sedmi ZP **odvozený** podílem dvou částek z měsíčního přerozdělení pojistného MZ; MZ počty takto
+přímo nezveřejňuje. Vstupy: `ingest/manual/pojistovny/prerozdeleni-mz-pojistovna.json` (tis. Kč na
+pojišťovnu) a `prerozdeleni-mz.json` (Kč na pojištěnce), oba přepsané z PDF MZ se zdrojem a datem
+ověření. Rozsah leden 2022 až říjen 2026 (58 měsíců). Validátor `validateKmenMesicni()` v
+`ingest/validate-pojistovny.js` (volitelný dataset): 7 ZP, měsíce bez mezer, stejná délka řad,
+kladné počty (`null` = nedohledáno, jen varování), `celkem` ≈ součet ZP ±0,2 %, index a přestupy
+odpovídají počtům, průměr 2024 ≈ `hospodareni.pocet_pojistencu` ±0,5 %. Idempotentní: stejný
+vstup = beze změny souboru. Čte ho jen `pojistovny-kmen.html` (`#zpKmenMesicni`, `#zpKmenPrestupy`).
+
+```json
+{
+  "version": "1.0", "generated_at": "…", "_doc": "…",
+  "zdroj": { "nazev": "…", "url": "https://mzd.gov.cz/prerozdelovani-pojistneho-na-verejne-zdravotni-pojisteni/",
+             "soubory": ["…pojistovna_vysledek_2024_12.pdf", "…pojistovna_vysledek_2026_10.pdf", "…pojistenec_…"],
+             "vstupy": ["ingest/manual/pojistovny/prerozdeleni-mz-pojistovna.json", "…prerozdeleni-mz.json"],
+             "overeno": "2026-11-02", "vzorec": "pocet = castka_na_pojistovnu_tis_kc * 1000 / castka_na_pojistence_kc" },
+  "mesice": ["2022-01", "…", "2026-10"],
+  "pojistovny": [{ "kod": "111", "zkratka": "VZP ČR", "pocty": [5898302, "…"], "index_2022_01": [100, 100.05, "…"] }],
+  "celkem": { "pocty": ["…"], "index_2022_01": ["…"] },        // z řádku „Celkem zdravotní pojišťovny“
+  "prestupy": {
+    "terminy": [{ "termin": "1. 1.", "z_mesic": 12, "na_mesic": 1 }, { "termin": "1. 7.", "z_mesic": 6, "na_mesic": 7 }],
+    "pojistovny": [{ "kod": "111", "zkratka": "VZP ČR", "zmeny": [
+      { "rok": 2025, "termin": "1. 7.", "z": "2025-06", "na": "2025-07", "pred": 6153976, "po": 6164936, "zmena": 10960, "zmena_pct": 0.18 } ] }],
+    "celkem": { "zmeny": ["…"] }
+  }
+}
+```
+
+`pocty[i]` odpovídá `mesice[i]`; `null` = chybí vstup (nic se nedomýšlí). `prestupy` jsou čistá
+změna kmene mezi prosincem a lednem (1. 1.) a mezi červnem a červencem (1. 7.), ne hrubé toky
+(zahrnuje narození, úmrtí, stěhování a opravy registru). Přesnost: částka na pojištěnce je v celých
+Kč (chyba ≈ ±0,02 %); průměr 2024 se od údaje MZ liší do 0,1 %, stav 12/2025 od CRP 2025 do 0,7 %
+u šesti ZP a o 1,06 % u VoZP.
 
 ### `data/pojistovny-dotaznik-agregaty.json` — agregáty dotazníků (generovaný)
 

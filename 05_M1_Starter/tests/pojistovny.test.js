@@ -53,7 +53,7 @@ test('pojistovny.json: semafor obsahuje všech 6 oblastí a jen povolené stavy'
 // ---------------------------------------------------------------- P1.6: přehled + podstránky
 const STRANKY = {
   'pojistovny.html': ['zpHeroStats', 'zpMojeZp', 'zpOvKarta', 'zpPrehled', 'zpOvGrafy', 'zpOvSemafor', 'zpOvTemata'],
-  'pojistovny-kmen.html': ['zpHeroStats', 'zpChartShare', 'zpCards', 'zpKraje', 'zpChartTrend', 'zpChartGrowth', 'zpChart65', 'zpChartNzs',
+  'pojistovny-kmen.html': ['zpHeroStats', 'zpChartShare', 'zpCards', 'zpKraje', 'zpChartTrend', 'zpChartGrowth', 'zpKmenMesicni', 'zpKmenPrestupy', 'zpChart65', 'zpChartNzs',
     'zpTableFin', 'zpChartZust', 'zpChartProvoz', 'zpChartYoy', 'zpTablePrev', 'zpSit', 'zpNotes', 'zpChybi'],
   'pojistovny-prevence.html': ['zpPrevMatrix', 'zpPrevProc', 'zpPrevOnko', 'zpPrevDusevni', 'zpFpStruktura', 'zpDolozene', 'zpMereni', 'zpOdpovediMatrix', 'zpOdpovedi'],
   'pojistovny-aplikace.html': ['zpAppMatrix', 'zpAppKriteria', 'zpAppSummary', 'zpAppNotes'],
