@@ -274,12 +274,17 @@ export function validateAll(datasets) {
         ok(!sadaIds.has(s?.id), `${tag}: duplicitní id sady`);
         sadaIds.add(s?.id);
         ok(isStr(s?.nazev), `${tag}: chybí nazev`);
+        if (s?.verze != null) ok(isStr(s.verze) && s.verze.length <= 32, `${tag}.verze: neprázdný string do 32 znaků`);
         const qids = new Set();
         const checkQ = (q, qtag, withOptions) => {
           ok(isStr(q?.id), `${qtag}: chybí id otázky`);
           ok(!qids.has(q?.id), `${qtag}: duplicitní id otázky '${q?.id}' v sadě`);
           qids.add(q?.id);
           ok(isStr(q?.text), `${qtag}: chybí text`);
+          if (q?.vyber != null) {
+            ok(q.vyber === 'jeden' || q.vyber === 'vice', `${qtag}.vyber: jeden | vice (je '${q.vyber}')`);
+            ok(Array.isArray(q?.moznosti), `${qtag}.vyber: dává smysl jen u otázky s moznosti[]`);
+          }
           if (withOptions) {
             ok(Array.isArray(q?.moznosti) && q.moznosti.length > 0 && q.moznosti.every(isStr), `${qtag}.moznosti: musí být neprázdné pole stringů`);
           }

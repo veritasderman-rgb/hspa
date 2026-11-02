@@ -22500,3 +22500,47 @@ table.zpv-heat th[aria-sort="ascending"] button.zpv-sort::after { content: " \21
   .zpi-tip, .zpi-chips { display: none; }
   main[data-moje-zp] .zpv-mark, main[class*="zpi-hover-"] .zpv-mark { opacity: 1; }
 }
+
+/* === Srovnávač pojišťoven: dotazníky src/zp-dotaznik.js (.zpd-) — balíček P2.4 === */
+.zpd-form{font-family:var(--sans);display:grid;gap:16px;max-width:760px}
+.zpd-part{border:1px solid var(--rule2);border-radius:4px;padding:12px 16px 4px;margin:0;min-width:0;display:grid;gap:14px}
+.zpd-part-title{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-mut);padding:0 6px}
+.zpd-q{border:0;margin:0;padding:0;min-width:0;display:grid;gap:6px}
+.zpd-q-text{font-size:15px;font-weight:600;color:var(--ink);padding:0;margin:0 0 4px}
+.zpd-opt{display:flex;align-items:flex-start;gap:8px;min-height:32px;padding:4px 0;font-size:14.5px;line-height:1.4;color:var(--ink);cursor:pointer}
+.zpd-opt-text{min-width:0;overflow-wrap:anywhere}
+.zpd-opt .zpd-input{flex:none;width:18px;height:18px;margin:2px 0 0;accent-color:var(--ink)}
+.zpd-more-label{display:grid;gap:4px;font-size:12.5px;color:var(--ink-mut);margin-top:4px}
+.zpd-more,.zpd-text{width:100%;box-sizing:border-box;font:inherit;font-size:14.5px;color:var(--ink);background:var(--paper);border:1px solid var(--rule2);border-radius:4px;padding:8px 10px}
+.zpd-text{resize:vertical;min-height:84px}
+.zpd-more:focus-visible,.zpd-text:focus-visible,.zpd-input:focus-visible,.zpd-submit:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.zpd-note{font-size:13px;color:var(--ink-mut);margin:0;max-width:80ch}
+.zpd-note--block{padding:10px 12px;border:1px dashed var(--rule2);border-radius:4px}
+.zpd-submit{justify-self:start;min-height:44px;padding:10px 22px;font:inherit;font-size:14.5px;font-weight:600;color:var(--paper);background:var(--ink);border:1px solid var(--ink);border-radius:4px;cursor:pointer}
+.zpd-submit:hover:not(:disabled){opacity:.88}
+.zpd-submit:disabled{opacity:.55;cursor:default}
+.zpd-status{margin:0;min-height:1.4em;font-size:14px;color:var(--ink)}
+.zpd-status.is-ok{color:var(--good);font-weight:600}
+.zpd-status.is-err{color:var(--bad);font-weight:600}
+.zpd-status.is-wait{color:var(--ink-mut)}
+.zpd-agg{font-family:var(--sans);margin-top:20px;padding-top:16px;border-top:1px solid var(--rule)}
+.zpd-agg-head{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-mut);margin:0 0 10px}
+.zpd-agg-q{margin:0 0 18px}
+.zpd-agg-q-text{font-size:14.5px;font-weight:600;color:var(--ink);margin:0 0 6px}
+.zpd-bars{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.zpd-bar{display:grid;grid-template-columns:minmax(0,14em) minmax(0,1fr) auto;align-items:center;gap:10px;font-size:13.5px;margin:0}
+.zpd-bar-label{color:var(--ink);overflow-wrap:anywhere}
+.zpd-bar-track{display:block;height:10px;background:var(--paper2);border-radius:2px;overflow:hidden}
+.zpd-bar-fill{display:block;height:100%;width:var(--w,0%);background:var(--ink);border-radius:2px}
+.zpd-bar-val{color:var(--ink-mut);font-variant-numeric:tabular-nums;white-space:nowrap}
+@media (max-width:520px){
+  .zpd-bar{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"l v" "t t"}
+  .zpd-bar-label{grid-area:l}
+  .zpd-bar-val{grid-area:v}
+  .zpd-bar-track{grid-area:t}
+  .zpd-submit{justify-self:stretch}
+}
+@media print{
+  .zpd-form{display:none}
+  .zpd-agg{break-inside:avoid}
+}
