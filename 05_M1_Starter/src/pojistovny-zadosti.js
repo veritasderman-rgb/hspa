@@ -242,11 +242,18 @@ export function renderZadosti(data, dnes = todayIso()) {
   const list = data && Array.isArray(data.zadosti) ? data.zadosti : null;
   if (!list) return '<div class="zpz-root"><p class="zpc-note">Registr žádostí se nepodařilo načíst.</p></div>';
   const sum = zadostiSummary(list, dnes);
+  const c = sum.counts;
+  const sent = list.length ? c.odeslana + c.odpovezeno + c['po-lhute'] + c['bez-odpovedi'] : 0;
+  // Dokud nic neodešlo, stránka neukazuje matici „připraveno k odeslání“ (nic neříká);
+  // jen jednu větu a sbalenou evidenci. Matice se objeví s prvním odeslaným dotazem.
+  const lead = list.length && sent === 0
+    ? `Zatím nebyl odeslán žádný dotaz; kolo ${sum.maxKolo ?? 1} se připravuje (${list.length} dotazů). Dotazy odesílá člověk, ne AI (metodika § 4.3); lhůta běží ode dne odeslání.`
+    : leadText(sum);
   return '<div class="zpz-root">'
     + '<h3 class="section-title"><span>Dotazy a žádosti pojišťovnám</span></h3>'
-    + `<p class="zpz-lead">${esc(leadText(sum))}</p>`
-    + matrixHtml(list, dnes, sum.maxKolo)
-    + `<details class="zpc-acc zpz-acc"><summary>Evidence žádostí a lhůt · ${list.length}</summary><div class="zpc-acc-body">${tableHtml(list, dnes)}`
+    + `<p class="zpz-lead">${esc(lead)}</p>`
+    + (sent > 0 ? matrixHtml(list, dnes, sum.maxKolo) : '')
+    + `<details class="zpc-acc zpz-acc"><summary>Evidence žádostí a lhůt · ${list.length}</summary><div class="zpc-acc-body">${sent > 0 ? '' : matrixHtml(list, dnes, sum.maxKolo)}${tableHtml(list, dnes)}`
     + '<p class="zpc-note">Lhůta u žádosti podle zákona 106 je 15 dní od přijetí žádosti; u nabídky spolupráce a u návrhu verdiktu (právo na odpověď, 10 dní před zveřejněním) ji stanoví metodika. '
     + 'Registr pro jednoduchost počítá dny do konce lhůty od data odeslání. Plné znění odpovědí se zveřejňuje bez úprav (metodika § 4.2).</p></div></details>'
     + '</div>';

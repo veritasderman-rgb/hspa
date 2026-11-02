@@ -1,0 +1,130 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-11-02T22:00:00Z",
+  "stav_k": "2026-11-02",
+  "_doc": "Inventář indikátorů a datových zdrojů o zdravotních pojišťovnách pro stránku pojistovny-indikatory.html. Čitelná podoba a rozbor: docs/pojistovny-indikatory.md (P5.5). Sekce kontrakt[] nese jen id a granularitu; název, jednotku, rok, zdroj a stav ověření doplní stránka za běhu z data/indicators.json (zdroj pravdy). Regulární výraz v auto_dotaz řídí seznam indikátorů, které vznikají z dat pojišťoven (NRHZS), ale pojišťovnu jako rozměr nemají. Kódy ZP: 111 VZP ČR · 201 VoZP · 205 ČPZP · 207 OZP · 209 ZPŠ · 211 ZP MV ČR · 213 RBP.",
+  "strucne": [
+    "Kdo je u koho pojištěn, říká jediný veřejný zdroj s plnou strukturou: ÚZIS, Centrální registr pojištěnců, datový souhrn OIS 11-47 (NZIP, Dimenze 5): rok × pojišťovna × okres × 19 věkových pásem × pohlaví, 2010–2025.",
+    "Datový kontrakt HSPA (data/indicators.json) nemá jediný indikátor s rozměrem „pojišťovna“: všechny hodnoty jsou za ČR nebo za kraj. Pojišťovny jako rozměr žijí mimo kontrakt, v datech srovnávače.",
+    "Rozpad podle pojišťovny v repu: kmen 2010–2025 (kraj × ZP), věk × pohlaví 2025, hospodaření 2024 (MZ + MF), část 2025 (VZ), plán 2026 (sněmovní tisk 280), struktura fondu prevence, plán úhrad podle segmentů 2024 (ZPP).",
+    "Chybí: měsíční počty pojištěnců per ZP, přestupy mezi pojišťovnami, podíl státních pojištěnců, skutečné nákladové indexy přerozdělení, věková struktura z výročních zpráv většiny pojišťoven."
+  ],
+  "kontrakt": {
+    "_doc": "Indikátory kontraktu, které se pojišťoven týkají přímo (1.1), jako kontext financování (1.2) nebo mají pojištěnce ve jmenovateli či zdroj u pojišťovny (1.3). granularita = za co hodnota je; per_zp = false u všech.",
+    "skupiny": [
+      {
+        "id": "primo",
+        "nazev": "Přímo o veřejném zdravotním pojištění a pojišťovnách",
+        "polozky": [
+          { "id": "uhrada_zp_per_pojistenec", "granularita": "ČR (součet 7 ZP); per ZP jen v textu metodické karty: VZP 47 998 Kč, zaměstnanecké v průměru 44 604 Kč" },
+          { "id": "podil_vydaje_luzkova_pece", "granularita": "ČR; zdrojová sada OIS-11-24 má ZP i okres zařízení, indikátor ne" },
+          { "id": "podil_vydaje_ambulantni_pece", "granularita": "ČR (OIS-11-24)" },
+          { "id": "podil_vydaje_leky", "granularita": "ČR (OIS-11-24)" },
+          { "id": "naklady_centrove_leky_total", "granularita": "ČR (OIS-11-06, NRHZS)" },
+          { "id": "vydaje_sprava_systemu_pct", "granularita": "ČR; SHA HC.7 zahrnuje chod pojišťoven" },
+          { "id": "podfinancovani_oblastni_interna_cm", "granularita": "ČR (poskytovatelé, ne pojišťovny)" }
+        ]
+      },
+      {
+        "id": "financovani",
+        "nazev": "Financování a finanční ochrana pojištěnce (kontext, ne o pojišťovnách)",
+        "polozky": [
+          { "id": "vydaje_zdravotnictvi_hdp", "granularita": "ČR" },
+          { "id": "vydaje_prevence_pct", "granularita": "ČR; SHA HC.6, není fond prevence pojišťoven" },
+          { "id": "vydaje_leky_hdp", "granularita": "ČR" },
+          { "id": "platba_z_kapsy_pct", "granularita": "ČR" },
+          { "id": "doplatky_leky_na_obyvatele", "granularita": "ČR" },
+          { "id": "katastroficke_vydaje_zdravi", "granularita": "ČR" },
+          { "id": "vydaje_dusevni_zdravi_pct", "granularita": "ČR" }
+        ]
+      },
+      {
+        "id": "pojistenec",
+        "nazev": "Pojištěnec jako jmenovatel, nebo zdroj u jedné pojišťovny",
+        "polozky": [
+          { "id": "registrovani_na_uvazek_pld", "granularita": "ČR (OIS-11-20)" },
+          { "id": "nemoci_z_povolani_neinfekcni", "granularita": "ČR; na 100 tis. pojištěnců" },
+          { "id": "cekaci_doba_kycel", "granularita": "ČR, ale zdroj je jediná pojišťovna (VZP ČR); bez stavu ověření" },
+          { "id": "cekaci_doby_specialist", "granularita": "ČR + kraje v data/regions.json" }
+        ]
+      }
+    ],
+    "auto_dotaz": {
+      "_doc": "Indikátory, jejichž zdroj (source.name v kontraktu nebo data_source/source v metodické kartě) odpovídá výrazu, nebo jejichž název zmiňuje pojišťovny. Vznikají z výkazů všech sedmi pojišťoven (NRHZS), ale pojišťovna v hodnotě nezůstává. Stránka je vypíše za běhu.",
+      "regex_zdroj": "VZP|pojišťov|NRHZS|KZP|SZP|ZFZP|v\\.z\\.p|veřejného zdravotního pojištění|OIS-11-(06|24|20|47)",
+      "regex_nazev": "pojišť|pojistn|\\bZP\\b"
+    }
+  },
+  "datasety": {
+    "_doc": "Datové sady v repu, které mají rozměr pojišťovna (nebo ho mají jen surově a transformace ho zahazuje).",
+    "polozky": [
+      { "k": "A", "soubor": "Datovy-souhrn-OIS-11-47-zdravotni-pojistenci-struktura-2026-01.csv (kořen repa, 15 MB)", "dimenze": "rok × ZP × okres × věk (19 pásem) × pohlaví", "roky": "2010–2025", "zdroj": "ÚZIS · CRP, OIS 11-47", "aktualizace": "ručně (soubor se nahrává ručně)", "web": "přímo ne; vstup pro B–F", "per_zp": "ano" },
+      { "k": "B", "soubor": "data/pojistenci-d5-zp.json", "dimenze": "kraj (14) × rok × ZP (7): počty, podíly, celkem", "roky": "2010–2025", "zdroj": "totéž", "aktualizace": "npm run transform:pojistenci (ručně)", "web": "pojistenci.html (tržní podíly), financovani.html, pojistovny-kmen.html (mapa kraj × ZP)", "per_zp": "ano" },
+      { "k": "C", "soubor": "data/pojistenci-d5-kraj.json", "dimenze": "kraj × rok × věk × pohlaví, bez ZP", "roky": "2010–2025", "zdroj": "totéž", "aktualizace": "totéž", "web": "pojistenci.html (mapa, pyramida)", "per_zp": "ne" },
+      { "k": "D", "soubor": "data/pojistenci-d5-okres.json", "dimenze": "okres (77) × rok × věk × pohlaví, bez ZP", "roky": "2010–2025", "zdroj": "totéž", "aktualizace": "totéž", "web": "pojistenci.html (drill-down)", "per_zp": "ne" },
+      { "k": "E", "soubor": "ingest/manual/pojistovny/crp-agregaty-2025.json", "dimenze": "ZP × rok (absolutně, podíl) + 2025: podíl 65+/80+/0–14, růst, top kraje", "roky": "2010–2025", "zdroj": "totéž", "aktualizace": "ruční agregát", "web": "vstup pojistovny.json (blok crp)", "per_zp": "ano" },
+      { "k": "F", "soubor": "data/pojistovny-vek.json", "dimenze": "ZP × 19 pásem × pohlaví, součet přes okresy", "roky": "jen 2025", "zdroj": "totéž", "aktualizace": "npm run data:pojistovny-crp", "web": "vstup standardizace (metodika § 4.1)", "per_zp": "ano" },
+      { "k": "G", "soubor": "data/pojistovny.json", "dimenze": "ZP × hospodaření, prevence, servis, semafor", "roky": "2024 (+ část 2025, plán 2026)", "zdroj": "MZ + MF Hodnocení v.z.p. 2024, VZ, ZPP 2026", "aktualizace": "ručně, validátor ingest/validate-pojistovny.js", "web": "celý srovnávač", "per_zp": "ano" },
+      { "k": "H", "soubor": "ingest/manual/pojistovny/zdroje-vz-2024.json, nakladove-indexy-2024.json, vz-text/*.txt", "dimenze": "podkladové tabulky z VZ 2024; váhy standardizace (placeholder); přepisy 20 výročních zpráv", "roky": "2024", "zdroj": "VZ, MZ", "aktualizace": "ručně; ověření čísel npm run verify:pojistovny", "web": "vstup G; blok Ověření proti VZ na stránce Metodika", "per_zp": "ano" },
+      { "k": "I", "soubor": "data/financing.json → by_payer + ingest/manual/zpp/{kod}-2024.json", "dimenze": "ZP × 8 segmentů péče, plán ZPP 2024", "roky": "2024", "zdroj": "ZPP 2024 (sněmovní tisky, weby ZP)", "aktualizace": "ručně („kalibrováno“), parser ingest/fetchers/zpp_pdf.js", "web": "financovani.html (renderPayersComparison)", "per_zp": "ano" },
+      { "k": "J", "soubor": "data/pojistovny-prevence.json", "dimenze": "ZP × oblasti prevence, struktura fondu prevence, odpovědi z VZ", "roky": "2024", "zdroj": "weby ZP, VZ", "aktualizace": "ručně", "web": "pojistovny-prevence.html", "per_zp": "ano" },
+      { "k": "K", "soubor": "data/pojistovny-aplikace.json, pojistovny-otazky.json, pojistovny-dotaznik-agregaty.json, pojistovny-sit.json", "dimenze": "aplikace ZP; sady otázek; agregáty dotazníků; síť odborností (horní odhad)", "roky": "2026", "zdroj": "weby, VZ, dotazníky, NRPZS × ÚZIS", "aktualizace": "ručně / Neon", "web": "pojistovny-aplikace.html, -gramotnost.html, -kmen.html", "per_zp": "ano" },
+      { "k": "L", "soubor": "data/dohodovaci-rizeni.json (OIS-11-24)", "dimenze": "žebříček úhrad podle ZP", "roky": "2023, 2024 (pololetní dodávka)", "zdroj": "ÚZIS", "aktualizace": "npm run data:dohodovaci-rizeni", "web": "dohodovaci-rizeni.html", "per_zp": "ano" },
+      { "k": "M", "soubor": "03_Prezentace/Datovy-souhrn-OIS-11-24-naklady-zdravotni-pojistovny-segmenty-2026-01.xlsx", "dimenze": "ZP × segment × rok a ZP × segment × okres zařízení", "roky": "2023, 2024_pol", "zdroj": "ÚZIS · NRHZS", "aktualizace": "ručně uloženo; fetcher stahuje XLSX do cache", "web": "jen systémové součty (podil_vydaje_*)", "per_zp": "surově ano" },
+      { "k": "N", "soubor": "data/regions.json", "dimenze": "nic per ZP (45 datasetů kraj × ukazatel)", "roky": "–", "zdroj": "–", "aktualizace": "–", "web": "kraje.html", "per_zp": "ne" }
+    ]
+  },
+  "kdo_u_koho": {
+    "_doc": "Které údaje ukazují, kdo je u koho pojištěn: zdroj, co přesně měří, rozlišení, časový základ, kdo publikuje, stav v repu.",
+    "polozky": [
+      { "zdroj": "ÚZIS · CRP, datový souhrn OIS 11-47", "meri": "počet evidovaných pojištěnců", "rozliseni": "ZP × okres × věk (19 pásem) × pohlaví", "casovy_zaklad": "stav k datu (den ověřit v metodickém PDF sady)", "kdo": "ÚZIS/NZIP, 1–3 edice ročně, roky 2010–2025", "v_repu": "ano: CSV + datasety B–F, G (blok crp)", "url": "https://www.nzip.cz/data/2660-zdravotni-pojistenci-struktura-datovy-souhrn" },
+      { "zdroj": "MZ + MF, Hodnocení vývoje systému v.z.p.", "meri": "průměrný roční počet pojištěnců, příjmy, náklady, fondy per ZP (hotovostní metodika)", "rozliseni": "ZP × rok, bez věku a regionu", "casovy_zaklad": "průměr za rok", "kdo": "MZ, 1× ročně (květen–červen za rok N−1); za 2025 dosud nezveřejněno", "v_repu": "ano za 2024: hospodareni.* (7 ZP)", "url": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf" },
+      { "zdroj": "Výroční zprávy pojišťoven (vyhláška 362/2010 Sb.)", "meri": "počet pojištěnců k 31. 12., vlastní vykazování, někdy věková struktura", "rozliseni": "ZP × rok (někdy kraj)", "casovy_zaklad": "typicky 31. 12.", "kdo": "každá ZP zvlášť v PDF, květen–říjen; formáty nesrovnatelné", "v_repu": "částečně: VZ 2024 (7 ZP) a VZ 2025 jen VZP, VoZP, OZP (hospodareni_2025); přepisy 20 VZ v ingest/manual/pojistovny/vz-text", "url": null },
+      { "zdroj": "Zdravotně pojistné plány (sněmovní tisky)", "meri": "plánovaný průměr pojištěnců, příjmy, výdaje, rezervy", "rozliseni": "ZP × rok", "casovy_zaklad": "plán", "kdo": "ročně v srpnu; tisk 280 = ZPP 2026", "v_repu": "částečně: zůstatky a plán 2026 v pojistovny.json, úhrady podle segmentů 2024 ve financing.by_payer; plánované počty pojištěnců nezachyceny", "url": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280" },
+      { "zdroj": "MZ, měsíční přerozdělení pojistného", "meri": "výsledná částka po přerozdělení na pojišťovnu (tis. Kč) a na jednoho pojištěnce (Kč), 100% výběr pojistného podle pojišťoven; měsíčně od ledna 2022", "rozliseni": "ZP × měsíc", "casovy_zaklad": "měsíc", "kdo": "MZ, přílohy PDF na stránce přerozdělování (aktualizace měsíčně; ověřeno 2. 11. 2026: soubory prerozdelovani_pojistenec_vysledek_YYYY_MM.pdf, prerozdelovani_pojistovna_vysledek_YYYY_MM.pdf, prerozdelovani_pojistovna_vyber_YYYY_MM.pdf)", "v_repu": "ne; podíl částky na pojištěnce k průměru všech pojišťoven je oficiální měřítko nákladovosti kmene (věk, pohlaví, farmaceuticko-nákladové skupiny), použitelné místo chybějících nákladových indexů (otevřená otázka standardizace)", "url": "https://mzd.gov.cz/prerozdelovani-pojistneho-na-verejne-zdravotni-pojisteni/" }
+    ],
+    "odpovedi": [
+      { "otazka": "Kolik pojištěnců má která pojišťovna dnes / v roce X", "odpoved": "ano (CRP), 2010–2025" },
+      { "otazka": "V kterém kraji / okrese", "odpoved": "kraj ano; okres jen v surovém CSV (okresní dataset pojišťovnu nezná)" },
+      { "otazka": "Jak jsou staří a jakého pohlaví", "odpoved": "ano pro 2025; pro jiné roky a okres jen v CSV" },
+      { "otazka": "Jak se kmen mění v čase", "odpoved": "ročně ano; měsíčně ne (MZ publikuje jen částky, ne počty)" },
+      { "otazka": "Kdo od koho odešel / přestoupil", "odpoved": "ne: z ročních stavů jde odhadnout jen čistá změna; hrubé toky nikde veřejně nejsou" },
+      { "otazka": "Kolik pojištěnců je státních (platí stát)", "odpoved": "ne per ZP" },
+      { "otazka": "Příjmy na pojištěnce po přerozdělení", "odpoved": "ano 2024 ročně (MZ Hodnocení); měsíčně v PDF MZ, v repu ne" }
+    ]
+  },
+  "navrhy": {
+    "_doc": "Navržené indikátory per pojišťovna (prefix zp_). V kontraktu by potřebovaly nový rozměr (třída C); do té doby jako pole v data/pojistovny.json. v_repu = jde spočítat z toho, co už v repu leží.",
+    "polozky": [
+      { "id": "zp_pojistenci", "nazev": "Počet pojištěnců (stav)", "zdroj": "CRP OIS 11-47", "granularita": "ZP × rok 2010–2025", "v_repu": "ano" },
+      { "id": "zp_podil_trhu_pct", "nazev": "Tržní podíl", "zdroj": "CRP", "granularita": "ZP × rok, ZP × kraj", "v_repu": "ano" },
+      { "id": "zp_podil_65plus_pct", "nazev": "Podíl pojištěnců 65+ (a 80+)", "zdroj": "CRP", "granularita": "ZP × rok", "v_repu": "ano pro 2025; jiné roky z CSV" },
+      { "id": "zp_prumerny_vek", "nazev": "Odhadovaný průměrný věk kmene", "zdroj": "CRP", "granularita": "ZP × rok", "v_repu": "ano 2025 (odhad ze středů pásem)" },
+      { "id": "zp_rust_kmene_pct", "nazev": "Růst kmene za 10 let / index 2010 = 100", "zdroj": "CRP", "granularita": "ZP", "v_repu": "ano" },
+      { "id": "zp_naklady_na_pojistence_kc", "nazev": "Náklady na zdravotní služby na pojištěnce", "zdroj": "MZ Hodnocení v.z.p.", "granularita": "ZP × rok", "v_repu": "ano 2024; 2025 jen VZP, VoZP, OZP" },
+      { "id": "zp_naklady_na_pojistence_std_kc", "nazev": "Totéž věkově a pohlavně standardizované", "zdroj": "CRP + nákladové indexy přerozdělení (nebo index z měsíčního přerozdělení MZ)", "granularita": "ZP × rok", "v_repu": "částečně: kód ano, váhy ne (placeholder)" },
+      { "id": "zp_provozni_naklady_pct", "nazev": "Výdaje na vlastní činnost / výdaje celkem; vedle toho zákonný limit nákladů na činnost (každá ZP má vlastní)", "zdroj": "MZ Tab. 4, VZ", "granularita": "ZP × rok", "v_repu": "ano 2024; limit u 3 ze 7 chybí" },
+      { "id": "zp_rezerva_pct_vydaju", "nazev": "Zůstatek na všech bankovních účtech jako % ročních výdajů (ZFZP se nepřičítá)", "zdroj": "MZ Tab. 6, ZPP tab. 9", "granularita": "ZP × rok", "v_repu": "ano" },
+      { "id": "zp_hospodarsky_vysledek_mld", "nazev": "Hospodářský výsledek (příjmy − výdaje)", "zdroj": "MZ Tab. 2 a 4", "granularita": "ZP × rok", "v_repu": "ano 2024" },
+      { "id": "zp_fond_prevence_na_pojistence_kc", "nazev": "Fond prevence na pojištěnce (a % příjmů)", "zdroj": "MZ, VZ", "granularita": "ZP × rok", "v_repu": "ano 2024 (+ 2025 VZP, VoZP, OZP); podle PS 7. 10. 2026 není hlavní ukazatel" },
+      { "id": "zp_prijmy_na_pojistence_kc", "nazev": "Pojistné po přerozdělení na pojištěnce", "zdroj": "MZ (ročně i měsíčně)", "granularita": "ZP × rok; ZP × měsíc", "v_repu": "ano 2024 ročně; měsíčně ne" },
+      { "id": "zp_uhrady_segment_podil", "nazev": "Podíl lůžkové / ambulantní / léků v úhradách pojišťovny", "zdroj": "ÚZIS OIS 11-24", "granularita": "ZP × segment × rok (okres zařízení)", "v_repu": "surově ano, zpracované jen za ČR; plán 2024 ve financing.by_payer" },
+      { "id": "zp_kmen_okres_podil", "nazev": "Podíl pojišťovny v okrese (kdo je u koho pojištěn „na mapě“)", "zdroj": "CRP", "granularita": "ZP × okres × rok", "v_repu": "surově ano (CSV), nezpracováno" },
+      { "id": "zp_kmen_vek_kraj", "nazev": "Věková struktura kmene pojišťovny v kraji", "zdroj": "CRP", "granularita": "ZP × kraj × věk", "v_repu": "surově ano, nezpracováno" },
+      { "id": "zp_pojistenci_mesicni", "nazev": "Měsíční počty pojištěnců (a změna proti minulému měsíci)", "zdroj": "MZ přerozdělení / KZP (neověřeno, že počty publikují)", "granularita": "ZP × měsíc", "v_repu": "ne" },
+      { "id": "zp_prestupy", "nazev": "Přestupy mezi pojišťovnami (příchozí / odchozí / saldo za rok)", "zdroj": "KZP / ZP / MZ (neověřeno)", "granularita": "ZP × rok", "v_repu": "ne" },
+      { "id": "zp_statni_podil_pct", "nazev": "Podíl státních pojištěnců v kmeni", "zdroj": "MF / MZ / ZP (neověřeno)", "granularita": "ZP × rok", "v_repu": "ne" },
+      { "id": "zp_cizinci_docasna_ochrana", "nazev": "Počet pojištěnců s dočasnou ochranou", "zdroj": "MZ / VZP (v tisku 70 jen u VZP)", "granularita": "ZP", "v_repu": "ne" },
+      { "id": "zp_cekaci_doby", "nazev": "Čekací doby na vybrané výkony podle pojišťovny", "zdroj": "žádosti 106, data VZP", "granularita": "ZP", "v_repu": "ne (jen cekaci_doba_kycel z VZP)" },
+      { "id": "zp_pokryti_screeningu", "nazev": "Pokrytí screeningem podle pojišťovny pojištěnce", "zdroj": "NRHZS (obsahuje kód ZP)", "granularita": "ZP × kraj", "v_repu": "ne; zjistit, zda sady NZIS Open pojišťovnu rozlišují" },
+      { "id": "zp_zamestnanci_na_10k", "nazev": "Přepočtení zaměstnanci na 10 tis. pojištěnců", "zdroj": "VZ", "granularita": "ZP", "v_repu": "ano (zamestnanci_prepocteni)" },
+      { "id": "zp_sit_odbornost_na_100k", "nazev": "Smluvní poskytovatelé dané odbornosti na 100 tis. pojištěnců (horní odhad)", "zdroj": "NRPZS × ÚZIS NR-04-64 (data/pojistovny-sit.json)", "granularita": "ZP × odbornost × kraj", "v_repu": "ano jako horní odhad; přesná síť jen žádostí podle § 106 na ÚZIS" }
+    ]
+  },
+  "mezery": [
+    "Aktuální stav CRP se do repa nahrává ručně (CSV v kořeni); fetcher nzip_dohodovaci_rizeni.js stahuje jen XLSX do cache a transform:pojistenci v žádném workflow neběží.",
+    "VZ 2025 chybí pro ČPZP, ZPŠ, ZP MV ČR, RBP; věková struktura chybí ve VZ všech pojišťoven kromě VZP a VoZP.",
+    "Ohlášená sada ÚZIS 5.3 „Náklady za zdravotní služby pro účely přerozdělování“ (NRHZS, plán: druhá polovina 2026 po validaci pojišťovnami) by dala skutečné váhy pro standardizaci; zatím nevyšla.",
+    "Měsíční PDF MZ o přerozdělení obsahují jen částky (na pojišťovnu a na pojištěnce), ne počty pojištěnců ani nákladové indexy; počty z nich jdou odvodit jen podílem, s chybou zaokrouhlení."
+  ]
+}

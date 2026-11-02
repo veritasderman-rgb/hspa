@@ -65,6 +65,7 @@ export const SITEMAP_EXCLUDED = {
   '/pojistovny-aplikace.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, podstránka pod heslem' },
   '/pojistovny-gramotnost.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, podstránka pod heslem' },
   '/pojistovny-metodika.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, podstránka pod heslem' },
+  '/pojistovny-indikatory.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, podstránka pod heslem' },
 };
 
 // Kurátorovaný seznam statických (sekčních) stránek.

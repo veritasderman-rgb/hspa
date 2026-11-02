@@ -31,8 +31,8 @@ const KODY = ['111', '201', '205', '207', '209', '211', '213'];
 
 // ---------------------------------------------------------------- shell
 
-test('shell: šest stránek v pořadí záložek, soubory existují, podstránky mají větu a „co tam najdu“', () => {
-  assert.deepEqual(ZP_STRANKY.map((s) => s.id), ['prehled', 'kmen', 'prevence', 'aplikace', 'gramotnost', 'metodika']);
+test('shell: sedm stránek v pořadí záložek, soubory existují, podstránky mají větu a „co tam najdu“', () => {
+  assert.deepEqual(ZP_STRANKY.map((s) => s.id), ['prehled', 'kmen', 'prevence', 'aplikace', 'gramotnost', 'metodika', 'indikatory']);
   for (const s of ZP_STRANKY) {
     assert.ok(fs.existsSync(path.join(ROOT, s.href)), s.href);
     if (s.id !== 'prehled') assert.ok(s.veta && s.co && s.kicker, s.id);
@@ -43,7 +43,7 @@ test('shell: šest stránek v pořadí záložek, soubory existují, podstránky
 
 test('shell: záložky — aktivní s aria-current="page", jinak žádná; pásek a kicker', () => {
   const html = zpTabsHtml('prevence');
-  assert.equal(count(html, /<a class="zpc-tab"/g), 6);
+  assert.equal(count(html, /<a class="zpc-tab"/g), 7);
   assert.equal(count(html, /aria-current="page"/g), 1);
   assert.match(html, /href="pojistovny-prevence\.html" aria-current="page">Prevence</);
   assert.match(html, /<nav class="zpc-tabs" aria-label="Témata srovnávače">/);
@@ -129,7 +129,7 @@ test('přehled: buildPrehled — tři dlaždice, čtyři grafy (podíl, rezervy,
   assert.match(out.grafy, /Celé téma<span class="sr-only">: Kmen a hospodaření<\/span>/);
   assert.equal(count(out.grafy, /data-zp="111"/g) > 3, true, 'marky nesou data-zp');
   assert.match(out.semafor, /zatím nehodnoceno/);
-  assert.equal(count(out.temata, /class="zpc-tema-card"/g), 5);
+  assert.equal(count(out.temata, /class="zpc-tema-card"/g), 6);
   // bez dat nepadá
   const empty = buildPrehled({ d: null, a: null, p: null });
   assert.equal(empty.grafy, '');
@@ -140,7 +140,7 @@ test('přehled: rozcestník — karty podstránek s kickerem, názvem, větou a 
   const html = temaKartyHtml();
   for (const s of ZP_STRANKY.filter((x) => x.id !== 'prehled')) assert.match(html, new RegExp(`href="${s.href}"`));
   assert.doesNotMatch(html, /href="pojistovny\.html"/);
-  for (const c of ['zpc-tema-kicker', 'zpc-tema-title', 'zpc-tema-veta', 'zpc-tema-co']) assert.equal(count(html, new RegExp(c, 'g')), 5, c);
+  for (const c of ['zpc-tema-kicker', 'zpc-tema-title', 'zpc-tema-veta', 'zpc-tema-co']) assert.equal(count(html, new RegExp(c, 'g')), 6, c);
 });
 
 // ---------------------------------------------------------------- síť odborností

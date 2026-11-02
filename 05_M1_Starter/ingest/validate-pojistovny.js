@@ -362,6 +362,18 @@ export function validateAll(datasets) {
           if (s?.[f] != null) ok(isStr(s[f]), `${tag}.${f}: neprázdný string`);
         }
         if (s?.kanal != null) ok(KANALY.includes(s.kanal), `${tag}.kanal: ${KANALY.join(' | ')} (je '${s.kanal}')`);
+        // vyhodnocovací metodika sady (Metodika a semafor → Návrh dotazníků)
+        if (s?.vyhodnoceni != null) {
+          const v = s.vyhodnoceni;
+          const vt = `${tag}.vyhodnoceni`;
+          if (ok(isObj(v), `${vt}: musí být objekt {oblasti, vstup, pravidla, vystup}`)) {
+            ok(Array.isArray(v.oblasti) && v.oblasti.length > 0 && v.oblasti.every((x) => OBLASTI.includes(x)),
+              `${vt}.oblasti: neprázdné pole z ${OBLASTI.join(' | ')}`);
+            ok(isStr(v.vstup), `${vt}.vstup: neprázdný string`);
+            ok(isStr(v.vystup), `${vt}.vystup: neprázdný string`);
+            ok(Array.isArray(v.pravidla) && v.pravidla.length > 0 && v.pravidla.every(isStr), `${vt}.pravidla: neprázdné pole stringů`);
+          }
+        }
         if (s?.povolene_respondenty != null) {
           ok(Array.isArray(s.povolene_respondenty) && s.povolene_respondenty.length > 0
             && s.povolene_respondenty.every((t) => RESPONDENT_TYPY.includes(t)),

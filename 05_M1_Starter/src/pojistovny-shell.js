@@ -48,12 +48,17 @@ export const ZP_STRANKY = [
   {
     id: 'gramotnost', href: 'pojistovny-gramotnost.html', label: 'Zdravotní gramotnost', kicker: 'V přípravě · druhé téma PS',
     veta: 'Jak pojišťovny hledají rizikové pojištěnce a podporují zdravotní gramotnost.',
-    co: 'Rizikové skupiny, dotazník kola 2, souhrnné odpovědi',
+    co: 'Rizikové skupiny, návrh dotazníků, souhrnné odpovědi',
   },
   {
     id: 'metodika', href: 'pojistovny-metodika.html', label: 'Metodika a semafor', kicker: 'Derivát metodiky Barometru',
     veta: 'Šest oblastí, čtyři stavy a právo pojišťovny na odpověď; registr žádostí a ověření čísel.',
-    co: 'Semafor 7 × 6, stanoviska, žádosti, ověření proti VZ, plán',
+    co: 'Semafor 7 × 6, návrh dotazníků a vyhodnocení, stanoviska, žádosti, ověření proti VZ, plán',
+  },
+  {
+    id: 'indikatory', href: 'pojistovny-indikatory.html', label: 'Indikátory a data', kicker: 'Inventář · stav k 2. 11. 2026',
+    veta: 'Které údaje říkají, kdo je u koho pojištěn, které indikátory se pojišťoven týkají a jak pojišťovny publikují otevřená data.',
+    co: 'Zdroje o kmeni, indikátory kontraktu, datové sady, navržené ukazatele, audit open dat',
   },
 ];
 

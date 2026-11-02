@@ -1,6 +1,6 @@
 {
   "version": "0.2.0",
-  "generated_at": "2026-11-02T20:00:00Z",
+  "generated_at": "2026-11-02T21:33:23.534Z",
   "changelog": [
     {
       "datum": "2026-11-02",
@@ -16,6 +16,11 @@
       "datum": "2026-11-02",
       "zmena": "Znění dotazníků pro všechny fáze srovnávače (docs/pojistovny-dotazniky.md): revize sad fond-prevence (7 otázek s formátem odpovědi a nápovědou, co je doloženo) a rizikovi-pojistenci (části A–C přepracované, nová část D Zdravotní gramotnost, 14 otázek); nové sady aplikace-privetivost (interní hodnoticí list), napo-pacientske-organizace, pojistenci-anketa, pravo-na-odpoved a pobocky-definice. Nová volitelná pole sady faze, respondent, kanal, uvod a otázky napoveda, max_delka. Sady zatím nebyly rozeslány, proto zůstává verze 1.",
       "zdroj": "zadání vydavatele 2. 11. 2026"
+    },
+    {
+      "datum": "2026-11-02",
+      "zmena": "Každá sada má vyhodnocovací metodiku (pole vyhodnoceni: oblasti semaforu, vstup, pravidla, vystup): jak se z odpovědí odvozuje stav doloženo / deklarováno / nedoloženo / neodpověděla, co do semaforu nevstupuje (anketa, NAPO) a jaké prahy čekají na schválení PS. Znění otázek se nemění, verze sad zůstává 1.",
+      "zdroj": "zadání vydavatele 2. 11. 2026 (Metodika a semafor: návrh dotazníků včetně vyhodnocovací metodiky)"
     }
   ],
   "_doc": "Sady otázek srovnávače pojišťoven podle fází projektu (docs/pojistovny-dotazniky.md): kolo 1 fond prevence a pobočky, kolo 2 rizikoví pojištěnci a zdravotní gramotnost, interní hodnoticí list aplikací, dotazník NAPO pro pacientské organizace, veřejná anketa pro pojištěnce a právo na odpověď. kanal: web-token | web-verejnost | interni | dopis+web; interní sady se přes web nevyplňují.",
@@ -73,7 +78,21 @@
           "napoveda": "Doloženo: datum posledního vyhodnocení a alespoň jeden příklad rozhodnutí, které z něj vzešlo (zápis, změna podmínek programu, tisková zpráva).",
           "max_delka": 2000
         }
-      ]
+      ],
+      "vyhodnoceni": {
+        "oblasti": [
+          "prevence"
+        ],
+        "vstup": "Odpovědi pojišťovny na sedm otázek fp1–fp7 (dopis a web, lhůta 15 dnů); každá odpověď se zveřejní v plném znění.",
+        "pravidla": [
+          "Každá otázka dostane vlastní stav: doloženo = odpověď obsahuje to, co žádá nápověda (čísla s rokem a jednotkou, metodika nebo odkaz na ni); deklarováno = pojišťovna tvrdí, že program má nebo měří, ale čísla ani metodiku nepředložila; nedoloženo = odpověď k věci nic neříká, nebo ji vlastní data pojišťovny (VZ, ZPP) vyvracejí.",
+          "Stav oblasti Prevence s dopadem = stav otázek o dopadu a efektivitě (fp4, fp6, fp7), ne průměr všech sedmi: pojišťovna může mít nejširší nabídku (fp1) a přesto deklarováno, pokud dopad neměří. fp1–fp3 a fp5 popisují nabídku a slouží ke kontextu, ne k verdiktu.",
+          "Pravidlo nejslabšího článku: když je fp4 nebo fp6 nedoloženo, oblast je nejvýš deklarováno. Doloženo vyžaduje fp4, fp6 i fp7 doloženo.",
+          "Výše fondu prevence ani počet programů nejsou kritériem (rozhodnutí PS 7. 10. 2026). Kč na pojištěnce se ukazují jen jako kontext, věkově standardizované, jakmile budou váhy.",
+          "Bez odpovědi do 15 dnů od doručení následuje žádost podle zákona 106 se stejným zněním; bez odpovědi ani na ni = neodpověděla (stav neutral, ne bad)."
+        ],
+        "vystup": "Tabulka 7 pojišťoven × 7 otázek se stavy, plné znění odpovědí (ingest/manual/pojistovny/odpovedi/), návrh verdiktu oblasti Prevence s dopadem; zveřejnění až po právu na odpověď."
+      }
     },
     {
       "id": "rizikovi-pojistenci",
@@ -268,7 +287,22 @@
             }
           ]
         }
-      ]
+      ],
+      "vyhodnoceni": {
+        "oblasti": [
+          "prevence",
+          "servis"
+        ],
+        "vstup": "Odpovědi pojišťoven na 14 otázek v částech A–D (osobní odkaz, lhůta 15 dnů): identifikace rizikových skupin, oslovení a souhlas, měření výsledků, zdravotní gramotnost.",
+        "pravidla": [
+          "Části A a C vstupují do oblasti Prevence s dopadem: A je doloženo, když A5 uvádí počty k 31. 12. 2026 s kritériem zařazení pro skupiny z A1; C je doloženo, když C2 uvádí aspoň jeden výsledek s čísly u oslovených i ve srovnávací skupině. Zaškrtnuté možnosti bez A5 a C2 = deklarováno.",
+          "Část B se nehodnotí stupněm, ale kontrolou souladu: pojištěnec se musí mít jak dozvědět o zařazení a jak oslovování odmítnout (B3); chybějící odpověď na B3 se uvede jako otevřená otázka, ne jako verdikt (otázky souhlasu s profilováním řeší ÚOOÚ, ne srovnávač).",
+          "Část D vstupuje do oblasti Klientský servis: doloženo = materiály s odkazy, jazyky a nabídka pro 65+ dohledatelné na webu; deklarováno = zaškrtnuto bez odkazů; nedoloženo = nic k věci. D4 (spolupráce s pacientskými organizacemi) se křížově ověřuje s odpověďmi organizací v dotazníku NAPO.",
+          "Odpověď „rizikové skupiny aktivně nevyhledáváme“ v A1 není sama o sobě nedoloženo: je to doložený fakt, který se zveřejní. Nedoloženo je jen tvrzení bez podkladu.",
+          "Souhrnné počty za všechny pojišťovny se zveřejní od tří odpovědí; odpovědi jednotlivých pojišťoven v plném znění spolu s hodnocením po právu na odpověď."
+        ],
+        "vystup": "Tabulka částí A–D × 7 pojišťoven se stavy, plné znění odpovědí, návrh doplnění verdiktů v oblastech Prevence s dopadem a Klientský servis."
+      }
     },
     {
       "id": "aplikace-privetivost",
@@ -372,7 +406,20 @@
             }
           ]
         }
-      ]
+      ],
+      "vyhodnoceni": {
+        "oblasti": [
+          "servis"
+        ],
+        "vstup": "Hodnoticí list IT experta: stupeň 0 / 1 / 2 u šesti kritérií K1–K6 pro každou ze sedmi aplikací, na stejném zařízení ve stejném týdnu.",
+        "pravidla": [
+          "Skóre aplikace = součet stupňů K1–K6 (0–12 bodů). Nehodnotí se dopad ani oblíbenost, jen zda funkce existuje a jak je použitelná; K6 (hodnocení v obchodech) se bere k datu testu a nezaokrouhluje.",
+          "Návrh stavu pro oblast Klientský servis: 9–12 bodů a žádné kritérium na stupni 0 = doloženo; 5–8 bodů, nebo 9+ s jedním kritériem na 0 = deklarováno (funkce jsou, ale s omezením); 0–4 body = nedoloženo. Pojišťovna bez veřejně dostupné aplikace, nebo která testovací přístup odmítne, = neodpověděla.",
+          "Stupeň se zapisuje jen s datem, verzí aplikace a zařízením (část Z); bez nich se test nepočítá a opakuje se.",
+          "Prahy i kritéria schvaluje pracovní skupina 12. 11. 2026; do té doby se stupně nezveřejňují."
+        ],
+        "vystup": "Matice kritérií 7 × 6 a skóre na stránce Aplikace; po právu na odpověď (10 dní) návrh stavu v semaforu, oblast Klientský servis."
+      }
     },
     {
       "id": "napo-pacientske-organizace",
@@ -643,7 +690,25 @@
             }
           ]
         }
-      ]
+      ],
+      "vyhodnoceni": {
+        "oblasti": [
+          "prevence",
+          "dostupnost",
+          "sit",
+          "kvalita",
+          "servis",
+          "hospodareni"
+        ],
+        "vstup": "Hodnocení pacientských organizací (členů NAPO) na škále v šesti oblastech, vždy s pojišťovnou, ke které se vztahuje, a popis konkrétních zkušeností.",
+        "pravidla": [
+          "Za organizaci odpovídá organizace, ne jednotlivec; jedna organizace = jedna odpověď. Výsledky se počítají jako podíl odpovědí na každém stupni škály, zvlášť za oblast a za pojišťovnu.",
+          "Zveřejňují se jen souhrnné počty, a to od tří odpovědí na oblast a pojišťovnu (technické minimum proti dohledání respondenta); rozklad podle diagnózové oblasti až od pěti organizací.",
+          "Dotazník není verdikt: je to signál od pacientů, který se ukazuje vedle dat jako „pohled pacientských organizací“. Do semaforu nevstupuje přímo; opakovaně špatné hodnocení v oblasti otevře cílený dotaz pojišťovně (kolo 2) a zmíní se v návrhu verdiktu, ke kterému má pojišťovna právo na odpověď.",
+          "Volné texty (zkusenost) se nezveřejňují automaticky; redakce z nich může citovat jen se souhlasem organizace a bez údajů o konkrétním pacientovi."
+        ],
+        "vystup": "Blok „Pohled pacientských organizací“ u každé oblasti (podíly na škále, počet organizací), seznam otevřených otázek pro kolo 2."
+      }
     },
     {
       "id": "pojistenci-anketa",
@@ -783,7 +848,20 @@
             }
           ]
         }
-      ]
+      ],
+      "vyhodnoceni": {
+        "oblasti": [
+          "servis"
+        ],
+        "vstup": "Odpovědi veřejnosti bez registrace: pojišťovna, důvod volby, co chybí, využití fondu prevence a aplikace, spokojenost; kraj a věk nepovinně.",
+        "pravidla": [
+          "Anketa není průzkum: respondenti se vybírají sami, takže se výsledky nepřepočítávají na populaci a neuvádí se jako „spokojenost pojištěnců pojišťovny X“. Ukazují se jako „co říkají respondenti ankety“ s počtem odpovědí.",
+          "Souhrny se zveřejňují od tří odpovědí na sadu (technické minimum); rozklad podle pojišťovny až od 30 odpovědí na pojišťovnu, podle kraje až od 30 na kraj (návrh prahu pro PS). Pod prahem se ukazuje jen celkový součet.",
+          "Do semaforu anketa nevstupuje. Otázka „co vám chybí“ slouží jako zdroj témat pro dotazy pojišťovnám a pro dotazník NAPO; otázka „spokojenost“ se ukazuje jen celkově a vedle doložených dat.",
+          "Ochrana proti opakování: nejvýš pět odeslání z jedné adresy za 10 minut, bez ukládání IP; podezřelé série (stejná kombinace odpovědí v krátkém sledu) redakce z agregátů vyřadí a zapíše do changelogu."
+        ],
+        "vystup": "Souhrnné grafy na stránce Zdravotní gramotnost (podíly odpovědí, počet respondentů), seznam témat pro další kolo dotazů."
+      }
     },
     {
       "id": "pravo-na-odpoved",
@@ -825,7 +903,25 @@
           "napoveda": "Redakce text nekrátí ani neupravuje; jen ho podle oblastí rozdělí do pole stanovisko_pojistovny u příslušné oblasti. Bez stanoviska zveřejníme hodnocení s poznámkou, že pojišťovna právo na odpověď nevyužila.",
           "max_delka": 1500
         }
-      ]
+      ],
+      "vyhodnoceni": {
+        "oblasti": [
+          "prevence",
+          "dostupnost",
+          "sit",
+          "kvalita",
+          "servis",
+          "hospodareni"
+        ],
+        "vstup": "Stanovisko pojišťovny k návrhu verdiktů (oblasti, s nimiž nesouhlasí, doklady, text ke zveřejnění) do 10 dnů od doručení návrhu.",
+        "pravidla": [
+          "Stanovisko se zveřejní doslova a beze změn vedle verdiktu (pole stanovisko_pojistovny), i když s ním redakce nesouhlasí.",
+          "Doklady se posuzují stejnými pravidly jako původní odpověď: nový podklad, který splňuje nápovědu příslušné otázky, mění stav otázky i oblasti; názor bez podkladu stav nemění. Každá změna má záznam v changelogu s datem a důvodem.",
+          "Pokud pojišťovna do 10 dnů neodpoví, verdikt se zveřejní s poznámkou „bez stanoviska“; stanovisko doručené později se doplní a verdikt se případně přepočítá se stejným záznamem.",
+          "Verdikty schvaluje člověk (vydavatel, třída C); AI připravuje jen podklady a návrh."
+        ],
+        "vystup": "Zveřejněný semafor s verdikty, stanovisky pojišťoven a changelogem; žádný verdikt bez proběhlé lhůty."
+      }
     },
     {
       "id": "pobocky-definice",
@@ -865,7 +961,20 @@
           "napoveda": "Doloženo: soubor, ze kterého jdou čísla z otázek 1–3 spočítat. Pokud seznam zveřejňujete na webu ve strojově čitelné podobě (CSV, JSON), stačí stálý odkaz; budeme ho používat pro průběžnou aktualizaci.",
           "max_delka": 1000
         }
-      ]
+      ],
+      "vyhodnoceni": {
+        "oblasti": [
+          "servis"
+        ],
+        "vstup": "Počty míst podle jednotné definice (přepážka, úřední hodiny ≥ 3 dny v týdnu, partnerská místa) k 31. 12. 2026 a CSV seznam míst s adresou a hodinami.",
+        "pravidla": [
+          "Srovnává se jen to, co je podle stejné definice: počet míst s osobní přepážkou (prepazky) a míst s úředními hodinami alespoň 3 dny v týdnu (uredni-hodiny). Čísla z webů pojišťoven („pobočky“, „kontaktní místa“, „klientská centra“) se nesrovnávají, protože každá pojišťovna počítá něco jiného.",
+          "Odvozené ukazatele: místa na 100 tisíc pojištěnců (kmen CRP k témuž datu) a pokrytí krajů (počet krajů, kde má pojišťovna aspoň jedno místo s úředními hodinami ≥ 3 dny). Oba se ukazují vedle sebe, bez pořadí a bez známky; regionální pojišťovna s hustou sítí ve dvou krajích není horší než celostátní s řidší.",
+          "Doloženo = čísla i CSV seznam (seznam-csv) s úředními hodinami; deklarováno = jen čísla bez seznamu, nebo seznam bez hodin; nedoloženo = odpověď bez čísel k definici; po lhůtě i po žádosti 106 = neodpověděla.",
+          "Seznam se jednou ročně kontroluje namátkou (5 adres na pojišťovnu proti webu); rozpor se zapíše do changelogu, verdikt se nemění bez práva na odpověď."
+        ],
+        "vystup": "Tabulka míst podle definice a na 100 tisíc pojištěnců, mapa pokrytí krajů; vstup do oblasti Klientský servis (spolu s aplikacemi), ne samostatný verdikt."
+      }
     }
   ]
 }

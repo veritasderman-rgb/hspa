@@ -14,6 +14,8 @@
 | kolo 2 · Q2 2027 | `rizikovi-pojistenci` | zdravotní pojišťovny (všech 7, adresný odkaz s tokenem) | `web-token` | 14 |
 | od zveřejnění stránky (průběžně) | `pojistenci-anketa` | veřejnost, pojištěnci všech pojišťoven; bez tokenu a bez registrace | `web-verejnost` | 8 |
 
+Znění všech sad je v plném rozsahu i na webu: `pojistovny-gramotnost.html` → blok **Návrh dotazníků** (číslované 1–7 v pořadí fází, každá sada má kotvu `#dotaznik-<id>`; renderuje `otazkySadyHtml` v `src/pojistovny-prevence.js` přímo z JSON, takže web i tento dokument říkají totéž).
+
 ## Zásady pro všechny sady
 
 - **Pojišťovna je partner i předmět hodnocení.** Otázky jsou věcné, bez hodnoticích přívlastků a bez domněnek o motivech (GOVERNANCE § 2). Ptáme se na to, co jde doložit, ne na názor.
@@ -21,7 +23,7 @@
 - **Formát odpovědi je v otázce.** Roky, jednotky (tis. Kč, počet unikátních osob), datum stavu (31. 12.) a sloupce tabulky. Nápověda (`napoveda`) u otázky říká, co musí odpověď obsahovat, aby dostala stav `dolozeno`; formulář ji ukazuje pod otázkou.
 - **Žádné osobní údaje.** U adresných sad je respondentem instituce; veřejná anketa nemá volný text kromě krátkého upřesnění a nic, co by identifikovalo člověka. Zveřejňují se jen souhrny od tří odpovědí (metodika § 7).
 - **Kanály** (`kanal`): `web-token` (osobní odkaz `pojistovny-gramotnost.html?dotaznik=<sada>&token=<token>`), `web-verejnost` (bez tokenu), `dopis+web` (dopis s nabídkou spolupráce; odpověď písemně nebo přes odkaz), `interni` (vyplňuje redakce, web ani API ji nepřijmou).
-- **Pole sady:** `id`, `nazev`, `verze`, `typ` (`otevrene` | `dotaznik`), `faze`, `respondent`, `kanal`, `uvod`, u pojišťoven `pravni_zaklad`, volitelně `povolene_respondenty`. **Pole otázky:** `id`, `text`, volitelně `moznosti` + `vyber` (`jeden` | `vice`), `napoveda`, `max_delka` (1–2 000; platí pro text odpovědi i upřesnění). V dotazníku musí otevřená otázka mít `max_delka`, aby šlo poznat záměr od chybějící nabídky.
+- **Pole sady:** `id`, `nazev`, `verze`, `typ` (`otevrene` | `dotaznik`), `faze`, `respondent`, `kanal`, `uvod`, u pojišťoven `pravni_zaklad`, volitelně `povolene_respondenty`, a `vyhodnoceni` = `{oblasti[], vstup, pravidla[], vystup}`: jak se z odpovědí odvozuje stav semaforu (validuje `validate-pojistovny.js`; web ho ukazuje pod otázkami každé sady na stránce Metodika a semafor). **Pole otázky:** `id`, `text`, volitelně `moznosti` + `vyber` (`jeden` | `vice`), `napoveda`, `max_delka` (1–2 000; platí pro text odpovědi i upřesnění). V dotazníku musí otevřená otázka mít `max_delka`, aby šlo poznat záměr od chybějící nabídky.
 
 ## 1. Prosinec 2026: aplikace (interní hodnoticí list)
 
@@ -100,6 +102,17 @@ Sada `aplikace-privetivost` · typ `dotaznik` · verze 1 · 8 otázek
 
 **Co znamená „doloženo“.** Stupeň je doložený, když je u něj datum testu, zařízení a verze aplikace (část Z) a u K6 opsané průměry s počtem hodnocení. Co hodnotitel na zařízení neověřil, zůstává prázdné (`kriteria: {}` = zatím nehodnoceno), ne 0.
 
+**Vyhodnocení** (pole `vyhodnoceni`; oblast semaforu: Klientský servis a informování)
+
+_Vstup:_ Hodnoticí list IT experta: stupeň 0 / 1 / 2 u šesti kritérií K1–K6 pro každou ze sedmi aplikací, na stejném zařízení ve stejném týdnu.
+
+1. Skóre aplikace = součet stupňů K1–K6 (0–12 bodů). Nehodnotí se dopad ani oblíbenost, jen zda funkce existuje a jak je použitelná; K6 (hodnocení v obchodech) se bere k datu testu a nezaokrouhluje.
+2. Návrh stavu pro oblast Klientský servis: 9–12 bodů a žádné kritérium na stupni 0 = doloženo; 5–8 bodů, nebo 9+ s jedním kritériem na 0 = deklarováno (funkce jsou, ale s omezením); 0–4 body = nedoloženo. Pojišťovna bez veřejně dostupné aplikace, nebo která testovací přístup odmítne, = neodpověděla.
+3. Stupeň se zapisuje jen s datem, verzí aplikace a zařízením (část Z); bez nich se test nepočítá a opakuje se.
+4. Prahy i kritéria schvaluje pracovní skupina 12. 11. 2026; do té doby se stupně nezveřejňují.
+
+_Výstup:_ Matice kritérií 7 × 6 a skóre na stránce Aplikace; po právu na odpověď (10 dní) návrh stavu v semaforu, oblast Klientský servis.
+
 ## 2. Leden 2027: kolo 1 (fond prevence + pobočky)
 
 Obě sady jdou všem sedmi pojišťovnám v jednom dopise, týž den a ve stejném znění (metodika § 4 bod 2). Odpovídá se písemně (dokumenty jsou podkladem a zveřejňují se v plném znění) nebo přes formulář s tokenem. Před žádostí podle zákona č. 106/1999 Sb. je vždy dobrovolná nabídka spolupráce (§ 4 bod 3).
@@ -146,6 +159,18 @@ Sada `fond-prevence` · typ `otevrene` · verze 1 · 7 otázek
 
 **Co znamená „doloženo“.** Stav `dolozeno` dostane odpověď, ze které lze tvrzení ověřit a zopakovat: tabulka nebo dokument s čísly za oba roky, metodika výpočtu, srovnání s výchozím stavem. Tvrzení bez čísel je `deklarovano`, odpověď mimo otázku `nedolozeno`, žádná odpověď ani po výzvě `neodpovedela` (metodika § 3). Výše fondu ani počet programů kritériem nejsou (§ 4 bod 6).
 
+**Vyhodnocení** (pole `vyhodnoceni`; oblast semaforu: Prevence s dopadem)
+
+_Vstup:_ Odpovědi pojišťovny na sedm otázek fp1–fp7 (dopis a web, lhůta 15 dnů); každá odpověď se zveřejní v plném znění.
+
+1. Každá otázka dostane vlastní stav: doloženo = odpověď obsahuje to, co žádá nápověda (čísla s rokem a jednotkou, metodika nebo odkaz na ni); deklarováno = pojišťovna tvrdí, že program má nebo měří, ale čísla ani metodiku nepředložila; nedoloženo = odpověď k věci nic neříká, nebo ji vlastní data pojišťovny (VZ, ZPP) vyvracejí.
+2. Stav oblasti Prevence s dopadem = stav otázek o dopadu a efektivitě (fp4, fp6, fp7), ne průměr všech sedmi: pojišťovna může mít nejširší nabídku (fp1) a přesto deklarováno, pokud dopad neměří. fp1–fp3 a fp5 popisují nabídku a slouží ke kontextu, ne k verdiktu.
+3. Pravidlo nejslabšího článku: když je fp4 nebo fp6 nedoloženo, oblast je nejvýš deklarováno. Doloženo vyžaduje fp4, fp6 i fp7 doloženo.
+4. Výše fondu prevence ani počet programů nejsou kritériem (rozhodnutí PS 7. 10. 2026). Kč na pojištěnce se ukazují jen jako kontext, věkově standardizované, jakmile budou váhy.
+5. Bez odpovědi do 15 dnů od doručení následuje žádost podle zákona 106 se stejným zněním; bez odpovědi ani na ni = neodpověděla (stav neutral, ne bad).
+
+_Výstup:_ Tabulka 7 pojišťoven × 7 otázek se stavy, plné znění odpovědí (ingest/manual/pojistovny/odpovedi/), návrh verdiktu oblasti Prevence s dopadem; zveřejnění až po právu na odpověď.
+
 ### Pobočky podle jednotné definice (`pobocky-definice`)
 
 | Kdy | Komu | Kanál | Lhůta | Co se zveřejní |
@@ -175,6 +200,17 @@ Sada `pobocky-definice` · typ `otevrene` · verze 1 · 4 otázky · povolení r
    > Doloženo: soubor, ze kterého jdou čísla z otázek 1–3 spočítat. Pokud seznam zveřejňujete na webu ve strojově čitelné podobě (CSV, JSON), stačí stálý odkaz; budeme ho používat pro průběžnou aktualizaci.
 
 **Co znamená „doloženo“.** Číslo je doložené, když ho lze spočítat ze zaslaného seznamu míst (CSV) a počet řádků druhu `prepazka` se s ním shoduje. Bez seznamu zveřejníme číslo jako deklarované a vedle něj počet z webu pojišťovny s datem ověření.
+
+**Vyhodnocení** (pole `vyhodnoceni`; oblast semaforu: Klientský servis a informování)
+
+_Vstup:_ Počty míst podle jednotné definice (přepážka, úřední hodiny ≥ 3 dny v týdnu, partnerská místa) k 31. 12. 2026 a CSV seznam míst s adresou a hodinami.
+
+1. Srovnává se jen to, co je podle stejné definice: počet míst s osobní přepážkou (prepazky) a míst s úředními hodinami alespoň 3 dny v týdnu (uredni-hodiny). Čísla z webů pojišťoven („pobočky“, „kontaktní místa“, „klientská centra“) se nesrovnávají, protože každá pojišťovna počítá něco jiného.
+2. Odvozené ukazatele: místa na 100 tisíc pojištěnců (kmen CRP k témuž datu) a pokrytí krajů (počet krajů, kde má pojišťovna aspoň jedno místo s úředními hodinami ≥ 3 dny). Oba se ukazují vedle sebe, bez pořadí a bez známky; regionální pojišťovna s hustou sítí ve dvou krajích není horší než celostátní s řidší.
+3. Doloženo = čísla i CSV seznam (seznam-csv) s úředními hodinami; deklarováno = jen čísla bez seznamu, nebo seznam bez hodin; nedoloženo = odpověď bez čísel k definici; po lhůtě i po žádosti 106 = neodpověděla.
+4. Seznam se jednou ročně kontroluje namátkou (5 adres na pojišťovnu proti webu); rozpor se zapíše do changelogu, verdikt se nemění bez práva na odpověď.
+
+_Výstup:_ Tabulka míst podle definice a na 100 tisíc pojištěnců, mapa pokrytí krajů; vstup do oblasti Klientský servis (spolu s aplikacemi), ne samostatný verdikt.
 
 ## 3. Q1 2027: pacientské organizace přes NAPO
 
@@ -367,6 +403,17 @@ Sada `napo-pacientske-organizace` · typ `dotaznik` · verze 1 · 16 otázek · 
 
 **Co znamená „doloženo“.** Dotazník NAPO verdikt nedokládá: je to zkušenost pacientů, podnět k otázkám pro pojišťovny a kontext oblasti `servis`. Souhrn se ukazuje vždy s počtem organizací a bez pořadí pojišťoven.
 
+**Vyhodnocení** (pole `vyhodnoceni`; oblast semaforu: Prevence s dopadem, Dostupnost a čekací doby, Síť a ohrožené oblasti, Kvalita ve smluvní politice, Klientský servis a informování, Hospodaření a transparentnost)
+
+_Vstup:_ Hodnocení pacientských organizací (členů NAPO) na škále v šesti oblastech, vždy s pojišťovnou, ke které se vztahuje, a popis konkrétních zkušeností.
+
+1. Za organizaci odpovídá organizace, ne jednotlivec; jedna organizace = jedna odpověď. Výsledky se počítají jako podíl odpovědí na každém stupni škály, zvlášť za oblast a za pojišťovnu.
+2. Zveřejňují se jen souhrnné počty, a to od tří odpovědí na oblast a pojišťovnu (technické minimum proti dohledání respondenta); rozklad podle diagnózové oblasti až od pěti organizací.
+3. Dotazník není verdikt: je to signál od pacientů, který se ukazuje vedle dat jako „pohled pacientských organizací“. Do semaforu nevstupuje přímo; opakovaně špatné hodnocení v oblasti otevře cílený dotaz pojišťovně (kolo 2) a zmíní se v návrhu verdiktu, ke kterému má pojišťovna právo na odpověď.
+4. Volné texty (zkusenost) se nezveřejňují automaticky; redakce z nich může citovat jen se souhlasem organizace a bez údajů o konkrétním pacientovi.
+
+_Výstup:_ Blok „Pohled pacientských organizací“ u každé oblasti (podíly na škále, počet organizací), seznam otevřených otázek pro kolo 2.
+
 ## 4. Březen 2027: právo na odpověď
 
 Po vyhodnocení kola 1 dostane každá pojišťovna návrh svého hodnocení 10 dní před zveřejněním (metodika § 4 bod 4) a lhůta se eviduje v `data/zadosti-106.json` jako záznam typu `pravo-na-odpoved`.
@@ -404,6 +451,17 @@ Sada `pravo-na-odpoved` · typ `otevrene` · verze 1 · 3 otázky · povolení r
    > Redakce text nekrátí ani neupravuje; jen ho podle oblastí rozdělí do pole stanovisko_pojistovny u příslušné oblasti. Bez stanoviska zveřejníme hodnocení s poznámkou, že pojišťovna právo na odpověď nevyužila.
 
 **Co znamená „doloženo“.** Nový podklad, ze kterého lze tvrzení ověřit a zopakovat, změní stav ještě před zveřejněním (s datem v changelogu). Nesouhlas bez podkladu stav nemění, ale stanovisko se zveřejní vždy.
+
+**Vyhodnocení** (pole `vyhodnoceni`; oblast semaforu: Prevence s dopadem, Dostupnost a čekací doby, Síť a ohrožené oblasti, Kvalita ve smluvní politice, Klientský servis a informování, Hospodaření a transparentnost)
+
+_Vstup:_ Stanovisko pojišťovny k návrhu verdiktů (oblasti, s nimiž nesouhlasí, doklady, text ke zveřejnění) do 10 dnů od doručení návrhu.
+
+1. Stanovisko se zveřejní doslova a beze změn vedle verdiktu (pole stanovisko_pojistovny), i když s ním redakce nesouhlasí.
+2. Doklady se posuzují stejnými pravidly jako původní odpověď: nový podklad, který splňuje nápovědu příslušné otázky, mění stav otázky i oblasti; názor bez podkladu stav nemění. Každá změna má záznam v changelogu s datem a důvodem.
+3. Pokud pojišťovna do 10 dnů neodpoví, verdikt se zveřejní s poznámkou „bez stanoviska“; stanovisko doručené později se doplní a verdikt se případně přepočítá se stejným záznamem.
+4. Verdikty schvaluje člověk (vydavatel, třída C); AI připravuje jen podklady a návrh.
+
+_Výstup:_ Zveřejněný semafor s verdikty, stanovisky pojišťoven a changelogem; žádný verdikt bez proběhlé lhůty.
 
 ## 5. Q2 2027: kolo 2 (rizikoví pojištěnci a zdravotní gramotnost)
 
@@ -551,6 +609,18 @@ Sada `rizikovi-pojistenci` · typ `dotaznik` · verze 1 · 14 otázek
 
 **Co znamená „doloženo“.** Volba v nabídce je deklarace. Doloženo je až to, co otevřené otázky (A5, B3, C2, D4) podloží počtem k datu, odkazem na dokument nebo výsledkem se srovnáním.
 
+**Vyhodnocení** (pole `vyhodnoceni`; oblast semaforu: Prevence s dopadem, Klientský servis a informování)
+
+_Vstup:_ Odpovědi pojišťoven na 14 otázek v částech A–D (osobní odkaz, lhůta 15 dnů): identifikace rizikových skupin, oslovení a souhlas, měření výsledků, zdravotní gramotnost.
+
+1. Části A a C vstupují do oblasti Prevence s dopadem: A je doloženo, když A5 uvádí počty k 31. 12. 2026 s kritériem zařazení pro skupiny z A1; C je doloženo, když C2 uvádí aspoň jeden výsledek s čísly u oslovených i ve srovnávací skupině. Zaškrtnuté možnosti bez A5 a C2 = deklarováno.
+2. Část B se nehodnotí stupněm, ale kontrolou souladu: pojištěnec se musí mít jak dozvědět o zařazení a jak oslovování odmítnout (B3); chybějící odpověď na B3 se uvede jako otevřená otázka, ne jako verdikt (otázky souhlasu s profilováním řeší ÚOOÚ, ne srovnávač).
+3. Část D vstupuje do oblasti Klientský servis: doloženo = materiály s odkazy, jazyky a nabídka pro 65+ dohledatelné na webu; deklarováno = zaškrtnuto bez odkazů; nedoloženo = nic k věci. D4 (spolupráce s pacientskými organizacemi) se křížově ověřuje s odpověďmi organizací v dotazníku NAPO.
+4. Odpověď „rizikové skupiny aktivně nevyhledáváme“ v A1 není sama o sobě nedoloženo: je to doložený fakt, který se zveřejní. Nedoloženo je jen tvrzení bez podkladu.
+5. Souhrnné počty za všechny pojišťovny se zveřejní od tří odpovědí; odpovědi jednotlivých pojišťoven v plném znění spolu s hodnocením po právu na odpověď.
+
+_Výstup:_ Tabulka částí A–D × 7 pojišťoven se stavy, plné znění odpovědí, návrh doplnění verdiktů v oblastech Prevence s dopadem a Klientský servis.
+
 ## 6. Od zveřejnění stránky: anketa pro pojištěnce
 
 Veřejná anketa bez tokenu na `pojistovny-gramotnost.html?dotaznik=pojistenci-anketa`. Žádné osobní údaje: věk jen v pásmech, bydliště jen kraj, jediné volné pole je upřesnění „jiné“ do 300 znaků a API v něm odmítne e-mail i rodné číslo.
@@ -653,6 +723,17 @@ Sada `pojistenci-anketa` · typ `dotaznik` · verze 1 · 8 otázek · povolení 
    - nechci uvést
 
 **Co znamená „doloženo“.** Anketa nic nedokládá a do semaforu nevstupuje: je to samovýběrový vzorek čtenářů, ne reprezentativní šetření. Na stránce vždy s počtem odpovědí a touto poznámkou.
+
+**Vyhodnocení** (pole `vyhodnoceni`; oblast semaforu: Klientský servis a informování)
+
+_Vstup:_ Odpovědi veřejnosti bez registrace: pojišťovna, důvod volby, co chybí, využití fondu prevence a aplikace, spokojenost; kraj a věk nepovinně.
+
+1. Anketa není průzkum: respondenti se vybírají sami, takže se výsledky nepřepočítávají na populaci a neuvádí se jako „spokojenost pojištěnců pojišťovny X“. Ukazují se jako „co říkají respondenti ankety“ s počtem odpovědí.
+2. Souhrny se zveřejňují od tří odpovědí na sadu (technické minimum); rozklad podle pojišťovny až od 30 odpovědí na pojišťovnu, podle kraje až od 30 na kraj (návrh prahu pro PS). Pod prahem se ukazuje jen celkový součet.
+3. Do semaforu anketa nevstupuje. Otázka „co vám chybí“ slouží jako zdroj témat pro dotazy pojišťovnám a pro dotazník NAPO; otázka „spokojenost“ se ukazuje jen celkově a vedle doložených dat.
+4. Ochrana proti opakování: nejvýš pět odeslání z jedné adresy za 10 minut, bez ukládání IP; podezřelé série (stejná kombinace odpovědí v krátkém sledu) redakce z agregátů vyřadí a zapíše do changelogu.
+
+_Výstup:_ Souhrnné grafy na stránce Zdravotní gramotnost (podíly odpovědí, počet respondentů), seznam témat pro další kolo dotazů.
 
 ## Průvodní dopis (kolo 1)
 

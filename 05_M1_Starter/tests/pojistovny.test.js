@@ -55,10 +55,11 @@ const STRANKY = {
   'pojistovny.html': ['zpHeroStats', 'zpMojeZp', 'zpOvKarta', 'zpPrehled', 'zpOvGrafy', 'zpOvSemafor', 'zpOvTemata'],
   'pojistovny-kmen.html': ['zpHeroStats', 'zpChartShare', 'zpCards', 'zpKraje', 'zpChartTrend', 'zpChartGrowth', 'zpChart65', 'zpChartNzs',
     'zpTableFin', 'zpChartZust', 'zpChartProvoz', 'zpChartYoy', 'zpTablePrev', 'zpSit', 'zpNotes', 'zpChybi'],
-  'pojistovny-prevence.html': ['zpPrevMatrix', 'zpPrevOnko', 'zpPrevDusevni', 'zpFpStruktura', 'zpDolozene', 'zpMereni', 'zpOdpovediMatrix', 'zpOdpovedi'],
+  'pojistovny-prevence.html': ['zpPrevMatrix', 'zpPrevProc', 'zpPrevOnko', 'zpPrevDusevni', 'zpFpStruktura', 'zpDolozene', 'zpMereni', 'zpOdpovediMatrix', 'zpOdpovedi'],
   'pojistovny-aplikace.html': ['zpAppMatrix', 'zpAppKriteria', 'zpAppSummary', 'zpAppNotes'],
   'pojistovny-gramotnost.html': ['zpRizikove', 'zpOtazky', 'zpDalsi', 'zpDotaznik', 'zpDotaznikAgregace'],
-  'pojistovny-metodika.html': ['zpSemafor', 'zpZadosti', 'zpVerifikace'],
+  'pojistovny-metodika.html': ['zpSemafor', 'zpOtazky', 'zpZadosti', 'zpVerifikace'],
+  'pojistovny-indikatory.html': ['zpIndStrucne', 'zpIndKdo', 'zpIndKontrakt', 'zpIndAuto', 'zpIndDatasety', 'zpIndNavrhy', 'zpIndMezery', 'zpStiznosti', 'zpOpendata'],
 };
 const PODSTRANKY = Object.keys(STRANKY).filter((f) => f !== 'pojistovny.html');
 const readPage = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
@@ -137,7 +138,7 @@ test('middleware.js: matcher pokrývá přehled, všech pět podstránek a data,
   const re = config.matcher.map((m) => new RegExp(`^${m.replace(/[.]/g, '\\.').replace(/:path\*/, '.*')}$`));
   const hit = (u) => re.some((r) => r.test(u));
   for (const u of ['/pojistovny', '/pojistovny.html', '/pojistovny-kmen.html', '/pojistovny-prevence.html', '/pojistovny-aplikace.html',
-    '/pojistovny-gramotnost.html', '/pojistovny-metodika.html', '/pojistovny-kmen', '/data/pojistovny.json', '/data/pojistovny-sit.json']) {
+    '/pojistovny-gramotnost.html', '/pojistovny-metodika.html', '/pojistovny-indikatory.html', '/pojistovny-kmen', '/data/pojistovny.json', '/data/pojistovny-sit.json', '/data/pojistovny-indikatory.json']) {
     assert.ok(hit(u), `${u} musí být za heslem`);
   }
   for (const u of ['/pojistenci.html', '/index.html', '/data/pojistenci-d5-zp.json', '/src/pojistovny.js', '/clanek-pojistne-plany-2026.html']) {

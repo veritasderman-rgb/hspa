@@ -6,7 +6,10 @@ jejich seznam (ty, ve kterých vidíme, jak který pojištěnec je u koho pojiš
 které údaje to jsou?)“. Dokument je rešerše a inventář, nic v něm není implementace.
 Vstup pro balíček P5.5 v `05_M1_Starter/PLAN-SROVNAVAC-POJISTOVEN.md` a pro práci na
 srovnávači (`pojistovny.html`, metodika `docs/metodika-srovnavac-pojistoven.md`).
-Cesty jsou od kořene repa; `05_M1_Starter/` zkracuji na `M1/`._
+Cesty jsou od kořene repa; `05_M1_Starter/` zkracuji na `M1/`. Strojová podoba inventáře je
+`M1/data/pojistovny-indikatory.json` a zobrazuje ji podstránka `pojistovny-indikatory.html`
+(indikátory kontraktu obohacuje za běhu z `indicators.json`); audit otevřených dat pojišťoven
+je v `M1/data/pojistovny-opendata.json`._
 
 ## 0. Stručná odpověď
 
@@ -225,6 +228,30 @@ Co je v repu a co ne, shrnutě:
 | Kdo od koho odešel / přestoupil | **ne**: z ročních stavů jde odhadnout jen čistá změna; hrubé toky (přestupy) nikde nemáme. Záznam CRP o změnách pojišťovny veřejný není (neověřeno) |
 | Kolik pojištěnců je státních (platí stát) | **ne** per ZP |
 | Příjmy na pojištěnce po přerozdělení | ano 2024 (G); měsíčně ne |
+
+## 3b. Stížnosti a podněty na dostupnost péče ve výročních zprávách
+
+_Doplněno 2. 11. 2026 na dotaz vydavatele („dají se z VZ vytáhnout počty stížností klientů na
+dostupnost?“). Data: `M1/data/pojistovny-stiznosti.json`, zobrazuje `pojistovny-indikatory.html`._
+
+Ano, částečně. Výroční zpráva má povinnou kapitolu 4.6.1 „Místní a časová dostupnost hrazených
+služeb dle § 40 zákona č. 48/1997 Sb.“, ale počty podání v ní uvádějí jen čtyři pojišťovny a každá
+jinak:
+
+| ZP | Co počítá | 2023 | 2024 | 2025 |
+|---|---|---|---|---|
+| VZP ČR | podněty k místní a časové dostupnosti, tabulka podle odbornosti (řádek Celkem tabulky) | 46 945 | 47 058 | 42,7 tis. (jen text) |
+| ZP MV ČR | (a) všechna podání vč. ombudsmana / oprávněné / prům. doba vyřízení; (b) podání na nedostupnost přes formulář MZ | 1 574 / 4 / 16,5 d; 1 391 | 917 / 14 / 8,65 d; 741 | 919 / 2 / 9,05 d; 672 |
+| ČPZP | přijatá podání na zajištění péče; zvlášť stomatologie | ~8 000 | ~8 000 (stomat. 4 703, z toho MSK 2 610) | 6 590 (stomat. 3 539, MSK 1 567) |
+| RBP | žádosti o zajištění péče u vybraných odborností | 3 970 (jen zubní) | VZ 2024 v repu není | 6 049 (zubní 4 623, VPL 811, PLDD 248, psychiatrie 148, dětská psych. 56, klin. psych. 163) |
+| VoZP, OZP, ZPŠ | jen slovní popis (evidence podnětů, Asistenční služba, komise pro síť) | – | – | – |
+
+Jediná položka se stejnou definicí u všech sedmi je počet stížností podle § 16a zákona
+č. 106/1999 Sb. (povinná část VZ o poskytování informací), která ale o dostupnosti péče nic neříká.
+Srovnání napříč pojišťovnami proto vyžaduje jednotnou definici podání (otázka do kola 1 nebo
+žádost 106): počet podání k dostupnosti za rok podle odbornosti a okresu, podíl vyřízených
+zajištěním péče do 30 dnů, počet eskalací na MZ. Převzaté položky jsou v datasetu s odkazem na
+soubor a řádek přepisu VZ (`ingest/manual/pojistovny/vz-text/`), takže je `verify` může kontrolovat.
 
 ## 4. Mezery a návrhy (jen seznam, žádná implementace)
 

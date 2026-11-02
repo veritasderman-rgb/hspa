@@ -157,14 +157,48 @@ const ONKO_LABEL = { prsu: 'Prs', delozni_hrdlo: 'Děložní hrdlo', kolorektum:
 export function buildOnkoMatrix(p) {
   const cols = (p?.onko_screening_sloupce || []).map((c) => ({ key: c, label: ONKO_LABEL[c] || c }));
   const rows = (p?.pojistovny || []).map((z) => {
-    const lvl = levelOf(z.onko_screening?.nadstandard?.stupen);
-    return { kod: z.kod, label: z.zkratka, sub: lvl == null ? '' : `nadstandard: ${LEVEL_LABEL[lvl]}`, _z: z };
+    const n = z.onko_screening?.nadstandard;
+    const lvl = levelOf(n?.stupen);
+    const proc = n?.popis ? ` — ${short(n.popis, 80)}` : '';
+    return { kod: z.kod, label: z.zkratka, sub: lvl == null ? '' : `nadstandard: ${LEVEL_LABEL[lvl]}${proc}`, _z: z };
   });
   const cell = (r, c) => {
     const v = r._z.onko_screening?.[c.key];
     return v === true || v === false ? v : null;
   };
   return { rows, cols, cell };
+}
+
+/**
+ * „Proč ten stupeň“: pro každou pojišťovnu seznam oblastí se stupněm a s tím, co
+ * rešerše na webu našla (popis). Stupeň bez popisu dostane „bez uvedeného důvodu“,
+ * aby bylo vidět, kde odhad nemá oporu. Zahrnuje matici oblastí, nadstandard
+ * onkologického screeningu a duševní zdraví.
+ */
+export function buildPrevProc(p) {
+  const oblasti = p?.oblasti || [];
+  const dus = p?.dusevni_sloupce || [];
+  return (p?.pojistovny || []).map((z) => {
+    const items = [];
+    const push = (skupina, label, o) => {
+      const lvl = levelOf(o?.stupen);
+      if (lvl == null) return;
+      items.push({ skupina, label, level: lvl, stupen: LEVEL_LABEL[lvl], popis: o?.popis ? String(o.popis) : '' });
+    };
+    for (const o of oblasti) push('Nabídka', o.label, z.oblasti?.[o.id]);
+    push('Onkologický screening', 'nadstandard', z.onko_screening?.nadstandard);
+    for (const c of dus) push('Duševní zdraví', c.label, z.dusevni?.[c.id]);
+    const bezDuvodu = items.filter((i) => !i.popis).length;
+    return { kod: z.kod, zkratka: z.zkratka, rok_vz: z.rok_vz ?? null, items, bezDuvodu };
+  });
+}
+
+export function prevProcHtml(p) {
+  const list = buildPrevProc(p);
+  if (!list.length) return '<p class="zpc-na">—</p>';
+  return list.map((z) => `<details class="zpc-acc zpc-proc" data-zp="${esc(z.kod)}"><summary>${dot(z.kod)}${esc(z.zkratka)}<span class="zpc-n">${z.items.length} položek${z.bezDuvodu ? ` · ${z.bezDuvodu} bez uvedeného důvodu` : ''}</span></summary><div class="zpc-acc-body"><ul>`
+    + z.items.map((i) => `<li><b>${esc(i.skupina)} · ${esc(i.label)}</b> · ${levelBadge(i.level)} ${i.popis ? esc(i.popis) : '<span class="zpc-na">bez uvedeného důvodu</span>'}</li>`).join('')
+    + '</ul></div></details>').join('');
 }
 
 /** Duševní zdraví 7 ZP × 5 (heatmapa). */
@@ -422,7 +456,7 @@ export function renderPrevence(p, d) {
     const hm = buildPrevHeatmap(p);
     set('zpPrevMatrix', heatmap(hm.rows, hm.cols, hm.cell, {
       title: 'Nabídka preventivních programů podle oblastí',
-      sub: 'Redakční odhad síly nabídky z webů pojišťoven, ne hodnocení dopadu. Kliknutím na sloupec seřadíte.',
+      sub: 'Stupeň je odhad redakce z webu pojišťovny, ne měření. Proč: najeďte na buňku, nebo rozbalte seznam pod maticí. Kliknutím na sloupec seřadíte.',
       source: srcWeb, sortable: true, rowHeader: 'Pojišťovna',
     }));
     // onko
@@ -432,7 +466,10 @@ export function renderPrevence(p, d) {
     setN('zpPrevNadstandardN', zps.length);
     // duševní
     const ds = buildDusevniHeatmap(p);
-    set('zpPrevDusevni', heatmap(ds.rows, ds.cols, ds.cell, { title: 'Duševní zdraví', sub: 'Síla nabídky podle typu programu.', source: srcWeb, sortable: true, rowHeader: 'Pojišťovna' }));
+    set('zpPrevDusevni', heatmap(ds.rows, ds.cols, ds.cell, { title: 'Duševní zdraví', sub: 'Stupeň nabídky z webu podle typu programu; co rešerše našla, je u buňky a v seznamu „Proč ten stupeň“.', source: srcWeb, sortable: true, rowHeader: 'Pojišťovna' }));
+    // proč ten stupeň: viditelné zdůvodnění každé buňky (nejen v tooltipu)
+    set('zpPrevProc', prevProcHtml(p));
+    setN('zpPrevProcN', `${zps.length} pojišťoven`);
 
     // fond prevence (podle „Moje pojišťovna“)
     fp.p = p;
@@ -464,11 +501,80 @@ export function renderPrevence(p, d) {
 }
 
 // ---------------------------------------------------------------- modul 4: otázky
+/** Pořadí sad podle fází (docs/pojistovny-dotazniky.md § Přehled); neznámé sady až na konec v pořadí JSON. */
+export const SADY_PORADI = ['aplikace-privetivost', 'fond-prevence', 'pobocky-definice', 'napo-pacientske-organizace', 'pravo-na-odpoved', 'rizikovi-pojistenci', 'pojistenci-anketa'];
+
+const KANAL_LABEL = { 'web-token': 'osobní odkaz od redakce', 'web-verejnost': 'veřejně na webu, bez tokenu', 'dopis+web': 'dopis s nabídkou spolupráce + web', interni: 'vyplňuje redakce (interní list)' };
+
+/** Části sady: `casti[]`, nebo jediná nepojmenovaná část z `otazky[]` (sady bez členění). */
+export function sadaCasti(sada) {
+  if (Array.isArray(sada?.casti) && sada.casti.length) return sada.casti;
+  return Array.isArray(sada?.otazky) && sada.otazky.length ? [{ id: null, nazev: null, otazky: sada.otazky }] : [];
+}
+
+/** Všechny sady seřazené podle fází, každá s počtem otázek. */
+export function buildOtazkySady(o) {
+  const sady = (o?.sady || []).filter((s) => s && s.id);
+  const idx = (s) => { const i = SADY_PORADI.indexOf(s.id); return i < 0 ? SADY_PORADI.length : i; };
+  return sady
+    .map((s, i) => ({ sada: s, poradi: i }))
+    .sort((a, b) => idx(a.sada) - idx(b.sada) || a.poradi - b.poradi)
+    .map(({ sada }) => ({ sada, pocet: sadaCasti(sada).reduce((n, c) => n + (c.otazky || []).length, 0) }));
+}
+
+function otazkaHtml(q, n) {
+  const vyber = q.moznosti?.length ? ` <small class="zpc-na">(${q.vyber === 'jeden' ? 'jedna volba' : 'více voleb'})</small>` : '';
+  const opts = q.moznosti?.length ? `<span class="zpc-opts">${q.moznosti.map(esc).join(' · ')}</span>` : '';
+  const nap = q.napoveda ? `<span class="zpc-opts">Nápověda: ${esc(q.napoveda)}</span>` : '';
+  const del = !q.moznosti?.length && q.max_delka ? `<span class="zpc-opts">Volný text, nejvýš ${esc(String(q.max_delka))} znaků.</span>` : '';
+  return `<li value="${n}"><small class="zpc-na">${esc(q.id)}</small> ${esc(q.text)}${vyber}${opts}${nap}${del}</li>`;
+}
+
+const OBLAST_NAZEV = { prevence: 'Prevence s dopadem', dostupnost: 'Dostupnost a čekací doby', sit: 'Síť a ohrožené oblasti', kvalita: 'Kvalita ve smluvní politice', servis: 'Klientský servis a informování', hospodareni: 'Hospodaření a transparentnost' };
+
+/** Vyhodnocovací metodika sady (pole vyhodnoceni): oblasti semaforu, vstup, pravidla, výstup. */
+export function vyhodnoceniHtml(v, oblastiNazvy = OBLAST_NAZEV) {
+  if (!v || typeof v !== 'object') return '';
+  const obl = (v.oblasti || []).map((id) => oblastiNazvy[id] || id).map(esc).join(', ');
+  return '<div class="zpc-vyhod"><p><b>Vyhodnocení</b>' + (obl ? ` · oblast semaforu: ${obl}` : '') + '</p>'
+    + (v.vstup ? `<p>${esc(v.vstup)}</p>` : '')
+    + ((v.pravidla || []).length ? `<ol>${v.pravidla.map((p) => `<li>${esc(p)}</li>`).join('')}</ol>` : '')
+    + (v.vystup ? `<p><b>Výstup:</b> ${esc(v.vystup)}</p>` : '')
+    + '</div>';
+}
+
+/**
+ * Návrh dotazníků 1…n: znění všech sad v pořadí fází (zdroj data/pojistovny-otazky.json).
+ * opts.proces = false vynechá procesní texty (úvod pro respondenta, právní základ, kanál);
+ * opts.vyhodnoceni = false vynechá vyhodnocovací metodiku.
+ */
+export function otazkySadyHtml(o, opts = {}) {
+  const { proces = true, vyhodnoceni = true } = opts;
+  const list = buildOtazkySady(o);
+  if (!list.length) return '<p class="zpc-na">Sady otázek zatím nejsou k dispozici.</p>';
+  return list.map(({ sada, pocet }, i) => {
+    let n = 0;
+    const casti = sadaCasti(sada).map((c) => `${c.nazev ? `<p><b>${c.id ? `${esc(c.id)} · ` : ''}${esc(c.nazev)}</b></p>` : ''}<ol>${(c.otazky || []).map((q) => otazkaHtml(q, ++n)).join('')}</ol>`).join('');
+    const meta = (proces
+      ? [sada.faze, sada.respondent, KANAL_LABEL[sada.kanal] || sada.kanal, `verze ${sada.verze ?? '1'}`]
+      : [sada.faze, sada.respondent]).filter(Boolean).map(esc).join(' · ');
+    return `<details class="zpc-acc zpc-q" id="dotaznik-${esc(sada.id)}"><summary>${i + 1}. ${esc(sada.nazev)}<span class="zpc-n">${pocet} otázek</span></summary><div class="zpc-acc-body">`
+      + (meta ? `<p class="zpc-note">${meta}</p>` : '')
+      + (proces && sada.uvod ? `<p>${esc(sada.uvod)}</p>` : '')
+      + (proces && sada.pravni_zaklad ? `<p class="zpc-note">${esc(sada.pravni_zaklad)}</p>` : '')
+      + casti
+      + (vyhodnoceni ? vyhodnoceniHtml(sada.vyhodnoceni) : '')
+      + '</div></details>';
+  }).join('');
+}
+
 export function renderOtazky(o) {
   if (!o) { set('zpOtazky', '<p class="zpc-na">Sady otázek zatím nejsou k dispozici.</p>'); return; }
-  const sada = (o.sady || []).find((s) => s.id === 'rizikovi-pojistenci') || (o.sady || [])[1];
-  if (!sada) return;
-  set('zpOtazky', (sada.casti || []).map((c) => `<p><b>${esc(c.id)} · ${esc(c.nazev)}</b></p><ol>${(c.otazky || []).map((q) => `<li>${esc(q.text)}${q.moznosti?.length ? `<span class="zpc-opts">${q.moznosti.map(esc).join(' · ')}</span>` : ''}</li>`).join('')}</ol>`).join(''));
-  setN('zpOtazkyN', (sada.casti || []).reduce((n, c) => n + (c.otazky || []).length, 0));
+  const list = buildOtazkySady(o);
+  // data-rezim="metodika" na kontejneru = jen otázky a vyhodnocení, bez procesních textů
+  const box = document.getElementById('zpOtazky');
+  const proces = box?.dataset?.rezim !== 'metodika';
+  set('zpOtazky', otazkySadyHtml(o, { proces }));
+  setN('zpOtazkyN', `${list.length} sad · ${list.reduce((n, x) => n + x.pocet, 0)} otázek`);
 }
 
