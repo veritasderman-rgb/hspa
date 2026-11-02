@@ -75,8 +75,20 @@ Průměr OECD = prostý průměr členských zemí s údajem za daný rok, prům
 
 Poznámka k dávkám 1 a 3: čísla „lékaři 4,2 vs OECD 3,9“, „sestry 9,0 vs 9,2“ a „antibiotika 15 vs 16“ jsou přesné citace OECD Health at a Glance 2025 (country note Czechia, data za rok 2023). Indikátory nově ukazují OECD data za rok 2024; citace HaaG 2025 v článcích s rokem 2023 zůstávají platné. Z téhož country note jdou ověřit i další seedy (např. `podil_generik_objem` 63 % vs OECD 56 %) — kandidáti na další dávku.
 
+## Dávka 4 (2. 11. 2026)
+
+| Indikátor | Výsledek | Seed → zdroj |
+|---|---|---|
+| `hiv_nove_diagnozy` | ověřeno | 2,7 / 100 000 (2025) a řada 2022–2025 = SZÚ NRL (293 / 269 / 253 / 292 případů); EU/EHP 5,3 = ECDC/WHO 2025 (data 2024) |
+| `vydaje_dlouhodoba_pece_hdp` | ověřeno, řada nahrazena | 1,9 % HDP (2023) = OECD SHA HC.3 + HCR.1 (1,88); OECD 1,84, EU 1,66; seed řada 1,5 → 1,9 nahrazena OECD (1,83 → 1,96 → 1,88) |
+| `podil_generik_objem` | ověřeno, řada nahrazena | 62,8 % (2023) = OECD `DF_GEN_MRKT`, HaaG 2025 63 % vs OECD 56 %; seed řada rostla z 58,2 %, OECD je od 2013 stabilní kolem 63 % |
+| `alkohol_adolescenti` | hodnota sedí, řada a srovnání ne | 56 % = ESPAD 2024 CZ 56,2 %; řada 2011–2019 a průměr ESPAD 42 % neověřeny |
+| `spotreba_antidiabetik` | benchmark sedí, hodnota ne | OECD 94,2 a EU 92,7 = OECD 2024; hodnota 113,1 (2025) je vlastní přepočet SÚKL, OECD pro ČR uvádí 107,1 (2024) |
+| `pm25_expozice` | hodnota a OECD sedí, rok ne | 14,1 µg/m³ vs OECD 11,2 = HaaG 2025; seed ji vede jako rok 2024 s řadou od 2020 — rok a řadu ověřit v datech OECD/EEA |
+| `klistova_encefalitida` | hodnota konzistentní, EU neověřeno | 6,1 / 100 000 (2024) odpovídá 670 případům; 2020 7,9 = ECDC; EU 0,81 nedohledáno |
+
 ## Fronta na další dávky
 
-Podle počtu publikovaných článků (k 2. 11. 2026), bez indikátorů čekajících na rozhodnutí vydavatele (`ehealth_adoption`, `cekaci_doby_specialist`, `spokojenost_informovani`, `nadeje_doziti_vzdelani_gap_muzi`, `bezpecnost_padu_nemocnice`) a bez těch, které nejdou ověřit z veřejných agregátů (dávky 1–3): kandidáti z country note Health at a Glance 2025 (`podil_generik_objem`, `luzka_psychiatricka_per_1000`, `pet_skenery_per_milion`, `readmise_30d_ami`), dále `alkohol_adolescenti`, `koureni_v_tehotenstvi`, `mamografy_per_100k`, `trombolyza_ischemicka_cmp`, … Neověřených seedů zbývá 104.
+Podle počtu publikovaných článků (k 2. 11. 2026), bez indikátorů čekajících na rozhodnutí vydavatele (`ehealth_adoption`, `cekaci_doby_specialist`, `spokojenost_informovani`, `nadeje_doziti_vzdelani_gap_muzi`, `bezpecnost_padu_nemocnice`) a bez těch, které nejdou ověřit z veřejných agregátů (dávky 1–3): kandidáti z country note Health at a Glance 2025 (`podil_generik_objem`, `luzka_psychiatricka_per_1000`, `pet_skenery_per_milion`, `readmise_30d_ami`), dále `alkohol_adolescenti`, `koureni_v_tehotenstvi`, `mamografy_per_100k`, `trombolyza_ischemicka_cmp`, … Neověřených seedů zbývá 101.
 
 Pojistka: `npm run validate:claims` (kontrola `ingest/validate-seed-claims.js`) hlídá, aby nově publikovaná tvrzení (`data/claims.json`, `check: auto`) nestála na neověřeném seedu. Stávající případy jsou v baseline `data/seed-claims-baseline.json`; s každou dávkou auditu se baseline zmenšuje a nesmí růst.
