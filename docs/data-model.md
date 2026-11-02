@@ -1649,6 +1649,27 @@ a dopočítá lhůtu.
 Odvozený stav (`zadostStav`): `odeslana` po uplynutí `lhuta_dni` od `odeslano` → `po-lhute`.
 Matice pokrytí: odpovězeno = ✓, čeká = ½, po lhůtě / bez odpovědi = ✕, připravena = „—“.
 
+### `data/pojistovny-sit.json` — síť smluvních odborností per ZP (generovaný prototyp)
+
+Dva generátory, každý píše jen své bloky; kontrola `validateSit()` v
+`ingest/validate-pojistovny.js`, metoda a limity `docs/pojistovny-sit.md`. Čte
+`src/pojistovny-sit.js` (`#zpSit` na `pojistovny-kmen.html`). Jen agregáty po krajích,
+žádné řádky s IČO/jmény (GOVERNANCE § 6 bod 3).
+
+| Blok | Generátor | Obsah |
+|---|---|---|
+| `odbornosti[]{kod, nazev}`, `kraje[]{kod, nazev}` | `ingest/fetchers/pojistovny-sit.js` | 7 kódů číselníku VZP 770 (001, 002, 014, 207, 305, 404, 603), 14 krajů NUTS3 (`CZ010`…) |
+| `matice[zp][odb][kraj]`, `celkem_cr[odb][kraj]`, `kvalita[zp]` | `pojistovny-sit.js` | horní odhad ÚZIS NR-04-64 × NRPZS, stav `ref_datum` 2024-12-31; jednotka = místo poskytování NRPZS na IČO (adrese) smluvního IČZ |
+| `seznamy_pojistoven[zp]` (volitelný) | `ingest/fetchers/pojistovny-sit-seznamy.js` | ze seznamu, který ZP sama zveřejňuje: `stav` `seznam` (VZP, ČPZP) \| `seznam-bez-odbornosti` (VoZP) \| `bez-seznamu` (OZP, ZPŠ, ZP MV ČR, RBP) \| `chyba`; `zdroj{nazev, url, stranka, format, velikost_b, http, stav_k, stav_k_zdroj, soubor_datum, overeno, licence}`, `jednotka`, `kraj_metoda`, `matice[odb][kraj]`, `celkem[odb]`, `bez_kraje[odb]` (jen `seznam`), `icz_celkem`, `icz_kraj[kraj]`, `icz_bez_kraje`, `kvalita{radku, icz, kraj_ciselnik, kraj_prefix, kraj_neurcen, …}`; `bez-seznamu` nese jen `zdroj.stranka` a `poznamka` |
+| `seznamy_pojistoven_zdroj_kraje` | `pojistovny-sit-seznamy.js` | číselník IČZ ÚZIS OIS-12-02 (IČZ → okres → kraj) |
+| `srovnani{metoda, odhad_ref_datum, zp[zp]{stav_k, odbornosti[odb]{seznam, odhad, pomer}}}` (volitelný) | `pojistovny-sit-seznamy.js` | `pomer = seznam / odhad` za ČR; `odbornosti: null` u VoZP (seznam bez odbornosti) |
+
+Jednotka seznamu: smluvní zařízení (IČZ) s nasmlouvanou odborností. Seznamy nenesou
+pracoviště (IČP) ani adresu; kraj se doplňuje z číselníku ÚZIS, jinak z dvojčíslí IČZ
+(≥ 95 % jednomu kraji), jinak `bez_kraje`. Validátor hlídá `součet matice + bez_kraje =
+celkem`, `icz_kraj + icz_bez_kraje = icz_celkem`, že `bez-seznamu` nenese čísla a že
+`srovnani` sedí na obě strany (seznam = `celkem`, odhad = součet `matice`, `pomer`).
+
 ### `data/pojistovny-verifikace.json` — protokol druhého ověření (plánovaný)
 
 Zatím neexistuje. Čísla z výročních zpráv jsou přepsaná z PDF a „čekají na druhé

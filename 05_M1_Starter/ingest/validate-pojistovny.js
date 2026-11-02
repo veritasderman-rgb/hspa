@@ -10,7 +10,8 @@
 //  - data/pojistovny-otazky.json     sady otázek (typ otevrene | dotaznik), unikátní id, volitelná pole sady
 //                                    faze/respondent/uvod/pravni_zaklad (string), kanal (KANALY), povolene_respondenty,
 //                                    otázky napoveda (string), max_delka (celé číslo 1–2000)
-//  - data/pojistovny-sit.json        (volitelný, P3.5 prototyp) matice ZP × odbornost × kraj, validateSit() na konci souboru
+//  - data/pojistovny-sit.json        (volitelný, P3.5 prototyp) matice ZP × odbornost × kraj, validateSit() na konci souboru;
+//                                    volitelné bloky seznamy_pojistoven + srovnani (seznamy VZP/ČPZP/VoZP)
 //  - data/pojistovny-vek.json        (volitelný, P3.3) 7 ZP, součet struktury = celkem ±0,1 %,
 //                                    ČR celkem = součet ZP ±0,5 %; hospodareni.*_std_kc obálka s faktorem 0,5–2 a stavem
 //
@@ -708,6 +709,75 @@ export function validateSit(S) {
       const sum = ['adresa', 'okres', 'jediny', 'nepriraditelne'].reduce((a, x) => a + (q[x] || 0), 0);
       ok(Number.isInteger(q.icz_smluvni) && sum === q.icz_smluvni, `${T} kvalita[${zp}]: adresa+okres+jediny+nepriraditelne (${sum}) ≠ icz_smluvni (${q.icz_smluvni})`);
       if (q.icz_smluvni > 0 && q.nepriraditelne / q.icz_smluvni > 0.25) warnings.push(`${T} kvalita[${zp}]: ${Math.round(100 * q.nepriraditelne / q.icz_smluvni)} % IČZ nepřiřazeno k místu NRPZS (> 25 %)`);
+    }
+  }
+
+  // ---- volitelné bloky ze seznamů pojišťoven (ingest/fetchers/pojistovny-sit-seznamy.js); chybí-li, nic se nehlásí
+  const isInt0 = (v) => Number.isInteger(v) && v >= 0;
+  const sum = (o) => Object.values(o || {}).reduce((a, b) => a + (Number.isFinite(b) ? b : 0), 0);
+  const SZ = S.seznamy_pojistoven;
+  if (SZ != null && ok(isObj(SZ), `${T}: seznamy_pojistoven musí být objekt`)) {
+    const STAVY_SZ = ['seznam', 'seznam-bez-odbornosti', 'bez-seznamu', 'chyba'];
+    for (const [zp, s] of Object.entries(SZ)) {
+      const tag = `${T} seznamy_pojistoven[${zp}]`;
+      ok(ZP.includes(zp), `${tag}: neznámý kód ZP`);
+      if (!ok(isObj(s) && STAVY_SZ.includes(s.stav), `${tag}: stav musí být jeden z ${STAVY_SZ.join(', ')}`)) continue;
+      ok(isObj(s.zdroj) && isIsoDate(s.zdroj.overeno), `${tag}: zdroj.overeno musí být ISO datum`);
+      if (s.stav === 'bez-seznamu' || s.stav === 'chyba') {
+        ok(s.matice == null && s.celkem == null, `${tag}: ${s.stav} nesmí nést čísla (matice/celkem)`);
+        ok(isStr(s.poznamka), `${tag}: ${s.stav} musí mít poznamka (proč není seznam)`);
+        continue;
+      }
+      ok(isStr(s.zdroj.url) && isStr(s.zdroj.nazev), `${tag}: zdroj musí mít nazev a url souboru`);
+      ok(isIsoDate(s.zdroj.stav_k), `${tag}: zdroj.stav_k musí být ISO datum`);
+      ok(isStr(s.jednotka), `${tag}: chybí jednotka`);
+      ok(isInt0(s.icz_celkem) && isInt0(s.icz_bez_kraje), `${tag}: icz_celkem a icz_bez_kraje musí být nezáporná celá čísla`);
+      if (ok(isObj(s.icz_kraj), `${tag}: chybí icz_kraj`)) {
+        for (const [k, v] of Object.entries(s.icz_kraj)) {
+          ok(krKody.has(k), `${tag}.icz_kraj: neznámý kraj '${k}'`);
+          ok(isInt0(v), `${tag}.icz_kraj.${k}: musí být nezáporné celé číslo`);
+        }
+        ok(sum(s.icz_kraj) + (s.icz_bez_kraje || 0) === s.icz_celkem, `${tag}: součet icz_kraj + icz_bez_kraje ≠ icz_celkem`);
+      }
+      const q = s.kvalita;
+      if (ok(isObj(q), `${tag}: chybí kvalita`)) {
+        ok((q.kraj_ciselnik || 0) + (q.kraj_prefix || 0) + (q.kraj_neurcen || 0) === q.icz && q.icz === s.icz_celkem,
+          `${tag} kvalita: kraj_ciselnik + kraj_prefix + kraj_neurcen ≠ icz (nebo icz ≠ icz_celkem)`);
+        if (q.icz > 0 && q.kraj_neurcen / q.icz > 0.05) warnings.push(`${tag}: ${Math.round(100 * q.kraj_neurcen / q.icz)} % IČZ bez kraje (> 5 %)`);
+        if (q.odbornost_nazev_nesouhlasi > 0) warnings.push(`${tag}: ${q.odbornost_nazev_nesouhlasi} řádků má kód odbornosti s názvem mimo mapování (ingest/mapping/pojistovny_sit_odbornosti.json)`);
+      }
+      if (s.stav === 'seznam-bez-odbornosti') {
+        ok(s.matice == null && s.celkem == null, `${tag}: seznam bez odbornosti nesmí nést matice/celkem`);
+        continue;
+      }
+      if (!ok(isObj(s.matice) && isObj(s.celkem) && isObj(s.bez_kraje), `${tag}: seznam s odborností musí mít matice, celkem a bez_kraje`)) continue;
+      for (const k of kody) {
+        const cell = s.matice[k];
+        if (!ok(isObj(cell), `${tag}.matice: chybí odbornost ${k}`)) continue;
+        checkCells(cell, `${tag}.matice[${k}]`);
+        ok(isInt0(s.celkem[k]) && isInt0(s.bez_kraje[k]), `${tag}: celkem[${k}] a bez_kraje[${k}] musí být nezáporná celá čísla`);
+        ok(sum(cell) + (s.bez_kraje[k] || 0) === s.celkem[k], `${tag}: součet matice[${k}] + bez_kraje ≠ celkem (${s.celkem[k]})`);
+        ok(s.celkem[k] <= s.icz_celkem, `${tag}: celkem[${k}] > icz_celkem (odbornost nemůže mít víc IČZ, než má seznam)`);
+      }
+    }
+  }
+  const SR = S.srovnani;
+  if (SR != null && ok(isObj(SR) && isObj(SR.zp) && isStr(SR.metoda), `${T}: srovnani musí mít metoda a zp`)) {
+    for (const [zp, z] of Object.entries(SR.zp)) {
+      const tag = `${T} srovnani.zp[${zp}]`;
+      ok(ZP.includes(zp), `${tag}: neznámý kód ZP`);
+      const s = SZ?.[zp];
+      ok(s && (s.stav === 'seznam' || s.stav === 'seznam-bez-odbornosti'), `${tag}: srovnání bez seznamu pojišťovny`);
+      if (z?.odbornosti == null) continue;
+      if (!ok(isObj(z.odbornosti), `${tag}.odbornosti: musí být objekt nebo null`)) continue;
+      for (const [k, c] of Object.entries(z.odbornosti)) {
+        ok(kody.has(k), `${tag}.odbornosti: neznámá odbornost '${k}'`);
+        if (!ok(isObj(c) && isInt0(c.seznam) && isInt0(c.odhad), `${tag}.odbornosti[${k}]: seznam a odhad musí být nezáporná celá čísla`)) continue;
+        ok(c.seznam === s?.celkem?.[k], `${tag}.odbornosti[${k}]: seznam (${c.seznam}) ≠ seznamy_pojistoven.celkem (${s?.celkem?.[k]})`);
+        ok(c.odhad === sum(S.matice?.[zp]?.[k]), `${tag}.odbornosti[${k}]: odhad (${c.odhad}) ≠ součet matice NR-04-64`);
+        ok(c.odhad > 0 ? isNum(c.pomer) && Math.abs(c.pomer - c.seznam / c.odhad) < 0.001 : c.pomer == null,
+          `${tag}.odbornosti[${k}]: pomer musí být seznam / odhad (nebo null při nulovém odhadu)`);
+      }
     }
   }
   return { errors, warnings, checks };
