@@ -4,11 +4,10 @@
 // přes re-export v src/pojistovny.js.
 
 import { escapeHtml, formatNumberCz } from './page-shared.js';
+import { ZP, zpColor } from './zp-palette.js';
 
-export const ZP_COLOR = {
-  '111': 'var(--ink)', '201': '#4a6fa5', '205': '#38761d', '207': '#7a6a9c',
-  '209': '#b8860b', '211': '#0b5394', '213': '#b45f06',
-};
+// Barvy pojišťoven: jedna paleta s Atlasem pojištěnců, tokeny --zp-* (src/zp-palette.js).
+export const ZP_COLOR = Object.fromEntries(ZP.map((z) => [z.kod, zpColor(z.kod)]));
 export const NA = '<span class="zpc-na" title="nedohledáno">—</span>';
 export const esc = escapeHtml;
 

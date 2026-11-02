@@ -22306,6 +22306,29 @@ h6.pop-doc-h { font-size: 16px; font-style: italic; }
 }
 
 /* === Srovnávač pojišťoven: tokeny palety pojišťoven (--zp-*) — plní balíček P1.1 === */
+/* Jedna paleta pojišťoven pro Atlas pojištěnců i Srovnávač (src/zp-palette.js).
+   Pevné pořadí podle kódu, nikdy se nerecykluje; žádná pojišťovna není červená
+   (--red = hrot kompasu a stav bad). Text se barvou série nikdy nebarví —
+   identitu nese tečka, popisek zůstává --ink. */
+:root {
+  --zp-111: #2a78d6; /* VZP ČR */
+  --zp-201: #eb6834; /* VoZP */
+  --zp-205: #1baf7a; /* ČPZP */
+  --zp-207: #eda100; /* OZP */
+  --zp-209: #e87ba4; /* ZPŠ */
+  --zp-211: #008300; /* ZP MV ČR */
+  --zp-213: #6250d6; /* RBP */
+  --zp-neutral: var(--neutral); /* „ostatní pojišťovny“ při zvýraznění jedné */
+}
+:root[data-theme="dark"] {
+  --zp-111: #3987e5;
+  --zp-201: #d95926;
+  --zp-205: #199e70;
+  --zp-207: #c98500;
+  --zp-209: #d55181;
+  --zp-211: #008300;
+  --zp-213: #9085e9;
+}
 
 /* === Srovnávač pojišťoven: stránka pojistovny.html (.zpc-) — plní balíček P0.4 === */
 
