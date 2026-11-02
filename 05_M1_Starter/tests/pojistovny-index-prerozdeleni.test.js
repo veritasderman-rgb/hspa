@@ -7,6 +7,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { median, indexyZRady, aplikujIndex, STAV_INDEX } from '../ingest/transform_pojistovny_index_prerozdeleni.js';
 import { validateAll, loadDatasets, STD_STAVY } from '../ingest/validate-pojistovny.js';
+import { aplikujStandardizaci, vahyPath } from '../ingest/transform_pojistovny_standardizace.js';
 import { stdInfo, STD_METODA } from '../src/pojistovny.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -104,4 +105,25 @@ test('frontend stdInfo: index-prerozdeleni je standardizováno s metodou „pře
   assert.equal(st.dolozeno, true);
   assert.equal(st.metoda, STD_METODA['index-prerozdeleni']);
   assert.match(st.metoda, /přerozdělení MZ/);
+});
+
+test('refresh pipeline: placeholder věkových vah nepřepíše obálky z indexu přerozdělení; doložené váhy ano; npm skript spouští index transform', () => {
+  const vekPath = path.join(ROOT, 'data', 'pojistovny-vek.json');
+  if (!fs.existsSync(vekPath)) return;
+  const vek = JSON.parse(fs.readFileSync(vekPath, 'utf8'));
+  const def = JSON.parse(fs.readFileSync(vahyPath(P.rok_hospodareni), 'utf8'));
+  assert.equal(def.stav, 'placeholder-bez-vah');
+  const r = aplikujStandardizaci(structuredClone(P), vek, def, { dnes: '2026-11-02' });
+  for (const z of r.data.pojistovny) {
+    assert.equal(z.hospodareni.naklady_na_pojistence_std_kc.stav, STAV_INDEX, z.kod);
+    assert.equal(z.hospodareni.naklady_na_pojistence_std_kc.hodnota, P.pojistovny.find((x) => x.kod === z.kod).hospodareni.naklady_na_pojistence_std_kc.hodnota);
+  }
+  assert.equal(r.zachovano, 14, '7 ZP × 2 pole zachováno');
+  // doložené váhy (vše = 2 kromě 85+ = 3) obálky přepíšou
+  const dolozene = structuredClone(def); dolozene.stav = 'dolozeno';
+  for (const k of Object.keys(dolozene.vahy)) dolozene.vahy[k] = k.startsWith('85+') ? 3 : 2;
+  const r2 = aplikujStandardizaci(structuredClone(P), vek, dolozene, { dnes: '2026-11-02' });
+  assert.ok(r2.data.pojistovny.every((z) => z.hospodareni.naklady_na_pojistence_std_kc.stav === 'dolozeno'));
+  const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
+  assert.match(pkg.scripts['data:pojistovny-crp'], /transform_pojistovny_index_prerozdeleni\.js$/);
 });
