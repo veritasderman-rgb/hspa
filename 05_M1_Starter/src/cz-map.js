@@ -60,7 +60,12 @@ function ensureThemeObserver() {
  * Vytvoří inline SVG s tile-mapou krajů.
  * @param {HTMLElement} host  Cílový element, do kterého se vloží SVG.
  * @param {Object} dataset    { regions: [{code,name,value}], country_avg, direction, unit }
- * @param {Object} hooks      { onRegionHover(code), onRegionLeave(code) }
+ * @param {Object} hooks      { onRegionHover(code), onRegionLeave(code),
+ *                              fillForRegion?(region, relPct, dark) → CSS barva | null,
+ *                              titleForRegion?(region, relPct) → text popisku | null,
+ *                              valueText?(region) → text hodnoty na dlaždici | null }
+ *                            Volitelné hooky fillForRegion/titleForRegion přepisují výchozí
+ *                            barvu a popisek dlaždice (Srovnávač pojišťoven: sekvenční rampa).
  */
 export function renderCzMap(host, dataset, hooks = {}) {
   const widthPx = COLS * (TILE_W + PAD);
@@ -93,9 +98,12 @@ export function renderCzMap(host, dataset, hooks = {}) {
           <text x="${x + TILE_W/2}" y="${y + TILE_H/2 + 4}" text-anchor="middle" class="cz-tile-lbl">${t.lbl}</text>
         </g>`;
     }
-    const fill = isContextDependent ? pickColorNeutral(t.relPct, dark) : pickColor(t.relPct, betterHigher, dark);
-    const valueText = formatValueShort(t.region.value);
-    const titleText = `${t.region.name}: ${t.region.value} ${escapeXml(dataset.unit)} (${t.relPct >= 0 ? '+' : ''}${t.relPct.toFixed(1)} % od průměru ČR)`;
+    const customFill = typeof hooks.fillForRegion === 'function' ? hooks.fillForRegion(t.region, t.relPct, dark) : null;
+    const fill = customFill || (isContextDependent ? pickColorNeutral(t.relPct, dark) : pickColor(t.relPct, betterHigher, dark));
+    const customValue = typeof hooks.valueText === 'function' ? hooks.valueText(t.region) : null;
+    const valueText = customValue != null ? escapeXml(customValue) : formatValueShort(t.region.value);
+    const customTitle = typeof hooks.titleForRegion === 'function' ? hooks.titleForRegion(t.region, t.relPct) : null;
+    const titleText = customTitle || `${t.region.name}: ${t.region.value} ${escapeXml(dataset.unit)} (${t.relPct >= 0 ? '+' : ''}${t.relPct.toFixed(1)} % od průměru ČR)`;
     return `
       <g class="cz-tile" data-region-code="${t.code}" tabindex="0" role="button"
          aria-label="${escapeXml(titleText)}">

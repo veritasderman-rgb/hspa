@@ -117,6 +117,15 @@ zdrave-cesko.cz/
 | **JS moduly** | `src/pojistenci.js` → `page-shared` |
 | **CSS namespace** | `.pojistenci-*` (atlas, controls, story, tile) |
 
+### `pojistovny.html` — Srovnávač zdravotních pojišťoven (pracovní, mimo sitemapu)
+
+| | |
+|---|---|
+| **Účel** | Srovnání sedmi zdravotních pojišťoven podle metodiky `docs/metodika-srovnavac-pojistoven.md`: kmen a hospodaření, prevence, aplikace, semafor, registr dotazů. Plán: `PLAN-SROVNAVAC-POJISTOVEN.md`. |
+| **Fetchuje** | `data/pojistovny*.json`, `data/pojistenci-d5-zp.json` (líně), `data/zadosti-106.json` |
+| **JS moduly** | `src/pojistovny.js` (hero, modul 3) · `pojistovny-prevence.js` (moduly 1–2) · `zp-viz.js` (grafové primitivy) · `zp-interact.js` („Moje pojišťovna“, tooltip) · `zp-palette.js` · `zp-dotaznik.js` · **`pojistovny-kraje.js`** (`#zpKraje`: dlaždicová mapa krajů přes `cz-map.js` + těžiště kmene, fetch až při přiblížení k viewportu) · **`pojistovny-semafor.js`** (`#zpSemafor`: tabulka stavů 7 × 6 s ikonou + textem, stanoviska pojišťoven, changelog) · **`pojistovny-zadosti.js`** (`#zpZadosti`: matice dotazů a tabulka lhůt) |
+| **CSS namespace** | `.zpc-*` (stránka) · `.zpv-*` (primitivy) · `.zpi-*` (interakce) · `.zpd-*` (dotazníky) · `.zpk-*` (kraje) · `.zps-*` (semafor) · `.zpz-*` (žádosti) |
+
 ### `prevence.html` — Prevence
 
 | | |

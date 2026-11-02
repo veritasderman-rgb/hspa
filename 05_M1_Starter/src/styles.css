@@ -22355,10 +22355,10 @@ select.zpc-note{color:var(--ink);background:var(--paper);border:1px solid var(--
 .zpc-card .zpc-kod{font-family:var(--mono,ui-monospace,monospace);font-size:12px;color:var(--ink-mut)}
 .zpc-card h3{font-family:var(--serif);font-size:22px;margin:0}
 .zpc-card .zpc-full{grid-column:1/-1;font-family:var(--sans);font-size:12px;color:var(--ink-mut)}
-.zpc-card .zpc-kpi{display:grid;grid-template-columns:1fr auto;align-items:end;gap:0 10px;border-bottom:1px solid var(--rule);padding-bottom:8px}
+.zpc-card .zpc-kpi{display:grid;grid-template-columns:minmax(0,1fr);gap:2px 10px;border-bottom:1px solid var(--rule);padding-bottom:8px}
 .zpc-card .zpc-kpi b{font-family:var(--sans);font-size:24px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1}
 .zpc-card .zpc-kpi span{font-family:var(--sans);font-size:12px;color:var(--ink-mut);grid-row:2}
-.zpc-card .zpc-kpi svg{grid-row:1/3;align-self:center}
+.zpc-card .zpc-mini-wrap{grid-row:3;display:flex;flex-wrap:wrap;align-items:flex-end;gap:2px 8px;margin-top:6px}
 .zpc-card dl{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:7px 12px;font-family:var(--sans);font-size:12.5px}
 .zpc-card dt{color:var(--ink-mut);font-size:11px;letter-spacing:.02em}
 .zpc-card dd{margin:0;font-weight:600;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
@@ -22407,9 +22407,44 @@ select.zpc-note{color:var(--ink);background:var(--paper);border:1px solid var(--
 .zpc-plan li{display:grid;grid-template-columns:96px 1fr auto;gap:12px;padding:12px 0;border-top:1px solid var(--rule);font-family:var(--serif);font-size:15px}
 .zpc-plan b{font-family:var(--sans);font-size:12.5px;color:var(--red)}
 .zpc-plan .zpc-agent{font-family:var(--sans);font-size:12px;color:var(--ink-mut);white-space:nowrap}
+/* P1.4: hero (Moje pojišťovna, akordeon „O projektu“), karty s minigrafem, tabulka hospodaření */
+.zpc-moje-lbl{font-family:var(--sans);font-size:13px;color:var(--ink-mut);margin:16px 0 6px}
+.zpc-hero-acc{margin:4px 0 16px;max-width:70ch}
+.zpc-hero-acc .zpc-acc-body p{margin:0 0 10px}
+.zpc-accs{margin-top:24px}
+.zpc-acc .zpc-acc-body ul{padding-left:1.1em;margin:0}
+.zpc-acc .zpc-acc-body li{margin-bottom:6px}
+.zpc-chart{min-width:0}
+.zpc-card.is-moje{box-shadow:inset 0 0 0 2px var(--c,var(--ink));border-color:transparent}
+.zpc-mini{display:block;overflow:visible;font-family:var(--sans)}
+.zpc-mini-base{stroke:var(--rule2);stroke-width:1;stroke-dasharray:2 2}
+.zpc-mini-line{fill:none;stroke:var(--ink);stroke-width:1.75;stroke-linejoin:round;stroke-linecap:round}
+.zpc-mini-dot{fill:var(--ink)}
+.zpc-card.is-moje .zpc-mini-line{stroke:var(--c,var(--ink))}
+.zpc-card.is-moje .zpc-mini-dot{fill:var(--c,var(--ink))}
+.zpc-mini-end{font-size:11px;font-weight:600;fill:var(--ink)}
+.zpc-mini-yr{font-size:11px;fill:var(--ink-mut)}
+.zpc-mini-cap{font-family:var(--sans);font-size:11px;color:var(--ink-mut);white-space:nowrap}
+.zpc-card .zpc-std{display:block;font-weight:400;font-size:11px;color:var(--ink-mut);cursor:help;text-decoration:underline dotted}
+.zpc-card-more summary{cursor:pointer;font-family:var(--sans);font-size:12.5px;color:var(--ink-mut);min-height:24px;padding:3px 0}
+.zpc-card-more[open] summary{margin-bottom:8px}
+.zpc-sort{display:inline-flex;align-items:flex-end;gap:4px;min-height:24px;padding:0;border:0;background:none;font:inherit;color:inherit;text-align:right;cursor:pointer;white-space:normal}
+.zpc-sort-ic::after{content:"↕";opacity:.55}
+.zpc-tbl th[aria-sort="ascending"] .zpc-sort-ic::after{content:"↑";opacity:1}
+.zpc-tbl th[aria-sort="descending"] .zpc-sort-ic::after{content:"↓";opacity:1}
+.zpc-tbl thead th{vertical-align:bottom}
+.zpc-tbl td.zpc-barcell{position:relative;min-width:110px}
+.zpc-ibar{position:absolute;left:10px;right:10px;bottom:4px;height:3px}
+.zpc-ibar i{display:block;height:100%;width:var(--w);background:var(--ink-mut);border-radius:0 2px 2px 0}
+.zpc-tbl tr[aria-current="true"]>*{background:var(--paper2)}
+.zpc-tbl tr[aria-current="true"] .zpc-ibar i{background:var(--ink)}
+.zpc-acc--tbl{margin-top:8px}
+.zpc-acc--tbl .zpc-tbl{margin:0 12px 12px}
 
 @media (max-width: 640px) {
   .zpc-mod-head{grid-template-columns:1fr}
+  .zpc-cards{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(260px,84%);align-items:start;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px;-webkit-overflow-scrolling:touch}
+  .zpc-card{scroll-snap-align:start}
   .zpc-plan li{grid-template-columns:1fr}
   .zpc-acc dl{grid-template-columns:1fr}
 }
@@ -22430,6 +22465,34 @@ select.zpc-note{color:var(--ink);background:var(--paper);border:1px solid var(--
   .zpc-lvl-3 { background: none; color: var(--ink); border: 1px solid var(--ink); }
   .zpc-lvl-2, .zpc-lvl-1, .zpc-lvl-0 { background: none; color: var(--ink); border: 1px solid var(--ink-mut); }
 }
+
+/* P2.2 + P2.3: moduly 1, 2, 4 na primitivách .zpv- — progressive disclosure, přepínače sekce fondu, rizikové skupiny */
+.zpc-n{font-weight:400;color:var(--ink-mut);white-space:nowrap}
+.zpc-box h4 .zpc-n{text-transform:none;letter-spacing:0}
+.zpc-acc{margin-top:8px}
+.zpc-acc .zpc-acc{margin:0 0 6px}
+.zpc-acc summary:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.zpc-acc-body ul{margin:0;padding-left:1.1em}
+.zpc-acc-body li{margin-bottom:6px;font-size:15px}
+.zpc-acc-body p{margin:0 0 8px}
+.zpc-acc-body .zpv-figure:last-child{margin-bottom:6px}
+.zpc-mod .zpv-figure{margin-top:6px}
+.zpc-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 12px}
+.zpc-chip{display:inline-flex;align-items:center;gap:2px;min-height:32px;padding:4px 12px;border:1px solid var(--rule2);border-radius:999px;background:transparent;color:var(--ink);font-family:var(--sans);font-size:13px;line-height:1.2;cursor:pointer}
+.zpc-chip .zpc-dot{margin-right:6px}
+.zpc-chip:hover{background:var(--paper2);border-color:var(--ink)}
+.zpc-chip[aria-pressed="true"]{background:var(--paper2);border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink);font-weight:600}
+.zpc-chip:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.zpc-fp-who{margin:4px 0 10px}
+.zpc-fp-mode{margin-bottom:16px}
+.zpc-rg{list-style:none;padding:0;margin:0 0 10px}
+.zpc-rg li{padding:7px 0;border-top:1px solid var(--rule);margin:0;font-size:15px}
+.zpc-rg li:first-child{border-top:0;padding-top:0}
+.zpc-rg small{display:block;font-family:var(--sans);font-size:12.5px;color:var(--ink-mut);margin-top:1px}
+.zpc-rg-line{font-family:var(--sans);font-size:13.5px;margin:6px 0}
+.zpc-pills{list-style:none;display:flex;flex-wrap:wrap;gap:6px;padding:0;margin:0}
+.zpc-pills li{margin:0;padding:3px 10px;border:1px solid var(--rule2);border-radius:999px;font-family:var(--sans);font-size:12.5px}
+@media print{.zpc-chips{display:none}}
 
 /* === Srovnávač pojišťoven: vizuální primitivy src/zp-viz.js (.zpv-) — plní balíček P1.2/P2.1 === */
 /* Grafové primitivy srovnávače (rankedBars, segmentedBar, statTiles, meter,
@@ -22544,6 +22607,14 @@ select.zpc-note{color:var(--ink);background:var(--paper);border:1px solid var(--
 .zpv-ref--below { left: 0; width: var(--w); background: color-mix(in srgb, var(--ink) 8%, transparent); }
 .zpv-ref--above { left: var(--w); right: 0; background: color-mix(in srgb, var(--ink) 8%, transparent); }
 .zpv-ref--line { left: var(--w); width: 0; border-left: 1px solid var(--ink-mut); }
+/* rankedBars allowNegative: nulová osa --x, záporné bary doleva, hodnota vlevo od špičky */
+.zpv-has-neg .zpv-bar { left: var(--x); }
+.zpv-bar--neg { border-radius: 4px 0 0 4px; }
+.zpv-val--neg { left: auto; right: calc(100% - var(--x) + 6px); }
+.zpv-zero { position: absolute; top: 0; bottom: 0; left: var(--x); width: 0; border-left: 1px solid var(--ink-mut); pointer-events: none; }
+.zpv-has-neg.zpv-vw-s .zpv-area { margin-left: 4.5em; }
+.zpv-has-neg.zpv-vw-m .zpv-area { margin-left: 6.5em; }
+.zpv-has-neg.zpv-vw-l .zpv-area { margin-left: 8.5em; }
 
 /* dumbbell */
 .zpv-dbplot { --zpv-labw: 11em; }
@@ -22674,7 +22745,8 @@ select.zpc-note{color:var(--ink);background:var(--paper);border:1px solid var(--
 @media screen and (prefers-reduced-motion: no-preference) {
   .zpv-anim-ready [data-zpv-anim="bar"],
   .zpv-anim-ready [data-zpv-anim="seg"] { transform: scaleX(0); transform-origin: left center; }
-  .zpv-anim-ready .zpv-db-line--down { transform-origin: right center; }
+  .zpv-anim-ready .zpv-db-line--down,
+  .zpv-anim-ready .zpv-bar--neg { transform-origin: right center; }
   .zpv-anim-ready .is-in [data-zpv-anim="bar"],
   .zpv-anim-ready .is-in [data-zpv-anim="seg"] { transform: scaleX(1); transition: transform .6s cubic-bezier(.2, .8, .2, 1); transition-delay: calc(var(--i, 0) * 60ms); }
   .zpv-anim-ready [data-zpv-anim="line"] { stroke-dasharray: 1; stroke-dashoffset: 1; }
@@ -22693,6 +22765,7 @@ select.zpc-note{color:var(--ink);background:var(--paper);border:1px solid var(--
   .zpv-scroll { overflow: visible; }
   .zpv-mark { print-color-adjust: exact; -webkit-print-color-adjust: exact; background-image: repeating-linear-gradient(45deg, transparent 0 3px, color-mix(in srgb, var(--paper) 40%, transparent) 3px 4.5px); }
   .zpv-cell { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}
 
 /* === Srovnávač pojišťoven: interakce src/zp-interact.js (.zpi-) — plní balíček P1.3 === */
 /* Kontrakt pro ostatní moduly:
@@ -22804,4 +22877,120 @@ table.zpv-heat th[aria-sort="ascending"] button.zpv-sort::after { content: " \21
 @media print{
   .zpd-form{display:none}
   .zpd-agg{break-inside:avoid}
+}
+
+/* === Srovnávač pojišťoven: kraje, semafor, žádosti (.zpk-, .zps-, .zpz-) — balíčky P3.2/P4.1 === */
+/* Moduly src/pojistovny-kraje.js (#zpKraje), pojistovny-semafor.js (#zpSemafor), pojistovny-zadosti.js (#zpZadosti).
+   Barvy jen přes tokeny; text zůstává v inkoustu, identitu ZP nese tečka nebo mark.
+   V těchto sekcích se marky nedimují podle „Moje pojišťovna“ (main[data-moje-zp] .zpv-mark { opacity: .45 }):
+   výběr tu řeší vybraná pojišťovna a zvýraznění řádku tabulky. */
+main .zpk .zpv-mark, main[data-moje-zp] .zpk .zpv-mark, main[class*="zpi-hover-"] .zpk .zpv-mark,
+main .zps .zpv-mark, main[data-moje-zp] .zps .zpv-mark, main[class*="zpi-hover-"] .zps .zpv-mark { opacity: 1; }
+.zpk-sr, .zps-sr, .zpz-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+
+/* --- kraj × ZP (#zpKraje) --- */
+.zpk { margin: 28px 0 12px; font-family: var(--sans); }
+.zpk-loading { font-size: 13.5px; color: var(--ink-mut); min-height: 6em; margin: 8px 0; }
+.zpk-lead { font-family: var(--serif); font-size: 16px; line-height: 1.5; max-width: 70ch; margin: 0 0 6px; color: var(--ink); }
+.zpk-state { font-size: 13.5px; color: var(--ink-mut); margin: 0 0 10px; max-width: 80ch; }
+.zpk-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 18px; }
+.zpk-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 4px 12px; border: 1px solid var(--rule2); border-radius: 999px; background: transparent; color: var(--ink); font-family: var(--sans); font-size: 13px; line-height: 1.2; cursor: pointer; transition: background-color .15s ease, border-color .15s ease; }
+.zpk-chip:hover { background: var(--paper2); border-color: var(--ink); }
+.zpk-chip[aria-pressed="true"] { background: var(--paper2); border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); font-weight: 600; }
+.zpk-chip:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.zpk-dot { width: 10px; height: 10px; border-radius: 50%; flex: none; background: var(--c, var(--ink)); }
+.zpk-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 24px 40px; align-items: start; margin: 0 0 14px; }
+.zpk-mapfig { margin: 0; min-width: 0; }
+.zpk-cap { display: flex; flex-direction: column; gap: 2px; margin: 0 0 8px; }
+.zpk-title { font-size: 14px; font-weight: 600; color: var(--ink); }
+.zpk-sub { font-size: 12.5px; color: var(--ink-mut); }
+.zpk-map { width: 100%; }
+.zpk-map .cz-map-svg { width: 100%; height: auto; display: block; }
+.zpk-map .cz-map-tooltip { display: none; }
+.zpk-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin: 8px 0 4px; font-size: 12px; color: var(--ink-mut); }
+.zpk-ramp { display: inline-flex; gap: 2px; }
+.zpk-sw { display: inline-block; width: 26px; height: 12px; border-radius: 2px; background: var(--c, var(--paper2)); box-shadow: inset 0 0 0 1px var(--rule); }
+.zpk-readout { min-height: 2.9em; margin: 6px 0 0; font-size: 13.5px; line-height: 1.4; color: var(--ink); }
+.zpk-map .cz-tile-lbl { font-size: 15px; }
+.zpk-map .cz-tile-val { font-size: 22px; }
+.zpk-tez { min-width: 0; }
+.zpk-tez .zpv-barlist { --zpv-labw: 9em; }
+.zpk-tez .zpv-figure { margin-bottom: 0; }
+.zpk-tez .zpv-row.is-linked { background: var(--paper2); }
+.zpk[data-zp="111"] { --zpv-mark-color: var(--zp-111); }
+.zpk[data-zp="201"] { --zpv-mark-color: var(--zp-201); }
+.zpk[data-zp="205"] { --zpv-mark-color: var(--zp-205); }
+.zpk[data-zp="207"] { --zpv-mark-color: var(--zp-207); }
+.zpk[data-zp="209"] { --zpv-mark-color: var(--zp-209); }
+.zpk[data-zp="211"] { --zpv-mark-color: var(--zp-211); }
+.zpk[data-zp="213"] { --zpv-mark-color: var(--zp-213); }
+.zpk-scroll { overflow-x: auto; border: 1px solid var(--rule2); margin: 4px 0 6px; -webkit-overflow-scrolling: touch; }
+.zpk-evo { border-collapse: collapse; width: 100%; min-width: 960px; font-family: var(--sans); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.zpk-evo th, .zpk-evo td { padding: 6px 8px; border-bottom: 1px solid var(--rule); text-align: right; white-space: nowrap; }
+.zpk-evo thead th { background: var(--paper2); color: var(--ink-mut); font-size: 11.5px; font-weight: 600; }
+.zpk-evo tbody th, .zpk-evo thead th:first-child { text-align: left; }
+.zpk-evo tbody th { position: sticky; left: 0; z-index: 1; background: var(--paper); font-weight: 600; }
+.zpk-delta { font-weight: 600; }
+
+/* --- semafor (#zpSemafor) --- */
+.zps-intro { font-size: 14px; line-height: 1.5; margin: 0 0 10px; max-width: 80ch; }
+.zps-intro--empty { padding: 10px 14px; border-left: 3px solid var(--rule2); background: var(--paper2); }
+.zps-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0 0 10px; padding: 0; list-style: none; font-size: 12.5px; }
+.zps-legend li { display: inline-flex; align-items: center; gap: 6px; }
+.zps-ic { display: inline-block; width: 1.1em; height: 1.1em; margin-right: 4px; vertical-align: -.18em; line-height: 0; }
+.zps-ic svg { display: block; width: 100%; height: 100%; }
+.zps-tone-good { color: var(--good); }
+.zps-tone-warn { color: var(--warn); }
+.zps-tone-bad { color: var(--bad); }
+.zps-tone-neutral, .zps-tone-none { color: var(--ink-mut); }
+.zps-scroll { overflow-x: auto; border: 1px solid var(--rule2); margin: 0 0 14px; -webkit-overflow-scrolling: touch; }
+.zps-table { border-collapse: collapse; width: 100%; min-width: 780px; font-family: var(--sans); font-size: 13px; }
+.zps-table th, .zps-table td { padding: 8px 10px; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
+.zps-table thead th { background: var(--paper2); color: var(--ink-mut); font-size: 11.5px; font-weight: 600; letter-spacing: .02em; }
+.zps-table tbody th { position: sticky; left: 0; z-index: 1; background: var(--paper); white-space: nowrap; }
+.zps-cell { min-width: 112px; }
+.zps-cell .zps-tx { display: inline; }
+.zps-cell small { display: block; margin-top: 3px; max-width: 220px; font-size: 11px; line-height: 1.35; color: var(--ink-mut); }
+.zps-cell[data-stav="null"] { color: var(--ink-mut); background: color-mix(in srgb, var(--ink) 3%, transparent); }
+.zps-cell[data-stav="dolozeno"] { background: color-mix(in srgb, var(--good) 8%, transparent); }
+.zps-cell[data-stav="deklarovano"] { background: color-mix(in srgb, var(--warn) 8%, transparent); }
+.zps-cell[data-stav="nedolozeno"] { background: color-mix(in srgb, var(--bad) 7%, transparent); }
+.zps-acc .zps-none { margin: 0 0 8px; font-size: 14px; }
+.zps-quote { margin: 0 0 12px; padding: 6px 14px; border-left: 3px solid var(--rule2); }
+.zps-quote p { margin: 0 0 4px; font-family: var(--serif); font-size: 15px; line-height: 1.5; }
+.zps-quote footer { font-family: var(--sans); font-size: 12px; color: var(--ink-mut); }
+.zps-log { list-style: none; margin: 0 0 8px; padding: 0; }
+.zps-log li { display: grid; grid-template-columns: 7.5em minmax(0, 1fr); gap: 2px 14px; padding: 8px 0; border-top: 1px solid var(--rule); font-family: var(--sans); font-size: 13.5px; line-height: 1.45; }
+.zps-log time { color: var(--ink-mut); font-variant-numeric: tabular-nums; }
+.zps-log-src { grid-column: 2; font-size: 12px; font-style: normal; color: var(--ink-mut); overflow-wrap: anywhere; }
+
+/* --- registr žádostí (#zpZadosti) --- */
+.zpz { margin: 28px 0 8px; font-family: var(--sans); }
+.zpz-lead { font-size: 14px; line-height: 1.5; margin: 0 0 12px; max-width: 80ch; }
+.zpz-root .zpv-figure { margin-bottom: 14px; }
+.zpz-scroll { overflow-x: auto; border: 1px solid var(--rule2); margin: 4px 0 8px; -webkit-overflow-scrolling: touch; }
+.zpz-table { border-collapse: collapse; width: 100%; min-width: 860px; font-family: var(--sans); font-size: 12.5px; }
+.zpz-table th, .zpz-table td { padding: 7px 10px; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; white-space: nowrap; }
+.zpz-table thead th { background: var(--paper2); color: var(--ink-mut); font-size: 11.5px; font-weight: 600; }
+.zpz-table tbody th { position: sticky; left: 0; z-index: 1; background: var(--paper); }
+.zpz-stav { white-space: normal; min-width: 190px; }
+.zpz-stav small { display: block; margin-top: 2px; font-size: 11.5px; color: var(--ink-mut); }
+
+@media (max-width: 860px) {
+  .zpk-body { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 520px) {
+  .zps-log li { grid-template-columns: minmax(0, 1fr); }
+  .zps-log-src { grid-column: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .zpk-chip { transition: none; }
+}
+@media print {
+  .zpk-chips { display: none; }
+  .zpk-scroll, .zps-scroll, .zpz-scroll { overflow: visible; }
+  .zpk-evo, .zps-table, .zpz-table { min-width: 0; font-size: 9pt; }
+  .zpk-evo th, .zpk-evo td, .zps-table th, .zps-table td, .zpz-table th, .zpz-table td { white-space: normal; }
+  .zps-cell.zpv-mark { background-image: none; }
+  .zps-table tr, .zpz-table tr, .zpk-evo tr { break-inside: avoid; }
 }

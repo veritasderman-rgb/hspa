@@ -32,6 +32,7 @@ export const FILES = {
 /** Volitelné datasety: když soubor chybí, validace se přeskočí (P3.3 věková struktura z CRP). */
 export const OPTIONAL_FILES = {
   vek: 'pojistovny-vek.json',
+  zadosti: 'zadosti-106.json',
 };
 export const STD_STAVY = ['dolozeno', 'placeholder-bez-vah'];
 
@@ -109,6 +110,23 @@ export function validateAll(datasets) {
       }
       if (Array.isArray(c.podil_trend)) ok(c.podil_trend.length >= 10, `${tag}.crp.podil_trend: příliš krátká řada (${c.podil_trend.length})`);
 
+      // crp.pojistenci_trend (P3.1, graf index 2010 = 100): povinná řada ≥ 10 bodů {year, insured},
+      // roky vzestupně bez duplicit; poslední bod má sedět s crp.pojistenci (jinak WARN)
+      const pt = c.pojistenci_trend;
+      if (ok(Array.isArray(pt), `${tag}.crp.pojistenci_trend: chybí nebo není pole`)) {
+        ok(pt.length >= 10, `${tag}.crp.pojistenci_trend: příliš krátká řada (${pt.length}, min. 10)`);
+        let prev = -Infinity;
+        pt.forEach((p, i) => {
+          ok(isObj(p) && Number.isInteger(p.year) && p.year > prev, `${tag}.crp.pojistenci_trend[${i}].year: musí být celé číslo, roky vzestupně bez duplicit`);
+          ok(isObj(p) && isNum(p.insured) && p.insured > 0, `${tag}.crp.pojistenci_trend[${i}].insured: musí být kladné číslo`);
+          if (isObj(p) && Number.isInteger(p.year)) prev = p.year;
+        });
+        const last = pt[pt.length - 1];
+        if (isObj(last) && isNum(last.insured) && isNum(c.pojistenci) && last.insured !== c.pojistenci) {
+          warn(`${tag}.crp.pojistenci_trend: poslední bod (${last.insured}) ≠ crp.pojistenci (${c.pojistenci})`);
+        }
+      }
+
       const h = z.hospodareni ?? {};
       for (const f of HOSP_REQUIRED) {
         if (!ok(h[f] != null, `${tag}.hospodareni: missing '${f}'`)) continue;
@@ -159,6 +177,7 @@ export function validateAll(datasets) {
           ok(STAVY.includes(s.stav), `${tag}.semafor.${ob}: neznámý stav '${s.stav}'`);
           ok(!!(s.zduvodneni && s.zdroj && s.rok), `${tag}.semafor.${ob}: stav bez zdůvodnění/zdroje/roku`);
         }
+        if (s?.stanovisko_pojistovny != null) ok(isStr(s.stanovisko_pojistovny), `${tag}.semafor.${ob}.stanovisko_pojistovny: musí být neprázdný string (doslovné stanovisko)`);
       }
     }
     ok(seen.size === 7, `pojistovny: očekáváno 7, nalezeno ${seen.size}`);
@@ -189,6 +208,23 @@ export function validateAll(datasets) {
         labels.add(f?.label);
       });
     }
+    // P2.3: schéma kritérií přívětivosti (volitelné; prázdné aplikace[].kriteria = zatím nehodnoceno)
+    const kritIds = [];
+    const kp = A.kriteria_privetivosti;
+    const skalaKeys = Object.keys(kp?.skala ?? {});
+    if (kp != null && ok(isObj(kp), `${AT}: kriteria_privetivosti musí být objekt`)) {
+      ok(['navrh', 'schvaleno'].includes(kp.stav), `${AT} kriteria_privetivosti.stav: 'navrh'|'schvaleno' (${JSON.stringify(kp.stav)})`);
+      ok(isStr(kp.zdroj), `${AT} kriteria_privetivosti: chybí zdroj`);
+      ok(skalaKeys.length > 0 && skalaKeys.every((k) => /^\d+$/.test(k)), `${AT} kriteria_privetivosti.skala: neprázdný objekt s číselnými klíči`);
+      if (ok(Array.isArray(kp.kriteria), `${AT} kriteria_privetivosti.kriteria musí být pole`)) {
+        kp.kriteria.forEach((k, i) => {
+          ok(isStr(k?.id), `${AT} kriteria_privetivosti.kriteria[${i}]: chybí id`);
+          ok(isStr(k?.label), `${AT} kriteria_privetivosti.kriteria[${i}]: chybí label`);
+          ok(!kritIds.includes(k?.id), `${AT} kriteria_privetivosti.kriteria: duplicitní id '${k?.id}'`);
+          kritIds.push(k?.id);
+        });
+      }
+    }
     if (ok(Array.isArray(A.aplikace), `${AT}: aplikace musí být pole`)) {
       const codes = new Set();
       for (const a of A.aplikace) {
@@ -203,6 +239,13 @@ export function validateAll(datasets) {
           }
         }
         if (a?.uzivatele != null) checkEnvelope(a.uzivatele, `${tag}.uzivatele`);
+        if (a?.kriteria != null && ok(isObj(a.kriteria), `${tag}.kriteria: musí být objekt`)) {
+          for (const [k, v] of Object.entries(a.kriteria)) {
+            ok(kritIds.includes(k), `${tag}.kriteria: neznámé id '${k}'`);
+            ok(isObj(v) && skalaKeys.includes(String(v.stupen)), `${tag}.kriteria.${k}.stupen: '${v?.stupen}' není ze škály ${JSON.stringify(skalaKeys)}`);
+            ok(isStr(v?.zdroj) && isNum(v?.rok), `${tag}.kriteria.${k}: chybí zdroj nebo rok`);
+          }
+        }
       }
       ok(A.aplikace.length === 7, `${AT}: aplikace očekáváno 7, nalezeno ${A.aplikace.length}`);
       for (const k of ZP_CODES) ok(codes.has(k), `${AT}: chybí aplikace pro ZP ${k}`);
@@ -232,6 +275,12 @@ export function validateAll(datasets) {
       ok(isStr(o?.id), `${VT} oblasti[${i}]: chybí id`);
       ok(!oblIds.includes(o?.id), `${VT} oblasti: duplicitní id '${o?.id}'`);
       oblIds.push(o?.id);
+    });
+    const skupinaIds = [];
+    (V.fond_prevence_skupiny ?? []).forEach((s, i) => {
+      ok(isStr(s?.id) && isStr(s?.label), `${VT} fond_prevence_skupiny[${i}]: chybí id nebo label`);
+      ok(!skupinaIds.includes(s?.id), `${VT} fond_prevence_skupiny: duplicitní id '${s?.id}'`);
+      skupinaIds.push(s?.id);
     });
     const onkoCols = V.onko_screening_sloupce ?? [];
     const dusIds = (V.dusevni_sloupce ?? []).map((s) => s.id);
@@ -268,6 +317,7 @@ export function validateAll(datasets) {
         let sum = 0;
         pol.forEach((p, i) => {
           ok(p?.skutecnost === null || isNum(p?.skutecnost), `${tag}.fond_prevence_struktura.polozky[${i}].skutecnost: musí být číslo|null`);
+          if (skupinaIds.length) ok(skupinaIds.includes(p?.skupina), `${tag}.fond_prevence_struktura.polozky[${i}].skupina: '${p?.skupina}' chybí nebo není ve slovníku fond_prevence_skupiny`);
           if (isNum(p?.skutecnost)) sum += p.skutecnost;
         });
         const celkem = fps.celkem?.skutecnost;
@@ -378,6 +428,13 @@ export function validateAll(datasets) {
     }
   }
 
+  if (datasets?.zadosti != null) {
+    const zr = validateZadosti(datasets.zadosti);
+    errors.push(...zr.errors);
+    warnings.push(...zr.warnings);
+    checks += zr.checks;
+  }
+
   return { errors, warnings, checks };
 }
 
@@ -411,3 +468,68 @@ function main() {
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
+
+/**
+ * Registr dotazů a žádostí pojišťovnám (data/zadosti-106.json, volitelný dataset).
+ * Hlídá enumy, kódy ZP, ISO data, unikátní id a konzistenci stavu s daty odeslání/doručení.
+ * (Enumy jsou uvnitř funkce: main() se volá už při načtení modulu, před vyhodnocením konstant níže.)
+ */
+export function validateZadosti(Z) {
+  const errors = [];
+  const warnings = [];
+  let checks = 0;
+  const ok = (cond, msg) => { checks++; if (!cond) errors.push(msg); return !!cond; };
+  const typy = ['nabidka-spoluprace', 'zadost-106', 'pravo-na-odpoved'];
+  const stavy = ['pripravena', 'odeslana', 'odpovezeno', 'po-lhute', 'bez-odpovedi'];
+  const T = 'zadosti-106.json';
+
+  if (!ok(isObj(Z), `${T}: chybí nebo není objekt`)) return { errors, warnings, checks };
+  ok(isStr(Z.version), `${T}: chybí version`);
+  ok(isStr(Z.generated_at), `${T}: chybí generated_at`);
+  if (Z.changelog != null && ok(Array.isArray(Z.changelog), `${T} changelog: musí být pole`)) {
+    Z.changelog.forEach((c, i) => {
+      const tag = `${T} changelog[${i}]`;
+      if (!ok(isObj(c), `${tag}: musí být objekt`)) return;
+      ok(isIsoDate(c.datum), `${tag}.datum: není ISO datum YYYY-MM-DD (${JSON.stringify(c.datum)})`);
+      ok(isStr(c.zmena), `${tag}.zmena: musí být neprázdný string`);
+      ok(typeof c.zdroj === 'string', `${tag}.zdroj: musí být string`);
+    });
+  }
+  if (!ok(Array.isArray(Z.zadosti), `${T} zadosti: musí být pole`)) return { errors, warnings, checks };
+
+  const ids = new Set();
+  const trojice = new Set();
+  Z.zadosti.forEach((z, i) => {
+    const tag = `${T} zadosti[${i}]`;
+    if (!ok(isObj(z), `${tag}: musí být objekt`)) return;
+    if (ok(isStr(z.id), `${tag}.id: chybí`)) {
+      ok(!ids.has(z.id), `${tag}.id: duplicitní '${z.id}'`);
+      ids.add(z.id);
+    }
+    ok(Number.isInteger(z.kolo) && z.kolo >= 1, `${tag}.kolo: musí být celé číslo ≥ 1 (${JSON.stringify(z.kolo)})`);
+    ok(typy.includes(z.typ), `${tag}.typ: '${z.typ}' není z enumu ${JSON.stringify(typy)}`);
+    ok(ZP_CODES.includes(z.pojistovna_kod), `${tag}.pojistovna_kod: neznámý kód '${z.pojistovna_kod}'`);
+    ok(z.odeslano == null || isIsoDate(z.odeslano), `${tag}.odeslano: musí být null nebo ISO datum (${JSON.stringify(z.odeslano)})`);
+    ok(Number.isInteger(z.lhuta_dni) && z.lhuta_dni >= 1, `${tag}.lhuta_dni: musí být celé číslo ≥ 1 (${JSON.stringify(z.lhuta_dni)})`);
+    ok(z.doruceno == null || isIsoDate(z.doruceno), `${tag}.doruceno: musí být null nebo ISO datum (${JSON.stringify(z.doruceno)})`);
+    ok(z.odpoved_soubor == null || (isStr(z.odpoved_soubor) && !/^\/|\.\./.test(z.odpoved_soubor)),
+      `${tag}.odpoved_soubor: musí být null nebo relativní název souboru bez '..' (${JSON.stringify(z.odpoved_soubor)})`);
+    if (!ok(stavy.includes(z.stav), `${tag}.stav: '${z.stav}' není z enumu ${JSON.stringify(stavy)}`)) return;
+
+    if (z.stav === 'pripravena') {
+      ok(z.odeslano == null && z.doruceno == null, `${tag}: stav 'pripravena' nesmí mít odeslano ani doruceno (nic nebylo odesláno)`);
+    } else {
+      ok(isIsoDate(z.odeslano), `${tag}: stav '${z.stav}' vyžaduje datum odeslano`);
+    }
+    if (z.stav === 'odpovezeno') ok(isIsoDate(z.doruceno), `${tag}: stav 'odpovezeno' vyžaduje datum doruceno`);
+    if (z.doruceno != null) {
+      ok(z.stav === 'odpovezeno', `${tag}: doruceno je vyplněno, stav musí být 'odpovezeno' (je '${z.stav}')`);
+      if (isIsoDate(z.odeslano) && isIsoDate(z.doruceno)) ok(z.doruceno >= z.odeslano, `${tag}: doruceno (${z.doruceno}) je dřív než odeslano (${z.odeslano})`);
+    }
+    if (z.odpoved_soubor != null && z.stav !== 'odpovezeno') warnings.push(`${tag}: odpoved_soubor u stavu '${z.stav}'`);
+    const t = `${z.kolo}|${z.typ}|${z.pojistovna_kod}`;
+    if (trojice.has(t)) warnings.push(`${tag}: další záznam pro kolo ${z.kolo}, typ ${z.typ}, ZP ${z.pojistovna_kod}`);
+    trojice.add(t);
+  });
+  return { errors, warnings, checks };
+}
