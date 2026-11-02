@@ -242,8 +242,8 @@ z toho, co už leží v repu.
 | `zp_rust_kmene_pct` | Růst kmene za 10 let / index 2010 = 100 | CRP | ZP | **ano** (P3.1) |
 | `zp_naklady_na_pojistence_kc` | Náklady na zdravotní služby na pojištěnce | MZ Hodnocení v.z.p. | ZP × rok | **ano** 2024; 2025 jen VZP, VoZP, OZP |
 | `zp_naklady_na_pojistence_std_kc` | totéž věkově a pohlavně standardizované | CRP + indexy přerozdělení | ZP × rok | **částečně**: kód ano, váhy ne (`placeholder-bez-vah`) |
-| `zp_provozni_naklady_pct` | Provozní náklady / příjmy (a proti zákonnému limitu 2,91 %) | MZ Tab. 4, VZ | ZP × rok | **ano** 2024; limit u 3 ze 7 chybí |
-| `zp_rezerva_pct_vydaju` | Zůstatek ZFZP + BÚ jako % ročních výdajů | MZ, ZPP | ZP × rok | **ano** (`zustatek_*`, `zustatek_2026_pct_vydaju`) |
+| `zp_provozni_naklady_pct` | Výdaje na vlastní činnost / **výdaje celkem** (MZ Tab. 4, hotovostně); vedle toho zákonný limit nákladů na činnost podle vyhlášky 418/2003 Sb., který má **každá ZP vlastní** (VZP 2,91 %, ČPZP 3,05 %, ZPŠ 3,08 %, RBP 3,07 %; VoZP, OZP, ZPMV nedohledán) a počítá se z jiného základu (rozvrhová základna), takže se s podílem na výdajích přímo nesrovnává | MZ Tab. 4, VZ | ZP × rok | **ano** 2024 (`provozni_naklady_pct`, `provozni_limit_pct`); limit u 3 ze 7 chybí |
+| `zp_rezerva_pct_vydaju` | Zůstatek na **všech bankovních účtech** jako % ročních výdajů (`zustatek_bu_celkem_mld`; ZFZP se **nepřičítá**, jeho účet je v součtu BÚ už obsažen — VZP 2024: ZFZP 11,12 mld, všechny BÚ 32,34 mld); ZFZP lze ukázat zvlášť jako dílčí položku | MZ Tab. 6, ZPP tab. 9 | ZP × rok | **ano** (`zustatek_bu_celkem_mld`, `zustatek_2026_pct_vydaju`); ZFZP zvlášť (`zustatek_zfzp_mld`) |
 | `zp_hospodarsky_vysledek_mld` | Hospodářský výsledek (příjmy − výdaje) | MZ Tab. 2 a 4 | ZP × rok | **ano** 2024; zdroj pro saldo v Tab. 1 chybí |
 | `zp_fond_prevence_na_pojistence_kc` | Fond prevence na pojištěnce (a % příjmů) | MZ, VZ | ZP × rok | **ano** 2024 (+ 2025 VZP, VoZP, OZP); rozhodnutí PS 7. 10. 2026: není hlavní ukazatel |
 | `zp_prijmy_na_pojistence_kc` | Pojistné po přerozdělení na pojištěnce | MZ | ZP × rok | **ano** 2024; měsíčně ne |
