@@ -168,3 +168,30 @@ Pro odbornou skupinu (Advance, FBMI ČVUT); do jejich odpovědi zůstává stav 
   člověk (třída C) — stránka `pojistovny.html` i `middleware.js` spadají do třídy C podle
   `scripts/pr-gate.js` (nová stránka, nasazení).
 - Odborná garance metodiky: Advance, FBMI ČVUT, NAPO; redakce metodiku nemění sama.
+
+## 7. Dotazníky
+
+- **Definice** dotazníku je jen v `data/pojistovny-otazky.json` (verzovaná, validovaná
+  `ingest/validate-pojistovny.js`): sada má `id`, `verze`, otázky nebo části s otázkami;
+  otázka s `moznosti` je výběrová (`vyber: "jeden"` = jedna volba, jinak vícenásobná),
+  volba „jiné (uveďte)“ dostane pole upřesnění. Formulář na `pojistovny.html` (modul 4)
+  se vyrenderuje z definice (`src/zp-dotaznik.js`), takže se otázky mění v gitu.
+  Změna znění nebo nabídky otázky zvyšuje `verze` sady, odpověď nese verzi, na kterou se
+  odpovídalo.
+- **Odpovědi** ukládá `api/dotaznik.js` do Neonu (Postgres, projekt `hspa-dotazniky`,
+  tabulka `dotaznik_odpoved`, schéma v `api/migrations/`). Funkce odpověď ověří proti
+  definici sady (jen známé otázky, hodnoty z nabídky, texty do 2 000 znaků). Bez
+  `DATABASE_URL` vrací 503 a nic neukládá.
+- **Tokeny** mají adresné sady (pojišťovny, pacientské organizace): každý respondent
+  dostane jednorázový odkaz `pojistovny.html?dotaznik=<sada>&token=<token>`, který
+  vygeneruje `scripts/dotaznik-token.js`. V databázi je jen sha256 hash tokenu; typ a kód
+  respondenta určuje token, ne tělo požadavku. Použitý nebo prošlý token odpověď
+  nepřijme. Veřejná anketa tokeny nepoužívá a text s e-mailem nebo rodným číslem odmítne.
+- **Export agregátů**: `node scripts/export-dotaznik.js` stáhne počty z view
+  `dotaznik_agregace` do `data/pojistovny-dotaznik-agregaty.json` (třída B, dělá rutina).
+  Stránka čte jen tento soubor. Zveřejňují se jen otázky s nabídkou, žádné volné texty,
+  a sada s méně než třemi odpověďmi se skryje, aby nešlo přiřadit odpověď instituci.
+- **Soukromí** (GOVERNANCE § 2 bod 5): žádné osobní údaje, IP adresa se neukládá (rate
+  limit drží v paměti funkce jen hash IP se solí), u adresných sad je respondentem
+  instituce, ne osoba. Odpovědi pojišťoven na kolo 1 zůstávají jako dokumenty v
+  `ingest/manual/pojistovny/odpovedi/`, Neon je jen pro strukturované dotazníky.
