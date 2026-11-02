@@ -39,7 +39,7 @@ export const OPTIONAL_FILES = {
   verifikace: 'pojistovny-verifikace.json', // výstup scripts/pojistovny-verify.js (ověření čísel proti VZ)
   sit: 'pojistovny-sit.json',
 };
-export const STD_STAVY = ['dolozeno', 'placeholder-bez-vah'];
+export const STD_STAVY = ['dolozeno', 'placeholder-bez-vah', 'index-prerozdeleni'];
 
 export const ZP_CODES = ['111', '201', '205', '207', '209', '211', '213'];
 export const OBLASTI = ['prevence', 'dostupnost', 'sit', 'kvalita', 'servis', 'hospodareni'];
@@ -144,6 +144,15 @@ export function validateAll(datasets) {
         checkEnvelope(h[f], `${tag}.hospodareni.${f}`);
       }
 
+      // volitelný index nákladovosti kmene z přerozdělení MZ (metodika § 4.2): obálka, hodnota 0,5–2
+      if (h.index_prerozdeleni != null) {
+        const itag = `${tag}.hospodareni.index_prerozdeleni`;
+        checkEnvelope(h.index_prerozdeleni, itag);
+        if (isObj(h.index_prerozdeleni)) {
+          ok(isNum(h.index_prerozdeleni.hodnota) && h.index_prerozdeleni.hodnota >= 0.5 && h.index_prerozdeleni.hodnota <= 2, `${itag}.hodnota: index 0,5–2`);
+          ok(isNum(h.index_prerozdeleni.median_kc) && isNum(h.index_prerozdeleni.median_cr_kc), `${itag}: chybí median_kc / median_cr_kc`);
+        }
+      }
       // volitelná standardizovaná pole *_std_kc (P3.3): obálka + faktor 0,5–2 + stav vah
       for (const [k, v] of Object.entries(h)) {
         if (!/_std_kc$/.test(k)) continue;
@@ -156,6 +165,10 @@ export function validateAll(datasets) {
         const base = h[k.replace(/_std_kc$/, '_kc')]?.hodnota;
         if (v.stav === 'placeholder-bez-vah' && isNum(base) && isNum(v.hodnota)) {
           ok(v.hodnota === base, `${stag}: placeholder bez vah musí mít hodnotu = nestandardizované (${v.hodnota} ≠ ${base})`);
+        }
+        if (v.stav === 'index-prerozdeleni' && isNum(base) && isNum(v.hodnota)) {
+          ok(Math.abs(v.hodnota - base * v.faktor) <= 1, `${stag}: hodnota musí být base × faktor (${v.hodnota} ≠ ${base} × ${v.faktor})`);
+          ok(isNum(h.index_prerozdeleni?.hodnota) && Math.abs(1 / h.index_prerozdeleni.hodnota - v.faktor) < 0.001, `${stag}: faktor musí být 1 / index_prerozdeleni`);
         }
       }
 

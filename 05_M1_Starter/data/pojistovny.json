@@ -1,6 +1,6 @@
 {
   "version": "0.1.0",
-  "generated_at": "2026-11-02T19:09:33Z",
+  "generated_at": "2026-11-02T22:08:40Z",
   "_doc": "Srovnávač zdravotních pojišťoven — sloučený dataset 7 ZP. crp = kmen 2025 z CRP (OIS 11-47); hospodareni = rok 2024 z Hodnocení vývoje systému v.z.p. (MZ ČR + MF) a výročních zpráv, každá položka {hodnota, rok, zdroj}; zustatek_* z ZPP 2026 (tisk 280); prevence/servis/mereni_dopadu z VZ 2024 a webů; semafor = hodnocení v 6 oblastech podle docs/metodika-srovnavac-pojistoven.md (stav null = zatím nehodnoceno). Validuje ingest/validate-pojistovny.js.",
   "rok_hospodareni": 2024,
   "rok_crp": 2025,
@@ -9,7 +9,8 @@
     {"datum":"2026-11-02","zmena":"Zavedení changelogu podle metodiky § 4.7; data beze změny.","zdroj":"PLAN-SROVNAVAC-POJISTOVEN.md P0.3"},
     {"datum":"2026-11-02","zmena":"Věková standardizace (P3.3): doplněna pole naklady_na_pojistence_std_kc a fond_prevence_na_pojistence_std_kc; nákladové indexy 2024 zatím nedoloženy (placeholder, faktor 1, hodnota = nestandardizovaná).","zdroj":"PLAN-SROVNAVAC-POJISTOVEN.md P3.3; docs/metodika-srovnavac-pojistoven.md § 4.1"},
     {"datum":"2026-11-02","zmena":"Doplněna řada crp.pojistenci_trend (počet pojištěnců 2010–2025, 16 bodů na ZP) z ingest/manual/pojistovny/crp-agregaty-2025.json pro graf index 2010 = 100 (P3.1); ostatní data beze změny.","zdroj":"ÚZIS · CRP · OIS 11-47 (verze 2026-01); PLAN-SROVNAVAC-POJISTOVEN.md P3.1"},
-    {"datum":"2026-11-02","zmena":"ZP MV ČR: provozni_fond_naklady_mil 1 426,8 → 1 427,6 mil. Kč podle VZ 2024 (čerpání 1 427 562 tis. Kč); jediný rozpor z automatického ověření 413 čísel proti textům výročních zpráv.","zdroj":"scripts/pojistovny-verify.js, ingest/manual/pojistovny/vz-text/211-2024.txt"}
+    {"datum":"2026-11-02","zmena":"ZP MV ČR: provozni_fond_naklady_mil 1 426,8 → 1 427,6 mil. Kč podle VZ 2024 (čerpání 1 427 562 tis. Kč); jediný rozpor z automatického ověření 413 čísel proti textům výročních zpráv.","zdroj":"scripts/pojistovny-verify.js, ingest/manual/pojistovny/vz-text/211-2024.txt"},
+    {"datum":"2026-11-02","zmena":"Standardizace nákladů na pojištěnce indexem nákladovosti kmene z měsíčního přerozdělení MZ (metodika § 4.2): pole index_prerozdeleni a přepočet naklady_na_pojistence_std_kc / fond_prevence_na_pojistence_std_kc (stav index-prerozdeleni, rok 2024); nahrazuje placeholder věkově-pohlavní standardizace, dokud MZ nezveřejní nákladové indexy věkových skupin.","zdroj":"MZ ČR · přerozdělování pojistného (měsíční PDF) · ingest/manual/pojistovny/prerozdeleni-mz.json; docs/metodika-srovnavac-pojistoven.md § 4.2"}
   ],
   "system": {
     "rok": 2024,
@@ -492,20 +493,28 @@
           "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280"
         },
         "naklady_na_pojistence_std_kc": {
-          "hodnota": 47998,
+          "hodnota": 46232,
           "rok": 2024,
-          "zdroj": "výpočet: naklady_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
-          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025.",
-          "faktor": 1,
-          "stav": "placeholder-bez-vah"
+          "zdroj": "výpočet: naklady_na_pojistence_kc × faktor z indexu nákladovosti kmene (ingest/transform_pojistovny_index_prerozdeleni.js; ingest/manual/pojistovny/prerozdeleni-mz.json)",
+          "poznamka": "faktor 0,963 = 1 / index 1,038 (medián měsíční částky po přerozdělení 2024, MZ); stav index-prerozdeleni: standardizace indexem nákladovosti kmene z přerozdělení, ne věkově-pohlavními indexy (ty MZ pro 2024 nezveřejnilo, metodika § 4.2).",
+          "faktor": 0.9632,
+          "stav": "index-prerozdeleni"
         },
         "fond_prevence_na_pojistence_std_kc": {
-          "hodnota": 338,
+          "hodnota": 326,
           "rok": 2024,
-          "zdroj": "výpočet: fond_prevence_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
-          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025. Fond prevence je standardizován faktorem nákladů na zdravotní služby — jen aproximace (věkový profil čerpání prevence se liší).",
-          "faktor": 1,
-          "stav": "placeholder-bez-vah"
+          "zdroj": "výpočet: fond_prevence_na_pojistence_kc × faktor z indexu nákladovosti kmene (ingest/transform_pojistovny_index_prerozdeleni.js; ingest/manual/pojistovny/prerozdeleni-mz.json)",
+          "poznamka": "faktor 0,963 = 1 / index 1,038 (medián měsíční částky po přerozdělení 2024, MZ); stav index-prerozdeleni: standardizace indexem nákladovosti kmene z přerozdělení, ne věkově-pohlavními indexy (ty MZ pro 2024 nezveřejnilo, metodika § 4.2). Fond prevence je standardizován stejným faktorem jako náklady na zdravotní služby — jen aproximace (věkový profil čerpání prevence se liší).",
+          "faktor": 0.9632,
+          "stav": "index-prerozdeleni"
+        },
+        "index_prerozdeleni": {
+          "hodnota": 1.0382,
+          "rok": 2024,
+          "zdroj": "MZ ČR · Přerozdělování pojistného na veřejné zdravotní pojištění · Výsledná částka po přerozdělení připadající na jednoho pojištěnce (https://mzd.gov.cz/prerozdelovani-pojistneho-na-verejne-zdravotni-pojisteni/; ingest/manual/pojistovny/prerozdeleni-mz.json)",
+          "poznamka": "medián měsíční částky po přerozdělení na pojištěnce 2024: 3983 Kč proti 3836.5 Kč za všechny pojišťovny; index > 1 = nákladnější kmen (věk, pohlaví, PCG, nákladné služby). Medián místo průměru kvůli mimořádným vyúčtováním v jednotlivých měsících.",
+          "median_kc": 3983,
+          "median_cr_kc": 3836.5
         }
       },
       "hospodareni_2025": {
@@ -949,20 +958,28 @@
           "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280"
         },
         "naklady_na_pojistence_std_kc": {
-          "hodnota": 46703,
+          "hodnota": 48310,
           "rok": 2024,
-          "zdroj": "výpočet: naklady_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
-          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025.",
-          "faktor": 1,
-          "stav": "placeholder-bez-vah"
+          "zdroj": "výpočet: naklady_na_pojistence_kc × faktor z indexu nákladovosti kmene (ingest/transform_pojistovny_index_prerozdeleni.js; ingest/manual/pojistovny/prerozdeleni-mz.json)",
+          "poznamka": "faktor 1,034 = 1 / index 0,967 (medián měsíční částky po přerozdělení 2024, MZ); stav index-prerozdeleni: standardizace indexem nákladovosti kmene z přerozdělení, ne věkově-pohlavními indexy (ty MZ pro 2024 nezveřejnilo, metodika § 4.2).",
+          "faktor": 1.0344,
+          "stav": "index-prerozdeleni"
         },
         "fond_prevence_na_pojistence_std_kc": {
-          "hodnota": 284,
+          "hodnota": 294,
           "rok": 2024,
-          "zdroj": "výpočet: fond_prevence_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
-          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025. Fond prevence je standardizován faktorem nákladů na zdravotní služby — jen aproximace (věkový profil čerpání prevence se liší).",
-          "faktor": 1,
-          "stav": "placeholder-bez-vah"
+          "zdroj": "výpočet: fond_prevence_na_pojistence_kc × faktor z indexu nákladovosti kmene (ingest/transform_pojistovny_index_prerozdeleni.js; ingest/manual/pojistovny/prerozdeleni-mz.json)",
+          "poznamka": "faktor 1,034 = 1 / index 0,967 (medián měsíční částky po přerozdělení 2024, MZ); stav index-prerozdeleni: standardizace indexem nákladovosti kmene z přerozdělení, ne věkově-pohlavními indexy (ty MZ pro 2024 nezveřejnilo, metodika § 4.2). Fond prevence je standardizován stejným faktorem jako náklady na zdravotní služby — jen aproximace (věkový profil čerpání prevence se liší).",
+          "faktor": 1.0344,
+          "stav": "index-prerozdeleni"
+        },
+        "index_prerozdeleni": {
+          "hodnota": 0.9668,
+          "rok": 2024,
+          "zdroj": "MZ ČR · Přerozdělování pojistného na veřejné zdravotní pojištění · Výsledná částka po přerozdělení připadající na jednoho pojištěnce (https://mzd.gov.cz/prerozdelovani-pojistneho-na-verejne-zdravotni-pojisteni/; ingest/manual/pojistovny/prerozdeleni-mz.json)",
+          "poznamka": "medián měsíční částky po přerozdělení na pojištěnce 2024: 3709 Kč proti 3836.5 Kč za všechny pojišťovny; index > 1 = nákladnější kmen (věk, pohlaví, PCG, nákladné služby). Medián místo průměru kvůli mimořádným vyúčtováním v jednotlivých měsících.",
+          "median_kc": 3709,
+          "median_cr_kc": 3836.5
         }
       },
       "hospodareni_2025": {
@@ -1393,20 +1410,28 @@
           "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280"
         },
         "naklady_na_pojistence_std_kc": {
-          "hodnota": 42421,
+          "hodnota": 46078,
           "rok": 2024,
-          "zdroj": "výpočet: naklady_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
-          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025.",
-          "faktor": 1,
-          "stav": "placeholder-bez-vah"
+          "zdroj": "výpočet: naklady_na_pojistence_kc × faktor z indexu nákladovosti kmene (ingest/transform_pojistovny_index_prerozdeleni.js; ingest/manual/pojistovny/prerozdeleni-mz.json)",
+          "poznamka": "faktor 1,086 = 1 / index 0,921 (medián měsíční částky po přerozdělení 2024, MZ); stav index-prerozdeleni: standardizace indexem nákladovosti kmene z přerozdělení, ne věkově-pohlavními indexy (ty MZ pro 2024 nezveřejnilo, metodika § 4.2).",
+          "faktor": 1.0862,
+          "stav": "index-prerozdeleni"
         },
         "fond_prevence_na_pojistence_std_kc": {
-          "hodnota": 308,
+          "hodnota": 335,
           "rok": 2024,
-          "zdroj": "výpočet: fond_prevence_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
-          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025. Fond prevence je standardizován faktorem nákladů na zdravotní služby — jen aproximace (věkový profil čerpání prevence se liší).",
-          "faktor": 1,
-          "stav": "placeholder-bez-vah"
+          "zdroj": "výpočet: fond_prevence_na_pojistence_kc × faktor z indexu nákladovosti kmene (ingest/transform_pojistovny_index_prerozdeleni.js; ingest/manual/pojistovny/prerozdeleni-mz.json)",
+          "poznamka": "faktor 1,086 = 1 / index 0,921 (medián měsíční částky po přerozdělení 2024, MZ); stav index-prerozdeleni: standardizace indexem nákladovosti kmene z přerozdělení, ne věkově-pohlavními indexy (ty MZ pro 2024 nezveřejnilo, metodika § 4.2). Fond prevence je standardizován stejným faktorem jako náklady na zdravotní služby — jen aproximace (věkový profil čerpání prevence se liší).",
+          "faktor": 1.0862,
+          "stav": "index-prerozdeleni"
+        },
+        "index_prerozdeleni": {
+          "hodnota": 0.9206,
+          "rok": 2024,
+          "zdroj": "MZ ČR · Přerozdělování pojistného na veřejné zdravotní pojištění · Výsledná částka po přerozdělení připadající na jednoho pojištěnce (https://mzd.gov.cz/prerozdelovani-pojistneho-na-verejne-zdravotni-pojisteni/; ingest/manual/pojistovny/prerozdeleni-mz.json)",
+          "poznamka": "medián měsíční částky po přerozdělení na pojištěnce 2024: 3532 Kč proti 3836.5 Kč za všechny pojišťovny; index > 1 = nákladnější kmen (věk, pohlaví, PCG, nákladné služby). Medián místo průměru kvůli mimořádným vyúčtováním v jednotlivých měsících.",
+          "median_kc": 3532,
+          "median_cr_kc": 3836.5
         }
       },
       "hospodareni_2025": null,
@@ -1787,20 +1812,28 @@
           "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280"
         },
         "naklady_na_pojistence_std_kc": {
-          "hodnota": 42172,
+          "hodnota": 45841,
           "rok": 2024,
-          "zdroj": "výpočet: naklady_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
-          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025.",
-          "faktor": 1,
-          "stav": "placeholder-bez-vah"
+          "zdroj": "výpočet: naklady_na_pojistence_kc × faktor z indexu nákladovosti kmene (ingest/transform_pojistovny_index_prerozdeleni.js; ingest/manual/pojistovny/prerozdeleni-mz.json)",
+          "poznamka": "faktor 1,087 = 1 / index 0,920 (medián měsíční částky po přerozdělení 2024, MZ); stav index-prerozdeleni: standardizace indexem nákladovosti kmene z přerozdělení, ne věkově-pohlavními indexy (ty MZ pro 2024 nezveřejnilo, metodika § 4.2).",
+          "faktor": 1.087,
+          "stav": "index-prerozdeleni"
         },
         "fond_prevence_na_pojistence_std_kc": {
-          "hodnota": 318,
+          "hodnota": 346,
           "rok": 2024,
-          "zdroj": "výpočet: fond_prevence_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
-          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025. Fond prevence je standardizován faktorem nákladů na zdravotní služby — jen aproximace (věkový profil čerpání prevence se liší).",
-          "faktor": 1,
-          "stav": "placeholder-bez-vah"
+          "zdroj": "výpočet: fond_prevence_na_pojistence_kc × faktor z indexu nákladovosti kmene (ingest/transform_pojistovny_index_prerozdeleni.js; ingest/manual/pojistovny/prerozdeleni-mz.json)",
+          "poznamka": "faktor 1,087 = 1 / index 0,920 (medián měsíční částky po přerozdělení 2024, MZ); stav index-prerozdeleni: standardizace indexem nákladovosti kmene z přerozdělení, ne věkově-pohlavními indexy (ty MZ pro 2024 nezveřejnilo, metodika § 4.2). Fond prevence je standardizován stejným faktorem jako náklady na zdravotní služby — jen aproximace (věkový profil čerpání prevence se liší).",
+          "faktor": 1.087,
+          "stav": "index-prerozdeleni"
+        },
+        "index_prerozdeleni": {
+          "hodnota": 0.92,
+          "rok": 2024,
+          "zdroj": "MZ ČR · Přerozdělování pojistného na veřejné zdravotní pojištění · Výsledná částka po přerozdělení připadající na jednoho pojištěnce (https://mzd.gov.cz/prerozdelovani-pojistneho-na-verejne-zdravotni-pojisteni/; ingest/manual/pojistovny/prerozdeleni-mz.json)",
+          "poznamka": "medián měsíční částky po přerozdělení na pojištěnce 2024: 3529.5 Kč proti 3836.5 Kč za všechny pojišťovny; index > 1 = nákladnější kmen (věk, pohlaví, PCG, nákladné služby). Medián místo průměru kvůli mimořádným vyúčtováním v jednotlivých měsících.",
+          "median_kc": 3529.5,
+          "median_cr_kc": 3836.5
         }
       },
       "hospodareni_2025": {
@@ -2220,20 +2253,28 @@
           "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280"
         },
         "naklady_na_pojistence_std_kc": {
-          "hodnota": 45182,
+          "hodnota": 45245,
           "rok": 2024,
-          "zdroj": "výpočet: naklady_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
-          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025.",
-          "faktor": 1,
-          "stav": "placeholder-bez-vah"
+          "zdroj": "výpočet: naklady_na_pojistence_kc × faktor z indexu nákladovosti kmene (ingest/transform_pojistovny_index_prerozdeleni.js; ingest/manual/pojistovny/prerozdeleni-mz.json)",
+          "poznamka": "faktor 1,001 = 1 / index 0,999 (medián měsíční částky po přerozdělení 2024, MZ); stav index-prerozdeleni: standardizace indexem nákladovosti kmene z přerozdělení, ne věkově-pohlavními indexy (ty MZ pro 2024 nezveřejnilo, metodika § 4.2).",
+          "faktor": 1.0014,
+          "stav": "index-prerozdeleni"
         },
         "fond_prevence_na_pojistence_std_kc": {
-          "hodnota": 404,
+          "hodnota": 405,
           "rok": 2024,
-          "zdroj": "výpočet: fond_prevence_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
-          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025. Fond prevence je standardizován faktorem nákladů na zdravotní služby — jen aproximace (věkový profil čerpání prevence se liší).",
-          "faktor": 1,
-          "stav": "placeholder-bez-vah"
+          "zdroj": "výpočet: fond_prevence_na_pojistence_kc × faktor z indexu nákladovosti kmene (ingest/transform_pojistovny_index_prerozdeleni.js; ingest/manual/pojistovny/prerozdeleni-mz.json)",
+          "poznamka": "faktor 1,001 = 1 / index 0,999 (medián měsíční částky po přerozdělení 2024, MZ); stav index-prerozdeleni: standardizace indexem nákladovosti kmene z přerozdělení, ne věkově-pohlavními indexy (ty MZ pro 2024 nezveřejnilo, metodika § 4.2). Fond prevence je standardizován stejným faktorem jako náklady na zdravotní služby — jen aproximace (věkový profil čerpání prevence se liší).",
+          "faktor": 1.0014,
+          "stav": "index-prerozdeleni"
+        },
+        "index_prerozdeleni": {
+          "hodnota": 0.9986,
+          "rok": 2024,
+          "zdroj": "MZ ČR · Přerozdělování pojistného na veřejné zdravotní pojištění · Výsledná částka po přerozdělení připadající na jednoho pojištěnce (https://mzd.gov.cz/prerozdelovani-pojistneho-na-verejne-zdravotni-pojisteni/; ingest/manual/pojistovny/prerozdeleni-mz.json)",
+          "poznamka": "medián měsíční částky po přerozdělení na pojištěnce 2024: 3831 Kč proti 3836.5 Kč za všechny pojišťovny; index > 1 = nákladnější kmen (věk, pohlaví, PCG, nákladné služby). Medián místo průměru kvůli mimořádným vyúčtováním v jednotlivých měsících.",
+          "median_kc": 3831,
+          "median_cr_kc": 3836.5
         }
       },
       "hospodareni_2025": null,
@@ -2617,20 +2658,28 @@
           "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280"
         },
         "naklady_na_pojistence_std_kc": {
-          "hodnota": 47053,
+          "hodnota": 47806,
           "rok": 2024,
-          "zdroj": "výpočet: naklady_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
-          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025.",
-          "faktor": 1,
-          "stav": "placeholder-bez-vah"
+          "zdroj": "výpočet: naklady_na_pojistence_kc × faktor z indexu nákladovosti kmene (ingest/transform_pojistovny_index_prerozdeleni.js; ingest/manual/pojistovny/prerozdeleni-mz.json)",
+          "poznamka": "faktor 1,016 = 1 / index 0,984 (medián měsíční částky po přerozdělení 2024, MZ); stav index-prerozdeleni: standardizace indexem nákladovosti kmene z přerozdělení, ne věkově-pohlavními indexy (ty MZ pro 2024 nezveřejnilo, metodika § 4.2).",
+          "faktor": 1.016,
+          "stav": "index-prerozdeleni"
         },
         "fond_prevence_na_pojistence_std_kc": {
-          "hodnota": 335,
+          "hodnota": 340,
           "rok": 2024,
-          "zdroj": "výpočet: fond_prevence_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
-          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025. Fond prevence je standardizován faktorem nákladů na zdravotní služby — jen aproximace (věkový profil čerpání prevence se liší).",
-          "faktor": 1,
-          "stav": "placeholder-bez-vah"
+          "zdroj": "výpočet: fond_prevence_na_pojistence_kc × faktor z indexu nákladovosti kmene (ingest/transform_pojistovny_index_prerozdeleni.js; ingest/manual/pojistovny/prerozdeleni-mz.json)",
+          "poznamka": "faktor 1,016 = 1 / index 0,984 (medián měsíční částky po přerozdělení 2024, MZ); stav index-prerozdeleni: standardizace indexem nákladovosti kmene z přerozdělení, ne věkově-pohlavními indexy (ty MZ pro 2024 nezveřejnilo, metodika § 4.2). Fond prevence je standardizován stejným faktorem jako náklady na zdravotní služby — jen aproximace (věkový profil čerpání prevence se liší).",
+          "faktor": 1.016,
+          "stav": "index-prerozdeleni"
+        },
+        "index_prerozdeleni": {
+          "hodnota": 0.9842,
+          "rok": 2024,
+          "zdroj": "MZ ČR · Přerozdělování pojistného na veřejné zdravotní pojištění · Výsledná částka po přerozdělení připadající na jednoho pojištěnce (https://mzd.gov.cz/prerozdelovani-pojistneho-na-verejne-zdravotni-pojisteni/; ingest/manual/pojistovny/prerozdeleni-mz.json)",
+          "poznamka": "medián měsíční částky po přerozdělení na pojištěnce 2024: 3776 Kč proti 3836.5 Kč za všechny pojišťovny; index > 1 = nákladnější kmen (věk, pohlaví, PCG, nákladné služby). Medián místo průměru kvůli mimořádným vyúčtováním v jednotlivých měsících.",
+          "median_kc": 3776,
+          "median_cr_kc": 3836.5
         }
       },
       "hospodareni_2025": null,
@@ -3019,20 +3068,28 @@
           "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280"
         },
         "naklady_na_pojistence_std_kc": {
-          "hodnota": 44198,
+          "hodnota": 46952,
           "rok": 2024,
-          "zdroj": "výpočet: naklady_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
-          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025.",
-          "faktor": 1,
-          "stav": "placeholder-bez-vah"
+          "zdroj": "výpočet: naklady_na_pojistence_kc × faktor z indexu nákladovosti kmene (ingest/transform_pojistovny_index_prerozdeleni.js; ingest/manual/pojistovny/prerozdeleni-mz.json)",
+          "poznamka": "faktor 1,062 = 1 / index 0,941 (medián měsíční částky po přerozdělení 2024, MZ); stav index-prerozdeleni: standardizace indexem nákladovosti kmene z přerozdělení, ne věkově-pohlavními indexy (ty MZ pro 2024 nezveřejnilo, metodika § 4.2).",
+          "faktor": 1.0623,
+          "stav": "index-prerozdeleni"
         },
         "fond_prevence_na_pojistence_std_kc": {
-          "hodnota": 276,
+          "hodnota": 293,
           "rok": 2024,
-          "zdroj": "výpočet: fond_prevence_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
-          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025. Fond prevence je standardizován faktorem nákladů na zdravotní služby — jen aproximace (věkový profil čerpání prevence se liší).",
-          "faktor": 1,
-          "stav": "placeholder-bez-vah"
+          "zdroj": "výpočet: fond_prevence_na_pojistence_kc × faktor z indexu nákladovosti kmene (ingest/transform_pojistovny_index_prerozdeleni.js; ingest/manual/pojistovny/prerozdeleni-mz.json)",
+          "poznamka": "faktor 1,062 = 1 / index 0,941 (medián měsíční částky po přerozdělení 2024, MZ); stav index-prerozdeleni: standardizace indexem nákladovosti kmene z přerozdělení, ne věkově-pohlavními indexy (ty MZ pro 2024 nezveřejnilo, metodika § 4.2). Fond prevence je standardizován stejným faktorem jako náklady na zdravotní služby — jen aproximace (věkový profil čerpání prevence se liší).",
+          "faktor": 1.0623,
+          "stav": "index-prerozdeleni"
+        },
+        "index_prerozdeleni": {
+          "hodnota": 0.9414,
+          "rok": 2024,
+          "zdroj": "MZ ČR · Přerozdělování pojistného na veřejné zdravotní pojištění · Výsledná částka po přerozdělení připadající na jednoho pojištěnce (https://mzd.gov.cz/prerozdelovani-pojistneho-na-verejne-zdravotni-pojisteni/; ingest/manual/pojistovny/prerozdeleni-mz.json)",
+          "poznamka": "medián měsíční částky po přerozdělení na pojištěnce 2024: 3611.5 Kč proti 3836.5 Kč za všechny pojišťovny; index > 1 = nákladnější kmen (věk, pohlaví, PCG, nákladné služby). Medián místo průměru kvůli mimořádným vyúčtováním v jednotlivých měsících.",
+          "median_kc": 3611.5,
+          "median_cr_kc": 3836.5
         }
       },
       "hospodareni_2025": null,

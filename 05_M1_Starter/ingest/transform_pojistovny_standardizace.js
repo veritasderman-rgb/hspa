@@ -25,7 +25,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { faktoryProVsechny, standardizujHodnotu, STAV_PLACEHOLDER } from './lib/standardizace.js';
+import { faktoryProVsechny, standardizujHodnotu, STAV_PLACEHOLDER, STAV_INDEX_PREROZDELENI } from './lib/standardizace.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -53,6 +53,7 @@ export function aplikujStandardizaci(P, vek, vahyDef, { dnes, vahySoubor = `nakl
   const placeholder = vahyDef.stav === STAV_PLACEHOLDER;
   const out = structuredClone(P);
 
+  let zachovano = 0;
   for (const z of out.pojistovny) {
     const f = faktory[z.kod];
     if (!f) throw new Error(`standardizace: ZP ${z.kod} chybí v pojistovny-vek.json`);
@@ -60,6 +61,10 @@ export function aplikujStandardizaci(P, vek, vahyDef, { dnes, vahySoubor = `nakl
     for (const [src, dst] of Object.entries(STD_POLE)) {
       const s = z.hospodareni?.[src];
       if (!s) continue;
+      // Placeholder (všechny váhy = 1) nesmí přepsat standardizaci indexem z přerozdělení MZ
+      // (metodika § 4.2, transform_pojistovny_index_prerozdeleni.js): ta je lepší než nic.
+      // Jakmile budou váhy doložené, přepíše se i obálka z indexu.
+      if (placeholder && z.hospodareni[dst]?.stav === STAV_INDEX_PREROZDELENI) { zachovano += 1; continue; }
       const aprox = src.startsWith('fond_prevence')
         ? ' Fond prevence je standardizován faktorem nákladů na zdravotní služby — jen aproximace (věkový profil čerpání prevence se liší).'
         : '';
@@ -78,14 +83,16 @@ export function aplikujStandardizaci(P, vek, vahyDef, { dnes, vahySoubor = `nakl
   }
 
   const zmena = placeholder
-    ? `Věková standardizace (P3.3): doplněna pole naklady_na_pojistence_std_kc a fond_prevence_na_pojistence_std_kc; nákladové indexy ${vahyDef.rok} zatím nedoloženy (placeholder, faktor 1, hodnota = nestandardizovaná).`
+    ? (zachovano
+      ? `Věková standardizace (P3.3): nákladové indexy ${vahyDef.rok} zatím nedoloženy (placeholder); zachována standardizace indexem nákladovosti kmene z přerozdělení MZ (metodika § 4.2), placeholder ji nepřepisuje.`
+      : `Věková standardizace (P3.3): doplněna pole naklady_na_pojistence_std_kc a fond_prevence_na_pojistence_std_kc; nákladové indexy ${vahyDef.rok} zatím nedoloženy (placeholder, faktor 1, hodnota = nestandardizovaná).`)
     : `Věková standardizace (P3.3): pole naklady_na_pojistence_std_kc a fond_prevence_na_pojistence_std_kc přepočtena nákladovými indexy ${vahyDef.rok} (stav ${vahyDef.stav}) na strukturu ČR z CRP ${vek.rok}.`;
   const zdroj = 'PLAN-SROVNAVAC-POJISTOVEN.md P3.3; docs/metodika-srovnavac-pojistoven.md § 4.1';
   out.changelog = Array.isArray(out.changelog) ? out.changelog : [];
   const dataZmenena = JSON.stringify(out.pojistovny) !== JSON.stringify(P.pojistovny);
   const uzJe = out.changelog.some((c) => c.datum === dnes && c.zmena === zmena);
   if (dataZmenena && !uzJe) out.changelog.push({ datum: dnes, zmena, zdroj });
-  return { data: out, faktory, zmeneno: dataZmenena || (out.changelog.length !== (P.changelog?.length ?? 0)) };
+  return { data: out, faktory, zachovano, zmeneno: dataZmenena || (out.changelog.length !== (P.changelog?.length ?? 0)) };
 }
 
 /** JSON.stringify(…, 2) s changelogem po jednom řádku na záznam (styl datasetu). */

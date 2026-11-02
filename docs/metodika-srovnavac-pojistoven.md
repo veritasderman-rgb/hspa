@@ -137,6 +137,45 @@ není hlavním ukazatelem (§ 4.6), takže se standardizovaná hodnota ukazuje j
 zdrojem; dokud je stav `placeholder-bez-vah`, standardizovaná hodnota se nezobrazuje jako
 samostatné číslo, jen poznámka, že standardizace čeká na váhy.
 
+### 4.2 Index nákladovosti kmene z přerozdělení (použito do doložení vah)
+
+_Zavedeno 2. 11. 2026 jako náhrada placeholderu § 4.1; čeká na potvrzení odbornou skupinou._
+
+**Proč.** Nákladové indexy věkových skupin pro rok 2024 MZ nezveřejnilo: podle § 20c zákona
+č. 592/1992 Sb. je do 15. září jen vypočte a zašle Dozorčímu orgánu a pojišťovnám (ověřeno
+2. 11. 2026: nejsou ve Sbírce, na webu MZ ani v NKOD). MZ ale každý měsíc zveřejňuje
+**výslednou částku po přerozdělení na jednoho pojištěnce** podle pojišťoven a celkem
+(stránka Přerozdělování pojistného, PDF `prerozdelovani_pojistenec_vysledek_<rok>_<měsíc>.pdf`)
+a k tabulce uvádí, že rozdíly mezi pojišťovnami „jsou zapříčiněny rozdílnou strukturou
+pojištěnců a odlišným podílem zvlášť nákladných hrazených služeb“. Podíl pojišťovny k celku je
+tedy oficiální měřítko nákladovosti kmene, které v sobě má věk, pohlaví, farmaceuticko-nákladové
+skupiny i nákladné služby.
+
+**Data a skript.** `ingest/manual/pojistovny/prerozdeleni-mz.json` (měsíční řady 2023–2025,
+7 ZP + celkem, zdroj a datum ověření) → `ingest/transform_pojistovny_index_prerozdeleni.js`
+→ `pojistovny[].hospodareni.index_prerozdeleni` {hodnota, rok, zdroj, poznamka, median_kc,
+median_cr_kc} a přepočet `*_std_kc` se stavem `index-prerozdeleni`.
+
+```
+index  = medián_12_měsíců(Kč na pojištěnce po přerozdělení, ZP) / medián_12_měsíců(celkem)
+faktor = 1 / index
+standardizovaná hodnota = hodnota na pojištěnce × faktor
+```
+
+Medián místo průměru: jednotlivé měsíce obsahují mimořádná vyúčtování (nákladné služby,
+opravy chybných údajů; např. RBP 10/2024, ZPŠ 11/2025), která s nákladovostí kmene nesouvisí.
+
+**Jak číst.** index > 1 = nákladnější kmen (starší, nemocnější), faktor < 1 standardizovanou
+hodnotu sníží; index < 1 naopak. Oproti § 4.1 index zahrnuje i PCG a nákladné služby, takže
+standardizuje „na stejný kmen“, ne jen „na stejný věk a pohlaví“; to je pro srovnání nákladů
+na zdravotní služby spíš výhoda, u fondu prevence zůstává aproximace (§ 4.1).
+
+**Stavy obálky `*_std_kc`:** `dolozeno` (věkově-pohlavní indexy MZ), `index-prerozdeleni`
+(tento postup), `placeholder-bez-vah` (faktor 1). Validátor u stavu `index-prerozdeleni` hlídá
+hodnota = základ × faktor a faktor = 1 / `index_prerozdeleni`. Až MZ indexy věkových skupin
+zveřejní, spustí se `transform_pojistovny_standardizace.js` s doloženými váhami a stav se
+přepne na `dolozeno`; index z přerozdělení zůstane jako kontrolní hodnota.
+
 ### Otevřené otázky standardizace
 
 Pro odbornou skupinu (Advance, FBMI ČVUT); do jejich odpovědi zůstává stav placeholder.

@@ -26,6 +26,8 @@ export const STAV_PLACEHOLDER = 'placeholder-bez-vah';
 /** Stav sady vah převzaté z doloženého veřejného zdroje (vyhláška MZ). */
 export const STAV_DOLOZENO = 'dolozeno';
 export const STAVY_VAH = [STAV_DOLOZENO, STAV_PLACEHOLDER];
+/** Stav obálky *_std_kc, kterou vytvořil transform_pojistovny_index_prerozdeleni.js (metodika § 4.2); placeholder ji nepřepisuje. */
+export const STAV_INDEX_PREROZDELENI = 'index-prerozdeleni';
 
 const isNum = (v) => typeof v === 'number' && Number.isFinite(v);
 

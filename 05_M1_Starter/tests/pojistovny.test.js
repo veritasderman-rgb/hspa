@@ -251,8 +251,17 @@ test('pojistovny.js: buildKmenCharts — vstupy pro všechny grafy modulu 3', ()
   // provoz: limit v tipu, null limit → „limit nedohledán“
   assert.match(ch.provoz.items.find((i) => i.kod === '201').tip, /limit nedohledán/);
   assert.match(ch.provoz.items.find((i) => i.kod === '111').tip, /limit 2,91\s%/);
-  // standardizace: placeholder → poznámka, žádné standardizované číslo
-  assert.ok(ch.nzs.items.every((i) => i.note.includes(mod.STD_PENDING)));
+  // standardizace: placeholder → poznámka, žádné standardizované číslo; index z přerozdělení → metoda v poznámce
+  const phD = copy(DATA); for (const z of phD.pojistovny) Object.assign(z.hospodareni.naklady_na_pojistence_std_kc, { stav: 'placeholder-bez-vah', faktor: 1, hodnota: z.hospodareni.naklady_na_pojistence_kc.hodnota });
+  assert.ok(mod.buildKmenCharts(phD).nzs.items.every((i) => i.note.includes(mod.STD_PENDING)));
+  if (DATA.pojistovny[0].hospodareni.naklady_na_pojistence_std_kc?.stav === 'index-prerozdeleni') {
+    assert.ok(ch.nzs.items.every((i) => /standardizováno indexem nákladovosti kmene/.test(i.note)));
+    assert.equal(ch.nzs.std, true);
+    assert.equal(ch.nzs.dbItems.length, 7);
+    assert.ok(ch.nzs.dbItems.every((i) => Number.isFinite(i.from) && Number.isFinite(i.to)));
+    assert.match(ch.nzs.dbOpts.sub, /stejný kmen/);
+  }
+  assert.equal(mod.buildKmenCharts(phD).nzs.std, false, 'bez standardizace zůstává žebříček');
   // kmen 2010–2025: 7 sérií po 16 bodech, index proti 2010
   assert.equal(ch.trend.series.length, 7);
   assert.ok(ch.trend.series.every((s) => s.points.length === 16 && s.points[0].year === 2010));
@@ -272,8 +281,10 @@ test('pojistovny.js: standardizace „dolozeno“ jde do poznámky s hodnotou', 
   Object.assign(std, { stav: 'dolozeno', hodnota: 45000 });
   const ch = mod.buildKmenCharts(d);
   assert.match(ch.nzs.items[0].note, /standardizováno na věk a pohlaví 45\s000\sKč/);
-  assert.deepEqual(mod.stdInfo(d.pojistovny[0].hospodareni), { dolozeno: true, hodnota: 45000, poznamka: std.poznamka });
-  assert.equal(mod.stdInfo(DATA.pojistovny[0].hospodareni).dolozeno, false);
+  assert.deepEqual(mod.stdInfo(d.pojistovny[0].hospodareni), { dolozeno: true, hodnota: 45000, poznamka: std.poznamka, metoda: 'na věk a pohlaví' });
+  const ph = copy(DATA); Object.assign(ph.pojistovny[0].hospodareni.naklady_na_pojistence_std_kc, { stav: 'placeholder-bez-vah', faktor: 1 });
+  assert.equal(mod.stdInfo(ph.pojistovny[0].hospodareni).dolozeno, false);
+  assert.match(mod.stdInfo(DATA.pojistovny[0].hospodareni).metoda || '', /přerozdělení MZ/);
   assert.equal(mod.stdInfo(undefined).dolozeno, false);
 });
 

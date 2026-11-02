@@ -41,6 +41,8 @@ const SRC_CRP = 'ÚZIS · CRP (OIS 11-47) · 2025';
 const SRC_MZ = 'MZ ČR + MF · hodnocení systému v.z.p. · 2024';
 const SRC_ZPP = 'PS ČR · zdravotně pojistné plány (tisk 280) · 2026';
 export const STD_PENDING = 'standardizace čeká na nákladové indexy';
+/** Popis metody standardizace podle stavu obálky *_std_kc. */
+export const STD_METODA = { dolozeno: 'na věk a pohlaví', 'index-prerozdeleni': 'indexem nákladovosti kmene (přerozdělení MZ)' };
 
 // ---------------------------------------------------------------- čisté funkce
 
@@ -78,11 +80,11 @@ export function heroTiles(d, { bezFondu = false } = {}) {
   return tiles;
 }
 
-/** Stav standardizace nákladů na pojištěnce: {dolozeno, hodnota, poznamka}. */
+/** Stav standardizace nákladů na pojištěnce: {dolozeno, hodnota, poznamka, metoda}. */
 export function stdInfo(hosp) {
   const std = hosp?.naklady_na_pojistence_std_kc;
-  if (std && std.stav === 'dolozeno' && isNum(std.hodnota)) return { dolozeno: true, hodnota: std.hodnota, poznamka: std.poznamka || '' };
-  return { dolozeno: false, hodnota: null, poznamka: STD_PENDING };
+  if (std && STD_METODA[std.stav] && isNum(std.hodnota)) return { dolozeno: true, hodnota: std.hodnota, poznamka: std.poznamka || '', metoda: STD_METODA[std.stav] };
+  return { dolozeno: false, hodnota: null, poznamka: STD_PENDING, metoda: null };
 }
 
 const YOY_METRICS = [
@@ -123,12 +125,23 @@ export function buildKmenCharts(d) {
   const nzs = {
     items: zps.map((z) => {
       const st = stdInfo(z.hospodareni);
-      const note = st.dolozeno ? `standardizováno na věk a pohlaví ${fmtKc(st.hodnota)} Kč` : `nestandardizováno, ${STD_PENDING}`;
+      const note = st.dolozeno ? `standardizováno ${st.metoda} ${fmtKc(st.hodnota)} Kč` : `nestandardizováno, ${STD_PENDING}`;
       return { ...base(z), value: h(z.hospodareni?.naklady_na_pojistence_kc), rok: 2024, note };
     }),
     opts: { title: 'Náklady na zdravotní služby na pojištěnce', sub: 'Kč za rok 2024, nestandardizováno na věk. Náklady (akruálně), ne hotovostní výdaje.', unit: 'Kč', dec: 0,
       source: SRC_MZ,
       ref: isNum(sys.naklady_zs_na_pojistence_kc) ? { value: sys.naklady_zs_na_pojistence_kc, label: 'průměr ČR', kind: 'line' } : null },
+  };
+  // Když mají všechny pojišťovny standardizovanou hodnotu, kreslí se dumbbell „vykázáno → standardizováno“:
+  // je vidět, jak se rozdíly po přepočtu na stejný kmen zmenší (VZP dolů, ČPZP a OZP nahoru).
+  const stdAll = zps.length > 0 && zps.every((z) => stdInfo(z.hospodareni).dolozeno);
+  const metoda = stdAll ? stdInfo(zps[0].hospodareni).metoda : null;
+  nzs.std = stdAll;
+  nzs.dbItems = stdAll ? zps.map((z) => ({ ...base(z), from: h(z.hospodareni?.naklady_na_pojistence_kc), to: stdInfo(z.hospodareni).hodnota })) : [];
+  nzs.dbOpts = {
+    title: 'Náklady na zdravotní služby na pojištěnce: vykázáno → standardizováno',
+    sub: `Kč za rok 2024. Plný bod = přepočet ${metoda || ''} na stejný kmen pro všechny pojišťovny (metodika § 4.2); prázdný = vykázané náklady (akruálně). Čím blíž si plné body jsou, tím menší část rozdílu vysvětluje pojišťovna sama.`,
+    unit: 'Kč', dec: 0, fromLabel: 'vykázáno', toLabel: 'standardizováno', source: SRC_MZ,
   };
 
   const zust = {
@@ -255,7 +268,7 @@ function cardHtml(z) {
   const yr = (v) => (v != null && p.rok_udaju && p.rok_udaju !== 2024 ? `<small class="zpc-na"> (${p.rok_udaju})</small>` : '');
   const row = (dt, dd) => `<div><dt>${dt}</dt><dd>${dd}</dd></div>`;
   const nppDd = `${num(h(hs.naklady_na_pojistence_kc))} Kč`
-    + (st.dolozeno ? '' : ` <small class="zpc-std" title="Standardizace na věk a pohlaví (metodika § 4.1): ${STD_PENDING}.">nestandardizováno</small>`);
+    + (st.dolozeno ? '' : ` <small class="zpc-std" title="Standardizace (metodika § 4.1 a § 4.2): ${STD_PENDING}.">nestandardizováno</small>`);
   const mini = miniIndexSvg((c.pojistenci_trend || []).map((t) => ({ year: t.year, value: t.insured })), { label: z.zkratka });
   return `<article class="zpc-card" id="zp-${esc(z.kod)}" data-zp="${esc(z.kod)}" style="--c:var(--zp-${esc(z.kod)})">
       <header><span class="zpc-kod">${esc(z.kod)}</span><h3>${esc(z.zkratka)}</h3><span class="zpc-full">${esc(z.nazev)}</span></header>
@@ -265,7 +278,7 @@ function cardHtml(z) {
         ${row('Senioři 65+', `${fmtKc(c.podil_65plus_pct, 1)} %`)}
         ${row('Kmen 2015 → 2025', isNum(g) ? `${g > 0 ? '+' : g < 0 ? '−' : ''}${fmtKc(Math.abs(g), 1)} %` : NA)}
         ${row('Náklady na pojištěnce 2024', nppDd)}
-        ${st.dolozeno ? row('Náklady na pojištěnce (standardizováno)', `${fmtKc(st.hodnota)} Kč`) : ''}
+        ${st.dolozeno ? row(`Náklady na pojištěnce (standardizováno ${esc(st.metoda)})`, `${fmtKc(st.hodnota)} Kč`) : ''}
         ${row('Rezerva konec 2026', `${num(h(hs.zustatek_2026_pct_vydaju), 1)} % výdajů`)}
       </dl>
       <details class="zpc-card-more"><summary>Další údaje</summary><dl>
@@ -324,7 +337,7 @@ function renderKmen(d) {
   set('zpChartTrend', indexedLines(ch.trend.series, ch.trend.opts));
   set('zpChartGrowth', rankedBars(ch.growth.items, ch.growth.opts));
   set('zpChart65', rankedBars(ch.senior.items, ch.senior.opts));
-  set('zpChartNzs', rankedBars(ch.nzs.items, ch.nzs.opts));
+  set('zpChartNzs', ch.nzs.std ? dumbbell(ch.nzs.dbItems, ch.nzs.dbOpts) : rankedBars(ch.nzs.items, ch.nzs.opts));
   renderFin(d);
   set('zpChartZust', rankedBars(ch.zust.items, ch.zust.opts));
   set('zpChartProvoz', rankedBars(ch.provoz.items, ch.provoz.opts));
