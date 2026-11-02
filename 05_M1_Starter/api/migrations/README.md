@@ -35,3 +35,15 @@ větev smazat nebo resetovat z rodiče, produkční data se jí nedotknou.
 Tabulky neobsahují IP adresy ani jiné osobní údaje. Token se ukládá jen jako
 sha256 hash. Rate limit odesílání běží v paměti funkce (hash IP se nikam
 nezapisuje).
+
+## Stav nasazení (2. 11. 2026)
+
+| Co | Hodnota |
+|---|---|
+| Neon projekt | `hspa-dotazniky` (id `plain-violet-77554655`, org `org-wispy-tree-74330947`, region `aws-eu-central-1`, Postgres 18) |
+| Databáze / role | `dotazniky` / `dotazniky_owner` |
+| Větev `main` | `br-lingering-credit-b953o0eg` — produkce; migrace 0001 + 0002 spuštěny 2. 11. 2026 |
+| Větev `test` | `br-floral-frog-b9q67osk` — zkoušky a Preview; migrace spuštěny, ověřeno vložením a smazáním zkušební odpovědi (view `dotaznik_agregace` agreguje pole i skaláry) |
+| Vercel `DATABASE_URL` | **ještě nenastaveno** — MCP konektor Vercelu nemá právo zapisovat env proměnné (403). Nastavit ručně: Vercel → projekt `hspa` → Settings → Environment Variables → `DATABASE_URL` (typ Sensitive): Production = pooled connection string větve `main`, Preview + Development = pooled connection string větve `test` (Neon konzole → projekt → Connect → *Pooled connection*). |
+
+Connection stringy se nikam do repa ani do chatu nepíší.
