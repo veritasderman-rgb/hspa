@@ -240,7 +240,7 @@ jinak:
 
 | ZP | Co počítá | 2023 | 2024 | 2025 |
 |---|---|---|---|---|
-| VZP ČR | podněty k místní a časové dostupnosti, tabulka podle odbornosti (součet sloupce Celkem) | 46 866 | 46 975 | 42,7 tis. (jen text) |
+| VZP ČR | podněty k místní a časové dostupnosti, tabulka podle odbornosti (řádek Celkem tabulky) | 46 945 | 47 058 | 42,7 tis. (jen text) |
 | ZP MV ČR | (a) všechna podání vč. ombudsmana / oprávněné / prům. doba vyřízení; (b) podání na nedostupnost přes formulář MZ | 1 574 / 4 / 16,5 d; 1 391 | 917 / 14 / 8,65 d; 741 | 919 / 2 / 9,05 d; 672 |
 | ČPZP | přijatá podání na zajištění péče; zvlášť stomatologie | ~8 000 | ~8 000 (stomat. 4 703, z toho MSK 2 610) | 6 590 (stomat. 3 539, MSK 1 567) |
 | RBP | žádosti o zajištění péče u vybraných odborností | 3 970 (jen zubní) | VZ 2024 v repu není | 6 049 (zubní 4 623, VPL 811, PLDD 248, psychiatrie 148, dětská psych. 56, klin. psych. 163) |

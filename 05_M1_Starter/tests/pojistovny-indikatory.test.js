@@ -149,14 +149,15 @@ test('stížnosti: dataset odkazuje na existující přepisy VZ a řádek s čí
       const lines = fs.readFileSync(p, 'utf8').split('\n');
       assert.ok(y.radek > 0 && y.radek <= lines.length, `${z.kod} ${y.rok}: řádek ${y.radek}`);
       const okno = lines.slice(Math.max(0, y.radek - 4), y.radek + 6).join(' ');
-      assert.match(okno, /stížnost|podnět|podání|žádost|dostupnost|16a/i, `${z.kod} ${y.rok}: okolí řádku ${y.radek} nemluví o podáních`);
+      assert.match(okno, /stížnost|podnět|podání|žádost|dostupnost|16a|Celkem/i, `${z.kod} ${y.rok}: okolí řádku ${y.radek} nemluví o podáních`);
       if (y.podani_dostupnost != null) assert.ok(Number.isInteger(y.podani_dostupnost) && y.podani_dostupnost > 0);
       if (y.stiznosti_16a != null) assert.ok(Number.isInteger(y.stiznosti_16a) && y.stiznosti_16a >= 0);
     }
   }
   // konkrétní doložené hodnoty, které se přepisovaly ručně
   const vzp = st.pojistovny.find((z) => z.kod === '111');
-  assert.equal(vzp.roky.find((y) => y.rok === 2024).podani_dostupnost, 46975);
+  assert.equal(vzp.roky.find((y) => y.rok === 2024).podani_dostupnost, 47058, 'řádek Celkem tabulky VZ 2024 (111-2024.txt:2063)');
+  assert.equal(vzp.roky.find((y) => y.rok === 2023).podani_dostupnost, 46945, 'řádek Celkem tabulky VZ 2023 (111-2023.txt:1945)');
   const mv = st.pojistovny.find((z) => z.kod === '211');
   assert.equal(mv.roky.find((y) => y.rok === 2024).podani_celkem, 917);
   assert.equal(mv.roky.find((y) => y.rok === 2024).opravnene_stiznosti, 14);
@@ -174,7 +175,7 @@ test('buildStiznosti / stiznostiHtml: 7 řádků, roky z dat, na 100 tis. jen u 
   assert.equal(rows.find((r) => r.kod === '201').posledni, null);
   const html = stiznostiHtml(st, poj);
   assert.equal((html.match(/<tr data-zp="/g) || []).length, 14, '7 řádků v tabulce podání + 7 v tabulce § 16a');
-  assert.match(html, /46\u00a0975|46 975/);
+  assert.match(html, /47\u00a0058|47 058/);
   assert.match(html, /neuvádí/);
   assert.match(html, /917 podání, 14 oprávněných/);
   assert.match(html, /§ 16a/);
