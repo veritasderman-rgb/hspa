@@ -1,10 +1,641 @@
 {
-  "version": "0.0.0",
-  "generated_at": "2026-11-02T22:10:00Z",
-  "stav": "placeholder",
+  "version": "1.0",
+  "generated_at": "2026-11-02T22:00:00Z",
+  "_doc": "Rešerše: jak 7 českých zdravotních pojišťoven publikuje otevřená data. Tři kanály: (1) vlastní web, (2) Národní katalog otevřených dat (NKOD, data.gov.cz; dotazy SPARQL k 2026-11-02), (3) výroční zprávy a jiné dokumenty. Pole 'stav' hodnotí kanál podle skala. Metoda: sitemap.xml a navigace každého webu, automatický průchod relevantních stránek na odkazy XLSX/CSV/JSON/XML/ZIP, otevření nalezených souborů (struktura listů/sloupců), kontrola HTTP 200 všech citovaných URL, SPARQL dotazy na NKOD. Pozn.: vyhledávače (WebSearch site:) pro tyto weby nevrátily nic použitelného, proto vše vychází z přímého otevření webů. Žádné osobní údaje. Pole nkod.popis, centralni_zdroje a odkazy doplňují schéma. Navazuje na docs/pojistovny-indikatory.md.",
   "stav_k": "2026-11-02",
-  "_doc": "Zástupný soubor: audit otevřených dat sedmi zdravotních pojišťoven (web, NKOD, výroční zprávy) se teprve doplňuje. Stránka pojistovny-indikatory.html při prázdném poli pojistovny ukáže větu, že audit zatím není k dispozici. Soubor musí existovat i prázdný: http-server u chybějícího JSON nechá požadavek viset a e2e test (networkidle) na CI vyprší.",
-  "skala": { "ano": "pojišťovna publikuje strojově čitelná data (CSV/XLSX/JSON) s popisem a periodicitou", "castecne": "jen tabulky v PDF, jednorázové výstupy nebo data bez popisu", "ne": "při uvedeném hledání nic nenalezeno" },
-  "centralni_zdroje": [],
-  "pojistovny": []
+  "skala": {
+    "ano": "Pojišťovna má na vlastním webu stránku/sekci s pravidelně aktualizovanými statistickými nebo produkčními datovými soubory ve strojově čitelném formátu (XLSX/CSV), nejen seznamy a dokumenty. U položky vyrocni_zpravy_a_jine: výroční zprávy doprovází ročenka nebo datové tabulky ve strojově čitelném formátu.",
+    "castecne": "Na webu jsou strojově čitelné soubory (XLSX/CSV), ale jen zákonem uložené nebo provozní seznamy a číselníky (např. seznam smluvních poskytovatelů, léky, ad hoc přílohy k žádostem podle zák. 106/1999 Sb.), ne statistická/produkční data o činnosti pojišťovny. U položky vyrocni_zpravy_a_jine: k dispozici jsou výroční zprávy a zdravotně pojistné plány, ale jen v PDF.",
+    "ne": "Na vlastním webu nebyl nalezen žádný strojově čitelný datový soubor ke stažení; jen PDF, formuláře a interaktivní webové aplikace (vyhledávače, aplikace pro zveřejněné smlouvy). U NKOD: pojišťovna není registrovaným poskytovatelem a nemá žádnou datovou sadu."
+  },
+  "centralni_zdroje": [
+    {
+      "nazev": "NZIP / ÚZIS – Národní registr hrazených zdravotních služeb (NRHZS): otevřená data za všechny pojišťovny",
+      "url": "https://www.nzip.cz/modul/datove-zpravodajstvi/katalog-dat",
+      "co_obsahuje": "Katalog zdravotnických dat NZIP (opendata.mzcr.cz na něj přesměrovává) uvádí 193 otevřených datových sad. Řada z nich vychází z dat zdravotních pojišťoven (NRHZS): vykázané výkony, léčivé přípravky, zdravotnické prostředky, vakcinace, číselníky IČZ dle údajů pojišťoven. Datové sady s dimenzí pojišťovny (např. https://www.nzip.cz/data/2282-vykony-zdravotni-pece-rok-mesic-zp-otevrena-data) mají sloupec 'pojistovna' s kódy všech sedmi pojišťoven (111, 201, 205, 207, 209, 211, 213; ověřeno stažením vzorku, 2010–2024, 3 955 381 záznamů). Dále např. https://www.nzip.cz/data/2216-zdravotnicke-prostredky-kod-mesic-pojistovna-otevrena-data, https://www.nzip.cz/data/2201-hromadne-vyrabene-lecive-pripravky-sukl-atc-vykazani-mesic-pojistovna-otevrena-data, https://www.nzip.cz/data/2770-vykony-diagnoza-odbornost-pojistovna-otevrena-data a https://www.nzip.cz/data/2878-uhrady-zdravotni-pojistoveny-lecive-pripravky-vice-indikaci-otevrena-data. Žádosti o vlastní výstupy: https://www.nzip.cz/zadosti-o-data.",
+      "format": "CSV.gz (datanzis.uzis.gov.cz), schémata a metodické popisy v PDF; část výstupů jako datové souhrny a vizualizace",
+      "periodicita": "Dle datové sady: roční (např. sada 2282, pokrytí do 12/2024) až čtvrtletní (léčivé přípravky, zdravotnické prostředky)",
+      "licence": "CC BY 4.0 (ověřeno u datové sady 2282 – Autorské dílo licencované CC BY 4.0, bez osobních údajů)"
+    },
+    {
+      "nazev": "Národní katalog otevřených dat (NKOD, data.gov.cz) – datové sady o pojišťovnách pod poskytovatelem Ministerstvo zdravotnictví",
+      "url": "https://data.gov.cz/sparql",
+      "co_obsahuje": "Zdravotní pojišťovny nejsou poskytovateli v NKOD (viz pole nkod u každé pojišťovny). Pod poskytovatelem Ministerstvo zdravotnictví (IČO 00024341) je v NKOD 271 datových sad (dotaz SPARQL 2026-11-02), z toho 19 s 'pojišťovna'/'pojištění' v názvu, např. 'Výkony zdravotní péče vykázané v rámci veřejného zdravotního pojištění dle měsíců vykázání a zdravotní pojišťovny', 'Hromadně vyráběné léčivé přípravky (ATC aktuální) – kód SÚKL, měsíc, pojišťovna', 'Zdravotnické prostředky – kód, měsíc, pojišťovna', 'Odvozený číselník IČZ dle údajů pojišťoven včetně historických hodnot', 'Analýza úhrad zdravotních pojišťoven pro vybrané léčivé přípravky s více indikacemi a různými úhradovými podmínkami'. Poskytovatel ÚZIS ČR (IČO 00023833) má v NKOD jen 1 záznam (podnět na data k otevření).",
+      "format": "RDF/DCAT (SPARQL, Accept: application/sparql-results+json); distribuce odkazují na CSV/CSV.gz",
+      "periodicita": "Průběžně dle poskytovatele",
+      "licence": "Dle datové sady (NZIP sady CC BY 4.0)"
+    },
+    {
+      "nazev": "Svaz zdravotních pojišťoven ČR – OPEN DATA ZZP",
+      "url": "https://szpcr.cz/open-data-zzp/",
+      "co_obsahuje": "Agregovaná produkční data zaměstnaneckých zdravotních pojišťoven (ZZP) za roky 2022–2025: 'Produkční data zdravotnických prostředků' (SZP ČR, hrazené ZP na poukaz a ZUM, 2025: listy 3.1–3.4) a 'Přehled léčivých přípravků vykázaných zaměstnaneckým zdravotním pojišťovnám' (počty balení dle kódu SÚKL a náklady dle ATC3, přehled k 1. 4. 2026). Stránka neuvádí, které pojišťovny jsou v agregátu zahrnuty. Členy Svazu jsou VoZP, ČPZP, OZP, ZPŠ, ZP MV ČR a RBP (https://szpcr.cz/o-svazu/pojistovny/); VZP členem není.",
+      "format": "XLSX",
+      "periodicita": "Roční (2022–2025), publikováno s ročním zpožděním (2025 zveřejněno 03–04/2026)",
+      "licence": "Neuvedena; stránka uvádí jen, že data mají informativní charakter a neslouží jako podklad pro vyúčtování"
+    },
+    {
+      "nazev": "Svaz zdravotních pojišťoven ČR – číselníky (HVLP, NHVLP, zdravotnické prostředky, pozitivní list)",
+      "url": "https://szpcr.cz/ciselniky.php",
+      "co_obsahuje": "Měsíčně vydávané číselníky společné pro pojišťovny sdružené ve Svazu (odkazují na ně ČPZP, OZP, ZPŠ, RBP a VoZP na svých webech): hromadně vyráběné léčivé přípravky, informační číselník, pozitivní list, zdravotnické prostředky. Datum publikování uvedeno u každé verze (nejnovější platnost od 1. 11. 2026, publikováno 29. 10. 2026). Registrace slouží k e-mailovému odběru aktualizací.",
+      "format": "TXT, XLS",
+      "periodicita": "Měsíčně",
+      "licence": "Neuvedena"
+    },
+    {
+      "nazev": "Ministerstvo zdravotnictví – Přerozdělování pojistného na veřejné zdravotní pojištění",
+      "url": "https://mzd.gov.cz/prerozdelovani-pojistneho-na-verejne-zdravotni-pojisteni/",
+      "co_obsahuje": "Měsíční přehledy po jednotlivých pojišťovnách: výsledné částky po přerozdělování (prerozdelovani_pojistovna_vysledek), totéž na pojištěnce (prerozdelovani_pojistenec_vysledek), výběr pojistného (prerozdelovani_pojistovna_vyber) a grafy; časová řada od ledna 2023, poslední aktualizace 19. 10. 2026. Příklad: https://mzd.gov.cz/wp-content/uploads/2014/11/prerozdelovani_pojistovna_vysledek_2026_10.pdf",
+      "format": "PDF (tabulky a grafy, nikoli strojově čitelné)",
+      "periodicita": "Měsíčně",
+      "licence": "Neuvedena"
+    },
+    {
+      "nazev": "Ministerstvo zdravotnictví – Zůstatky na fondech zdravotních pojišťoven",
+      "url": "https://mzd.gov.cz/zustatky-na-fondech-zdravotnich-pojistoven/",
+      "co_obsahuje": "Konečné zůstatky na bankovních účtech fondů jednotlivých pojišťoven; PDF tabulky a grafy od 1/2020 a strojově čitelný soubor https://mzd.gov.cz/wp-content/uploads/2025/04/fondy_zustatky.csv (sloupce ZP;FOND;ROK;MESIC;ZUSTATEK, kód pojišťovny 111, 201, …, řada od 1/2012). Poslední aktualizace 16. 10. 2026.",
+      "format": "CSV, PDF",
+      "periodicita": "Měsíčně",
+      "licence": "Neuvedena"
+    },
+    {
+      "nazev": "Ministerstvo zdravotnictví a Ministerstvo financí – Hodnocení vývoje systému veřejného zdravotního pojištění",
+      "url": "https://mzd.gov.cz/hodnoceni-vyvoje-systemu-verejneho-zdravotniho-pojisteni/",
+      "co_obsahuje": "Souhrnná roční hodnocení systému VZP z výročních zpráv a účetních závěrek pojišťoven (období 2015–2024): PDF a přiložené tabulky (např. vz2024_hodnoceni_tab_1-1a-1b-1c-1d-2-4.xlsx a vz2024_hodnoceni_tab_3-3a-3b-3c.xlsx). Zdravotní a kontrolní část zpracovalo MZ, ekonomické hodnocení MF. Poslední aktualizace 27. 5. 2026.",
+      "format": "PDF, XLSX",
+      "periodicita": "Roční (po schválení výročních zpráv Poslaneckou sněmovnou)",
+      "licence": "Neuvedena"
+    },
+    {
+      "nazev": "Ministerstvo financí – Fiskální údaje: Hotovostní toky a saldo hospodaření ZP (měsíční)",
+      "url": "https://mf.gov.cz/cs/rozpoctova-politika/rozpoctove-ramce-statisticke-informace/fiskalni-udaje/fondy-socialniho-zabezpeceni/zdravotni-pojistovny/2026/hotovostni-toky-a-saldo-hospodareni-zp-mesicni-63089",
+      "co_obsahuje": "Měsíční celkové příjmy a výdaje a saldo hospodaření zdravotních pojišťoven (všech sedm jmenovitě dle metodiky), zdroj výkazy podle zákona č. 24/2017 Sb.; poslední doplnění 30. 10. 2026 (údaje za září 2026). Metodický popis: https://www.mfcr.cz/assets/cs/media/Rozp-ramce-zak-23-2017_Metodicky-popis-Fiskalni-udaje-za-zdravotni-pojistovny_2018.pdf",
+      "format": "XLSX",
+      "periodicita": "Měsíčně (do konce následujícího měsíce)",
+      "licence": "Neuvedena"
+    },
+    {
+      "nazev": "ČSÚ – Hospodaření zdravotních pojišťoven (výkazy Zdp 3-04 a Zdp 5-01)",
+      "url": "https://csu.gov.cz/hospodareni-zdravotnich-pojistoven",
+      "co_obsahuje": "Vybrané ukazatele z čtvrtletního a ročního statistického výkazu zdravotních pojišťoven, vybrané tabulky v DataStatu (https://data.csu.gov.cz/datastat/dash?aPolozka=FIN02#katalog=33876), metodika. Obsah jednotlivých tabulek v DataStatu nebyl otevřen (dynamická aplikace).",
+      "format": "DataStat (tabulky, export dle aplikace)",
+      "periodicita": "Čtvrtletně a ročně",
+      "licence": "Neověřeno"
+    },
+    {
+      "nazev": "Kancelář zdravotního pojištění (KZP) – statistické ročenky a Portál ukazatelů kvality (PUK)",
+      "url": "https://kancelarzp.cz/statistiky_2/statisticke-rocenky/",
+      "co_obsahuje": "Statistické ročenky KZP 2006–2025 (např. https://kancelarzp.cz/wp-content/uploads/2026/06/STAT.ROCENKA-2025_260622.pdf) a analýzy; Portál ukazatelů kvality https://puk.kancelarzp.cz/ s ukazateli kvality zdravotní péče počítanými z dat zdravotních pojišťoven (KZP pověřena agendou v roce 2019). Ročenky jsou o mezinárodním pojištění (EU) a agendě KZP, nejsou datovou sadou o jednotlivých pojišťovnách.",
+      "format": "PDF (ročenky), webový portál (PUK)",
+      "periodicita": "Roční (ročenky zveřejňovány v červnu 2022–2026), PUK průběžně",
+      "licence": "Neuvedena"
+    },
+    {
+      "nazev": "Registr smluv (smlouvy.gov.cz) – zdravotní pojišťovny jako uveřejňující subjekty",
+      "url": "https://data.smlouvy.gov.cz/",
+      "co_obsahuje": "Zdravotní pojišťovna je uveřejňujícím subjektem podle § 2 odst. 1 písm. k) zákona č. 340/2015 Sb. (https://www.zakonyprolidi.cz/cs/2015-340). Podle profilů na Hlídači státu k 2. 11. 2026 mají pojišťovny v registru smluv celkem od 2016 tyto počty smluv: VZP 24 665, VoZP 4 734, ČPZP 8 114, OZP 6 725, ZPŠ 2 253, ZP MV ČR 6 528, RBP 4 256 (https://www.hlidacstatu.cz/subjekt/41197518 a profily dalších IČO). Úplné roční exporty registru: https://data.smlouvy.gov.cz/dump_2026_01.xml.",
+      "format": "XML (měsíční i roční dumpy), web smlouvy.gov.cz",
+      "periodicita": "Průběžně (časová razítka dumpů 13.–31. 10. 2026)",
+      "licence": "Neověřeno (stránka dumpů licenci neuvádí)"
+    }
+  ],
+  "pojistovny": [
+    {
+      "kod": "111",
+      "zkratka": "VZP ČR",
+      "web_opendata": {
+        "stav": "ano",
+        "url": "https://www.vzp.cz/o-nas/dokumenty/publikace-dat",
+        "popis": "Samostatná sekce označená 'otevřená data' na vzp.cz neexistuje (v navigaci ani v sitemap.xml s 533 URL; interní vyhledávač vzp.cz je dynamický a nešlo jej ověřit). Strojově čitelná data jsou ale pravidelně zveřejňována v sekci O nás › Dokumenty: 'Publikace dat' (Vybraná produkční data VZP ČR, čtvrtletně kumulativně od roku 2019), 'Ročenky' (PDF + zdrojové tabulky XLSX), dále číselníky (CSV/PDF) a seznam smluvních poskytovatelů (XLSX). Struktura produkčního souboru VZP (Část 1 Výkony, Část 2 Léčivé přípravky, Část 3 Zdravotnické prostředky) odpovídá souboru ČPZP; VZP má navíc Část 4 Diagnózy. Licence není uvedena; podmínky webu omezují užití jinak než pro vlastní potřebu bez souhlasu (https://www.vzp.cz/o-nas/dokumenty/copyright-c-vzp).",
+        "datove_sady": [
+          {
+            "nazev": "Publikace dat – Vybraná produkční data VZP ČR",
+            "url": "https://media.vzpstatic.cz/media/Default/dokumenty/produkce_web_2026_1q-2q.xlsx",
+            "format": "XLSX",
+            "periodicita": "Čtvrtletně, kumulativně (leden–březen, –červen, –září, –prosinec); na webu od roku 2019, nejnovější leden–červen 2026",
+            "licence": "Neuvedena (viz Copyright © VZP)",
+            "obsah": "Listy 1.1 vykázané výkony a ošetřovací dny; 2.1–2.6 léčivé přípravky (nejčastěji předepisované na recepty, IPLP, ATC skupiny, HVLP, ZULP, centra se zvláštní smlouvou dle diagnostických skupin); 3.1–3.4 zdravotnické prostředky na poukaz a ZUM; 4.1 náklady a počty UOP dle diagnózy MKN-10 a pohlaví."
+          },
+          {
+            "nazev": "Ročenka VZP ČR – zdrojové tabulky",
+            "url": "https://media.vzpstatic.cz/media/Default/rocenky/rocenka-2024-tabulky.xlsx",
+            "format": "XLSX (ověřeno u ročníků 2019–2024), doprovodné PDF ročenky",
+            "periodicita": "Roční (ročenky 2010–2024)",
+            "licence": "Neuvedena",
+            "obsah": "Ročenka 2024 má 71 listů; kapitoly: I. Pojištěnci VZP ČR (počty, věková struktura, platba pojistného, stát jako plátce dle kraje), II. Výběr pojistného, III. Síť zdravotnických zařízení (primární, ambulantní, lůžková péče, lázně, pohotovost, nákladná technika, centra), IV. Náklady na zdravotní péči, V. Činnost zdravotnických zařízení (výkony, léčivé přípravky, zdravotnické prostředky aj.), VI. Regulační poplatky a doplatky za léky."
+          },
+          {
+            "nazev": "Číselníky VZP ČR",
+            "url": "https://www.vzp.cz/poskytovatele/ciselniky",
+            "format": "CSV, PDF (průběžně aktualizované číselníky)",
+            "periodicita": "Průběžně (např. Ambuleky platnost od 1. 10. 2026, HVLP od 1. 11. 2026)",
+            "licence": "Bezplatné stažení jen poslední zveřejněné verze (náklady se přeúčtovávají dle vyhlášky 418/2003 Sb.); jiné formy za úplatu",
+            "obsah": "Číselníky pro vykazování, kontrolu a úhradu zdravotní péče: výkony, ambuleky, doprava, druh péče, léčivé přípravky, zdravotnické prostředky, smluvní odbornosti ap."
+          },
+          {
+            "nazev": "Seznam smluvních poskytovatelů zdravotních služeb",
+            "url": "https://media.vzpstatic.cz/media/Default/dokumenty/seznam_pzs_2026-10.xlsx",
+            "format": "XLSX",
+            "periodicita": "Průběžně, aktuální stav k 1. 10. 2026",
+            "licence": "Neuvedena",
+            "obsah": "Seznam smluvních poskytovatelů řazený podle názvu (zákonná povinnost); k dispozici je i webový vyhledávač smluvních poskytovatelů."
+          }
+        ]
+      },
+      "nkod": {
+        "stav": "ne",
+        "pocet_sad": 0,
+        "url": null,
+        "sady": [],
+        "popis": "Dotaz na SPARQL endpoint NKOD (https://data.gov.cz/sparql) k 2026-11-02: (1) dataset IRI s předponou https://data.gov.cz/zdroj/datové-sady/<IČO>/ pro IČO 41197518 nevrátil žádný záznam; (2) publisher IRI .../orgán-veřejné-moci/41197518, .../právnická-osoba/41197518 i https://data.gov.cz/zdroj/poskytovatel/41197518 bez datových sad; (3) výčet všech 373 distinct poskytovatelů datových sad v NKOD (dcterms:publisher) neobsahuje žádnou zdravotní pojišťovnu (zdravotnické organizace: pouze Ministerstvo zdravotnictví, ÚZIS ČR a Národní centrum ošetřovatelství a nelékařských zdravotnických oborů). Data o pojišťovnách se v NKOD objevují jen zprostředkovaně pod poskytovatelem Ministerstvo zdravotnictví (viz centralni_zdroje)."
+      },
+      "vyrocni_zpravy_a_jine": {
+        "stav": "ano",
+        "popis": "Výroční zprávy (PDF), Zdravotně pojistné plány a Ročenky se zdrojovými tabulkami v XLSX (viz datové sady). Portál 'Smlouvy s poskytovateli zdravotních služeb' (zveřejnění smluv dle § 17 odst. 9 zák. 48/1997 Sb., vyhledávání dle názvu, pracoviště, segmentu, IČ a IČZ) a portál 'Žádosti o smlouvy' jsou webové aplikace, hromadný export nebyl nalezen. Samostatný datový portál ani API pro veřejnost jsem nenašel; B2B komunikace e-VZP slouží poskytovatelům a SW firmám.",
+        "odkazy": [
+          {
+            "nazev": "O nás › Dokumenty (výroční zprávy, ročenky, ZPP, legislativa, publikace dat)",
+            "url": "https://www.vzp.cz/o-nas/dokumenty"
+          },
+          {
+            "nazev": "Ročenky VZP ČR (PDF + zdrojové tabulky XLSX)",
+            "url": "https://www.vzp.cz/o-nas/dokumenty/rocenky"
+          },
+          {
+            "nazev": "Smlouvy s poskytovateli zdravotních služeb (portál)",
+            "url": "https://www.vzp.cz/poskytovatele/smluvni-vztahy/smlouvy-s-poskytovateli-zdravotnich-sluzeb"
+          },
+          {
+            "nazev": "Smluvní vztahy (seznam PZS, žádosti o smlouvy)",
+            "url": "https://www.vzp.cz/poskytovatele/smluvni-vztahy"
+          }
+        ]
+      },
+      "zadosti_o_data": {
+        "popis": "Žádosti o informace podle zákona 106/1999 Sb. (VZP zveřejňuje popis žádostí a odpovědi po ročnících 2015–2026). K některým odpovědím jsou přiloženy ad hoc XLSX tabulky (např. https://media.vzpstatic.cz/media/Default/odpovedi-na-zadosti-o-informace/priloha-zadost-10-10-2016.xlsx). Samostatný postup pro poskytování dat vědcům/výzkumu jsem na vzp.cz nenašel.",
+        "url": "https://www.vzp.cz/o-nas/informace/odpovedi-na-zadosti-o-informace"
+      },
+      "shrnuti": "VZP je jedna z mála pojišťoven s pravidelně publikovanými strojově čitelnými daty (čtvrtletní produkční data a zdrojové tabulky ročenky v XLSX), ale bez označení 'otevřená data', bez otevřené licence a mimo NKOD.",
+      "overeno": "2026-11-02",
+      "zdroje": [
+        "https://www.vzp.cz/o-nas/dokumenty/publikace-dat",
+        "https://media.vzpstatic.cz/media/Default/dokumenty/produkce_web_2026_1q-2q.xlsx",
+        "https://www.vzp.cz/o-nas/dokumenty/rocenky",
+        "https://media.vzpstatic.cz/media/Default/rocenky/rocenka-2024-tabulky.xlsx",
+        "https://www.vzp.cz/poskytovatele/ciselniky",
+        "https://www.vzp.cz/poskytovatele/smluvni-vztahy/seznam-smluvnich-poskytovatelu-zdravotnich-sluzeb",
+        "https://media.vzpstatic.cz/media/Default/dokumenty/seznam_pzs_2026-10.xlsx",
+        "https://www.vzp.cz/o-nas/dokumenty/copyright-c-vzp",
+        "https://www.vzp.cz/o-nas/informace/odpovedi-na-zadosti-o-informace",
+        "https://media.vzpstatic.cz/media/Default/odpovedi-na-zadosti-o-informace/priloha-zadost-10-10-2016.xlsx",
+        "https://www.vzp.cz/sitemap.xml",
+        "https://data.gov.cz/sparql"
+      ]
+    },
+    {
+      "kod": "201",
+      "zkratka": "VoZP ČR",
+      "web_opendata": {
+        "stav": "castecne",
+        "url": "https://www.vozp.cz/seznam-smluvnich-poskytovatelu-zdravotnich-sluzeb",
+        "popis": "Sekce 'otevřená data' ani statistická/produkční data ke stažení na vozp.cz nejsou (sitemap.xml obsahuje jen 8 URL, proto jsem prošel navigaci hlavní stránky a stránky pro poskytovatele a zveřejňované informace). Strojově čitelný je zákonem uložený seznam smluvních poskytovatelů (CSV a XLSX). Smlouvy s poskytovateli a rozsah nasmlouvaných služeb jsou zveřejněny ve webové aplikaci klientského portálu (https://www.vozp.cz/smlouvy-zverejnene), číselníky, ceníky a pozitivní listy jsou na samostatné stránce (nabízí Nemocniční číselník, Číselník zdravotnických prostředků, Číselník HVLP SZP ČR a pozitivní listy; ověřen jen odkaz na PDF pozitivního listu). Licence není u žádného souboru uvedena.",
+        "datove_sady": [
+          {
+            "nazev": "Seznam smluvních poskytovatelů zdravotních služeb (řazený podle IČZ)",
+            "url": "https://www.vozp.cz/assets/_oz_soubory/poskytovatele_seznam/vozp-smluvni-poskytovatele-30.09.2026-csv.csv",
+            "format": "CSV (a totéž v XLSX: vozp-smluvni-poskytovatele-30.09.2026-xls.xlsx)",
+            "periodicita": "Průběžně, aktuální stav k 30. 9. 2026 (datum je v názvu souboru)",
+            "licence": "Neuvedena; zveřejnění ukládá § 40 odst. 10 písm. a) zák. 48/1997 Sb.",
+            "obsah": "Přibližně 26 tis. řádků; sloupce IČO, název IČO, IČZ, název IČZ, obec, PSČ, ulice."
+          }
+        ]
+      },
+      "nkod": {
+        "stav": "ne",
+        "pocet_sad": 0,
+        "url": null,
+        "sady": [],
+        "popis": "Dotaz na SPARQL endpoint NKOD (https://data.gov.cz/sparql) k 2026-11-02: (1) dataset IRI s předponou https://data.gov.cz/zdroj/datové-sady/<IČO>/ pro IČO 47114975 nevrátil žádný záznam; (2) publisher IRI .../orgán-veřejné-moci/47114975, .../právnická-osoba/47114975 i https://data.gov.cz/zdroj/poskytovatel/47114975 bez datových sad; (3) výčet všech 373 distinct poskytovatelů datových sad v NKOD (dcterms:publisher) neobsahuje žádnou zdravotní pojišťovnu (zdravotnické organizace: pouze Ministerstvo zdravotnictví, ÚZIS ČR a Národní centrum ošetřovatelství a nelékařských zdravotnických oborů). Data o pojišťovnách se v NKOD objevují jen zprostředkovaně pod poskytovatelem Ministerstvo zdravotnictví (viz centralni_zdroje)."
+      },
+      "vyrocni_zpravy_a_jine": {
+        "stav": "castecne",
+        "popis": "Výroční zprávy 2004–2025 v PDF (2025 dosud neschválena Poslaneckou sněmovnou) a pro roky 2018–2025 'Vybrané ukazatele VZ' jako online prolistovatelný dokument (flipbook, nestrojově čitelný). Dále zdravotně pojistný plán a zveřejňované informace dle zák. 106/1999 Sb. Statistická ročenka ani datový portál nenalezeny. VoZP je členem SZP ČR (viz OPEN DATA ZZP) a spolu s dalšími 4 pojišťovnami využívá Portál ZP (https://www.vozp.cz/portal-zp).",
+        "odkazy": [
+          {
+            "nazev": "Výroční zprávy VoZP ČR",
+            "url": "https://www.vozp.cz/vyrocni-zpravy"
+          },
+          {
+            "nazev": "Výroční zpráva VoZP ČR za rok 2025 (PDF)",
+            "url": "https://www.vozp.cz/assets/vz_2025_vozp.pdf"
+          },
+          {
+            "nazev": "Smlouvy s poskytovateli zdravotních služeb (zveřejnění dle § 17 odst. 9 zák. 48/1997 Sb.)",
+            "url": "https://www.vozp.cz/smlouvy-zverejnene"
+          },
+          {
+            "nazev": "Číselníky, ceníky a pozitivní listy",
+            "url": "https://www.vozp.cz/ciselniky-ceniky-a-pozitivni-listy"
+          },
+          {
+            "nazev": "Zveřejňované informace o VoZP ČR",
+            "url": "https://www.vozp.cz/zverejnovane-informace-o-vozp-cr"
+          }
+        ]
+      },
+      "zadosti_o_data": {
+        "popis": "Informace dle zák. 106/1999 Sb. (písemně, datová schránka, e-podatelna). Samostatný postup pro data pro výzkum nenalezen.",
+        "url": "https://www.vozp.cz/informace-dle-zak-106-1999-sb"
+      },
+      "shrnuti": "VoZP zveřejňuje jen zákonný seznam smluvních poskytovatelů v CSV/XLSX; statistická data o produkci na vlastním webu nemá a není v NKOD.",
+      "overeno": "2026-11-02",
+      "zdroje": [
+        "https://www.vozp.cz/seznam-smluvnich-poskytovatelu-zdravotnich-sluzeb",
+        "https://www.vozp.cz/assets/_oz_soubory/poskytovatele_seznam/vozp-smluvni-poskytovatele-30.09.2026-csv.csv",
+        "https://www.vozp.cz/smlouvy-zverejnene",
+        "https://www.vozp.cz/ciselniky-ceniky-a-pozitivni-listy",
+        "https://www.vozp.cz/vyrocni-zpravy",
+        "https://www.vozp.cz/assets/vz_2025_vozp.pdf",
+        "https://www.vozp.cz/zverejnovane-informace-o-vozp-cr",
+        "https://www.vozp.cz/informace-dle-zak-106-1999-sb",
+        "https://www.vozp.cz/portal-zp",
+        "https://www.vozp.cz/sitemap.xml",
+        "https://data.gov.cz/sparql"
+      ]
+    },
+    {
+      "kod": "205",
+      "zkratka": "ČPZP",
+      "web_opendata": {
+        "stav": "ano",
+        "url": "https://www.cpzp.cz/otevrena-data",
+        "popis": "ČPZP má jako jediná ze sedmi pojišťoven samostatnou stránku nazvanou 'Otevřená data' (odkaz na hlavní stránce). Zveřejňuje 'vybraná produkční data' (přehledy vykázaných výkonů, ošetřovacích dní, léčivých přípravků a zdravotnických prostředků), zpracovávaná nejdříve 20 dní po skončení čtvrtletí, ve formě jednoho XLSX souboru za období. Licence není uvedena a data nejsou v NKOD. Dále je ke stažení seznam smluvních zařízení v XLSX.",
+        "datove_sady": [
+          {
+            "nazev": "Otevřená data – Přehled vybraných produkčních dat ČPZP (leden–červen 2026)",
+            "url": "https://www.cpzp.cz/cdn/file/9dmcsXFuHbXdHsaPTh84tv97htDO9qZn.xlsx",
+            "format": "XLSX (8 souborů: 2019–2025 roční, 2026 leden–červen)",
+            "periodicita": "Čtvrtletně (dle textu stránky), na webu roční soubory 2019–2025 a pololetí 2026; např. soubor produkce_CPZP_web_2025-4Q.xlsx",
+            "licence": "Neuvedena",
+            "obsah": "1.1 přehled hrazených vykázaných výkonů a ošetřovacích dní (kód, název, počet, UOP); 2.1.1–2.7 léčivé přípravky (nejčastěji předepisované a nákladově nejvýznamnější na recepty dle kódu a ATC, IPLP, ATC skupiny, HVLP, ZULP, centra); 3.1–3.4 zdravotnické prostředky na poukaz a ZUM."
+          },
+          {
+            "nazev": "Seznam smluvních zařízení (poskytovatelů zdravotních služeb dle odborností)",
+            "url": "https://www.cpzp.cz/import/lekari/PZSdleOdb.xlsx",
+            "format": "XLSX",
+            "periodicita": "Průběžně (soubor se obnovuje, datum stavu v souboru neuvedeno)",
+            "licence": "Neuvedena",
+            "obsah": "Přibližně 31 tis. řádků; sloupce IČO, název subjektu, IČZ, název poskytovatele, odbornost."
+          }
+        ]
+      },
+      "nkod": {
+        "stav": "ne",
+        "pocet_sad": 0,
+        "url": null,
+        "sady": [],
+        "popis": "Dotaz na SPARQL endpoint NKOD (https://data.gov.cz/sparql) k 2026-11-02: (1) dataset IRI s předponou https://data.gov.cz/zdroj/datové-sady/<IČO>/ pro IČO 47672234 nevrátil žádný záznam; (2) publisher IRI .../orgán-veřejné-moci/47672234, .../právnická-osoba/47672234 i https://data.gov.cz/zdroj/poskytovatel/47672234 bez datových sad; (3) výčet všech 373 distinct poskytovatelů datových sad v NKOD (dcterms:publisher) neobsahuje žádnou zdravotní pojišťovnu (zdravotnické organizace: pouze Ministerstvo zdravotnictví, ÚZIS ČR a Národní centrum ošetřovatelství a nelékařských zdravotnických oborů). Data o pojišťovnách se v NKOD objevují jen zprostředkovaně pod poskytovatelem Ministerstvo zdravotnictví (viz centralni_zdroje)."
+      },
+      "vyrocni_zpravy_a_jine": {
+        "stav": "castecne",
+        "popis": "Výroční zprávy 2016–2025 a zdravotně pojistné plány 2016–2026 pouze v PDF na stránce Ekonomické informace. Zveřejňované smlouvy s PZS jsou ve webové aplikaci portal.cpzp.cz. Statistická ročenka ani datový portál nenalezeny; ČPZP občas publikuje analýzy z vlastních dat v tiskových zprávách.",
+        "odkazy": [
+          {
+            "nazev": "Ekonomické informace (výroční zprávy, zdravotně pojistné plány)",
+            "url": "https://www.cpzp.cz/clanek/50-0-Ekonomicke-informace.html"
+          },
+          {
+            "nazev": "Zveřejňované smlouvy s PZS",
+            "url": "https://portal.cpzp.cz/app/smlouvy-s-pzs/"
+          },
+          {
+            "nazev": "Informace k číselníkům (odkaz na číselníky SZP ČR a VZP)",
+            "url": "https://www.cpzp.cz/clanek/3420-0-Informace-k-ciselnikum.html"
+          },
+          {
+            "nazev": "Smluvní lékaři (vyhledávání a XLSX seznam)",
+            "url": "https://www.cpzp.cz/lekari"
+          }
+        ]
+      },
+      "zadosti_o_data": {
+        "popis": "Svobodný přístup k informacím (zák. 106/1999 Sb.); ČPZP zveřejňuje dotazy a odpovědi jako samostatné stránky (desítky stránek od roku 2023); u části jsou ad hoc XLSX přílohy (např. https://www.cpzp.cz/cdn/file/DUYBLd2MG7utN9Bo9HTbL6izGVorxbb8.xlsx u odpovědi z 29. 5. 2024). Samostatný postup pro data pro výzkum nenalezen.",
+        "url": "https://www.cpzp.cz/clanek/1803-0-Svobodny-pristup-k-informacim.html"
+      },
+      "shrnuti": "ČPZP má jako jediná pojišťovna pojmenovanou stránku 'Otevřená data' s čtvrtletními XLSX produkčními daty od roku 2019, ale bez licence a mimo NKOD.",
+      "overeno": "2026-11-02",
+      "zdroje": [
+        "https://www.cpzp.cz/otevrena-data",
+        "https://www.cpzp.cz/cdn/file/9dmcsXFuHbXdHsaPTh84tv97htDO9qZn.xlsx",
+        "https://www.cpzp.cz/cdn/file/mjA7l7gPdLbigpbWbrMpIBMRdXeaHahI.xlsx",
+        "https://www.cpzp.cz/lekari",
+        "https://www.cpzp.cz/import/lekari/PZSdleOdb.xlsx",
+        "https://www.cpzp.cz/clanek/50-0-Ekonomicke-informace.html",
+        "https://portal.cpzp.cz/app/smlouvy-s-pzs/",
+        "https://www.cpzp.cz/clanek/3420-0-Informace-k-ciselnikum.html",
+        "https://www.cpzp.cz/clanek/1803-0-Svobodny-pristup-k-informacim.html",
+        "https://www.cpzp.cz/zadost_o-poskytnuti-informaci-podle-zakona-c.-1061999-sb.-o-svobodnem-pristupu-k-informacim-ze-dne-29.5.2024",
+        "https://www.cpzp.cz/cdn/file/DUYBLd2MG7utN9Bo9HTbL6izGVorxbb8.xlsx",
+        "https://www.cpzp.cz/sitemap.xml",
+        "https://data.gov.cz/sparql"
+      ]
+    },
+    {
+      "kod": "207",
+      "zkratka": "OZP",
+      "web_opendata": {
+        "stav": "castecne",
+        "url": "https://www.ozp.cz/lecive-pripravky",
+        "popis": "Sekce 'otevřená data' ani statistická/produkční data na ozp.cz nejsou (prošla jsem sitemap.xml s 609 URL a navigaci). Strojově čitelné XLSX jsou jen provozní soubory pro poskytovatele: přehled indikačních omezení, seznam center se zvláštní smlouvou, seznam diagnostických skupin a diagnóz (měsíční verze) a signální kódy center; dříve též měsíční seznamy léčivých přípravků bez indikačních omezení (XLSX a ZIP, ověřeno pro 2020–2021). Smlouvy a cenová ujednání s poskytovateli jsou ve webové aplikaci 'Zveřejnění smluv' (dokumenty chráněné autorským právem, jen ke čtení) a smluvní partneři v aplikaci 'Mapa smluvních partnerů'/'Atlas doktorů' (bez exportu).",
+        "datove_sady": [
+          {
+            "nazev": "Centrová léčba a léčivé přípravky – přehled indikačních omezení, seznam center, seznam diagnostických skupin a diagnóz",
+            "url": "https://www.ozp.cz/web/files-c/1659/prehled_indikacnich_omezeni.xlsx?261013",
+            "format": "XLSX",
+            "periodicita": "Měsíčně (verze 07–10/2026 seznamu diagnostických skupin; soubory nesou v URL parametr verze, např. ?261013 a ?261026)",
+            "licence": "Neuvedena",
+            "obsah": "Číselníky úhradových podmínek pro poskytovatele: indikační omezení léčivých přípravků, centra se zvláštní smlouvou, skupiny diagnóz, signální kódy center."
+          },
+          {
+            "nazev": "Léčivé přípravky a potraviny bez indikačních omezení (praktičtí lékaři), měsíční seznamy 2020–2021",
+            "url": "https://www.ozp.cz/pro-lekare/aktualni-informace/prakticti-lekari/web/files-c/1119/lecive_pripr_bez_in-pres_prakticti_lekari_2101.xlsx",
+            "format": "XLSX a ZIP",
+            "periodicita": "Měsíčně (na webu ověřeny ročníky 2020 a 2021)",
+            "licence": "Neuvedena",
+            "obsah": "Seznam léčivých přípravků a potravin pro zvláštní lékařské účely, jejichž úhrada není vázána na indikační omezení (provozní informace pro lékaře)."
+          }
+        ]
+      },
+      "nkod": {
+        "stav": "ne",
+        "pocet_sad": 0,
+        "url": null,
+        "sady": [],
+        "popis": "Dotaz na SPARQL endpoint NKOD (https://data.gov.cz/sparql) k 2026-11-02: (1) dataset IRI s předponou https://data.gov.cz/zdroj/datové-sady/<IČO>/ pro IČO 47114321 nevrátil žádný záznam; (2) publisher IRI .../orgán-veřejné-moci/47114321, .../právnická-osoba/47114321 i https://data.gov.cz/zdroj/poskytovatel/47114321 bez datových sad; (3) výčet všech 373 distinct poskytovatelů datových sad v NKOD (dcterms:publisher) neobsahuje žádnou zdravotní pojišťovnu (zdravotnické organizace: pouze Ministerstvo zdravotnictví, ÚZIS ČR a Národní centrum ošetřovatelství a nelékařských zdravotnických oborů). Data o pojišťovnách se v NKOD objevují jen zprostředkovaně pod poskytovatelem Ministerstvo zdravotnictví (viz centralni_zdroje)."
+      },
+      "vyrocni_zpravy_a_jine": {
+        "stav": "castecne",
+        "popis": "Výroční zprávy 2001–2025 pouze v PDF; zdravotně pojistné plány v PDF. Statistická ročenka ani datový portál nenalezeny. OZP je členem SZP ČR (OPEN DATA ZZP, číselníky) a prohlašuje, že jako první zaměstnanecká pojišťovna začala zveřejňovat smlouvy a cenová ujednání s poskytovateli.",
+        "odkazy": [
+          {
+            "nazev": "Výroční zprávy OZP",
+            "url": "https://www.ozp.cz/tiskove-centrum/vyrocni-zpravy"
+          },
+          {
+            "nazev": "Výroční zpráva OZP za rok 2025 (PDF)",
+            "url": "https://www.ozp.cz/web/files-c/510/vz_ozp_2025.pdf"
+          },
+          {
+            "nazev": "Smlouvy a cenová ujednání s poskytovateli zdravotních služeb",
+            "url": "https://www.ozp.cz/o-pojistovne/smlouvy-a-cenova-ujednani-s-poskytovateli-zdravotnich-sluzeb"
+          },
+          {
+            "nazev": "Zveřejnění smluv (aplikace dle § 17 odst. 9 zák. 48/1997 Sb.)",
+            "url": "https://www.ozp.cz/zverejneni-smluv/"
+          },
+          {
+            "nazev": "Informace o OZP (zveřejňované informace dle 106/1999 Sb.)",
+            "url": "https://www.ozp.cz/o-pojistovne/informace-o-ozp"
+          }
+        ]
+      },
+      "zadosti_o_data": {
+        "popis": "Povinně zveřejňované informace dle zák. 106/1999 Sb. a podatelna. Samostatný postup pro data pro výzkum nenalezen.",
+        "url": "https://www.ozp.cz/o-pojistovne/informace-o-ozp"
+      },
+      "shrnuti": "OZP nezveřejňuje žádná statistická data; ke stažení jsou jen provozní XLSX pro lékaře (indikační omezení, centra, diagnózy), smlouvy v aplikaci bez exportu, mimo NKOD.",
+      "overeno": "2026-11-02",
+      "zdroje": [
+        "https://www.ozp.cz/lecive-pripravky",
+        "https://www.ozp.cz/web/files-c/1659/prehled_indikacnich_omezeni.xlsx?261013",
+        "https://www.ozp.cz/pro-lekare/aktualni-informace/prakticti-lekari/lecive-pripravky-a-potraviny-bez-indikacnich-omezeni-2021",
+        "https://www.ozp.cz/pro-lekare/aktualni-informace/prakticti-lekari/web/files-c/1119/lecive_pripr_bez_in-pres_prakticti_lekari_2101.xlsx",
+        "https://www.ozp.cz/o-pojistovne/smlouvy-a-cenova-ujednani-s-poskytovateli-zdravotnich-sluzeb",
+        "https://www.ozp.cz/zverejneni-smluv/",
+        "https://www.ozp.cz/pro-klienty/smluvni-lekari-ozp",
+        "https://www.ozp.cz/tiskove-centrum/vyrocni-zpravy",
+        "https://www.ozp.cz/web/files-c/510/vz_ozp_2025.pdf",
+        "https://www.ozp.cz/o-pojistovne/informace-o-ozp",
+        "https://www.ozp.cz/sitemap.xml",
+        "https://data.gov.cz/sparql"
+      ]
+    },
+    {
+      "kod": "209",
+      "zkratka": "ZPŠ",
+      "web_opendata": {
+        "stav": "ne",
+        "url": null,
+        "popis": "Na zpskoda.cz jsem nenašel žádný datový soubor o činnosti ani seznam ke stažení. Prohledáno: sitemap.xml (616 URL; hledání otevřen*, data, statisti*, smluvn*, číselník*, výroční, úhrad*, seznam), navigace hlavní stránky, stránky Smluvní vztahy, Financování zdravotních služeb, Číselníky/DNC/Pozitivní list, O nás, Strukturované informace a automatický průchod 25 relevantních stránek na odkazy XLSX/CSV/JSON/XML/ZIP (jediný nález: formulář formular_icz_icp_def.xlsx, tj. šablona, nikoli data). Smluvní poskytovatelé jsou jen ve vyhledávači (https://www.zpskoda.cz/smluvni-partneri), smlouvy včetně úhradových dodatků a rozsahu nasmlouvaných služeb v aplikaci https://smlouvy.zpskoda.cz/ (zveřejnění dle § 17 odst. 9 zák. 48/1997 Sb.). Číselníky odkazují na SZP ČR (szpcr.cz).",
+        "datove_sady": []
+      },
+      "nkod": {
+        "stav": "ne",
+        "pocet_sad": 0,
+        "url": null,
+        "sady": [],
+        "popis": "Dotaz na SPARQL endpoint NKOD (https://data.gov.cz/sparql) k 2026-11-02: (1) dataset IRI s předponou https://data.gov.cz/zdroj/datové-sady/<IČO>/ pro IČO 46354182 nevrátil žádný záznam; (2) publisher IRI .../orgán-veřejné-moci/46354182, .../právnická-osoba/46354182 i https://data.gov.cz/zdroj/poskytovatel/46354182 bez datových sad; (3) výčet všech 373 distinct poskytovatelů datových sad v NKOD (dcterms:publisher) neobsahuje žádnou zdravotní pojišťovnu (zdravotnické organizace: pouze Ministerstvo zdravotnictví, ÚZIS ČR a Národní centrum ošetřovatelství a nelékařských zdravotnických oborů). Data o pojišťovnách se v NKOD objevují jen zprostředkovaně pod poskytovatelem Ministerstvo zdravotnictví (viz centralni_zdroje)."
+      },
+      "vyrocni_zpravy_a_jine": {
+        "stav": "castecne",
+        "popis": "Výroční zprávy 2007–2024 (2024 dosud neschválena Poslaneckou sněmovnou) a zdravotně pojistné plány jen v PDF. Statistická ročenka ani datový portál nenalezeny. ZPŠ je členem SZP ČR.",
+        "odkazy": [
+          {
+            "nazev": "O nás (výroční zprávy a zdravotně pojistné plány)",
+            "url": "https://www.zpskoda.cz/o-nas"
+          },
+          {
+            "nazev": "Archiv výročních zpráv",
+            "url": "https://www.zpskoda.cz/archiv-vyrocnich-zprav"
+          },
+          {
+            "nazev": "Výroční zpráva ZPŠ za rok 2024 (PDF)",
+            "url": "https://www.zpskoda.cz/sites/default/files/docs/2025/10/vz-2024-zps.pdf"
+          },
+          {
+            "nazev": "Smlouvy s poskytovateli",
+            "url": "https://www.zpskoda.cz/smlouvy-s-poskytovateli"
+          },
+          {
+            "nazev": "Povinné informace o subjektu",
+            "url": "https://www.zpskoda.cz/strukturovane-informace"
+          }
+        ]
+      },
+      "zadosti_o_data": {
+        "popis": "Povinné informace o subjektu dle zák. 106/1999 Sb. (strukturované informace). Samostatný postup pro data pro výzkum nenalezen.",
+        "url": "https://www.zpskoda.cz/strukturovane-informace"
+      },
+      "shrnuti": "ZPŠ nezveřejňuje na webu žádná strojově čitelná data; jen výroční zprávy v PDF a aplikace pro vyhledání smluvních partnerů a smluv, mimo NKOD.",
+      "overeno": "2026-11-02",
+      "zdroje": [
+        "https://www.zpskoda.cz/sitemap.xml",
+        "https://www.zpskoda.cz/smluvni-vztahy",
+        "https://www.zpskoda.cz/smluvni-partneri",
+        "https://www.zpskoda.cz/smlouvy-s-poskytovateli",
+        "https://smlouvy.zpskoda.cz/",
+        "https://www.zpskoda.cz/financovani-zdravotnich-sluzeb",
+        "https://www.zpskoda.cz/ciselniky-dnc-pozitivni-list",
+        "https://www.zpskoda.cz/o-nas",
+        "https://www.zpskoda.cz/archiv-vyrocnich-zprav",
+        "https://www.zpskoda.cz/sites/default/files/docs/2025/10/vz-2024-zps.pdf",
+        "https://www.zpskoda.cz/strukturovane-informace",
+        "https://data.gov.cz/sparql"
+      ]
+    },
+    {
+      "kod": "211",
+      "zkratka": "ZP MV ČR",
+      "web_opendata": {
+        "stav": "castecne",
+        "url": "https://www.zpmvcr.cz/pojistenci/zdravotni-sluzby/lazenska-lecebne-rehabilitacni-pece",
+        "popis": "Sekce 'otevřená data' ani statistická data na zpmvcr.cz nejsou (prošla jsem sitemap.xml se 764 URL, navigaci a automaticky 48 stránek sekcí Poskytovatelé, O nás › Dokumenty/Legislativa a Pojištěnci › Zdravotní služby na odkazy XLSX/CSV/JSON/XML/ZIP). Strojově čitelné soubory jsou jen: XLSX se seznamem smluvních poskytovatelů lázeňské léčebně rehabilitační péče (dospělí) a XLSX přílohy odpovědí na žádosti podle zák. 106/1999 Sb. (ad hoc, dle toho, co žadatelé požadovali). Smluvní poskytovatelé jsou v interaktivní mapě (Power BI) na stránce Smluvní poskytovatelé, smlouvy s poskytovateli v aplikaci https://eforms.zpmvcr.cz/esmlouvy/ (zveřejnění dle § 17 odst. 9 zák. 48/1997 Sb., podle stránky ve zkušebním provozu). Úhradové dodatky jsou ve formě PDF.",
+        "datove_sady": [
+          {
+            "nazev": "Seznam smluvních poskytovatelů lázeňské léčebně rehabilitační péče – dospělí (změny k 31. 8. 2026)",
+            "url": "https://www.zpmvcr.cz/system/files/dokumenty/2026-08/Seznam%20smluvn%C3%ADch%20poskytovatel%C5%AF%20l%C3%A1ze%C5%88sk%C3%A9%20l%C3%A9%C4%8Debn%C4%9B%20rehabilita%C4%8Dn%C3%AD%20p%C3%A9%C4%8De_dosp%C4%9Bl%C3%AD%20%20-%20zm%C4%9Bny%20k%2031.%208.%202026.xlsx",
+            "format": "XLSX",
+            "periodicita": "Dle změn (aktuální verze k 31. 8. 2026)",
+            "licence": "Neuvedena",
+            "obsah": "Seznam smluvních lázeňských poskytovatelů pro dospělé."
+          },
+          {
+            "nazev": "Přílohy odpovědí na žádosti dle zák. 106/1999 Sb. (2025, 2026)",
+            "url": "https://www.zpmvcr.cz/o-nas/legislativa/poskytnute-informace-podle-zak-c-1061999-sb-2026",
+            "format": "XLSX (několik souborů ročně, např. tabulka.xlsx, příloha žádosti)",
+            "periodicita": "Ad hoc, dle došlých žádostí",
+            "licence": "Neuvedena",
+            "obsah": "Tabulky vyžádané žadateli, např. počty vydaných zdravotnických prostředků a úhrady za roky 2020–2025; nejde o systematickou datovou sadu."
+          }
+        ]
+      },
+      "nkod": {
+        "stav": "ne",
+        "pocet_sad": 0,
+        "url": null,
+        "sady": [],
+        "popis": "Dotaz na SPARQL endpoint NKOD (https://data.gov.cz/sparql) k 2026-11-02: (1) dataset IRI s předponou https://data.gov.cz/zdroj/datové-sady/<IČO>/ pro IČO 47114304 nevrátil žádný záznam; (2) publisher IRI .../orgán-veřejné-moci/47114304, .../právnická-osoba/47114304 i https://data.gov.cz/zdroj/poskytovatel/47114304 bez datových sad; (3) výčet všech 373 distinct poskytovatelů datových sad v NKOD (dcterms:publisher) neobsahuje žádnou zdravotní pojišťovnu (zdravotnické organizace: pouze Ministerstvo zdravotnictví, ÚZIS ČR a Národní centrum ošetřovatelství a nelékařských zdravotnických oborů). Data o pojišťovnách se v NKOD objevují jen zprostředkovaně pod poskytovatelem Ministerstvo zdravotnictví (viz centralni_zdroje)."
+      },
+      "vyrocni_zpravy_a_jine": {
+        "stav": "castecne",
+        "popis": "Výroční zprávy 2010–2025 (2025 dosud neschválena Poslaneckou sněmovnou) a zdravotně pojistné plány v PDF. Statistická ročenka ani datový portál nenalezeny. Pojišťovna publikuje i jednorázové analýzy (např. analýza sítě stomatologů z roku 2022) v aktualitách.",
+        "odkazy": [
+          {
+            "nazev": "Výroční zprávy ZP MV ČR",
+            "url": "https://www.zpmvcr.cz/o-nas/dokumenty/vyrocni-zpravy"
+          },
+          {
+            "nazev": "Smlouvy s poskytovateli zdravotních služeb",
+            "url": "https://www.zpmvcr.cz/poskytovatele/smlouvy-s-poskytovateli-zdravotnich-sluzeb"
+          },
+          {
+            "nazev": "Smluvní poskytovatelé (mapa)",
+            "url": "https://www.zpmvcr.cz/pojistenci/zdravotni-sluzby/smluvni-poskytovatele"
+          },
+          {
+            "nazev": "Úhradové dodatky pro rok 2025",
+            "url": "https://www.zpmvcr.cz/poskytovatele/uhrady-zdravotnich-sluzeb/uhradove-dodatky-pro-rok-2025"
+          },
+          {
+            "nazev": "Legislativa a poskytnuté informace dle 106/1999 Sb.",
+            "url": "https://www.zpmvcr.cz/o-nas/legislativa"
+          }
+        ]
+      },
+      "zadosti_o_data": {
+        "popis": "Žádosti dle zák. 106/1999 Sb. se vyřizují a zveřejňují po letech 2018–2026 včetně XLSX příloh. Samostatný postup pro data pro výzkum nenalezen.",
+        "url": "https://www.zpmvcr.cz/o-nas/legislativa/informace-dle-zakona-c.-106-1999-sb."
+      },
+      "shrnuti": "ZP MV ČR nemá žádná systematická otevřená data; jen XLSX seznam lázeňských poskytovatelů a ad hoc XLSX přílohy odpovědí podle zák. 106/1999 Sb., mimo NKOD.",
+      "overeno": "2026-11-02",
+      "zdroje": [
+        "https://www.zpmvcr.cz/sitemap.xml",
+        "https://www.zpmvcr.cz/pojistenci/zdravotni-sluzby/lazenska-lecebne-rehabilitacni-pece",
+        "https://www.zpmvcr.cz/system/files/dokumenty/2026-08/Seznam%20smluvn%C3%ADch%20poskytovatel%C5%AF%20l%C3%A1ze%C5%88sk%C3%A9%20l%C3%A9%C4%8Debn%C4%9B%20rehabilita%C4%8Dn%C3%AD%20p%C3%A9%C4%8De_dosp%C4%9Bl%C3%AD%20%20-%20zm%C4%9Bny%20k%2031.%208.%202026.xlsx",
+        "https://www.zpmvcr.cz/o-nas/legislativa/poskytnute-informace-podle-zak-c-1061999-sb-2026",
+        "https://www.zpmvcr.cz/pojistenci/zdravotni-sluzby/smluvni-poskytovatele",
+        "https://www.zpmvcr.cz/poskytovatele/smlouvy-s-poskytovateli-zdravotnich-sluzeb",
+        "https://eforms.zpmvcr.cz/esmlouvy/",
+        "https://www.zpmvcr.cz/o-nas/dokumenty/vyrocni-zpravy",
+        "https://www.zpmvcr.cz/poskytovatele/uhrady-zdravotnich-sluzeb/uhradove-dodatky-pro-rok-2025",
+        "https://www.zpmvcr.cz/o-nas/legislativa",
+        "https://www.zpmvcr.cz/o-nas/legislativa/informace-dle-zakona-c.-106-1999-sb.",
+        "https://www.zpmvcr.cz/o-nas/aktuality/odmitani-novych-klientu-a-dlouhe-cekaci-lhuty-u-zubare-co-vse-odhalila-analyza-zp",
+        "https://data.gov.cz/sparql"
+      ]
+    },
+    {
+      "kod": "213",
+      "zkratka": "RBP",
+      "web_opendata": {
+        "stav": "castecne",
+        "url": "https://www.rbp213.cz/vyhledani-smluvniho-lekare/a-5264/",
+        "popis": "Sekce 'otevřená data' ani statistická data na rbp213.cz nejsou (prošla jsem sitemap.xml s 834 URL, navigaci a automaticky 270 stránek sekcí poskytovatelé, o nás, pojištěnci, plátci a dokumenty na odkazy XLSX/CSV/JSON/XML/ZIP). Strojově čitelné soubory jsou jen: XLSX 'Přehled poskytovatelů lůžkové péče' (odkazy na weby nemocnic se zveřejněnými čekacími dobami) a ad hoc XLSX přílohy odpovědí na žádosti podle zák. 106/1999 Sb. (RBP zveřejňuje 161 stránek odpovědí z let 2021–2026; přílohy jsou tabulky připravené pro konkrétní žadatele, např. komerční datové firmy). Smluvní lékaři i smlouvy s poskytovateli se vyhledávají v aplikaci my213 (bez exportu); číselníky RBP odkazují na číselníky SZP ČR a VZP.",
+        "datove_sady": [
+          {
+            "nazev": "Přehled poskytovatelů lůžkové péče (zveřejněné čekací doby na výkony)",
+            "url": "https://www.rbp213.cz/systemfiles/file/1763448695-ekac-doby-operac-nemocnic-odkaz-web-1.xlsx",
+            "format": "XLSX",
+            "periodicita": "Neuvedena (soubor z listopadu 2025 dle časového razítka v názvu)",
+            "licence": "Neuvedena",
+            "obsah": "Přehled smluvních nemocnic s odkazem na web, kde zveřejňují čekací doby na operace."
+          },
+          {
+            "nazev": "Přílohy odpovědí na žádosti dle zák. 106/1999 Sb. (2021–2026)",
+            "url": "https://www.rbp213.cz/o-nas/obecne/legislativa/poskytnute-informace/zadost-o-informaci-ze-dne-27-7-2021/a-1520/",
+            "format": "XLSX (např. OpenDataInitiative-IMUNOGLOBINY-2016-2021.xlsx, IQVIASolutions-VYK-vyber-2015-2020-20210521.xlsx)",
+            "periodicita": "Ad hoc, dle došlých žádostí",
+            "licence": "Neuvedena",
+            "obsah": "Tabulky vykázaných výkonů, léčivých přípravků a počtů pojištěnců připravené podle konkrétní žádosti; nejde o systematickou datovou sadu."
+          }
+        ]
+      },
+      "nkod": {
+        "stav": "ne",
+        "pocet_sad": 0,
+        "url": null,
+        "sady": [],
+        "popis": "Dotaz na SPARQL endpoint NKOD (https://data.gov.cz/sparql) k 2026-11-02: (1) dataset IRI s předponou https://data.gov.cz/zdroj/datové-sady/<IČO>/ pro IČO 47673036 nevrátil žádný záznam; (2) publisher IRI .../orgán-veřejné-moci/47673036, .../právnická-osoba/47673036 i https://data.gov.cz/zdroj/poskytovatel/47673036 bez datových sad; (3) výčet všech 373 distinct poskytovatelů datových sad v NKOD (dcterms:publisher) neobsahuje žádnou zdravotní pojišťovnu (zdravotnické organizace: pouze Ministerstvo zdravotnictví, ÚZIS ČR a Národní centrum ošetřovatelství a nelékařských zdravotnických oborů). Data o pojišťovnách se v NKOD objevují jen zprostředkovaně pod poskytovatelem Ministerstvo zdravotnictví (viz centralni_zdroje)."
+      },
+      "vyrocni_zpravy_a_jine": {
+        "stav": "castecne",
+        "popis": "Výroční zprávy 2014–2025 pouze v PDF. Statistická ročenka ani datový portál nenalezeny. RBP je členem SZP ČR.",
+        "odkazy": [
+          {
+            "nazev": "Výroční zpráva",
+            "url": "https://www.rbp213.cz/o-nas/pro-verejnost-a-media/vyrocni-zprava/a-380/"
+          },
+          {
+            "nazev": "Smluvní vztahy (včetně Smluvní vztahy s poskytovateli a vzory smluv)",
+            "url": "https://www.rbp213.cz/poskytovatele/obecne/smluvni-vztahy/a-2/"
+          },
+          {
+            "nazev": "Číselníky",
+            "url": "https://www.rbp213.cz/poskytovatele/dokumenty/ciselniky/a-421/"
+          },
+          {
+            "nazev": "Povinně zveřejňované informace",
+            "url": "https://www.rbp213.cz/o-nas/obecne/legislativa/povinne-zverejnovane-informace/a-414/"
+          }
+        ]
+      },
+      "zadosti_o_data": {
+        "popis": "Povinně zveřejňované informace a postup vyřizování žádostí dle zák. 106/1999 Sb. (RBP uvádí, že povinnost se jí týká jen v omezeném rozsahu); odpovědi na žádosti publikuje po jednotlivých žádostech od roku 2021, někdy s XLSX přílohou. Samostatný postup pro data pro výzkum nenalezen.",
+        "url": "https://www.rbp213.cz/o-nas/obecne/legislativa/poskytnute-informace/a-1517/"
+      },
+      "shrnuti": "RBP nezveřejňuje žádná systematická statistická data; ke stažení je jen XLSX s přehledem nemocnic a ad hoc XLSX přílohy odpovědí podle zák. 106/1999 Sb., smlouvy a lékaře nabízí v aplikaci my213, mimo NKOD.",
+      "overeno": "2026-11-02",
+      "zdroje": [
+        "https://www.rbp213.cz/sitemap.xml",
+        "https://www.rbp213.cz/vyhledani-smluvniho-lekare/a-5264/",
+        "https://www.rbp213.cz/systemfiles/file/1763448695-ekac-doby-operac-nemocnic-odkaz-web-1.xlsx",
+        "https://www.rbp213.cz/poskytovatele/obecne/smluvni-vztahy/a-2/",
+        "https://www.rbp213.cz/poskytovatele/dokumenty/ciselniky/a-421/",
+        "https://www.rbp213.cz/o-nas/pro-verejnost-a-media/vyrocni-zprava/a-380/",
+        "https://www.rbp213.cz/o-nas/obecne/legislativa/povinne-zverejnovane-informace/a-414/",
+        "https://www.rbp213.cz/o-nas/obecne/legislativa/poskytnute-informace/a-1517/",
+        "https://www.rbp213.cz/o-nas/obecne/legislativa/poskytnute-informace/zadost-o-informaci-ze-dne-27-7-2021/a-1520/",
+        "https://data.gov.cz/sparql"
+      ]
+    }
+  ]
 }
