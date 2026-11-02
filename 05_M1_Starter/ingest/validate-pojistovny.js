@@ -8,6 +8,8 @@
 //  - data/pojistovny-aplikace.json   funkce[], aplikace[7], funkce true|false|null, uzivatele, rizikové skupiny, rozpory
 //  - data/pojistovny-prevence.json   enum stupňů, oblasti, matice 7 ZP, onko/duševní sloupce, struktura fondu prevence
 //  - data/pojistovny-otazky.json     sady otázek (typ otevrene | dotaznik), unikátní id
+//  - data/pojistovny-vek.json        (volitelný, P3.3) 7 ZP, součet struktury = celkem ±0,1 %,
+//                                    ČR celkem = součet ZP ±0,5 %; hospodareni.*_std_kc obálka s faktorem 0,5–2 a stavem
 //
 // Chyby (FAIL) končí exit 1. Varování (WARN) proces nezastaví (např. součet položek fondu prevence
 // neodpovídá souhrnu ±1 % — některé výroční zprávy zaokrouhlují).
@@ -27,6 +29,11 @@ export const FILES = {
   prevence: 'pojistovny-prevence.json',
   otazky: 'pojistovny-otazky.json',
 };
+/** Volitelné datasety: když soubor chybí, validace se přeskočí (P3.3 věková struktura z CRP). */
+export const OPTIONAL_FILES = {
+  vek: 'pojistovny-vek.json',
+};
+export const STD_STAVY = ['dolozeno', 'placeholder-bez-vah'];
 
 export const ZP_CODES = ['111', '201', '205', '207', '209', '211', '213'];
 export const OBLASTI = ['prevence', 'dostupnost', 'sit', 'kvalita', 'servis', 'hospodareni'];
@@ -54,7 +61,7 @@ export function validateAll(datasets) {
   const ok = (cond, msg) => { checks++; if (!cond) errors.push(msg); return !!cond; };
   const warn = (msg) => warnings.push(msg);
 
-  const { pojistovny: P, aplikace: A, prevence: V, otazky: Q } = datasets ?? {};
+  const { pojistovny: P, aplikace: A, prevence: V, otazky: Q, vek: VK } = datasets ?? {};
 
   // Obálka {hodnota, rok, zdroj}: hodnota číslo nebo null; hodnota bez zdroje je chyba.
   function checkEnvelope(v, tag) {
@@ -106,6 +113,21 @@ export function validateAll(datasets) {
       for (const f of HOSP_REQUIRED) {
         if (!ok(h[f] != null, `${tag}.hospodareni: missing '${f}'`)) continue;
         checkEnvelope(h[f], `${tag}.hospodareni.${f}`);
+      }
+
+      // volitelná standardizovaná pole *_std_kc (P3.3): obálka + faktor 0,5–2 + stav vah
+      for (const [k, v] of Object.entries(h)) {
+        if (!/_std_kc$/.test(k)) continue;
+        const stag = `${tag}.hospodareni.${k}`;
+        checkEnvelope(v, stag);
+        if (!isObj(v)) continue;
+        ok(isNum(v.faktor) && v.faktor >= 0.5 && v.faktor <= 2, `${stag}.faktor: musí být číslo 0,5–2 (${JSON.stringify(v.faktor)})`);
+        ok(STD_STAVY.includes(v.stav), `${stag}.stav: '${v.stav}' není z ${JSON.stringify(STD_STAVY)}`);
+        ok(isStr(v.poznamka), `${stag}.poznamka: chybí (faktor, rok indexů, stav)`);
+        const base = h[k.replace(/_std_kc$/, '_kc')]?.hodnota;
+        if (v.stav === 'placeholder-bez-vah' && isNum(base) && isNum(v.hodnota)) {
+          ok(v.hodnota === base, `${stag}: placeholder bez vah musí mít hodnotu = nestandardizované (${v.hodnota} ≠ ${base})`);
+        }
       }
 
       // hospodareni_2025: null (nebo chybí), nebo objekt obálek se stejnými pravidly
@@ -309,6 +331,48 @@ export function validateAll(datasets) {
     }
   }
 
+  // ---------------------------------------------------------------- pojistovny-vek.json (volitelný)
+  const KT = 'pojistovny-vek.json';
+  if (VK != null && ok(isObj(VK), `${KT}: není objekt`)) {
+    for (const f of ['version', 'generated_at', 'rok', 'zdroj', 'pasma', 'pohlavi', 'cr', 'pojistovny']) ok(VK[f] != null, `${KT} root: missing '${f}'`);
+    ok(Array.isArray(VK.pasma) && VK.pasma.length === 19, `${KT}: pasma musí mít 19 položek`);
+    ok(JSON.stringify(VK.pohlavi) === JSON.stringify(['M', 'F']), `${KT}: pohlavi musí být ["M","F"]`);
+    const cells = (VK.pasma ?? []).flatMap((p) => (VK.pohlavi ?? []).map((s) => `${p}:${s}`));
+    const checkStruct = (o, tag) => {
+      if (!ok(isObj(o?.struktura), `${tag}.struktura: musí být objekt`)) return 0;
+      for (const c of cells) ok(isNum(o.struktura[c]) && o.struktura[c] >= 0, `${tag}.struktura: chybí nebo záporná buňka '${c}'`);
+      ok(Object.keys(o.struktura).length === cells.length, `${tag}.struktura: neočekávané buňky (${Object.keys(o.struktura).length} ≠ ${cells.length})`);
+      const sum = Object.values(o.struktura).reduce((a, b) => a + (isNum(b) ? b : 0), 0);
+      if (ok(isNum(o.celkem) && o.celkem > 0, `${tag}.celkem: musí být kladné číslo`)) {
+        ok(Math.abs(sum - o.celkem) / o.celkem <= 0.001, `${tag}: součet struktury ${sum} ≠ celkem ${o.celkem} (±0,1 %)`);
+      }
+      return o.celkem ?? 0;
+    };
+    const codes = new Set();
+    let sumZp = 0;
+    for (const z of VK.pojistovny ?? []) {
+      const tag = `${KT} pojistovny[${z?.kod ?? '?'}]`;
+      ok(ZP_CODES.includes(String(z?.kod)), `${tag}: neznámý kód ZP`);
+      ok(!codes.has(z?.kod), `${tag}: duplicitní kód`);
+      codes.add(z?.kod);
+      sumZp += checkStruct(z, tag);
+      ok(isNum(z?.podil_65plus_pct), `${tag}.podil_65plus_pct: musí být číslo`);
+    }
+    ok(codes.size === 7, `${KT}: pojistovny očekáváno 7, nalezeno ${codes.size}`);
+    const cr = checkStruct(VK.cr, `${KT} cr`);
+    if (cr > 0) ok(Math.abs(sumZp - cr) / cr <= 0.005, `${KT}: ČR celkem ${cr} ≠ součet ZP ${sumZp} (±0,5 %)`);
+    // soulad s crp blokem v pojistovny.json (stejný zdroj a rok): podíl 65+ ±0,2 p. b.
+    if (isObj(P) && VK.rok === P.rok_crp) {
+      for (const z of VK.pojistovny ?? []) {
+        const pz = (P.pojistovny ?? []).find((x) => String(x.kod) === String(z.kod));
+        const ref = pz?.crp?.podil_65plus_pct;
+        if (isNum(ref) && isNum(z.podil_65plus_pct)) {
+          ok(Math.abs(ref - z.podil_65plus_pct) <= 0.2, `${KT} pojistovny[${z.kod}]: podíl 65+ ${z.podil_65plus_pct} ≠ pojistovny.json crp ${ref} (±0,2 p. b.)`);
+        }
+      }
+    }
+  }
+
   return { errors, warnings, checks };
 }
 
@@ -318,6 +382,10 @@ export function loadDatasets(dir = DATA_DIR) {
     const p = path.join(dir, file);
     if (!fs.existsSync(p)) throw new Error(`data/${file} not found`);
     out[key] = JSON.parse(fs.readFileSync(p, 'utf8'));
+  }
+  for (const [key, file] of Object.entries(OPTIONAL_FILES)) {
+    const p = path.join(dir, file);
+    if (fs.existsSync(p)) out[key] = JSON.parse(fs.readFileSync(p, 'utf8'));
   }
   return out;
 }
@@ -333,7 +401,8 @@ function main() {
     process.exit(1);
   }
   const P = datasets.pojistovny;
-  console.log(`validate-pojistovny: OK: 4 datasety, ${checks} kontrol (${P.pojistovny.length} ZP, verze ${P.version}, stav ${P.stav}${warnings.length ? `, ${warnings.length} WARN` : ''})`);
+  const vek = datasets.vek ? `, věková struktura CRP ${datasets.vek.rok}` : '';
+  console.log(`validate-pojistovny: OK: 4 datasety, ${checks} kontrol (${P.pojistovny.length} ZP, verze ${P.version}, stav ${P.stav}${vek}${warnings.length ? `, ${warnings.length} WARN` : ''})`);
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
