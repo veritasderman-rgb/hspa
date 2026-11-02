@@ -1,26 +1,34 @@
 {
   "id": "vydaje_leky_hdp",
-  "name": "Výdaje na léčiva (% HDP)",
+  "name": "Výdaje na léky mimo nemocnice (% HDP)",
   "area": "Struktury",
   "domain": "Financování zdravotnictví",
   "subdomain": "Farmaceutické výdaje",
-  "definition": "Celkové výdaje na léčivé přípravky (za zdravotní pojišťovny i přímé platby pacientů) jako % HDP.",
+  "definition": "Výdaje na léčiva a zdravotnický spotřební materiál vydané pacientům mimo lůžkovou péči (lékárny a výdejny; funkce HC.5.1 Systému zdravotnických účtů SHA) ze všech zdrojů financování — veřejné zdravotní pojištění, doplatky i volný prodej — jako % HDP. Léky podané v nemocnici (centrová a nemocniční léčiva) do ukazatele nepatří; jsou součástí výdajů na lůžkovou a ambulantní péči.",
   "unit": "% HDP",
   "direction": "context_dependent",
   "data_source": {
     "primary": {
-      "type": "sukl",
-      "note": "Registr cen a úhrad SÚKL + NZIS výdaje ZP."
+      "type": "oecd_sdmx2",
+      "agency": "OECD.ELS.HD",
+      "dataflow": "DSD_SHA@DF_SHA",
+      "dims": {
+        "UNIT_MEASURE": "PT_B1GQ",
+        "FINANCING_SCHEME": "_T",
+        "FUNCTION": "HC51",
+        "PROVIDER": "_T"
+      },
+      "note": "Ověřeno 2. 11. 2026 (seed-audit, dávka 2, docs/seed-audit.md). OECD Health Statistics (SHA): ČR 1,16 % HDP (2024), průměr OECD 1,28 % (31 zemí), průměr EU 1,32 % (26 členů EU v datech OECD). OECD přebírá české údaje ze zdravotnických účtů ČSÚ."
     },
     "fallback": {
-      "type": "oecd",
-      "code": "PHARM_EXP_SHA"
+      "type": "csu_sha",
+      "note": "ČSÚ — Výsledky zdravotnických účtů ČR, funkce HC.5.1."
     }
   },
   "benchmark_source": {
-    "type": "oecd",
-    "code": "PHARM_EXP_SHA",
-    "dataset": "SHA"
+    "type": "oecd_sdmx2",
+    "dataset": "DSD_SHA@DF_SHA",
+    "note": "Průměr OECD = prostý průměr členských zemí s údajem za poslední rok ČR; průměr EU = prostý průměr členů EU v datech OECD za týž rok."
   },
   "signal_thresholds": {
     "good": 10,
@@ -32,9 +40,9 @@
     "MZ ČR",
     "MF ČR"
   ],
-  "method_notes": "ČR mírně nad OECD průměrem. Generický podíl je relativně vysoký (~70 %), čímž omezuje nadměrný nárůst.",
+  "method_notes": "OECD SHA, funkce HC.5.1 (léčiva a zdravotnický spotřební materiál vydané mimo lůžkovou péči), všechny zdroje financování, % HDP. Oprava 2. 11. 2026: dřívější seed 1,7 % HDP (2024) s průměrem OECD 1,5 % a EU 1,4 % neměl dohledatelný zdroj a tvrdil, že je ČR nad průměrem. Podle OECD je ČR pod průměrem OECD i EU a podíl od roku 2015 (1,32 %) pozvolna klesá; výkyv v roce 2020 (1,38 %) odráží propad HDP v pandemii. Mezinárodně srovnatelný údaj včetně nemocničních léčiv OECD pro většinu zemí nemá.",
   "limitations": "Srovnání ovlivněno rozdíly v cenových politikách, doplňkových pojistných systémech a výši DPH na léky.",
-  "patient_story": "Lékárna, Praha 4, čtvrtek ráno, 73letá důchodkyně přebírá tři recepty. „1 700 Kč doplatek, paní.\" Pacientka má 5 chronických léků, měsíční výdaj rodiny za léky cca 3 500 Kč. To je v Česku běžné, zejména u starších pacientů s polypragmazií (viz indikátor polypragmazie_65plus). Vysoké výdaje na léky jsou kombinací stárnoucí populace, šíření nových molekul a omezené cenové páky státu.\n\nVýdaje na léky v ČR jsou 1,7 % HDP (2024). OECD průměr 1,5 %, EU 1,4 % — Česko je nad oběma průměry. V absolutní hodnotě cca 132 mld. Kč ročně, z toho cca 75 % hradí zdravotní pojišťovny, 25 % pacient (doplatek + samoléčba). Trend rostoucí (2010: 1,5 %; 2024: 1,7 %). Vysoký podíl tvoří inovativní léčiva (onkologie, biologika, RA, vzácná onemocnění), které tlačí celkový rozpočet nahoru.\n\nStrukturálně český systém má fixní seznam hrazených léků (SÚKL), referenční ceny (regulovaný maximum), a paralelní distribuci (umožňující reexport — viz indikátor vypadky_leciv_aktivní). Centralizované vyjednávání cen je v Česku slabší než v Německu (AMNOG benefit assessment) nebo Velké Británii (NICE health technology appraisal). U inovativních léčiv „extra-financování\" přes mimořádné úhrady stoupá, ale nesystémově.\n\nVýdaje na léky jsou indikátor lékové politiky státu — nízké hodnoty mohou znamenat omezenou dostupnost (Polsko, Rumunsko), vysoké hodnoty buď bohatství systému nebo neefektivitu. Česko je v evropském středu. Politické páky: posílení hodnotové úhrady (HTA s českou perspektivou; rozšíření spolupráce s EUNetHTA); zvýšení role generik a biosimilars (cíl 70 % objemu generik); reforma kategorií léků (kategorie A bez doplatku, kategorie B s doplatkem, kategorie C samoplatebné). Indikátor v HSPA dashboardu sleduje výdaje na léky jako klíčový kontextový parametr lékové politiky.",
+  "patient_story": "Lékárna na sídlišti, čtvrtek ráno. Třiasedmdesátiletá paní přebírá pět léků na tlak, cukrovku a srdce a u pokladny doplácí. Doplatek ji pálí a v čekárně u praktika se o drahých lécích mluví pořád. Systém jako celek přitom za léky z lékáren utrácí méně, než by se podle těch rozhovorů zdálo.\n\nVýdaje na léky a zdravotnický materiál vydané mimo nemocnici dosáhly v Česku v roce 2024 podle OECD 1,16 % HDP. Průměr zemí OECD je 1,28 %, průměr členů EU 1,32 % — Česko je pod oběma. Od roku 2015, kdy podíl činil 1,32 %, pozvolna klesá; jednorázový skok v roce 2020 (1,38 %) nezpůsobila vyšší útrata, ale propad HDP v pandemii. Do čísla patří úhrady pojišťoven, doplatky pacientů i volně prodejné přípravky.\n\nCo v čísle chybí: léky podané v nemocnici — biologická a onkologická léčba v centrech a nemocniční léčiva. Právě tam výdaje rostou nejrychleji, ale srovnatelný mezinárodní údaj za ně OECD pro většinu zemí nevede. Dřívější verze tohoto indikátoru uváděla 1,7 % HDP a tvrdila, že je Česko nad průměrem OECD i EU; proti zdroji se to nepotvrdilo a 2. listopadu 2026 bylo opraveno.\n\nVýdaje na léky jsou kontextový ukazatel lékové politiky. Nízký podíl může znamenat dobře vyjednané ceny i omezenou dostupnost, vysoký buď bohatší systém, nebo slabé vyjednávání. Páky státu jsou známé: hodnocení zdravotnických technologií při stanovení úhrady, referenční ceny, podpora generik a biosimilars a sledování doplatků u chronicky nemocných. Indikátor je proto dobré číst spolu s polypragmazií u seniorů a s výdaji na nemocniční léčiva, které tu chybějí.",
   "framework": "hspa",
   "dimension": "efektivita"
 }
