@@ -1040,11 +1040,13 @@ redakční stupeň (`level`, rampa a legenda se čtyřmi slovy se nemění, řaz
 podle `data-level`), ale **text v buňce je počet nalezených položek** — částí
 `popis` oddělených čárkou nebo středníkem (`pocetPolozek`: „screeningy, omezené
 benefity“ = 2; prázdný popis = „—“). Tooltip říká stupeň a co rešerše našla
-(`tipText: 'stupeň základní'`, `tip: 'rešerše na webu našla 2 položky: …'`).
-Pod legendou je povinná věta `foot` „Číslo v buňce = kolik programů rešerše na
-webu našla; odstín = redakční stupeň.“ Číslo je počet položek v textu rešerše,
-ne kvalita ani objem programu; proto stupeň zůstává odstínem a nehodnotí se podle
-čísla.
+(`tipText: 'stupeň základní'`, `tip: 'popis rešerše má 2 položky: …'`).
+Pod legendou je povinná věta `foot` „Číslo v buňce = počet položek v textu rešerše
+(části popisu oddělené čárkou nebo středníkem), ne ověřený počet programů: záleží na
+podrobnosti zápisu … Odstín = redakční stupeň.“ Číslo je počet položek v textu
+rešerše („HPV, klíšťovka, chřipka“ = 3, „široká škála očkování“ = 1), ne počet
+programů ani kvalita či objem; proto stupeň zůstává odstínem a nehodnotí se podle
+čísla (nález Codex na PR #1354).
 
 **Stáří dat (`src/pojistovny-stari.js`).** Každá podstránka srovnávače ukazuje
 (1) pod `.zpc-mod-head` (na přehledu v hero) jednu větu `p.zpc-stari` „Data: CRP

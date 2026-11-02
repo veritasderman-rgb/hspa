@@ -151,11 +151,12 @@ export function pocetPolozek(popis) {
 const polozekCz = (n) => `${n} ${n === 1 ? 'položku' : n >= 2 && n <= 4 ? 'položky' : 'položek'}`;
 
 /** Věta pod maticí nabídky: co znamená číslo a co odstín. */
-export const PREV_HEAT_FOOT = 'Číslo v buňce = kolik programů rešerše na webu našla; odstín = redakční stupeň.';
+export const PREV_HEAT_FOOT = 'Číslo v buňce = počet položek v textu rešerše (části popisu oddělené čárkou nebo středníkem), ne ověřený počet programů: záleží na podrobnosti zápisu („HPV, klíšťovka, chřipka“ = 3, „široká škála očkování“ = 1). Odstín = redakční stupeň.';
 
 /**
  * Heatmapa nabídky 7 ZP × 9 oblastí. Barva buňky = redakční stupeň, text v buňce = počet
- * položek, které rešerše na webu našla („—“ = žádná); tooltip nese stupeň a popis z webu.
+ * položek v textu rešerše („—“ = prázdný popis), NE ověřený počet programů: číslo závisí na
+ * podrobnosti zápisu rešerše, proto to věta pod maticí i tooltip říkají; tooltip nese stupeň a popis.
  */
 export function buildPrevHeatmap(p) {
   const rows = (p?.pojistovny || []).map((z) => ({ kod: z.kod, label: z.zkratka, sub: z.rok_vz ? `VZ ${z.rok_vz}` : '', _z: z }));
@@ -169,7 +170,7 @@ export function buildPrevHeatmap(p) {
       level,
       text: n ? String(n) : '—',
       tipText: `stupeň ${LEVEL_LABEL[level]}`,
-      tip: n ? `rešerše na webu našla ${polozekCz(n)}: ${o.popis}` : 'rešerše na webu nenašla konkrétní program',
+      tip: n ? `popis rešerše má ${polozekCz(n)}: ${o.popis}` : 'rešerše na webu nenašla konkrétní program',
     };
   };
   return { rows, cols, cell };

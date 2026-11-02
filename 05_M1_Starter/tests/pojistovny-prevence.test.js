@@ -124,15 +124,15 @@ test('buildPrevHeatmap: v buňce počet nalezených položek, barva podle stupn�
   assert.equal(c.level, 1, 'barva = stupeň základní');
   assert.equal(c.text, '2', 'screeningy, omezené benefity = 2 položky');
   assert.equal(c.tipText, 'stupeň základní');
-  assert.match(c.tip, /rešerše na webu našla 2 položky: screeningy, omezené benefity/);
+  assert.match(c.tip, /popis rešerše má 2 položky: screeningy, omezené benefity/);
   const mv = h.rows.find((r) => r.kod === '211');
   assert.equal(h.cell(mv, onko).text, '4');
   assert.equal(h.cell(mv, onko).level, 3);
   // jedna položka = „položku“, pět a více = „položek“
-  assert.match(h.cell(vzp, h.cols.find((x) => x.key === 'diabetologie')).tip, /našla 1 položku: glukóza/);
+  assert.match(h.cell(vzp, h.cols.find((x) => x.key === 'diabetologie')).tip, /popis rešerše má 1 položku: glukóza/);
   const p2 = structuredClone(PREV);
   p2.pojistovny[0].oblasti.onkologie = { stupen: 'silne', popis: 'a, b, c, d, e' };
-  assert.match(buildPrevHeatmap(p2).cell(buildPrevHeatmap(p2).rows[0], onko).tip, /našla 5 položek/);
+  assert.match(buildPrevHeatmap(p2).cell(buildPrevHeatmap(p2).rows[0], onko).tip, /popis rešerše má 5 položek/);
   // bez popisu: stupeň zůstane (barva), v buňce „—“, tooltip řekne, že rešerše nic nenašla
   p2.pojistovny[0].oblasti.onkologie = { stupen: 'minimalni', popis: null };
   const h2 = buildPrevHeatmap(p2);
@@ -151,11 +151,11 @@ test('heatmapa nabídky: číslo v buňce, tooltip „stupeň … — našla …
   assert.equal(cells.length, 63, '7 × 9 buněk');
   for (const [, , , text] of cells) assert.match(text, /^(\d+|—)$/, 'v buňce jen číslo nebo „—“, ne slovo stupně');
   assert.doesNotMatch(html, /<td class="zpv-cell"[^>]*>(minimální|základní|silné|nejsilnější)</);
-  assert.match(html, /data-tip="VZP ČR · Onkologie: stupeň základní — rešerše na webu našla 2 položky: screeningy, omezené benefity"/);
+  assert.match(html, /data-tip="VZP ČR · Onkologie: stupeň základní — popis rešerše má 2 položky: screeningy, omezené benefity"/);
   // legenda = rampa stupňů (4 slova), pod maticí věta o významu čísla a odstínu
   assert.equal((html.match(/<i class="zpv-sw zpv-sw--ramp"/g) || []).length, 4);
   for (const w of ['minimální', 'základní', 'silné', 'nejsilnější']) assert.match(html, new RegExp(`</i>${w}</li>`));
-  assert.match(html, /<p class="zpv-foot">Číslo v buňce = kolik programů rešerše na webu našla; odstín = redakční stupeň\.<\/p>/);
+  assert.match(html, /<p class="zpv-foot">Číslo v buňce = počet položek v textu rešerše [^<]*ne ověřený počet programů[^<]*Odstín = redakční stupeň\.<\/p>/);
   assert.ok(html.indexOf('zpv-legend') < html.indexOf('zpv-foot'), 'věta je pod legendou');
   assert.doesNotMatch(heatmap(hm.rows, hm.cols, hm.cell, {}), /zpv-foot/);
   // řazení dál jede podle data-level (stupeň), ne podle čísla v buňce
