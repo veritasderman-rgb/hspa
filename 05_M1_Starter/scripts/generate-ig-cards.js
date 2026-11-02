@@ -453,8 +453,8 @@ const MANIFEST = {
   },
   'clanek-starnuti-lekaru': {
     kicker: 'Pracovní síla · lékaři', signal: 'warn',
-    stat: '41', statSuffix: '%', barPct: 41,
-    claim: 'českých lékařů je starších 55 let (2022) — nad průměrem EU.',
+    stat: '40', statSuffix: '%', barPct: 40,
+    claim: 'českých lékařů je starších 55 let (2024) — nad průměrem EU.',
     context: 'U praktiků je nad 60 let 44 %, u dětských praktiků 47 % (2022).',
   },
   'clanek-plne-kojeni-porodnice': {
@@ -694,7 +694,7 @@ const MANIFEST = {
     kicker: 'Onkologie · HPV', signal: 'warn',
     stat: '69,8', statSuffix: '%', barPct: 70,
     claim: 'dívek je očkováno proti HPV (kohorta 13 let, 2023).',
-    context: 'OECD 75 %, EU 72 %, cíl WHO 90 % do 2030.',
+    context: 'V roce 2024 68,3 %. Cíl WHO je 90 % do roku 2030.',
   },
   'clanek-platba-z-kapsy': {
     kicker: 'Financování · solidarita', signal: 'neutral',
@@ -807,7 +807,7 @@ const MANIFEST = {
   'clanek-governance-nezavislost': { kicker: 'Řízení · governance', signal: 'neutral', context: 'Belgie to řeší: nezávislá věda, mezirezort, veřejný portál.', headline: 'Kdo měří, nesmí být tím, kdo je měřen. Jinak čísla nemají váhu.' },
   'clanek-manifest-reforma-zdravotnictvi': { kicker: 'Manifest · reforma', signal: 'neutral', context: '13 priorit — od rychlých výher po dlouhodobé investice.', headline: 'Zdravotnictví nereformujete za jedno volební období. Dá se ale začít.' },
   'clanek-vydaje-prevence': { kicker: 'Financování · prevence', signal: 'bad', stat: '2,7', statSuffix: '%', barPct: 3, claim: 'běžných výdajů na zdravotnictví jde v ČR na prevenci.', context: 'Průměr OECD 3,2 %, špička 6,9 % (Kanada). Ani ne polovina.' },
-  'clanek-ambulantni-kontakty': { kicker: 'Primární péče', signal: 'warn', stat: '11,2', claim: 'návštěvy lékaře ročně — dvakrát víc než průměrný Evropan.', context: 'Průměr OECD 6,8. Vysoké číslo není ukazatel kvality.' },
+  'clanek-ambulantni-kontakty': { kicker: 'Primární péče', signal: 'neutral', stat: '9,0', claim: 'konzultace lékaře ročně na obyvatele (OECD, 2024).', context: 'Průměr OECD 8,1, EU 7,6. Vysoké číslo není ukazatel kvality.' },
   'clanek-pm25-spinavy-vzduch': { kicker: 'Životní prostředí · PM2.5', signal: 'bad', stat: '14,1', claim: 'mikrogramu PM2.5 na m³ v českém vzduchu.', context: 'Doporučení WHO je 5 — trojnásobek. IARC karcinogen třídy 1.' },
   'clanek-cekaci-doby-kycel': { kicker: 'Čekací doby · kyčel', signal: 'warn', stat: '118', claim: 'dní na náhradu kyčle — o třetinu déle než v OECD.', context: 'Průměr OECD 85 dní. Česko nemá národní záruku čekání.' },
   'clanek-okresni-nemocnice-personalni-krize': { kicker: 'Síť nemocnic · personál', signal: 'bad', stat: '11', claim: 'z 12 internistů v Pelhřimově dalo výpověď naráz.', context: 'Znojmo, Děčín, Rychnov — jeden vzorec, žádný garant.' },

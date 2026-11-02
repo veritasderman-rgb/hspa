@@ -59,9 +59,9 @@ Průměr OECD = prostý průměr členských zemí s údajem za daný rok, prům
 |---|---|---|
 | `ambulantni_kontakty_per_capita` | **opraveno**, živě z OECD | 11,2 kontaktu (OECD 6,8, EU 7,2) → 9,0 konzultace lékaře na obyvatele (2024, `DF_CONSULT`), OECD 8,1, EU 7,6; ČR nad průměrem zhruba o desetinu, ne „dvakrát víc“ |
 | `sestry_per_1000` | **opraveno**, živě z OECD | 9,0 (OECD 9,2) s klesající řadou → 9,09 (2024), řada roste (8,56 → 9,09); OECD 9,64, EU 8,56 |
-| `podil_lekaru_55plus` | **opraveno** | 41 % (2022), řada 2013–2022 orientační, „Německo ~44 %“ → 40,1 % (2024, OECD, vlastní výpočet z věkových skupin), 2022 39,1 %; OECD 29,8, EU 33,7; Německo 32,2 % |
+| `podil_lekaru_55plus` | **opraveno** | 41 % (2022), řada 2013–2022 orientační → 40,1 % (2024, OECD, vlastní výpočet z věkových skupin), 2022 39,1 %; OECD 29,8, EU 33,7. Srovnání zemí v článku ponecháno podle HaaG Europe 2024 |
 | `podil_prakticti_lekari` | ověřeno, řada nahrazena, živě z OECD | 16,9 % (2023) = OECD 16,86; nově 17,17 % (2024), OECD 22,5, EU 17,5 |
-| `spotreba_antibiotik` | ověřeno, řada odstraněna | 15 → 15,4 DDD (2023, OECD `DF_PIPC`, primární péče), OECD 15,7; EU 18,3 = ESAC-Net komunitní; řada 2020–2022 bez zdroje. Celková spotřeba (OECD/ECDC) roste: 13,4 (2020) → 18,9 (2024) |
+| `spotreba_antibiotik` | ověřeno, řada odstraněna | 15,0 DDD (2023) = ECDC ESAC-Net, komunitní; OECD (primární péče) 15,4, průměr 15,7; EU 18,3 = ESAC-Net komunitní; řada 2020–2022 bez zdroje. Celková spotřeba (OECD/ECDC) roste: 13,4 (2020) → 18,9 (2024) |
 | `vakcinace_hpv` | ověřeno, benchmark odstraněn | 69,8 % (2023) = ÚZIS NZIS; nově 68,3 % (2024); „OECD 75 %, EU 72 %“ bez zdroje — OECD HPV nevede |
 | `hospitalizace_acsc` | ověřeno, řada a rok opraveny | 592 / OECD 473 = Health at a Glance 2025; jde o rok 2023 (součet OECD HCQI astma + CHOPN, srdeční selhání, diabetes), seed řada 650 / 600 / 615 → OECD 725 / 619 / 577 / 604 / 592 (2019–2023) |
 | `prevalence_dusevni_poruchy_dospeli` | ověřeno | 20,02 / 29,63 / 27,22 % = PMID 32988427 a 38042095; rok 2022 ovlivněn metodikou sběru (domácnostní vzorek 19,9 %) |

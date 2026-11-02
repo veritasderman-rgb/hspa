@@ -26,6 +26,7 @@
     visual_elements_count: 5
     notes: "Díl 2/3 vědeckého seriálu o epidemiologii. Empirická tvrzení doložena primární literaturou z PubMedu (DOI v sekci Zdroje): 154 milionů úmrtí odvráceno vakcinací 1974-2024, 40 % poklesu kojenecké úmrtnosti, 10,2 mld. let zdravého života (Shattock et al. 2024, Lancet, DOI 10.1016/S0140-6736(24)00850-X); MMR a autismus bez souvislosti — dánská kohorta 657 461 dětí, HR 0,93 (95% CI 0,85-1,02) (Hviid et al. 2019, Ann Intern Med, DOI 10.7326/M18-2101) a americká kohorta 95 727 dětí (Jain et al. 2015, JAMA, DOI 10.1001/jama.2015.3077); práh kolektivní imunity spalniček 90-95 %, R0 10-20 (Kinoshita & Nishiura 2017, Vaccine, DOI 10.1016/j.vaccine.2017.05.011); historie/eradikace (Kayser & Ramzan 2021, DOI 10.1080/21645515.2021.1977057). Indikátory z dashboardu (ověřené hodnoty): vakcinace_mmr_deti 83,7 % (2022, OECD 94,8 / EU 95,2, signal bad), vakcinace_hexa_deti 86 % (2024), vakcinace_hpv 69,8 % (2023), vakcinace_chripka_65 24,5 % (2025, OECD 47), vakcinace_pneumokok_65 5,5 % (2023, OECD 50), spalnicky 0,9/100k (2023), mortalita_kojenecka 2,3/1000 (2024, EU 3,5). Cross-linky: nedovarenytapir.cz #/hra/krizovy-stab (vakcinační kampaň, kolektivní imunita), #/prirucka (úroveň Vysoká škola / lékařská fakulta). Díl ve frontě k publikaci (published:false, ready, scheduled_for 2026-06-10). evidence-audit 2026-09-07 (ea-2026-09-07-02): 7 tvrzení — 5 supported, 1 partial (R₀ spalniček 12–18 v textu vs 10–20 v citované studii Kinoshita & Nishiura 2017; práh 90–95 % doložen doslova), 1 unclear (řádek hepatitidy A v tabulce prahů — citace ciad552 existuje, čísla zbývá doověřit); prose beze změny, doplněny PMID do source_note claims --01, --02, --10, --11; viz data/evidence-audit.json"
     fix_2026-10-26: "databox: proočkovanost chřipka 65+ 24,5 % (2025) → 24,6 % (sezóna 2024/25, ÚZIS NR-28-02), OECD 47 → 51 % (OECD DF_IMMUN 2024) (issue #1306)"
+    OPRAVA 2026-11-02 (seed-audit dávka 3): "Benchmarky HPV „OECD 75 %“ a „EU 72 %“ bez zdroje (OECD proočkovanost HPV nevede) odstraněny; ČR 69,8 % (2023) ověřena proti ÚZIS NZIS, Aktuální data o proočkovanosti (1. 9. 2026); 2024: 68,3 %."
 -->
 <meta name="article:audit-status" content="verified">
 <link rel="stylesheet" href="src/styles.min.css">
@@ -155,6 +156,9 @@
         <div class="ed-kicker">Oprava · 2. listopadu 2026</div>
         <p>
           Předchozí verze uváděla, že proti pneumokokům je očkováno 5,5 procenta Čechů nad 65 let (2023), a srovnávala to s průměrem OECD 50 procent a EU 17 procent. Šlo o neověřenou výchozí hodnotu v naší databázi indikátorů; mezinárodní průměry pro tento ukazatel OECD ani Eurostat nevedou. Podle registru ÚZIS má očkování proti pneumokokům 28,6 procenta lidí nad 65 let (2025), v roce 2019 to bylo 31,8 procenta.
+        </p>
+        <p>
+          Předchozí verze srovnávala českou proočkovanost proti HPV s „průměrem OECD 75 %“ a „EU 72 %“. Tyto průměry nemají dohledatelný zdroj — OECD proočkovanost proti HPV ve svých statistikách nevede — proto jsme je odstranili. Česká hodnota 69,8 % (2023) je správná; za rok 2024 uvádí ÚZIS 68,3 % (pokles souvisí s rozšířením úhrady na věk 11–14 let).
         </p>
       </aside>
 
@@ -301,7 +305,7 @@
         <ol class="av-bar-compare" data-max="100" data-unit=" %" data-decimals="1">
           <li class="av-bar-row av-bar-row-highlight" data-value="83.7" data-label="MMR děti (ČR)" data-note="práh ≈ 95 %; OECD 94,8"></li>
           <li class="av-bar-row" data-value="86" data-label="Hexavakcína / DTP děti (ČR)" data-note="OECD 91,8" data-display="86,0"></li>
-          <li class="av-bar-row" data-value="69.8" data-label="HPV dívky (ČR)" data-note="OECD 75"></li>
+          <li class="av-bar-row" data-value="69.8" data-label="HPV dívky (ČR)" data-note="cíl WHO 90"></li>
           <li class="av-bar-row av-bar-row-bad" data-value="24.5" data-label="Chřipka 65+ (ČR)" data-note="OECD 47 — propastný rozdíl"></li>
           <li class="av-bar-row av-bar-row-bad" data-value="5.5" data-label="Pneumokok 65+ (ČR)" data-note="OECD 50 — nejhorší"></li>
         </ol>
@@ -342,7 +346,7 @@
         <li><strong>154 mil. odvrácených úmrtí (1974–2024)</strong> — modelový odhad WHO/Lancet; 40 % poklesu kojenecké úmrtnosti</li>
         <li><strong><a href="indikator-vakcinace_mmr_deti.html">MMR děti</a></strong> — ČR 83,7 % (2022) vs OECD 94,8 / EU 95,2; práh ≈ 95 %</li>
         <li><strong><a href="indikator-vakcinace_hexa_deti.html">Hexavakcína (DTP)</a></strong> — ČR 86 % (2024) vs OECD 91,8</li>
-        <li><strong><a href="indikator-vakcinace_hpv.html">HPV dívky</a></strong> — ČR 69,8 % (2023) vs OECD 75</li>
+        <li><strong><a href="indikator-vakcinace_hpv.html">HPV dívky</a></strong> — ČR 69,8 % (2023), 2024: 68,3 % (ÚZIS NZIS)</li>
         <li><strong><a href="indikator-vakcinace_chripka_65.html">Chřipka 65+</a></strong> — ČR 24,6 % (sezóna 2024/25) vs OECD 51</li>
         <li><strong><a href="indikator-vakcinace_pneumokok_65.html">Pneumokok 65+</a></strong> — ČR 28,6 % (2025, ÚZIS); mezinárodní srovnání nevedeno</li>
         <li><strong><a href="indikator-spalnicky.html">Incidence spalniček</a></strong> — ČR 0,9 na 100 000 ob. (2023)</li>

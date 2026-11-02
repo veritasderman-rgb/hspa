@@ -9,9 +9,9 @@ Formát: každá položka má `Datum`, `PR`, `Co`, `Proč`, `Důsledek`.
 ## 2026-11-02 — Seed-audit, dávka 3: ambulantní kontakty, sestry, lékaři 55+, antibiotika, HPV, odvratitelné hospitalizace
 
 - **PR**: `claude/gallant-heisenberg-wibiow` (dávka 3, `docs/seed-audit.md`)
-- **Co**: Živě z OECD nově `ambulantni_kontakty_per_capita` (11,2 → 9,0 konzultace na obyvatele, OECD 8,1), `sestry_per_1000` (9,09, OECD 9,64, EU 8,56) a `podil_prakticti_lekari` (17,17 %, OECD 22,5). Ručně opraveno `podil_lekaru_55plus` (41 → 40,1 % 2024, OECD 29,8, EU 33,7), u `spotreba_antibiotik` hodnota 15,4 (primární péče, OECD 15,7) bez neověřené řady, u `vakcinace_hpv` nový rok 2024 (68,3 %) bez benchmarku, u `hospitalizace_acsc` rok 2023 a řada z OECD HCQI. Ověřeno beze změny: prevalence duševních poruch (NÚDZ), centrové léky (OIS-11-06), incidence karcinomu prsu (Country Cancer Profile).
-- **Proč**: „Češi chodí k lékaři dvakrát častěji než Evropané“ neplatí (OECD: o desetinu víc); „Německo má starší lékaře než Česko“ neplatí (32 % vs 40 %); HPV „OECD 75 %“ a antibiotika „trend klesá“ neměly zdroj — celková spotřeba antibiotik po pandemii roste.
-- **Důsledek**: **NEVRACET** „11,2 kontaktu“, „OECD 6,8“, „Německo ~44 %“, „OECD 75 %“ u HPV. Citace OECD Health at a Glance 2025 s rokem 2023 (lékaři 4,2 / 3,9, sestry 9,0 / 9,2, antibiotika 15 / 16) jsou platné a nepřepisovat je na čísla 2024 bez uvedení roku.
+- **Co**: Živě z OECD nově `ambulantni_kontakty_per_capita` (11,2 → 9,0 konzultace na obyvatele, OECD 8,1), `sestry_per_1000` (9,09, OECD 9,64, EU 8,56) a `podil_prakticti_lekari` (17,17 %, OECD 22,5). Ručně opraveno `podil_lekaru_55plus` (41 → 40,1 % 2024, OECD 29,8, EU 33,7), u `spotreba_antibiotik` hodnota 15,0 (ECDC ESAC-Net, komunitní; OECD primární péče 15,4, průměr 15,7) bez neověřené řady, u `vakcinace_hpv` nový rok 2024 (68,3 %) bez benchmarku, u `hospitalizace_acsc` rok 2023 a řada z OECD HCQI. Ověřeno beze změny: prevalence duševních poruch (NÚDZ), centrové léky (OIS-11-06), incidence karcinomu prsu (Country Cancer Profile).
+- **Proč**: „Češi chodí k lékaři dvakrát častěji než Evropané“ neplatí (OECD: o desetinu víc); HPV „OECD 75 %“ a antibiotika „trend klesá“ neměly zdroj — celková spotřeba antibiotik po pandemii roste.
+- **Důsledek**: **NEVRACET** „11,2 kontaktu“, „OECD 6,8“, „OECD 75 %“ u HPV. Citace OECD Health at a Glance 2025 s rokem 2023 (lékaři 4,2 / 3,9, sestry 9,0 / 9,2, antibiotika 15 / 16) jsou platné a nepřepisovat je na čísla 2024 bez uvedení roku.
 
 ---
 
