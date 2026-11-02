@@ -33,7 +33,7 @@ function refreshInteract() {
 const fmtUsers = (u) => {
   if (!u || !isNum(u.hodnota)) return null;
   const mil = u.hodnota / 1e6;
-  return `${fmtKc(mil, mil >= 1 ? 1 : 2)} mil. uživatelů${u.rok ? ` (${u.rok})` : ''}`;
+  return `${fmtKc(mil, mil >= 1 ? 1 : 2)} mil. uživatelů${u.rok ? ` (${u.rok})` : ''}`;
 };
 
 /** Matice funkcí aplikací: řádky = 7 ZP (sub = název aplikace + uživatelé), sloupce = funkce. */
@@ -263,7 +263,7 @@ export function buildFondParts(z, { skupiny = false, slovnik = FOND_SKUPINY } = 
     key: u.key,
     label: u.label,
     value: u.value,
-    tip: `${u.full || u.label}: ${fmtKc(u.value)} ${f.jednotka || 'tis. Kč'} · ${fmtKc(total ? (100 * u.value) / total : 0, 1)} % · VZ ${z.rok_vz ?? ''}`,
+    tip: `${u.full || u.label}: ${fmtKc(u.value)} ${f.jednotka || 'tis. Kč'} · ${fmtKc(total ? (100 * u.value) / total : 0, 1)} % · VZ ${z.rok_vz ?? ''}`,
   }));
   const kod = String(z.kod);
   const bell = [...positive].sort((a, b) => b.value - a.value).slice(0, 6)
@@ -376,10 +376,10 @@ const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 
 function fpTable(z, f) {
   const tot = f.celkem?.skutecnost || f.polozky.reduce((a, x) => a + (x.skutecnost || 0), 0) || 1;
-  const rows = [...f.polozky].sort((a, b) => (b.skutecnost || 0) - (a.skutecnost || 0)).map((x) => `<tr><th scope="row" class="zpc-txt">${esc(x.nazev)}</th><td>${num(x.zpp)}</td><td>${num(x.skutecnost)}</td><td>${x.skutecnost != null ? fmtKc(100 * x.skutecnost / tot, 1) + ' %' : NA}</td><td>${x.zpp && x.skutecnost != null ? fmtKc(100 * x.skutecnost / x.zpp, 0) + ' %' : NA}</td><td>${num(x.predchozi_rok)}</td></tr>`).join('');
-  return `<details class="zpc-acc"><summary>Tabulka všech položek <span class="zpc-n"> · ${f.polozky.length}</span></summary><div class="zpc-acc-body">`
+  const rows = [...f.polozky].sort((a, b) => (b.skutecnost || 0) - (a.skutecnost || 0)).map((x) => `<tr><th scope="row" class="zpc-txt">${esc(x.nazev)}</th><td>${num(x.zpp)}</td><td>${num(x.skutecnost)}</td><td>${x.skutecnost != null ? fmtKc(100 * x.skutecnost / tot, 1) + ' %' : NA}</td><td>${x.zpp && x.skutecnost != null ? fmtKc(100 * x.skutecnost / x.zpp, 0) + ' %' : NA}</td><td>${num(x.predchozi_rok)}</td></tr>`).join('');
+  return `<details class="zpc-acc"><summary>Tabulka všech položek<span class="zpc-n"> ·${f.polozky.length}</span></summary><div class="zpc-acc-body">`
     + `<div class="zpc-tbl" role="region" tabindex="0" aria-label="Struktura fondu prevence (tabulka, posuvná)"><table><thead><tr><th class="zpc-txt">Účelová položka (${esc(f.jednotka || 'tis. Kč')}, ${esc(f.rok || '')})</th><th>Plán (ZPP)</th><th>Skutečnost</th><th>Podíl</th><th>Plnění plánu</th><th>Předchozí rok</th></tr></thead><tbody>${rows}</tbody>`
-    + `<tfoot><tr><th class="zpc-txt">Celkem</th><td>${num(f.celkem?.zpp)}</td><td><b>${num(f.celkem?.skutecnost)}</b></td><td>100 %</td><td>${f.celkem?.zpp && f.celkem?.skutecnost ? fmtKc(100 * f.celkem.skutecnost / f.celkem.zpp, 0) + ' %' : NA}</td><td>${num(f.celkem?.predchozi_rok)}</td></tr></tfoot></table></div>`
+    + `<tfoot><tr><th class="zpc-txt">Celkem</th><td>${num(f.celkem?.zpp)}</td><td><b>${num(f.celkem?.skutecnost)}</b></td><td>100 %</td><td>${f.celkem?.zpp && f.celkem?.skutecnost ? fmtKc(100 * f.celkem.skutecnost / f.celkem.zpp, 0) + ' %' : NA}</td><td>${num(f.celkem?.predchozi_rok)}</td></tr></tfoot></table></div>`
     + `${z.poznamka ? `<p class="zpc-cap">${esc(z.poznamka)}</p>` : ''}</div></details>`;
 }
 
