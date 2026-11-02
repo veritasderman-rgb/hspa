@@ -236,6 +236,9 @@ pro dotazníky s **Neonem** (Postgres; organizace vydavatele už má projekty
 - Neon branching pro testy (`npm run test:api` proti větvi `test`), migrace jako
   SQL soubory v `api/migrations/`.
 
+Znění všech sad podle fází (kolo 1, kolo 2, NAPO, anketa, aplikace, právo na
+odpověď, pobočky): [`docs/pojistovny-dotazniky.md`](../docs/pojistovny-dotazniky.md).
+
 Balíček P2.4 níže. Třída **C** (nová závislost `@neondatabase/serverless`,
 `api/`, env proměnné, data od institucí); Neon projekt zakládá vydavatel (nebo
 AI s jeho souhlasem přes Neon MCP), `DATABASE_URL` nastaví ve Vercelu.

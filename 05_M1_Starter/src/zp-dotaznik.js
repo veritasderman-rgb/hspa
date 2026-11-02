@@ -32,6 +32,12 @@ export function questionKind(q) {
   return q.vyber === 'jeden' ? 'jeden' : 'vice';
 }
 
+/** Nejvyšší délka volného textu (odpověď i upřesnění): `max_delka` otázky, nejvýš MAX_TEXT. */
+export function maxDelka(q) {
+  const m = q?.max_delka;
+  return Number.isInteger(m) && m > 0 ? Math.min(m, MAX_TEXT) : MAX_TEXT;
+}
+
 // ------------------------------------------------------------------ odeslání
 /**
  * Přečte odpovědi z odkazů na pole formuláře.
@@ -128,8 +134,14 @@ function questionNode(doc, q, uid, refs) {
     ta.setAttribute('id', id);
     ta.setAttribute('name', q.id);
     ta.setAttribute('rows', '4');
-    ta.setAttribute('maxlength', String(MAX_TEXT));
+    ta.setAttribute('maxlength', String(maxDelka(q)));
     wrap.appendChild(label);
+    if (q.napoveda) {
+      const hint = mk(doc, 'p', 'zpd-note', q.napoveda);
+      hint.setAttribute('id', `${id}-napoveda`);
+      ta.setAttribute('aria-describedby', `${id}-napoveda`);
+      wrap.appendChild(hint);
+    }
     wrap.appendChild(ta);
     refs[q.id] = { kind, inputs: [ta] };
     return wrap;
@@ -137,6 +149,12 @@ function questionNode(doc, q, uid, refs) {
   const fs = mk(doc, 'fieldset', 'zpd-q');
   fs.setAttribute('data-otazka', q.id);
   fs.appendChild(mk(doc, 'legend', 'zpd-q-text', q.text));
+  if (q.napoveda) {
+    const hint = mk(doc, 'p', 'zpd-note', q.napoveda);
+    hint.setAttribute('id', `${uid}-${q.id}-napoveda`);
+    fs.setAttribute('aria-describedby', `${uid}-${q.id}-napoveda`);
+    fs.appendChild(hint);
+  }
   const inputs = [];
   q.moznosti.forEach((opt) => {
     const lab = mk(doc, 'label', 'zpd-opt');
@@ -156,7 +174,7 @@ function questionNode(doc, q, uid, refs) {
     const extra = mk(doc, 'input', 'zpd-more');
     extra.setAttribute('type', 'text');
     extra.setAttribute('name', q.id + UPRESNENI_SUFFIX);
-    extra.setAttribute('maxlength', String(MAX_TEXT));
+    extra.setAttribute('maxlength', String(maxDelka(q)));
     lab.appendChild(extra);
     fs.appendChild(lab);
     ref.extra = extra;
@@ -198,6 +216,7 @@ export function renderDotaznik(container, sada, opts = {}) {
   const form = mk(doc, 'form', 'zpd-form');
   form.setAttribute('novalidate', '');
   form.setAttribute('aria-label', sada.nazev || 'Dotazník');
+  if (sada.uvod) form.appendChild(mk(doc, 'p', 'zpd-note zpd-note--block', sada.uvod));
 
   if (Array.isArray(sada.casti)) {
     sada.casti.forEach((c) => {
