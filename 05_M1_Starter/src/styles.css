@@ -22693,6 +22693,7 @@ select.zpc-note{color:var(--ink);background:var(--paper);border:1px solid var(--
   .zpv-scroll { overflow: visible; }
   .zpv-mark { print-color-adjust: exact; -webkit-print-color-adjust: exact; background-image: repeating-linear-gradient(45deg, transparent 0 3px, color-mix(in srgb, var(--paper) 40%, transparent) 3px 4.5px); }
   .zpv-cell { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}
 
 /* === Srovnávač pojišťoven: interakce src/zp-interact.js (.zpi-) — plní balíček P1.3 === */
 /* Kontrakt pro ostatní moduly:
@@ -22804,4 +22805,120 @@ table.zpv-heat th[aria-sort="ascending"] button.zpv-sort::after { content: " \21
 @media print{
   .zpd-form{display:none}
   .zpd-agg{break-inside:avoid}
+}
+
+/* === Srovnávač pojišťoven: kraje, semafor, žádosti (.zpk-, .zps-, .zpz-) — balíčky P3.2/P4.1 === */
+/* Moduly src/pojistovny-kraje.js (#zpKraje), pojistovny-semafor.js (#zpSemafor), pojistovny-zadosti.js (#zpZadosti).
+   Barvy jen přes tokeny; text zůstává v inkoustu, identitu ZP nese tečka nebo mark.
+   V těchto sekcích se marky nedimují podle „Moje pojišťovna“ (main[data-moje-zp] .zpv-mark { opacity: .45 }):
+   výběr tu řeší vybraná pojišťovna a zvýraznění řádku tabulky. */
+main .zpk .zpv-mark, main[data-moje-zp] .zpk .zpv-mark, main[class*="zpi-hover-"] .zpk .zpv-mark,
+main .zps .zpv-mark, main[data-moje-zp] .zps .zpv-mark, main[class*="zpi-hover-"] .zps .zpv-mark { opacity: 1; }
+.zpk-sr, .zps-sr, .zpz-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+
+/* --- kraj × ZP (#zpKraje) --- */
+.zpk { margin: 28px 0 12px; font-family: var(--sans); }
+.zpk-loading { font-size: 13.5px; color: var(--ink-mut); min-height: 6em; margin: 8px 0; }
+.zpk-lead { font-family: var(--serif); font-size: 16px; line-height: 1.5; max-width: 70ch; margin: 0 0 6px; color: var(--ink); }
+.zpk-state { font-size: 13.5px; color: var(--ink-mut); margin: 0 0 10px; max-width: 80ch; }
+.zpk-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 18px; }
+.zpk-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 4px 12px; border: 1px solid var(--rule2); border-radius: 999px; background: transparent; color: var(--ink); font-family: var(--sans); font-size: 13px; line-height: 1.2; cursor: pointer; transition: background-color .15s ease, border-color .15s ease; }
+.zpk-chip:hover { background: var(--paper2); border-color: var(--ink); }
+.zpk-chip[aria-pressed="true"] { background: var(--paper2); border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); font-weight: 600; }
+.zpk-chip:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.zpk-dot { width: 10px; height: 10px; border-radius: 50%; flex: none; background: var(--c, var(--ink)); }
+.zpk-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 24px 40px; align-items: start; margin: 0 0 14px; }
+.zpk-mapfig { margin: 0; min-width: 0; }
+.zpk-cap { display: flex; flex-direction: column; gap: 2px; margin: 0 0 8px; }
+.zpk-title { font-size: 14px; font-weight: 600; color: var(--ink); }
+.zpk-sub { font-size: 12.5px; color: var(--ink-mut); }
+.zpk-map { width: 100%; }
+.zpk-map .cz-map-svg { width: 100%; height: auto; display: block; }
+.zpk-map .cz-map-tooltip { display: none; }
+.zpk-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin: 8px 0 4px; font-size: 12px; color: var(--ink-mut); }
+.zpk-ramp { display: inline-flex; gap: 2px; }
+.zpk-sw { display: inline-block; width: 26px; height: 12px; border-radius: 2px; background: var(--c, var(--paper2)); box-shadow: inset 0 0 0 1px var(--rule); }
+.zpk-readout { min-height: 2.9em; margin: 6px 0 0; font-size: 13.5px; line-height: 1.4; color: var(--ink); }
+.zpk-map .cz-tile-lbl { font-size: 15px; }
+.zpk-map .cz-tile-val { font-size: 22px; }
+.zpk-tez { min-width: 0; }
+.zpk-tez .zpv-barlist { --zpv-labw: 9em; }
+.zpk-tez .zpv-figure { margin-bottom: 0; }
+.zpk-tez .zpv-row.is-linked { background: var(--paper2); }
+.zpk[data-zp="111"] { --zpv-mark-color: var(--zp-111); }
+.zpk[data-zp="201"] { --zpv-mark-color: var(--zp-201); }
+.zpk[data-zp="205"] { --zpv-mark-color: var(--zp-205); }
+.zpk[data-zp="207"] { --zpv-mark-color: var(--zp-207); }
+.zpk[data-zp="209"] { --zpv-mark-color: var(--zp-209); }
+.zpk[data-zp="211"] { --zpv-mark-color: var(--zp-211); }
+.zpk[data-zp="213"] { --zpv-mark-color: var(--zp-213); }
+.zpk-scroll { overflow-x: auto; border: 1px solid var(--rule2); margin: 4px 0 6px; -webkit-overflow-scrolling: touch; }
+.zpk-evo { border-collapse: collapse; width: 100%; min-width: 960px; font-family: var(--sans); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.zpk-evo th, .zpk-evo td { padding: 6px 8px; border-bottom: 1px solid var(--rule); text-align: right; white-space: nowrap; }
+.zpk-evo thead th { background: var(--paper2); color: var(--ink-mut); font-size: 11.5px; font-weight: 600; }
+.zpk-evo tbody th, .zpk-evo thead th:first-child { text-align: left; }
+.zpk-evo tbody th { position: sticky; left: 0; z-index: 1; background: var(--paper); font-weight: 600; }
+.zpk-delta { font-weight: 600; }
+
+/* --- semafor (#zpSemafor) --- */
+.zps-intro { font-size: 14px; line-height: 1.5; margin: 0 0 10px; max-width: 80ch; }
+.zps-intro--empty { padding: 10px 14px; border-left: 3px solid var(--rule2); background: var(--paper2); }
+.zps-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0 0 10px; padding: 0; list-style: none; font-size: 12.5px; }
+.zps-legend li { display: inline-flex; align-items: center; gap: 6px; }
+.zps-ic { display: inline-block; width: 1.1em; height: 1.1em; margin-right: 4px; vertical-align: -.18em; line-height: 0; }
+.zps-ic svg { display: block; width: 100%; height: 100%; }
+.zps-tone-good { color: var(--good); }
+.zps-tone-warn { color: var(--warn); }
+.zps-tone-bad { color: var(--bad); }
+.zps-tone-neutral, .zps-tone-none { color: var(--ink-mut); }
+.zps-scroll { overflow-x: auto; border: 1px solid var(--rule2); margin: 0 0 14px; -webkit-overflow-scrolling: touch; }
+.zps-table { border-collapse: collapse; width: 100%; min-width: 780px; font-family: var(--sans); font-size: 13px; }
+.zps-table th, .zps-table td { padding: 8px 10px; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
+.zps-table thead th { background: var(--paper2); color: var(--ink-mut); font-size: 11.5px; font-weight: 600; letter-spacing: .02em; }
+.zps-table tbody th { position: sticky; left: 0; z-index: 1; background: var(--paper); white-space: nowrap; }
+.zps-cell { min-width: 112px; }
+.zps-cell .zps-tx { display: inline; }
+.zps-cell small { display: block; margin-top: 3px; max-width: 220px; font-size: 11px; line-height: 1.35; color: var(--ink-mut); }
+.zps-cell[data-stav="null"] { color: var(--ink-mut); background: color-mix(in srgb, var(--ink) 3%, transparent); }
+.zps-cell[data-stav="dolozeno"] { background: color-mix(in srgb, var(--good) 8%, transparent); }
+.zps-cell[data-stav="deklarovano"] { background: color-mix(in srgb, var(--warn) 8%, transparent); }
+.zps-cell[data-stav="nedolozeno"] { background: color-mix(in srgb, var(--bad) 7%, transparent); }
+.zps-acc .zps-none { margin: 0 0 8px; font-size: 14px; }
+.zps-quote { margin: 0 0 12px; padding: 6px 14px; border-left: 3px solid var(--rule2); }
+.zps-quote p { margin: 0 0 4px; font-family: var(--serif); font-size: 15px; line-height: 1.5; }
+.zps-quote footer { font-family: var(--sans); font-size: 12px; color: var(--ink-mut); }
+.zps-log { list-style: none; margin: 0 0 8px; padding: 0; }
+.zps-log li { display: grid; grid-template-columns: 7.5em minmax(0, 1fr); gap: 2px 14px; padding: 8px 0; border-top: 1px solid var(--rule); font-family: var(--sans); font-size: 13.5px; line-height: 1.45; }
+.zps-log time { color: var(--ink-mut); font-variant-numeric: tabular-nums; }
+.zps-log-src { grid-column: 2; font-size: 12px; font-style: normal; color: var(--ink-mut); overflow-wrap: anywhere; }
+
+/* --- registr žádostí (#zpZadosti) --- */
+.zpz { margin: 28px 0 8px; font-family: var(--sans); }
+.zpz-lead { font-size: 14px; line-height: 1.5; margin: 0 0 12px; max-width: 80ch; }
+.zpz-root .zpv-figure { margin-bottom: 14px; }
+.zpz-scroll { overflow-x: auto; border: 1px solid var(--rule2); margin: 4px 0 8px; -webkit-overflow-scrolling: touch; }
+.zpz-table { border-collapse: collapse; width: 100%; min-width: 860px; font-family: var(--sans); font-size: 12.5px; }
+.zpz-table th, .zpz-table td { padding: 7px 10px; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; white-space: nowrap; }
+.zpz-table thead th { background: var(--paper2); color: var(--ink-mut); font-size: 11.5px; font-weight: 600; }
+.zpz-table tbody th { position: sticky; left: 0; z-index: 1; background: var(--paper); }
+.zpz-stav { white-space: normal; min-width: 190px; }
+.zpz-stav small { display: block; margin-top: 2px; font-size: 11.5px; color: var(--ink-mut); }
+
+@media (max-width: 860px) {
+  .zpk-body { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 520px) {
+  .zps-log li { grid-template-columns: minmax(0, 1fr); }
+  .zps-log-src { grid-column: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .zpk-chip { transition: none; }
+}
+@media print {
+  .zpk-chips { display: none; }
+  .zpk-scroll, .zps-scroll, .zpz-scroll { overflow: visible; }
+  .zpk-evo, .zps-table, .zpz-table { min-width: 0; font-size: 9pt; }
+  .zpk-evo th, .zpk-evo td, .zps-table th, .zps-table td, .zpz-table th, .zpz-table td { white-space: normal; }
+  .zps-cell.zpv-mark { background-image: none; }
+  .zps-table tr, .zpz-table tr, .zpk-evo tr { break-inside: avoid; }
 }

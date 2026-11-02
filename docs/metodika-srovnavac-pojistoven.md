@@ -35,6 +35,8 @@ vztah pojišťovna – nemocnice, politické výroky (ty patří do Barometru).
 | `neodpovedela` | neodpověděla / mimo lhůtu | neutral | bez odpovědi do 15 dní (zákon 106) ani po výzvě |
 | `null` | zatím nehodnoceno | — | před prvním kolem; výchozí stav |
 
+UI semaforu (`src/pojistovny-semafor.js`) zobrazí každý stav jako ikonu + text (✓ ◐ ✕ ⊘),
+`null` jako šedé „zatím nehodnoceno“; změny jsou vidět v bloku „Změny (changelog)“.
 Každý stav `!= null` vyžaduje `rok`, `zduvodneni` a `zdroj` (validátor). Stav se
 nevyjadřuje k motivům ani k osobám.
 
@@ -45,10 +47,18 @@ nevyjadřuje k motivům ani k osobám.
    s poznámkou. Postup viz [§ 4.1 podrobně](#41-podrobně--postup-standardizace) níže.
 2. **Stejná otázka, stejný den, stejný formát.** Všech sedm pojišťoven dostane totéž podání.
    Odpovědi se zveřejňují v plném znění (`ingest/manual/pojistovny/odpovedi/`).
+   Evidence dotazů a lhůt: `data/zadosti-106.json` (`typ` nabidka-spoluprace | zadost-106 |
+   pravo-na-odpoved, `odeslano`, `lhuta_dni`, `doruceno`, `odpoved_soubor`, `stav`); zobrazuje
+   ji `src/pojistovny-zadosti.js` v modulu 5 (matice 7 × typy, dny do konce lhůty). Zapisuje
+   ji člověk při odeslání a doručení, AI nic neodesílá; validuje `ingest/validate-pojistovny.js`.
 3. **Partnerský tón.** Před žádostí podle zákona 106 vždy nabídka dobrovolného předání dat
    (šablona `docs/dopis-instituce-data.md`).
 4. **Právo na odpověď.** Pojišťovna dostane návrh verdiktu 10 dní před zveřejněním; její
    stanovisko se publikuje vedle verdiktu, doslova.
+   Stanovisko se uloží do volitelného pole `pojistovny[].semafor[oblast].stanovisko_pojistovny`
+   (neprázdný string, bez úprav) a zobrazí se v bloku „Stanoviska pojišťoven (právo na
+   odpověď)“ pod semaforem (`src/pojistovny-semafor.js`); lhůta 10 dní se eviduje v
+   `data/zadosti-106.json` jako záznam typu `pravo-na-odpoved`.
 5. **Zamrazená baseline.** Výchozí hodnoty k datu prvního zveřejnění se nemění; revize
    zdrojových dat se zapisují s datem.
 6. **Doložitelnost před objemem.** Výše fondu prevence ani počet benefitů nejsou
