@@ -232,6 +232,31 @@ Balíček P2.4 níže. Třída **C** (nová závislost `@neondatabase/serverless
 `api/`, env proměnné, data od institucí); Neon projekt zakládá vydavatel (nebo
 AI s jeho souhlasem přes Neon MCP), `DATABASE_URL` nastaví ve Vercelu.
 
+### 2.8 Přehled + podstránky (rozhodnutí vydavatele 2. 11. 2026)
+
+Hlavní stránka `pojistovny.html` je **general view**: čtenář na ní za minutu zjistí,
+kdo je kdo, vybere si pojišťovnu a vidí jeden klíčový graf za každé téma. Hutný
+obsah (matice, tabulky, odpovědi z VZ, metodika, žádosti) jde na podstránky.
+Princip doplňuje § 2.6: rozklikávání řeší hloubku *uvnitř* stránky, podstránky řeší
+*šířku* témat.
+
+| Stránka | Obsah | Z čeho vzniká |
+|---|---|---|
+| `pojistovny.html` (přehled) | hero + KPI řada, výběr „Moje pojišťovna“ (sdílený přes `localStorage` na všech podstránkách), karta pojišťovny (vybrané), **jeden graf na téma**: tržní podíl (segmentovaný pruh), index kmene 2010 = 100, nabídka prevence (heatmapa 7 × 9 zkrácená na Σ), funkce aplikací (meter n/10 per ZP), semafor 7 × 6 jako miniatura; pod každým grafem odkaz „Celé téma →“; rozcestník karet podstránek | dnešní moduly, ořezané na headline |
+| `pojistovny-kmen.html` | Kmen a hospodaření v plném rozsahu: karty, seřazené bary, index 2010 = 100, dumbbell 2024 → 2025, mapa kraj × ZP a těžiště, tabulky, standardizace (jakmile budou váhy) | modul 3 + `pojistovny-kraje.js` |
+| `pojistovny-prevence.html` | Nabídka 7 × 9, onko a duševní, fond prevence (segmentovaný pruh + dumbbell + skupiny), odpovědi z VZ (matice pokrytí + plné znění), doložené výsledky | modul 2 |
+| `pojistovny-aplikace.html` | Funkce 7 × 10, přívětivost (po PS), uživatelé, rozpory a chybějící data | modul 1 |
+| `pojistovny-gramotnost.html` | Rizikové skupiny, dotazník (Neon), agregáty odpovědí, další směry | modul 4 + `zp-dotaznik.js` |
+| `pojistovny-metodika.html` | Metodika a semafor s právem na odpověď, registr žádostí, changelog, zdroje, plán | modul 5 + 6 + `pojistovny-semafor.js`, `pojistovny-zadosti.js` |
+| `pojistovna.html?zp=111` (později) | profil jedné pojišťovny: všechny její hodnoty na jedné stránce, srovnání s průměrem ČR, odkazy na témata | stejné renderery, filtr na jednu ZP |
+
+Technika: sdílený shell (`src/pojistovny-shell.js`: hlavička srovnávače, pásek
+pracovní verze, výběr Moje pojišťovna, rozcestník témat, patička se zdroji),
+renderovací funkce modulů zůstávají v `src/pojistovny*.js` a volají se podle toho,
+které kontejnery na stránce jsou; `middleware.js` matcher rozšířit na
+`/pojistovny-:path*` (třída C); `pr-gate` nové stránky = C; sitemap/noindex jako
+dnes. Vizuální e2e baseline pro každou podstránku (light + dark).
+
 ---
 
 ## 3. Architektura implementace
@@ -288,6 +313,7 @@ plánování a sporná rozhodnutí, „Sonnet“ = implementace s jasným zadán
 | P1.2 | `zp-viz.js` primitivy: `rankedBars`, `segmentedBar`, `statTiles`, `meter` + tabulkové dvojče + aria; CSS; unit testy | `src/zp-viz.js`, `styles.css`, `tests/zp-viz.test.js` | B | Sonnet (brief = § 2.4 + prototyp) | 2 | 100 % větví null/empty; žádný inline style kromě width |
 | P1.3 | `zp-interact.js`: výběr Moje pojišťovna (chips, localStorage, `aria-pressed`), linked highlight, tooltip, IO animace, reduced motion | `src/zp-interact.js`, `styles.css` | B | Sonnet | 1,5 | e2e: klik na chip → `[data-zp="201"].is-moje` ve všech grafech; reduced motion test |
 | P1.4 | Modul 3 přepnout: hero → stat dlaždice s count-up; 4 grafy → `rankedBars` s ref. zónou + `segmentedBar` tržního podílu; karty: sparkline nahradit indexovaným mini-grafem s popisky 2010/2025; tabulka hospodaření zkrácená + inline bary + řazení; vysvětlivky, poznámky a „co chybí“ do `<details>` podle § 2.6 | `src/pojistovny.js`, `pojistovny.html` | B | Sonnet | 2 | screenshoty 1280/390/dark bez kolizí; `pojistovny.test.js` přepsán; modul 3 má ≤ 1 obrazovku textu nad grafy na 390 px |
+| P1.6 | **Přehled + podstránky** (§ 2.8): `pojistovny.html` ořezat na general view, nové `pojistovny-kmen/-prevence/-aplikace/-gramotnost/-metodika.html`, sdílený shell `src/pojistovny-shell.js`, výběr Moje pojišťovna napříč stránkami, matcher middleware, e2e/a11y baseline pro 5 nových stránek, sitemap exclude | nové HTML, `src/pojistovny-shell.js`, `src/pojistovny*.js`, `middleware.js`, testy | **C** (nové stránky, middleware) | Opus (rozhodnutí, co je headline) | 2 | přehled ≤ 3 obrazovky na 390 px, každé téma má podstránku, výběr ZP přežije přechod mezi stránkami |
 | P1.5 | Nezávislá revize vizuálu: editor s checklistem (`dataviz/references/anti-patterns.md` + `docs/accessibility.md`) nad screenshoty z CI | — | B (review) | Editor (Opus) | 0,5 | žádný nález kategorie „form“ nebo „a11y“ |
 
 ### Fáze 2 — Prevence a aplikace (prosinec 2026 – leden 2027)
