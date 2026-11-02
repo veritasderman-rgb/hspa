@@ -38,6 +38,12 @@ export function questionKind(q) {
   return q.vyber === 'jeden' ? 'jeden' : 'vice';
 }
 
+/** Nejvyšší délka volného textu otázky (odpověď i upřesnění): `max_delka` sady, nejvýš MAX_TEXT. */
+export function maxDelka(q) {
+  const m = q?.max_delka;
+  return Number.isInteger(m) && m > 0 ? Math.min(m, MAX_TEXT) : MAX_TEXT;
+}
+
 /** sha256 (hex) tokenu — v databázi je jen hash. */
 export function hashToken(token) {
   return createHash('sha256').update(String(token), 'utf8').digest('hex');
@@ -60,6 +66,8 @@ export function validateOdpoved(def, body) {
 
   if (!isPlainObject(def) || !def.id) return { ok: false, errors: ['sada: neznámá sada'], clean: null };
   if (!isPlainObject(body)) return { ok: false, errors: ['tělo požadavku musí být objekt'], clean: null };
+  // Interní hodnoticí list (např. aplikace-privetivost) vyplňuje redakce do datasetu, ne přes web.
+  if (def.kanal === 'interni') return { ok: false, errors: ['sada: interní sada se přes web nevyplňuje'], clean: null };
 
   // --- sada a verze
   if (body.sada_id !== def.id) err(`sada_id: očekáváno '${def.id}'`);
@@ -102,7 +110,7 @@ export function validateOdpoved(def, body) {
         if (!hasUpresneni(q)) { err(`odpovedi.${key}: otázka upřesnění nemá`); continue; }
         if (typeof raw !== 'string') { err(`odpovedi.${key}: upřesnění musí být text`); continue; }
         const t = cleanText(raw);
-        if (t.length > MAX_TEXT) { err(`odpovedi.${key}: text je delší než ${MAX_TEXT} znaků`); continue; }
+        if (t.length > maxDelka(q)) { err(`odpovedi.${key}: text je delší než ${maxDelka(q)} znaků`); continue; }
         if (t) odpovedi[key] = t;
         continue;
       }
@@ -111,7 +119,7 @@ export function validateOdpoved(def, body) {
       if (kind === 'text') {
         if (typeof raw !== 'string') { err(`odpovedi.${key}: očekáván text`); continue; }
         const t = cleanText(raw);
-        if (t.length > MAX_TEXT) { err(`odpovedi.${key}: text je delší než ${MAX_TEXT} znaků`); continue; }
+        if (t.length > maxDelka(q)) { err(`odpovedi.${key}: text je delší než ${maxDelka(q)} znaků`); continue; }
         if (t) odpovedi[key] = t;
         continue;
       }

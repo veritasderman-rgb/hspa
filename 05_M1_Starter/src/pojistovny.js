@@ -4,7 +4,7 @@
 //   data/pojistovny.json            kmen (CRP 2025 + řada 2010–2025), hospodaření 2024 (MZ+MF, VZ), 2025 (VZ), ZPP 2026, servis
 //   data/pojistovny-aplikace.json   matice funkcí aplikací, uživatelé, rizikové skupiny, další zkoumání
 //   data/pojistovny-prevence.json   nabídka podle oblastí, onko screening, duševní zdraví, struktura fondu prevence, odpovědi z VZ
-//   data/pojistovny-otazky.json     sady otázek (kolo 1 fond prevence, kolo 2 rizikoví pojištěnci)
+//   data/pojistovny-otazky.json     sady otázek všech fází (docs/pojistovny-dotazniky.md)
 // Každý soubor je nepovinný: chybí-li, modul vypíše stav „data zatím nejsou k dispozici“ a zbytek stránky funguje.
 //
 // Tenhle soubor drží hero, modul 3 (kmen a hospodaření; P1.4 + P3.1 + P3.4) a init.
@@ -365,10 +365,15 @@ function renderDotazniky(otazky, agregaty) {
   if (!box || !otazky) return;
   const params = new URLSearchParams(location.search);
   const sady = otazky.sady || [];
-  const urlSada = sady.find((s) => s.id === params.get('dotaznik'));
+  // interní hodnoticí list (kanal: interni) se přes web nevyplňuje, URL ho nevybere
+  const urlSada = sady.find((s) => s.id === params.get('dotaznik') && s.kanal !== 'interni');
   const sada = urlSada || sady.find((s) => s.id === box.dataset.sada);
   if (!sada) return;
-  renderDotaznik(box, sada, { token: urlSada ? params.get('token') : null });
+  const token = urlSada ? params.get('token') : null;
+  // s tokenem: typ respondenta podle sady (jediný adresný typ, např. pacientska_organizace), jinak pojistovna
+  const adresne = (sada.povolene_respondenty || []).filter((t) => t !== 'verejnost');
+  const respondentTyp = token ? (adresne.length === 1 ? adresne[0] : 'pojistovna') : null;
+  renderDotaznik(box, sada, { token, respondentTyp });
   const aggBox = document.getElementById('zpDotaznikAgregace');
   if (aggBox && agregaty) renderDotaznikAgregace(aggBox, agregaty, sada);
   if (urlSada) box.scrollIntoView({ block: 'start' });

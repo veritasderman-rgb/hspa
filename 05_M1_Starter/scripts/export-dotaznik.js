@@ -27,6 +27,7 @@ export const VERSION = '1.0.0';
 export async function buildExport(sql, defs, now = new Date()) {
   const sady = {};
   for (const def of defs.sady ?? []) {
+    if (def.kanal === 'interni') continue; // interní hodnoticí list nemá odpovědi v databázi
     sady[def.id] = await fetchSadaAgregaty(sql, def);
   }
   return { version: VERSION, generated_at: now.toISOString(), sady };

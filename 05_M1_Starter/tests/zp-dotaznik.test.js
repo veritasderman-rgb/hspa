@@ -23,7 +23,9 @@ import {
   renderDotaznik, renderDotaznikAgregace, collectOdpovedi, buildPayload, interpretResponse,
   flattenOtazky, questionKind, hasUpresneni, submitDotaznik,
 } from '../src/zp-dotaznik.js';
-import { validateAll, loadDatasets } from '../ingest/validate-pojistovny.js';
+import { validateAll, loadDatasets, KANALY } from '../ingest/validate-pojistovny.js';
+import { maxDelka as apiMaxDelka } from '../api/_dotaznik-validate.js';
+import { maxDelka } from '../src/zp-dotaznik.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = (...p) => fs.readFileSync(path.join(ROOT, ...p), 'utf8');
@@ -412,7 +414,9 @@ test('buildExport: tvar souboru a zápis jen při změně', async () => {
   const doc = await buildExport(sql, OTAZKY, new Date('2026-11-03T10:00:00Z'));
   assert.equal(doc.version, '1.0.0');
   assert.equal(doc.generated_at, '2026-11-03T10:00:00.000Z');
-  assert.deepEqual(Object.keys(doc.sady).sort(), ['fond-prevence', 'rizikovi-pojistenci']);
+  // všechny webové sady; interní hodnoticí list (kanal: interni) databázi nemá
+  assert.deepEqual(Object.keys(doc.sady).sort(), OTAZKY.sady.filter((x) => x.kanal !== 'interni').map((x) => x.id).sort());
+  assert.ok(!('aplikace-privetivost' in doc.sady));
   const s = doc.sady['rizikovi-pojistenci'];
   assert.equal(s.pocet_odpovedi, 4);
   assert.deepEqual(s.respondent_typy, { pojistovna: 4 });
@@ -520,7 +524,9 @@ test('renderDotaznik: počet polí s data-otazka = počet otázek, části jako 
   const checks = c.find((n) => n.attrs.type === 'checkbox');
   const expected = flattenOtazky(SADA).filter((q) => q.vyber === 'jeden').reduce((s, q) => s + q.moznosti.length, 0);
   assert.equal(radios.length, expected);
-  assert.equal(checks.length, flattenOtazky(SADA).filter((q) => q.vyber !== 'jeden').reduce((s, q) => s + q.moznosti.length, 0));
+  assert.equal(checks.length, flattenOtazky(SADA).filter((q) => questionKind(q) === 'vice').reduce((s, q) => s + q.moznosti.length, 0));
+  // otevřené otázky v části (bez nabídky) dostanou textareu
+  assert.equal(c.find((n) => n.tag === 'textarea').length, flattenOtazky(SADA).filter((q) => questionKind(q) === 'text').length);
   // upřesnění jen u otázek s volbou „uveďte“
   const upres = c.find((n) => (n.attrs.name || '').endsWith('_upresneni'));
   assert.equal(upres.length, flattenOtazky(SADA).filter(hasUpresneni).length);
@@ -714,4 +720,153 @@ test('dokumentace: o-projektu (soukromí), metodika § 7, quickref .zpd-', () =>
 test('vercel.json: funkce dotaznik.js dostane definici sad', () => {
   const v = JSON.parse(read('vercel.json'));
   assert.equal(v.functions['api/dotaznik.js'].includeFiles, 'data/pojistovny-otazky.json');
+});
+
+// --- znění dotazníků pro všechny fáze (docs/pojistovny-dotazniky.md) ----------------------------
+const sadaById = (id) => OTAZKY.sady.find((s) => s.id === id);
+const WEB_DOTAZNIKY = OTAZKY.sady.filter((s) => s.typ === 'dotaznik' && s.kanal !== 'interni');
+
+test('sady: každá má unikátní id otázek, povolený kanal, fázi, respondenta a úvod', () => {
+  assert.deepEqual(OTAZKY.sady.map((s) => s.id), [
+    'fond-prevence', 'rizikovi-pojistenci', 'aplikace-privetivost', 'napo-pacientske-organizace',
+    'pojistenci-anketa', 'pravo-na-odpoved', 'pobocky-definice',
+  ]);
+  for (const s of OTAZKY.sady) {
+    const ids = flattenOtazky(s).map((q) => q.id);
+    assert.equal(new Set(ids).size, ids.length, `${s.id}: duplicitní id otázky`);
+    assert.ok(KANALY.includes(s.kanal), `${s.id}: kanal '${s.kanal}'`);
+    for (const f of ['faze', 'respondent', 'uvod']) assert.ok(typeof s[f] === 'string' && s[f].trim(), `${s.id}.${f}`);
+    assert.equal(s.verze, '1');
+  }
+});
+
+test('sady: limity počtu otázek ze zadání a pravni_zaklad jen u sad pro pojišťovny', () => {
+  const pocet = (id) => flattenOtazky(sadaById(id)).length;
+  assert.ok(pocet('fond-prevence') <= 7);
+  assert.ok(pocet('rizikovi-pojistenci') <= 14);
+  assert.ok(pocet('napo-pacientske-organizace') <= 16);
+  assert.ok(pocet('pojistenci-anketa') <= 8);
+  assert.equal(pocet('pravo-na-odpoved'), 3);
+  assert.equal(pocet('pobocky-definice'), 4);
+  assert.deepEqual(sadaById('rizikovi-pojistenci').casti.map((c) => c.id), ['A', 'B', 'C', 'D']);
+  for (const s of OTAZKY.sady) {
+    const proPojistovny = /pojišťovn/.test(s.respondent) && !/pacient|veřejnost|IT expert/.test(s.respondent);
+    assert.equal(typeof s.pravni_zaklad === 'string', proPojistovny, `${s.id}: pravni_zaklad`);
+  }
+  // fond prevence: každá otázka říká, co je doloženo
+  assert.ok(sadaById('fond-prevence').otazky.every((q) => typeof q.napoveda === 'string' && /oložen/.test(q.napoveda)));
+});
+
+test('sady: respondenti a kanály drží pohromadě (veřejnost bez tokenu, NAPO jen organizace)', () => {
+  assert.deepEqual(sadaById('pojistenci-anketa').povolene_respondenty, ['verejnost']);
+  assert.equal(sadaById('pojistenci-anketa').kanal, 'web-verejnost');
+  assert.deepEqual(sadaById('napo-pacientske-organizace').povolene_respondenty, ['pacientska_organizace']);
+  assert.deepEqual(sadaById('pravo-na-odpoved').povolene_respondenty, ['pojistovna']);
+  assert.equal(sadaById('aplikace-privetivost').kanal, 'interni');
+  assert.equal(sadaById('aplikace-privetivost').povolene_respondenty, undefined);
+});
+
+test('anketa: bez osobních údajů, věk jen v pásmech, kraj 14 + nechci uvést, text do 300 znaků', () => {
+  const s = sadaById('pojistenci-anketa');
+  const q = Object.fromEntries(flattenOtazky(s).map((x) => [x.id, x]));
+  assert.equal(q.pojistovna.moznosti.length, 8);
+  assert.equal(q.kraj.moznosti.length, 15);
+  assert.ok(q.vek.moznosti.every((m) => /^\d|nechci/.test(m)));
+  assert.ok(flattenOtazky(s).every((x) => questionKind(x) !== 'text'), 'anketa nemá volné textové pole');
+  assert.equal(maxDelka(q['co-chybi']), 300);
+  assert.match(s.uvod, /IP adresu/);
+  const body = (odp) => ({ sada_id: s.id, sada_verze: '1', respondent_typ: 'verejnost', odpovedi: odp });
+  assert.equal(validateOdpoved(s, body({ 'co-chybi': ['jiné (uveďte)'], 'co-chybi_upresneni': 'x'.repeat(300) })).ok, true);
+  assert.equal(validateOdpoved(s, body({ 'co-chybi': ['jiné (uveďte)'], 'co-chybi_upresneni': 'x'.repeat(301) })).ok, false);
+  assert.equal(validateOdpoved(s, { ...body({ spokojenost: '4' }), respondent_typ: 'pojistovna', token: TOKEN }).ok, false);
+});
+
+test('max_delka: API a frontend počítají stejně; stanovisko do 1 500 znaků', () => {
+  for (const s of OTAZKY.sady) for (const q of flattenOtazky(s)) assert.equal(maxDelka(q), apiMaxDelka(q), `${s.id}.${q.id}`);
+  assert.equal(maxDelka({}), 2000);
+  assert.equal(maxDelka({ max_delka: 99999 }), 2000);
+  const s = sadaById('pravo-na-odpoved');
+  const body = (t) => ({ sada_id: s.id, sada_verze: '1', respondent_typ: 'pojistovna', token: TOKEN, respondent_kod: '111', odpovedi: { stanovisko: t } });
+  assert.equal(validateOdpoved(s, body('a'.repeat(1500))).ok, true);
+  const bad = validateOdpoved(s, body('a'.repeat(1501)));
+  assert.equal(bad.ok, false);
+  assert.ok(bad.errors.some((e) => /1500/.test(e)));
+});
+
+test('interní hodnoticí list: API ho odmítne, token se k němu nevydá, kritéria = pojistovny-aplikace.json', () => {
+  const s = sadaById('aplikace-privetivost');
+  const r = validateOdpoved(s, { sada_id: s.id, sada_verze: '1', respondent_typ: 'verejnost', odpovedi: {} });
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some((e) => /interní/.test(e)));
+  assert.equal(checkArgs({ sada: s.id, kod: '111' }, OTAZKY.sady).ok, false);
+  const app = JSON.parse(read('data', 'pojistovny-aplikace.json'));
+  const kriteria = app.kriteria_privetivosti.kriteria.map((k) => k.id);
+  const k = s.casti.find((c) => c.id === 'K').otazky;
+  assert.deepEqual(k.map((q) => q.id.replace(/-/g, '_')), kriteria);
+  for (const q of k) {
+    assert.equal(q.vyber, 'jeden');
+    assert.deepEqual(q.moznosti.map((m) => m.slice(0, 1)), ['0', '1', '2'], q.id);
+  }
+});
+
+test('dotaznik-token: sada NAPO jen pro pacientské organizace, anketa bez tokenu', () => {
+  assert.equal(checkArgs({ sada: 'napo-pacientske-organizace', kod: 'NAPO', typ: 'pacientska_organizace' }, OTAZKY.sady).ok, true);
+  assert.equal(checkArgs({ sada: 'napo-pacientske-organizace', kod: '111' }, OTAZKY.sady).ok, false);
+  assert.equal(checkArgs({ sada: 'pojistenci-anketa', kod: '111' }, OTAZKY.sady).ok, false);
+  assert.equal(checkArgs({ sada: 'pobocky-definice', kod: '209' }, OTAZKY.sady).ok, true);
+});
+
+test('renderDotaznik: každá webová sada typu dotaznik se vyrenderuje (otázky, části, maxlength, nápověda)', () => {
+  assert.ok(WEB_DOTAZNIKY.length >= 3);
+  for (const s of WEB_DOTAZNIKY) {
+    const adresne = (s.povolene_respondenty || []).filter((t) => t !== 'verejnost');
+    const opts = adresne.length ? { token: TOKEN, respondentTyp: adresne[0] } : {};
+    const c = mkContainer();
+    const r = renderDotaznik(c, s, opts);
+    assert.ok(r.form, s.id);
+    assert.equal(c.find((n) => n.attrs['data-otazka']).length, flattenOtazky(s).length, s.id);
+    assert.equal(c.find((n) => n.className === 'zpd-part').length, s.casti.length, s.id);
+    for (const q of flattenOtazky(s).filter((x) => questionKind(x) === 'text')) {
+      const ta = c.find((n) => n.tag === 'textarea' && n.attrs.name === q.id)[0];
+      assert.equal(ta.attrs.maxlength, String(maxDelka(q)), `${s.id}.${q.id}`);
+    }
+    assert.ok(c.textContent.includes(s.uvod), `${s.id}: úvod`);
+    // typ respondenta v těle odpovídá sadě
+    if (adresne.length) assert.equal(r.getPayload().respondent_typ, adresne[0]);
+  }
+});
+
+test('validate-pojistovny: nová pole sad (kanal, max_delka, napoveda, povolene_respondenty, otevřená otázka v dotazníku)', () => {
+  const d = loadDatasets();
+  const idx = (id) => d.otazky.sady.findIndex((s) => s.id === id);
+  const fails = (mut, re) => {
+    const x = structuredClone(d);
+    mut(x.otazky.sady);
+    assert.ok(validateAll(x).errors.some((e) => re.test(e)), re);
+  };
+  fails((s) => { s[0].kanal = 'posta'; }, /kanal/);
+  fails((s) => { s[0].otazky[0].max_delka = 5000; }, /max_delka/);
+  fails((s) => { s[0].otazky[0].max_delka = 1.5; }, /max_delka/);
+  fails((s) => { s[0].otazky[0].napoveda = ''; }, /napoveda/);
+  fails((s) => { s[0].uvod = 7; }, /uvod/);
+  fails((s) => { s[idx('napo-pacientske-organizace')].povolene_respondenty = ['expert']; }, /povolene_respondenty/);
+  fails((s) => { s[idx('pojistenci-anketa')].povolene_respondenty = ['pojistovna']; }, /web-verejnost/);
+  fails((s) => { delete s[idx('napo-pacientske-organizace')].casti.at(-1).otazky[0].max_delka; }, /otevřená otázka v dotazníku musí mít max_delka/);
+  fails((s) => { s[1].casti[0].otazky[0].moznosti.push('obézní děti'); }, /bez duplicit/);
+});
+
+test('docs/pojistovny-dotazniky.md: každá sada a otázka doslova, průvodní dopis, odkaz z plánu § 2.7', () => {
+  const doc = fs.readFileSync(path.join(ROOT, '..', 'docs', 'pojistovny-dotazniky.md'), 'utf8');
+  for (const s of OTAZKY.sady) {
+    assert.ok(doc.includes(`\`${s.id}\``), `chybí sada ${s.id}`);
+    for (const q of flattenOtazky(s)) {
+      assert.ok(doc.includes(q.text), `${s.id}.${q.id}: text otázky se v dokumentu neshoduje s JSON`);
+      for (const m of q.moznosti || []) assert.ok(doc.includes(m), `${s.id}.${q.id}: chybí možnost „${m}“`);
+    }
+  }
+  assert.match(doc, /^## Průvodní dopis/m);
+  assert.match(doc, /dopis-instituce-data\.md/);
+  const plan = read('PLAN-SROVNAVAC-POJISTOVEN.md');
+  const p27 = plan.slice(plan.indexOf('### 2.7'), plan.indexOf('### 2.8'));
+  assert.match(p27, /docs\/pojistovny-dotazniky\.md/);
 });

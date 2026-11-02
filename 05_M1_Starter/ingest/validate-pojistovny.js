@@ -7,7 +7,9 @@
 //                                    stejné obálky), konzistence odvozených hodnot, semafor, volitelný changelog[]
 //  - data/pojistovny-aplikace.json   funkce[], aplikace[7], funkce true|false|null, uzivatele, rizikové skupiny, rozpory
 //  - data/pojistovny-prevence.json   enum stupňů, oblasti, matice 7 ZP, onko/duševní sloupce, struktura fondu prevence
-//  - data/pojistovny-otazky.json     sady otázek (typ otevrene | dotaznik), unikátní id
+//  - data/pojistovny-otazky.json     sady otázek (typ otevrene | dotaznik), unikátní id, volitelná pole sady
+//                                    faze/respondent/uvod/pravni_zaklad (string), kanal (KANALY), povolene_respondenty,
+//                                    otázky napoveda (string), max_delka (celé číslo 1–2000)
 //  - data/pojistovny-sit.json        (volitelný, P3.5 prototyp) matice ZP × odbornost × kraj, validateSit() na konci souboru
 //  - data/pojistovny-vek.json        (volitelný, P3.3) 7 ZP, součet struktury = celkem ±0,1 %,
 //                                    ČR celkem = součet ZP ±0,5 %; hospodareni.*_std_kc obálka s faktorem 0,5–2 a stavem
@@ -42,6 +44,12 @@ export const STD_STAVY = ['dolozeno', 'placeholder-bez-vah'];
 export const ZP_CODES = ['111', '201', '205', '207', '209', '211', '213'];
 export const OBLASTI = ['prevence', 'dostupnost', 'sit', 'kvalita', 'servis', 'hospodareni'];
 export const STAVY = ['dolozeno', 'deklarovano', 'nedolozeno', 'neodpovedela'];
+/** Kanály sad dotazníků (docs/pojistovny-dotazniky.md); `interni` se přes web nevyplňuje. */
+export const KANALY = ['web-token', 'web-verejnost', 'interni', 'dopis+web'];
+/** Typy respondentů = enum `respondent_typ` v api/migrations (nový typ = migrace, třída C). */
+export const RESPONDENT_TYPY = ['pojistovna', 'pacientska_organizace', 'verejnost'];
+/** Strop délky textu odpovědi; max_delka otázky ho nesmí překročit (api/_dotaznik-validate.js MAX_TEXT). */
+export const MAX_DELKA_TEXTU = 2000;
 
 const HOSP_REQUIRED = ['pocet_pojistencu', 'prijmy_celkem_mld', 'naklady_zdravotni_sluzby_mld', 'naklady_na_pojistence_kc',
   'fond_prevence_naklady_mil', 'fond_prevence_na_pojistence_kc', 'provozni_naklady_pct', 'hospodarsky_vysledek_mld',
@@ -350,6 +358,22 @@ export function validateAll(datasets) {
         sadaIds.add(s?.id);
         ok(isStr(s?.nazev), `${tag}: chybí nazev`);
         if (s?.verze != null) ok(isStr(s.verze) && s.verze.length <= 32, `${tag}.verze: neprázdný string do 32 znaků`);
+        for (const f of ['faze', 'respondent', 'uvod', 'pravni_zaklad']) {
+          if (s?.[f] != null) ok(isStr(s[f]), `${tag}.${f}: neprázdný string`);
+        }
+        if (s?.kanal != null) ok(KANALY.includes(s.kanal), `${tag}.kanal: ${KANALY.join(' | ')} (je '${s.kanal}')`);
+        if (s?.povolene_respondenty != null) {
+          ok(Array.isArray(s.povolene_respondenty) && s.povolene_respondenty.length > 0
+            && s.povolene_respondenty.every((t) => RESPONDENT_TYPY.includes(t)),
+          `${tag}.povolene_respondenty: neprázdné pole z ${RESPONDENT_TYPY.join(' | ')}`);
+        }
+        if (s?.kanal === 'web-verejnost') {
+          ok(Array.isArray(s.povolene_respondenty) && s.povolene_respondenty.includes('verejnost'),
+            `${tag}: kanal web-verejnost vyžaduje povolene_respondenty s 'verejnost'`);
+        }
+        if (s?.kanal === 'web-token' && Array.isArray(s.povolene_respondenty)) {
+          ok(s.povolene_respondenty.some((t) => t !== 'verejnost'), `${tag}: kanal web-token potřebuje adresného respondenta`);
+        }
         const qids = new Set();
         const checkQ = (q, qtag, withOptions) => {
           ok(isStr(q?.id), `${qtag}: chybí id otázky`);
@@ -360,8 +384,18 @@ export function validateAll(datasets) {
             ok(q.vyber === 'jeden' || q.vyber === 'vice', `${qtag}.vyber: jeden | vice (je '${q.vyber}')`);
             ok(Array.isArray(q?.moznosti), `${qtag}.vyber: dává smysl jen u otázky s moznosti[]`);
           }
-          if (withOptions) {
-            ok(Array.isArray(q?.moznosti) && q.moznosti.length > 0 && q.moznosti.every(isStr), `${qtag}.moznosti: musí být neprázdné pole stringů`);
+          if (q?.napoveda != null) ok(isStr(q.napoveda), `${qtag}.napoveda: neprázdný string`);
+          if (q?.max_delka != null) {
+            ok(Number.isInteger(q.max_delka) && q.max_delka >= 1 && q.max_delka <= MAX_DELKA_TEXTU,
+              `${qtag}.max_delka: celé číslo 1–${MAX_DELKA_TEXTU} (je '${q.max_delka}')`);
+          }
+          if (q?.moznosti != null) {
+            ok(Array.isArray(q.moznosti) && q.moznosti.length > 0 && q.moznosti.every(isStr)
+              && new Set(q.moznosti).size === q.moznosti.length, `${qtag}.moznosti: musí být neprázdné pole stringů bez duplicit`);
+          }
+          // V dotazníku je otázka bez nabídky jen výslovně otevřená (má max_delka); jinak jde o chybu v datech.
+          if (withOptions && q?.moznosti == null) {
+            ok(q?.max_delka != null, `${qtag}.moznosti: musí být neprázdné pole stringů (otevřená otázka v dotazníku musí mít max_delka)`);
           }
         };
         if (s?.typ === 'otevrene') {
