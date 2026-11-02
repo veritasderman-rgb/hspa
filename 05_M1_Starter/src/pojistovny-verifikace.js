@@ -43,7 +43,7 @@ export function verifikaceSouhrnHtml(v) {
   const bez = bezTextu.length
     ? `<p class="zpc-note">Bez ověření zůstalo ${bezTextu.length} čísel: výroční zpráva je sken bez textové vrstvy nebo její text chybí.</p>`
     : '';
-  return `<div class="zpc-tbl"><table><caption class="zpc-note">Čísla přepsaná z výročních zpráv a jejich kontrola proti textu těchto zpráv`
+  return `<div class="zpc-tbl" role="region" tabindex="0" aria-label="Ověření čísel proti výročním zprávám (tabulka, posuvná)"><table><caption class="zpc-note">Čísla přepsaná z výročních zpráv a jejich kontrola proti textu těchto zpráv`
     + `${v.generated_at ? ` (stav k ${escapeHtml(datumCz(v.generated_at))})` : ''}</caption>`
     + '<thead><tr><th class="zpc-txt">Pojišťovna</th><th>Nalezeno</th><th>Nenalezeno</th><th>Bez textu</th><th>Mimo rozsah</th></tr></thead>'
     + `<tbody>${rows}</tbody>`
