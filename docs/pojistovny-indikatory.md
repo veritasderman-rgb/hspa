@@ -27,9 +27,9 @@ je v `M1/data/pojistovny-opendata.json`._
 4. **Nevyužité, ale v repu ležící:** ZP × okres × věk × pohlaví (surové CSV, transform
    to agreguje pryč) a úhrady ZP podle segmentů a okresů zařízení (OIS 11-24,
    `03_Prezentace/Datovy-souhrn-OIS-11-24-…xlsx`).
-5. **Chybí:** měsíční počty pojištěnců per ZP (jediná cesta k přestupům mezi
-   pojišťovnami v čase), skutečné nákladové indexy přerozdělení, věková struktura
-   z výročních zpráv, jakákoli data o změnách pojišťovny.
+5. **Chybí:** hrubé toky přestupů mezi pojišťovnami (měsíční počty pojištěnců per ZP
+   jsou od 2. 11. 2026 v repu, ale jen odvozené z přerozdělení MZ a dávají čistou změnu
+   kmene), skutečné nákladové indexy přerozdělení, věková struktura z výročních zpráv.
 
 ## 1. Indikátory datového kontraktu
 
@@ -206,16 +206,20 @@ Praktický příklad rozdílu zdrojů: průměrný počet pojištěnců 2024 pod
 | **(b) MZ + MF, Hodnocení vývoje systému v.z.p.** | **průměrný roční počet pojištěnců**, příjmy, náklady, fondy per ZP (hotovostní metodika) | ZP × rok, bez věku a regionu | průměr za rok | MZ, 1× ročně (květen–červen za rok N−1); za 2025 dosud nezveřejněno | **ano** za 2024: `hospodareni.*` (7 ZP) |
 | **(c) Výroční zprávy ZP** (vyhláška 362/2010 Sb.) | počet pojištěnců k 31. 12., vlastní vykazování, někdy věkové struktura | ZP × rok (někdy kraj) | typicky 31. 12. | každá ZP zvlášť, v PDF, květen–říjen; formáty nesrovnatelné | **částečně**: VZ 2024 (7 ZP) a VZ 2025 jen VZP, VoZP, OZP (`hospodareni_2025`); text VZ v repu není, jen přepsané tabulky |
 | **(d) Zdravotně pojistné plány** (sněmovní tisky) | plánovaný průměr pojištěnců, příjmy, výdaje, rezervy | ZP × rok | plán | ročně v srpnu; tisk 280 = ZPP 2026 | **částečně**: zůstatky a plán 2026 v `pojistovny.json`, úhrady podle segmentů 2024 v `financing.by_payer` (zaokrouhlené „kalibrované“ hodnoty), plánované počty pojištěnců nezachyceny |
-| **(e) Měsíční přerozdělení pojistného** | podle popisu stránky MZ: výsledné částky po přerozdělení pro každou ZP, průměrné příjmy na pojištěnce, měsíční 100% výběr a parametry pojistného podle plátců | ZP × měsíc | měsíc | MZ, `https://mzd.gov.cz/prerozdelovani-pojistneho-na-verejne-zdravotni-pojisteni/`, přílohy PDF (kontrola stránky 2. 11. 2026: data od ledna 2023, aktualizace 19. 10. 2026) | **ne**. Odkazuje se na ni jen draft `M1/drafts/explainer-prerozdeleni-pojistneho-tisk-70.json` |
+| **(e) Měsíční přerozdělení pojistného** | podle popisu stránky MZ: výsledné částky po přerozdělení pro každou ZP, průměrné příjmy na pojištěnce, měsíční 100% výběr a parametry pojistného podle plátců | ZP × měsíc | měsíc | MZ, `https://mzd.gov.cz/prerozdelovani-pojistneho-na-verejne-zdravotni-pojisteni/`, přílohy PDF (kontrola stránky 2. 11. 2026: data od ledna 2023, aktualizace 19. 10. 2026) | **ano** (od 2. 11. 2026): měsíční řady 2022–2026/10 v `ingest/manual/pojistovny/prerozdeleni-mz-pojistovna.json` (tis. Kč na pojišťovnu) a `prerozdeleni-mz.json` (Kč na pojištěnce); z nich odvozené měsíční počty pojištěnců v `data/pojistovny-kmen-mesicni.json` (metodika § 4.3) a index nákladovosti kmene (§ 4.2). Odkazuje se na ni i draft `M1/drafts/explainer-prerozdeleni-pojistneho-tisk-70.json` |
 
-K bodu (e) poctivě: stránka MZ **výslovně nepopisuje, že přílohy obsahují počty
-pojištěnců nebo nákladové indexy**, jen výsledné částky a průměr na pojištěnce (který
-počet pojištěnců implicitně vyžaduje). Zadání vydavatele předpokládá, že MZ/VZP zveřejňuje
-měsíčně počty pojištěnců a indexy per ZP. To v repu **nebylo ověřeno** (PDF přílohy
-nebyly staženy, web Kanceláře zdravotního pojištění `zdravotnipojistovny.cz` nebyl
-v session dostupný a repo ho jako zdroj nevyužilo, viz `data/pojistovny.json` →
-`chybi`). Rozpor ke kontrole: draft explaineru uvádí „měsíční data od 11/2014“,
-stránka MZ při kontrole říkala od ledna 2023.
+K bodu (e) poctivě (ověřeno 2. 11. 2026 stažením PDF příloh): přílohy MZ **neobsahují
+počty pojištěnců ani nákladové indexy**, jen výsledné částky po přerozdělení na pojišťovnu
+(tis. Kč) a na jednoho pojištěnce (Kč), měsíčně od ledna 2022 (soubory `…_2024_12.pdf`
+a `…_2026_10.pdf`; překryv 2024 je shodný). Počet pojištěnců v měsíci proto vychází
+jako **podíl** obou částek (částka na pojišťovnu × 1000 ÷ částka na pojištěnce): obě mají
+tytéž mimořádné položky, takže podíl je čistý a zbývá jen zaokrouhlení (≈ ±0,02 %).
+Průměr 12 měsíců 2024 sedí s průměrným počtem pojištěnců podle MZ na ±0,1 % u všech sedmi
+ZP; stav 12/2025 se od CRP 2025 liší o méně než 0,7 % u šesti ZP a o 1,06 % u VoZP
+(příčinu zdroj neuvádí). Je to odvozená hodnota, ne publikovaný údaj; web Kanceláře
+zdravotního pojištění `zdravotnipojistovny.cz` nebyl dostupný a nevyužili jsme ho. Rozpor
+ke kontrole: draft explaineru uvádí „měsíční data od 11/2014“, na stránce MZ jsou
+PDF od ledna 2022 (starší řady nejsou ve dvou stažených souborech).
 
 Co je v repu a co ne, shrnutě:
 
@@ -224,8 +228,8 @@ Co je v repu a co ne, shrnutě:
 | Kolik pojištěnců má která ZP dnes / v roce X | **ano** (a), 2010–2025 |
 | V kterém kraji / okrese | kraj ano (B); **okres jen v CSV** (D okres neumí ZP) |
 | Jak jsou staří a jakého pohlaví | ano pro 2025 (F); pro jiné roky a okres jen v CSV |
-| Jak se kmen mění v čase | ano ročně (E, B); měsíčně ne |
-| Kdo od koho odešel / přestoupil | **ne**: z ročních stavů jde odhadnout jen čistá změna; hrubé toky (přestupy) nikde nemáme. Záznam CRP o změnách pojišťovny veřejný není (neověřeno) |
+| Jak se kmen mění v čase | ano ročně (E, B); **měsíčně odvozeně** (e), 1/2022–10/2026: počet = částka na pojišťovnu ÷ částka na pojištěnce z přerozdělení MZ |
+| Kdo od koho odešel / přestoupil | **jen částečně**: z měsíčních stavů (e) jde spočítat čistou změnu kmene k 1. 1. a 1. 7. (`pojistovny-kmen-mesicni.json` → `prestupy`); hrubé toky (kdo od koho odešel) nikde nemáme. Záznam CRP o změnách pojišťovny veřejný není (neověřeno) |
 | Kolik pojištěnců je státních (platí stát) | **ne** per ZP |
 | Příjmy na pojištěnce po přerozdělení | ano 2024 (G); měsíčně ne |
 
@@ -277,8 +281,8 @@ z toho, co už leží v repu.
 | `zp_uhrady_segment_podil` | Podíl lůžkové / ambulantní / léků v úhradách ZP | ÚZIS OIS 11-24 | ZP × segment × rok (okres zařízení) | **surově ano** (`03_Prezentace/…OIS-11-24…xlsx`), zpracované jen za ČR; plán 2024 v `financing.by_payer` |
 | `zp_kmen_okres_podil` | Podíl ZP v okrese (kdo je u koho pojištěn „na mapě“) | CRP | ZP × okres × rok | **surově ano** (CSV), nezpracováno |
 | `zp_kmen_vek_kraj` | Věková struktura kmene ZP v kraji | CRP | ZP × kraj × věk | **surově ano**, nezpracováno |
-| `zp_pojistenci_mesicni` | Měsíční počty pojištěnců (příp. změna oproti předchozímu měsíci) | MZ přerozdělení / KZP | ZP × měsíc | **ne**; ověřit obsah PDF příloh MZ a KZP |
-| `zp_prestupy` | Přestupy mezi ZP (příchozí / odchozí / saldo za rok) | KZP / ZP / MZ (neověřeno) | ZP × rok | **ne** |
+| `zp_pojistenci_mesicni` | Měsíční počty pojištěnců (příp. změna oproti předchozímu měsíci) | MZ přerozdělení (odvozeno podílem dvou částek; počty MZ přímo nepublikuje) / KZP | ZP × měsíc | **ano** od 2. 11. 2026: `data/pojistovny-kmen-mesicni.json`, 1/2022–10/2026 (metodika § 4.3); KZP neověřeno |
+| `zp_prestupy` | Přestupy mezi ZP (příchozí / odchozí / saldo za rok) | KZP / ZP / MZ (neověřeno) | ZP × rok | **částečně**: čistá změna kmene k 1. 1. a 1. 7. z odvozených měsíčních počtů (`pojistovny-kmen-mesicni.json` → `prestupy`); hrubé toky ne |
 | `zp_staty_podil_pct` | Podíl státních pojištěnců v kmeni | MF / MZ / ZP (neověřeno) | ZP × rok | **ne** |
 | `zp_cizinci_docasna_ochrana` | Počet pojištěnců s dočasnou ochranou | MZ/VZP (v tisku 70 jen u VZP) | ZP | **ne** (jen mimořádné zprávy; draft tisk 70) |
 | `zp_cekaci_doby` | Čekací doby na vybrané výkony | žádosti 106, data VZP | ZP | **ne** (jen `cekaci_doba_kycel` z VZP) |
