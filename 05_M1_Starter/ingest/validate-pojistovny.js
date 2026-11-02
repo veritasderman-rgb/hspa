@@ -1,4 +1,4 @@
-// Validace data/pojistovny.json (Hlídač zdravotních pojišťoven) proti datovému kontraktu.
+// Validace data/pojistovny.json (Srovnávač zdravotních pojišťoven) proti datovému kontraktu.
 // Spouštěj: node ingest/validate-pojistovny.js   (přidat do validate:all v package.json)
 //
 // Kontroluje: root pole, 7 pojišťoven s unikátními kódy, CRP blok, hospodaření

@@ -1,4 +1,4 @@
-// Testy Hlídače zdravotních pojišťoven — data/pojistovny.json + pojistovny.html + src/pojistovny.js.
+// Testy Srovnávače zdravotních pojišťoven — data/pojistovny.json + pojistovny.html + src/pojistovny.js.
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
