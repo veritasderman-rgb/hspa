@@ -30,8 +30,11 @@ import { maxDelka } from '../src/zp-dotaznik.js';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = (...p) => fs.readFileSync(path.join(ROOT, ...p), 'utf8');
 const OTAZKY = JSON.parse(read('data', 'pojistovny-otazky.json'));
-const SADA = OTAZKY.sady.find((s) => s.id === 'rizikovi-pojistenci');
-const OTEVRENA = OTAZKY.sady.find((s) => s.id === 'fond-prevence');
+// Testy validátoru odpovědí pracují s kopií sad bez omezení respondentů (obecné chování);
+// skutečné omezení v datech (PS 12. 11. § 5) hlídá samostatný test níže.
+const bezOmezeni = (id) => { const x = structuredClone(OTAZKY.sady.find((s) => s.id === id)); delete x.povolene_respondenty; return x; };
+const SADA = bezOmezeni('rizikovi-pojistenci');
+const OTEVRENA = bezOmezeni('fond-prevence');
 const TOKEN = 'abcdefghijklmnopqrstuvwxyz012345';
 
 // --- pomocníci --------------------------------------------------------------
@@ -197,6 +200,15 @@ test('validateOdpoved: povolene_respondenty omezí typy; řídicí znaky se odst
   assert.equal(validateOdpoved(def, tokenBody({ A3: 'ne' })).ok, true);
   const r = validateOdpoved(OTEVRENA, { sada_id: 'fond-prevence', sada_verze: '1', respondent_typ: 'verejnost', odpovedi: { fp1: '  ahoj\u0000 svět\u0007 ' } });
   assert.equal(r.clean.odpovedi.fp1, 'ahoj svět');
+});
+
+test('data: adresné sady pojišťoven mají povolene_respondenty ["pojistovna"]; veřejná anketa jen verejnost', () => {
+  for (const id of ['fond-prevence', 'rizikovi-pojistenci', 'pobocky-definice', 'pravo-na-odpoved']) {
+    const real = OTAZKY.sady.find((s) => s.id === id);
+    assert.deepEqual(real.povolene_respondenty, ['pojistovna'], id);
+    assert.equal(validateOdpoved(real, { sada_id: id, sada_verze: real.verze, respondent_typ: 'verejnost', odpovedi: {} }).ok, false, `${id}: veřejnost nesmí odpovídat`);
+  }
+  assert.deepEqual(OTAZKY.sady.find((s) => s.id === 'pojistenci-anketa').povolene_respondenty, ['verejnost']);
 });
 
 test('hashToken: sha256 hex, stabilní', () => {
@@ -678,7 +690,7 @@ test('zp-dotaznik.js nepoužívá innerHTML ani eval', () => {
 test('pojistovny-gramotnost.html a pojistovny.js: kontejnery, věta o soukromí, volání renderu', () => {
   const html = read('pojistovny-gramotnost.html');
   const modul = html.slice(html.indexOf('id="modul-gramotnost"'), html.indexOf('</section>', html.indexOf('id="modul-gramotnost"')));
-  assert.match(modul, /<div id="zpDotaznik" data-sada="rizikovi-pojistenci"><\/div>/);
+  assert.match(modul, /<div id="zpDotaznik" data-sada="pojistenci-anketa"><\/div>/, 'bez tokenu se ukazuje veřejná anketa (PS 12. 11. § 5)');
   assert.match(modul, /<div id="zpDotaznikAgregace"><\/div>/);
   assert.match(modul, /bez osobních údajů/);
   const js = read('src', 'pojistovny.js');
