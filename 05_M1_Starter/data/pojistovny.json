@@ -1,0 +1,2548 @@
+{
+  "version": "0.1.0",
+  "generated_at": "2026-11-02T18:02:33Z",
+  "_doc": "Hlídač zdravotních pojišťoven — sloučený dataset 7 ZP. crp = kmen 2025 z CRP (OIS 11-47); hospodareni = rok 2024 z Hodnocení vývoje systému v.z.p. (MZ ČR + MF) a výročních zpráv, každá položka {hodnota, rok, zdroj}; zustatek_* z ZPP 2026 (tisk 280); prevence/servis/mereni_dopadu z VZ 2024 a webů; semafor = hodnocení v 6 oblastech podle docs/metodika-hlidac-pojistoven.md (stav null = zatím nehodnoceno). Validuje ingest/validate-pojistovny.js.",
+  "rok_hospodareni": 2024,
+  "rok_crp": 2025,
+  "stav": "pracovni-navrh",
+  "system": {
+    "rok": 2024,
+    "prijmy_celkem_mld": 504.67,
+    "vydaje_celkem_mld": 512.19,
+    "vydaje_zdravotni_sluzby_mld": 499.19,
+    "naklady_zdravotni_sluzby_zfzp_mld": 504.581,
+    "naklady_zdravotni_sluzby_celkem_mld": 508.134,
+    "saldo_mld": -7.5,
+    "provozni_vydaje_mld": 9.54,
+    "fond_prevence_naklady_celkem_mld": 3.553,
+    "fond_prevence_na_pojistence_kc": 328,
+    "pocet_pojistencu_prumer": 10844507,
+    "pocet_pojistencu_prumer_mz_text": "10,84 mil.",
+    "zustatky_bu_zp_celkem_mld": 47.7,
+    "naklady_zs_na_pojistence_kc": 46856,
+    "naklady_zs_zfzp_na_pojistence_kc": 46529,
+    "platba_statu_mesicne_kc": 2085,
+    "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+    "poznamka": "Deficit 7,5 mld: VZP −6,4 mld, ZZP celkem −1,1 mld; kladné saldo jen VoZP (+0,4 mld) a ZPŠ. Fond prevence celkem meziročně +55,4 % (VZP 2,079 mld, ZZP 1,474 mld). Tabulka 'pojištěnci' MZ: součet průměrných počtů 7 ZP = 10 844 507."
+  },
+  "system_crp": {
+    "pojistenci_2025": 10851604,
+    "podil_65plus_pct": 20.86
+  },
+  "oblasti": [
+    {
+      "id": "prevence",
+      "nazev": "Prevence s dopadem",
+      "popis": "Kolik fond prevence stojí, na co jde, jak pojišťovna měří dopad na zdraví a chování, jak často vyhodnocuje a zda má interní metodiku.",
+      "zdroje": [
+        "výroční zprávy",
+        "ZPP",
+        "žádosti 106",
+        "NZIP preventivní prohlídky",
+        "screeningové registry ÚZIS"
+      ]
+    },
+    {
+      "id": "dostupnost",
+      "nazev": "Dostupnost a čekací doby",
+      "popis": "Čekací doby na vybrané výkony, podíl pacientů ošetřených ve lhůtě podle nařízení 307/2012 Sb., cesty pacientů u onkologických diagnóz, regionální rozdíly.",
+      "zdroje": [
+        "žádosti 106",
+        "cesty pacienta (NOP)",
+        "KZP",
+        "data VZP o čekacích dobách",
+        "OIS dojezdové analýzy"
+      ]
+    },
+    {
+      "id": "sit",
+      "nazev": "Síť a ohrožené oblasti",
+      "popis": "Smluvní síť v regionech s nedostatkem praktiků a specialistů, úhrada vzdálené péče, mobilní poskytovatelé, zajištění pohotovostí.",
+      "zdroje": [
+        "NRHZS referenční síť (OIS 11-39)",
+        "registrovaní na úvazek PL (OIS 11-20)",
+        "pohotovosti"
+      ]
+    },
+    {
+      "id": "kvalita",
+      "nazev": "Kvalita ve smluvní politice",
+      "popis": "Používá pojišťovna ukazatele kvality (PUK, INDIKO, NIKEZ) při uzavírání smluv a úhradách? Platí za výsledek, nebo za výkon?",
+      "zdroje": [
+        "žádosti 106",
+        "smluvní dodatky",
+        "úhradové mechanismy VZP+",
+        "Portál ukazatelů kvality KZP"
+      ]
+    },
+    {
+      "id": "servis",
+      "nazev": "Klientský servis a informování",
+      "popis": "Aplikace, online přepážka, srozumitelnost informací o nárocích, doplatcích a čekacích dobách, vyřizování stížností a jejich lhůty.",
+      "zdroje": [
+        "weby a aplikace pojišťoven",
+        "dotazníky NAPO",
+        "stížnosti ombudsmana"
+      ]
+    },
+    {
+      "id": "hospodareni",
+      "nazev": "Hospodaření a transparentnost",
+      "popis": "Provozní náklady, rezervy, závazky po splatnosti, včasnost zveřejnění VZ, strojová čitelnost dat, odpovědi na žádosti 106 ve lhůtě.",
+      "zdroje": [
+        "ZPP (sněmovní tisky)",
+        "hodnocení MZ+MF",
+        "výroční zprávy",
+        "vlastní evidence žádostí"
+      ]
+    }
+  ],
+  "stavy_semaforu": {
+    "dolozeno": {
+      "label": "doloženo daty",
+      "signal": "good"
+    },
+    "deklarovano": {
+      "label": "deklarováno, nedoloženo",
+      "signal": "warn"
+    },
+    "nedolozeno": {
+      "label": "nedoloženo",
+      "signal": "bad"
+    },
+    "neodpovedela": {
+      "label": "neodpověděla / mimo lhůtu",
+      "signal": "neutral"
+    }
+  },
+  "zdroje": [
+    {
+      "id": "crp_ois_11_47",
+      "nazev": "ÚZIS ČR · Centrální registr pojištěnců — datový souhrn OIS 11-47 Struktura pojištěnců (verze 2026-01)",
+      "url": "https://www.nzip.cz/dohodovaci-rizeni"
+    },
+    {
+      "id": "mz_hodnoceni_2024",
+      "url": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+    },
+    {
+      "id": "mz_prehled_hodnoceni",
+      "url": "https://mzd.gov.cz/hodnoceni-vyvoje-systemu-verejneho-zdravotniho-pojisteni/"
+    },
+    {
+      "id": "vz_vzp_2024",
+      "url": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vyrocni-zprava-2024.pdf"
+    },
+    {
+      "id": "vz_vzp_2025",
+      "url": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vzp_vyrocni_zprava_2025.pdf"
+    },
+    {
+      "id": "vzp_rocenka_2024_tabulky",
+      "url": "https://media.vzpstatic.cz/media/Default/rocenky/rocenka-2024-tabulky.xlsx"
+    },
+    {
+      "id": "vz_vozp_2024",
+      "url": "https://www.vozp.cz/assets/vz_2024_vozp.pdf"
+    },
+    {
+      "id": "vz_vozp_2025",
+      "url": "https://www.vozp.cz/assets/vz_2025_vozp.pdf"
+    },
+    {
+      "id": "vz_cpzp_2024",
+      "url": "https://www.cpzp.cz/cdn/file/dBsRubRJnfQF8h7D7wgH0Se4cNJWi9kR.pdf"
+    },
+    {
+      "id": "vz_ozp_2025",
+      "url": "https://www.ozp.cz/web/files-c/510/vz_ozp_2025.pdf"
+    },
+    {
+      "id": "vz_zps_2024",
+      "url": "https://www.zpskoda.cz/sites/default/files/docs/2025/10/vz-2024-zps.pdf"
+    },
+    {
+      "id": "vz_zpmv_2024",
+      "url": "https://www.zpmvcr.cz/system/files/dokumenty/2026-02/VZ%202024%20ZPMVCR_komplet.pdf"
+    },
+    {
+      "id": "vz_rbp_2024",
+      "url": "https://www.rbp213.cz/systemfiles/file/RBP-Vyrocni-zprava-2024.pdf"
+    },
+    {
+      "id": "tisk_280",
+      "nazev": "Sněmovní tisk 280/0 — ZPP 2026 s hodnocením MZd a MF",
+      "url": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280",
+      "clanek": "clanek-pojistne-plany-2026.html"
+    }
+  ],
+  "chybi": [
+    "Věková struktura (podíl 65+ / průměrný věk) pro ČPZP, OZP, ZPŠ, ZP MV ČR, RBP – VZ ji neuvádějí (ZPMV má jen interní graf); dohledáno jen VZP (ročenka, 22,9 % 65+) a VoZP (průměrný věk 43,1; 60+ 24,7 % v 2025).",
+    "Maximální roční příspěvky z fondu prevence pro rok 2024 pro dospělého/dítě u VoZP, OZP, ZPŠ, ZP MV ČR a RBP – webové stránky už zobrazují nabídku 2026 a Wayback Machine odmítal dotazy (HTTP 429); 2024 potvrzeno jen u VZP (tisková zpráva 9/2023) a ČPZP (snapshot 5/2024); ZPMV doloženo 2025 (leták).",
+    "Zákonný limit nákladů na činnost (%) pro VoZP, OZP a ZP MV ČR (uveden jen absolutní rozdíl/příděl).",
+    "Počet poboček z VZ 2024 u VZP, ZP MV ČR, ZPŠ – použity údaje z webu/tiskových zpráv 2026.",
+    "Výroční zprávy 2025 pro ČPZP, ZPŠ, ZP MV ČR, RBP nebyly k 2. 11. 2026 dohledány; MZ/MF souhrnné hodnocení za rok 2025 dosud nezveřejněno – rok 2025 proto jen u VZP, VoZP, OZP a bez jednotné metodiky (čísla z VZ, ne z MZ).",
+    "VZ OZP 2024 nebyla stažena (zadání obsahovalo jen VZ 2025); údaje OZP 2024 jsou z MZ hodnocení a ze srovnávacích sloupců VZ 2025.",
+    "Jednotné 'saldo' za ZP v MZ tabulkové příloze (Tab. 1, str. 6) není součástí staženého PDF – hospodářský výsledek 2024 vypočten jako rozdíl příjmů celkem a výdajů celkem z Tab. 2 a Tab. 4 (součet odpovídá −7,5 mld).",
+    "Podmínky fondu prevence ZP MV ČR 2024 (PDF) nedostupné (HTTP 403).",
+    "Programy pro zaměstnavatele u VZP – nepotvrzeno (null).",
+    "Kancelář zdravotního pojištění / zdravotnipojistovny.cz nebyly využity (MZ hodnocení poskytlo kompletní konzistentní tabulky)."
+  ],
+  "pojistovny": [
+    {
+      "kod": "111",
+      "zkratka": "VZP ČR",
+      "nazev": "Všeobecná zdravotní pojišťovna ČR",
+      "web": "https://www.vzp.cz",
+      "crp": {
+        "rok": 2025,
+        "zdroj": "https://www.nzip.cz/dohodovaci-rizeni",
+        "pojistenci": 6168626,
+        "podil_trhu_pct": 56.85,
+        "podil_65plus_pct": 22.88,
+        "podil_80plus_pct": 5.74,
+        "podil_0_14_pct": 14.85,
+        "rust_2015_2025_pct": 4.18,
+        "max_podil_v_kraji_pct": 72.4,
+        "top_kraje": [
+          {
+            "kraj": "CZ010",
+            "nazev": "Praha",
+            "pojistenci": 954907,
+            "pct_kmene": 15.5,
+            "podil_v_kraji_pct": 64.6
+          },
+          {
+            "kraj": "CZ020",
+            "nazev": "Středočeský",
+            "pojistenci": 806123,
+            "pct_kmene": 13.1,
+            "podil_v_kraji_pct": 55.5
+          },
+          {
+            "kraj": "CZ064",
+            "nazev": "Jihomoravský",
+            "pojistenci": 537415,
+            "pct_kmene": 8.7,
+            "podil_v_kraji_pct": 55.0
+          },
+          {
+            "kraj": "CZ042",
+            "nazev": "Ústecký",
+            "pojistenci": 535239,
+            "pct_kmene": 8.7,
+            "podil_v_kraji_pct": 67.5
+          }
+        ],
+        "podil_trend": [
+          {
+            "year": 2010,
+            "share_pct": 60.77
+          },
+          {
+            "year": 2011,
+            "share_pct": 60.58
+          },
+          {
+            "year": 2012,
+            "share_pct": 59.37
+          },
+          {
+            "year": 2013,
+            "share_pct": 58.51
+          },
+          {
+            "year": 2014,
+            "share_pct": 57.4
+          },
+          {
+            "year": 2015,
+            "share_pct": 56.93
+          },
+          {
+            "year": 2016,
+            "share_pct": 56.69
+          },
+          {
+            "year": 2017,
+            "share_pct": 56.52
+          },
+          {
+            "year": 2018,
+            "share_pct": 56.51
+          },
+          {
+            "year": 2019,
+            "share_pct": 56.41
+          },
+          {
+            "year": 2020,
+            "share_pct": 56.38
+          },
+          {
+            "year": 2021,
+            "share_pct": 56.13
+          },
+          {
+            "year": 2022,
+            "share_pct": 55.9
+          },
+          {
+            "year": 2023,
+            "share_pct": 56.89
+          },
+          {
+            "year": 2024,
+            "share_pct": 56.6
+          },
+          {
+            "year": 2025,
+            "share_pct": 56.85
+          }
+        ]
+      },
+      "hospodareni": {
+        "pocet_pojistencu": {
+          "hodnota": 6150186,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "podil_trhu_pct": {
+          "hodnota": 56.71,
+          "rok": 2024,
+          "zdroj": "vypočteno z MZ hodnocení 2024 (6 150 186 / 10 844 507); MZ uvádí 56,7 %"
+        },
+        "prijmy_celkem_mld": {
+          "hodnota": 297.744,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "Tab. 2; pojistné po přerozdělování 293,135 mld"
+        },
+        "pojistne_po_prerozdeleni_mld": {
+          "hodnota": 293.135,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "prijmy_na_pojistence_kc": {
+          "hodnota": 48412,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "naklady_zdravotni_sluzby_mld": {
+          "hodnota": 295.195,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "Tab. 10, náklady ZFZP vč. dohadných položek (akruálně); hotovostní výdaje na ZS ze ZFZP 294,434 mld (Tab. 4)"
+        },
+        "naklady_na_pojistence_kc": {
+          "hodnota": 47998,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "Tab. 12; výdaje na ZS na 1 pojištěnce 47 874 Kč (Tab. 4)"
+        },
+        "fond_prevence_naklady_mil": {
+          "hodnota": 2079,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "Tab. 17 celkem (zdravotní programy 1 782, ostatní činnosti 297); VZ VZP 2024 Příloha 13: 2 079 022 tis. Kč = 129,9 % plánu 1,6 mld; 2023: 954 958 tis."
+        },
+        "fond_prevence_na_pojistence_kc": {
+          "hodnota": 338,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "MZ text (náklady); výdaje na preventivní programy na 1 pojištěnce 326 Kč (Tab. 4)"
+        },
+        "provozni_fond_naklady_mil": {
+          "hodnota": 6764.2,
+          "rok": 2024,
+          "zdroj": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vyrocni-zprava-2024.pdf",
+          "poznamka": "celkové čerpání PF 2024 (95,1 % plánu); z toho náklady na běžný provoz 1 202,3 mil; převod PF→Fprev 800 mil; MZ 'výdaje na vlastní činnost' 5 768 mil"
+        },
+        "provozni_naklady_pct": {
+          "hodnota": 1.9,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "podíl výdajů na vlastní činnost na výdajích celkem (MZ Tab. 4). Zákonný limit nákladů na činnost 2,91 % z rozvrhové základny = 8 569,0 mil; skutečný příděl do PF jen 4 002,8 mil (1,36 %), úspora ponechána v ZFZP (VZ 2024)"
+        },
+        "provozni_limit_pct": {
+          "hodnota": 2.91,
+          "rok": 2024,
+          "zdroj": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vyrocni-zprava-2024.pdf"
+        },
+        "zustatek_zfzp_mld": {
+          "hodnota": 11.1213,
+          "rok": 2024,
+          "zdroj": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vyrocni-zprava-2024.pdf",
+          "poznamka": "stav finančních prostředků ZFZP k 31. 12. 2024 (z 15 282,3 mil na 11 121,3 mil)"
+        },
+        "zustatek_bu_celkem_mld": {
+          "hodnota": 32.342,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "Tab. 6, všechny BÚ; 10,6 % ročních výdajů; RF naplněn 3 911,4 mil"
+        },
+        "hospodarsky_vysledek_mld": {
+          "hodnota": -6.42,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "saldo příjmů a výdajů celkem (Tab. 2 minus Tab. 4: 297 744 − 304 164 mil); MZ text −6,4 mld. Saldo příjmů a nákladů ZFZP dle VZ −4 981,6 mil"
+        },
+        "zamestnanci_prepocteni": {
+          "hodnota": 3554,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "rok": 2024,
+        "zustatek_bu_2025_oček_mil": {
+          "hodnota": 28415,
+          "rok": 2025,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280",
+          "poznamka": "očekávaná skutečnost konec 2025; tab. 9 hodnocení MZd+MF"
+        },
+        "zustatek_bu_2026_plan_mil": {
+          "hodnota": 18685,
+          "rok": 2026,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280",
+          "poznamka": "plán konec 2026; tab. 9"
+        },
+        "zustatek_2026_pct_vydaju": {
+          "hodnota": 5.5,
+          "rok": 2026,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280",
+          "poznamka": "kritická hranice 3–4 % ročních výdajů"
+        },
+        "zavazky_po_splatnosti_2026_plan_mil": {
+          "hodnota": 0,
+          "rok": 2026,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280"
+        }
+      },
+      "hospodareni_2025": {
+        "pocet_pojistencu": {
+          "hodnota": 6173200,
+          "rok": 2025,
+          "zdroj": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vzp_vyrocni_zprava_2025.pdf"
+        },
+        "prijmy_celkem_mld": {
+          "hodnota": 314.5244,
+          "rok": 2025,
+          "zdroj": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vzp_vyrocni_zprava_2025.pdf",
+          "poznamka": "příjmy ZFZP; pojistné po přerozdělování 308 946 mil"
+        },
+        "naklady_zdravotni_sluzby_mld": {
+          "hodnota": 307.0248,
+          "rok": 2025,
+          "zdroj": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vzp_vyrocni_zprava_2025.pdf",
+          "poznamka": "náklady ZFZP na ZS; výdaje na ZS 305 033,8 mil"
+        },
+        "naklady_na_pojistence_kc": {
+          "hodnota": null,
+          "rok": 2025,
+          "zdroj": null
+        },
+        "fond_prevence_naklady_mil": {
+          "hodnota": 1833.187,
+          "rok": 2025,
+          "zdroj": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vzp_vyrocni_zprava_2025.pdf",
+          "poznamka": "86,1 % ZPP 2025; meziročně −245,8 mil kvůli společnému limitu pohyb+dentální hygiena"
+        },
+        "fond_prevence_na_pojistence_kc": {
+          "hodnota": 297,
+          "rok": 2025,
+          "zdroj": "vypočteno (1 833,187 mil / 6 173 200)"
+        },
+        "provozni_fond_naklady_mil": {
+          "hodnota": null,
+          "rok": 2025,
+          "zdroj": null,
+          "poznamka": "max. limit nákladů na činnost 2,9 % = 9 000,2 mil (VZ 2025); příděl PF→Fprev 900 mil"
+        },
+        "zustatek_zfzp_mld": {
+          "hodnota": 9.204,
+          "rok": 2025,
+          "zdroj": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vzp_vyrocni_zprava_2025.pdf"
+        },
+        "zustatek_bu_celkem_mld": {
+          "hodnota": 32.044,
+          "rok": 2025,
+          "zdroj": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vzp_vyrocni_zprava_2025.pdf"
+        },
+        "hospodarsky_vysledek_mld": {
+          "hodnota": -5.2946,
+          "rok": 2025,
+          "zdroj": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vzp_vyrocni_zprava_2025.pdf",
+          "poznamka": "saldo příjmů a nákladů ZFZP (účetně); cash flow téměř vyrovnaný (BÚ −297,7 mil)"
+        }
+      },
+      "prevence": {
+        "rok_udaju": 2024,
+        "max_prispevek_dospely_kc": 1000,
+        "max_prispevek_dite_kc": 2000,
+        "poznamka_k_maximu": "2024: dospělí 1 000 Kč pohyb (18–65 i 65+) + 1 000 Kč dentální hygiena (podmíněno preventivní prohlídkou u PL v posledních 24 měs.); děti 2 000 Kč pohyb + 1 000 Kč dentální hygiena; těhotné 5 000 Kč; očkování zvlášť (např. pásový opar 3 000 Kč 50+, meningokok B 2 000 Kč, RSV 2 000 Kč 60+). 2025: pohyb a dentální hygiena dospělých sloučeny do 500 Kč, rehabilitace max 1 000 Kč, děti 2 000 Kč.",
+        "hlavni_kategorie": [
+          "pohyb (děti, dospělí, senioři 65+ – Zdravé stárnutí)",
+          "dentální hygiena (bonus za preventivní prohlídku)",
+          "očkování nehrazená z v.z.p.",
+          "Maminka a miminko (těhotné + 12 měs. po porodu)",
+          "duševní zdraví",
+          "dietní programy (celiakie, PKU)",
+          "rehabilitační aktivity (bonus za onkoscreening)",
+          "dárci krve",
+          "diabetes"
+        ],
+        "bonusovy_program": {
+          "existuje": true,
+          "nazev": "Klub pevného zdraví (slevy; od 2025 pro všechny klienty) + bonusové programy podmíněné prevencí (dentální hygiena, rehabilitační aktivity)",
+          "poznamka": null
+        },
+        "programy_pro_zamestnavatele": {
+          "existuje": null,
+          "nazev": null,
+          "poznamka": "ve VZ 2024 ani na webu nenalezen specifický program pro zaměstnavatele (VZ zmiňuje jen Motivační program VZP PLUS pro poskytovatele)"
+        },
+        "zdroj": "https://www.vzp.cz/o-nas/aktuality/dentalni-hygiena-pohyb-ockovani-proti-pasovemu-oparu-a-mnohe-dalsi-vzp-navysuje-fond-prevence"
+      },
+      "servis": {
+        "mobilni_aplikace": "Moje VZP (cca 2,4 mil. aktivních uživatelů, 8/2025; digitální průkaz pojištěnce; přihlášení BankID)",
+        "pocet_pobocek": null,
+        "pocet_pobocek_poznamka": "VZ 2024 počet neuvádí; tisková zpráva VZP 30. 3. 2026: 'téměř 200 poboček' (klientská pracoviště), 6 regionálních poboček v 2024 (od 4/2026 jen 2 regionální ředitelství); ČT24 (nedatováno) 185 poboček",
+        "online_prepazka": true,
+        "online_prepazka_poznamka": "Moje VZP (web + aplikace), e-podání; on-line objednání na 90+ pobočkách (2024)",
+        "zdroj": "https://www.vzp.cz/o-nas/aktuality/aplikace-moje-vzp-bude-mit-vyssi-zabezpeceni-pouziva-ji-uz-3-miliony-klientu"
+      },
+      "mereni_dopadu": {
+        "hodnoceni_ve_vz": false,
+        "citace": "VZ 2024 popisuje u programů pouze cíle, např. 'Cílem programu byla motivace pojištěnce k absolvování preventivních prohlídek a screeningů, posílení zodpovědnosti za vlastní zdraví a dále zvýšení atraktivity preventivních programů Pojišťovny.' – kvantifikované vyhodnocení dopadu na zdraví nenalezeno (hledáno: vyhodnocení, efektivita, dopad, účinnost).",
+        "zdroj": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vyrocni-zprava-2024.pdf"
+      },
+      "poznamky": [
+        "2024: první deficit po letech přebytků (−6,4 mld); příděl do PF snížen na 46,7 % zákonného limitu, aby se posílil ZFZP.",
+        "Plošná výměna průkazů pojištěnců 2024 zvýšila provozní náklady; prodej budov Nymburk a Bruntál.",
+        "Změna vedení: 23. 2. 2026 správní rada odvolala ředitele Zdeňka Kabátka (13 let ve funkci), od 24. 2. 2026 ředitelem Ivan Duškov (dosavadní náměstek). ; kontext (ministr Vojtěch: ztráta důvěry): https://www.e15.cz/domaci/kabatek-konci-jako-reditel-vzp-ztratil-moji-duveru-rekl-ministr-zdravotnictvi-vojtech-1431020",
+        "Od 1. 4. 2026 reorganizace: 6 regionálních poboček → 2 regionální ředitelství.",
+        "MZ 2024: probíhá kontrola plnění opatření VZP k nápravě z 8 předchozích kontrol (neukončena).",
+        "VZ 2025: zavedení společného limitu pohyb + dentální hygiena snížilo čerpání Fprev o 11,8 %."
+      ],
+      "poznamky_zdroje": [
+        "https://www.vzp.cz/o-nas/aktuality/ivan-duskov-strida-zdenka-kabatka-ve-funkci-reditele-vzp-cr",
+        "https://www.e15.cz/domaci/kabatek-konci-jako-reditel-vzp-ztratil-moji-duveru-rekl-ministr-zdravotnictvi-vojtech-1431020"
+      ],
+      "semafor": {
+        "prevence": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "dostupnost": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "sit": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "kvalita": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "servis": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "hospodareni": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        }
+      }
+    },
+    {
+      "kod": "201",
+      "zkratka": "VoZP",
+      "nazev": "Vojenská zdravotní pojišťovna ČR",
+      "web": "https://www.vozp.cz",
+      "crp": {
+        "rok": 2025,
+        "zdroj": "https://www.nzip.cz/dohodovaci-rizeni",
+        "pojistenci": 700176,
+        "podil_trhu_pct": 6.45,
+        "podil_65plus_pct": 19.24,
+        "podil_80plus_pct": 4.31,
+        "podil_0_14_pct": 14.58,
+        "rust_2015_2025_pct": -0.98,
+        "max_podil_v_kraji_pct": 13.0,
+        "top_kraje": [
+          {
+            "kraj": "CZ031",
+            "nazev": "Jihočeský",
+            "pojistenci": 82954,
+            "pct_kmene": 11.8,
+            "podil_v_kraji_pct": 13.0
+          },
+          {
+            "kraj": "CZ020",
+            "nazev": "Středočeský",
+            "pojistenci": 76212,
+            "pct_kmene": 10.9,
+            "podil_v_kraji_pct": 5.2
+          },
+          {
+            "kraj": "CZ010",
+            "nazev": "Praha",
+            "pojistenci": 70862,
+            "pct_kmene": 10.1,
+            "podil_v_kraji_pct": 4.8
+          },
+          {
+            "kraj": "CZ064",
+            "nazev": "Jihomoravský",
+            "pojistenci": 70183,
+            "pct_kmene": 10.0,
+            "podil_v_kraji_pct": 7.2
+          }
+        ],
+        "podil_trend": [
+          {
+            "year": 2010,
+            "share_pct": 5.72
+          },
+          {
+            "year": 2011,
+            "share_pct": 5.62
+          },
+          {
+            "year": 2012,
+            "share_pct": 6.02
+          },
+          {
+            "year": 2013,
+            "share_pct": 6.42
+          },
+          {
+            "year": 2014,
+            "share_pct": 6.68
+          },
+          {
+            "year": 2015,
+            "share_pct": 6.8
+          },
+          {
+            "year": 2016,
+            "share_pct": 6.73
+          },
+          {
+            "year": 2017,
+            "share_pct": 6.68
+          },
+          {
+            "year": 2018,
+            "share_pct": 6.69
+          },
+          {
+            "year": 2019,
+            "share_pct": 6.65
+          },
+          {
+            "year": 2020,
+            "share_pct": 6.63
+          },
+          {
+            "year": 2021,
+            "share_pct": 6.65
+          },
+          {
+            "year": 2022,
+            "share_pct": 6.71
+          },
+          {
+            "year": 2023,
+            "share_pct": 6.48
+          },
+          {
+            "year": 2024,
+            "share_pct": 6.54
+          },
+          {
+            "year": 2025,
+            "share_pct": 6.45
+          }
+        ]
+      },
+      "hospodareni": {
+        "pocet_pojistencu": {
+          "hodnota": 703630,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "podil_trhu_pct": {
+          "hodnota": 6.49,
+          "rok": 2024,
+          "zdroj": "vypočteno z MZ hodnocení 2024"
+        },
+        "prijmy_celkem_mld": {
+          "hodnota": 31.683,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "pojistne_po_prerozdeleni_mld": {
+          "hodnota": 31.241,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "prijmy_na_pojistence_kc": {
+          "hodnota": 45027,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "naklady_zdravotni_sluzby_mld": {
+          "hodnota": 32.862,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "Tab. 10 (akruálně, +10,7 % meziročně)"
+        },
+        "naklady_na_pojistence_kc": {
+          "hodnota": 46703,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "výdaje na ZS na 1 pojištěnce 42 898 Kč"
+        },
+        "fond_prevence_naklady_mil": {
+          "hodnota": 200,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "Tab. 17 vč. 19 mil ze specifických fondů MO (Fprev samotný dle VZ: 181,184 mil = 100,7 % plánu; 2023: 189,032 mil)"
+        },
+        "fond_prevence_na_pojistence_kc": {
+          "hodnota": 284,
+          "rok": 2024,
+          "zdroj": "vypočteno (200 mil / 703 630); MZ výdaje na preventivní programy na 1 pojištěnce 271 Kč"
+        },
+        "provozni_fond_naklady_mil": {
+          "hodnota": 658.485,
+          "rok": 2024,
+          "zdroj": "https://www.vozp.cz/assets/vz_2024_vozp.pdf",
+          "poznamka": "náklady na provozní činnosti (−3,7 % meziročně, −13,1 % vs. plán); MZ výdaje na vlastní činnost 696 mil"
+        },
+        "provozni_naklady_pct": {
+          "hodnota": 2.2,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "podíl na výdajích celkem; příděl do PF 650 mil byl o 311 mil nižší než max. limit (tj. limit cca 961 mil)"
+        },
+        "provozni_limit_pct": {
+          "hodnota": null,
+          "rok": 2024,
+          "zdroj": null
+        },
+        "zustatek_zfzp_mld": {
+          "hodnota": 0.41319,
+          "rok": 2024,
+          "zdroj": "https://www.vozp.cz/assets/vz_2024_vozp.pdf",
+          "poznamka": "konečný zůstatek BÚ ZFZP k 31. 12. 2024 (413 190 tis. Kč)"
+        },
+        "zustatek_bu_celkem_mld": {
+          "hodnota": 1.216,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "3,9 % ročních výdajů"
+        },
+        "hospodarsky_vysledek_mld": {
+          "hodnota": 0.369,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "saldo příjmů a výdajů (31 683 − 31 314 mil); MZ: +0,4 mld, ale jako jediná ZP závazky po lhůtě splatnosti vůči PZS 0,6 mld (602 mil)"
+        },
+        "zamestnanci_prepocteni": {
+          "hodnota": 387,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "rok": 2024,
+        "zustatek_bu_2025_oček_mil": {
+          "hodnota": 587,
+          "rok": 2025,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280",
+          "poznamka": "očekávaná skutečnost konec 2025; tab. 9 hodnocení MZd+MF"
+        },
+        "zustatek_bu_2026_plan_mil": {
+          "hodnota": 617,
+          "rok": 2026,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280",
+          "poznamka": "plán konec 2026; tab. 9"
+        },
+        "zustatek_2026_pct_vydaju": {
+          "hodnota": 1.8,
+          "rok": 2026,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280",
+          "poznamka": "kritická hranice 3–4 % ročních výdajů"
+        },
+        "zavazky_po_splatnosti_2026_plan_mil": {
+          "hodnota": 2998,
+          "rok": 2026,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280"
+        }
+      },
+      "hospodareni_2025": {
+        "pocet_pojistencu": {
+          "hodnota": 695231,
+          "rok": 2025,
+          "zdroj": "https://www.vozp.cz/assets/vz_2025_vozp.pdf"
+        },
+        "prijmy_celkem_mld": {
+          "hodnota": null,
+          "rok": 2025,
+          "zdroj": null,
+          "poznamka": "pojistné po přerozdělování 33 047,595 mil"
+        },
+        "pojistne_po_prerozdeleni_mld": {
+          "hodnota": 33.0476,
+          "rok": 2025,
+          "zdroj": "https://www.vozp.cz/assets/vz_2025_vozp.pdf"
+        },
+        "fond_prevence_naklady_mil": {
+          "hodnota": 190.462,
+          "rok": 2025,
+          "zdroj": "https://www.vozp.cz/assets/vz_2025_vozp.pdf"
+        },
+        "fond_prevence_na_pojistence_kc": {
+          "hodnota": 274,
+          "rok": 2025,
+          "zdroj": "vypočteno"
+        },
+        "provozni_fond_naklady_mil": {
+          "hodnota": null,
+          "rok": 2025,
+          "zdroj": null,
+          "poznamka": "příděl ze ZFZP do PF 800 mil"
+        },
+        "zustatek_zfzp_mld": {
+          "hodnota": 0.008905,
+          "rok": 2025,
+          "zdroj": "https://www.vozp.cz/assets/vz_2025_vozp.pdf",
+          "poznamka": "BÚ ZFZP 8,905 mil; RF 441,983 mil zrušen k 31. 12. 2025"
+        },
+        "hospodarsky_vysledek_mld": {
+          "hodnota": null,
+          "rok": 2025,
+          "zdroj": null,
+          "poznamka": "pojistné po přerozdělení − výdaje ZS = +144,737 mil; závazky po lhůtě splatnosti vůči PZS 1 205,303 mil (z 602 mil)"
+        }
+      },
+      "prevence": {
+        "rok_udaju": 2024,
+        "max_prispevek_dospely_kc": null,
+        "max_prispevek_dite_kc": null,
+        "poznamka_k_maximu": "Souhrnný roční strop VoZP neuvádí – limit je 3 různé příspěvky za rok. Aktuální web (2026, rok neuveden): děti očkování až 2 000, pohyb 1 000, plavání 700, dentální hygiena 500, rovnátka 1 500; dospělí očkování 1 000, pravidelný pohyb 700, dentální hygiena 500, těhotenství 2 000. 2024 konkrétní částky nedohledány (plavání dětí 2024 cca 500 Kč, v 2025 700 Kč dle Novinky.cz).",
+        "hlavni_kategorie": [
+          "kondiční cvičení a regenerace (20,6 % nákladů)",
+          "dentální hygiena (15,6 %; dospělí podmíněno prev. prohlídkou)",
+          "očkování dětí a dospělých (14,3 %)",
+          "program Rodina vojáka (9,5 %) a Válečný veterán",
+          "plavání (9,3 %)",
+          "těhotné/novorozenecké balíčky (6,6 %)",
+          "onkoprevence",
+          "dárci krve",
+          "ozdravné pobyty dětí v zahraničí"
+        ],
+        "bonusovy_program": {
+          "existuje": true,
+          "nazev": "Zdravý pojištěnec (mimořádný příspěvek 1 000 Kč za absolvování všech preventivních prohlídek/screeningů, od konce 2023); BeneFit Klub (slevy)",
+          "poznamka": null
+        },
+        "programy_pro_zamestnavatele": {
+          "existuje": true,
+          "nazev": "Zdravý zaměstnanec",
+          "poznamka": null
+        },
+        "zdroj": "https://www.vozp.cz/prispevky-na-prevenci"
+      },
+      "servis": {
+        "mobilni_aplikace": "Zdraví na klik",
+        "pocet_pobocek": 7,
+        "pocet_pobocek_poznamka": "7 poboček (Ústí n. L., Olomouc, Brno, Hradec Králové, České Budějovice, Praha, Plzeň) + více než 40 jednatelství (VZ 2024)",
+        "online_prepazka": true,
+        "online_prepazka_poznamka": "Klientský portál VoZP (kp.vozp.cz) + aplikace",
+        "zdroj": "https://www.vozp.cz/mobilni-aplikace"
+      },
+      "mereni_dopadu": {
+        "hodnoceni_ve_vz": false,
+        "citace": "VZ 2024: 'Jejich obsah VoZP průběžně vyhodnocuje a případně upravuje dle aktuálních potřeb.' a 'příspěvky na zdravotní péči, produkty a aktivity, u nichž je prokazatelný preventivní, diagnostický nebo léčebný efekt' – jde o deklaraci, výsledky evaluace dopadu VZ neobsahuje; vyhodnocuje se jen čerpání vs. plán.",
+        "zdroj": "https://www.vozp.cz/assets/vz_2024_vozp.pdf"
+      },
+      "poznamky": [
+        "Jediná ZP se závazky po lhůtě splatnosti vůči PZS: 602 mil Kč (2024), 1 205 mil Kč (2025); závazky ve lhůtě 104 dnů (nejvíce v systému).",
+        "Kladné saldo 2024 (+0,4 mld) dosaženo mj. nižším přídělem do PF o 311 mil pod limit.",
+        "Specifické fondy z rozpočtu MO (FPÚPP, FZÚZS) – zdravotní služby nad rámec v.z.p. pro vojáky.",
+        "2025: úspora >700 mil na ZS proti plánu, pokles pojištěnců o 1,2 %; RF zrušen (poslední rok povinného RF).",
+        "Seznam Zprávy (18. 3. 2026) zmiňují diskusi o možném sloučení VoZP se ZP MV ČR – nepotvrzeno.",
+        "Generální ředitel Ing. Josef Diessl (VZ 2025)."
+      ],
+      "poznamky_zdroje": [],
+      "semafor": {
+        "prevence": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "dostupnost": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "sit": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "kvalita": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "servis": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "hospodareni": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        }
+      }
+    },
+    {
+      "kod": "205",
+      "zkratka": "ČPZP",
+      "nazev": "Česká průmyslová zdravotní pojišťovna",
+      "web": "https://www.cpzp.cz",
+      "crp": {
+        "rok": 2025,
+        "zdroj": "https://www.nzip.cz/dohodovaci-rizeni",
+        "pojistenci": 1307560,
+        "podil_trhu_pct": 12.05,
+        "podil_65plus_pct": 16.75,
+        "podil_80plus_pct": 3.32,
+        "podil_0_14_pct": 18.31,
+        "rust_2015_2025_pct": 8.05,
+        "max_podil_v_kraji_pct": 37.1,
+        "top_kraje": [
+          {
+            "kraj": "CZ080",
+            "nazev": "Moravskoslezský",
+            "pojistenci": 374587,
+            "pct_kmene": 28.6,
+            "podil_v_kraji_pct": 31.8
+          },
+          {
+            "kraj": "CZ071",
+            "nazev": "Olomoucký",
+            "pojistenci": 232592,
+            "pct_kmene": 17.8,
+            "podil_v_kraji_pct": 37.1
+          },
+          {
+            "kraj": "CZ020",
+            "nazev": "Středočeský",
+            "pojistenci": 168045,
+            "pct_kmene": 12.9,
+            "podil_v_kraji_pct": 11.6
+          },
+          {
+            "kraj": "CZ064",
+            "nazev": "Jihomoravský",
+            "pojistenci": 105062,
+            "pct_kmene": 8.0,
+            "podil_v_kraji_pct": 10.8
+          }
+        ],
+        "podil_trend": [
+          {
+            "year": 2010,
+            "share_pct": 10.77
+          },
+          {
+            "year": 2011,
+            "share_pct": 10.9
+          },
+          {
+            "year": 2012,
+            "share_pct": 11.23
+          },
+          {
+            "year": 2013,
+            "share_pct": 11.4
+          },
+          {
+            "year": 2014,
+            "share_pct": 11.58
+          },
+          {
+            "year": 2015,
+            "share_pct": 11.64
+          },
+          {
+            "year": 2016,
+            "share_pct": 11.81
+          },
+          {
+            "year": 2017,
+            "share_pct": 11.88
+          },
+          {
+            "year": 2018,
+            "share_pct": 11.89
+          },
+          {
+            "year": 2019,
+            "share_pct": 12.02
+          },
+          {
+            "year": 2020,
+            "share_pct": 12.05
+          },
+          {
+            "year": 2021,
+            "share_pct": 12.13
+          },
+          {
+            "year": 2022,
+            "share_pct": 12.2
+          },
+          {
+            "year": 2023,
+            "share_pct": 11.99
+          },
+          {
+            "year": 2024,
+            "share_pct": 12.1
+          },
+          {
+            "year": 2025,
+            "share_pct": 12.05
+          }
+        ]
+      },
+      "hospodareni": {
+        "pocet_pojistencu": {
+          "hodnota": 1310233,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "podil_trhu_pct": {
+          "hodnota": 12.08,
+          "rok": 2024,
+          "zdroj": "vypočteno z MZ hodnocení 2024"
+        },
+        "prijmy_celkem_mld": {
+          "hodnota": 55.901,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "pojistne_po_prerozdeleni_mld": {
+          "hodnota": 55.393,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "prijmy_na_pojistence_kc": {
+          "hodnota": 42665,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "nejnižší v systému"
+        },
+        "naklady_zdravotni_sluzby_mld": {
+          "hodnota": 55.582,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "naklady_na_pojistence_kc": {
+          "hodnota": 42421,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "výdaje na ZS na 1 pojištěnce 41 499 Kč (nejnižší)"
+        },
+        "fond_prevence_naklady_mil": {
+          "hodnota": 404,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "VZ: 403,895 mil = 106,9 % plánu (378 mil); +33,2 mil meziročně"
+        },
+        "fond_prevence_na_pojistence_kc": {
+          "hodnota": 308,
+          "rok": 2024,
+          "zdroj": "vypočteno (404 mil / 1 310 233); MZ výdaje na prev. programy na 1 pojištěnce 305 Kč"
+        },
+        "provozni_fond_naklady_mil": {
+          "hodnota": 1068.497,
+          "rok": 2024,
+          "zdroj": "https://www.cpzp.cz/cdn/file/dBsRubRJnfQF8h7D7wgH0Se4cNJWi9kR.pdf",
+          "poznamka": "čerpání PF celkem (Příloha 3, 89,3 % plánu); MZ výdaje na vlastní činnost 1 075 mil"
+        },
+        "provozni_naklady_pct": {
+          "hodnota": 1.9,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "podíl na výdajích celkem; max. limit 3,05 % z rozvrhové základny nevyužit, úspora 424,457 mil ponechána v ZFZP"
+        },
+        "provozni_limit_pct": {
+          "hodnota": 3.05,
+          "rok": 2024,
+          "zdroj": "https://www.cpzp.cz/cdn/file/dBsRubRJnfQF8h7D7wgH0Se4cNJWi9kR.pdf"
+        },
+        "zustatek_zfzp_mld": {
+          "hodnota": 1.203828,
+          "rok": 2024,
+          "zdroj": "https://www.cpzp.cz/cdn/file/dBsRubRJnfQF8h7D7wgH0Se4cNJWi9kR.pdf",
+          "poznamka": "konečný zůstatek BÚ ZFZP (Příloha, část B IV) 1 203 828 tis. Kč"
+        },
+        "zustatek_bu_celkem_mld": {
+          "hodnota": 4.481,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "8,0 % ročních výdajů"
+        },
+        "hospodarsky_vysledek_mld": {
+          "hodnota": -0.157,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "saldo příjmů a výdajů (55 901 − 56 058 mil)"
+        },
+        "zamestnanci_prepocteni": {
+          "hodnota": 696,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "VZ: 700 k 31. 12. 2024 (1 872 pojištěnců/zam.)"
+        },
+        "rok": 2024,
+        "zustatek_bu_2025_oček_mil": {
+          "hodnota": 3251,
+          "rok": 2025,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280",
+          "poznamka": "očekávaná skutečnost konec 2025; tab. 9 hodnocení MZd+MF"
+        },
+        "zustatek_bu_2026_plan_mil": {
+          "hodnota": 1489,
+          "rok": 2026,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280",
+          "poznamka": "plán konec 2026; tab. 9"
+        },
+        "zustatek_2026_pct_vydaju": {
+          "hodnota": 2.4,
+          "rok": 2026,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280",
+          "poznamka": "kritická hranice 3–4 % ročních výdajů"
+        },
+        "zavazky_po_splatnosti_2026_plan_mil": {
+          "hodnota": 0,
+          "rok": 2026,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280"
+        }
+      },
+      "hospodareni_2025": null,
+      "prevence": {
+        "rok_udaju": 2024,
+        "max_prispevek_dospely_kc": 1000,
+        "max_prispevek_dite_kc": 1500,
+        "poznamka_k_maximu": "Roční limit skupiny programů 2024: děti a mládež do 17 let 1 500 Kč, ženy 18+ 1 000 Kč, muži 18+ 1 000 Kč + programy čerpatelné nad limit (BabyGen až 4 000 Kč – nový 2024, dárci až 6 000 Kč). Stejné limity platí i 2026 (web ČPZP).",
+        "hlavni_kategorie": [
+          "zdravý způsob života (letní tábory, Pravidelný pohyb, Krok pro zdraví)",
+          "očkování nehrazená z v.z.p.",
+          "prevence závažných onemocnění (BabyGen, laserové operace očí, rázová vlna, odvykání kouření – od 2024 podmíněno preventivní prohlídkou)",
+          "rehabilitačně rekondiční programy se zaměstnavateli",
+          "dárci krve/plazmy/kostní dřeně",
+          "ozdravně léčebné pobyty dětí (Priessnitzovy lázně)",
+          "duševní zdraví"
+        ],
+        "bonusovy_program": {
+          "existuje": true,
+          "nazev": "Bonus Plus (body za prevenci; od 2024 i na brýle)",
+          "poznamka": null
+        },
+        "programy_pro_zamestnavatele": {
+          "existuje": true,
+          "nazev": "rehabilitačně rekondiční preventivní programy ve spolupráci s organizacemi (spolufinancované zaměstnavateli); web: Programy pro podniky",
+          "poznamka": null
+        },
+        "zdroj": "https://web.archive.org/web/20240523224604/https://www.cpzp.cz/preventivni-programy"
+      },
+      "servis": {
+        "mobilni_aplikace": "Zdraví v mobilu (od 2024 i registrace k ČPZP a proplácení preventivních programů)",
+        "pocet_pobocek": 100,
+        "pocet_pobocek_poznamka": "pobočková síť 100 poboček + Informační centrum (VZ 2024); web 2026: 101 poboček",
+        "online_prepazka": true,
+        "online_prepazka_poznamka": "E-přepážka (Portál ČPZP), nepřetržitý provoz",
+        "zdroj": "https://www.cpzp.cz/cdn/file/dBsRubRJnfQF8h7D7wgH0Se4cNJWi9kR.pdf"
+      },
+      "mereni_dopadu": {
+        "hodnoceni_ve_vz": false,
+        "citace": "VZ 2024: 'Při tvorbě programů hrazených z Fprev se ČPZP opírá mimo jiné o nevyvratitelnou existenci celosvětově prováděných výzkumů, analýz a vědecky ověřených poznatků o pozitivních účincích prevence a ochrany zdraví.' – vlastní evaluace dopadu není uvedena, sledováno jen čerpání.",
+        "zdroj": "https://www.cpzp.cz/cdn/file/dBsRubRJnfQF8h7D7wgH0Se4cNJWi9kR.pdf"
+      },
+      "poznamky": [
+        "Nejnižší příjmy i náklady na pojištěnce v systému (vliv struktury a umístění kmene – Moravskoslezský kraj).",
+        "Rezerva 7,996 mil Kč na soudní spor o přímořské pobyty 2018–2021.",
+        "Změna vedení: ředitel Vladimír Matta nečekaně odvolán v březnu 2026, nahrazen Davidem Šmehlíkem (bývalý náměstek VZP).",
+        "VZ 2025 nebyla k 2. 11. 2026 dohledána."
+      ],
+      "poznamky_zdroje": [
+        "https://www.seznamzpravy.cz/clanek/domaci-zivot-v-cesku-zemetreseni-v-pojistovnach-priprava-na-reformu-nebo-odveta-301873"
+      ],
+      "semafor": {
+        "prevence": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "dostupnost": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "sit": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "kvalita": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "servis": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "hospodareni": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        }
+      }
+    },
+    {
+      "kod": "207",
+      "zkratka": "OZP",
+      "nazev": "Oborová zdravotní pojišťovna zaměstnanců bank, pojišťoven a stavebnictví",
+      "web": "https://www.ozp.cz",
+      "crp": {
+        "rok": 2025,
+        "zdroj": "https://www.nzip.cz/dohodovaci-rizeni",
+        "pojistenci": 755548,
+        "podil_trhu_pct": 6.96,
+        "podil_65plus_pct": 17.41,
+        "podil_80plus_pct": 3.51,
+        "podil_0_14_pct": 16.59,
+        "rust_2015_2025_pct": 2.79,
+        "max_podil_v_kraji_pct": 18.7,
+        "top_kraje": [
+          {
+            "kraj": "CZ010",
+            "nazev": "Praha",
+            "pojistenci": 276746,
+            "pct_kmene": 36.6,
+            "podil_v_kraji_pct": 18.7
+          },
+          {
+            "kraj": "CZ020",
+            "nazev": "Středočeský",
+            "pojistenci": 149923,
+            "pct_kmene": 19.8,
+            "podil_v_kraji_pct": 10.3
+          },
+          {
+            "kraj": "CZ042",
+            "nazev": "Ústecký",
+            "pojistenci": 45505,
+            "pct_kmene": 6.0,
+            "podil_v_kraji_pct": 5.7
+          },
+          {
+            "kraj": "CZ064",
+            "nazev": "Jihomoravský",
+            "pojistenci": 40634,
+            "pct_kmene": 5.4,
+            "podil_v_kraji_pct": 4.2
+          }
+        ],
+        "podil_trend": [
+          {
+            "year": 2010,
+            "share_pct": 6.62
+          },
+          {
+            "year": 2011,
+            "share_pct": 6.68
+          },
+          {
+            "year": 2012,
+            "share_pct": 6.71
+          },
+          {
+            "year": 2013,
+            "share_pct": 6.76
+          },
+          {
+            "year": 2014,
+            "share_pct": 6.99
+          },
+          {
+            "year": 2015,
+            "share_pct": 7.07
+          },
+          {
+            "year": 2016,
+            "share_pct": 6.95
+          },
+          {
+            "year": 2017,
+            "share_pct": 6.97
+          },
+          {
+            "year": 2018,
+            "share_pct": 6.97
+          },
+          {
+            "year": 2019,
+            "share_pct": 6.96
+          },
+          {
+            "year": 2020,
+            "share_pct": 6.96
+          },
+          {
+            "year": 2021,
+            "share_pct": 7.01
+          },
+          {
+            "year": 2022,
+            "share_pct": 7.05
+          },
+          {
+            "year": 2023,
+            "share_pct": 7.03
+          },
+          {
+            "year": 2024,
+            "share_pct": 7.01
+          },
+          {
+            "year": 2025,
+            "share_pct": 6.96
+          }
+        ]
+      },
+      "hospodareni": {
+        "pocet_pojistencu": {
+          "hodnota": 758486,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "podil_trhu_pct": {
+          "hodnota": 6.99,
+          "rok": 2024,
+          "zdroj": "vypočteno z MZ hodnocení 2024"
+        },
+        "prijmy_celkem_mld": {
+          "hodnota": 32.401,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "pojistne_po_prerozdeleni_mld": {
+          "hodnota": 32.191,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "prijmy_na_pojistence_kc": {
+          "hodnota": 42717,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "naklady_zdravotni_sluzby_mld": {
+          "hodnota": 31.987,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "naklady_na_pojistence_kc": {
+          "hodnota": 42172,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "výdaje na ZS na 1 pojištěnce 41 699 Kč"
+        },
+        "fond_prevence_naklady_mil": {
+          "hodnota": 241,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "VZ OZP 2025 (sloupec 2024): 241 272 tis. Kč, z toho Moje bonusy 65 420 tis."
+        },
+        "fond_prevence_na_pojistence_kc": {
+          "hodnota": 318,
+          "rok": 2024,
+          "zdroj": "vypočteno (241 mil / 758 486); MZ Tab. 4 rovněž 317 Kč"
+        },
+        "provozni_fond_naklady_mil": {
+          "hodnota": 774,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "MZ 'výdaje na vlastní činnost' (VZ OZP 2024 nebyla stažena; VZ 2025: výdaje PF 804,5 mil)"
+        },
+        "provozni_naklady_pct": {
+          "hodnota": 2.4,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "provozni_limit_pct": {
+          "hodnota": null,
+          "rok": 2024,
+          "zdroj": null
+        },
+        "zustatek_zfzp_mld": {
+          "hodnota": 0.723338,
+          "rok": 2024,
+          "zdroj": "https://www.ozp.cz/web/files-c/510/vz_ozp_2025.pdf",
+          "poznamka": "stav BÚ ZFZP k 1. 1. 2025 = 723 338 tis. Kč"
+        },
+        "zustatek_bu_celkem_mld": {
+          "hodnota": 2.708,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "8,3 % ročních výdajů"
+        },
+        "hospodarsky_vysledek_mld": {
+          "hodnota": -0.295,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "saldo příjmů a výdajů (32 401 − 32 696 mil)"
+        },
+        "zamestnanci_prepocteni": {
+          "hodnota": 432,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "rok": 2024,
+        "zustatek_bu_2025_oček_mil": {
+          "hodnota": 2065,
+          "rok": 2025,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280",
+          "poznamka": "očekávaná skutečnost konec 2025; tab. 9 hodnocení MZd+MF"
+        },
+        "zustatek_bu_2026_plan_mil": {
+          "hodnota": 1024,
+          "rok": 2026,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280",
+          "poznamka": "plán konec 2026; tab. 9"
+        },
+        "zustatek_2026_pct_vydaju": {
+          "hodnota": 2.8,
+          "rok": 2026,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280",
+          "poznamka": "kritická hranice 3–4 % ročních výdajů"
+        },
+        "zavazky_po_splatnosti_2026_plan_mil": {
+          "hodnota": 0,
+          "rok": 2026,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280"
+        }
+      },
+      "hospodareni_2025": {
+        "pocet_pojistencu": {
+          "hodnota": 753102,
+          "rok": 2025,
+          "zdroj": "https://www.ozp.cz/web/files-c/510/vz_ozp_2025.pdf"
+        },
+        "pojistne_po_prerozdeleni_mld": {
+          "hodnota": 33.3632,
+          "rok": 2025,
+          "zdroj": "https://www.ozp.cz/web/files-c/510/vz_ozp_2025.pdf"
+        },
+        "fond_prevence_naklady_mil": {
+          "hodnota": 266.195,
+          "rok": 2025,
+          "zdroj": "https://www.ozp.cz/web/files-c/510/vz_ozp_2025.pdf",
+          "poznamka": "106,5 % plánu; Moje bonusy 82,386 mil; Zdravá firma 9,524 mil"
+        },
+        "fond_prevence_na_pojistence_kc": {
+          "hodnota": 353,
+          "rok": 2025,
+          "zdroj": "vypočteno"
+        },
+        "provozni_fond_naklady_mil": {
+          "hodnota": 803.513,
+          "rok": 2025,
+          "zdroj": "https://www.ozp.cz/web/files-c/510/vz_ozp_2025.pdf",
+          "poznamka": "výdaje na provoz OZP (PF část B)"
+        },
+        "zustatek_zfzp_mld": {
+          "hodnota": 0.694367,
+          "rok": 2025,
+          "zdroj": "https://www.ozp.cz/web/files-c/510/vz_ozp_2025.pdf"
+        },
+        "hospodarsky_vysledek_mld": {
+          "hodnota": -0.5887,
+          "rok": 2025,
+          "zdroj": "https://www.ozp.cz/web/files-c/510/vz_ozp_2025.pdf",
+          "poznamka": "pojistné po přerozdělení − výdaje ZS − výdaje na provoz = −588,698 mil; část provozu kryta zůstatkem PF"
+        }
+      },
+      "prevence": {
+        "rok_udaju": 2026,
+        "max_prispevek_dospely_kc": null,
+        "max_prispevek_dite_kc": null,
+        "poznamka_k_maximu": "OZP používá kreditní systém VITAKARTA (Moje bonusy): podle počtu kreditů 'až 10 000 Kč za rok na každý z programů' (web 2026). Pevné částky 2026: děti dentální hygiena až 1 000 Kč, sport 6–14 let až 1 000 Kč, očkování až 1 000 Kč; těhotné až 3 000 Kč; senioři 70+ 500 Kč. Rok 2024 konkrétní maxima nedohledána (2025: infarkt 1 200, ledviny 1 000 Kč).",
+        "hlavni_kategorie": [
+          "programy plně hrazené OZP (STOP programy, SkinVision)",
+          "programy s příspěvkem",
+          "Moje bonusy (kredity)",
+          "primární prevence v terénu",
+          "Zdravá firma (zaměstnavatelé)",
+          "dárci krve",
+          "ozdravné pobyty dětí",
+          "Asistenční služba OZP"
+        ],
+        "bonusovy_program": {
+          "existuje": true,
+          "nazev": "Moje bonusy / kredity ve VITAKARTĚ (preventivně motivační systém)",
+          "poznamka": null
+        },
+        "programy_pro_zamestnavatele": {
+          "existuje": true,
+          "nazev": "Zdravá firma (Dny zdraví ve firmách, on-line přednášky, kredity zaměstnancům); náklady 7,619 mil (2024), 9,524 mil (2025)",
+          "poznamka": null
+        },
+        "zdroj": "https://www.ozp.cz/benefity/benefityozp"
+      },
+      "servis": {
+        "mobilni_aplikace": "VITAKARTA (mVITAKARTA; redesign 2025; 1. místo Mobilní aplikace v anketě ZP roku 2025)",
+        "pocet_pobocek": 13,
+        "pocet_pobocek_poznamka": "13 poboček + 30 expozitur (VZ 2025; 2024 nepotvrzeno)",
+        "online_prepazka": true,
+        "online_prepazka_poznamka": "VITAKARTA (klientská zóna), virtuální pobočka, chatbot (2025), Asistenční služba OZP",
+        "zdroj": "https://www.ozp.cz/vitakarta"
+      },
+      "mereni_dopadu": {
+        "hodnoceni_ve_vz": false,
+        "citace": "VZ 2025 popisuje 'program hodnocení kvality pojištěnci' (pojištěnci hodnotí lékaře ve VITAKARTĚ, 65 076 pojištěnců, 20 703 lékařů), nikoli evaluaci zdravotního dopadu preventivních programů; u programů jen čerpání vs. plán. VZ 2024 nebyla analyzována.",
+        "zdroj": "https://www.ozp.cz/web/files-c/510/vz_ozp_2025.pdf"
+      },
+      "poznamky": [
+        "Ze zadání byl k dispozici jen odkaz na VZ 2025; údaje 2024 jsou primárně z MZ hodnocení a ze srovnávacích sloupců VZ 2025.",
+        "2025: příjmy po přerozdělení nestačily na krytí ZS a provozu (−588,7 mil), OZP použila zůstatek PF; závazky vůči PZS ve lhůtě 71 dnů.",
+        "Nejnižší nárůst nákladů na ZS v 2024 (+8,2 %).",
+        "Dceřiná společnost (vázáno 207 mil Kč)."
+      ],
+      "poznamky_zdroje": [],
+      "semafor": {
+        "prevence": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "dostupnost": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "sit": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "kvalita": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "servis": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "hospodareni": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        }
+      }
+    },
+    {
+      "kod": "209",
+      "zkratka": "ZPŠ",
+      "nazev": "Zaměstnanecká pojišťovna Škoda",
+      "web": "https://www.zpskoda.cz",
+      "crp": {
+        "rok": 2025,
+        "zdroj": "https://www.nzip.cz/dohodovaci-rizeni",
+        "pojistenci": 143044,
+        "podil_trhu_pct": 1.32,
+        "podil_65plus_pct": 19.82,
+        "podil_80plus_pct": 4.3,
+        "podil_0_14_pct": 16.36,
+        "rust_2015_2025_pct": 2.71,
+        "max_podil_v_kraji_pct": 6.7,
+        "top_kraje": [
+          {
+            "kraj": "CZ020",
+            "nazev": "Středočeský",
+            "pojistenci": 97327,
+            "pct_kmene": 68.0,
+            "podil_v_kraji_pct": 6.7
+          },
+          {
+            "kraj": "CZ052",
+            "nazev": "Královéhradecký",
+            "pojistenci": 33722,
+            "pct_kmene": 23.6,
+            "podil_v_kraji_pct": 6.1
+          },
+          {
+            "kraj": "CZ051",
+            "nazev": "Liberecký",
+            "pojistenci": 7718,
+            "pct_kmene": 5.4,
+            "podil_v_kraji_pct": 1.7
+          },
+          {
+            "kraj": "CZ010",
+            "nazev": "Praha",
+            "pojistenci": 3251,
+            "pct_kmene": 2.3,
+            "podil_v_kraji_pct": 0.2
+          }
+        ],
+        "podil_trend": [
+          {
+            "year": 2010,
+            "share_pct": 1.29
+          },
+          {
+            "year": 2011,
+            "share_pct": 1.3
+          },
+          {
+            "year": 2012,
+            "share_pct": 1.32
+          },
+          {
+            "year": 2013,
+            "share_pct": 1.32
+          },
+          {
+            "year": 2014,
+            "share_pct": 1.34
+          },
+          {
+            "year": 2015,
+            "share_pct": 1.34
+          },
+          {
+            "year": 2016,
+            "share_pct": 1.36
+          },
+          {
+            "year": 2017,
+            "share_pct": 1.36
+          },
+          {
+            "year": 2018,
+            "share_pct": 1.37
+          },
+          {
+            "year": 2019,
+            "share_pct": 1.38
+          },
+          {
+            "year": 2020,
+            "share_pct": 1.38
+          },
+          {
+            "year": 2021,
+            "share_pct": 1.38
+          },
+          {
+            "year": 2022,
+            "share_pct": 1.37
+          },
+          {
+            "year": 2023,
+            "share_pct": 1.32
+          },
+          {
+            "year": 2024,
+            "share_pct": 1.33
+          },
+          {
+            "year": 2025,
+            "share_pct": 1.32
+          }
+        ]
+      },
+      "hospodareni": {
+        "pocet_pojistencu": {
+          "hodnota": 143485,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "podil_trhu_pct": {
+          "hodnota": 1.32,
+          "rok": 2024,
+          "zdroj": "vypočteno z MZ hodnocení 2024"
+        },
+        "prijmy_celkem_mld": {
+          "hodnota": 6.674,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "pojistne_po_prerozdeleni_mld": {
+          "hodnota": 6.629,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "prijmy_na_pojistence_kc": {
+          "hodnota": 46515,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "naklady_zdravotni_sluzby_mld": {
+          "hodnota": 6.483,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "naklady_na_pojistence_kc": {
+          "hodnota": 45182,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "výdaje na ZS na 1 pojištěnce 43 718 Kč"
+        },
+        "fond_prevence_naklady_mil": {
+          "hodnota": 58,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "VZ: 57,697 mil (91,6 % plánu 63 mil), 85 266 příspěvků, 39 programů; 2023: 45,552 mil"
+        },
+        "fond_prevence_na_pojistence_kc": {
+          "hodnota": 404,
+          "rok": 2024,
+          "zdroj": "vypočteno (58 mil / 143 485); MZ Tab. 4: 382 Kč (nejvyšší v systému)"
+        },
+        "provozni_fond_naklady_mil": {
+          "hodnota": 161.903,
+          "rok": 2024,
+          "zdroj": "https://www.zpskoda.cz/sites/default/files/docs/2025/10/vz-2024-zps.pdf",
+          "poznamka": "čerpání provozních nákladů; příděl ze ZFZP jen 150 mil (limit 204,796 mil); MZ výdaje na vlastní činnost 163 mil"
+        },
+        "provozni_naklady_pct": {
+          "hodnota": 2.5,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "podíl na výdajích celkem – nejvyšší v systému (malá ZP)"
+        },
+        "provozni_limit_pct": {
+          "hodnota": 3.08,
+          "rok": 2024,
+          "zdroj": "https://www.zpskoda.cz/sites/default/files/docs/2025/10/vz-2024-zps.pdf"
+        },
+        "zustatek_zfzp_mld": {
+          "hodnota": 0.486709,
+          "rok": 2024,
+          "zdroj": "https://www.zpskoda.cz/sites/default/files/docs/2025/10/vz-2024-zps.pdf",
+          "poznamka": "konečný zůstatek finančních prostředků ZFZP 486 709 tis. Kč (z 281 203 tis.)"
+        },
+        "zustatek_bu_celkem_mld": {
+          "hodnota": 0.864,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "13,3 % ročních výdajů – nejvyšší relativní rezerva"
+        },
+        "hospodarsky_vysledek_mld": {
+          "hodnota": 0.167,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "saldo příjmů a výdajů (6 674 − 6 507 mil); kladné"
+        },
+        "zamestnanci_prepocteni": {
+          "hodnota": 82,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "rok": 2024,
+        "zustatek_bu_2025_oček_mil": {
+          "hodnota": 589,
+          "rok": 2025,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280",
+          "poznamka": "očekávaná skutečnost konec 2025; tab. 9 hodnocení MZd+MF"
+        },
+        "zustatek_bu_2026_plan_mil": {
+          "hodnota": 219,
+          "rok": 2026,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280",
+          "poznamka": "plán konec 2026; tab. 9"
+        },
+        "zustatek_2026_pct_vydaju": {
+          "hodnota": 2.9,
+          "rok": 2026,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280",
+          "poznamka": "kritická hranice 3–4 % ročních výdajů"
+        },
+        "zavazky_po_splatnosti_2026_plan_mil": {
+          "hodnota": 0,
+          "rok": 2026,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280"
+        }
+      },
+      "hospodareni_2025": null,
+      "prevence": {
+        "rok_udaju": 2024,
+        "max_prispevek_dospely_kc": null,
+        "max_prispevek_dite_kc": null,
+        "poznamka_k_maximu": "Souhrnný strop ZPŠ nestanovuje; maxima jednotlivých programů 2024 nedohledána. Příklady 2026 (web): sport dospělí 700 Kč, dentální hygiena dospělí 700 Kč / děti 1 000 Kč, duševní zdraví 4 000 Kč, klíšťová encefalitida 2 100 Kč, pásový opar 4 000 Kč; starší zdroj (2023): neinvazivní prenatální test až 4 000 Kč.",
+        "hlavni_kategorie": [
+          "očkování (klíšťová encefalitida, hepatitida, rotaviry…)",
+          "včasný záchyt onemocnění (prsu, prostaty, kolorektální, štítná žláza, melanom)",
+          "dentální hygiena (děti i dospělí; dospělí 2024 +340 %)",
+          "ortodoncie",
+          "těhotné a po porodu",
+          "duševní a tělesné zdraví (pohyb)",
+          "moderní diagnostické a léčebné metody",
+          "rehabilitační a ozdravné pobyty",
+          "dárci krve",
+          "celiakie/PKU",
+          "duševní zdraví"
+        ],
+        "bonusovy_program": {
+          "existuje": null,
+          "nazev": null,
+          "poznamka": "ve VZ 2024 ani na webu nenalezen pojmenovaný bonusový/věrnostní program"
+        },
+        "programy_pro_zamestnavatele": {
+          "existuje": true,
+          "nazev": "rekondiční pobyty pro dospělé zaměstnance (1,591 mil Kč 2024) – kmen vázán na Škoda Auto",
+          "poznamka": null
+        },
+        "zdroj": "https://www.zpskoda.cz/zdravotni-programy"
+      },
+      "servis": {
+        "mobilni_aplikace": "Karta mého srdce (web + mobilní aplikace); pro agendu pojištěnce Portál ZP",
+        "pocet_pobocek": 7,
+        "pocet_pobocek_poznamka": "7 kontaktních míst dle webu 2026 (Mladá Boleslav 2×, Vrchlabí, Jilemnice, Rychnov n. K., Kvasiny, Nymburk); VZ 2024 počet neuvádí",
+        "online_prepazka": true,
+        "online_prepazka_poznamka": "Portál ZP (společné řešení ZZP; 197 tis. podání v 2024), eDokladovka na všech kontaktních místech",
+        "zdroj": "https://www.zpskoda.cz/sites/default/files/docs/2025/10/vz-2024-zps.pdf"
+      },
+      "mereni_dopadu": {
+        "hodnoceni_ve_vz": true,
+        "citace": "VZ 2024: 'ZPŠ pravidelně vyhodnocuje finanční náklady na jednotlivé aktivity, počet očkovaných, záchyt závažných onemocnění podle vykázaných markerů, počet rehabilitačních pobytů a další.' – jediná ZP, která zmiňuje sledování záchytu onemocnění; konkrétní výsledky evaluace však VZ nepublikuje (jen počty účastníků a náklady).",
+        "zdroj": "https://www.zpskoda.cz/sites/default/files/docs/2025/10/vz-2024-zps.pdf"
+      },
+      "poznamky": [
+        "Jedna ze dvou ZP s kladným saldem 2024; nejvyšší zůstatek k výdajům (13,3 %), nejvyšší výdaje na prevenci na pojištěnce (382 Kč) i nejvyšší podíl provozních výdajů (2,5 %).",
+        "Příděl do PF (150 mil) nepokryl provozní náklady (161,9 mil).",
+        "VZ 2024 zveřejněna až 10/2025 (dosud neschválena PSP).",
+        "VZ 2025 nebyla k 2. 11. 2026 dohledána."
+      ],
+      "poznamky_zdroje": [],
+      "semafor": {
+        "prevence": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "dostupnost": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "sit": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "kvalita": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "servis": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "hospodareni": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        }
+      }
+    },
+    {
+      "kod": "211",
+      "zkratka": "ZP MV ČR",
+      "nazev": "Zdravotní pojišťovna ministerstva vnitra ČR",
+      "web": "https://www.zpmvcr.cz",
+      "crp": {
+        "rok": 2025,
+        "zdroj": "https://www.nzip.cz/dohodovaci-rizeni",
+        "pojistenci": 1354312,
+        "podil_trhu_pct": 12.48,
+        "podil_65plus_pct": 19.6,
+        "podil_80plus_pct": 3.63,
+        "podil_0_14_pct": 15.81,
+        "rust_2015_2025_pct": 7.69,
+        "max_podil_v_kraji_pct": 20.5,
+        "top_kraje": [
+          {
+            "kraj": "CZ064",
+            "nazev": "Jihomoravský",
+            "pojistenci": 199833,
+            "pct_kmene": 14.8,
+            "podil_v_kraji_pct": 20.5
+          },
+          {
+            "kraj": "CZ020",
+            "nazev": "Středočeský",
+            "pojistenci": 155026,
+            "pct_kmene": 11.4,
+            "podil_v_kraji_pct": 10.7
+          },
+          {
+            "kraj": "CZ010",
+            "nazev": "Praha",
+            "pojistenci": 138865,
+            "pct_kmene": 10.3,
+            "podil_v_kraji_pct": 9.4
+          },
+          {
+            "kraj": "CZ063",
+            "nazev": "Vysočina",
+            "pojistenci": 103247,
+            "pct_kmene": 7.6,
+            "podil_v_kraji_pct": 13.9
+          }
+        ],
+        "podil_trend": [
+          {
+            "year": 2010,
+            "share_pct": 10.85
+          },
+          {
+            "year": 2011,
+            "share_pct": 10.95
+          },
+          {
+            "year": 2012,
+            "share_pct": 11.37
+          },
+          {
+            "year": 2013,
+            "share_pct": 11.58
+          },
+          {
+            "year": 2014,
+            "share_pct": 11.9
+          },
+          {
+            "year": 2015,
+            "share_pct": 12.09
+          },
+          {
+            "year": 2016,
+            "share_pct": 12.32
+          },
+          {
+            "year": 2017,
+            "share_pct": 12.45
+          },
+          {
+            "year": 2018,
+            "share_pct": 12.46
+          },
+          {
+            "year": 2019,
+            "share_pct": 12.51
+          },
+          {
+            "year": 2020,
+            "share_pct": 12.55
+          },
+          {
+            "year": 2021,
+            "share_pct": 12.63
+          },
+          {
+            "year": 2022,
+            "share_pct": 12.72
+          },
+          {
+            "year": 2023,
+            "share_pct": 12.35
+          },
+          {
+            "year": 2024,
+            "share_pct": 12.51
+          },
+          {
+            "year": 2025,
+            "share_pct": 12.48
+          }
+        ]
+      },
+      "hospodareni": {
+        "pocet_pojistencu": {
+          "hodnota": 1354075,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "podil_trhu_pct": {
+          "hodnota": 12.49,
+          "rok": 2024,
+          "zdroj": "vypočteno z MZ hodnocení 2024; VZ: propojištěnost 12,4 % obyvatel ČR"
+        },
+        "prijmy_celkem_mld": {
+          "hodnota": 62.087,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "pojistne_po_prerozdeleni_mld": {
+          "hodnota": 61.497,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "prijmy_na_pojistence_kc": {
+          "hodnota": 45852,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "naklady_zdravotni_sluzby_mld": {
+          "hodnota": 63.714,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "+13,6 % meziročně – nejvyšší růst v systému"
+        },
+        "naklady_na_pojistence_kc": {
+          "hodnota": 47053,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "výdaje na ZS na 1 pojištěnce 45 029 Kč"
+        },
+        "fond_prevence_naklady_mil": {
+          "hodnota": 454,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "VZ: 453,987 mil = 137,6 % plánu (330 mil); z toho programy pro pojištěnce 427,019 mil, program pro rizikové profese 26,968 mil; 2023: 387,431 mil"
+        },
+        "fond_prevence_na_pojistence_kc": {
+          "hodnota": 335,
+          "rok": 2024,
+          "zdroj": "vypočteno (454 mil / 1 354 075); MZ Tab. 4: 318 Kč"
+        },
+        "provozni_fond_naklady_mil": {
+          "hodnota": 1426.8,
+          "rok": 2024,
+          "zdroj": "https://www.zpmvcr.cz/system/files/dokumenty/2026-02/VZ%202024%20ZPMVCR_komplet.pdf",
+          "poznamka": "vypočteno: plán 1 688,546 mil čerpán na 84,5 % (úspora 260,984 mil); příděl ze ZFZP do PF jen 809 mil (o >1 mld pod limitem); MZ výdaje na vlastní činnost 1 313 mil"
+        },
+        "provozni_naklady_pct": {
+          "hodnota": 2.1,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "provozni_limit_pct": {
+          "hodnota": null,
+          "rok": 2024,
+          "zdroj": null
+        },
+        "zustatek_zfzp_mld": {
+          "hodnota": 0.622388,
+          "rok": 2024,
+          "zdroj": "https://www.zpmvcr.cz/system/files/dokumenty/2026-02/VZ%202024%20ZPMVCR_komplet.pdf",
+          "poznamka": "BÚ ZFZP 622,388 mil (−46 %), kryje 4 úhradové dny – nejnižší v systému"
+        },
+        "zustatek_bu_celkem_mld": {
+          "hodnota": 4.695,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "7,5 % ročních výdajů"
+        },
+        "hospodarsky_vysledek_mld": {
+          "hodnota": -0.917,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "saldo příjmů a výdajů celkem (62 087 − 63 004 mil); saldo ZFZP dle VZ −3 282,322 mil; Seznam Zprávy: deficit 2024 3,24 mld, 2025 1,98 mld"
+        },
+        "zamestnanci_prepocteni": {
+          "hodnota": 743,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "rok": 2024,
+        "zustatek_bu_2025_oček_mil": {
+          "hodnota": 3091,
+          "rok": 2025,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280",
+          "poznamka": "očekávaná skutečnost konec 2025; tab. 9 hodnocení MZd+MF"
+        },
+        "zustatek_bu_2026_plan_mil": {
+          "hodnota": 1590,
+          "rok": 2026,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280",
+          "poznamka": "plán konec 2026; tab. 9"
+        },
+        "zustatek_2026_pct_vydaju": {
+          "hodnota": 2.3,
+          "rok": 2026,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280",
+          "poznamka": "kritická hranice 3–4 % ročních výdajů"
+        },
+        "zavazky_po_splatnosti_2026_plan_mil": {
+          "hodnota": 2300,
+          "rok": 2026,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280"
+        }
+      },
+      "hospodareni_2025": null,
+      "prevence": {
+        "rok_udaju": 2025,
+        "max_prispevek_dospely_kc": 500,
+        "max_prispevek_dite_kc": 1500,
+        "poznamka_k_maximu": "Leták Bonusy 2025: základní programy dospělí až 500 Kč (podmíněno preventivní prohlídkou), děti do 18 let až 1 500 Kč, těhotné/po porodu až 3 000 Kč; bonusové programy nad rámec: očkování až 2 000 Kč, duševní zdraví až 4 000 Kč, dárci 5 000–10 000 Kč; modelově až 35 000 Kč pro 4člennou rodinu. Rok 2024: maxima nedohledána (Podmínky FP 2024 nedostupné – HTTP 403); VZ 2024 uvádí, že čerpání sportovních aktivit šlo nad rámec plánu.",
+        "hlavni_kategorie": [
+          "očkování (94,5 mil 2024)",
+          "sportovní pohybové aktivity (126,1 mil) a sportovní ochranné pomůcky",
+          "dentální hygiena a rovnátka (59,9 mil)",
+          "těhotenství (26,2 mil)",
+          "duševní zdraví – klinická psychologie/logopedie (9,5 mil)",
+          "onkologické prohlídky (9,1 mil)",
+          "dárci krve (11,3 mil)",
+          "chronicky nemocní (21,1 mil)",
+          "Dětské sportovní léto (9,7 mil)",
+          "program pro profese s významným zdravotním rizikem – bezpečnostní sbory (27,0 mil)"
+        ],
+        "bonusovy_program": {
+          "existuje": true,
+          "nazev": "Bonusové programy (nad rámec základních, za screening/prevenci) + Program slev a výhod; bez samostatného názvu věrnostního programu",
+          "poznamka": null
+        },
+        "programy_pro_zamestnavatele": {
+          "existuje": true,
+          "nazev": "Program podpory profesí s významným zdravotním rizikem (bezpečnostní sbory; plán 42 mil, čerpáno 26,968 mil 2024)",
+          "poznamka": null
+        },
+        "zdroj": "https://www.zpmvcr.cz/sites/www.zpmvcr.cz/files/casopis/Letak_FP_2025_3Q_R_CERVEN.pdf"
+      },
+      "servis": {
+        "mobilni_aplikace": "ZP211 (mobilní verze Karty života)",
+        "pocet_pobocek": null,
+        "pocet_pobocek_poznamka": "VZ 2024 počet neuvádí; web 2026: 'více než 90 klientských center'",
+        "online_prepazka": true,
+        "online_prepazka_poznamka": "E-komunikace (eforms.zpmvcr.cz) – 98,6 % zaměstnavatelů podává Přehled elektronicky; on-line rezervace termínů",
+        "zdroj": "https://www.zpmvcr.cz/system/files/dokumenty/2026-02/VZ%202024%20ZPMVCR_komplet.pdf"
+      },
+      "mereni_dopadu": {
+        "hodnoceni_ve_vz": false,
+        "citace": "VZ 2024 uvádí jen cíle a čerpání ('Tento trend podpory sportovních aktivit a zdravého životního stylu ZP MV ČR dlouhodobě vítá a má ji za koncepční a strategický cíl.'). MZ hodnocení 2024 ke kontrole: 'ZP MV ČR opakovaně financovala marketingové aktivity bez stanovení konkrétních měřitelných cílů a bez vyhodnocení jejich efektivity' a 'V oblasti čerpání příspěvků z fondu prevence vytvořila netransparentní prostředí a zvýhodnila vybrané subjekty i jednotlivce.'",
+        "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+      },
+      "poznamky": [
+        "Kontrola NKÚ č. 23/12 a navazující kontrola MZ (usnesení vlády č. 778/2024, ukončena 4/2025): porušení zákona o účetnictví, zkreslené informace o odpisech pohledávek ve VZ, účelové dělení veřejných zakázek, netransparentní čerpání Fprev.",
+        "Fprev čerpán na 137,6 % plánu 2024 (sport, ochranné pomůcky, dentální hygiena, očkování).",
+        "Zůstatek BÚ ZFZP kryje jen 4 úhradové dny (nejnižší v systému); závazky +35,2 % meziročně.",
+        "Změna vedení: GŘ David Kostka (od 2015) oznámil v únoru 2026 rezignaci k 30. 4. 2026; správní rada 25. 3. 2026 vybrala Ondřeje Felixe (od 5/2026). Tři členové vedení odešli 11/2025. ; https://www.seznamzpravy.cz/clanek/domaci-kauzy-druha-nejvetsi-pojistovna-ma-noveho-sefa-ac-ve-ztrate-vyplacela-miliony-302576",
+        "VZ 2024 zveřejněna až 2/2026. VZ 2025 nedohledána."
+      ],
+      "poznamky_zdroje": [
+        "https://www.newstream.cz/zpravy-z-firem/zdravotni-pojistovnu-ministerstva-vnitra-povede-ondrej-felix",
+        "https://www.seznamzpravy.cz/clanek/domaci-kauzy-druha-nejvetsi-pojistovna-ma-noveho-sefa-ac-ve-ztrate-vyplacela-miliony-302576"
+      ],
+      "semafor": {
+        "prevence": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "dostupnost": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "sit": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "kvalita": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "servis": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "hospodareni": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        }
+      }
+    },
+    {
+      "kod": "213",
+      "zkratka": "RBP",
+      "nazev": "RBP, zdravotní pojišťovna",
+      "web": "https://www.rbp213.cz",
+      "crp": {
+        "rok": 2025,
+        "zdroj": "https://www.nzip.cz/dohodovaci-rizeni",
+        "pojistenci": 422338,
+        "podil_trhu_pct": 3.89,
+        "podil_65plus_pct": 17.24,
+        "podil_80plus_pct": 3.29,
+        "podil_0_14_pct": 16.75,
+        "rust_2015_2025_pct": -1.78,
+        "max_podil_v_kraji_pct": 27.3,
+        "top_kraje": [
+          {
+            "kraj": "CZ080",
+            "nazev": "Moravskoslezský",
+            "pojistenci": 321846,
+            "pct_kmene": 76.2,
+            "podil_v_kraji_pct": 27.3
+          },
+          {
+            "kraj": "CZ072",
+            "nazev": "Zlínský",
+            "pojistenci": 56853,
+            "pct_kmene": 13.5,
+            "podil_v_kraji_pct": 9.9
+          },
+          {
+            "kraj": "CZ064",
+            "nazev": "Jihomoravský",
+            "pojistenci": 23655,
+            "pct_kmene": 5.6,
+            "podil_v_kraji_pct": 2.4
+          },
+          {
+            "kraj": "CZ071",
+            "nazev": "Olomoucký",
+            "pojistenci": 9484,
+            "pct_kmene": 2.2,
+            "podil_v_kraji_pct": 1.5
+          }
+        ],
+        "podil_trend": [
+          {
+            "year": 2010,
+            "share_pct": 3.99
+          },
+          {
+            "year": 2011,
+            "share_pct": 3.97
+          },
+          {
+            "year": 2012,
+            "share_pct": 4.0
+          },
+          {
+            "year": 2013,
+            "share_pct": 4.02
+          },
+          {
+            "year": 2014,
+            "share_pct": 4.11
+          },
+          {
+            "year": 2015,
+            "share_pct": 4.13
+          },
+          {
+            "year": 2016,
+            "share_pct": 4.15
+          },
+          {
+            "year": 2017,
+            "share_pct": 4.13
+          },
+          {
+            "year": 2018,
+            "share_pct": 4.1
+          },
+          {
+            "year": 2019,
+            "share_pct": 4.07
+          },
+          {
+            "year": 2020,
+            "share_pct": 4.05
+          },
+          {
+            "year": 2021,
+            "share_pct": 4.09
+          },
+          {
+            "year": 2022,
+            "share_pct": 4.06
+          },
+          {
+            "year": 2023,
+            "share_pct": 3.93
+          },
+          {
+            "year": 2024,
+            "share_pct": 3.92
+          },
+          {
+            "year": 2025,
+            "share_pct": 3.89
+          }
+        ]
+      },
+      "hospodareni": {
+        "pocet_pojistencu": {
+          "hodnota": 424412,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "VZ RBP: k 31. 12. 2024 424 412 (k 31. 12. 2023 427 301)"
+        },
+        "podil_trhu_pct": {
+          "hodnota": 3.91,
+          "rok": 2024,
+          "zdroj": "vypočteno z MZ hodnocení 2024"
+        },
+        "prijmy_celkem_mld": {
+          "hodnota": 18.178,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "pojistne_po_prerozdeleni_mld": {
+          "hodnota": 18.058,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "VZ: vybráno 10 802,869 mil + přerozdělení 7 255,537 mil = 18 058,406 mil"
+        },
+        "prijmy_na_pojistence_kc": {
+          "hodnota": 42832,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "naklady_zdravotni_sluzby_mld": {
+          "hodnota": 18.758,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+        },
+        "naklady_na_pojistence_kc": {
+          "hodnota": 44198,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "výdaje na ZS na 1 pojištěnce 42 102 Kč"
+        },
+        "fond_prevence_naklady_mil": {
+          "hodnota": 117,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "VZ: 117,263 mil (zdravotní programy 35,304; ozdravné pobyty 15,539; ostatní činnosti 66,420); 2023: 103,152 mil"
+        },
+        "fond_prevence_na_pojistence_kc": {
+          "hodnota": 276,
+          "rok": 2024,
+          "zdroj": "vypočteno (117 mil / 424 412); MZ Tab. 4: 266 Kč – nejnižší v systému"
+        },
+        "provozni_fond_naklady_mil": {
+          "hodnota": 511.039,
+          "rok": 2024,
+          "zdroj": "https://www.rbp213.cz/systemfiles/file/RBP-Vyrocni-zprava-2024.pdf",
+          "poznamka": "čerpání PF celkem (91,6 % plánu); z toho mzdy 190,067 mil; příděl ze ZFZP 526,1 mil; MZ výdaje na vlastní činnost 428 mil"
+        },
+        "provozni_naklady_pct": {
+          "hodnota": 2.3,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "podíl na výdajích celkem; skutečný příděl do PF 2,9 % z rozvrhové základny, zákonný limit 3,07 %"
+        },
+        "provozni_limit_pct": {
+          "hodnota": 3.07,
+          "rok": 2024,
+          "zdroj": "https://www.rbp213.cz/systemfiles/file/RBP-Vyrocni-zprava-2024.pdf"
+        },
+        "zustatek_zfzp_mld": {
+          "hodnota": 0.513114,
+          "rok": 2024,
+          "zdroj": "https://www.rbp213.cz/systemfiles/file/RBP-Vyrocni-zprava-2024.pdf",
+          "poznamka": "konečný zůstatek BÚ ZFZP (část B IV) 513 114 tis. Kč; účetní zůstatek ZFZP (část A) −910,762 mil"
+        },
+        "zustatek_bu_celkem_mld": {
+          "hodnota": 1.411,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "7,6 % ročních výdajů; RF 249,856 mil"
+        },
+        "hospodarsky_vysledek_mld": {
+          "hodnota": -0.266,
+          "rok": 2024,
+          "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf",
+          "poznamka": "saldo příjmů a výdajů (18 178 − 18 444 mil); VZ: příjmy k sanaci výdajů na ZS + přídělů byly nedostatečné"
+        },
+        "zamestnanci_prepocteni": {
+          "hodnota": 245,
+          "rok": 2024,
+          "zdroj": "https://www.rbp213.cz/systemfiles/file/RBP-Vyrocni-zprava-2024.pdf"
+        },
+        "rok": 2024,
+        "zustatek_bu_2025_oček_mil": {
+          "hodnota": 1214,
+          "rok": 2025,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280",
+          "poznamka": "očekávaná skutečnost konec 2025; tab. 9 hodnocení MZd+MF"
+        },
+        "zustatek_bu_2026_plan_mil": {
+          "hodnota": 634,
+          "rok": 2026,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280",
+          "poznamka": "plán konec 2026; tab. 9"
+        },
+        "zustatek_2026_pct_vydaju": {
+          "hodnota": 3.0,
+          "rok": 2026,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280",
+          "poznamka": "kritická hranice 3–4 % ročních výdajů"
+        },
+        "zavazky_po_splatnosti_2026_plan_mil": {
+          "hodnota": 0,
+          "rok": 2026,
+          "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280"
+        }
+      },
+      "hospodareni_2025": null,
+      "prevence": {
+        "rok_udaju": 2026,
+        "max_prispevek_dospely_kc": 1000,
+        "max_prispevek_dite_kc": 1000,
+        "poznamka_k_maximu": "Web 2026: preventivní programy mají společný strop 1 000 Kč/rok (děti i dospělí), bonusové programy nad rámec (Bonus 90+ 1 500 Kč, HPV 4 000 Kč, duševní pohoda 5 000 Kč, lázeňské/přímořské pobyty dětí 10 000 Kč, dárci 6 500 Kč, onkologičtí pacienti 3 000 Kč). Rok 2024: maxima nedohledána (VZ uvádí jen počty uživatelů a náklady; starší zdroj 2023: FYZIO213 700 Kč děti).",
+        "hlavni_kategorie": [
+          "vitaminové přípravky (riziková pracoviště, dárci, těhotné, senioři, děti)",
+          "očkování (15 585 pojištěnců)",
+          "onkologická prevence (mamo, HPV, kolorektální, PSA, melanom)",
+          "ortodoncie (2 173 dětí)",
+          "ozdravné pobyty dětí (přímoří/hory, tábory 5 054 dětí) a seniorů",
+          "těhotné/po porodu",
+          "pohybové aktivity my213",
+          "Dny zdraví",
+          "duševní pohoda (Mojra, 2 499 pojištěnců)",
+          "geny213",
+          "Program 90+/Bonus 90+"
+        ],
+        "bonusovy_program": {
+          "existuje": true,
+          "nazev": "Program 90+ / Bonus 90+ (bonusové body za absolvování preventivních prohlídek, 2024: 2,036 mil Kč); bonusový program s uživateli my213",
+          "poznamka": null
+        },
+        "programy_pro_zamestnavatele": {
+          "existuje": true,
+          "nazev": "vitaminové přípravky pro pracovníky rizikových pracovišť (9 124 ks, 3 496 pojištěnců 2024); samostatný program pro firmy na webu nenalezen",
+          "poznamka": null
+        },
+        "zdroj": "https://www.rbp213.cz/preventivni-a-bonusovy-program/a-5357/"
+      },
+      "servis": {
+        "mobilni_aplikace": "my213 (aplikace + web my213.cz; 2024 rozšířena o přehledy OSVČ, platební brána ComGate)",
+        "pocet_pobocek": 39,
+        "pocet_pobocek_poznamka": "39 poboček (úvodní slovo VZ 2024); web 2026 uvádí 65 kontaktních míst vč. podatelen",
+        "online_prepazka": true,
+        "online_prepazka_poznamka": "my213 + virtuální pobočka (videohovor s operátorem)",
+        "zdroj": "https://www.rbp213.cz/virtualni-pobocka/a-5089/"
+      },
+      "mereni_dopadu": {
+        "hodnoceni_ve_vz": false,
+        "citace": "VZ 2024 (kap. 4.7.1): programy 'vycházejí z ověřených pozitivních vlivů na zdravotní stav pojištěnců, zejména z analytických zjištění a podložených výsledných efektů spočívajících v tom, že vynaložené náklady jsou sanovány úsporami v celém systému' – deklarace bez uvedení metodiky či výsledků; VZ uvádí jen počty uživatelů jednotlivých příspěvků.",
+        "zdroj": "https://www.rbp213.cz/systemfiles/file/RBP-Vyrocni-zprava-2024.pdf"
+      },
+      "poznamky": [
+        "Kmen koncentrován v Moravskoslezském kraji; příjmy ovlivněny úpadkem Liberty Ostrava a dodavatelů.",
+        "2024: převod autorských práv k CIS RBP na pojišťovnu (konec vendor lock-inu); zahájena implementace ISO 9001; strategie RBP 2030.",
+        "Projekt dostupnosti stomatologie (bonifikace 2 000–3 000 Kč za převzetí pojištěnců, 2 555 pojištěnců 2024); od 1. 1. 2025 nový projekt dostupnosti péče.",
+        "Historie: sloučení s Moravskou ZP (1. 9. 1996); přejmenování z Revírní bratrské pokladny na RBP od 1. 1. 2019.",
+        "Výkonný ředitel Ing. Antonín Klimša, MBA (VZ 2024). Ředitel pro zdravotnictví Václav Janalík kandidoval v 2026 na GŘ ZP MV ČR.",
+        "VZ 2025 nedohledána; VZ 2024 je skenovaný PDF bez textové vrstvy."
+      ],
+      "poznamky_zdroje": [],
+      "semafor": {
+        "prevence": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "dostupnost": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "sit": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "kvalita": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "servis": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        },
+        "hospodareni": {
+          "stav": null,
+          "rok": null,
+          "zduvodneni": null,
+          "zdroj": null
+        }
+      }
+    }
+  ]
+}
