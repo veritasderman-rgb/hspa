@@ -14,6 +14,7 @@
 <meta property="article:section" content="Duševní zdraví">
 <!--
   audit:
+    OPRAVA 2026-11-02: "SEED-AUDIT dávka 2: psychiatrie_prumerna_delka_hospitalizace seed 43 dní (2022) a OECD 19 / EU 21 nesedí. OECD DF_HOSP_AV_LENGTH (F00–F99): ČR 38,8 dne (2022), průměr OECD 28,5, EU 23,4. Jen řádek v databoxu."
     - 2026-08-26 noční rutina (FÁZE 3, kontrola odkazů v draftu): OPRAVEN mrtvý odkaz v sekci Zdroje — https://www.nzip.cz/datova-sada/119 už na detail datové sady nevede, NZIP celý tvar /datova-sada/{id} přesměrovává (HTTP 200) na https://www.nzip.cz/modul/datove-zpravodajstvi/katalog-dat; odkaz i jeho popisek nahrazeny katalogem dat. Táž oprava provedena v metodické kartě indicators/rehospitalizace_schizofrenie_30d.json. Primární CSV data.mzcr.cz/data/distribuce/269/dusevni-onemocneni-rehospitalizace.csv ověřeno HTTP 200 (26. 8. 2026) — beze změny. NEDOŘEŠENO: psychiatrie.uzis.cz (fallback zdroj karty) vrací 26. 8. 2026 HTTP 503 na celé subdoméně (ověřeno 3× curl + WebFetch); nejde o 404, odkaz proto neměněn — založeno issue #1087 k opětovné kontrole. Žádná změna čísel ani tvrzení; draft zůstává published:false.
     - 2026-08-20 ověřovací protokol §4: Data ověřena 2026-08-20: otevřená data MZ ČR (indikátor č. 17, distribuce 269) stále končí rokem 2021, novější řada zveřejněna nebyla. Počet center duševního zdraví odpovídá — podle MZ ČR (9. 6. 2026) jich koncem roku 2025 fungovalo 50, z toho 39 pro dospělé se závažným duševním onemocněním, zbytek specializovaných (děti, závislosti, ochranné léčení, senioři). Financování zůstává projektové: výzva „Podpora vzniku CDZ IV“ cílí na nejméně 15 nových center (vyhlášení 9/2026, realizace do 2028), převod do standardní úhrady ze zdravotního a sociálního pojištění zatím neproběhl.
     last_reviewed: 2026-08-06
@@ -55,7 +56,7 @@
         "@id": "https://skorezdravotnictvi.cz/clanek-rehospitalizace-schizofrenie"
       },
       "datePublished": "2026-08-27",
-      "dateModified": "2026-08-27",
+      "dateModified": "2026-11-02",
       "author": {
         "@type": "Organization",
         "name": "HSPA Monitor",
@@ -145,6 +146,14 @@
     </header>
 
     <div class="article-body">
+
+      <aside class="article-callout article-callout-update" aria-label="Oprava článku">
+        <div class="ed-kicker">Oprava · 2. listopadu 2026</div>
+        <p>
+          Předchozí verze uváděla v přehledu dat průměrnou délku psychiatrické hospitalizace 43 dní (2022). Šlo o neověřenou výchozí hodnotu v naší databázi indikátorů; podle OECD Health Statistics to bylo 38,8 dne, při průměru OECD 28,5 a EU 23,4 dne.
+        </p>
+      </aside>
+
 
       <p class="article-lead">
         Panu Markovi je čtyřiatřicet a z psychiatrické nemocnice odcházel po šesti týdnech potřetí za pět let. V ruce recept na měsíc léků a doporučení „objednat se k ambulantnímu psychiatrovi&quot;. Jeho psychiatr měl nejbližší volný termín za sedm týdnů, centrum duševního zdraví v okrese neexistuje a z nemocnice si nikdo neověřil, jestli se k lékaři vůbec dostal. Po třech týdnech doma přestal léky brát, přestal spát; rodina nakonec volala záchranku. Do třiceti dnů od propuštění byl zpět na stejném oddělení. V psychiatrii se tomu říká efekt otáčivých dveří — a česká data o něm poprvé mluví v číslech, která si může kdokoli stáhnout.
@@ -237,7 +246,7 @@
         Mezinárodní srovnání rehospitalizací v psychiatrii je ošidnější než u somatických oborů, protože země měří různě. Nejcitovanější kotvou zůstává analýza OECD <em>Making Mental Health Count</em>: neplánované rehospitalizace do 30 dnů u schizofrenie dosahovaly napříč zhruba patnácti sledovanými zeměmi v průměru kolem <strong>13 %</strong>. Česko je s hodnotou 15,6 % nad touto úrovní. Jedna výhrada ale hraje v český prospěch: většina zemí OECD počítá jen návraty <em>do téhož zařízení</em>, zatímco český registr díky propojení záznamů zachytí návrat kamkoli. Česká metodika je tedy přísnější a skutečný odstup od průměru OECD je menší, než ukazuje prosté srovnání čísel — proto indikátor nese signál „varování&quot;, nikoli „špatné&quot;.
       </p>
       <p>
-        Sousedé srovnatelnou veřejnou řadu nenabízejí — Německo, Rakousko, Polsko ani Slovensko národní third-party ukazatel psychiatrických readmisí nepublikují, což je samo o sobě výmluvné: Česko patří v otevřenosti dat o duševním zdraví k lepší části Evropy. O to důležitější je číst domácí číslo poctivě. Nízký podíl rehospitalizací totiž není automaticky známkou kvality — lze ho „koupit&quot; i tím, že pacienty prostě nepropouštíte. Česká <a href="indikator-psychiatrie_prumerna_delka_hospitalizace.html">průměrná psychiatrická hospitalizace trvá 43 dní</a>, více než dvojnásobek průměru OECD (19 dní). Systém, který drží pacienty na lůžku dvakrát déle než okolní svět, a přesto se mu vracejí častěji, selhává na obou koncích zároveň — a přesně tuhle kombinaci česká data ukazují.
+        Sousedé srovnatelnou veřejnou řadu nenabízejí — Německo, Rakousko, Polsko ani Slovensko národní third-party ukazatel psychiatrických readmisí nepublikují, což je samo o sobě výmluvné: Česko patří v otevřenosti dat o duševním zdraví k lepší části Evropy. O to důležitější je číst domácí číslo poctivě. Nízký podíl rehospitalizací totiž není automaticky známkou kvality — lze ho „koupit&quot; i tím, že pacienty prostě nepropouštíte. Česká <a href="indikator-psychiatrie_prumerna_delka_hospitalizace.html">průměrná psychiatrická hospitalizace trvá 38,8 dne</a>, zhruba o třetinu déle než v průměru OECD (28,5 dne). Systém, který drží pacienty na lůžku dvakrát déle než okolní svět, a přesto se mu vracejí častěji, selhává na obou koncích zároveň — a přesně tuhle kombinaci česká data ukazují.
       </p>
 
       <h3>Strukturální analýza: mezera mezi lůžkem a ambulancí</h3>
@@ -282,7 +291,7 @@
       <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
       <ul class="article-databox-list">
         <li><a href="indikator-rehospitalizace_schizofrenie_30d.html"><strong>Rehospitalizace do 30 dnů — schizofrenie (F20)</strong></a> — 15,6 % (2021), po poklesu na 12,1 % (2017) opět roste · signál warn — nový indikátor, nejtvrdší test návaznosti péče po reformě</li>
-        <li><a href="indikator-psychiatrie_prumerna_delka_hospitalizace.html"><strong>Průměrná délka psychiatrické hospitalizace</strong></a> — 43 dní (2022) vs. OECD 19 · signál bad — dlouhá lůžková fáze, a přesto časté návraty</li>
+        <li><a href="indikator-psychiatrie_prumerna_delka_hospitalizace.html"><strong>Průměrná délka psychiatrické hospitalizace</strong></a> — 38,8 dne (2022) vs. OECD 28,5 · signál bad — dlouhá lůžková fáze, a přesto časté návraty</li>
         <li><a href="indikator-centra_dusevniho_zdravi_per_100k.html"><strong>Centra duševního zdraví na 100 tis. obyvatel</strong></a> — komunitní síť, která má otáčivé dveře zastavit, pokrývá jen část okresů</li>
         <li><a href="indikator-psychiatri_per_100k.html"><strong>Psychiatři na 100 tis. obyvatel</strong></a> — kapacita ambulantní sítě, na které návaznost péče stojí</li>
         <li><a href="indikator-vydaje_dusevni_zdravi_pct.html"><strong>Výdaje na duševní zdraví (% výdajů na zdravotnictví)</strong></a> — finanční rámec, ve kterém se reforma odehrává</li>

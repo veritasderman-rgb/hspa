@@ -4,23 +4,30 @@
   "area": "Výstupy",
   "domain": "Porodní péče",
   "subdomain": "Intervenční porody",
-  "definition": "Podíl porodů provedených císařským řezem (SC) ze všech porodů v daném roce.",
+  "definition": "Počet porodů císařským řezem na 100 živě narozených dětí v daném roce (OECD vykazuje na 1 000 živě narozených).",
   "unit": "%",
   "direction": "lower_is_better",
   "data_source": {
     "primary": {
-      "type": "uzis_nzis",
-      "note": "Perinatální statistika ÚZIS — výkaz ÚZISu za porodnice."
+      "type": "oecd_sdmx2",
+      "agency": "OECD.ELS.HD",
+      "dataflow": "DSD_HEALTH_PROC@DF_SURG_PROC",
+      "dims": {
+        "MEDICAL_PROCEDURE": "CM74_CAE",
+        "UNIT_MEASURE": "PRC_10P3BR_L",
+        "MODE_PROVISION": "_T"
+      },
+      "note": "Ověřeno 2. 11. 2026 (seed-audit, dávka 2, docs/seed-audit.md). OECD Health Statistics: ČR 262,5 císařského řezu na 1 000 živě narozených (2024) = 26,3 na 100. Hodnota je zatím zapsána ručně (fetcher OECD neumí přepočet měřítka); OECD přebírá české údaje z NZIS."
     },
     "fallback": {
-      "type": "oecd",
-      "code": "CS_RATE"
+      "type": "uzis_nzis",
+      "note": "Perinatální statistika ÚZIS (Rodička a novorozenec)."
     }
   },
   "benchmark_source": {
-    "type": "oecd",
-    "code": "CS_RATE",
-    "dataset": "HEALTH_HCQU"
+    "type": "oecd_sdmx2",
+    "dataset": "DSD_HEALTH_PROC@DF_SURG_PROC",
+    "note": "Průměr OECD za rok 2024 = 27,3 (28 zemí s údajem; za rok 2023 s 35 zeměmi 30,7). Průměr EU = 30,8 (prostý průměr 25 členů EU v datech OECD za rok 2024)."
   },
   "signal_thresholds": {
     "good": 2,
@@ -31,9 +38,9 @@
     "ÚZIS",
     "ČGS"
   ],
-  "method_notes": "WHO doporučuje 10–15 % jako optimální míru SC. Hodnoty nad 20 % nemají prokázaný přínos pro matku ani dítě.",
+  "method_notes": "WHO doporučuje 10–15 % jako optimální míru SC. Hodnoty nad 20 % nemají prokázaný přínos pro matku ani dítě. Oprava 2. 11. 2026: dřívější seed 28,3 % (2024, OECD 28, EU 27) zdroji neodpovídal. Podle OECD je ČR pod průměrem OECD i EU, podíl ale roste: 2019 23,3, 2020 23,9, 2021 24,9, 2022 25,2, 2023 25,5, 2024 26,3 na 100 živě narozených.",
   "limitations": "Míra SC závisí na věku a rizikovosti populace rodičů, nikoli jen na systémových faktorech. Hranice 10–15 % pochází z prohlášení WHO z roku 1985; podle systematického přehledu ekologických studií (Betrán et al., Reprod Health 2015, PMID 26093498) nad mírou zhruba 9–16 % populační mateřská, novorozenecká a kojenecká úmrtnost dál neklesá, po úpravě o socioekonomické faktory se tento vztah oslabuje a vliv na morbiditu hodnocen nebyl.",
-  "patient_story": "Porodnice, plánovaný porod 32leté primipary. Indikace císařského řezu: pánevní poloha plodu. Operace plánovaná, anestezie epidurální, krátká hospitalizace. To je v ČR 28,3 % všech porodů — v evropském průměru, ale s rostoucí trajektorií.\n\nProcento porodů císařským řezem v ČR je 28,3 % (ÚZIS NRMD, 2024). OECD průměr 28 %, EU 27 % — Česko signal warn (mírně nad WHO doporučeným optimem 10–15 %). Trend rostoucí (2010: 23 %; 2024: 28,3 %). Mezi nemocnicemi rozptyl 18–38 % — odráží jak rizikový profil pacientek, tak různou klinickou praxi. Indikace: pánevní poloha, fetal distress, předchozí SC, mateřský diabetes, makrosomie, opakované SC.\n\nStrukturálně český systém má kvalitní porodnictví (3. nejnižší kojenecká mortalita v Evropě — viz mortalita_kojenecka 2,4), ale rostoucí SC trend odráží defenzivní medicínu (riziko soudních sporů u komplikovaného vaginálního porodu), demografické faktory (starší prvorodičky, asistovaná reprodukce), pacientskou poptávku (plánovaný SC vyšší procento u některých populací). VBAC (vaginal birth after cesarean) je v ČR limitovaný.\n\nVysoký SC procent znamená vyšší peri- a postoperační rizika pro matku (krvácení, infekce, tromboembolismus), pozdější obtíže (placenta accreta v dalším těhotenství, problematické vaginální porody po SC). Politické páky: standardizace indikací SC (NICE guideline NG192); rozšíření VBAC programů (UK model); podpora normálního porodu (porodní asistentky, dula); audit SC per nemocnice s benchmarking; pacientská edukace o rizicích a benefitech různých modalitních rozhodnutí. Indikátor v HSPA dashboardu sleduje SC procento jako klíčový ukazatel kvality porodní péče.",
+  "patient_story": "Porodnice, plánovaný porod 32leté primipary. Indikace císařského řezu: pánevní poloha plodu. Operace plánovaná, anestezie epidurální, krátká hospitalizace. Císařským řezem se v Česku rodí zhruba každé čtvrté dítě — méně než v průměru OECD, ale podíl roste.\n\nNa 100 živě narozených dětí připadalo v ČR v roce 2024 podle OECD 26,3 císařského řezu. Průměr zemí OECD je 27,3 (28 zemí s daty za rok 2024; za rok 2023 s 35 zeměmi 30,7), průměr členů EU 30,8 — Česko je pod oběma, ale vysoko nad doporučením WHO (10–15 %). Podíl roste: v roce 2019 to bylo 23,3. Mezi nemocnicemi se míra liší podle rizikového profilu pacientek i podle klinické praxe. Indikace: pánevní poloha, fetal distress, předchozí SC, mateřský diabetes, makrosomie, opakované SC.\n\nStrukturálně český systém má kvalitní porodnictví (velmi nízká kojenecká úmrtnost — viz mortalita_kojenecka), ale rostoucí SC trend odráží defenzivní medicínu (riziko soudních sporů u komplikovaného vaginálního porodu), demografické faktory (starší prvorodičky, asistovaná reprodukce), pacientskou poptávku (plánovaný SC vyšší procento u některých populací). VBAC (vaginal birth after cesarean) je v ČR limitovaný.\n\nVysoký SC procent znamená vyšší peri- a postoperační rizika pro matku (krvácení, infekce, tromboembolismus), pozdější obtíže (placenta accreta v dalším těhotenství, problematické vaginální porody po SC). Politické páky: standardizace indikací SC (NICE guideline NG192); rozšíření VBAC programů (UK model); podpora normálního porodu (porodní asistentky, dula); audit SC per nemocnice s benchmarking; pacientská edukace o rizicích a benefitech různých modalitních rozhodnutí. Indikátor v HSPA dashboardu sleduje SC procento jako klíčový ukazatel kvality porodní péče.",
   "framework": "hspa",
   "dimension": "kvalita",
   "literature": [

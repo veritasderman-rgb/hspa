@@ -6,6 +6,15 @@ Formát: každá položka má `Datum`, `PR`, `Co`, `Proč`, `Důsledek`.
 
 ---
 
+## 2026-11-02 — Seed-audit, dávka 2: léky, lékaři, psychiatrie, císařské řezy, dětská obezita, nemocniční infekce, pneumokoky
+
+- **PR**: `claude/gallant-heisenberg-wibiow` (dávka 2 auditu seed indikátorů, `docs/seed-audit.md`)
+- **Co**: Sedm indikátorů opraveno proti primárním zdrojům. Živě z OECD (nové mapování v `ingest/mapping/oecd_sdmx2_codes.json`): `vydaje_leky_hdp` 1,7 → 1,16 % HDP (SHA HC.5.1, OECD 1,28, EU 1,32; přejmenováno na „mimo nemocnice“), `lekari_per_1000` 4,2 → 4,29 (OECD 4,02, EU 4,36), `psychiatrie_prumerna_delka_hospitalizace` 43 → 38,8 dne (2022, OECD 28,5, EU 23,4). Ručně ověřeno: `cezarsky_rez_pct` 28,3 → 26,3 na 100 živě narozených (OECD 27,3, EU 30,8), `deti_obezita_cosi` 26,3 % (2019) → 21,0 % (COSI 6. kolo, 2023; region WHO Europe 25 %), `infekce_nosokomialni` 6,5 → 6,7 % (ECDC PPS 2022–2023, medián EU/EHP 6,8; 2016–2017 také 6,7), `vakcinace_pneumokok_65` 5,5 → 28,6 % (ÚZIS NZIS 2025, bez benchmarku). Ověřeno beze změny hodnoty: `vakcinace_hexa_deti`, `polypragmazie_65plus`, `spokojenost_pece` (75 %, OECD 64; EU 67 a řada odstraněny). Opravené články nesou viditelnou poznámku „Oprava · 2. listopadu 2026“.
+- **Proč**: Hodnoty, řady i benchmarky seedů neměly zdroj a v několika případech obracely závěr článků: léky „nad průměrem OECD“ (jsou pod), pneumokoky „19 z 20 seniorů neočkováno, OECD 50 %“ (očkovaná je zhruba třetina, OECD údaj nevede), dětská obezita „soustavně roste“ (studie z dat COSI změnu 2008–2019 nenašla), lékaři „víc než průměrná evropská země“ (jsou pod průměrem EU). Zápis z 30. 10. 2026 výše, že „léky % HDP sedí“, byl chybný — srovnání tehdy neproběhlo proti SHA HC.5.1.
+- **Důsledek**: **NEVRACET** seed hodnoty ani benchmarky „OECD 50 %“ (pneumokoky), „OECD 5,5 % / EU 5,9 %“ (HAI), „OECD 19 dní“ (psychiatrie), „průměr 29,8 %“ (COSI), „EU 67 %“ (spokojenost). Pneumokoky nemají mezinárodní benchmark — nevymýšlet ho. COSI má zatím jediný bod podle definic WHO; rostoucí řadu nedoplňovat bez zdroje. `cezarsky_rez_pct` má v kartě `oecd_sdmx2` bez mapování (fetcher neumí měřítko na 100), hodnotu při kvartálním refreshi aktualizovat ručně.
+
+---
+
 ## 2026-10-30 — Délka hospitalizace a zubaři podle OECD; průměr OECD pod 10 na dvě desetinná místa
 
 - **PR**: `claude/gallant-heisenberg-wibiow` (navazuje na opravu CT/MR)

@@ -9,12 +9,16 @@
   "direction": "lower_is_better",
   "data_source": {
     "primary": {
-      "type": "szu_amres",
-      "note": "PPS běží ve 4letých vlnách. Národní HAI Surveillance koordinuje SZÚ."
+      "type": "ecdc_pps",
+      "note": "ECDC PPS HAI & AMU (vlny 2011–2012, 2016–2017, 2022–2023); národně koordinuje SZÚ.",
+      "endpoint": "https://www.ecdc.europa.eu/en/publications-data/country-factsheet-czechia"
     }
   },
   "benchmark_source": {
-    "type": "ecdc"
+    "type": "ecdc",
+    "dataset": "ECDC PPS 2022–2023 — medián zemí EU/EHP",
+    "value": 6.8,
+    "note": "Medián zemí, ne vážený průměr. Souhrnná prevalence EU/EHP z téže studie je vyšší (ECDC uvádí po úpravě 8,0 %)."
   },
   "signal_thresholds": {
     "good": 5,
@@ -25,9 +29,9 @@
     "SZÚ",
     "ECDC"
   ],
-  "method_notes": "ECDC PPS HAI&AMU. Vzorek pokrývá > 50 % akutních lůžek. ČR má dlouhodobě vyšší prevalenci než EU průměr — částečně reflektuje aktivnější surveillance.",
+  "method_notes": "Ověřeno 2. 11. 2026 (seed-audit, dávka 2, docs/seed-audit.md). ECDC bodová prevalenční studie HAI a spotřeby antibiotik v akutních nemocnicích (PPS). 2022–2023: ČR 6,7 % pacientů s alespoň jednou HAI (39 nemocnic, 12 296 pacientů; country factsheet Czechia), medián zemí EU/EHP 6,8 % (rozpětí 3,0–13,8 %). 2016–2017: 45 nemocnic, 15 117 pacientů, HAI u 1 015 pacientů = 6,7 % (SZÚ, Hygiena 2023). Oprava 2. 11. 2026: dřívější seed 6,5 % (2023) s průměrem OECD 5,5 % a EU 5,9 % a řadou s body 2019, 2021 a 2022 neměl zdroj — PPS probíhá jen ve vlnách a OECD prevalenci HAI nevede. ECDC upozorňuje, že prevalence závisí na skladbě pacientů, diagnostické kapacitě a citlivosti vyhledávání infekcí.",
   "limitations": "PPS = jednodenní snapshot, ne kontinuální. Citlivost na intenzitu surveillance (více aktivně sledujících nemocnic = vyšší zachycený podíl).",
-  "patient_story": "Praha, fakultní nemocnice, JIP, 71letý pacient po elektivní ortopedické operaci. Pátý pooperační den vystupuje horečka. Hemokultura — Staphylococcus aureus, multirezistentní. Diagnóza: nosokomiální infekce krevního řečiště, pravděpodobně z centrálního žilního katetru. Hospitalizace se prodlouží o 14 dní, pacient má 25% riziko úmrtí. To není výjimečná situace — je to statisticky pravděpodobná komplikace, kterou systém u zhruba 6,5 % hospitalizovaných pacientů zaznamenává.\n\nPrevalence nosokomiálních (zdravotně-asociovaných) infekcí v ČR je 6,5 % hospitalizovaných pacientů (ÚZIS NRH, 2023). OECD průměr je 5,5 %, EU 5,9 %. Česko je nad oběma průměry o 0,6–1 procentní bod. Trend pomalu klesá (2015: 7,8 %; 2023: 6,5 %), tempo je nedostatečné. Nejčastější typy: infekce močových cest, infekce v místě chirurgického výkonu, pneumonie spojená s ventilátorem, infekce krevního řečiště. Multirezistentní kmeny (MRSA, ESBL E. coli, Klebsiella) tvoří v ČR cca 20 % izolátů — vyšší než průměr EU.\n\nStrukturálně český systém má všechny komponenty (NRPZS, NRH, antibiotická střediska, hygienické směrnice), ale implementace v každodenní praxi kolísá. Hand hygiene compliance měřená v auditech je v některých nemocnicích jen 40–50 % (cíl WHO: 80 %+). Antibiotic stewardship (program racionální preskripce ATB) je pomalu zaváděn jen ve velkých nemocnicích. Personální poddimenzování (sestry / lůžko v některých odděleních pod doporučenou hodnotou) zvyšuje riziko chyb. Forenzní pohled — pacient, kterému se „v nemocnici stalo něco navíc\", má v ČR ztížený přístup ke kompenzaci.\n\nNosokomiální infekce jsou v Česku odhadované jako příčina cca 2 000–3 000 úmrtí ročně — část preventabilní lepší hygienou a antibiotickou stewardship. Politické páky: zveřejňování dat infekce per nemocnice (UK NHS model — povinné publikování MRSA a C. difficile case rates per trust); inspekce hygienické compliance s reálným dopadem na akreditaci; investice do antibiotic stewardship programu (každá fakultní nemocnice ATB tým); navýšení personálních standardů (sestra/lůžko jako kvalitativní indikátor). Indikátor v HSPA dashboardu sleduje nosokomiální infekce jako klíčový ukazatel kvality nemocniční péče a pacientské bezpečnosti.",
+  "patient_story": "Fakultní nemocnice, JIP, sedmdesátiletý pacient po plánované ortopedické operaci. Pátý den po výkonu dostane horečku. Hemokultura ukáže zlatého stafylokoka, nejspíš z centrálního žilního katétru. Diagnóza: infekce krevního řečiště spojená se zdravotní péčí. Hospitalizace se protáhne o týdny a riziko komplikací prudce stoupne. Takovou infekci — nemusí být vždy tak vážná — má v kterýkoli den zhruba každý patnáctý pacient české nemocnice.\n\nV evropské bodové prevalenční studii ECDC z let 2022–2023 mělo infekci spojenou se zdravotní péčí 6,7 % pacientů ve 39 českých nemocnicích (12 296 pacientů). Medián zemí EU/EHP je 6,8 %, rozpětí 3,0 až 13,8 %. Česko je tedy na evropském mediánu — a stejně jako v předchozí vlně 2016–2017, kdy studie v 45 nemocnicích našla infekci také u 6,7 % pacientů. Dřívější verze tohoto indikátoru uváděla 6,5 % proti „průměru OECD 5,5 %“; takové srovnání neexistuje a 2. listopadu 2026 bylo opraveno.\n\nNa mediánu je Česko u prevalence, ale ne u toho, co infekcím předchází. Podle téže studie mají české nemocnice 0,82 úvazku sestry pro prevenci infekcí na 250 lůžek (medián EU/EHP 1,25), dávkovač dezinfekce u lůžka má 42,4 % lůžek (medián 49,2 %) a jednolůžkových pokojů je 8,6 % (medián 15,8 %). Odebírají méně hemokultur (27,6 na 1 000 ošetřovacích dnů, medián 44,7) — a nízká diagnostika může prevalenci uměle snižovat. Podíl rezistentních kmenů je vyšší než medián (souhrnný index 29,8 % proti 21,8 %) a chirurgická profylaxe trvá déle než den u 49,6 % podání (medián 38,1 %).\n\nPolitické páky jsou proto spíš v prevenci než v samotném čísle prevalence: personální standard pro hygieniky a sestry pro prevenci infekcí, dávkovače dezinfekce u každého lůžka, programy racionálního užívání antibiotik ve všech nemocnicích, víc diagnostiky a zveřejňování výsledků po nemocnicích. Indikátor sleduje nemocniční infekce jako klíčový ukazatel bezpečnosti pacientů — data přicházejí jen jednou za několik let, proto je dobré číst ho spolu s ukazateli rezistence a spotřeby antibiotik.",
   "framework": "hspa",
   "dimension": "bezpecnost"
 }
