@@ -1,0 +1,114 @@
+name: Pojišťovny — výroční zprávy
+
+# Rutina Srovnávače zdravotních pojišťoven (PLAN-SROVNAVAC-POJISTOVEN.md P5.3, zadání vydavatele 2. 11. 2026):
+# jednou ročně po vydání výročních zpráv (VZ) stáhne VZ všech 7 pojišťoven z jejich webů, přepíše je do
+# textu v repu a ověří, že čísla na stránce srovnávače jsou v těchto textech.
+#
+#   1) node ingest/fetchers/pojistovny-vz.js --jen-stazeni   PDF → ingest/cache (gitignored) + vz-manifest.json
+#   2) node ingest/fetchers/pojistovny-vz.js --jen-text      PDF → ingest/manual/pojistovny/vz-text/<kod>-<rok>.txt
+#   3) node scripts/pojistovny-verify.js                     data/pojistovny-verifikace.json
+#   4) node ingest/validate-pojistovny.js                    tvar dat; nenalezená čísla = WARN (signál pro redakci)
+#
+# Výsledek jde jako PR (větev chore/pojistovny-vz-<rok>), nikdy přímo do main. Co není ve VZ nalezeno, se v PR
+# jen ukáže; opravu čísel dělá redakce (třída B) po porovnání s PDF.
+#
+# TŘÍDA C (GOVERNANCE.md § 3): nový workflow v .github/workflows/ smí zavést jen vydavatel. Před prvním
+# během proto: (1) schválit tento soubor, (2) v Settings → Actions → General zapnout „Allow GitHub Actions
+# to create and approve pull requests". PR otevřený výchozím GITHUB_TOKENem nespouští další workflow
+# (CI, pr-gate); chce-li vydavatel kontroly na tomto PR, musí je pustit ručně nebo workflow přepnout na
+# token aplikace/PAT.
+
+on:
+  schedule:
+    - cron: '0 3 15 6 *'   # 1× ročně, 15. června 03:00 UTC (VZ bývají vydané do konce května)
+  workflow_dispatch:        # ruční doběh, např. když pojišťovna zveřejní VZ později
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: pojistovny-vz
+  cancel-in-progress: false
+
+jobs:
+  vz:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: 05_M1_Starter
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: 05_M1_Starter/package-lock.json
+
+      - name: Kill switch AI provozu
+        # GOVERNANCE.md § 5: při stavu „pozastaveno" v data/ai-provoz.json skončí job tady
+        # kódem 1 — dřív než cokoli stáhne nebo otevře PR. Stav se čte vždy z main.
+        run: |
+          git fetch --no-tags --depth=1 origin main
+          git show origin/main:05_M1_Starter/data/ai-provoz.json > "$RUNNER_TEMP/ai-provoz.json"
+          AI_PROVOZ_STATE="$RUNNER_TEMP/ai-provoz.json" node scripts/ai-provoz.js check
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install poppler (pdftotext)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y poppler-utils
+
+      - name: Stažení výročních zpráv (max 1 požadavek/s)
+        # Web, který blokuje (403/429) nebo je nedostupný, se jen zapíše do manifestu (stav chyba);
+        # nic se neobchází a job kvůli tomu nepadá — rozdíl uvidí redakce v PR.
+        run: node ingest/fetchers/pojistovny-vz.js --jen-stazeni
+
+      - name: Text z PDF
+        run: node ingest/fetchers/pojistovny-vz.js --jen-text
+
+      - name: Ověření čísel proti výročním zprávám
+        run: node scripts/pojistovny-verify.js
+
+      - name: Validace datasetů srovnávače
+        run: node ingest/validate-pojistovny.js
+
+      - name: Rok pro název větve
+        id: rok
+        run: echo "rok=$(date -u +%Y)" >> "$GITHUB_OUTPUT"
+
+      - name: Otevřít PR
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: chore/pojistovny-vz-${{ steps.rok.outputs.rok }}
+          base: main
+          commit-message: 'chore(pojistovny): výroční zprávy ${{ steps.rok.outputs.rok }} — manifest, texty, ověření čísel'
+          title: 'chore(pojistovny): výroční zprávy ${{ steps.rok.outputs.rok }} — texty a ověření čísel'
+          # Jen výstupy rutiny; PDF zůstávají v gitignorované cache.
+          add-paths: |
+            05_M1_Starter/ingest/manual/pojistovny/vz-manifest.json
+            05_M1_Starter/ingest/manual/pojistovny/vz-text/*.txt
+            05_M1_Starter/data/pojistovny-verifikace.json
+          delete-branch: true
+          body: |
+            ## Souhrn
+            Roční rutina `pojistovny-vz.yml`: stažení výročních zpráv 7 zdravotních pojišťoven, přepis do textu a ověření čísel srovnávače proti těmto textům.
+
+            ## Změny
+            - `ingest/manual/pojistovny/vz-manifest.json` — co se stáhlo (URL, sha256, stav `ok` / `nenalezeno` / `chyba` / `bez-textu`)
+            - `ingest/manual/pojistovny/vz-text/<kod>-<rok>.txt` — normalizovaný text VZ
+            - `data/pojistovny-verifikace.json` — výsledek ověření každého čísla (`nalezeno` / `nenalezeno` / `bez-textu` / `mimo-rozsah`)
+
+            ## Verifikace
+            `node scripts/pojistovny-verify.js` a `node ingest/validate-pojistovny.js` doběhly. Čísla `nenalezeno` jsou WARN, ne chyba dat: redakce je porovná s PDF a případně opraví `data/pojistovny*.json` (viz `docs/metodika-srovnavac-pojistoven.md` § 5.1).
+
+            ## Test plan
+            - [ ] V manifestu zkontrolovat sedm pojišťoven, u `chyba` a `nenalezeno` přečíst poznámku (web blokuje, VZ ještě není vydána)
+            - [ ] Projít nenalezená čísla v `data/pojistovny-verifikace.json` (`"nalezeno": false`)
+            - [ ] Pokud pojišťovna VZ za nový rok vydala, doplnit ji do `ingest/mapping/pojistovny_vz.json` (`rucni_pdf`) a rutinu pustit znovu
+
+            🤖 Generated with [Claude Code](https://claude.com/claude-code)

@@ -171,6 +171,47 @@ Pro odbornou skupinu (Advance, FBMI ČVUT); do jejich odpovědi zůstává stav 
 | Interní rešerše z webů (matice nabídky, aplikace) | redakční odhad | nikdy nenahrazuje doložení pojišťovnou |
 | Odpovědi pojišťoven | primární pro semafor | plné znění veřejné |
 
+### 5.1 Ověření proti výročním zprávám
+
+Čísla přepsaná z výročních zpráv (VZ) se nespoléhají na jediné přečtení: roční rutina je znovu
+vyhledá v textu VZ. Rutina nic neopravuje, jen ukáže rozdíly redakci.
+
+**Co rutina dělá** (`.github/workflows/pojistovny-vz.yml`, ručně i 15. června v 03:00 UTC, kdy bývají VZ vydané):
+
+1. `ingest/fetchers/pojistovny-vz.js` projde stránky s VZ všech sedmi pojišťoven (konfigurace
+   `ingest/mapping/pojistovny_vz.json`: stránka, vzory odkazů, případně ručně zadané URL),
+   najde odkazy na PDF včetně roku a PDF stáhne do gitignorované cache. Nejvýš jeden požadavek za sekundu,
+   User-Agent projektu, TLS se nevypíná. Web, který blokuje (HTTP 403/429) nebo nefunguje, se jen zapíše
+   do `ingest/manual/pojistovny/vz-manifest.json` (`stav: chyba`, HTTP kód v poznámce); nic se neobchází.
+   Manifest u každé VZ nese URL, `sha256`, velikost, čas stažení a stav `ok` / `nenalezeno` / `chyba` / `bez-textu`.
+2. Z PDF se přes `pdftotext -layout` udělá normalizovaný text
+   (`ingest/manual/pojistovny/vz-text/<kod>-<rok>.txt`, strany oddělené `=== strana N ===`, nezlomitelné
+   mezery nahrazené běžnými). Sken bez textové vrstvy (dnes VZ RBP za 2024) dostane `stav: bez-textu`;
+   OCR rutina neumí.
+3. `scripts/pojistovny-verify.js` vezme každé číslo z `data/pojistovny.json` (obálky `{hodnota, rok, zdroj}`)
+   a z `data/pojistovny-prevence.json` (struktura fondu prevence: `zpp`, `skutecnost`, `predchozi_rok`, `celkem`)
+   a hledá ho v textu VZ, na kterou ukazuje jeho zdroj. Hledání je tolerantní k zápisu (`1 234,5`, `1234.5`)
+   i k řádu (tis. / mil. / mld.: číslo se zkusí ×1000, ÷1000 a ×1 000 000). Výsledek je
+   `data/pojistovny-verifikace.json`, validátor `ingest/validate-pojistovny.js` ho hlídá.
+
+**Co znamenají výsledky** (pole `nalezeno`):
+
+| Hodnota | Význam | Co s tím |
+|---|---|---|
+| `true` | číslo je v textu VZ (`kontext` ukazuje ±80 znaků kolem první shody) | nic; u `jistota: nizka` jde o drobné číslo, které se v textu najde i náhodou, takže shoda jistotu nepřidává |
+| `false` | VZ má text, ale číslo v něm není | WARN pro redakci: porovnat s PDF; buď je v datech překlep či zastaralá hodnota, nebo je číslo odvozené (součet, přepočet) a patří do poznámky |
+| `bez-textu` | VZ je sken nebo její text v repu chybí; ověřuje se aspoň v srovnávacím sloupci následující VZ (`pres_nasledujici_vz`) | ruční kontrola nebo OCR |
+| `mimo-rozsah` | zdroj hodnoty není VZ (Hodnocení MZ, sněmovní tisk ZPP, `vypočteno`) | jiný dokument, rutina ho nehledá |
+
+`jistota` shody roste s počtem platných číslic (5 a víc = vysoká, 4 = střední, méně = nízká) a také tím,
+že vedle sebe na jednom řádku tabulky VZ stojí dvě čísla téže položky (`shoda_radku`). **Nalezeno neznamená
+správně přiřazeno**: číslo mohlo v dokumentu stát u jiné položky. Rutina ověřuje opis, ne výklad.
+
+**Kdy se spouští.** Jednou ročně po vydání VZ a ručně (`workflow_dispatch`), když pojišťovna zveřejní VZ
+později. Pokud pojišťovna VZ vydá a rutina ji nenajde, doplní se její URL do `rucni_pdf` v mapování.
+Výsledek přichází jako PR (větev `chore/pojistovny-vz-<rok>`); texty VZ a verifikaci commituje jen tato
+rutina, PDF zůstávají v cache.
+
 ## 6. Role a třídy změn
 
 - Přepis dat, grafy, drafty: AI rutina (třída B).
