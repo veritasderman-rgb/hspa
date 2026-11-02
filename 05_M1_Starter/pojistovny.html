@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Srovnávač zdravotních pojišťoven — pracovní verze · HSPA Monitor</title>
+<meta name="description" content="Pracovní verze srovnávače sedmi českých zdravotních pojišťoven: aplikace, preventivní programy a fond prevence, kmen a hospodaření, zdravotní gramotnost. Projekt think tanku Ministr zdraví a NAPO ve spolupráci se Zdravým Českem.">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Srovnávač zdravotních pojišťoven — pracovní verze">
+<meta property="og:locale" content="cs_CZ">
+<link rel="stylesheet" href="src/styles.min.css">
+<!--
+  audit:
+    status: draft
+    pristup: heslo (middleware.js, POJISTOVNY_HESLO) + noindex
+    trida: C (nová stránka, hodnocení pojmenovaných institucí)
+    zdroje: data/pojistovny*.json — každá hodnota má zdroj a rok
+  Stránkově specifické styly jsou zatím inline (.zpc-*); při merge přesunout do src/styles.css a spustit npm run build:css.
+-->
+<style>
+.zpc-strip{font-family:var(--sans);font-size:13px;background:var(--surface-warn);border-top:1px solid var(--warn);border-bottom:1px solid var(--warn);padding:8px 20px;color:var(--ink)}
+.zpc-strip b{color:var(--warn)}
+.zpc-modnav{display:flex;flex-wrap:wrap;gap:6px 10px;font-family:var(--sans);font-size:13px;margin:0 0 8px;padding:0;list-style:none}
+.zpc-modnav a{display:inline-block;padding:6px 12px;border:1px solid var(--rule2);border-radius:999px;text-decoration:none;color:var(--ink)}
+.zpc-modnav a:hover{border-color:var(--red);color:var(--red)}
+.zpc-modnav .zpc-faze{font-size:11px;color:var(--ink-mut);margin-left:6px}
+.zpc-mod{padding:40px 0 8px;border-top:1px solid var(--rule)}
+.zpc-mod-head{display:grid;grid-template-columns:1fr auto;gap:8px 24px;align-items:end;margin-bottom:14px}
+.zpc-mod-head h2{font-family:var(--serif);font-size:clamp(24px,3vw,32px);line-height:1.15;margin:0}
+.zpc-mod-head .zpc-stav{font-family:var(--sans);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-mut);white-space:nowrap}
+.zpc-lead{font-family:var(--serif);font-size:17px;line-height:1.55;max-width:70ch;color:var(--ink);margin:0 0 18px}
+.zpc-note{font-family:var(--sans);font-size:13.5px;color:var(--ink-mut);max-width:80ch;margin:8px 0 18px}
+.zpc-grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px 36px;align-items:start}
+.zpc-charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px 40px;margin:12px 0 20px}
+.zpc-chart h4{font-family:var(--sans);font-size:14px;font-weight:600;margin:0 0 2px}
+.zpc-chart .zpc-sub{font-family:var(--sans);font-size:12.5px;color:var(--ink-mut);display:block;margin-bottom:8px}
+.zpc-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin:14px 0 10px}
+.zpc-card{border:1px solid var(--rule2);border-top:4px solid var(--c,var(--ink));padding:14px 16px;background:var(--paper);display:flex;flex-direction:column;gap:10px;min-width:0}
+.zpc-card header{display:grid;grid-template-columns:auto 1fr;gap:0 10px;align-items:baseline}
+.zpc-card .zpc-kod{font-family:var(--mono,ui-monospace,monospace);font-size:12px;color:var(--ink-mut)}
+.zpc-card h3{font-family:var(--serif);font-size:22px;margin:0}
+.zpc-card .zpc-full{grid-column:1/-1;font-family:var(--sans);font-size:12px;color:var(--ink-mut)}
+.zpc-card .zpc-kpi{display:grid;grid-template-columns:1fr auto;align-items:end;gap:0 10px;border-bottom:1px solid var(--rule);padding-bottom:8px}
+.zpc-card .zpc-kpi b{font-family:var(--sans);font-size:24px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1}
+.zpc-card .zpc-kpi span{font-family:var(--sans);font-size:12px;color:var(--ink-mut);grid-row:2}
+.zpc-card .zpc-kpi svg{grid-row:1/3;align-self:center}
+.zpc-card dl{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:7px 12px;font-family:var(--sans);font-size:12.5px}
+.zpc-card dt{color:var(--ink-mut);font-size:11px;letter-spacing:.02em}
+.zpc-card dd{margin:0;font-weight:600;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.zpc-tbl{overflow-x:auto;border:1px solid var(--rule2);margin:10px 0 6px;-webkit-overflow-scrolling:touch}
+.zpc-tbl table{border-collapse:collapse;width:100%;font-family:var(--sans);font-size:13px;min-width:680px}
+.zpc-tbl th,.zpc-tbl td{padding:8px 10px;border-bottom:1px solid var(--rule);text-align:right;vertical-align:top;font-variant-numeric:tabular-nums;white-space:nowrap}
+.zpc-tbl thead th{background:var(--paper2);font-size:11.5px;letter-spacing:.03em;color:var(--ink-mut);font-weight:600}
+.zpc-tbl tbody th,.zpc-tbl thead th:first-child{text-align:left}
+.zpc-tbl td.zpc-txt,.zpc-tbl th.zpc-txt{text-align:left;white-space:normal;min-width:200px;max-width:380px}
+.zpc-tbl td small{display:block;white-space:normal;color:var(--ink-mut);font-size:11px;max-width:280px;text-align:left}
+.zpc-cap{font-family:var(--sans);font-size:12px;color:var(--ink-mut);margin:0 0 18px;max-width:90ch}
+.zpc-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--c,var(--ink));margin-right:8px;vertical-align:-1px}
+.zpc-na{color:var(--ink-mut)}
+.zpc-yes{color:var(--good);font-weight:700}.zpc-no{color:var(--bad);font-weight:700}.zpc-part{color:var(--warn);font-weight:700}
+.zpc-lvl{display:inline-block;min-width:22px;padding:2px 7px;border-radius:4px;font-size:11.5px;font-weight:600;text-align:center;white-space:normal}
+.zpc-lvl-3{background:var(--good);color:var(--paper)}.zpc-lvl-2{background:rgba(47,107,31,.18);color:var(--good)}.zpc-lvl-1{background:rgba(160,90,8,.16);color:var(--warn)}.zpc-lvl-0{background:var(--red-soft);color:var(--bad)}
+.zpc-matrix td{text-align:left;white-space:normal;min-width:120px;font-size:12px}
+.zpc-matrix td .zpc-desc{display:block;color:var(--ink-mut);font-size:11px;margin-top:2px}
+.zpc-sem{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 16px;font-family:var(--sans);font-size:12.5px}
+.zpc-sem span{padding:3px 9px;border:1px solid var(--rule2);border-radius:999px}
+.zpc-sem .g{border-color:var(--good);color:var(--good)}.zpc-sem .w{border-color:var(--warn);color:var(--warn)}.zpc-sem .b{border-color:var(--bad);color:var(--bad)}
+.zpc-acc{border:1px solid var(--rule2);margin:0 0 8px}
+.zpc-acc summary{cursor:pointer;padding:10px 14px;font-family:var(--sans);font-weight:600;font-size:14px;list-style:none;display:flex;gap:10px;align-items:center}
+.zpc-acc summary::-webkit-details-marker{display:none}
+.zpc-acc summary::before{content:"+";width:18px;color:var(--red);font-weight:700}
+.zpc-acc[open] summary::before{content:"−"}
+.zpc-acc .zpc-acc-body{padding:4px 16px 14px;font-family:var(--serif);font-size:15px;line-height:1.5}
+.zpc-acc dl{margin:0;display:grid;grid-template-columns:minmax(140px,220px) 1fr;gap:8px 16px;font-size:14px}
+.zpc-acc dt{font-family:var(--sans);font-size:12px;color:var(--ink-mut);padding-top:2px}
+.zpc-acc dd{margin:0}
+.zpc-box{border:1px solid var(--rule2);padding:16px 18px;background:var(--paper)}
+.zpc-box h4{font-family:var(--sans);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-mut);margin:0 0 8px}
+.zpc-box ul{padding-left:1.1em;margin:0}
+.zpc-box li{margin-bottom:6px;font-size:15px}
+.zpc-q ol{padding-left:1.3em;margin:0}
+.zpc-q li{margin-bottom:6px;font-size:14.5px}
+.zpc-q .zpc-opts{font-family:var(--sans);font-size:12.5px;color:var(--ink-mut);display:block}
+.zpc-plan{list-style:none;padding:0;margin:14px 0 0}
+.zpc-plan li{display:grid;grid-template-columns:96px 1fr auto;gap:12px;padding:12px 0;border-top:1px solid var(--rule);font-family:var(--serif);font-size:15px}
+.zpc-plan b{font-family:var(--sans);font-size:12.5px;color:var(--red)}
+.zpc-plan .zpc-agent{font-family:var(--sans);font-size:12px;color:var(--ink-mut);white-space:nowrap}
+@media (max-width:640px){.zpc-mod-head{grid-template-columns:1fr}.zpc-plan li{grid-template-columns:1fr}.zpc-acc dl{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#content">Přeskočit na hlavní obsah</a>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Srovnávač pojišťoven</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<div class="zpc-strip" role="note"><b>Pracovní verze pod heslem, neindexovaná.</b> Čísla z výročních zpráv jsou přepsána z PDF a čekají na druhé ověření. Název projektu se teprve hledá („Hlídač“ pracovní skupina odmítla jako konfrontační; ve hře jsou Průvodce pojištěnce, Navigátor, Zrcadlo, Kompas).</div>
+
+<main id="content">
+
+  <section class="ed-hero" aria-labelledby="zpHeroHeadline">
+    <div class="ed-hero-content">
+      <div class="ed-kicker">Srovnávač zdravotních pojišťoven · pracovní verze</div>
+      <h1 class="ed-hero-headline" id="zpHeroHeadline">Sedm pojišťoven, jeden pojištěnec. Co pro něj která skutečně dělá?</h1>
+      <p class="ed-hero-lead">
+        Projekt think tanku Ministr zdraví a Národní asociace pacientských organizací se zaměřuje na vztah pojišťovny a pojištěnce, ne pojišťovny a nemocnice. Nemá pojišťovny kontrolovat, má pojištěncům pomoci se orientovat: co nabízejí aplikace, co z fondu prevence má doložitelný přínos, jak se liší kmen a hospodaření a jak pojišťovny podporují zdravotní gramotnost.
+      </p>
+      <p class="ed-hero-lead">
+        Stavíme na datech, která už existují (Centrální registr pojištěnců, výroční zprávy, pojistné plány, hodnocení MZ a MF), a doplňujeme je dotazy pojišťovnám. Každé číslo má zdroj a rok. Hodnocení v semaforu vzniká až po právu pojišťovny na odpověď.
+      </p>
+      <ul class="zpc-modnav" aria-label="Moduly srovnávače">
+        <li><a href="#modul-aplikace">1 · Aplikace<span class="zpc-faze">první výstup</span></a></li>
+        <li><a href="#modul-prevence">2 · Prevence a fond prevence</a></li>
+        <li><a href="#modul-kmen">3 · Kmen a hospodaření</a></li>
+        <li><a href="#modul-gramotnost">4 · Zdravotní gramotnost<span class="zpc-faze">v přípravě</span></a></li>
+        <li><a href="#modul-metodika">5 · Metodika a semafor</a></li>
+        <li><a href="#modul-plan">6 · Plán a zdroje</a></li>
+      </ul>
+    </div>
+    <aside class="ed-hero-stats" aria-label="Klíčová čísla" id="zpHeroStats"></aside>
+  </section>
+
+  <!-- Modul 1: Aplikace -->
+  <section class="zpc-mod" id="modul-aplikace" aria-labelledby="zpAppHead">
+    <div class="zpc-mod-head"><h2 id="zpAppHead">1 · Co umí aplikace pojišťoven</h2><span class="zpc-stav">první výstup · zápis PS 7. 10. 2026</span></div>
+    <p class="zpc-lead">Pracovní skupina zvolila srovnání aplikací jako první téma: je konkrétní, srozumitelné a dá se doložit. Matice ukazuje deset funkcí podle interní analýzy digitalizace a výročních zpráv. Kritéria uživatelské přívětivosti (5–7 hledisek) doplní IT expert podle podkladu Mariana Rybáře.</p>
+    <div id="zpAppMatrix" class="zpc-tbl"></div>
+    <p class="zpc-cap" id="zpAppCap"></p>
+    <div class="zpc-grid2">
+      <div class="zpc-box"><h4>Co z toho plyne</h4><ul id="zpAppSummary"></ul></div>
+      <div class="zpc-box"><h4>Rozpory a chybějící data</h4><ul id="zpAppNotes"></ul></div>
+    </div>
+  </section>
+
+  <!-- Modul 2: Prevence -->
+  <section class="zpc-mod" id="modul-prevence" aria-labelledby="zpPrevHead">
+    <div class="zpc-mod-head"><h2 id="zpPrevHead">2 · Preventivní programy a fond prevence</h2><span class="zpc-stav">kolo 1 · rešerše z webů a VZ</span></div>
+    <p class="zpc-lead">Fond prevence zůstává tématem, ale pracovní skupina nechce hodnotit jeho výši ani seznam benefitů. Koruny na pojištěnce o přínosu nevypovídají. Otázka zní, zda programy podporují užitečné aktivity a zda lze jejich výsledek doložit. Proto vedle nabídky ukazujeme strukturu čerpání a to málo, co pojišťovny o výsledcích uvádějí.</p>
+    <h3 class="section-title"><span>Nabídka podle oblastí</span></h3>
+    <p class="zpc-note">Redakční odhad síly nabídky z webů pojišťoven (interní rešerše 2026): nejsilnější / silné / základní / minimální. Není to hodnocení dopadu.</p>
+    <div id="zpPrevMatrix" class="zpc-tbl"></div>
+    <div class="zpc-grid2">
+      <div><h3 class="section-title"><span>Onkologický screening</span></h3><div id="zpPrevOnko" class="zpc-tbl"></div></div>
+      <div><h3 class="section-title"><span>Duševní zdraví</span></h3><div id="zpPrevDusevni" class="zpc-tbl"></div></div>
+    </div>
+    <h3 class="section-title" style="margin-top:28px"><span>Kam jdou peníze z fondu prevence</span></h3>
+    <p class="zpc-note">Struktura čerpání podle účelových položek z výročních zpráv (tis. Kč, skutečnost vs. plán). Vyberte pojišťovnu.</p>
+    <div id="zpFpStruktura"></div>
+    <div class="zpc-grid2" style="margin-top:20px">
+      <div class="zpc-box"><h4>Doložené výsledky, které pojišťovny samy uvádějí</h4><ul id="zpDolozene"></ul></div>
+      <div class="zpc-box"><h4>Měří pojišťovna dopad? (výroční zprávy 2024)</h4><ul id="zpMereni"></ul></div>
+    </div>
+    <h3 class="section-title" style="margin-top:28px"><span>Odpovědi na sedm otázek z výročních zpráv</span></h3>
+    <p class="zpc-note">Co lze na sedm otázek prvního kola odpovědět už z výročních zpráv. Mezery jsou přesně to, na co se pojišťoven zeptáme.</p>
+    <div id="zpOdpovedi"></div>
+  </section>
+
+  <!-- Modul 3: Kmen a hospodaření -->
+  <section class="zpc-mod" id="modul-kmen" aria-labelledby="zpKmenHead">
+    <div class="zpc-mod-head"><h2 id="zpKmenHead">3 · Kmen a hospodaření</h2><span class="zpc-stav">CRP 2025 · MZ a MF 2024 · ZPP 2026</span></div>
+    <p class="zpc-lead">Kontext, bez kterého se nedá nic férově srovnávat: kdo koho pojišťuje, jak starý kmen nese a s jakou rezervou vstupuje do roku 2026. Náklady i prevence na pojištěnce se v dalších kolech budou standardizovat na věkovou strukturu ČR.</p>
+    <div id="zpCards" class="zpc-cards"></div>
+    <p class="zpc-cap">Karty: kmen, věková struktura a regionální těžiště z CRP (ÚZIS, OIS 11-47, verze 2026-01, rok 2025; sparkline = tržní podíl 2010–2025). Náklady a fond prevence za rok 2024 z Hodnocení vývoje systému v.z.p. (MZ ČR + MF) a výročních zpráv. Zůstatky z plánů na rok 2026 (sněmovní tisk 280/0). Pomlčka = nedohledáno.</p>
+    <div class="zpc-charts">
+      <div class="zpc-chart"><h4>Tržní podíl 2025</h4><span class="zpc-sub">% pojištěnců ČR · CRP OIS 11-47</span><div id="zpChartShare"></div></div>
+      <div class="zpc-chart"><h4>Podíl seniorů 65+ v kmeni</h4><span class="zpc-sub">Starší kmen = vyšší náklady; přerozdělení to má vyrovnávat. ČR průměr přerušovaně.</span><div id="zpChart65"></div></div>
+    </div>
+    <h3 class="section-title"><span>Hospodaření 2024</span></h3>
+    <div id="zpTableFin" class="zpc-tbl"></div>
+    <p class="zpc-cap">Primární zdroj: Hodnocení vývoje systému v.z.p. v roce 2024 (MZ ČR + MF; pojištěnci = roční průměr, saldo = příjmy − výdaje, hotovostní metodika), doplněno výročními zprávami 2024. Provoz = výdaje na vlastní činnost v % příjmů (limit podle vyhlášky 418/2003 Sb.). Zůstatky na bankovních účtech podle sněmovního tisku 280/0 (tab. 9). Příjmy, náklady a saldo v mld Kč; fond prevence a zůstatky v mil. Kč.</p>
+    <div class="zpc-charts">
+      <div class="zpc-chart"><h4>Náklady na zdravotní služby na pojištěnce</h4><span class="zpc-sub">Kč za rok 2024 · nestandardizováno na věk</span><div id="zpChartNzs"></div></div>
+      <div class="zpc-chart"><h4>Rezervy na konci roku 2026</h4><span class="zpc-sub">Zůstatek na účtech jako % ročních výdajů · plán ZPP 2026. Pod 3–4 % vznikají dluhy po splatnosti.</span><div id="zpChartZust"></div></div>
+    </div>
+    <h3 class="section-title"><span>Klientský servis</span></h3>
+    <div id="zpTablePrev" class="zpc-tbl"></div>
+    <div class="zpc-grid2">
+      <div class="zpc-box"><h4>Poznámky k jednotlivým pojišťovnám</h4><ul id="zpNotes"></ul></div>
+      <div class="zpc-box"><h4>Co se nepodařilo dohledat</h4><ul id="zpChybi"></ul></div>
+    </div>
+  </section>
+
+  <!-- Modul 4: Zdravotní gramotnost -->
+  <section class="zpc-mod" id="modul-gramotnost" aria-labelledby="zpGramHead">
+    <div class="zpc-mod-head"><h2 id="zpGramHead">4 · Zdravotní gramotnost a rizikoví pojištěnci</h2><span class="zpc-stav">v přípravě · druhé téma PS</span></div>
+    <p class="zpc-lead">Druhé téma pracovní skupiny: jak pojišťovny podporují zdravotní gramotnost svých klientů a jak pracují s rizikovými skupinami (obézní děti, křehcí senioři, chroničtí a polypragmatičtí pacienti). Pojišťovny pracují jen s vykázanými daty, chybí jim BMI, pohyb i životní styl. Personalizovaná komunikace naráží na souhlas s profilováním.</p>
+    <div class="zpc-grid2">
+      <div class="zpc-box"><h4>Rizikové skupiny a data, která chybí</h4><div id="zpRizikove"></div></div>
+      <div class="zpc-box zpc-q"><h4>Dotazník pro pojišťovny (návrh)</h4><div id="zpOtazky"></div></div>
+    </div>
+    <div class="zpc-box" style="margin-top:20px"><h4>Další směry zkoumání</h4><ul id="zpDalsi"></ul></div>
+  </section>
+
+  <!-- Modul 5: Metodika -->
+  <section class="zpc-mod" id="modul-metodika" aria-labelledby="zpMetHead">
+    <div class="zpc-mod-head"><h2 id="zpMetHead">5 · Metodika a semafor</h2><span class="zpc-stav">derivát metodiky Barometru</span></div>
+    <p class="zpc-lead">Šest oblastí, čtyři stavy, stejná pravidla jako Barometr: doslovná citace, zamrazená baseline, interpretace viditelně oddělená od dat, žádné motivy, právo na odpověď deset dní před zveřejněním. Semafor je zatím prázdný: první verdikty vzniknou až po prvním kole odpovědí a po lidském schválení (třída C).</p>
+    <div class="zpc-sem" aria-label="Stavy semaforu"><span class="g">doloženo daty</span><span class="w">deklarováno, nedoloženo</span><span class="b">nedoloženo</span><span>neodpověděla / mimo lhůtu</span><span>zatím nehodnoceno</span></div>
+    <div id="zpSemafor" class="zpc-tbl"></div>
+    <div class="zpc-grid2" style="margin-top:20px">
+      <div class="zpc-box"><h4>Pravidla férovosti</h4><ul>
+        <li><b>Standardizace na věk a pohlaví.</b> Náklady i prevence na pojištěnce se přepočítávají na strukturu ČR (CRP).</li>
+        <li><b>Stejná otázka, stejná lhůta, stejný formát.</b> Všech sedm pojišťoven dostane totéž podání ve stejný den; odpovědi se zveřejňují v plném znění.</li>
+        <li><b>Partnerský tón.</b> Před oficiálním dotazem nabídka dobrovolného předání dat; pojišťovna je partner i předmět hodnocení.</li>
+        <li><b>Žádné predikce, žádné motivy.</b> Hodnotíme vztah tvrzení k datům, ne osoby ani úmysly.</li>
+        <li><b>Opravy viditelně.</b> Každá změna skóre má záznam s datem a důvodem.</li></ul></div>
+      <div class="zpc-box"><h4>Co dělá vydavatel, co dělá AI</h4><ul>
+        <li>Sběr a přepis dat, grafy, drafty textů: AI rutina (třída B).</li>
+        <li>Verdikty semaforu, texty o pojmenovaných pojišťovnách, odeslání dotazů: člověk (třída C).</li>
+        <li>Metodiku garantuje odborná skupina (Advance, FBMI ČVUT, NAPO), ne redakce.</li></ul></div>
+    </div>
+  </section>
+
+  <!-- Modul 6: Plán -->
+  <section class="zpc-mod" id="modul-plan" aria-labelledby="zpPlanHead">
+    <div class="zpc-mod-head"><h2 id="zpPlanHead">6 · Plán modulů a zdroje</h2><span class="zpc-stav">příští PS 12. 11. 2026</span></div>
+    <p class="zpc-lead">Pracovní skupina chce během roku tři srozumitelná, nízkonákladová a doložitelná témata. Moduly níže jsou seřazené podle toho, co je hotové z existujících dat, a podle náročnosti; podrobný plán s rozdělením práce je v souboru 09_Srovnavac_pojistoven_plan.md.</p>
+    <ul class="zpc-plan">
+      <li><b>hotovo</b><span>Modul 3 Kmen a hospodaření: CRP, MZ a MF 2024, ZPP 2026. Druhé ověření čísel z PDF.</span><span class="zpc-agent">kontrola: člověk</span></li>
+      <li><b>hotovo (data)</b><span>Modul 1 Aplikace: matice funkcí. Chybí 5–7 kritérií přívětivosti a počty uživatelů u šesti ZP (dotaz).</span><span class="zpc-agent">IT expert + dotaz ZP</span></li>
+      <li><b>kolo 1</b><span>Modul 2 Prevence: struktura fondu prevence a odpovědi z VZ hotové; sedm otázek pojišťovnám (nabídka spolupráce, poté zákon 106).</span><span class="zpc-agent">člověk odesílá · AI vyhodnocuje</span></li>
+      <li><b>kolo 2</b><span>Modul 4 Zdravotní gramotnost: dotazník rizikových skupin, personalizace, přístupnost aplikací pro 65+.</span><span class="zpc-agent">metodika PS</span></li>
+      <li><b>průběžně</b><span>Modul 5 Semafor: první verdikty po odpovědích a právu na odpověď; roční aktualizace z VZ a ZPP automaticky.</span><span class="zpc-agent">rutina + vydavatel</span></li>
+      <li><b>později</b><span>Index pojišťoven, průvodce volbou před přestupními termíny (30. 6., 31. 12.), kalkulačka prevence, mapa dostupnosti podle pojišťovny.</span><span class="zpc-agent">rozhodne PS</span></li>
+    </ul>
+    <h3 class="section-title" style="margin-top:28px"><span>Zdroje</span></h3>
+    <ul id="zpSources" class="zpc-note" style="padding-left:1.1em"></ul>
+  </section>
+
+  <section class="section related-section" aria-labelledby="relatedHeading">
+    <div class="section-title"><h3 id="relatedHeading">Příbuzné sekce</h3></div>
+    <div class="related-grid">
+      <a class="related-card" href="pojistenci.html"><div class="related-card-kicker">CRP · 2010–2025</div><h4 class="related-card-title">Atlas pojištěnců</h4><p class="related-card-desc">Kmen sedmi pojišťoven kraj po kraji, rok po roce.</p><span class="related-card-arrow" aria-hidden="true">→</span></a>
+      <a class="related-card" href="clanek-pojistne-plany-2026.html"><div class="related-card-kicker">Sněmovní tisk 280</div><h4 class="related-card-title">Schodek podle plánu</h4><p class="related-card-desc">Pojistné plány 2026: saldo −14,9 mld a rezervy u kritické hranice.</p><span class="related-card-arrow" aria-hidden="true">→</span></a>
+      <a class="related-card" href="clanek-bonus-za-zdravi-pojistne.html"><div class="related-card-kicker">Financování</div><h4 class="related-card-title">Bonus za zdraví patří do fondu prevence</h4><p class="related-card-desc">Co říkají randomizované studie o pobídkách a jak to dělá Německo.</p><span class="related-card-arrow" aria-hidden="true">→</span></a>
+      <a class="related-card" href="barometr.html"><div class="related-card-kicker">Metodika</div><h4 class="related-card-title">Barometr</h4><p class="related-card-desc">Pravidla, ze kterých semafor srovnávače vychází.</p><span class="related-card-arrow" aria-hidden="true">→</span></a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/pojistovny.js"></script>
+</body>
+</html>
