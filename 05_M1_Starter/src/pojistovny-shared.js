@@ -65,6 +65,11 @@ export const boolMark = (v) => (v === true ? '<span class="zpc-yes">✓</span>' 
 export const dot = (kod) => `<span class="zpc-dot" style="--c:${ZP_COLOR[kod] || 'var(--ink)'}"></span>`;
 export const li = (arr) => (arr || []).map((s) => `<li>${esc(s)}</li>`).join('') || '<li class="zpc-na">—</li>';
 export const set = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
+/** ISO datum (YYYY-MM-DD, případně s časem) → „14. 10. 2026“; cokoli jiného se vrátí beze změny. */
+export function datumCz(iso) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(iso ?? ''));
+  return m ? `${Number(m[3])}. ${Number(m[2])}. ${m[1]}` : String(iso ?? '');
+}
 export const short = (s, n = 70) => (s ? (String(s).length > n ? String(s).slice(0, n - 1) + '…' : String(s)) : '');
 
 async function fetchJson(url, attempt = 0) {

@@ -1027,13 +1027,48 @@ primitivy … (.zpv-) === */` na konci `styles.css`.
 | `meter(value, {max, min, label, thresholds:[{at,signal}], text, unit, dec})` | číslo | `role="meter"` + `aria-valuenow/min/max/valuetext`; track = světlejší krok barvy signálu (`good/warn/bad/neutral`) |
 | `indexedLines(series, {title, sub, base:'first'\|rok, source, unit, dec})` | `series[{kod\|key, label, points[{year, value}]}]` | SVG `viewBox 0 0 360 232`, index základ = 100, jedna osa, hairline mřížka, 2px čáry (`pathLength=1`), koncové tečky r 4 s prstencem, direct labels s leader lines (při přeplnění jen legenda), legenda vždy; dvojče = řádek na rok (index + absolutní hodnota) |
 | `dumbbell(items, {title, sub, unit, dec, fromLabel:'plán', toLabel:'skutečnost', source, sort, maxv})` | `items[{kod\|key, label, from, to}]` | HTML; „from“ prázdné kolečko `--ink-mut`, „to“ plný mark; hodnota vždy u plného bodu (při poklesu vlevo od něj přes `--x`, není-li místo, za prázdným bodem); osa od 0,9 × minima, když by body ležely v úzkém pásu (v záhlaví „Osa nezačíná nulou“); `sortNote` jako u `rankedBars`; rozdíl v % v tooltipu a v tabulce |
-| `heatmap(rows, cols, cell, {title, sub, levels, source, sortable:true, rowHeader})` | `cell(row,col) → {level:0..3\|null, text?, tip?}` | `<table class="zpv-matrix zpv-heat">`, `td.zpv-cell[data-level]` s textem stupně, popis v `data-tip` + `sr-only`; rampa `--zpv-ramp-0..3` (light `--paper2`→`#1c5cab`, dark →`#6da7ec`); hlavičky `button.zpv-sort[data-col]` + `aria-sort="none"` (chování jinde); skrytá věta `[data-zpv-sortnote]` („Řazeno podle stupně, nejde o hodnocení pojišťoven“), kterou po prvním seřazení odkryje `zp-interact.js` |
+| `heatmap(rows, cols, cell, {title, sub, levels, source, sortable:true, rowHeader, foot})` | `cell(row,col) → {level:0..3\|null, text?, tipText?, tip?}` | `<table class="zpv-matrix zpv-heat">`, `td.zpv-cell[data-level]` s textem stupně (nebo vlastním `text`, např. počtem), popis v `data-tip` + `sr-only` (`tipText` = co stojí za dvojtečkou v tooltipu, výchozí `text`; `foot` = věta `p.zpv-foot` pod legendou); rampa `--zpv-ramp-0..3` (light `--paper2`→`#1c5cab`, dark →`#6da7ec`); hlavičky `button.zpv-sort[data-col]` + `aria-sort="none"` (chování jinde); skrytá věta `[data-zpv-sortnote]` („Řazeno podle stupně, nejde o hodnocení pojišťoven“), kterou po prvním seřazení odkryje `zp-interact.js` |
 | `dotMatrix(rows, cols, cell, {title, sub, scoreLabel:'n/10', source, rowHeader})` | `cell → true\|false\|'partial'\|null` | kolečka `.zpv-pip--yes/no/part` s `role="img"` + `aria-label`, „—“ pro null; poslední sloupec `meter` (ano = 1, částečně = 0,5, / počet známých) |
 | `coverageMatrix(rows, cols, cell, {title, sub, source, labels, rowHeader})` | `cell → 'ano'\|'castecne'\|'ne'\|null\|{stav, tip}` | stav vždy ikona (✓ ½ ✕) + text, ikona v `--good/--warn/--bad`, text v inkoustu (SC 1.4.1) |
 
 Pomocné exporty: `foldParts`, `indexSeries`, `niceTicks`, `dodgeLabels`,
 `meterSignal`, `dotScore`, `diffPct`, `sortDesc`, `pct`, `fmtValue`,
 `NA_TEXT`, `ZP_KODY`, `HEAT_LEVELS`, `COVERAGE_STATES`.
+
+**Heatmapa s počtem (nabídka prevence, `buildPrevHeatmap`).** Barva buňky zůstává
+redakční stupeň (`level`, rampa a legenda se čtyřmi slovy se nemění, řazení jede
+podle `data-level`), ale **text v buňce je počet nalezených položek** — částí
+`popis` oddělených čárkou nebo středníkem (`pocetPolozek`: „screeningy, omezené
+benefity“ = 2; prázdný popis = „—“). Tooltip říká stupeň a co rešerše našla
+(`tipText: 'stupeň základní'`, `tip: 'rešerše na webu našla 2 položky: …'`).
+Pod legendou je povinná věta `foot` „Číslo v buňce = kolik programů rešerše na
+webu našla; odstín = redakční stupeň.“ Číslo je počet položek v textu rešerše,
+ne kvalita ani objem programu; proto stupeň zůstává odstínem a nehodnotí se podle
+čísla.
+
+**Stáří dat (`src/pojistovny-stari.js`).** Každá podstránka srovnávače ukazuje
+(1) pod `.zpc-mod-head` (na přehledu v hero) jednu větu `p.zpc-stari` „Data: CRP
+2025 · MZ 2024 · VZ 2024 (OZP 2025, ZPŠ 2020)“ a (2) nad patičkou „Zdroje dat
+srovnávače“ sbalený `details.zpc-acc.zpc-stari-acc` „Stáří dat na této stránce“
+s tabulkou dataset · k datu/rok · zdroj · stav. Obojí skládá `stariRadky()` ze
+**stejného registru** (`STARI_REGISTR`), který čte roky a data za běhu z datasetů,
+které stránka načítá (`rok_crp`, `rok_hospodareni`, `rok_vz`, `reserse.datum`,
+`ref_datum`, `stav_k`, `generated_at`); řádek, jehož soubor stránka nenačetla, se
+vynechá. Míchají-li se na stránce dva roky téže veličiny (náklady 2024 a 2025,
+výroční zprávy o prevenci 2020/2024/2025), blok přidá `p.zpc-stari-warn`
+(„Pozor, míchají se roky …“) a summary dostane poznámku „míchají se roky“.
+Nový dataset = jeden řádek v registru (`vyber(dataset) → {kDatu, kratce, roky,
+stav}`, `stranky` = kde se ukazuje, `velicina` = skupina pro detekci míchání).
+
+**Záložky srovnávače (`.zpc-tabs`)** jsou ve dvou skupinách (`ZP_SKUPINY` v
+`src/pojistovny-shell.js`): „Pro pojištěnce“ vlevo (Přehled, Kmen a hospodaření,
+Prevence, Aplikace, Zdravotní gramotnost) a „Pro redakci a data“ vpravo
+(`.zpc-tabs-grp--redakce`: Metodika a semafor, Indikátory a data) — písmo 13 px,
+za svislým oddělovačem. Každá skupina je vlastní `<ul>` pojmenovaný skrytým
+`span.zpc-tabs-lbl.sr-only` (`aria-labelledby`). Na úzkém displeji se celý pás
+posouvá do stran a skupiny jdou za sebou. Rozcestník na přehledu (`temaKartyHtml`)
+má totéž dělení: velké karty `.zpc-tema-card` a pod nadpisem „Pro redakci a data“
+(`.zpc-ov-h3`) menší `.zpc-tema-card--mini` bez věty.
 
 **Mobil (indexedLines):** SVG se škáluje rovnoměrně (žádné
 `preserveAspectRatio="none"`). ViewBox 360 je šitý na telefon (390px viewport ≈

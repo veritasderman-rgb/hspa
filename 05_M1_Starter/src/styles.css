@@ -22548,8 +22548,14 @@ select.zpc-note{color:var(--ink);background:var(--paper);border:1px solid var(--
 .zpc-shell .zpc-strip{margin:0 0 14px;padding:8px 14px}
 .zpc-shell-head{display:flex;flex-direction:column;gap:6px}
 .zpc-kicker{font-family:var(--sans);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--ink-mut);margin:0}
-.zpc-tabs ul{display:flex;gap:2px;list-style:none;margin:0;padding:0;border-bottom:1px solid var(--rule2);overflow-x:auto;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+/* záložky ve dvou skupinách: pro pojištěnce vlevo, pro redakci a data vpravo (světlejší, za svislým oddělovačem);
+   na úzkém displeji se celý pás posouvá do stran a skupiny jdou za sebou */
+.zpc-tabs{display:flex;align-items:stretch;border-bottom:1px solid var(--rule2);overflow-x:auto;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+.zpc-tabs ul{display:flex;gap:2px;list-style:none;margin:0;padding:0;flex:none}
 .zpc-tabs li{flex:none;margin:0}
+.zpc-tabs .zpc-tabs-grp--pojistenci{margin-right:16px}
+.zpc-tabs .zpc-tabs-grp--redakce{margin-left:auto;padding-left:10px;border-left:1px solid var(--rule2)}
+.zpc-tabs-grp--redakce .zpc-tab{font-size:13px;color:var(--ink-mut)}
 .zpc-tab{display:inline-flex;align-items:center;min-height:40px;padding:8px 12px;font-family:var(--sans);font-size:14px;color:var(--ink-mut);text-decoration:none;border-bottom:3px solid transparent;white-space:nowrap}
 .zpc-tab:hover{color:var(--ink);border-bottom-color:var(--rule2)}
 .zpc-tab[aria-current="page"]{color:var(--ink);font-weight:600;border-bottom-color:var(--ink)}
@@ -22559,6 +22565,15 @@ select.zpc-note{color:var(--ink);background:var(--paper);border:1px solid var(--
 .zpc-moje-wrap{margin:0 0 20px}
 .zpc-moje-wrap .zpc-moje-lbl{margin-top:0}
 .zpc-zdroje-wrap{margin-top:32px}
+/* stáří dat: věta pod nadpisem + sbalená tabulka nad patičkou Zdroje (src/pojistovny-stari.js) */
+.zpc-stari{font-family:var(--sans);font-size:13px;line-height:1.5;color:var(--ink-mut);margin:-4px 0 14px}
+.zpc-stari-wrap{margin-top:32px}
+.zpc-stari-wrap+.zpc-zdroje-wrap{margin-top:8px}
+.zpc-stari-warn{font-family:var(--sans);font-size:13.5px;line-height:1.5;margin:6px 0 10px;padding:8px 12px;border-left:3px solid var(--warn);background:var(--paper2);color:var(--ink)}
+.zpc-stari-acc .zpc-tbl table{min-width:640px}
+.zpc-stari-acc .zpc-tbl td.zpc-txt{min-width:140px}
+.zpc-proc .zpc-note{margin:4px 0 10px}
+.zpc-proc .zpc-note a{color:var(--ink);text-underline-offset:3px}
 .zpc-zdroje .zpc-acc-body li{font-family:var(--sans);font-size:13px}
 .zpc-zdroje .zpc-acc-body a{overflow-wrap:anywhere}
 /* přehled */
@@ -22618,6 +22633,11 @@ select.zpc-note{color:var(--ink);background:var(--paper);border:1px solid var(--
 .zpc-tema-title{font-family:var(--serif);font-size:19px;font-weight:700;line-height:1.2}
 .zpc-tema-veta{font-family:var(--serif);font-size:15px;line-height:1.45}
 .zpc-tema-co{font-family:var(--sans);font-size:12.5px;color:var(--ink-mut)}
+.zpc-ov-h3{font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mut);margin:22px 0 8px}
+.zpc-tema-grid--mini{grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.zpc-tema-card--mini{padding:9px 14px;gap:1px;border-top-width:1px;background:var(--paper2)}
+.zpc-tema-card--mini .zpc-tema-title{font-size:16px}
+.zpc-tema-card--mini .zpc-tema-kicker{font-size:10.5px}
 .zpc-ov-about{margin:0 0 8px}
 /* síť odborností (prototyp) */
 .zpc-sit-limit{color:var(--ink);border-left:3px solid var(--warn);padding-left:12px}
@@ -22797,6 +22817,7 @@ select.zpc-note{color:var(--ink);background:var(--paper);border:1px solid var(--
 
 /* legenda (pořadí = pořadí marků; čísla neopakuje) */
 .zpv-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 10px 0 0; padding: 0; list-style: none; font-size: 12.5px; line-height: 1.5; }
+.zpv-foot { margin: 8px 0 0; font-family: var(--sans); font-size: 12.5px; line-height: 1.5; color: var(--ink-mut); }
 .zpv-legend li { display: inline-flex; align-items: center; gap: 6px; }
 .zpv-legend--db { margin: 0 0 6px; }
 .zpv-sw { display: inline-block; flex: none; width: 10px; height: 10px; border-radius: 2px; background: var(--zpv-zp, var(--ink)); }

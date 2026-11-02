@@ -10,7 +10,7 @@
 //   buildAppMatrix, buildKriteriaMatrix, buildPrevHeatmap, buildOnkoMatrix, buildDusevniHeatmap,
 //   buildFondParts, coverageState, buildCoverage, odhadniSkupinu.
 
-import { NA, esc, num, fmtKc, levelBadge, dot, li, set, short, LEVELS, LEVEL_LABEL } from './pojistovny-shared.js';
+import { NA, esc, num, fmtKc, levelBadge, dot, li, set, short, datumCz, LEVELS, LEVEL_LABEL } from './pojistovny-shared.js';
 import { heatmap, dotMatrix, coverageMatrix, segmentedBar, dumbbell, isNum } from './zp-viz.js';
 import { initZpInteract, MOJE_EVENT } from './zp-interact.js';
 import { ZP_BY_KOD } from './zp-palette.js';
@@ -139,14 +139,38 @@ export function levelOf(stupen) {
   return n == null ? null : n;
 }
 
-/** Heatmapa nabídky 7 ZP × 9 oblastí. */
+/**
+ * Počet položek v popisu rešerše: části oddělené čárkou nebo středníkem („screeningy, omezené
+ * benefity“ = 2). Čárka v závorce se počítá taky (výčet programů); prázdný popis = 0.
+ */
+export function pocetPolozek(popis) {
+  if (popis == null) return 0;
+  return String(popis).split(/[,;]/).map((s) => s.trim()).filter(Boolean).length;
+}
+
+const polozekCz = (n) => `${n} ${n === 1 ? 'položku' : n >= 2 && n <= 4 ? 'položky' : 'položek'}`;
+
+/** Věta pod maticí nabídky: co znamená číslo a co odstín. */
+export const PREV_HEAT_FOOT = 'Číslo v buňce = kolik programů rešerše na webu našla; odstín = redakční stupeň.';
+
+/**
+ * Heatmapa nabídky 7 ZP × 9 oblastí. Barva buňky = redakční stupeň, text v buňce = počet
+ * položek, které rešerše na webu našla („—“ = žádná); tooltip nese stupeň a popis z webu.
+ */
 export function buildPrevHeatmap(p) {
   const rows = (p?.pojistovny || []).map((z) => ({ kod: z.kod, label: z.zkratka, sub: z.rok_vz ? `VZ ${z.rok_vz}` : '', _z: z }));
   const cols = (p?.oblasti || []).map((o) => ({ key: o.id, label: o.label }));
   const cell = (r, c) => {
     const o = r._z.oblasti?.[c.key];
     const level = levelOf(o?.stupen);
-    return level == null ? null : { level, tip: o?.popis || undefined };
+    if (level == null) return null;
+    const n = pocetPolozek(o?.popis);
+    return {
+      level,
+      text: n ? String(n) : '—',
+      tipText: `stupeň ${LEVEL_LABEL[level]}`,
+      tip: n ? `rešerše na webu našla ${polozekCz(n)}: ${o.popis}` : 'rešerše na webu nenašla konkrétní program',
+    };
   };
   return { rows, cols, cell };
 }
@@ -189,14 +213,16 @@ export function buildPrevProc(p) {
     push('Onkologický screening', 'nadstandard', z.onko_screening?.nadstandard);
     for (const c of dus) push('Duševní zdraví', c.label, z.dusevni?.[c.id]);
     const bezDuvodu = items.filter((i) => !i.popis).length;
-    return { kod: z.kod, zkratka: z.zkratka, rok_vz: z.rok_vz ?? null, items, bezDuvodu };
+    return { kod: z.kod, zkratka: z.zkratka, rok_vz: z.rok_vz ?? null, reserse: z.reserse?.datum ? { datum: z.reserse.datum, url: z.reserse.url || null } : null, items, bezDuvodu };
   });
 }
 
 export function prevProcHtml(p) {
   const list = buildPrevProc(p);
   if (!list.length) return '<p class="zpc-na">—</p>';
-  return list.map((z) => `<details class="zpc-acc zpc-proc" data-zp="${esc(z.kod)}"><summary>${dot(z.kod)}${esc(z.zkratka)}<span class="zpc-n">${z.items.length} položek${z.bezDuvodu ? ` · ${z.bezDuvodu} bez uvedeného důvodu` : ''}</span></summary><div class="zpc-acc-body"><ul>`
+  return list.map((z) => `<details class="zpc-acc zpc-proc" data-zp="${esc(z.kod)}"><summary>${dot(z.kod)}${esc(z.zkratka)}<span class="zpc-n">${z.items.length} položek${z.bezDuvodu ? ` · ${z.bezDuvodu} bez uvedeného důvodu` : ''}`
+    + `${z.reserse ? ` · rešerše webu ${esc(datumCz(z.reserse.datum))}` : ''}</span></summary><div class="zpc-acc-body">`
+    + `${z.reserse?.url ? `<p class="zpc-note">Rešerše webu ${esc(datumCz(z.reserse.datum))}: <a href="${esc(z.reserse.url)}" rel="noopener">stránka prevence ${esc(z.zkratka)}</a>.</p>` : ''}<ul>`
     + z.items.map((i) => `<li><b>${esc(i.skupina)} · ${esc(i.label)}</b> · ${levelBadge(i.level)} ${i.popis ? esc(i.popis) : '<span class="zpc-na">bez uvedeného důvodu</span>'}</li>`).join('')
     + '</ul></div></details>').join('');
 }
@@ -456,8 +482,8 @@ export function renderPrevence(p, d) {
     const hm = buildPrevHeatmap(p);
     set('zpPrevMatrix', heatmap(hm.rows, hm.cols, hm.cell, {
       title: 'Nabídka preventivních programů podle oblastí',
-      sub: 'Stupeň je odhad redakce z webu pojišťovny, ne měření. Proč: najeďte na buňku, nebo rozbalte seznam pod maticí. Kliknutím na sloupec seřadíte.',
-      source: srcWeb, sortable: true, rowHeader: 'Pojišťovna',
+      sub: 'Barva je odhad redakce z webu pojišťovny, ne měření. Proč: najeďte na buňku, nebo rozbalte seznam pod maticí. Kliknutím na sloupec seřadíte podle stupně.',
+      source: srcWeb, sortable: true, rowHeader: 'Pojišťovna', foot: PREV_HEAT_FOOT,
     }));
     // onko
     const on = buildOnkoMatrix(p);

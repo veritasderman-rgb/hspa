@@ -140,12 +140,17 @@ export function semaforRadekHtml(d) {
     + `<a href="${esc(met.href)}">Jak bude hodnocení vznikat →</a></span></p>`;
 }
 
-/** Rozcestník podstránek (karty s kickerem, názvem, větou a „co tam najdu“). */
-export function temaKartyHtml(stranky = ZP_STRANKY) {
-  return stranky.filter((s) => s.id !== 'prehled').map((s) => `<li><a class="zpc-tema-card" href="${esc(s.href)}">`
+/**
+ * Rozcestník podstránek jedné skupiny. `pojistenci` = velké karty (kicker, název, věta, „co tam
+ * najdu“); `redakce` = menší karty bez věty (kicker, název, „co tam najdu“) pro samostatný řádek
+ * „Pro redakci a data“. Přehled sám se do rozcestníku nedává.
+ */
+export function temaKartyHtml(skupina = 'pojistenci', stranky = ZP_STRANKY) {
+  const mini = skupina === 'redakce';
+  return stranky.filter((s) => s.id !== 'prehled' && s.skupina === skupina).map((s) => `<li><a class="zpc-tema-card${mini ? ' zpc-tema-card--mini' : ''}" href="${esc(s.href)}">`
     + `<span class="zpc-tema-kicker">${esc(s.kicker || '')}</span>`
     + `<span class="zpc-tema-title">${esc(s.label)}<span aria-hidden="true">\u00a0→</span></span>`
-    + `<span class="zpc-tema-veta">${esc(s.veta || '')}</span>`
+    + (mini ? '' : `<span class="zpc-tema-veta">${esc(s.veta || '')}</span>`)
     + `<span class="zpc-tema-co">${esc(s.co || '')}</span></a></li>`).join('');
 }
 
@@ -158,7 +163,7 @@ function tile(figureHtml, temaId) {
 /**
  * Vstupy přehledu → HTML jednotlivých kontejnerů (bez DOM).
  * @param {{d, a, p, tiles?: Array, kmen?: object}} x  kmen = buildKmenCharts(d), tiles = heroTiles(d)
- * @returns {{hero: string, grafy: string, semafor: string, temata: string, souhrny: Array}}
+ * @returns {{hero: string, grafy: string, semafor: string, temata: string, temataRedakce: string, souhrny: Array}}
  */
 export function buildPrehled({ d, a, p, tiles, kmen }) {
   // Mřížka 2 × 2: podíl | rezervy, prevence | aplikace (na mobilu stejné pořadí v posuvném pásu).
@@ -189,7 +194,8 @@ export function buildPrehled({ d, a, p, tiles, kmen }) {
     hero: tiles ? statTiles(tiles, { title: 'Klíčová čísla systému' }) : '',
     grafy: grafy.join(''),
     semafor: d ? semaforRadekHtml(d) : '',
-    temata: temaKartyHtml(),
+    temata: temaKartyHtml('pojistenci'),
+    temataRedakce: temaKartyHtml('redakce'),
     souhrny: zpSouhrny(d, a),
   };
 }
@@ -211,7 +217,8 @@ function paintKarta(doc, souhrny) {
 }
 
 /**
- * Vykreslí přehled do #zpHeroStats, #zpOvKarta, #zpOvGrafy, #zpOvSemafor, #zpOvTemata.
+ * Vykreslí přehled do #zpHeroStats, #zpOvKarta, #zpOvGrafy, #zpOvSemafor, #zpOvTemata
+ * a #zpOvTemataRedakce.
  * Kartu překresluje při změně „Moje pojišťovna“.
  */
 export function renderPrehled({ d, a, p, tiles, kmen }, doc = globalThis.document) {
@@ -221,6 +228,7 @@ export function renderPrehled({ d, a, p, tiles, kmen }, doc = globalThis.documen
   set('zpOvGrafy', out.grafy || '<p class="zpc-na">Data srovnávače se nepodařilo načíst.</p>');
   set('zpOvSemafor', out.semafor);
   set('zpOvTemata', out.temata);
+  set('zpOvTemataRedakce', out.temataRedakce);
   const host = doc.getElementById('zpOvKarta');
   if (!host) return;
   paintKarta(doc, out.souhrny);

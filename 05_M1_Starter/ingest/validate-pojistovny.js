@@ -320,6 +320,12 @@ export function validateAll(datasets) {
       ok(!codes.has(z?.kod), `${tag}: duplicitní kód`);
       codes.add(z?.kod);
       ok(isNum(z?.rok_vz), `${tag}.rok_vz: musí být číslo (${JSON.stringify(z?.rok_vz)})`);
+      // reserse {datum, url}: kdy a z jaké stránky proběhla rešerše webu; volitelné, když je, musí být úplné
+      if (z?.reserse != null) {
+        ok(isObj(z.reserse), `${tag}.reserse: musí být objekt {datum, url}`);
+        ok(isIsoDate(z.reserse?.datum), `${tag}.reserse.datum: musí být datum YYYY-MM-DD (${JSON.stringify(z.reserse?.datum)})`);
+        ok(isStr(z.reserse?.url) && /^https?:\/\//.test(z.reserse.url), `${tag}.reserse.url: musí být adresa http(s) (${JSON.stringify(z.reserse?.url)})`);
+      }
 
       for (const [id, o] of Object.entries(z?.oblasti ?? {})) {
         ok(oblIds.includes(id), `${tag}.oblasti: neznámé id '${id}'`);
