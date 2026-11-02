@@ -261,7 +261,7 @@ test('buildMesicniSeries: 7 sérií po 58 bodech, kód = data-zp, značky osy po
   assert.equal(ch.series.length, 7);
   assert.ok(ch.series.every((s) => s.points.length === 58 && s.kod && s.label));
   assert.equal(ch.opts.base, 2022);
-  assert.deepEqual(ch.opts.xTicks.map((t) => t.label), ['1/2022', '2023', '2024', '2025', '2026']);
+  assert.deepEqual(ch.opts.xTicks.map((t) => t.label), ['2022', '2023', '2024', '2025', '2026']);
   const html = indexedLines(ch.series, ch.opts);
   assert.equal((html.match(/class="zpv-series"/g) || []).length, 7);
   for (const kod of KODY) assert.ok(html.includes(`data-zp="${kod}"`), `chybí data-zp ${kod}`);
@@ -322,6 +322,8 @@ test('věta pod grafem: odvozeno podílem dvou částek MZ, přestupní termíny
   assert.match(v, /přestupním termínům 1\. 1\. a 1\. 7\./);
   assert.match(v, /nejde o hodnocení/);
   assert.match(v, /1\/2022 až 10\/2026/);
+  assert.match(v, /65\/2022 Sb\./, 'skok VZP v dubnu 2022 má uvedený důvod (lex Ukrajina)');
+  assert.match(v, /neprodloužily/, 'pokles v dubnu 2023 má uvedený důvod');
   assert.doesNotMatch(v, /undefined/);
 });
 

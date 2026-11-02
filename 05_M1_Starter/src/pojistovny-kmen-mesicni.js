@@ -47,9 +47,9 @@ export function buildMesicniSeries(K) {
     label: z.zkratka,
     points: mesice.map((m, i) => ({ year: mesicX(m), value: isNum(z.pocty?.[i]) ? z.pocty[i] : null })),
   }));
-  // značky osy: každé leden (první s měsícem a rokem, ostatní jen rok)
+  // značky osy: každý leden, popsaný jen rokem (na mobilu by se „1/2022“ a „2023“ slévaly; měsíc základu říká podtitulek)
   const ticks = mesice.filter((m) => m.endsWith('-01'))
-    .map((m) => ({ x: mesicX(m), label: m === mesice[0] ? mesicLabel(m) : m.slice(0, 4) }));
+    .map((m) => ({ x: mesicX(m), label: m.slice(0, 4) }));
   const prvni = mesice[0], posledni = mesice[mesice.length - 1];
   return {
     series,
@@ -121,7 +121,7 @@ export function veta(K) {
   const mesice = K?.mesice || [];
   const od = mesice.length ? mesicLabel(mesice[0]) : '';
   const do_ = mesice.length ? mesicLabel(mesice[mesice.length - 1]) : '';
-  return `Počty pojištěnců jsou odvozené podílem dvou částek z měsíčního přerozdělení MZ (částka po přerozdělení na pojišťovnu děleno částkou na jednoho pojištěnce), MZ je takto přímo nezveřejňuje; průměr roku 2024 se od ročního průměru podle MZ liší o méně než 0,1 %. Skoky mezi prosincem a lednem a mezi červnem a červencem odpovídají přestupním termínům 1. 1. a 1. 7.; změny mimo ně (například u VZP ČR v dubnu 2022 a 2023) zdroj nevysvětluje. Období ${od} až ${do_}. Řazeno podle kódu pojišťovny, nejde o hodnocení.`;
+  return `Počty pojištěnců jsou odvozené podílem dvou částek z měsíčního přerozdělení MZ (částka po přerozdělení na pojišťovnu děleno částkou na jednoho pojištěnce), MZ je takto přímo nezveřejňuje; průměr roku 2024 se od ročního průměru podle MZ liší o méně než 0,1 %. Skoky mezi prosincem a lednem a mezi červnem a červencem odpovídají přestupním termínům 1. 1. a 1. 7.; změny mimo ně zdroj MZ nevysvětluje. Skok VZP ČR v dubnu 2022 časově odpovídá registraci uprchlíků z Ukrajiny s dočasnou ochranou, kteří jsou podle zákona č. 65/2022 Sb. (účinnost 21. 3. 2022) pojištěnci vedenými u VZP ČR (do února 2023 jich VZP registrovala téměř 367,5 tisíce); pokles v dubnu 2023 časově odpovídá konci dočasné ochrany u osob, které si ji do konce března 2023 neprodloužily. Počet osob v těchto skocích zdroje neuvádějí. Období ${od} až ${do_}. Řazeno podle kódu pojišťovny, nejde o hodnocení.`;
 }
 
 /** Vykreslí obě kontejnery (chybí-li dataset, ukáže stav „nedohledáno“). */

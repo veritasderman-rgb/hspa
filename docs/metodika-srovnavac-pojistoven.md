@@ -203,7 +203,15 @@ neověřeno). Součet sedmi ZP odpovídá řádku „Celkem zdravotní pojišťo
 **Co to není.** Počet je odvozená hodnota, ne publikovaný údaj; pole `zdroj` to říká a věta pod
 grafem také. Změna mezi prosincem a lednem a mezi červnem a červencem je čistá změna kmene, ne
 hrubé toky přestupů (zahrnuje narození, úmrtí, stěhování a opravy registru) a zdroj nerozlišuje
-příčinu; změny mimo přestupní termíny (např. VZP ČR v dubnu 2022 a 2023) nevysvětluje. Chybějící
+příčinu a změny mimo přestupní termíny nevysvětluje. Dva největší skoky mají doložený kontext,
+ne doložený počet: nárůst VZP ČR v dubnu 2022 (+4,2 %, +246 tis.) časově odpovídá registraci
+uprchlíků z Ukrajiny s dočasnou ochranou, kteří jsou podle zákona č. 65/2022 Sb. (účinnost 21. 3. 2022)
+pojištěnci vedenými u VZP ČR — VZP jich do 21. 2. 2023 registrovala téměř 367,5 tisíce
+([VZP, Rok války na Ukrajině](https://www.vzp.cz/o-nas/aktuality/rok-valky-na-ukrajine-data-o-cerpani-zdravotni-pece-ukrajinci-v-cesku),
+[VZP, informace pro poskytovatele](https://www.vzp.cz/poskytovatele/informace-pro-praxi/poradna/informace-pro-poskytovatele-zdravotnich-sluzeb-poskytujicich-peci-osobam-ktere-uprchly-z-uzemi-ukrajiny-v-dusledku-ozbrojeneho-konfliktu));
+pokles v dubnu 2023 (−1,9 %, −117 tis.) časově odpovídá konci dočasné ochrany u osob, které si ji
+do konce března 2023 neprodloužily (tamtéž). Kolik osob tyto skoky tvoří, žádný ze zdrojů neuvádí,
+proto věta pod grafem mluví o časové shodě, ne o příčině. Chybějící
 měsíc zůstane `null`, nic se nedomýšlí (dnes žádný nechybí; rok 2026 má zatím 10 měsíců).
 
 **Data a skript.** `ingest/manual/pojistovny/prerozdeleni-mz-pojistovna.json` + `prerozdeleni-mz.json`
