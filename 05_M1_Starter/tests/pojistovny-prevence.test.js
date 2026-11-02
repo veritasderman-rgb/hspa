@@ -288,17 +288,20 @@ test('validátor: skupina položky fondu musí být ze slovníku', () => {
 });
 
 // ---------------------------------------------------------------- HTML kontejnery
-test('pojistovny.html: kontejnery modulů 1, 2, 4 existují a bylo použito progressive disclosure', () => {
-  const html = fs.readFileSync(path.join(ROOT, 'pojistovny.html'), 'utf8');
-  for (const id of ['zpAppMatrix', 'zpAppKriteria', 'zpPrevMatrix', 'zpPrevOnko', 'zpPrevDusevni', 'zpFpStruktura',
-    'zpOdpovediMatrix', 'zpOdpovedi', 'zpDolozene', 'zpMereni', 'zpRizikove', 'zpOtazky', 'zpDalsi', 'zpDotaznik', 'zpDotaznikAgregace']) {
-    assert.match(html, new RegExp(`id="${id}"`), id);
-  }
-  // select z původního fondu prevence je pryč
-  assert.doesNotMatch(html, /zpFpSelect/);
-  const sec = (id) => html.split(`id="${id}"`)[1].split('</section>')[0];
-  for (const id of ['modul-aplikace', 'modul-prevence', 'modul-gramotnost']) {
-    assert.ok((sec(id).match(/<details class="zpc-acc/g) || []).length >= 3, `${id}: rozklikávací vysvětlivky`);
-    assert.equal((sec(id).match(/<p class="zpc-lead">/g) || []).length, 1, `${id}: jeden lead`);
+test('podstránky aplikace / prevence / gramotnost (P1.6): kontejnery modulů 1, 2, 4 a progressive disclosure', () => {
+  const page = { 'modul-aplikace': 'pojistovny-aplikace.html', 'modul-prevence': 'pojistovny-prevence.html', 'modul-gramotnost': 'pojistovny-gramotnost.html' };
+  const ids = {
+    'modul-aplikace': ['zpAppMatrix', 'zpAppKriteria'],
+    'modul-prevence': ['zpPrevMatrix', 'zpPrevOnko', 'zpPrevDusevni', 'zpFpStruktura', 'zpOdpovediMatrix', 'zpOdpovedi', 'zpDolozene', 'zpMereni'],
+    'modul-gramotnost': ['zpRizikove', 'zpOtazky', 'zpDalsi', 'zpDotaznik', 'zpDotaznikAgregace'],
+  };
+  for (const [mod, file] of Object.entries(page)) {
+    const html = fs.readFileSync(path.join(ROOT, file), 'utf8');
+    for (const id of ids[mod]) assert.match(html, new RegExp(`id="${id}"`), `${file}: ${id}`);
+    // select z původního fondu prevence je pryč
+    assert.doesNotMatch(html, /zpFpSelect/);
+    const sec = html.split(`id="${mod}"`)[1].split('</section>')[0];
+    assert.ok((sec.match(/<details class="zpc-acc/g) || []).length >= 3, `${mod}: rozklikávací vysvětlivky`);
+    assert.equal((sec.match(/<p class="zpc-lead">/g) || []).length, 1, `${mod}: jeden lead`);
   }
 });

@@ -20,6 +20,11 @@ const PAGES = [
   { path: '/legislativa.html',     name: 'legislativa' },
   { path: '/barometr.html',        name: 'barometr' },
   { path: '/pojistovny.html',      name: 'insurers' },
+  { path: '/pojistovny-kmen.html',       name: 'insurers-kmen' },
+  { path: '/pojistovny-prevence.html',   name: 'insurers-prevence' },
+  { path: '/pojistovny-aplikace.html',   name: 'insurers-aplikace' },
+  { path: '/pojistovny-gramotnost.html', name: 'insurers-gramotnost' },
+  { path: '/pojistovny-metodika.html',   name: 'insurers-metodika' },
   // Stabilní článek drží v gate pokrytí sdílené article šablony (CSS/JS).
   // Visual snapshot článku je vynechán (nedeterministické count-up animace),
   // ale axe analýza je deterministická.

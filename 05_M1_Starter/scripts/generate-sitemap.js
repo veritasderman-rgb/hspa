@@ -58,6 +58,13 @@ export const SITEMAP_EXCLUDED = {
   '/konference.html': { typ: 'noindex', duvod: 'akce, ne evergreen obsah' },
   '/konference-prezentace.html': { typ: 'noindex', duvod: 'podklad k prezentaci' },
   '/tiskovazprava.html': { typ: 'noindex', duvod: 'jednorázový podklad pro média' },
+  // Srovnávač pojišťoven: pracovní verze pod heslem (middleware.js), do zveřejnění rozhodnutím PS mimo sitemapu.
+  '/pojistovny.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, pracovní verze pod heslem' },
+  '/pojistovny-kmen.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, podstránka pod heslem' },
+  '/pojistovny-prevence.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, podstránka pod heslem' },
+  '/pojistovny-aplikace.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, podstránka pod heslem' },
+  '/pojistovny-gramotnost.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, podstránka pod heslem' },
+  '/pojistovny-metodika.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, podstránka pod heslem' },
 };
 
 // Kurátorovaný seznam statických (sekčních) stránek.

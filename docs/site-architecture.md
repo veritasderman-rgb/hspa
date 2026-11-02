@@ -117,14 +117,27 @@ zdrave-cesko.cz/
 | **JS moduly** | `src/pojistenci.js` → `page-shared` |
 | **CSS namespace** | `.pojistenci-*` (atlas, controls, story, tile) |
 
-### `pojistovny.html` — Srovnávač zdravotních pojišťoven (pracovní, mimo sitemapu)
+### `pojistovny.html` + `pojistovny-*.html` — Srovnávač zdravotních pojišťoven (pracovní, pod heslem, mimo sitemapu)
+
+Od balíčku P1.6 (`PLAN-SROVNAVAC-POJISTOVEN.md` § 2.8) má srovnávač **přehled a pět podstránek**. Všech šest stránek je `noindex`, za heslem (`middleware.js`, matcher `/pojistovny`, `/pojistovny.html`, `/pojistovny-:path*`, `/data/pojistovny*`) a v `SITEMAP_EXCLUDED`.
+
+| Stránka | Obsah | Kontejnery | Script tagy |
+|---|---|---|---|
+| `pojistovny.html` (přehled, general view) | hero + 3 KPI, výběr „Moje pojišťovna“, karta vybrané ZP (bez výběru 7 malých karet = tlačítka výběru), jeden graf na téma v mřížce 2 × 2 (na mobilu posuvný pás): tržní podíl, rezervy 2026, co VZ říkají o prevenci (matice pokrytí), funkce aplikací n/10; semafor jako jeden řádek „zatím nehodnoceno“ (do prvních verdiktů), rozcestník 5 podstránek, „O projektu“ | `#zpHeroStats`, `#zpMojeZp`, `#zpOvKarta`, `#zpPrehled` > `#zpOvGrafy`, `#zpOvSemafor`, `#zpOvTemata` | `pojistovny.js` |
+| `pojistovny-kmen.html` | modul 3 celý: KPI, tržní podíl, karty ZP, kraje, index 2010 = 100, změna 2015 → 2025, věk a náklady, tabulka hospodaření, rezervy, provoz, VZ 2025 (věta, dokud nejsou u všech), klientský servis, **síť smluvních odborností (prototyp)**, poznámky | `#zpChart*`, `#zpCards`, `#zpKraje`, `#zpTableFin`, `#zpSit`, … | `pojistovny.js`, `pojistovny-kraje.js`, `pojistovny-sit.js` |
+| `pojistovny-prevence.html` | modul 2: nabídka 7 × 9, onko, duševní zdraví, struktura fondu prevence, doložené výsledky, odpovědi z VZ | `#zpPrevMatrix`, `#zpFpStruktura`, `#zpOdpovediMatrix`, … | `pojistovny.js` |
+| `pojistovny-aplikace.html` | modul 1: funkce 7 × 10, kritéria přívětivosti, rozpory | `#zpAppMatrix`, `#zpAppKriteria`, … | `pojistovny.js` |
+| `pojistovny-gramotnost.html` | modul 4: rizikové skupiny, otázky kola 2, dotazník (adresné odkazy `?dotaznik=…&token=…`), agregáty | `#zpRizikove`, `#zpDotaznik`, `#zpDotaznikAgregace`, … | `pojistovny.js` |
+| `pojistovny-metodika.html` | modul 5 + 6: semafor, žádosti, ověření VZ, pravidla férovosti, plán, příbuzné sekce | `#zpSemafor`, `#zpZadosti`, `#zpVerifikace` | `pojistovny.js`, `pojistovny-semafor.js`, `pojistovny-zadosti.js`, `pojistovny-verifikace.js` |
 
 | | |
 |---|---|
-| **Účel** | Srovnání sedmi zdravotních pojišťoven podle metodiky `docs/metodika-srovnavac-pojistoven.md`: kmen a hospodaření, prevence, aplikace, semafor, registr dotazů. Plán: `PLAN-SROVNAVAC-POJISTOVEN.md`. |
-| **Fetchuje** | `data/pojistovny*.json`, `data/pojistenci-d5-zp.json` (líně), `data/zadosti-106.json` |
-| **JS moduly** | `src/pojistovny.js` (hero, modul 3) · `pojistovny-prevence.js` (moduly 1–2) · `zp-viz.js` (grafové primitivy) · `zp-interact.js` („Moje pojišťovna“, tooltip) · `zp-palette.js` · `zp-dotaznik.js` · **`pojistovny-kraje.js`** (`#zpKraje`: dlaždicová mapa krajů přes `cz-map.js` + těžiště kmene, fetch až při přiblížení k viewportu) · **`pojistovny-semafor.js`** (`#zpSemafor`: tabulka stavů 7 × 6 s ikonou + textem, stanoviska pojišťoven, changelog) · **`pojistovny-zadosti.js`** (`#zpZadosti`: matice dotazů a tabulka lhůt) |
-| **CSS namespace** | `.zpc-*` (stránka) · `.zpv-*` (primitivy) · `.zpi-*` (interakce) · `.zpd-*` (dotazníky) · `.zpk-*` (kraje) · `.zps-*` (semafor) · `.zpz-*` (žádosti) |
+| **Účel** | Srovnání sedmi zdravotních pojišťoven podle metodiky `docs/metodika-srovnavac-pojistoven.md`. Plán: `PLAN-SROVNAVAC-POJISTOVEN.md`. |
+| **Shell** | `src/pojistovny-shell.js` — `renderZpShell()` vykreslí do `#zpShell` (první prvek `<main>`, `data-aktivni="<tema>"`) pásek pracovní verze, kicker a záložky témat (`aria-current="page"`), do `#zpZdroje` sbalené zdroje z `pojistovny.json`; volá i `renderModuleNav('pojistovny')`, masthead a footer. Staré odkazy `pojistovny.html#modul-…` a `?dotaznik=` přesměruje `legacyRedirect()` na podstránky. |
+| **Orchestrace** | `src/pojistovny.js` běží na všech šesti stránkách a podle přítomných kontejnerů rozhodne, která data načte (`POTREBA`) a které renderery zavolá; `loadJson` v `pojistovny-shared.js` drží jeden slib na URL (shell, orchestrátor i semafor sdílejí jeden fetch `pojistovny.json`). Každý renderer bez kontejneru nic nevykreslí. |
+| **Fetchuje** | `data/pojistovny.json` (vždy), `pojistovny-aplikace.json` / `-prevence.json` / `-otazky.json` / `-dotaznik-agregaty.json` jen na stránkách, které je zobrazují; `pojistenci-d5-zp.json` a `pojistovny-sit.json` líně (kmen); `zadosti-106.json`, `pojistovny-verifikace.json` (metodika) |
+| **JS moduly** | `pojistovny.js` (orchestrace, hero, modul 3) · **`pojistovny-shell.js`** · **`pojistovny-prehled.js`** (přehled: karta ZP, mřížka grafů, semafor-řádek, rozcestník) · `pojistovny-prevence.js` (moduly 1, 2, 4) · `zp-viz.js` (primitivy) · `zp-interact.js` („Moje pojišťovna“ přes `localStorage` `hspa-moje-zp` — výběr drží i mezi podstránkami, tooltip) · `zp-palette.js` · `zp-dotaznik.js` · `pojistovny-kraje.js` (`#zpKraje`) · **`pojistovny-sit.js`** (`#zpSit`: heatmapa 7 ZP × 7 odborností, kvartily, tabulka kraj × ZP; prototyp, povinné věty o metodě nad grafem) · `pojistovny-semafor.js` (`#zpSemafor`) · `pojistovny-zadosti.js` (`#zpZadosti`) · `pojistovny-verifikace.js` (`#zpVerifikace`) |
+| **CSS namespace** | `.zpc-*` (stránky, shell `.zpc-shell`/`.zpc-tabs`, přehled `.zpc-overview-grid`/`.zpc-ov-*`/`.zpc-tema-*`, síť `.zpc-sit-*`) · `.zpv-*` (primitivy) · `.zpi-*` (interakce) · `.zpd-*` (dotazníky) · `.zpk-*` (kraje) · `.zps-*` (semafor) · `.zpz-*` (žádosti) |
 
 ### `prevence.html` — Prevence
 

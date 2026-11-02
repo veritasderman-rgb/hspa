@@ -441,6 +441,10 @@ function sortHeat(btn) {
   sorted.forEach((row) => tbody.appendChild(row));
   table.querySelectorAll('th[aria-sort]').forEach((h) => h.removeAttribute('aria-sort'));
   th.setAttribute('aria-sort', dir === 'asc' ? 'ascending' : 'descending');
+  // Po seřazení se ukáže věta „Řazeno podle stupně, nejde o hodnocení“ (heatmap() ji nese skrytou).
+  const fig = table.closest ? table.closest('figure') : null;
+  const note = fig ? fig.querySelector('[data-zpv-sortnote]') : null;
+  if (note) note.hidden = false;
 }
 
 function setupMotion(main, win, reduced) {

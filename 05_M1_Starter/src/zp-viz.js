@@ -558,6 +558,7 @@ function signedPct(p) {
  */
 export function dumbbell(items, opts = {}) {
   const { unit = '', dec = 0, fromLabel = 'plán', toLabel = 'skutečnost', source = '', sort = 'desc', maxv } = opts;
+  // sortNote: jako u rankedBars (výchozí SORT_NOTE, false vypne).
   const list = (Array.isArray(items) ? items : []).filter((it) => it && typeof it === 'object')
     .map((it) => ({ ...it, from: isNum(it.from) ? it.from : null, to: isNum(it.to) ? it.to : null }));
   if (!list.length) return emptyFigure('dumbbell', opts);
@@ -565,6 +566,11 @@ export function dumbbell(items, opts = {}) {
   const vals = rows.flatMap((r) => [r.from, r.to]).filter(isNum);
   let max = isNum(maxv) && maxv > 0 ? maxv : Math.max(0, ...vals);
   if (!(max > 0)) max = 1;
+  // Osa od 0,9 × minimum, když by jinak všechny body ležely v úzkém pásu vpravo
+  // (rozdíl by nebyl vidět); v záhlaví pak poznámka „osa nezačíná nulou“.
+  const minv = vals.length ? Math.min(...vals) : 0;
+  const lo = minv > 0 && 0.9 * minv > 0.1 * max ? 0.9 * minv : 0;
+  const at = (v) => pct(v - lo, max - lo);
 
   const toTexts = rows.map((r) => fmtValue(r.to, dec, unit));
   const rowsHtml = rows.map((r, i) => {
@@ -579,17 +585,23 @@ export function dumbbell(items, opts = {}) {
     if (r.to == null) {
       inner = `<span class="zpv-na">${NA_TEXT}</span>`;
     } else {
-      const a = isNum(r.from) ? Math.max(0, r.from) : null;
-      const b = Math.max(0, r.to);
+      const a = isNum(r.from) ? Math.max(lo, r.from) : null;
+      const b = Math.max(lo, r.to);
       if (a != null) {
-        const lo = Math.min(a, b);
+        const mn = Math.min(a, b);
         const dir = b >= a ? 'up' : 'down';
-        inner += `<span class="zpv-db-line zpv-db-line--${dir}" data-zpv-anim="bar" style="--w:${pct(lo, max)};width:${pct(Math.abs(b - a), max)};--i:${i}" aria-hidden="true"></span>`
-          + `<span class="zpv-db-from" style="--w:${pct(a, max)}" aria-hidden="true"></span>`;
+        inner += `<span class="zpv-db-line zpv-db-line--${dir}" data-zpv-anim="bar" style="--w:${at(mn)};width:${pct(Math.abs(b - a), max - lo)};--i:${i}" aria-hidden="true"></span>`
+          + `<span class="zpv-db-from" style="--w:${at(a)}" aria-hidden="true"></span>`;
       }
-      inner += `<span class="zpv-db-to zpv-mark"${id} data-zpv-anim="dot" style="--w:${pct(b, max)};--i:${i}" tabindex="0" role="img" `
-        + `aria-label="${esc(`${r.label}: ${toLabel} ${tt}, ${fromLabel} ${ft}`)}" data-tip="${tip}"></span>`
-        + `<span class="zpv-val" style="--w:${pct(Math.max(a ?? 0, b), max)}">${esc(tt)}</span>`;
+      // Hodnota patří k plnému bodu („to“): vpravo od něj, při poklesu vlevo od něj;
+      // vlevo jen když je tam místo (≥ 25 % osy), jinak až za prázdným bodem.
+      const posB = (b - lo) / (max - lo);
+      let val;
+      if (a == null || b >= a) val = `<span class="zpv-val" style="--w:${at(b)}">${esc(tt)}</span>`;
+      else if (posB >= 0.25) val = `<span class="zpv-val zpv-val--neg zpv-val--db" style="--x:${at(b)}">${esc(tt)}</span>`;
+      else val = `<span class="zpv-val" style="--w:${at(a)}">${esc(tt)}</span>`;
+      inner += `<span class="zpv-db-to zpv-mark"${id} data-zpv-anim="dot" style="--w:${at(b)};--i:${i}" tabindex="0" role="img" `
+        + `aria-label="${esc(`${r.label}: ${toLabel} ${tt}, ${fromLabel} ${ft}`)}" data-tip="${tip}"></span>` + val;
     }
     return `<div class="zpv-row"${id} data-tip="${tip}"><span class="zpv-label">${esc(r.label ?? '')}</span>`
       + `<span class="zpv-track"><span class="zpv-area">${inner}</span></span></div>`;
@@ -601,7 +613,10 @@ export function dumbbell(items, opts = {}) {
   const plot = `<div class="zpv-plot zpv-barlist zpv-dbplot ${valWidthClass(toTexts)}" role="group" aria-label="${esc(aria)}">${legend}${rowsHtml}</div>`;
   const table = tableTwin(opts.title, ['Položka', fromLabel, toLabel, 'Rozdíl'],
     rows.map((r, i) => [esc(r.label ?? ''), esc(fmtValue(r.from, dec, unit)), esc(toTexts[i]), esc(signedPct(diffPct(r.from, r.to)))]));
-  return figure('dumbbell', opts, plot + table);
+  let extra = lo > 0 ? `<span class="zpv-axisnote">Osa nezačíná nulou (od ${esc(fmtValue(lo, dec, unit))}).</span>` : '';
+  const note = opts.sortNote === undefined ? SORT_NOTE : opts.sortNote;
+  if (sort === 'desc' && note) extra += `<span class="zpv-sortnote">${esc(note)}</span>`;
+  return figure('dumbbell', opts, plot + table, { extraCap: extra });
 }
 
 // ---------------------------------------------------------------------
@@ -624,10 +639,13 @@ function rowHead(r) {
   return `<th scope="row"><span class="zpv-rowlab">${esc(r.label ?? '')}</span>${sub}</th>`;
 }
 
-function matrixFigure(typ, o, tableHtml, legend) {
+function matrixFigure(typ, o, tableHtml, legend, extraCap = '') {
   const scroll = `<div class="zpv-scroll" tabindex="0" role="region" aria-label="${esc(o.title || 'Tabulka')}">${tableHtml}</div>`;
-  return figure(typ, o, scroll + (legend || ''));
+  return figure(typ, o, scroll + (legend || ''), { extraCap });
 }
+
+/** Věta k řaditelné heatmapě; skrytá, dokud čtenář neklikne na řazení (odkryje ji zp-interact.js). */
+export const HEAT_SORT_NOTE = 'Řazeno podle stupně, nejde o hodnocení pojišťoven.';
 
 function safeCell(fn, r, c) {
   try { return typeof fn === 'function' ? fn(r, c) : null; } catch { return null; }
@@ -672,7 +690,8 @@ export function heatmap(rows, cols, cell, opts = {}) {
 
   const legend = `<ul class="zpv-legend zpv-legend--ramp" aria-label="Stupně">${levels.slice(0, 4).map((l, i) => `<li><i class="zpv-sw zpv-sw--ramp" data-level="${i}" aria-hidden="true"></i>${esc(l)}</li>`).join('')}</ul>`;
   const table = `<table class="zpv-matrix zpv-heat" aria-label="${esc(opts.title || 'Matice')}"><thead>${head}</thead><tbody>${body}</tbody></table>`;
-  return matrixFigure('heatmap', opts, table, legend);
+  const note = sortable ? `<span class="zpv-sortnote" data-zpv-sortnote hidden>${esc(opts.sortNote || HEAT_SORT_NOTE)}</span>` : '';
+  return matrixFigure('heatmap', opts, table, legend, note);
 }
 
 // ---------------------------------------------------------------------

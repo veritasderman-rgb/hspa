@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prevence a fond prevence — Srovnávač pojišťoven, pracovní verze · HSPA Monitor</title>
+<meta name="description" content="Preventivní programy sedmi zdravotních pojišťoven: nabídka podle oblastí, onkologický screening, duševní zdraví, struktura čerpání fondu prevence a odpovědi z výročních zpráv. Pracovní verze.">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Prevence a fond prevence — Srovnávač zdravotních pojišťoven">
+<meta property="og:locale" content="cs_CZ">
+<link rel="stylesheet" href="src/styles.min.css">
+<!--
+  audit:
+    status: draft
+    pristup: heslo (middleware.js, POJISTOVNY_HESLO, matcher /pojistovny-:path*) + noindex
+    trida: C (nová stránka, hodnocení pojmenovaných institucí)
+    stranka: prevence (P1.6, PLAN-SROVNAVAC-POJISTOVEN.md § 2.8)
+    zdroje: data/pojistovny*.json — každá hodnota má zdroj a rok
+-->
+</head>
+<body>
+<a class="skip-link" href="#content">Přeskočit na hlavní obsah</a>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Srovnávač pojišťoven</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+  <div id="zpShell" class="zpc-shell" data-aktivni="prevence"></div>
+
+  <!-- Modul 2: Prevence -->
+  <section class="zpc-mod zpc-mod--page" id="modul-prevence" aria-labelledby="zpPrevHead">
+    <div class="zpc-mod-head"><h1 id="zpPrevHead">Preventivní programy a fond prevence</h1><span class="zpc-stav">kolo 1 · rešerše z webů a VZ</span></div>
+    <p class="zpc-lead">Nehodnotíme výši fondu prevence ani seznam benefitů, ale to, zda programy podporují užitečné aktivity a zda lze jejich výsledek doložit.</p>
+    <div class="zpc-moje-wrap">
+      <p class="zpc-moje-lbl" id="zpMojeLbl">Moje pojišťovna: vyberte ji a zvýrazní se ve všech grafech a tabulkách, i na ostatních stránkách srovnávače.</p>
+      <div id="zpMojeZp" class="zpc-moje" aria-describedby="zpMojeLbl"></div>
+    </div>
+    <div id="zpPrevMatrix"></div>
+    <details class="zpc-acc">
+      <summary>Jak číst nabídku a proč nehodnotíme výši fondu</summary>
+      <div class="zpc-acc-body"><p>Stupeň (nejsilnější / silné / základní / minimální) je redakční odhad síly nabídky z webů pojišťoven (interní rešerše 2026), není to hodnocení dopadu. Fond prevence zůstává tématem, ale pracovní skupina nechce hodnotit jeho výši: koruny na pojištěnce o přínosu nevypovídají. Proto vedle nabídky ukazujeme strukturu čerpání a to málo, co pojišťovny o výsledcích uvádějí.</p></div>
+    </details>
+    <div class="zpc-grid2">
+      <div id="zpPrevOnko"></div>
+      <div id="zpPrevDusevni"></div>
+    </div>
+    <details class="zpc-acc">
+      <summary>Nadstandardní onkologické programy<span class="zpc-n" id="zpPrevNadstandardN"></span></summary>
+      <div class="zpc-acc-body"><ul id="zpPrevNadstandard"></ul></div>
+    </details>
+    <h3 class="section-title zpc-h3"><span>Kam jdou peníze z fondu prevence</span></h3>
+    <p class="zpc-note">Struktura čerpání podle účelových položek z výročních zpráv, skutečnost proti plánu.</p>
+    <div id="zpFpStruktura"></div>
+    <details class="zpc-acc">
+      <summary>Doložené výsledky, které pojišťovny samy uvádějí<span class="zpc-n" id="zpDolozeneN"></span></summary>
+      <div class="zpc-acc-body"><ul id="zpDolozene"></ul></div>
+    </details>
+    <details class="zpc-acc">
+      <summary>Měří pojišťovna dopad? (výroční zprávy 2024)<span class="zpc-n" id="zpMereniN"></span></summary>
+      <div class="zpc-acc-body"><ul id="zpMereni"></ul></div>
+    </details>
+    <h3 class="section-title zpc-h3"><span>Odpovědi na sedm otázek z výročních zpráv</span></h3>
+    <div id="zpOdpovediMatrix"></div>
+    <details class="zpc-acc">
+      <summary>Plné znění z VZ<span class="zpc-n" id="zpOdpovediN"></span></summary>
+      <div class="zpc-acc-body" id="zpOdpovedi"></div>
+    </details>
+  </section>
+
+
+  <div id="zpZdroje" class="zpc-zdroje-wrap"></div>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/pojistovny.js"></script>
+</body>
+</html>
