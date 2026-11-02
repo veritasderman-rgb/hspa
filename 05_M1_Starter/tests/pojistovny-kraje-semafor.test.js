@@ -177,8 +177,8 @@ test('kraje: legenda rampy — 5 vzorků, nejnižší a nejvyšší hodnota', ()
   const ds = buildKrajDataset(D5, '213', 2025);
   const html = legendHtml(ds, false);
   assert.equal(count(html, /class="zpk-sw"/g), 5);
-  assert.match(html, /nejnižší 0,02 %/);
-  assert.match(html, /nejvyšší 27,3 %/);
+  assert.match(html, /nejnižší 0,02\s%/);
+  assert.match(html, /nejvyšší 27,3\s%/);
   assert.notEqual(legendHtml(ds, true), html, 'tmavý režim má jiné barvy');
   assert.equal(legendHtml({ regions: [] }, false), '');
 });

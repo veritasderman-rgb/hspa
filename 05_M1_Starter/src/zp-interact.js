@@ -7,7 +7,9 @@
 //      atribut main[data-moje-zp], event `zp:moje-change` na document.
 //   2. Linked highlight — delegovaný pointerover/focusin na .zpv-mark[data-zp]
 //      nastaví na <main> třídu zpi-hover-<kod> (CSS zvýrazní stejný kód všude).
-//   3. Tooltip — jeden <div class="zpi-tip" role="status" aria-live="polite">.
+//   3. Tooltip — jeden <div class="zpi-tip" role="status" aria-live="polite">,
+//      plní ho .zpv-mark i libovolný prvek s data-tip (TIP_SELECTOR: buňky
+//      heatmapy s popisem programu, dot matrix, matice pokrytí, řádky barů).
 //   4. Animace — IntersectionObserver přidá .is-in na figure.zpv, count-up.
 //   5. Řazení heatmap (button.zpv-sort[data-col]) a „Rozbalit vše“.
 //
@@ -19,6 +21,9 @@ import { formatNumberCz } from './page-shared.js';
 export const STORAGE_KEY = 'hspa-moje-zp';
 export const MOJE_EVENT = 'zp:moje-change';
 export const HOVER_PREFIX = 'zpi-hover-';
+/** Co ukazuje tooltip: datové marky i buňky/řádky s popisem (heatmapa, dot matrix,
+ *  matice pokrytí, řádek baru). Hover i focus; fokusovatelné jsou jen prvky s tabindex. */
+export const TIP_SELECTOR = '.zpv-mark, [data-tip]';
 
 /** Záloha seznamu ZP — použije se jen, když selže import ./zp-palette.js.
  *  Kódy a zkratky odpovídají data/pojistovny.json. */
@@ -44,6 +49,14 @@ const COUNT_MS = 1200;
 
 export function easeOutQuart(t) {
   return 1 - Math.pow(1 - t, 4);
+}
+
+/** Text počítadla: český formát, typografické minus (U+2212) a volitelný prefix —
+ *  stejný výstup jako fmtValue v zp-viz.js, aby count-up nepřepsal „−7,5“ na „-7,5“. */
+export function fmtCount(v, decimals = 0, prefix = '') {
+  if (!Number.isFinite(v)) return null;
+  const d = Math.min(4, Math.max(0, decimals | 0));
+  return `${prefix}${formatNumberCz(v, { minDecimals: d, maxDecimals: d }).replace(/^-/, '\u2212')}`;
 }
 
 /**
@@ -233,8 +246,8 @@ function getTip(doc) {
 
 function runCount(el, win) {
   const target = parseFloat(el.dataset.value);
-  const decimals = Math.min(4, Math.max(0, parseInt(el.dataset.decimals, 10) || 0));
-  const fmt = (v) => formatNumberCz(v, { minDecimals: decimals, maxDecimals: decimals });
+  const decimals = parseInt(el.dataset.decimals, 10) || 0;
+  const fmt = (v) => fmtCount(v, decimals, el.dataset.prefix || '');
   if (!Number.isFinite(target)) return;
   const t0 = win.performance.now();
   const step = (now) => {
@@ -349,7 +362,11 @@ function bindDelegates(main, doc, win) {
   };
 
   const showTip = (mark) => {
-    const text = mark.getAttribute('data-tip');
+    // Mark bez vlastního popisu (kolečko v dot matrix) bere text z nejbližšího
+    // předka s data-tip (buňka); pozice tooltipu zůstává u marku.
+    const holder = mark.hasAttribute('data-tip') ? mark
+      : (mark.parentElement && mark.parentElement.closest ? mark.parentElement.closest('[data-tip]') : null);
+    const text = holder ? holder.getAttribute('data-tip') : null;
     if (!text) return;
     tip.textContent = text;
     tip.classList.add('is-on');
@@ -370,7 +387,7 @@ function bindDelegates(main, doc, win) {
     tip.textContent = '';
   };
 
-  const markOf = (e) => (e.target && e.target.closest ? e.target.closest('.zpv-mark') : null);
+  const markOf = (e) => (e.target && e.target.closest ? e.target.closest(TIP_SELECTOR) : null);
 
   const enter = (e) => {
     const mark = markOf(e);
@@ -382,7 +399,7 @@ function bindDelegates(main, doc, win) {
     if (e.type === 'pointerout' && e.pointerType === 'touch') return; // dotyk: schová další klepnutí
     const mark = markOf(e);
     if (!mark) return;
-    const to = e.relatedTarget && e.relatedTarget.closest ? e.relatedTarget.closest('.zpv-mark') : null;
+    const to = e.relatedTarget && e.relatedTarget.closest ? e.relatedTarget.closest(TIP_SELECTOR) : null;
     if (to === mark) return;
     if (!to) { setHover(null); hideTip(); }
   };
@@ -393,7 +410,7 @@ function bindDelegates(main, doc, win) {
   main.addEventListener('focusout', leave);
 
   doc.addEventListener('pointerdown', (e) => {
-    if (e.target && e.target.closest && e.target.closest('.zpv-mark')) return;
+    if (e.target && e.target.closest && e.target.closest(TIP_SELECTOR)) return;
     setHover(null);
     hideTip();
   });
@@ -433,11 +450,7 @@ function setupMotion(main, win, reduced) {
   counts.forEach((c) => { c.setAttribute('data-zpi-init', '1'); });
   figures.forEach((f) => { f.setAttribute('data-zpi-init', '1'); });
 
-  const finalText = (el) => {
-    const d = Math.min(4, Math.max(0, parseInt(el.dataset.decimals, 10) || 0));
-    const v = parseFloat(el.dataset.value);
-    return Number.isFinite(v) ? formatNumberCz(v, { minDecimals: d, maxDecimals: d }) : null;
-  };
+  const finalText = (el) => fmtCount(parseFloat(el.dataset.value), parseInt(el.dataset.decimals, 10) || 0, el.dataset.prefix || '');
 
   if (reduced || typeof win.IntersectionObserver === 'undefined') {
     // Konečný stav bez přechodu: žádná třída zpv-anim-ready, hodnoty rovnou.

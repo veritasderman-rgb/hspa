@@ -167,8 +167,8 @@ export function tezisteItems(d5, kod, rok, zdroj = 'ÚZIS, CRP (OIS 11-47)') {
         label: k.name,
         value,
         rok,
-        tip: `${krajLabel(k.name)}: ${fmtShare(value)} % kmene ${zkr} · ${fmtInt(count)} pojištěnců`
-          + `${popShare == null ? '' : ` · kraj tvoří ${fmtShare(popShare)} % pojištěnců ČR`} · ${rok} · ${zdroj}`,
+        tip: `${krajLabel(k.name)}: ${fmtShare(value)} % kmene ${zkr} · ${fmtInt(count)} pojištěnců`
+          + `${popShare == null ? '' : ` · kraj tvoří ${fmtShare(popShare)} % pojištěnců ČR`} · ${rok} · ${zdroj}`,
       };
     })
     .sort((a, b) => b.value - a.value);
@@ -202,7 +202,7 @@ export function krajReadout(region, zkratka, avg) {
   if (!region) return '';
   const diff = isNum(avg) ? region.value - avg : null;
   const diffTxt = diff == null ? '' : ` (${diff >= 0 ? '+' : '−'}${fmt(Math.abs(diff), 1)} p. b. oproti ČR)`;
-  return `${krajLabel(region.name)} · ${zkratka}: ${fmtShare(region.value)} % pojištěnců kraje${diffTxt} · ${fmtInt(region.count)} pojištěnců`;
+  return `${krajLabel(region.name)} · ${zkratka}: ${fmtShare(region.value)} % pojištěnců kraje${diffTxt} · ${fmtInt(region.count)} pojištěnců`;
 }
 
 /** Věta o tom, která pojišťovna se zobrazuje a proč. */
@@ -250,7 +250,7 @@ export function legendHtml(dataset, dark) {
     const rel = RAMP_REL_MIN + (RAMP_REL_MAX - RAMP_REL_MIN) * t;
     return `<i class="zpk-sw" style="--c:${esc(pickColorNeutral(rel, dark))}" aria-hidden="true"></i>`;
   }).join('');
-  return `<span class="zpk-lg-end">nejnižší ${esc(fmtShare(min))} %</span><span class="zpk-ramp">${swatches}</span><span class="zpk-lg-end">nejvyšší ${esc(fmtShare(max))} %</span>`;
+  return `<span class="zpk-lg-end">nejnižší ${esc(fmtShare(min))} %</span><span class="zpk-ramp">${swatches}</span><span class="zpk-lg-end">nejvyšší ${esc(fmtShare(max))} %</span>`;
 }
 
 // ---------------------------------------------------------------------------
@@ -363,7 +363,7 @@ export function bootKraje(doc = globalThis.document, win = globalThis.window) {
   function defaultReadout() {
     const zkr = ZP_BY_KOD[state.dataset.kod].zkratka;
     const nat = nationalTotals(state.d5, state.dataset.kod, state.dataset.rok);
-    return `ČR celkem: ${zkr} má ${fmt(nat.share, 1)} % pojištěnců (${fmtInt(nat.count)}). Najeďte na kraj nebo ho vyberte tabulátorem.`;
+    return `ČR celkem: ${zkr} má ${fmt(nat.share, 1)} % pojištěnců (${fmtInt(nat.count)}). Najeďte na kraj nebo ho vyberte tabulátorem.`;
   }
 
   function draw() {

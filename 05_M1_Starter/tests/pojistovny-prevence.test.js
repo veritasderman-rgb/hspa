@@ -28,7 +28,7 @@ test('buildAppMatrix: 7 ZP × 10 funkcí, ZPŠ bez údajů, uživatelé v sub ř
   assert.equal(m.cols.length, 10);
   const vzp = m.rows.find((r) => r.kod === '111');
   assert.match(vzp.sub, /Moje VZP/);
-  assert.match(vzp.sub, /2,4 mil\. uživatelů \(2025\)/);
+  assert.match(vzp.sub, /2,4\smil\. uživatelů \(2025\)/);
   const zps = m.rows.find((r) => r.kod === '209');
   assert.match(zps.sub, /funkce bez údajů/);
   for (const c of m.cols) assert.equal(m.cell(zps, c), null);

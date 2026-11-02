@@ -12,6 +12,7 @@ import {
   easeOutQuart, clampTipPosition, sortRowsByLevel, nextSortDir,
   readMojeZp, writeMojeZp, normalizeZpList, renderMojeZpChips,
   ZP_FALLBACK, ZP_KODY, STORAGE_KEY, MOJE_EVENT, HOVER_PREFIX,
+  TIP_SELECTOR, fmtCount,
 } from '../src/zp-interact.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -266,4 +267,23 @@ test('zp-interact.js: kontrakt s grafy (třídy, atributy, parametry IO)', () =>
   assert.doesNotMatch(SRC, /innerHTML/);
   // žádný scroll listener (plán § 6 bod 8)
   assert.doesNotMatch(SRC, /addEventListener\('scroll'/);
+});
+
+// --- tooltip: kontrakt selektoru (revize P1.5, Codex review PR #1343) -----------
+test('TIP_SELECTOR: tooltip cílí na marky i na prvky s data-tip (buňky heatmapy a matic)', () => {
+  const parts = TIP_SELECTOR.split(',').map((s) => s.trim());
+  assert.ok(parts.includes('.zpv-mark'));
+  assert.ok(parts.includes('[data-tip]'));
+  // delegace (hover, focus, odchod, klik mimo) jde jen přes TIP_SELECTOR, ne přes holé '.zpv-mark'
+  assert.doesNotMatch(SRC, /closest\('\.zpv-mark'\)/);
+  assert.ok((SRC.match(/closest\(TIP_SELECTOR\)/g) || []).length >= 3);
+});
+
+// --- count-up: typografické minus -------------------------------------------------
+test('fmtCount: záporné číslo s U+2212, prefix, desetinná místa; NaN → null', () => {
+  assert.equal(fmtCount(-7.5, 1), '−7,5');
+  assert.equal(fmtCount(512.2, 1), '512,2');
+  assert.equal(fmtCount(3.549, 2, '~'), '~3,55');
+  assert.equal(fmtCount(Number.NaN, 1), null);
+  assert.doesNotMatch(fmtCount(-1234.5, 1), /-/);
 });

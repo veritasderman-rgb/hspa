@@ -74,8 +74,9 @@ function idAttr(item) {
 function tipText(item, valueText, source) {
   if (item.tip) return String(item.tip);
   const parts = [`${item.label ?? ''}: ${valueText}`];
-  if (item.rok != null) parts.push(String(item.rok));
   const src = item.zdroj ?? item.source ?? source;
+  // rok jen když ho už neobsahuje popis zdroje („… · 2025“), ať se v tooltipu neopakuje
+  if (item.rok != null && !(src && String(src).includes(String(item.rok)))) parts.push(String(item.rok));
   if (src) parts.push(String(src));
   if (item.note) parts.push(String(item.note));
   return parts.join(' · ');
@@ -263,7 +264,10 @@ export function segmentedBar(parts, opts = {}) {
     const vt = fmtValue(p.value, dec, unit);
     const st = shareText(p.value);
     const folded = p.isOther ? ` (${p.folded.join(', ')})` : '';
-    const tip = esc(p.tip || [`${p.label}${folded}: ${vt}`, st, p.rok, p.zdroj ?? source].filter((x) => x != null && x !== '').join(' · '));
+    // podíl jen když se liší od hodnoty (u jednotky % jsou stejné); rok jen když ho nenese zdroj
+    const srcP = p.zdroj ?? source;
+    const rokP = p.rok != null && !(srcP && String(srcP).includes(String(p.rok))) ? p.rok : null;
+    const tip = esc(p.tip || [`${p.label}${folded}: ${vt}`, st === vt ? null : st, rokP, srcP].filter((x) => x != null && x !== '').join(' · '));
     const slotAttr = p.kod == null ? ` data-slot="${p.isOther ? 'other' : slot++}"` : '';
     let lab = '';
     if (sh >= 14) lab = `<span class="zpv-seg-lab" aria-hidden="true">${esc(st)}</span>`;
@@ -660,7 +664,10 @@ export function heatmap(rows, cols, cell, opts = {}) {
     const text = v.text != null ? String(v.text) : (levels[lvl] ?? String(lvl));
     const tip = [`${r.label} · ${c.label}: ${text}`, v.tip].filter(Boolean).join(' — ');
     const sr = v.tip ? `<span class="sr-only"> — ${esc(v.tip)}</span>` : '';
-    return `<td class="zpv-cell" data-level="${lvl}" data-col="${esc(c.key)}" tabindex="0" data-tip="${esc(tip)}">${esc(text)}${sr}</td>`;
+    // Fokus jen tam, kde tooltip přidá popis (v.tip): bez něj by tooltip jen
+    // opakoval viditelný text buňky a Tab by procházel 63 zastávek naprázdno.
+    const focus = v.tip ? ' tabindex="0"' : '';
+    return `<td class="zpv-cell" data-level="${lvl}" data-col="${esc(c.key)}"${focus} data-tip="${esc(tip)}">${esc(text)}${sr}</td>`;
   }).join('')}</tr>`).join('');
 
   const legend = `<ul class="zpv-legend zpv-legend--ramp" aria-label="Stupně">${levels.slice(0, 4).map((l, i) => `<li><i class="zpv-sw zpv-sw--ramp" data-level="${i}" aria-hidden="true"></i>${esc(l)}</li>`).join('')}</ul>`;

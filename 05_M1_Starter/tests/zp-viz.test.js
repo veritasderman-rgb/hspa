@@ -338,6 +338,21 @@ test('heatmap: sémantická tabulka, data-level, data-zp na řádku, řazení ma
   assert.ok(!heatmap(ROWS, COLS, () => ({ level: 1 }), { sortable: false }).includes('zpv-sort"'));
 });
 
+test('tooltip: rok se neopakuje, když ho nese zdroj; podíl se neopakuje u jednotky %', () => {
+  const b = rankedBars([{ kod: '209', label: 'ZPŠ', value: 19.8, rok: 2025 }], { unit: '%', dec: 1, source: 'ÚZIS · CRP · 2025' });
+  assert.match(b, /data-tip="ZPŠ: 19,8\s% · ÚZIS · CRP · 2025"/);
+  const b2 = rankedBars([{ kod: '209', label: 'ZPŠ', value: 19.8, rok: 2024 }], { unit: '%', dec: 1, source: 'ÚZIS · CRP · 2025' });
+  assert.match(b2, /data-tip="ZPŠ: 19,8\s% · 2024 · ÚZIS · CRP · 2025"/);
+  const s = segmentedBar([{ kod: '111', label: 'VZP', value: 60, rok: 2025 }, { kod: '201', label: 'VoZP', value: 40, rok: 2025 }], { unit: '%', dec: 1, source: 'CRP · 2025' });
+  assert.match(s, /data-tip="VZP: 60,0\s% · CRP · 2025"/);
+});
+
+test('heatmap: tabindex jen u buněk s popisem (tooltip přidá informaci), data-tip vždy', () => {
+  const h = heatmap(ROWS, COLS, (r, c) => (c.key === 'x' ? null : { level: 1, tip: c.key === 'onko' ? 'popis' : undefined }));
+  assert.equal(count(h, /<td class="zpv-cell"[^>]*tabindex="0"/g), 2, 'jen sloupec s popisem × 2 řádky');
+  assert.equal(count(h, /<td class="zpv-cell" data-level="1"[^>]*data-tip="/g), 4, 'tooltip (hover) má každá buňka s úrovní');
+});
+
 test('heatmap: prázdný vstup, chybná funkce, escapování', () => {
   assert.ok(heatmap([], COLS, () => null).includes(NA_TEXT));
   assert.ok(heatmap(ROWS, [], () => null).includes(NA_TEXT));

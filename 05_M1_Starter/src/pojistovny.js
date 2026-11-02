@@ -41,13 +41,13 @@ export function heroTiles(d) {
   const c = d?.system_crp || {};
   return [
     { value: isNum(c.pojistenci_2025) ? c.pojistenci_2025 : null, unit: 'osob', label: `pojištěnců v CRP (${d?.rok_crp ?? 2025})`,
-      meta: `7 pojišťoven · senioři 65+ tvoří ${fmtKc(c.podil_65plus_pct, 1)} % kmene` },
+      meta: `7 pojišťoven · senioři 65+ tvoří ${fmtKc(c.podil_65plus_pct, 1)} % kmene` },
     { value: isNum(s.vydaje_celkem_mld) ? s.vydaje_celkem_mld : null, decimals: 1, unit: 'mld Kč', label: `výdaje systému v.z.p. ${s.rok ?? ''}`.trim(),
-      meta: 'plán 2026: 570,8 mld (sněmovní tisk 280)' },
+      meta: 'plán 2026: 570,8 mld (sněmovní tisk 280)' },
     { value: isNum(s.saldo_mld) ? s.saldo_mld : null, decimals: 1, unit: 'mld Kč', label: `saldo systému ${s.rok ?? ''}`.trim(),
-      meta: 'kladně jen VoZP a ZPŠ; plán 2026 −14,9 mld' },
+      meta: 'kladně jen VoZP a ZPŠ; plán 2026 −14,9 mld' },
     { value: isNum(s.fond_prevence_naklady_celkem_mld) ? s.fond_prevence_naklady_celkem_mld : null, decimals: 2, unit: 'mld Kč',
-      label: `čerpání fondů prevence ${s.rok ?? ''}`.trim(), meta: `${fmtKc(s.fond_prevence_na_pojistence_kc)} Kč na pojištěnce` },
+      label: `čerpání fondů prevence ${s.rok ?? ''}`.trim(), meta: `${fmtKc(s.fond_prevence_na_pojistence_kc)} Kč na pojištěnce` },
   ];
 }
 
@@ -96,7 +96,7 @@ export function buildKmenCharts(d) {
   const nzs = {
     items: zps.map((z) => {
       const st = stdInfo(z.hospodareni);
-      const note = st.dolozeno ? `standardizováno na věk a pohlaví ${fmtKc(st.hodnota)} Kč` : `nestandardizováno, ${STD_PENDING}`;
+      const note = st.dolozeno ? `standardizováno na věk a pohlaví ${fmtKc(st.hodnota)} Kč` : `nestandardizováno, ${STD_PENDING}`;
       return { ...base(z), value: h(z.hospodareni?.naklady_na_pojistence_kc), rok: 2024, note };
     }),
     opts: { title: 'Náklady na zdravotní služby na pojištěnce', sub: 'Kč za rok 2024, nestandardizováno na věk. Náklady (akruálně), ne hotovostní výdaje.', unit: 'Kč', dec: 0,
@@ -108,7 +108,7 @@ export function buildKmenCharts(d) {
     items: zps.map((z) => {
       const v = h(z.hospodareni?.zustatek_2026_pct_vydaju);
       const zav = h(z.hospodareni?.zavazky_po_splatnosti_2026_plan_mil);
-      const tip = `${z.zkratka}: ${isNum(v) ? fmtKc(v, 1) + ' % ročních výdajů' : 'nedohledáno'} · závazky po splatnosti ${isNum(zav) ? fmtKc(zav) + ' mil. Kč' : 'nedohledány'} · ZPP 2026`;
+      const tip = `${z.zkratka}: ${isNum(v) ? fmtKc(v, 1) + ' % ročních výdajů' : 'nedohledáno'} · závazky po splatnosti ${isNum(zav) ? fmtKc(zav) + ' mil. Kč' : 'nedohledány'} · ZPP 2026`;
       return { ...base(z), value: v, tip };
     }),
     opts: { title: 'Rezervy na konci roku 2026', sub: 'Zůstatek na účtech v % ročních výdajů. Pod 3–4 % vznikají dluhy po splatnosti.', unit: '%', dec: 1, source: SRC_ZPP,
@@ -119,7 +119,7 @@ export function buildKmenCharts(d) {
     items: zps.map((z) => {
       const v = h(z.hospodareni?.provozni_naklady_pct);
       const lim = h(z.hospodareni?.provozni_limit_pct);
-      const tip = `${z.zkratka}: ${isNum(v) ? fmtKc(v, 1) + ' % příjmů' : 'nedohledáno'} · ${isNum(lim) ? `limit ${fmtKc(lim, 2)} %` : 'limit nedohledán'} · 2024`;
+      const tip = `${z.zkratka}: ${isNum(v) ? fmtKc(v, 1) + ' % příjmů' : 'nedohledáno'} · ${isNum(lim) ? `limit ${fmtKc(lim, 2)} %` : 'limit nedohledán'} · 2024`;
       return { ...base(z), value: v, tip };
     }),
     opts: { title: 'Provoz v % příjmů', sub: 'Výdaje na vlastní činnost pojišťovny; limit podle vyhlášky 418/2003 Sb. v tooltipu.', unit: '%', dec: 1, source: SRC_MZ },
@@ -222,27 +222,27 @@ function cardHtml(z) {
   const st = stdInfo(hs);
   const yr = (v) => (v != null && p.rok_udaju && p.rok_udaju !== 2024 ? `<small class="zpc-na"> (${p.rok_udaju})</small>` : '');
   const row = (dt, dd) => `<div><dt>${dt}</dt><dd>${dd}</dd></div>`;
-  const nppDd = `${num(h(hs.naklady_na_pojistence_kc))} Kč`
+  const nppDd = `${num(h(hs.naklady_na_pojistence_kc))} Kč`
     + (st.dolozeno ? '' : ` <small class="zpc-std" title="Standardizace na věk a pohlaví (metodika § 4.1): ${STD_PENDING}.">nestandardizováno</small>`);
   const mini = miniIndexSvg((c.pojistenci_trend || []).map((t) => ({ year: t.year, value: t.insured })), { label: z.zkratka });
   return `<article class="zpc-card" id="zp-${esc(z.kod)}" data-zp="${esc(z.kod)}" style="--c:var(--zp-${esc(z.kod)})">
       <header><span class="zpc-kod">${esc(z.kod)}</span><h3>${esc(z.zkratka)}</h3><span class="zpc-full">${esc(z.nazev)}</span></header>
-      <div class="zpc-kpi"><b>${fmtKc(c.pojistenci / 1e6, 2)} mil.</b><span>pojištěnců ${esc(c.rok ?? 2025)} · ${fmtKc(c.podil_trhu_pct, 1)} % trhu</span>
+      <div class="zpc-kpi"><b>${fmtKc(c.pojistenci / 1e6, 2)} mil.</b><span>pojištěnců ${esc(c.rok ?? 2025)} · ${fmtKc(c.podil_trhu_pct, 1)} % trhu</span>
         <div class="zpc-mini-wrap">${mini}<span class="zpc-mini-cap">kmen, 2010 = 100</span></div></div>
       <dl>
-        ${row('Senioři 65+', `${fmtKc(c.podil_65plus_pct, 1)} %`)}
-        ${row('Kmen 2015 → 2025', isNum(g) ? `${g > 0 ? '+' : g < 0 ? '−' : ''}${fmtKc(Math.abs(g), 1)} %` : NA)}
+        ${row('Senioři 65+', `${fmtKc(c.podil_65plus_pct, 1)} %`)}
+        ${row('Kmen 2015 → 2025', isNum(g) ? `${g > 0 ? '+' : g < 0 ? '−' : ''}${fmtKc(Math.abs(g), 1)} %` : NA)}
         ${row('Náklady na pojištěnce 2024', nppDd)}
-        ${st.dolozeno ? row('Náklady na pojištěnce (standardizováno)', `${fmtKc(st.hodnota)} Kč`) : ''}
-        ${row('Rezerva konec 2026', `${num(h(hs.zustatek_2026_pct_vydaju), 1)} % výdajů`)}
+        ${st.dolozeno ? row('Náklady na pojištěnce (standardizováno)', `${fmtKc(st.hodnota)} Kč`) : ''}
+        ${row('Rezerva konec 2026', `${num(h(hs.zustatek_2026_pct_vydaju), 1)} % výdajů`)}
       </dl>
       <details class="zpc-card-more"><summary>Další údaje</summary><dl>
-        ${row('Děti 0–14', `${fmtKc(c.podil_0_14_pct, 1)} %`)}
-        ${row('Těžiště', top ? `${esc(top.nazev || '')} (${fmtKc(top.pct_kmene, 0)} % kmene)` : NA)}
-        ${row('Fond prevence 2024', `${num(h(hs.fond_prevence_naklady_mil))} mil. Kč`)}
-        ${row('Max. příspěvek dospělý / dítě', `${num(p.max_prispevek_dospely_kc)}${yr(p.max_prispevek_dospely_kc)} / ${num(p.max_prispevek_dite_kc)}${yr(p.max_prispevek_dite_kc)} Kč`)}
+        ${row('Děti 0–14', `${fmtKc(c.podil_0_14_pct, 1)} %`)}
+        ${row('Těžiště', top ? `${esc(top.nazev || '')} (${fmtKc(top.pct_kmene, 0)} % kmene)` : NA)}
+        ${row('Fond prevence 2024', `${num(h(hs.fond_prevence_naklady_mil))} mil. Kč`)}
+        ${row('Max. příspěvek dospělý / dítě', `${num(p.max_prispevek_dospely_kc)}${yr(p.max_prispevek_dospely_kc)} / ${num(p.max_prispevek_dite_kc)}${yr(p.max_prispevek_dite_kc)} Kč`)}
         ${row('Aplikace', esc(short(s.mobilni_aplikace, 28)) || NA)}
-        ${row('Saldo 2024', `${num(h(hs.hospodarsky_vysledek_mld), 1)} mld Kč`)}
+        ${row('Saldo 2024', `${num(h(hs.hospodarsky_vysledek_mld), 1)} mld Kč`)}
       </dl></details></article>`;
 }
 

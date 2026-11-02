@@ -968,6 +968,12 @@ primitivy … (.zpv-) === */` na konci `styles.css`.
   řádek (`.zpv-row`, hit area ≥ 26 px) nese stejné `data-zp`/`data-tip`.
   U `indexedLines` je fokus/tip na `<g class="zpv-series">` (+ průhledná 24px
   `.zpv-hit` cesta), `path`/`circle` uvnitř jsou `zpv-mark` bez tabindexu.
+- Tooltip (`src/zp-interact.js`, `TIP_SELECTOR = '.zpv-mark, [data-tip]'`):
+  hover i focus na marku **nebo na libovolném prvku s `data-tip`** (buňky heatmapy,
+  dot matrix, matice pokrytí, semaforu; řádek baru). Mark bez vlastního `data-tip`
+  (kolečko v dot matrix) bere text z nejbližšího předka s `data-tip`. Buňka heatmapy
+  má `tabindex="0"` jen tehdy, když nese popis (`cell().tip`) — jinak by tooltip jen
+  opakoval viditelný text; popis je vždy i v `sr-only`.
 - Barvy ZP: `.zpv [data-zp="111"] { --zpv-zp: var(--zp-111) }` … pro 7 kódů;
   `.zpv-figure.is-colored .zpv-mark` bere `--zpv-zp` vždy (segmentedBar,
   indexedLines). Zvýraznění „Moje pojišťovna“ dodává jiný balíček přes
@@ -978,11 +984,15 @@ primitivy … (.zpv-) === */` na konci `styles.css`.
   v `@media screen and (prefers-reduced-motion: no-preference)` → bez JS,
   v tisku i při reduce je vidět konečný stav. Count-up (`.zpv-count`) řeší JS.
 - Null hodnota se nikdy nekreslí, píše se „nedohledáno“ (`NA_TEXT`).
-- Inline `style=` jen `--w`, `--i` a `width` (segmenty, spojnice dumbbellu).
+- Inline `style=` jen `--w`, `--i`, `--x` (nulová osa a záporné bary `rankedBars`
+  s `allowNegative`) a `width` (segmenty, spojnice dumbbellu).
+- Čísla: `fmtValue()` píše záporné hodnoty typografickým minus „−“ (U+2212) a jednotku
+  přes nezlomitelnou mezeru; count-up (`fmtCount()` v `zp-interact.js`) dává stejný text,
+  takže animace „−7,5“ nepřepíše na „-7,5“.
 
 | Funkce | Vstup | Výstup / poznámky |
 |---|---|---|
-| `rankedBars(items, {title, sub, unit, dec, ref:{value,label,kind:'zone-below'\|'zone-above'\|'line'}, sort:'desc'\|'none', maxv, source, sortNote})` | `items[{kod\|key, label, value, rok?, zdroj?, note?, tip?}]` | HTML bary ≤ 20 px, 4px zaoblená špička, hodnota na špičce (rezerva `zpv-vw-s/m/l`); reference = pás 8 % nebo hairline v tracku, popisek v záhlaví; pod seřazeným grafem „Řazeno podle hodnoty, nejde o hodnocení“ (`sortNote:false` vypne) |
+| `rankedBars(items, {title, sub, unit, dec, ref:{value,label,kind:'zone-below'\|'zone-above'\|'line'}, sort:'desc'\|'none', maxv, source, sortNote, allowNegative, signed})` | `items[{kod\|key, label, value, rok?, zdroj?, note?, tip?}]` | HTML bary ≤ 20 px, 4px zaoblená špička, hodnota na špičce (rezerva `zpv-vw-s/m/l`); reference = pás 8 % nebo hairline v tracku (hodnota má podklad v barvě povrchu, linka ji nepřeškrtne), popisek v záhlaví; pod seřazeným grafem „Řazeno podle hodnoty, nejde o hodnocení“ (`sortNote:false` vypne). **`allowNegative:true`** = diverging bar: nulová osa `.zpv-zero` (`--x`), záporné bary rostou doleva (`.zpv-bar--neg`, zaoblení vlevo), hodnota vlevo od špičky (`.zpv-val--neg`), rezerva pro popisek i vlevo; jedna barva, směr nese poloha a znaménko. Bez záporných hodnot je výstup shodný jako bez volby. **`signed:true`** = kladné hodnoty dostanou „+“ (záporné mají „−“ vždy) — pro změny („Změna kmene 2015 → 2025“) |
 | `segmentedBar(parts, {title, sub, unit, dec, maxParts:6, otherLabel:'Ostatní', source})` | `parts[{kod\|key, label, value}]` | tall bar 28 px, 2px mezery, podíl uvnitř od 14 % (7–14 % jen v kontejneru ≥ 720 px), legenda názvů v pořadí segmentů, fold zbytku do „Ostatní“; tabulka nese všechny části |
 | `statTiles(tiles, {title?})` | `tiles[{value, unit, label, meta, decimals, prefix}]` | `<ul class="zpv zpv-stats">`; `<b class="zpv-count" data-value data-decimals>` s konečnou hodnotou jako textem, proporcionální číslice |
 | `meter(value, {max, min, label, thresholds:[{at,signal}], text, unit, dec})` | číslo | `role="meter"` + `aria-valuenow/min/max/valuetext`; track = světlejší krok barvy signálu (`good/warn/bad/neutral`) |
