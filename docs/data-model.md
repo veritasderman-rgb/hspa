@@ -1560,3 +1560,109 @@ ručně ověřovaných claims, HSPA frameworku a navázaných článků; stav `p
 (`content_hash` se liší, kontrola starší než 365 dní, nebo záznam nese `followup`) → `done`. `--batch` vrátí další
 dávku (default 12 článků + 8 indikátorů), `--hash <soubor>` spočítá hash pro zápis.
 
+
+---
+
+## 25. Srovnávač pojišťoven — `data/pojistovny*.json` + `data/zadosti-106.json` (kurátorované)
+
+Stránka `pojistovny.html` (pracovní verze pod heslem) čte jen tyto soubory; každý je
+nepovinný (chybí-li, modul vypíše „data zatím nejsou k dispozici“). Plán a balíčky:
+`05_M1_Starter/PLAN-SROVNAVAC-POJISTOVEN.md`, metodika `docs/metodika-srovnavac-pojistoven.md`,
+validátor `ingest/validate-pojistovny.js`. Číselné položky mají obálku
+`{hodnota, rok, zdroj, poznamka?}`; `null` = nedohledáno (na stránce „nedohledáno“ / „—“,
+nikdy 0). Každý soubor nese `version`, `generated_at`, `_doc` a `changelog[]{datum, zmena, zdroj}`
+(metodika § 4.7).
+
+| Soubor | Obsah | Kdo čte |
+|---|---|---|
+| `pojistovny.json` | `system` (systém v.z.p. 2024), `system_crp` (CRP 2025), `pojistovny[]` po ZP: `crp` (kmen, `pojistenci_trend[]{year, insured}` 2010–2025, `top_kraje`), `hospodareni` (2024), `hospodareni_2025` (jen VZP, VoZP, OZP), `prevence`, `servis`, `mereni_dopadu`, `semafor`; `stavy_semaforu`, `zdroje[]`, `chybi[]` | `src/pojistovny.js`, `pojistovny-semafor.js` |
+| `pojistovny-prevence.json` | `oblasti[]` × `pojistovny[].oblasti{stupen, popis}` (heatmapa 7 × 9), `onko_screening`, `dusevni_sloupce`, `fond_prevence_struktura.polozky[]{nazev, zpp, skutecnost, predchozi_rok, skupina}`, `fond_prevence_skupiny[]`, `odpovedi` (7 otázek z VZ), `dolozene_vysledky[]` | `src/pojistovny-prevence.js` |
+| `pojistovny-aplikace.json` | `funkce[]` × `aplikace[].funkce{id: true\|false\|'partial'\|null}`, `kriteria_privetivosti` (návrh, prázdná `aplikace[].kriteria{}` do PS), uživatelé, rizikové skupiny | `src/pojistovny-prevence.js` |
+| `pojistovny-otazky.json` | `sady[]{id, nazev, typ, verze, platne_od?, pravni_zaklad, otazky[] \| casti[].otazky[]}` — definice dotazníků (formulář renderuje `src/zp-dotaznik.js`) | `zp-dotaznik.js`, `api/dotaznik.js` |
+| `pojistovny-vek.json` | viz níže | `ingest/transform_pojistovny_crp.js` (výstup), standardizace § 4.1 |
+| `pojistovny-dotaznik-agregaty.json` | viz níže | `src/zp-dotaznik.js` |
+| `zadosti-106.json` | viz níže | `src/pojistovny-zadosti.js` |
+| `pojistovny-verifikace.json` | **plánovaný**, viz níže | — |
+
+### `data/pojistovny-vek.json` — věková a pohlavní struktura kmene (generovaný)
+
+Výstup `ingest/transform_pojistovny_crp.js` z CSV ÚZIS OIS 11-47 (verze 2026-01, rok 2025).
+Podklad pro věkovou standardizaci nákladů a prevence (metodika § 4.1, balíček P3.3).
+
+```json
+{
+  "version": "1.0", "generated_at": "…", "rok": 2025,
+  "zdroj": { "nazev": "ÚZIS, OIS 11-47, verze 2026-01", "soubor": "…csv", "url": "…" },
+  "pasma": ["0", "1-4", "5-9", "…", "90+"],          // 19 pásem
+  "pohlavi": ["M", "F"],
+  "stredy_pasem": { "0": 0.5, "1-4": 3, "…": "…" },   // pro odhad průměrného věku
+  "cr": { "celkem": 10851604, "podil_65plus_pct": 20.86, "prumerny_vek_odhad": 43.1,
+          "struktura": { "0:M": 42800, "0:F": 40367, "…": "…" } },   // klíč "<pásmo>:<pohlaví>"
+  "pojistovny": [{ "kod": "111", "celkem": 6168626, "struktura": { "…": "…" },
+                   "podil_65plus_pct": 22.88, "prumerny_vek_odhad": 44.3 }]
+}
+```
+
+Standardizované hodnoty se zapisují do `pojistovny.json` jako
+`hospodareni.naklady_na_pojistence_std_kc` / `fond_prevence_na_pojistence_std_kc`
+s polem `stav`. Dokud nákladové indexy nejsou doložené, je `stav: "placeholder-bez-vah"`
+(faktor 1, hodnota = nestandardizovaná) a **frontend číslo nezobrazí** — `stdInfo()`
+v `src/pojistovny.js` bere jen `stav: "dolozeno"`, jinak ukáže štítek „nestandardizováno“.
+
+### `data/pojistovny-dotaznik-agregaty.json` — agregáty dotazníků (generovaný)
+
+Export `scripts/export-dotaznik.js` z Neonu (§ 2.7 plánu); stránka zná jen tenhle soubor,
+ne databázi. Jen souhrnné počty, žádné PII ani jednotlivé odpovědi.
+
+```json
+{ "version": "1.0.0", "generated_at": "…",
+  "sady": { "<sada_id>": {
+    "pocet_odpovedi": 0,
+    "respondent_typy": { "pojistovna": 0, "pacientska_organizace": 0, "verejnost": 0 },
+    "skryto": false,                                   // true při < 3 odpovědích → agregát se nezobrazí
+    "otazky": { "<otazka_id>": { "<moznost>": 0 } }   // jen uzavřené otázky; volný text se neexportuje
+  } } }
+```
+
+Prázdné `sady: {}` = zatím nic nesebráno (stav k 2. 11. 2026); modul pak agregace nevykreslí.
+
+### `data/zadosti-106.json` — registr dotazů a žádostí pojišťovnám
+
+Stav dotazů kola 1+ (nabídka spolupráce → žádost podle zákona 106/1999 Sb. → právo
+na odpověď). Pole `stav` zapisuje **člověk** (odeslání je třída C); modul jen zobrazuje
+a dopočítá lhůtu.
+
+```json
+{ "version": "0.1.0", "generated_at": "…", "_doc": "…", "changelog": [ … ],
+  "zadosti": [{
+    "id": "k1-nabidka-111", "kolo": 1,
+    "typ": "nabidka-spoluprace",          // | "zadost-106" | "pravo-na-odpoved"
+    "pojistovna_kod": "111",
+    "odeslano": null,                       // YYYY-MM-DD
+    "lhuta_dni": 15,
+    "doruceno": null,                       // YYYY-MM-DD odpovědi
+    "odpoved_soubor": null,                 // cesta v ingest/manual/pojistovny/odpovedi/
+    "stav": "pripravena"                    // | odeslana | odpovezeno | po-lhute | bez-odpovedi
+  }] }
+```
+
+Odvozený stav (`zadostStav`): `odeslana` po uplynutí `lhuta_dni` od `odeslano` → `po-lhute`.
+Matice pokrytí: odpovězeno = ✓, čeká = ½, po lhůtě / bez odpovědi = ✕, připravena = „—“.
+
+### `data/pojistovny-verifikace.json` — protokol druhého ověření (plánovaný)
+
+Zatím neexistuje. Čísla z výročních zpráv jsou přepsaná z PDF a „čekají na druhé
+ověření“ (pásek pracovní verze). Navržený tvar, aby se ověření dalo strojově hlídat
+a pásek odstranit po položkách:
+
+```json
+{ "version": "0.1.0", "generated_at": "…",
+  "polozky": [{ "soubor": "data/pojistovny.json",
+                "cesta": "pojistovny[kod=111].hospodareni.naklady_na_pojistence_kc",
+                "hodnota": 47998, "zdroj": "…pdf", "strana": 12,
+                "overil": "clovek|ai", "overeno": "YYYY-MM-DD",
+                "vysledek": "shoda|oprava|nelze-overit", "poznamka": null }] }
+```
+
+Až vznikne: validátor kontroluje, že `cesta` existuje a `hodnota` sedí s datasetem
+(drift jako `claims.json`); schéma potvrdí balíček, který soubor založí.

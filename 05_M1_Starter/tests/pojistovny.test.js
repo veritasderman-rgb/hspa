@@ -109,6 +109,7 @@ test('pojistovny.js: fmtKc a levelBadge', () => {
   assert.equal(mod.fmtKc(20.857, 1), '20,9');
   assert.equal(mod.fmtKc(null), '—');
   assert.equal(mod.fmtKc(''), '—');
+  assert.equal(mod.fmtKc(-6.41, 1), '−6,4', 'záporné číslo s typografickým minus');
   assert.match(mod.levelBadge('silne'), /zpc-lvl-2/);
   assert.match(mod.levelBadge(3), /nejsilnější/);
   assert.match(mod.levelBadge(null), /—/);
@@ -123,7 +124,7 @@ test('pojistovny.js: miniIndexSvg — index prvního roku, krajní roky, null/kr
   assert.match(svg, />2010<\/text>/);
   assert.match(svg, />2025<\/text>/);
   assert.match(svg, /class="zpc-mini-end"[^>]*>117</);
-  assert.match(svg, /role="img" aria-label="ČPZP: počet pojištěnců 2025 = 117 % stavu 2010 \(index 2010 = 100\)"/);
+  assert.match(svg, /role="img" aria-label="ČPZP: počet pojištěnců 2025 = 117\s% stavu 2010 \(index 2010 = 100\)"/);
   assert.ok(!/style=/.test(svg), 'barva jen přes CSS');
   assert.match(mod.miniIndexSvg([]), /nedohledán/);
   assert.match(mod.miniIndexSvg([{ year: 2010, value: 5 }]), /nedohledán/);
@@ -160,7 +161,7 @@ test('pojistovny.js: buildKmenCharts — vstupy pro všechny grafy modulu 3', ()
   assert.ok(ch.zust.items.every((i) => /závazky po splatnosti/.test(i.tip)));
   // provoz: limit v tipu, null limit → „limit nedohledán“
   assert.match(ch.provoz.items.find((i) => i.kod === '201').tip, /limit nedohledán/);
-  assert.match(ch.provoz.items.find((i) => i.kod === '111').tip, /limit 2,91 %/);
+  assert.match(ch.provoz.items.find((i) => i.kod === '111').tip, /limit 2,91\s%/);
   // standardizace: placeholder → poznámka, žádné standardizované číslo
   assert.ok(ch.nzs.items.every((i) => i.note.includes(mod.STD_PENDING)));
   // kmen 2010–2025: 7 sérií po 16 bodech, index proti 2010
@@ -181,7 +182,7 @@ test('pojistovny.js: standardizace „dolozeno“ jde do poznámky s hodnotou', 
   const std = d.pojistovny[0].hospodareni.naklady_na_pojistence_std_kc;
   Object.assign(std, { stav: 'dolozeno', hodnota: 45000 });
   const ch = mod.buildKmenCharts(d);
-  assert.match(ch.nzs.items[0].note, /standardizováno na věk a pohlaví 45\s000 Kč/);
+  assert.match(ch.nzs.items[0].note, /standardizováno na věk a pohlaví 45\s000\sKč/);
   assert.deepEqual(mod.stdInfo(d.pojistovny[0].hospodareni), { dolozeno: true, hodnota: 45000, poznamka: std.poznamka });
   assert.equal(mod.stdInfo(DATA.pojistovny[0].hospodareni).dolozeno, false);
   assert.equal(mod.stdInfo(undefined).dolozeno, false);

@@ -13,7 +13,8 @@ export const esc = escapeHtml;
 
 export function fmtKc(v, dec = 0) {
   if (v == null || v === '') return '—';
-  return formatNumberCz(v, { minDecimals: dec, maxDecimals: dec });
+  // Záporná čísla s typografickým minus (U+2212), stejně jako fmtValue v zp-viz.js.
+  return formatNumberCz(v, { minDecimals: dec, maxDecimals: dec }).replace(/^-/, '−');
 }
 export const num = (v, dec = 0) => (v == null ? NA : fmtKc(v, dec));
 export const h = (obj) => (obj && typeof obj === 'object' && 'hodnota' in obj ? obj.hodnota : obj);
@@ -43,7 +44,7 @@ export function miniIndexSvg(points, { w = 176, hh = 44, label = '' } = {}) {
   const d = idx.map((p, k) => `${k ? 'L' : 'M'}${r(X(p.year))} ${r(Y(p.i))}`).join('');
   const end = idx[idx.length - 1];
   const endTxt = fmtKc(end.i, 0);
-  const aria = `${label ? label + ': ' : ''}počet pojištěnců ${y1yr} = ${endTxt} % stavu ${y0yr} (index ${y0yr} = 100)`;
+  const aria = `${label ? label + ': ' : ''}počet pojištěnců ${y1yr} = ${endTxt} % stavu ${y0yr} (index ${y0yr} = 100)`;
   return `<svg class="zpc-mini" viewBox="0 0 ${w} ${hh}" width="${w}" height="${hh}" role="img" aria-label="${esc(aria)}">`
     + `<line class="zpc-mini-base" x1="${x0}" x2="${x1}" y1="${r(Y(100))}" y2="${r(Y(100))}"/>`
     + `<path class="zpc-mini-line" d="${d}"/>`
