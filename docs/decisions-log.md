@@ -6,6 +6,25 @@ Formát: každá položka má `Datum`, `PR`, `Co`, `Proč`, `Důsledek`.
 
 ---
 
+
+## 2026-11-02 — Srovnávač pojišťoven: P0.1 (validace, Neon, ochrana podkladů, brána semaforu)
+
+- **PR**: balíček P0.1 z `05_M1_Starter/PLAN-SROVNAVAC-POJISTOVEN.md`, třída C (merguje vydavatel)
+- **Co**: `validate:pojistovny` ve `validate:all`; závislost `@neondatabase/serverless` pro `api/dotaznik.js`; `.vercelignore` s celým `ingest/` (z `src/`, `api/` ani HTML se za běhu `ingest/` nečte, takže matcher `middleware.js` se nerozšiřuje); pravidlo `semafor-pojistoven` v `scripts/pr-gate.js` (`data/pojistovny-semafor.json` = C); workflow `visual-a11y.yml` přidává snímky do indexu před kontrolou změn, aby se commitla i baseline nové stránky.
+- **Proč**: ruční podklady v `ingest/manual/pojistovny/` by se na Vercelu servírovaly mimo Basic Auth; verdikty semaforu jsou soudy o jmenovaných institucích (metodika § 6), brána je ale zařazuje podle cesty.
+- **Důsledek**: verdikty semaforu patří do samostatného souboru `data/pojistovny-semafor.json`, **ne** do klíče `semafor` v `data/pojistovny.json` (ten by brána pustila jako B). Něco z `ingest/` číst za běhu = nejdřív zúžit `.vercelignore`. Nenasazeno, ochranu `ingest/` ověří vydavatel `curl -I` na produkci.
+
+---
+
+## 2026-11-02 — Srovnávač pojišťoven: věková standardizace „Kč na pojištěnce“ (P3.3), váhy zatím placeholder
+
+- **PR**: balíček P3.3 z `05_M1_Starter/PLAN-SROVNAVAC-POJISTOVEN.md`
+- **Co**: `ingest/transform_pojistovny_crp.js` agreguje CSV OIS 11-47 na `data/pojistovny-vek.json` (ZP × 19 pásem × pohlaví, CRP 2025); `ingest/lib/standardizace.js` + `ingest/transform_pojistovny_standardizace.js` doplňují `hospodareni.naklady_na_pojistence_std_kc` a `fond_prevence_na_pojistence_std_kc` s faktorem E_ČR / E_ZP z nákladových vah (`ingest/manual/pojistovny/nakladove-indexy-2024.json`). Postup v `docs/metodika-srovnavac-pojistoven.md` § 4.1 podrobně.
+- **Proč**: metodika § 4.1 vyžaduje standardizaci na strukturu ČR; VZP má 22,9 % pojištěnců 65+, ČPZP 16,8 %.
+- **Důsledek**: doložené nákladové indexy pro rok 2024 v repu nejsou, proto `stav: placeholder-bez-vah`, všechny váhy = 1, faktor 1, standardizovaná hodnota = nestandardizovaná. **NEVYMÝŠLET** váhy (ani z orientačních čísel v draftu o přerozdělení); doplní je až potvrzení odborné skupiny (otevřené otázky v metodice).
+
+---
+
 ## 2026-11-02 — Jedna paleta pojišťoven (`--zp-*`): VZP přestává být červená
 
 - **PR**: balíček P1.1 z `05_M1_Starter/PLAN-SROVNAVAC-POJISTOVEN.md`

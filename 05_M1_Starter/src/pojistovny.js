@@ -14,6 +14,7 @@ import './analytics.js';
 import { renderModuleNav, renderMastheadDate, renderFooter } from './page-shared.js';
 import { ZP_COLOR, NA, esc, num, h, fmtKc, hbarSvg, sparkSvg, levelBadge, boolMark, dot, li, set, short, loadJson } from './pojistovny-shared.js';
 import { renderApps, renderPrevence, renderOtazky } from './pojistovny-prevence.js';
+import { renderDotaznik, renderDotaznikAgregace } from './zp-dotaznik.js';
 
 // Re-export čistých funkcí kvůli tests/pojistovny.test.js.
 export { fmtKc, hbarSvg, sparkSvg, levelBadge };
@@ -74,16 +75,35 @@ function renderKmen(d) {
   set('zpSources', (d.zdroje || []).map((z) => `<li>${esc(z.nazev || z.id)}${z.url ? ` — <a href="${esc(z.url)}" rel="noopener">${esc(z.url)}</a>` : ''}${z.clanek ? ` · <a href="${esc(z.clanek)}">článek</a>` : ''}</li>`).join(''));
 }
 
+// ---------------------------------------------------------------- dotazník (P2.4)
+// Formulář se vyrenderuje ze sady v pojistovny-otazky.json. Adresný odkaz
+// pojistovny.html?dotaznik=<sada>&token=<token> přepne sadu a doplní token.
+function renderDotazniky(otazky, agregaty) {
+  const box = document.getElementById('zpDotaznik');
+  if (!box || !otazky) return;
+  const params = new URLSearchParams(location.search);
+  const sady = otazky.sady || [];
+  const urlSada = sady.find((s) => s.id === params.get('dotaznik'));
+  const sada = urlSada || sady.find((s) => s.id === box.dataset.sada);
+  if (!sada) return;
+  renderDotaznik(box, sada, { token: urlSada ? params.get('token') : null });
+  const aggBox = document.getElementById('zpDotaznikAgregace');
+  if (aggBox && agregaty) renderDotaznikAgregace(aggBox, agregaty, sada);
+  if (urlSada) box.scrollIntoView({ block: 'start' });
+}
+
 // ---------------------------------------------------------------- init
 async function init() {
   renderModuleNav('pojistovny');
   renderMastheadDate();
   if (typeof renderFooter === 'function') renderFooter();
-  const [d, a, p, o] = await Promise.all([
+  const [d, a, p, o, agg] = await Promise.all([
     loadJson('data/pojistovny.json'), loadJson('data/pojistovny-aplikace.json'),
     loadJson('data/pojistovny-prevence.json'), loadJson('data/pojistovny-otazky.json'),
+    loadJson('data/pojistovny-dotaznik-agregaty.json'),
   ]);
   renderHero(d); renderApps(a); renderPrevence(p, d); renderKmen(d); renderOtazky(o);
+  renderDotazniky(o, agg);
 }
 
 if (typeof document !== 'undefined') {

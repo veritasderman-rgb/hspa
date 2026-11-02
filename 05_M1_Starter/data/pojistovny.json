@@ -1,12 +1,13 @@
 {
   "version": "0.1.0",
-  "generated_at": "2026-11-02T18:02:33Z",
+  "generated_at": "2026-11-02T19:09:33Z",
   "_doc": "Srovnávač zdravotních pojišťoven — sloučený dataset 7 ZP. crp = kmen 2025 z CRP (OIS 11-47); hospodareni = rok 2024 z Hodnocení vývoje systému v.z.p. (MZ ČR + MF) a výročních zpráv, každá položka {hodnota, rok, zdroj}; zustatek_* z ZPP 2026 (tisk 280); prevence/servis/mereni_dopadu z VZ 2024 a webů; semafor = hodnocení v 6 oblastech podle docs/metodika-srovnavac-pojistoven.md (stav null = zatím nehodnoceno). Validuje ingest/validate-pojistovny.js.",
   "rok_hospodareni": 2024,
   "rok_crp": 2025,
   "stav": "pracovni-navrh",
   "changelog": [
-    {"datum":"2026-11-02","zmena":"Zavedení changelogu podle metodiky § 4.7; data beze změny.","zdroj":"PLAN-SROVNAVAC-POJISTOVEN.md P0.3"}
+    {"datum":"2026-11-02","zmena":"Zavedení changelogu podle metodiky § 4.7; data beze změny.","zdroj":"PLAN-SROVNAVAC-POJISTOVEN.md P0.3"},
+    {"datum":"2026-11-02","zmena":"Věková standardizace (P3.3): doplněna pole naklady_na_pojistence_std_kc a fond_prevence_na_pojistence_std_kc; nákladové indexy 2024 zatím nedoloženy (placeholder, faktor 1, hodnota = nestandardizovaná).","zdroj":"PLAN-SROVNAVAC-POJISTOVEN.md P3.3; docs/metodika-srovnavac-pojistoven.md § 4.1"}
   ],
   "system": {
     "rok": 2024,
@@ -227,7 +228,7 @@
             "nazev": "Jihomoravský",
             "pojistenci": 537415,
             "pct_kmene": 8.7,
-            "podil_v_kraji_pct": 55.0
+            "podil_v_kraji_pct": 55
           },
           {
             "kraj": "CZ042",
@@ -418,6 +419,22 @@
           "hodnota": 0,
           "rok": 2026,
           "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280"
+        },
+        "naklady_na_pojistence_std_kc": {
+          "hodnota": 47998,
+          "rok": 2024,
+          "zdroj": "výpočet: naklady_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
+          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025.",
+          "faktor": 1,
+          "stav": "placeholder-bez-vah"
+        },
+        "fond_prevence_na_pojistence_std_kc": {
+          "hodnota": 338,
+          "rok": 2024,
+          "zdroj": "výpočet: fond_prevence_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
+          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025. Fond prevence je standardizován faktorem nákladů na zdravotní služby — jen aproximace (věkový profil čerpání prevence se liší).",
+          "faktor": 1,
+          "stav": "placeholder-bez-vah"
         }
       },
       "hospodareni_2025": {
@@ -583,14 +600,14 @@
         "podil_80plus_pct": 4.31,
         "podil_0_14_pct": 14.58,
         "rust_2015_2025_pct": -0.98,
-        "max_podil_v_kraji_pct": 13.0,
+        "max_podil_v_kraji_pct": 13,
         "top_kraje": [
           {
             "kraj": "CZ031",
             "nazev": "Jihočeský",
             "pojistenci": 82954,
             "pct_kmene": 11.8,
-            "podil_v_kraji_pct": 13.0
+            "podil_v_kraji_pct": 13
           },
           {
             "kraj": "CZ020",
@@ -610,7 +627,7 @@
             "kraj": "CZ064",
             "nazev": "Jihomoravský",
             "pojistenci": 70183,
-            "pct_kmene": 10.0,
+            "pct_kmene": 10,
             "podil_v_kraji_pct": 7.2
           }
         ],
@@ -793,6 +810,22 @@
           "hodnota": 2998,
           "rok": 2026,
           "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280"
+        },
+        "naklady_na_pojistence_std_kc": {
+          "hodnota": 46703,
+          "rok": 2024,
+          "zdroj": "výpočet: naklady_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
+          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025.",
+          "faktor": 1,
+          "stav": "placeholder-bez-vah"
+        },
+        "fond_prevence_na_pojistence_std_kc": {
+          "hodnota": 284,
+          "rok": 2024,
+          "zdroj": "výpočet: fond_prevence_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
+          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025. Fond prevence je standardizován faktorem nákladů na zdravotní služby — jen aproximace (věkový profil čerpání prevence se liší).",
+          "faktor": 1,
+          "stav": "placeholder-bez-vah"
         }
       },
       "hospodareni_2025": {
@@ -971,7 +1004,7 @@
             "kraj": "CZ064",
             "nazev": "Jihomoravský",
             "pojistenci": 105062,
-            "pct_kmene": 8.0,
+            "pct_kmene": 8,
             "podil_v_kraji_pct": 10.8
           }
         ],
@@ -1155,6 +1188,22 @@
           "hodnota": 0,
           "rok": 2026,
           "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280"
+        },
+        "naklady_na_pojistence_std_kc": {
+          "hodnota": 42421,
+          "rok": 2024,
+          "zdroj": "výpočet: naklady_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
+          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025.",
+          "faktor": 1,
+          "stav": "placeholder-bez-vah"
+        },
+        "fond_prevence_na_pojistence_std_kc": {
+          "hodnota": 308,
+          "rok": 2024,
+          "zdroj": "výpočet: fond_prevence_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
+          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025. Fond prevence je standardizován faktorem nákladů na zdravotní služby — jen aproximace (věkový profil čerpání prevence se liší).",
+          "faktor": 1,
+          "stav": "placeholder-bez-vah"
         }
       },
       "hospodareni_2025": null,
@@ -1279,7 +1328,7 @@
             "kraj": "CZ042",
             "nazev": "Ústecký",
             "pojistenci": 45505,
-            "pct_kmene": 6.0,
+            "pct_kmene": 6,
             "podil_v_kraji_pct": 5.7
           },
           {
@@ -1467,6 +1516,22 @@
           "hodnota": 0,
           "rok": 2026,
           "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280"
+        },
+        "naklady_na_pojistence_std_kc": {
+          "hodnota": 42172,
+          "rok": 2024,
+          "zdroj": "výpočet: naklady_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
+          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025.",
+          "faktor": 1,
+          "stav": "placeholder-bez-vah"
+        },
+        "fond_prevence_na_pojistence_std_kc": {
+          "hodnota": 318,
+          "rok": 2024,
+          "zdroj": "výpočet: fond_prevence_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
+          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025. Fond prevence je standardizován faktorem nákladů na zdravotní služby — jen aproximace (věkový profil čerpání prevence se liší).",
+          "faktor": 1,
+          "stav": "placeholder-bez-vah"
         }
       },
       "hospodareni_2025": {
@@ -1615,7 +1680,7 @@
             "kraj": "CZ020",
             "nazev": "Středočeský",
             "pojistenci": 97327,
-            "pct_kmene": 68.0,
+            "pct_kmene": 68,
             "podil_v_kraji_pct": 6.7
           },
           {
@@ -1818,6 +1883,22 @@
           "hodnota": 0,
           "rok": 2026,
           "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280"
+        },
+        "naklady_na_pojistence_std_kc": {
+          "hodnota": 45182,
+          "rok": 2024,
+          "zdroj": "výpočet: naklady_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
+          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025.",
+          "faktor": 1,
+          "stav": "placeholder-bez-vah"
+        },
+        "fond_prevence_na_pojistence_std_kc": {
+          "hodnota": 404,
+          "rok": 2024,
+          "zdroj": "výpočet: fond_prevence_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
+          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025. Fond prevence je standardizován faktorem nákladů na zdravotní služby — jen aproximace (věkový profil čerpání prevence se liší).",
+          "faktor": 1,
+          "stav": "placeholder-bez-vah"
         }
       },
       "hospodareni_2025": null,
@@ -2133,6 +2214,22 @@
           "hodnota": 2300,
           "rok": 2026,
           "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280"
+        },
+        "naklady_na_pojistence_std_kc": {
+          "hodnota": 47053,
+          "rok": 2024,
+          "zdroj": "výpočet: naklady_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
+          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025.",
+          "faktor": 1,
+          "stav": "placeholder-bez-vah"
+        },
+        "fond_prevence_na_pojistence_std_kc": {
+          "hodnota": 335,
+          "rok": 2024,
+          "zdroj": "výpočet: fond_prevence_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
+          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025. Fond prevence je standardizován faktorem nákladů na zdravotní služby — jen aproximace (věkový profil čerpání prevence se liší).",
+          "faktor": 1,
+          "stav": "placeholder-bez-vah"
         }
       },
       "hospodareni_2025": null,
@@ -2284,7 +2381,7 @@
           },
           {
             "year": 2012,
-            "share_pct": 4.0
+            "share_pct": 4
           },
           {
             "year": 2013,
@@ -2444,7 +2541,7 @@
           "poznamka": "plán konec 2026; tab. 9"
         },
         "zustatek_2026_pct_vydaju": {
-          "hodnota": 3.0,
+          "hodnota": 3,
           "rok": 2026,
           "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280",
           "poznamka": "kritická hranice 3–4 % ročních výdajů"
@@ -2453,6 +2550,22 @@
           "hodnota": 0,
           "rok": 2026,
           "zdroj": "https://www.psp.cz/sqw/historie.sqw?o=10&t=280"
+        },
+        "naklady_na_pojistence_std_kc": {
+          "hodnota": 44198,
+          "rok": 2024,
+          "zdroj": "výpočet: naklady_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
+          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025.",
+          "faktor": 1,
+          "stav": "placeholder-bez-vah"
+        },
+        "fond_prevence_na_pojistence_std_kc": {
+          "hodnota": 276,
+          "rok": 2024,
+          "zdroj": "výpočet: fond_prevence_na_pojistence_kc × faktor věkově-pohlavní standardizace (ingest/transform_pojistovny_standardizace.js; data/pojistovny-vek.json; ingest/manual/pojistovny/nakladove-indexy-2024.json)",
+          "poznamka": "faktor 1,000; nákladové indexy 2024 zatím nedoloženy (stav placeholder-bez-vah: všechny váhy = 1), hodnota = nestandardizovaná; struktura kmene CRP 2025. Fond prevence je standardizován faktorem nákladů na zdravotní služby — jen aproximace (věkový profil čerpání prevence se liší).",
+          "faktor": 1,
+          "stav": "placeholder-bez-vah"
         }
       },
       "hospodareni_2025": null,

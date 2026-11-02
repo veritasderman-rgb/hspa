@@ -1,0 +1,10 @@
+# Co se nenahrává do nasazení na Vercel.
+#
+# ingest/ nečte za běhu nic: ani src/, ani api/, ani HTML stránky (ověřeno grepem
+# 2. 11. 2026). Slouží jen CI a ručním skriptům. ingest/manual/pojistovny/ obsahuje
+# podklady Srovnávače pojišťoven (zdroje-vz-2024.json, nakladove-indexy-2024.json,
+# crp-agregaty-2025.json), které by se jinak servírovaly veřejně na
+# /ingest/manual/pojistovny/*.json mimo Basic Auth z middleware.js.
+# Pokud někdy začne něco z ingest/ číst za běhu, tuhle řádku zúžit na ingest/cache/
+# a ingest/manual/pojistovny/ přidat do matcheru middleware.js.
+ingest/

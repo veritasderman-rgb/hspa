@@ -42,6 +42,9 @@ npm run serve                    # http://localhost:8080
 npm run validate:all             # všech 9 validátorů (indicators, strategies, explainers, prevention, articles, dohodovaci, legislation, financing, clinical-quality)
 npm run validate:evidence        # registr evidence-auditu (data/evidence-audit.json)
 npm run evidence:queue -- --status   # fronta evidence-auditu: kolik článků/indikátorů čeká na ověření v PubMed
+npm run validate:pojistovny      # dataset Srovnávače pojišťoven (data/pojistovny*.json; součást validate:all)
+npm run data:pojistovny-crp      # CRP agregace pojištěnců (věkové pásy) + standardizace nákladů na pojištěnce
+npm run export:dotaznik          # export odpovědí z dotazníku pojišťoven (Neon, vyžaduje DATABASE_URL)
 
 # Testy
 npm test                         # 731 testů, 0 failures
@@ -110,6 +113,7 @@ git push -u origin claude/<branch-name>
 | `.zpc-*` | Srovnávač pojišťoven — stránka (strip, nav modulů, karty pojišťoven, tabulky, matice, akordeony, boxy) | pojistovny.html |
 | `.zpv-*` | (plánováno) Srovnávač pojišťoven — vizuální primitivy (grafy, sparkliny, ikonové řady) | `src/zp-viz.js` |
 | `.zpi-*` | (plánováno) Srovnávač pojišťoven — interakce (filtry, výběr pojišťoven, porovnání) | `src/zp-interact.js` |
+| `.zpd-*` | Srovnávač pojišťoven — dotazníky (formulář ze sady otázek, vodorovné bary agregátů) | `src/zp-dotaznik.js`, pojistovny.html |
 
 ---
 

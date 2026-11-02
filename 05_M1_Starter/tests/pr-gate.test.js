@@ -24,6 +24,12 @@ test('osoby, pohotovosti, závislosti a soukromí jsou třída C', () => {
   }
 });
 
+test('semafor pojišťoven (verdikty o jmenovaných institucích) je třída C', () => {
+  const r = zaradSoubor(`${S}data/pojistovny-semafor.json`);
+  assert.equal(r.trida, 'C');
+  assert.equal(r.pravidlo, 'semafor-pojistoven');
+});
+
 test('nová top-level stránka je C, úprava existující hub stránky je B, nový článek je B', () => {
   assert.equal(zaradSoubor(`${S}nova-sekce.html`, 'A').trida, 'C');
   assert.equal(zaradSoubor(`${S}o-projektu.html`, 'M').trida, 'B');
