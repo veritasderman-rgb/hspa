@@ -9,7 +9,12 @@ import { fileURLToPath } from 'node:url';
 import {
   ODBORNOSTI, REF_DATE, norm, splitObory, oborToKod, filterContractRows, aggregateSit, buildDocument,
 } from '../ingest/fetchers/pojistovny-sit.js';
+import {
+  loadOdbMapping, normalizeOdbornost, normIcz, parseSeznamRows, parseSeznamXlsx, parseSeznamCsv, parseStavK,
+  buildIczKraj, krajForIcz, aggregateSeznam, buildSrovnani, buildSeznamyBlock,
+} from '../ingest/fetchers/pojistovny-sit-seznamy.js';
 import { validateSit, validateAll } from '../ingest/validate-pojistovny.js';
+import XLSX from 'xlsx';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -171,4 +176,190 @@ test('commitnutý data/pojistovny-sit.json (je-li) prochází validátorem', () 
   if (!fs.existsSync(file)) return;
   const r = validateSit(JSON.parse(fs.readFileSync(file, 'utf8')));
   assert.deepEqual(r.errors, []);
+});
+
+// ---------------------------------------------------------------- seznamy pojišťoven (pojistovny-sit-seznamy.js)
+
+test('normalizeOdbornost: kód před pomlčkou (VZP i ČPZP), název jako záloha, nesoulad kódu a názvu', () => {
+  const mp = loadOdbMapping();
+  assert.deepEqual(normalizeOdbornost('207 - alergologie a klinická imunologie', mp), { kod: '207', raw: '207', shoda: true });
+  assert.deepEqual(normalizeOdbornost('207-alergologie a klinická imunologie', mp), { kod: '207', raw: '207', shoda: true });
+  assert.equal(normalizeOdbornost('014 - klinická stomatologie', mp).kod, '014');
+  assert.equal(normalizeOdbornost('002 - praktické lékařství pro děti a dorost a pediatrie', mp).kod, '002');
+  assert.equal(normalizeOdbornost('002-praktické lékařství pro děti a dorost', mp).kod, '002');
+  assert.deepEqual(normalizeOdbornost('101 - vnitřní lékařství - interna', mp), { kod: null, raw: '101', shoda: true });
+  assert.deepEqual(normalizeOdbornost('2U1-dlouhodobá lp rehabilitační', mp), { kod: null, raw: '2U1', shoda: true });
+  assert.equal(normalizeOdbornost('Dermatovenerologie', mp).kod, '404');
+  assert.deepEqual(normalizeOdbornost('207 - psychiatrie', mp), { kod: '207', raw: '207', shoda: false });
+  assert.deepEqual(normalizeOdbornost('', mp), { kod: null, raw: null, shoda: true });
+});
+
+test('mapování odborností pokrývá právě sledované kódy VZP 770', () => {
+  const m = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'ingest', 'mapping', 'pojistovny_sit_odbornosti.json'), 'utf8'));
+  assert.deepEqual(Object.keys(m.odbornosti).sort(), ODBORNOSTI.map((o) => o.kod).sort());
+  for (const o of Object.values(m.odbornosti)) {
+    assert.ok(o.nazev_770 && o.nazvy.length);
+    for (const n of o.nazvy) assert.equal(n, norm(n), `název '${n}' musí být normalizovaný`);
+  }
+});
+
+test('parseSeznamXlsx: titulek se stavem nad hlavičkou, IČZ doplněné nulami, prázdné řádky pryč', () => {
+  const ws = XLSX.utils.aoa_to_sheet([
+    ['Seznam smluvních poskytovatelů zdravotních služeb dle odborností k 1. 10. 2026 (řazeno dle IČZ)', '', '', '', ''],
+    ['IČO', 'NÁZEV SUBJEKTU', 'IČZ', 'NÁZEV POSKYTOVATELE', 'ODBORNOST'],
+    ['23761', 'Ústav', '01001000', 'Ústav', '207 - alergologie a klinická imunologie'],
+    ['23761', 'Ústav', 1001000, 'Ústav', '404 - dermatovenerologie'],
+    ['', '', '', '', ''],
+    ['1', 'X', 'abc', 'X', '001 - všeobecné praktické lékařství'],
+  ]);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Seznam');
+  const buf = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
+  const p = parseSeznamXlsx(buf);
+  assert.match(p.titulek, /k 1\. 10\. 2026/);
+  assert.equal(parseStavK(p.titulek), '2026-10-01');
+  assert.deepEqual(p.radky, [
+    { icz: '01001000', odb: '207 - alergologie a klinická imunologie' },
+    { icz: '01001000', odb: '404 - dermatovenerologie' },
+  ]);
+  assert.throws(() => parseSeznamRows([['a', 'b'], ['c', 'd']]), /hlavička/);
+});
+
+test('parseSeznamCsv (VoZP: UTF-8, uvozovky, CRLF) a parseStavK z názvu souboru', () => {
+  const csv = '"IČO","Název IČO","IČZ","Název IČZ","Obec","PSČ","Ulice"\r\n'
+    + '"00023761","ÚSTAV","01001000","ÚSTAV","Praha","11000","Národní 139/8"\r\n'
+    + '"1","X, s.r.o.","5000","X","Brno","60200","A 1"\r\n';
+  assert.deepEqual(parseSeznamCsv(csv).radky, [{ icz: '01001000' }, { icz: '00005000' }]);
+  assert.throws(() => parseSeznamCsv('"A","B"\n"1","2"\n'), /IČZ/);
+  assert.equal(parseStavK('vozp-smluvni-poskytovatele-30.09.2026-csv.csv'), '2026-09-30');
+  assert.equal(parseStavK('PZSdleOdb.xlsx'), null);
+  assert.equal(normIcz(' 1001000 '), '01001000');
+  assert.equal(normIcz('x1'), '');
+});
+
+test('buildIczKraj + krajForIcz: číselník ÚZIS, pak jednoznačné dvojčíslí (≥ 95 %), jinak bez kraje', () => {
+  const rows = [];
+  for (let i = 0; i < 40; i++) rows.push({ ICZ: `10${String(i).padStart(3, '0')}000`, okres_RUIAN: 'CZ0100' }); // 10 → Praha 100 %
+  for (let i = 0; i < 20; i++) rows.push({ ICZ: `20${String(i).padStart(3, '0')}000`, okres_RUIAN: 'CZ0201' });
+  for (let i = 0; i < 20; i++) rows.push({ ICZ: `20${String(i + 50).padStart(3, '0')}000`, okres_RUIAN: 'CZ0100' }); // 20 → 50:50
+  rows.push({ ICZ: '30000000', okres_RUIAN: 'CZ0311' }); // málo IČZ na dvojčíslí
+  rows.push({ ICZ: '31000000', okres_RUIAN: '' });
+  const ik = buildIczKraj(rows, new Set(['CZ010', 'CZ020', 'CZ031']));
+  assert.equal(ik.okres.get('20000000'), 'CZ020');
+  assert.deepEqual(krajForIcz('20000000', ik), { kraj: 'CZ020', uroven: 'ciselnik' });
+  assert.deepEqual(krajForIcz('10999000', ik), { kraj: 'CZ010', uroven: 'prefix' });
+  assert.deepEqual(krajForIcz('20999000', ik), { kraj: null, uroven: 'neurcen' });
+  assert.deepEqual(krajForIcz('30999000', ik), { kraj: null, uroven: 'neurcen' });
+  assert.deepEqual(krajForIcz('31000000', ik), { kraj: null, uroven: 'neurcen' });
+});
+
+const IK = { okres: new Map([['01001000', 'CZ010'], ['20001000', 'CZ020']]), prefix: new Map([['80', 'CZ080']]) };
+const ODB_KODY = ODBORNOSTI.map((o) => o.kod);
+
+test('aggregateSeznam: IČZ × odbornost jednou, kraj, bez kraje, kvalita; seznam bez odbornosti jen IČZ', () => {
+  const mp = loadOdbMapping();
+  const radky = [
+    { icz: '01001000', odb: '207 - alergologie a klinická imunologie' },
+    { icz: '01001000', odb: '207 - alergologie a klinická imunologie' }, // duplicita
+    { icz: '01001000', odb: '404 - dermatovenerologie' },
+    { icz: '01001000', odb: '101 - interna' }, // nesledovaná
+    { icz: '20001000', odb: '207-alergologie a klinická imunologie' },
+    { icz: '80555000', odb: '001-všeobecné praktické lékařství' }, // kraj přes dvojčíslí
+    { icz: '55555000', odb: '207 - alergologie a klinická imunologie' }, // bez kraje
+  ];
+  const a = aggregateSeznam(radky, { mp, ik: IK, odbKody: ODB_KODY });
+  assert.deepEqual(a.matice['207'], { CZ010: 1, CZ020: 1 });
+  assert.equal(a.celkem['207'], 3);
+  assert.equal(a.bez_kraje['207'], 1);
+  assert.deepEqual(a.matice['001'], { CZ080: 1 });
+  assert.equal(a.celkem['305'], 0);
+  assert.equal(a.icz_celkem, 4);
+  assert.deepEqual(a.icz_kraj, { CZ010: 1, CZ020: 1, CZ080: 1 });
+  assert.equal(a.icz_bez_kraje, 1);
+  assert.deepEqual(a.kvalita, { radku: 7, icz: 4, kraj_ciselnik: 2, kraj_prefix: 1, kraj_neurcen: 1, odbornost_bez_kodu: 0, odbornost_nazev_nesouhlasi: 0 });
+
+  const b = aggregateSeznam([{ icz: '01001000' }, { icz: '01001000' }, { icz: '77000000' }], { mp, ik: IK, odbKody: ODB_KODY, sOdbornosti: false });
+  assert.equal(b.matice, null);
+  assert.equal(b.celkem, null);
+  assert.equal(b.icz_celkem, 2);
+  assert.deepEqual(b.icz_kraj, { CZ010: 1 });
+});
+
+/** fixtureDoc() + bloky seznamů pro VZP (s odborností), VoZP (bez) a ostatní bez seznamu. */
+function fixtureDocSeznamy() {
+  const d = fixtureDoc();
+  const mp = loadOdbMapping();
+  const zdroj = (stavK) => ({ nazev: 'Seznam', url: 'https://example.cz/seznam.xlsx', stranka: 'https://example.cz/', format: 'XLSX', stav_k: stavK, overeno: '2026-11-02', licence: 'neuvedena' });
+  const vzp = aggregateSeznam([
+    { icz: '01001000', odb: '207 - alergologie a klinická imunologie' },
+    { icz: '55555000', odb: '207 - alergologie a klinická imunologie' },
+  ], { mp, ik: IK, odbKody: ODB_KODY });
+  const vozp = aggregateSeznam([{ icz: '01001000' }], { mp, ik: IK, odbKody: ODB_KODY, sOdbornosti: false });
+  d.seznamy_pojistoven = buildSeznamyBlock({
+    111: { stav: 'seznam', zdroj: zdroj('2026-10-01'), jednotka: 'IČZ s odborností', ...vzp },
+    201: { stav: 'seznam-bez-odbornosti', zdroj: { ...zdroj('2026-09-30'), format: 'CSV' }, jednotka: 'IČZ', ...vozp },
+  }, { overeno: '2026-11-02' });
+  d.srovnani = buildSrovnani(d, d.seznamy_pojistoven);
+  return d;
+}
+
+test('buildSeznamyBlock + buildSrovnani: 7 ZP, bez seznamu bez čísel, poměr seznam / odhad', () => {
+  const d = fixtureDocSeznamy();
+  assert.deepEqual(Object.keys(d.seznamy_pojistoven).sort(), ['111', '201', '205', '207', '209', '211', '213']);
+  for (const k of ['205', '207', '209', '211', '213']) {
+    assert.equal(d.seznamy_pojistoven[k].stav, 'bez-seznamu');
+    assert.equal(d.seznamy_pojistoven[k].matice, undefined);
+    assert.ok(d.seznamy_pojistoven[k].poznamka);
+  }
+  // odhad VZP alergologie ve fixture = 1 místo (Praha); seznam = 2 IČZ
+  assert.deepEqual(d.srovnani.zp['111'].odbornosti['207'], { seznam: 2, odhad: 1, pomer: 2 });
+  assert.deepEqual(d.srovnani.zp['111'].odbornosti['404'], { seznam: 0, odhad: 0, pomer: null });
+  assert.equal(d.srovnani.zp['201'].odbornosti, null);
+  assert.equal(d.srovnani.zp['205'], undefined);
+});
+
+test('validateSit: bloky seznamů projdou; bez bloků nic nehlásí; chytá nesoulad', () => {
+  assert.deepEqual(validateSit(fixtureDocSeznamy()).errors, []);
+  assert.deepEqual(validateSit(fixtureDoc()).errors, []);
+  const bad = (mut) => { const d = structuredClone(fixtureDocSeznamy()); mut(d); return validateSit(d).errors.join('\n'); };
+  assert.match(bad((d) => { d.seznamy_pojistoven['111'].celkem['207'] = 5; }), /≠ celkem|> icz_celkem/);
+  assert.match(bad((d) => { d.seznamy_pojistoven['111'].matice['207'].CZ999 = 1; }), /neznámý kraj/);
+  assert.match(bad((d) => { d.seznamy_pojistoven['111'].icz_bez_kraje = 0; }), /icz_kraj \+ icz_bez_kraje/);
+  assert.match(bad((d) => { d.seznamy_pojistoven['209'].celkem = { 207: 1 }; }), /nesmí nést čísla/);
+  assert.match(bad((d) => { d.seznamy_pojistoven['201'].matice = {}; }), /bez odbornosti nesmí/);
+  assert.match(bad((d) => { d.seznamy_pojistoven['111'].stav = 'jiny'; }), /stav musí být/);
+  assert.match(bad((d) => { d.seznamy_pojistoven['111'].zdroj.stav_k = '1. 10. 2026'; }), /stav_k/);
+  assert.match(bad((d) => { d.seznamy_pojistoven['999'] = d.seznamy_pojistoven['209']; }), /neznámý kód ZP/);
+  assert.match(bad((d) => { d.srovnani.zp['111'].odbornosti['207'].pomer = 0.5; }), /pomer musí být/);
+  assert.match(bad((d) => { d.srovnani.zp['111'].odbornosti['207'].odhad = 9; }), /součet matice/);
+  assert.match(bad((d) => { d.srovnani.zp['209'] = { odbornosti: null }; }), /bez seznamu/);
+  assert.match(bad((d) => { delete d.srovnani.metoda; }), /srovnani musí mít/);
+});
+
+test('render: druhý pohled „Podle seznamu pojišťovny“ — tooltip, sloupce seznam ZP, bez seznamu, bez undefined', async () => {
+  const { renderSit, sitKrajTableHtml, seznamTip, seznamyTableHtml } = await import('../src/pojistovny-sit.js');
+  const d = fixtureDocSeznamy();
+  const html = renderSit(d, '207');
+  assert.doesNotMatch(html, /undefined|NaN|\[object Object\]/);
+  assert.match(html, /Podle seznamu pojišťovny/);
+  assert.match(html, /Rozdíl metod/);
+  assert.match(html, /seznam pojišťovny k 1\. 10\. 2026: 2 smluvních zařízení \(IČZ\) s touto odborností/);
+  assert.match(html, /bez seznamu pojišťovny/); // tooltip u ZP bez seznamu
+  assert.equal((html.match(/>bez seznamu</g) || []).length, 5, '5 ZP bez seznamu v tabulce');
+  assert.match(html, /seznam odbornost neuvádí: 1 smluvních zařízení/);
+  assert.doesNotMatch(html, /zpv-sort/, 'bez řazení');
+  const t = sitKrajTableHtml(d, '207');
+  assert.match(t, /seznam ZP<small>VZP ČR<\/small>/);
+  assert.doesNotMatch(t, /seznam ZP<small>VoZP/, 'VoZP nemá odbornost → žádný sloupec');
+  assert.match(t, /<tfoot><tr class="zpc-sit-sum"><th scope="row">ČR celkem<\/th>/);
+  assert.match(t, /z toho 1 bez kraje/);
+  assert.equal(seznamTip(d, '201', '207'), 'seznam pojišťovny odbornost neuvádí');
+  // starší data bez bloku: žádný druhý pohled ani prázdné sloupce
+  const old = fixtureDoc();
+  assert.equal(seznamyTableHtml(old), '');
+  assert.equal(seznamTip(old, '111', '207'), '');
+  assert.doesNotMatch(renderSit(old), /Podle seznamu|seznam ZP|tfoot/);
+  // commitnutá data: všechny odbornosti bez undefined/NaN
+  const real = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'pojistovny-sit.json'), 'utf8'));
+  for (const odb of ODB_KODY) assert.doesNotMatch(renderSit(real, odb), /undefined|NaN/, `odbornost ${odb}`);
 });
