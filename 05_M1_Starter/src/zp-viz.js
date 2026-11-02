@@ -24,7 +24,8 @@
 //   - animované prvky mají `data-zpv-anim="bar|line|count|seg|dot"`; schovají
 //     se jen pod `main.zpv-anim-ready`, odhalí je `.is-in` (IntersectionObserver
 //     v zp-interact.js). Bez JS i při reduced motion je vidět konečný stav.
-//   - inline `style=` jen custom properties `--w`/`--i` a `width` u segmentů.
+//   - inline `style=` jen custom properties `--w`/`--i` (+ `--x` u záporných
+//     barů rankedBars s allowNegative) a `width` u segmentů.
 //
 // Přístupnost (odchylka od briefu, vědomá): složený `aria-label` nese
 // `.zpv-plot` s `role="group"`, ne `<figure role="img">`. Role img má
@@ -148,25 +149,37 @@ function valWidthClass(texts) {
 /**
  * @param {Array<{kod?, key?, label, value, rok?, zdroj?, note?, tip?}>} items
  * @param {{title?, sub?, unit?, dec?, ref?: {value, label, kind?: 'line'|'zone-below'|'zone-above'},
- *          sort?: 'desc'|'none', maxv?, source?, sortNote?: string|false}} opts
+ *          sort?: 'desc'|'none', maxv?, source?, sortNote?: string|false,
+ *          allowNegative?: boolean, signed?: boolean}} opts
+ *
+ * allowNegative: záporné hodnoty se kreslí doleva od nulové osy (diverging bar,
+ * jedna barva; směr nese poloha a znaménko, ne barva). Bez záporných hodnot je
+ * výstup stejný jako bez volby. signed: kladné hodnoty dostanou „+“.
  */
 export function rankedBars(items, opts = {}) {
-  const { unit = '', dec = 0, ref = null, sort = 'desc', maxv, source = '' } = opts;
+  const { unit = '', dec = 0, ref = null, sort = 'desc', maxv, source = '', allowNegative = false, signed = false } = opts;
   const list = normItems(items);
   if (!list.length) return emptyFigure('bars', opts);
   const rows = sort === 'desc' ? sortDesc(list) : list;
   const refOk = ref && isNum(ref.value);
   const vals = rows.map((r) => r.value).filter(isNum);
+  const hasNeg = allowNegative && vals.some((v) => v < 0);
+  const lo = hasNeg ? Math.min(0, ...vals, refOk ? ref.value : 0) : 0;
   let max = isNum(maxv) && maxv > 0 ? maxv : Math.max(0, ...vals, refOk ? ref.value : 0);
   if (!(max > 0)) max = 1;
+  const span = max - lo;
+  const at = (v) => pct(v - lo, span); // poloha hodnoty na ose (bez záporných = pct(v, max))
+  const zero = at(0);
 
   const kind = refOk ? (ref.kind || 'zone-below') : null;
   let refEl = '';
-  if (kind === 'line') refEl = `<span class="zpv-ref zpv-ref--line" style="--w:${pct(ref.value, max)}" aria-hidden="true"></span>`;
-  else if (kind === 'zone-above') refEl = `<span class="zpv-ref zpv-ref--above" style="--w:${pct(ref.value, max)}" aria-hidden="true"></span>`;
-  else if (kind) refEl = `<span class="zpv-ref zpv-ref--below" style="--w:${pct(ref.value, max)}" aria-hidden="true"></span>`;
+  if (kind === 'line') refEl = `<span class="zpv-ref zpv-ref--line" style="--w:${at(ref.value)}" aria-hidden="true"></span>`;
+  else if (kind === 'zone-above') refEl = `<span class="zpv-ref zpv-ref--above" style="--w:${at(ref.value)}" aria-hidden="true"></span>`;
+  else if (kind) refEl = `<span class="zpv-ref zpv-ref--below" style="--w:${at(ref.value)}" aria-hidden="true"></span>`;
+  if (hasNeg) refEl += `<span class="zpv-zero" style="--x:${zero}" aria-hidden="true"></span>`;
 
-  const texts = rows.map((r) => fmtValue(r.value, dec, unit));
+  const fmt = (v) => (signed && isNum(v) && v > 0 ? `+${fmtValue(v, dec, unit)}` : fmtValue(v, dec, unit));
+  const texts = rows.map((r) => fmt(r.value));
   const rowsHtml = rows.map((r, i) => {
     const vt = texts[i];
     const tip = esc(tipText(r, vt, source));
@@ -175,6 +188,15 @@ export function rankedBars(items, opts = {}) {
     let inner;
     if (r.value == null) {
       inner = `<span class="zpv-na">${NA_TEXT}</span>`;
+    } else if (hasNeg) {
+      const neg = r.value < 0;
+      const x = neg ? at(r.value) : zero;
+      const w = pct(Math.abs(r.value), span);
+      inner = `<span class="zpv-bar zpv-mark${neg ? ' zpv-bar--neg' : ''}"${id} data-zpv-anim="bar" style="--x:${x};--w:${w};--i:${i}" `
+        + `tabindex="0" role="img" aria-label="${esc(`${r.label ?? ''}: ${vt}`)}" data-tip="${tip}"></span>`
+        + (neg
+          ? `<span class="zpv-val zpv-val--neg" style="--x:${x}">${esc(vt)}</span>`
+          : `<span class="zpv-val" style="--w:${at(r.value)}">${esc(vt)}</span>`);
     } else {
       const w = pct(Math.max(0, r.value), max);
       inner = `<span class="zpv-bar zpv-mark"${id} data-zpv-anim="bar" style="--w:${w};--i:${i}" `
@@ -195,7 +217,7 @@ export function rankedBars(items, opts = {}) {
 
   const aria = `${opts.title || 'Graf'}: ${rows.map((r, i) => `${r.label ?? ''} ${texts[i]}`).join(', ')}`
     + `${refOk ? `. ${refText}` : ''}.`;
-  const plot = `<div class="zpv-plot zpv-barlist ${valWidthClass(texts)}${kind === 'line' ? ' zpv-has-refline' : ''}" role="group" aria-label="${esc(aria)}">${rowsHtml}</div>`;
+  const plot = `<div class="zpv-plot zpv-barlist ${valWidthClass(texts)}${kind === 'line' ? ' zpv-has-refline' : ''}${hasNeg ? ' zpv-has-neg' : ''}" role="group" aria-label="${esc(aria)}">${rowsHtml}</div>`;
   const table = tableTwin(opts.title, ['Položka', unit ? `Hodnota (${unit})` : 'Hodnota'],
     rows.map((r, i) => [esc(r.label ?? ''), esc(texts[i])]));
   return figure('bars', opts, plot + table, { extraCap: extra });

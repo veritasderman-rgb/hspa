@@ -43,11 +43,15 @@
       <div class="ed-kicker">Srovnávač zdravotních pojišťoven · pracovní verze</div>
       <h1 class="ed-hero-headline" id="zpHeroHeadline">Sedm pojišťoven, jeden pojištěnec. Co pro něj která skutečně dělá?</h1>
       <p class="ed-hero-lead">
-        Projekt think tanku Ministr zdraví a Národní asociace pacientských organizací se zaměřuje na vztah pojišťovny a pojištěnce, ne pojišťovny a nemocnice. Nemá pojišťovny kontrolovat, má pojištěncům pomoci se orientovat: co nabízejí aplikace, co z fondu prevence má doložitelný přínos, jak se liší kmen a hospodaření a jak pojišťovny podporují zdravotní gramotnost.
+        Srovnávač pomáhá pojištěncům zorientovat se v tom, co jim která pojišťovna nabízí: aplikace, prevenci, kmen a hospodaření. Každé číslo má zdroj a rok, hodnocení vzniká až po právu pojišťovny na odpověď.
       </p>
-      <p class="ed-hero-lead">
-        Stavíme na datech, která už existují (Centrální registr pojištěnců, výroční zprávy, pojistné plány, hodnocení MZ a MF), a doplňujeme je dotazy pojišťovnám. Každé číslo má zdroj a rok. Hodnocení v semaforu vzniká až po právu pojišťovny na odpověď.
-      </p>
+      <details class="zpc-acc zpc-hero-acc">
+        <summary>O projektu a datech</summary>
+        <div class="zpc-acc-body">
+          <p>Projekt think tanku Ministr zdraví a Národní asociace pacientských organizací se zaměřuje na vztah pojišťovny a pojištěnce, ne pojišťovny a nemocnice. Nemá pojišťovny kontrolovat, má pojištěncům pomoci se orientovat: co nabízejí aplikace, co z fondu prevence má doložitelný přínos, jak se liší kmen a hospodaření a jak pojišťovny podporují zdravotní gramotnost.</p>
+          <p>Stavíme na datech, která už existují (Centrální registr pojištěnců, výroční zprávy, pojistné plány, hodnocení MZ a MF), a doplňujeme je dotazy pojišťovnám. Hodnocení v semaforu vzniká až po právu pojišťovny na odpověď.</p>
+        </div>
+      </details>
       <ul class="zpc-modnav" aria-label="Moduly srovnávače">
         <li><a href="#modul-aplikace">1 · Aplikace<span class="zpc-faze">první výstup</span></a></li>
         <li><a href="#modul-prevence">2 · Prevence a fond prevence</a></li>
@@ -56,8 +60,9 @@
         <li><a href="#modul-metodika">5 · Metodika a semafor</a></li>
         <li><a href="#modul-plan">6 · Plán a zdroje</a></li>
       </ul>
+      <p class="zpc-moje-lbl" id="zpMojeLbl">Moje pojišťovna: vyberte ji a zvýrazní se ve všech grafech a tabulkách.</p>
+      <div id="zpMojeZp" class="zpc-moje" aria-describedby="zpMojeLbl"></div>
     </div>
-    <div id="zpMojeZp" class="zpc-moje"></div>
     <aside class="ed-hero-stats" aria-label="Klíčová čísla" id="zpHeroStats"></aside>
   </section>
 
@@ -99,26 +104,51 @@
   <!-- Modul 3: Kmen a hospodaření -->
   <section class="zpc-mod" id="modul-kmen" aria-labelledby="zpKmenHead">
     <div class="zpc-mod-head"><h2 id="zpKmenHead">3 · Kmen a hospodaření</h2><span class="zpc-stav">CRP 2025 · MZ a MF 2024 · ZPP 2026</span></div>
-    <p class="zpc-lead">Kontext, bez kterého se nedá nic férově srovnávat: kdo koho pojišťuje, jak starý kmen nese a s jakou rezervou vstupuje do roku 2026. Náklady i prevence na pojištěnce se v dalších kolech budou standardizovat na věkovou strukturu ČR.</p>
-    <div id="zpCards" class="zpc-cards"></div>
-    <p class="zpc-cap">Karty: kmen, věková struktura a regionální těžiště z CRP (ÚZIS, OIS 11-47, verze 2026-01, rok 2025; sparkline = tržní podíl 2010–2025). Náklady a fond prevence za rok 2024 z Hodnocení vývoje systému v.z.p. (MZ ČR + MF) a výročních zpráv. Zůstatky z plánů na rok 2026 (sněmovní tisk 280/0). Pomlčka = nedohledáno.</p>
+    <p class="zpc-lead">Kdo koho pojišťuje, jak starý kmen nese, kolik stojí jeho péče a s jakou rezervou vstupuje do roku 2026.</p>
+    <div id="zpChartShare"></div>
+    <div id="zpCards" class="zpc-cards" role="region" tabindex="0" aria-label="Karty sedmi pojišťoven (na mobilu posuvné do stran)"></div>
+    <p class="zpc-cap">ÚZIS · CRP 2025 · MZ ČR + MF 2024 · ZPP 2026 · pomlčka = nedohledáno</p>
     <div id="zpKraje" class="zpc-kraje"></div>
+    <h3 class="section-title"><span>Vývoj kmene 2010–2025</span></h3>
     <div class="zpc-charts">
-      <div class="zpc-chart"><h4>Tržní podíl 2025</h4><span class="zpc-sub">% pojištěnců ČR · CRP OIS 11-47</span><div id="zpChartShare"></div></div>
-      <div class="zpc-chart"><h4>Podíl seniorů 65+ v kmeni</h4><span class="zpc-sub">Starší kmen = vyšší náklady; přerozdělení to má vyrovnávat. ČR průměr přerušovaně.</span><div id="zpChart65"></div></div>
+      <div class="zpc-chart" id="zpChartTrend"></div>
+      <div class="zpc-chart" id="zpChartGrowth"></div>
+    </div>
+    <h3 class="section-title"><span>Věk kmene a náklady na péči</span></h3>
+    <div class="zpc-charts">
+      <div class="zpc-chart" id="zpChart65"></div>
+      <div class="zpc-chart" id="zpChartNzs"></div>
     </div>
     <h3 class="section-title"><span>Hospodaření 2024</span></h3>
-    <div id="zpTableFin" class="zpc-tbl" role="region" tabindex="0" aria-label="Hospodaření pojišťoven 2024 (tabulka, posuvná)"></div>
-    <p class="zpc-cap">Primární zdroj: Hodnocení vývoje systému v.z.p. v roce 2024 (MZ ČR + MF; pojištěnci = roční průměr, saldo = příjmy − výdaje, hotovostní metodika), doplněno výročními zprávami 2024. Provoz = výdaje na vlastní činnost v % příjmů (limit podle vyhlášky 418/2003 Sb.). Zůstatky na bankovních účtech podle sněmovního tisku 280/0 (tab. 9). Příjmy, náklady a saldo v mld Kč; fond prevence a zůstatky v mil. Kč.</p>
+    <div id="zpTableFin"></div>
+    <p class="zpc-cap">MZ ČR + MF · Hodnocení vývoje systému v.z.p. 2024 · výroční zprávy 2024 · sněmovní tisk 280/0 · řazení kliknutím na záhlaví</p>
     <div class="zpc-charts">
-      <div class="zpc-chart"><h4>Náklady na zdravotní služby na pojištěnce</h4><span class="zpc-sub">Kč za rok 2024 · nestandardizováno na věk</span><div id="zpChartNzs"></div></div>
-      <div class="zpc-chart"><h4>Rezervy na konci roku 2026</h4><span class="zpc-sub">Zůstatek na účtech jako % ročních výdajů · plán ZPP 2026. Pod 3–4 % vznikají dluhy po splatnosti.</span><div id="zpChartZust"></div></div>
+      <div class="zpc-chart" id="zpChartZust"></div>
+      <div class="zpc-chart" id="zpChartProvoz"></div>
     </div>
+    <h3 class="section-title"><span>Co ukazují výroční zprávy 2025</span></h3>
+    <div class="zpc-chart" id="zpChartYoy"></div>
     <h3 class="section-title"><span>Klientský servis</span></h3>
     <div id="zpTablePrev" class="zpc-tbl" role="region" tabindex="0" aria-label="Klientský servis (tabulka, posuvná)"></div>
-    <div class="zpc-grid2">
-      <div class="zpc-box"><h4>Poznámky k jednotlivým pojišťovnám</h4><ul id="zpNotes"></ul></div>
-      <div class="zpc-box"><h4>Co se nepodařilo dohledat</h4><ul id="zpChybi"></ul></div>
+    <div class="zpc-accs">
+      <details class="zpc-acc">
+        <summary>Jak číst modul a odkud jsou data · 5</summary>
+        <div class="zpc-acc-body"><ul>
+          <li><b>Kmen.</b> Počet pojištěnců, věková struktura a regionální těžiště z Centrálního registru pojištěnců (ÚZIS, OIS 11-47, verze 2026-01, rok 2025). Minigraf v kartě a graf vývoje ukazují počet pojištěnců jako index vůči roku 2010 (2010 = 100).</li>
+          <li><b>Hospodaření 2024.</b> Primární zdroj: Hodnocení vývoje systému v.z.p. v roce 2024 (MZ ČR + MF; pojištěnci = roční průměr, saldo = příjmy − výdaje, hotovostní metodika), doplněno výročními zprávami 2024. Příjmy, náklady a saldo v mld Kč, fond prevence a zůstatky v mil. Kč.</li>
+          <li><b>Provoz.</b> Výdaje na vlastní činnost v % příjmů; limit podle vyhlášky 418/2003 Sb. Zůstatky na bankovních účtech podle sněmovního tisku 280/0 (tab. 9).</li>
+          <li><b>Standardizace.</b> Náklady i prevence na pojištěnce se mají přepočítat na věkovou a pohlavní strukturu ČR (metodika § 4.1). Dokud nejsou doložené nákladové indexy, ukazujeme hodnoty nestandardizované a v kartách je tak značíme.</li>
+          <li><b>Řazení.</b> Grafy jsou seřazené podle hodnoty, nejde o hodnocení pojišťoven. Barvu pojišťovny uvidíte po výběru „Moje pojišťovna“ nebo při najetí myší.</li>
+        </ul></div>
+      </details>
+      <details class="zpc-acc">
+        <summary>Poznámky k jednotlivým pojišťovnám · <span id="zpNotesN">0</span></summary>
+        <div class="zpc-acc-body"><ul id="zpNotes"></ul></div>
+      </details>
+      <details class="zpc-acc">
+        <summary>Co se nepodařilo dohledat · <span id="zpChybiN">0</span></summary>
+        <div class="zpc-acc-body"><ul id="zpChybi"></ul></div>
+      </details>
     </div>
   </section>
 

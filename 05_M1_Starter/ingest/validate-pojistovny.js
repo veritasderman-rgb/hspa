@@ -109,6 +109,23 @@ export function validateAll(datasets) {
       }
       if (Array.isArray(c.podil_trend)) ok(c.podil_trend.length >= 10, `${tag}.crp.podil_trend: příliš krátká řada (${c.podil_trend.length})`);
 
+      // crp.pojistenci_trend (P3.1, graf index 2010 = 100): povinná řada ≥ 10 bodů {year, insured},
+      // roky vzestupně bez duplicit; poslední bod má sedět s crp.pojistenci (jinak WARN)
+      const pt = c.pojistenci_trend;
+      if (ok(Array.isArray(pt), `${tag}.crp.pojistenci_trend: chybí nebo není pole`)) {
+        ok(pt.length >= 10, `${tag}.crp.pojistenci_trend: příliš krátká řada (${pt.length}, min. 10)`);
+        let prev = -Infinity;
+        pt.forEach((p, i) => {
+          ok(isObj(p) && Number.isInteger(p.year) && p.year > prev, `${tag}.crp.pojistenci_trend[${i}].year: musí být celé číslo, roky vzestupně bez duplicit`);
+          ok(isObj(p) && isNum(p.insured) && p.insured > 0, `${tag}.crp.pojistenci_trend[${i}].insured: musí být kladné číslo`);
+          if (isObj(p) && Number.isInteger(p.year)) prev = p.year;
+        });
+        const last = pt[pt.length - 1];
+        if (isObj(last) && isNum(last.insured) && isNum(c.pojistenci) && last.insured !== c.pojistenci) {
+          warn(`${tag}.crp.pojistenci_trend: poslední bod (${last.insured}) ≠ crp.pojistenci (${c.pojistenci})`);
+        }
+      }
+
       const h = z.hospodareni ?? {};
       for (const f of HOSP_REQUIRED) {
         if (!ok(h[f] != null, `${tag}.hospodareni: missing '${f}'`)) continue;

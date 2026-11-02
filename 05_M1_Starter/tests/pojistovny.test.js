@@ -59,7 +59,7 @@ test('pojistovny.html: noindex dokud je pracovní návrh, jeden h1, modul, foote
   assert.match(html, /<script type="module" src="src\/pojistovny\.js">/);
   assert.match(html, /id="siteFooter"/);
   assert.match(html, /id="moduleNav"/);
-  for (const id of ['zpHeroStats', 'zpAppMatrix', 'zpPrevMatrix', 'zpPrevOnko', 'zpPrevDusevni', 'zpFpStruktura', 'zpOdpovedi', 'zpCards', 'zpChartShare', 'zpChart65', 'zpTableFin', 'zpChartNzs', 'zpChartZust', 'zpTablePrev', 'zpNotes', 'zpChybi', 'zpOtazky', 'zpSemafor', 'zpSources']) {
+  for (const id of ['zpHeroStats', 'zpAppMatrix', 'zpPrevMatrix', 'zpPrevOnko', 'zpPrevDusevni', 'zpFpStruktura', 'zpOdpovedi', 'zpCards', 'zpChartShare', 'zpChart65', 'zpTableFin', 'zpChartNzs', 'zpChartZust', 'zpChartProvoz', 'zpChartTrend', 'zpChartGrowth', 'zpChartYoy', 'zpMojeZp', 'zpTablePrev', 'zpNotes', 'zpChybi', 'zpOtazky', 'zpSemafor', 'zpSources']) {
     assert.match(html, new RegExp(`id="${id}"`), `chybí kontejner #${id}`);
   }
 });
@@ -95,17 +95,147 @@ test('pojistovny-prevence.json: 7 pojišťoven × 9 oblastí, stupně jen z povo
   }
 });
 
-test('src/pojistovny.js: čisté funkce formátují a kreslí', async () => {
-  const mod = await import('../src/pojistovny.js');
-  assert.equal(mod.fmtKc(47998), '47 998');
+// ---------------------------------------------------------------------------
+// Čisté funkce src/pojistovny.js (P1.4 + P3.1 + P3.4): příprava vstupů pro
+// primitivy zp-viz.js je oddělená od renderu a testuje se bez DOM.
+// ---------------------------------------------------------------------------
+const mod = await import('../src/pojistovny.js');
+const viz = await import('../src/zp-viz.js');
+const copy = (x) => JSON.parse(JSON.stringify(x));
+const NB = (s) => s.replace(/ /g, ' ');
+
+test('pojistovny.js: fmtKc a levelBadge', () => {
+  assert.equal(mod.fmtKc(47998), NB('47 998'));
+  assert.equal(mod.fmtKc(20.857, 1), '20,9');
   assert.equal(mod.fmtKc(null), '—');
-  const svg = mod.hbarSvg([{ label: 'A', value: 10, color: '#000' }, { label: 'B', value: null, color: '#000' }], { unit: ' %' });
-  assert.match(svg, /<svg/);
-  assert.match(svg, /nedohledáno/);
-  const sp = mod.sparkSvg([{ year: 2010, share_pct: 60 }, { year: 2011, share_pct: 58 }, { year: 2012, share_pct: 57 }], '#000');
-  assert.match(sp, /polyline/);
+  assert.equal(mod.fmtKc(''), '—');
   assert.match(mod.levelBadge('silne'), /zpc-lvl-2/);
+  assert.match(mod.levelBadge(3), /nejsilnější/);
   assert.match(mod.levelBadge(null), /—/);
+  assert.equal(mod.levelBadge('<b>'), '&lt;b&gt;');
+  assert.equal(mod.hbarSvg, undefined, 'hbarSvg je nahrazen primitivy zp-viz.js');
+  assert.equal(mod.sparkSvg, undefined, 'sparkSvg je nahrazen miniIndexSvg');
+});
+
+test('pojistovny.js: miniIndexSvg — index prvního roku, krajní roky, null/krátká řada', () => {
+  const svg = mod.miniIndexSvg([{ year: 2011, value: 120 }, { year: 2010, value: 100 }, { year: 2025, value: 117 }], { label: 'ČPZP' });
+  assert.match(svg, /^<svg class="zpc-mini"/);
+  assert.match(svg, />2010<\/text>/);
+  assert.match(svg, />2025<\/text>/);
+  assert.match(svg, /class="zpc-mini-end"[^>]*>117</);
+  assert.match(svg, /role="img" aria-label="ČPZP: počet pojištěnců 2025 = 117 % stavu 2010 \(index 2010 = 100\)"/);
+  assert.ok(!/style=/.test(svg), 'barva jen přes CSS');
+  assert.match(mod.miniIndexSvg([]), /nedohledán/);
+  assert.match(mod.miniIndexSvg([{ year: 2010, value: 5 }]), /nedohledán/);
+  assert.match(mod.miniIndexSvg(null), /nedohledán/);
+  assert.ok(!mod.miniIndexSvg([{ year: 2010, value: 1 }, { year: 2011, value: 2 }], { label: '<x>' }).includes('<x>'));
+});
+
+test('pojistovny.js: heroTiles ze system/system_crp, null → nedohledáno', () => {
+  const t = mod.heroTiles(DATA);
+  assert.equal(t.length, 4);
+  assert.equal(t[0].value, DATA.system_crp.pojistenci_2025);
+  assert.equal(t[1].value, DATA.system.vydaje_celkem_mld);
+  assert.equal(t[2].value, DATA.system.saldo_mld);
+  assert.equal(t[3].value, DATA.system.fond_prevence_naklady_celkem_mld);
+  const html = viz.statTiles(t);
+  assert.equal((html.match(/class="zpv-count" data-zpv-anim="count"/g) || []).length, 4);
+  const empty = mod.heroTiles({});
+  assert.ok(empty.every((x) => x.value === null));
+  assert.equal((viz.statTiles(empty).match(/nedohledáno/g) || []).length, 4);
+});
+
+test('pojistovny.js: buildKmenCharts — vstupy pro všechny grafy modulu 3', () => {
+  const ch = mod.buildKmenCharts(DATA);
+  for (const k of ['share', 'senior', 'nzs', 'zust', 'provoz', 'trend', 'growth', 'yoy']) assert.ok(ch[k]?.opts?.title, `chybí graf ${k}`);
+  // tržní podíl: 7 částí, žádné skládání do „Ostatní“
+  assert.equal(ch.share.parts.length, 7);
+  assert.equal(ch.share.opts.maxParts, 7);
+  assert.ok(Math.abs(ch.share.parts.reduce((a, p) => a + p.value, 0) - 100) < 0.2);
+  // reference: ČR průměr 65+ jako linka, náklady jako linka, rezervy jako zóna 3,5
+  assert.deepEqual(ch.senior.opts.ref, { value: DATA.system_crp.podil_65plus_pct, label: 'průměr ČR', kind: 'line' });
+  assert.equal(ch.nzs.opts.ref.value, DATA.system.naklady_zs_na_pojistence_kc);
+  assert.match(ch.nzs.opts.sub, /akruálně/);
+  assert.deepEqual(ch.zust.opts.ref, { value: 3.5, label: 'kritická hranice 3–4 %', kind: 'zone-below' });
+  assert.ok(ch.zust.items.every((i) => /závazky po splatnosti/.test(i.tip)));
+  // provoz: limit v tipu, null limit → „limit nedohledán“
+  assert.match(ch.provoz.items.find((i) => i.kod === '201').tip, /limit nedohledán/);
+  assert.match(ch.provoz.items.find((i) => i.kod === '111').tip, /limit 2,91 %/);
+  // standardizace: placeholder → poznámka, žádné standardizované číslo
+  assert.ok(ch.nzs.items.every((i) => i.note.includes(mod.STD_PENDING)));
+  // kmen 2010–2025: 7 sérií po 16 bodech, index proti 2010
+  assert.equal(ch.trend.series.length, 7);
+  assert.ok(ch.trend.series.every((s) => s.points.length === 16 && s.points[0].year === 2010));
+  assert.equal(ch.trend.opts.base, 2010);
+  assert.match(ch.trend.opts.sub, /ukrajinských uprchlíků/);
+  // změna 2015 → 2025: diverging (záporné hodnoty povolené), se znaménkem
+  assert.equal(ch.growth.opts.allowNegative, true);
+  assert.ok(ch.growth.items.some((i) => i.value < 0));
+  const gh = viz.rankedBars(ch.growth.items, ch.growth.opts);
+  assert.match(gh, /zpv-bar--neg/);
+  assert.match(gh, /\+8,1\s%/);
+});
+
+test('pojistovny.js: standardizace „dolozeno“ jde do poznámky s hodnotou', () => {
+  const d = copy(DATA);
+  const std = d.pojistovny[0].hospodareni.naklady_na_pojistence_std_kc;
+  Object.assign(std, { stav: 'dolozeno', hodnota: 45000 });
+  const ch = mod.buildKmenCharts(d);
+  assert.match(ch.nzs.items[0].note, /standardizováno na věk a pohlaví 45\s000 Kč/);
+  assert.deepEqual(mod.stdInfo(d.pojistovny[0].hospodareni), { dolozeno: true, hodnota: 45000, poznamka: std.poznamka });
+  assert.equal(mod.stdInfo(DATA.pojistovny[0].hospodareni).dolozeno, false);
+  assert.equal(mod.stdInfo(undefined).dolozeno, false);
+});
+
+test('pojistovny.js: P3.4 dumbbell 2024 → 2025 — metrika dostupná u všech ZP s VZ 2025', () => {
+  const ch = mod.buildKmenCharts(DATA);
+  const with25 = DATA.pojistovny.filter((z) => z.hospodareni_2025 && Object.keys(z.hospodareni_2025).length).map((z) => z.kod);
+  assert.ok(ch.yoy.metric, 'nějaká metrika musí být k dispozici');
+  assert.deepEqual(ch.yoy.items.map((i) => i.kod), with25);
+  assert.ok(ch.yoy.items.every((i) => Number.isFinite(i.from) && Number.isFinite(i.to)));
+  const missing = DATA.pojistovny.filter((z) => !with25.includes(z.kod)).map((z) => z.zkratka);
+  assert.deepEqual(ch.yoy.missing, missing);
+  for (const m of missing) assert.ok(ch.yoy.opts.sub.includes(m));
+  assert.match(ch.yoy.opts.sub, /VZ 2025 nedohledána/);
+  // pořadí preference: příjmy → náklady → fond prevence na pojištěnce
+  const z = (kod, a, b) => ({ kod, zkratka: kod,
+    hospodareni: { naklady_na_pojistence_kc: { hodnota: a }, fond_prevence_na_pojistence_kc: { hodnota: 1 } },
+    hospodareni_2025: { naklady_na_pojistence_kc: { hodnota: b }, fond_prevence_na_pojistence_kc: { hodnota: 2 } } });
+  assert.equal(mod.pickYoyMetric([z('111', 10, 11), z('201', 5, 6)]).key, 'naklady_na_pojistence_kc');
+  assert.equal(mod.pickYoyMetric([z('111', 10, null), z('201', 5, 6)]).key, 'fond_prevence_na_pojistence_kc');
+  assert.equal(mod.pickYoyMetric([{ kod: '111', hospodareni: {}, hospodareni_2025: null }]), null);
+  assert.equal(mod.pickYoyMetric([]), null);
+  const none = mod.buildKmenCharts({ pojistovny: [{ kod: '111', zkratka: 'VZP', hospodareni: {}, crp: {} }] });
+  assert.deepEqual(none.yoy.items, []);
+  assert.match(viz.dumbbell(none.yoy.items, none.yoy.opts), /nedohledáno/);
+});
+
+test('pojistovny.js: tabulka hospodaření — 7 sloupců, další v detailu, řazení s null na konci', () => {
+  assert.equal(mod.FIN_COLS.length, 7);
+  assert.deepEqual(mod.FIN_COLS.filter((c) => c.bar).map((c) => c.key), ['npp', 'provoz']);
+  const keys = new Set([...mod.FIN_COLS, ...mod.FIN_MORE_COLS].map((c) => c.key));
+  assert.equal(keys.size, mod.FIN_COLS.length + mod.FIN_MORE_COLS.length, 'sloupce se neopakují');
+  const rows = mod.buildFinRows(DATA);
+  assert.equal(rows.length, 7);
+  assert.equal(rows[0].v.npp, DATA.pojistovny[0].hospodareni.naklady_na_pojistence_kc.hodnota);
+  for (const r of rows) for (const k of keys) assert.ok(r.v[k] === null || Number.isFinite(r.v[k]), `${r.kod}.${k}`);
+  const desc = mod.sortFinRows(rows, 'npp', 'desc').map((r) => r.v.npp);
+  assert.deepEqual(desc, [...desc].sort((a, b) => b - a));
+  const t = [{ kod: 'a', v: { x: 2 } }, { kod: 'b', v: { x: null } }, { kod: 'c', v: { x: 5 } }, { kod: 'd', v: { x: 2 } }];
+  assert.deepEqual(mod.sortFinRows(t, 'x', 'desc').map((r) => r.kod), ['c', 'a', 'd', 'b']);
+  assert.deepEqual(mod.sortFinRows(t, 'x', 'asc').map((r) => r.kod), ['a', 'd', 'c', 'b']);
+  assert.deepEqual(t.map((r) => r.kod), ['a', 'b', 'c', 'd'], 'vstup se nemění');
+  assert.deepEqual(mod.sortFinRows(null, 'x'), []);
+});
+
+test('pojistovny.json: crp.pojistenci_trend 2010–2025 sedí s kmenem 2025 a růstem 2015 → 2025', () => {
+  for (const z of DATA.pojistovny) {
+    const t = z.crp.pojistenci_trend;
+    assert.equal(t.length, 16, z.kod);
+    assert.equal(t[t.length - 1].insured, z.crp.pojistenci, `${z.kod}: poslední bod = pojištěnci 2025`);
+    const g = (t.find((p) => p.year === 2025).insured / t.find((p) => p.year === 2015).insured - 1) * 100;
+    assert.ok(Math.abs(g - z.crp.rust_2015_2025_pct) < 0.01, `${z.kod}: růst ${g} ≠ ${z.crp.rust_2015_2025_pct}`);
+  }
 });
 
 // ---------------------------------------------------------------------------
@@ -147,6 +277,26 @@ test('validate-pojistovny: duplicitní kód ZP v pojistovny.json', () => {
   const s = realSets();
   s.pojistovny.pojistovny[1].kod = s.pojistovny.pojistovny[0].kod;
   fails(s, /duplicitní kód/);
+});
+
+test('validate-pojistovny: crp.pojistenci_trend — povinná, ≥ 10 bodů, roky vzestupně', () => {
+  let sets = realSets();
+  delete sets.pojistovny.pojistovny[0].crp.pojistenci_trend;
+  fails(sets, /pojistenci_trend: chybí/);
+  sets = realSets();
+  sets.pojistovny.pojistovny[1].crp.pojistenci_trend = sets.pojistovny.pojistovny[1].crp.pojistenci_trend.slice(0, 9);
+  fails(sets, /pojistenci_trend: příliš krátká řada \(9/);
+  sets = realSets();
+  sets.pojistovny.pojistovny[2].crp.pojistenci_trend[3].year = 2010;
+  fails(sets, /pojistenci_trend\[3\]\.year/);
+  sets = realSets();
+  sets.pojistovny.pojistovny[2].crp.pojistenci_trend[4].insured = null;
+  fails(sets, /pojistenci_trend\[4\]\.insured/);
+  sets = realSets();
+  sets.pojistovny.pojistovny[0].crp.pojistenci_trend.at(-1).insured += 1;
+  const { errors, warnings } = validateAll(sets);
+  assert.deepEqual(errors, []);
+  assert.ok(warnings.some((w) => /poslední bod/.test(w)));
 });
 
 test('validate-pojistovny: hospodareni_2025 — null i chybějící projde, rozbitá obálka selže', () => {

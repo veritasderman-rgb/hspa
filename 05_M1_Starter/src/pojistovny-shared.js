@@ -1,7 +1,7 @@
 // Sdílené pomocné funkce srovnávače pojišťoven (čisté, bez DOM kromě `set`).
 // Používají je src/pojistovny.js (hero, kmen) a src/pojistovny-prevence.js (aplikace, prevence, otázky).
-// Exportované čisté funkce (fmtKc, hbarSvg, sparkSvg, levelBadge) testuje tests/pojistovny.test.js
-// přes re-export v src/pojistovny.js.
+// Exportované čisté funkce (fmtKc, levelBadge, miniIndexSvg) testuje tests/pojistovny.test.js
+// přes re-export v src/pojistovny.js. Grafy kreslí src/zp-viz.js (hbarSvg/sparkSvg odstraněny v P1.4).
 
 import { escapeHtml, formatNumberCz } from './page-shared.js';
 import { ZP, zpColor } from './zp-palette.js';
@@ -18,46 +18,40 @@ export function fmtKc(v, dec = 0) {
 export const num = (v, dec = 0) => (v == null ? NA : fmtKc(v, dec));
 export const h = (obj) => (obj && typeof obj === 'object' && 'hodnota' in obj ? obj.hodnota : obj);
 
-/** Vodorovný sloupcový graf (SVG, škálovaný; hodnota null = „nedohledáno“). */
-export function hbarSvg(items, { unit = '', dec = 1, ref = null, refLabel = '', width = 640, maxv = null } = {}) {
-  const vals = items.map((i) => i.value).filter((v) => v != null);
-  if (!vals.length) return '<p class="zpc-na">Data nejsou k dispozici.</p>';
-  const mx = maxv ?? Math.max(...vals, ref ?? 0) * 1.12;
-  const rh = 26, gap = 8, labW = 120, valW = 92;
-  const hgt = items.length * (rh + gap) + 28;
-  const bw = width - labW - valW - 8;
-  let out = `<svg viewBox="0 0 ${width} ${hgt}" width="100%" role="img" aria-label="graf" style="max-width:${width}px;font-family:var(--sans)">`;
-  if (ref != null) {
-    const x = labW + bw * ref / mx;
-    out += `<line x1="${x.toFixed(1)}" y1="2" x2="${x.toFixed(1)}" y2="${hgt - 16}" stroke="var(--red)" stroke-width="1.5" stroke-dasharray="4 3"/>`;
-    out += `<text x="${(x + 4).toFixed(1)}" y="${hgt - 4}" font-size="11" fill="var(--red)">${esc(refLabel)}</text>`;
-  }
-  items.forEach((it, i) => {
-    const y = 8 + i * (rh + gap);
-    out += `<text x="${labW - 8}" y="${(y + rh * 0.68).toFixed(1)}" text-anchor="end" font-size="13" fill="var(--ink)">${esc(it.label)}</text>`;
-    if (it.value == null) {
-      out += `<text x="${labW + 4}" y="${(y + rh * 0.68).toFixed(1)}" font-size="12" fill="var(--ink-mut)">nedohledáno</text>`;
-      return;
-    }
-    const w = Math.max(2, bw * it.value / mx);
-    out += `<rect x="${labW}" y="${y}" width="${w.toFixed(1)}" height="${rh}" fill="${it.color}" rx="2"/>`;
-    const txt = fmtKc(it.value, dec) + unit;
-    out += `<text x="${(labW + w + 6).toFixed(1)}" y="${(y + rh * 0.68).toFixed(1)}" font-size="13" font-weight="600" fill="var(--ink)" style="font-variant-numeric:tabular-nums">${esc(txt)}</text>`;
-    if (it.sub) out += `<text x="${(labW + w + 6 + txt.length * 7.5 + 6).toFixed(1)}" y="${(y + rh * 0.68).toFixed(1)}" font-size="11" fill="var(--ink-mut)">${esc(it.sub)}</text>`;
-  });
-  return out + '</svg>';
+/**
+ * Miniaturní indexovaný graf do karty pojišťovny (náhrada sparkline): řada
+ * {year, value} přepočtená na index prvního roku = 100, vodorovná linka 100,
+ * popisky krajních let a koncová hodnota indexu. Čistá funkce → SVG string.
+ * Pevná velikost (bez škálování), text 11 px; barva čáry přes CSS
+ * (.zpc-mini-line, výchozí inkoust, ve vybrané kartě barva pojišťovny).
+ */
+export function miniIndexSvg(points, { w = 176, hh = 44, label = '' } = {}) {
+  const pts = (Array.isArray(points) ? points : [])
+    .filter((p) => p && Number.isFinite(p.year) && Number.isFinite(p.value))
+    .sort((a, b) => a.year - b.year);
+  const base = pts.find((p) => p.value !== 0);
+  if (pts.length < 2 || !base) return '<span class="zpc-na">vývoj kmene nedohledán</span>';
+  const idx = pts.map((p) => ({ year: p.year, i: (p.value / base.value) * 100 }));
+  const lo = Math.min(100, ...idx.map((p) => p.i));
+  const hi = Math.max(100, ...idx.map((p) => p.i));
+  const rng = (hi - lo) || 1;
+  const x0 = 2, x1 = w - 34, y0 = 4, y1 = hh - 17;
+  const y0yr = idx[0].year, y1yr = idx[idx.length - 1].year;
+  const X = (yr) => x0 + ((yr - y0yr) / ((y1yr - y0yr) || 1)) * (x1 - x0);
+  const Y = (v) => y1 - ((v - lo) / rng) * (y1 - y0);
+  const r = (v) => Math.round(v * 10) / 10;
+  const d = idx.map((p, k) => `${k ? 'L' : 'M'}${r(X(p.year))} ${r(Y(p.i))}`).join('');
+  const end = idx[idx.length - 1];
+  const endTxt = fmtKc(end.i, 0);
+  const aria = `${label ? label + ': ' : ''}počet pojištěnců ${y1yr} = ${endTxt} % stavu ${y0yr} (index ${y0yr} = 100)`;
+  return `<svg class="zpc-mini" viewBox="0 0 ${w} ${hh}" width="${w}" height="${hh}" role="img" aria-label="${esc(aria)}">`
+    + `<line class="zpc-mini-base" x1="${x0}" x2="${x1}" y1="${r(Y(100))}" y2="${r(Y(100))}"/>`
+    + `<path class="zpc-mini-line" d="${d}"/>`
+    + `<circle class="zpc-mini-dot" cx="${r(X(end.year))}" cy="${r(Y(end.i))}" r="2.5"/>`
+    + `<text class="zpc-mini-end" x="${r(X(end.year) + 5)}" y="${r(Y(end.i) + 4)}">${esc(endTxt)}</text>`
+    + `<text class="zpc-mini-yr" x="${x0}" y="${hh - 3}">${y0yr}</text>`
+    + `<text class="zpc-mini-yr" x="${r(x1)}" y="${hh - 3}" text-anchor="end">${y1yr}</text></svg>`;
 }
-
-/** Sparkline tržního podílu. */
-export function sparkSvg(trend, color, w = 120, hh = 28) {
-  const vals = trend.map((t) => t.share_pct);
-  const mn = Math.min(...vals), mx = Math.max(...vals), rng = (mx - mn) || 1;
-  const pts = vals.map((v, i) => [2 + i * (w - 4) / (vals.length - 1), hh - 2 - (v - mn) / rng * (hh - 6)]);
-  const d = pts.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(' ');
-  const [lx, ly] = pts[pts.length - 1];
-  return `<svg viewBox="0 0 ${w} ${hh}" width="${w}" height="${hh}" aria-hidden="true"><polyline points="${d}" fill="none" stroke="${color}" stroke-width="1.6"/><circle cx="${lx.toFixed(1)}" cy="${ly.toFixed(1)}" r="2.4" fill="${color}"/></svg>`;
-}
-
 export const LEVELS = { nejsilnejsi: 3, silne: 2, zakladni: 1, minimalni: 0 };
 export const LEVEL_LABEL = { 3: 'nejsilnější', 2: 'silné', 1: 'základní', 0: 'minimální' };
 export function levelBadge(stupen) {

@@ -41,7 +41,7 @@ function assertOnlyAllowedStyles(html) {
   for (const [, st] of html.matchAll(/style="([^"]*)"/g)) {
     for (const decl of st.split(';').map((d) => d.trim()).filter(Boolean)) {
       const prop = decl.split(':')[0].trim();
-      assert.ok(['--w', '--i', 'width'].includes(prop), `nepovolený inline styl: ${decl}`);
+      assert.ok(['--w', '--i', '--x', 'width'].includes(prop), `nepovolený inline styl: ${decl}`);
     }
   }
 }
@@ -124,6 +124,32 @@ test('rankedBars: referenční zóna/linka v tracku + popisek v záhlaví', () =
   assert.ok(line.includes('zpv-has-refline'));
   const above = rankedBars(ZP, { ref: { value: 20, label: 'Nad', kind: 'zone-above' } });
   assert.ok(above.includes('zpv-ref--above'));
+});
+
+test('rankedBars allowNegative: nulová osa, záporné bary doleva, znaménko, styly', () => {
+  const items = [
+    { kod: '205', label: 'ČPZP', value: 8.05 },
+    { kod: '213', label: 'RBP', value: -1.78 },
+    { kod: '201', label: 'VoZP', value: -0.98 },
+    { kod: '209', label: 'ZPŠ', value: null },
+  ];
+  const h = rankedBars(items, { title: 'Změna', unit: '%', dec: 1, allowNegative: true, signed: true });
+  assert.ok(h.includes('zpv-has-neg'));
+  // rozsah −1,78 … 8,05 → nula na 18,11 %
+  assert.equal(count(h, /class="zpv-zero" style="--x:18.11%"/g), 4, 'nulová osa v každém řádku');
+  assert.match(h, /class="zpv-bar zpv-mark" data-zp="205" data-zpv-anim="bar" style="--x:18.11%;--w:81.89%;--i:0"/);
+  assert.match(h, /class="zpv-bar zpv-mark zpv-bar--neg" data-zp="213" data-zpv-anim="bar" style="--x:0%;--w:18.11%;--i:2"/);
+  assert.match(h, /zpv-val zpv-val--neg" style="--x:0%">−1,8\s%</);
+  assert.match(h, /aria-label="ČPZP: \+8,1\s%"/);
+  assert.match(h, /data-zp="209"[^>]*>[\s\S]*?nedohledáno/);
+  assert.equal(count(h, /zpv-bar--neg/g), 2);
+  assertOnlyAllowedStyles(h);
+  assertFocusableMarks(h);
+  // bez záporných hodnot je výstup shodný s výchozím
+  const pos = [{ kod: '111', label: 'VZP', value: 4 }, { kod: '201', label: 'VoZP', value: 2 }];
+  assert.equal(rankedBars(pos, { allowNegative: true }), rankedBars(pos));
+  // bez allowNegative se záporná hodnota dál kreslí od nuly (šířka 0)
+  assert.ok(!rankedBars(items).includes('zpv-zero'));
 });
 
 test('rankedBars: escapování popisků i titulku', () => {
