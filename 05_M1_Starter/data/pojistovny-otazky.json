@@ -1,6 +1,6 @@
 {
   "version": "0.2.0",
-  "generated_at": "2026-11-02T21:33:23.534Z",
+  "generated_at": "2026-11-02T22:31:22.077Z",
   "changelog": [
     {
       "datum": "2026-11-02",
@@ -21,6 +21,11 @@
       "datum": "2026-11-02",
       "zmena": "Každá sada má vyhodnocovací metodiku (pole vyhodnoceni: oblasti semaforu, vstup, pravidla, vystup): jak se z odpovědí odvozuje stav doloženo / deklarováno / nedoloženo / neodpověděla, co do semaforu nevstupuje (anketa, NAPO) a jaké prahy čekají na schválení PS. Znění otázek se nemění, verze sad zůstává 1.",
       "zdroj": "zadání vydavatele 2. 11. 2026 (Metodika a semafor: návrh dotazníků včetně vyhodnocovací metodiky)"
+    },
+    {
+      "datum": "2026-11-02",
+      "zmena": "Sady fond-prevence a rizikovi-pojistenci mají povolene_respondenty [\"pojistovna\"] (API odmítne jiný typ respondenta i s tokenem); výchozí sada na stránce Zdravotní gramotnost bez osobního odkazu je veřejná anketa pojistenci-anketa místo rizikovi-pojistenci, který bez tokenu nejde odeslat. Návrh pro PS 12. 11. 2026 (docs/ps-2026-11-12-podklady.md § 5), znění otázek beze změny, verze sad 1.",
+      "zdroj": "docs/ps-2026-11-12-podklady.md"
     }
   ],
   "_doc": "Sady otázek srovnávače pojišťoven podle fází projektu (docs/pojistovny-dotazniky.md): kolo 1 fond prevence a pobočky, kolo 2 rizikoví pojištěnci a zdravotní gramotnost, interní hodnoticí list aplikací, dotazník NAPO pro pacientské organizace, veřejná anketa pro pojištěnce a právo na odpověď. kanal: web-token | web-verejnost | interni | dopis+web; interní sady se přes web nevyplňují.",
@@ -92,7 +97,10 @@
           "Bez odpovědi do 15 dnů od doručení následuje žádost podle zákona 106 se stejným zněním; bez odpovědi ani na ni = neodpověděla (stav neutral, ne bad)."
         ],
         "vystup": "Tabulka 7 pojišťoven × 7 otázek se stavy, plné znění odpovědí (ingest/manual/pojistovny/odpovedi/), návrh verdiktu oblasti Prevence s dopadem; zveřejnění až po právu na odpověď."
-      }
+      },
+      "povolene_respondenty": [
+        "pojistovna"
+      ]
     },
     {
       "id": "rizikovi-pojistenci",
@@ -302,7 +310,10 @@
           "Souhrnné počty za všechny pojišťovny se zveřejní od tří odpovědí; odpovědi jednotlivých pojišťoven v plném znění spolu s hodnocením po právu na odpověď."
         ],
         "vystup": "Tabulka částí A–D × 7 pojišťoven se stavy, plné znění odpovědí, návrh doplnění verdiktů v oblastech Prevence s dopadem a Klientský servis."
-      }
+      },
+      "povolene_respondenty": [
+        "pojistovna"
+      ]
     },
     {
       "id": "aplikace-privetivost",
