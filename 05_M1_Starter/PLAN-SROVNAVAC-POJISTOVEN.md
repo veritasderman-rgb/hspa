@@ -127,25 +127,31 @@ dočasně (linked highlighting přes `data-zp="111"` na každém marku a jeden d
 ### 2.3 Jedna paleta pojišťoven, tokeny, obě témata
 
 Pevné pořadí podle kódu, nikdy se nerecykluje, sdílená se `src/pojistenci.js`
-(a výhledově `financovani.js`). Hex vychází z referenční kategorické palety dataviz
-metodiky (sloty 1–7, slot 8 „red“ vynechán kvůli brandu). Validátor
-(`dataviz/scripts/validate_palette.js`) nad povrchem `--paper`:
+(a výhledově `financovani.js`). **Rozhodnutí vydavatele 2. 11. 2026: barvy drží napříč
+celou stránkou podle pojišťovny a vycházejí z jejího brandu** (barva loga stažená z webu
+pojišťovny; hex originálů a zdroje v `ZP[].brand` v `src/zp-palette.js`), ne z referenční
+kategorické palety dataviz. Odstín zůstává brandový, upravena je světlost/sytost, aby
+paleta prošla validátorem (`dataviz/scripts/validate_palette.js`, povrch `--paper`) a
+nekolidovala se stavovými barvami (`--red`/`--bad`, `--good`, `--warn`).
 
-| Kód | ZP | Light (`#fbf8f1`) | Dark (`#17140f`) |
-|---|---|---|---|
-| 111 | VZP ČR | `#2a78d6` | `#3987e5` |
-| 201 | VoZP | `#eb6834` | `#d95926` |
-| 205 | ČPZP | `#1baf7a` | `#199e70` |
-| 207 | OZP | `#eda100` | `#c98500` |
-| 209 | ZPŠ | `#e87ba4` | `#d55181` |
-| 211 | ZP MV ČR | `#008300` | `#008300` |
-| 213 | RBP | `#6250d6` | `#9085e9` |
+| Kód | ZP | Brand originál | Light (`#fbf8f1`) | Dark (`#17140f`) |
+|---|---|---|---|---|
+| 111 | VZP ČR | `#e6300e` červená | `#fe4160` | `#b30420` |
+| 201 | VoZP | `#166937` zelená | `#0b9353` | `#288f5f` |
+| 205 | ČPZP | `#00aee7` azurová | `#1db4ee` | `#069ee3` |
+| 207 | OZP | `#702082` fialová | `#772689` | `#9934b2` |
+| 209 | ZPŠ | `#f36f21` oranžová | `#f56c0c` | `#ac642d` |
+| 211 | ZP MV ČR | `#283796` navy | `#3344a7` | `#5c4dd6` |
+| 213 | RBP | `#00a3e0` azurová | `#0f8cbf` | `#007ea1` |
 
-Výsledek: light PASS/PASS/PASS (CVD ΔE 9,1)/PASS, kontrast **WARN** u 205/207/209
-(2,0–2,7 : 1) → vyžaduje viditelné popisky a tabulkové dvojče, což 2.1 zaručuje;
-dark PASS ve všech pěti kontrolách. Tokeny `--zp-111 … --zp-213` v `src/styles.css`
-(`:root` + `:root[data-theme="dark"]`), JS je čte přes `getComputedStyle` (vzor
-`cz-choropleth.js:72`). Text se barvou série nikdy nebarví; identitu nese tečka.
+Výsledek: light i dark PASS (pásmo, chroma, CVD ΔE 8,5 / 9,8, normal-vision 19,4 / 17,0),
+kontrast **WARN** u ČPZP a ZPŠ (light 2,3 / 2,8 : 1) a u VZP v dark (2,6 : 1) →
+vyžaduje viditelné popisky a tabulkové dvojče, což 2.1 zaručuje. VZP je malinová/karmínová,
+ale ΔE vůči stavové `--red` ≥ 15 (light 15,7, dark 15,0): **série = brand rodina, stavy =
+ikona + text**, `--red` zůstává hrotu kompasu a stavu bad. Tokeny `--zp-111 … --zp-213` v
+`src/styles.css` (`:root` + `:root[data-theme="dark"]`), JS je čte přes `getComputedStyle`
+(vzor `cz-choropleth.js:72`). Text se barvou série nikdy nebarví; identitu nese tečka.
+Podrobná tabulka s důvody úprav: `docs/visual-components.md` → „Paleta pojišťoven“.
 
 ### 2.4 Formy grafů podle dat
 
@@ -411,7 +417,7 @@ GOVERNANCE § 4).
 
 | # | Otázka | Návrh |
 |---|---|---|
-| R1 | Paleta pojišťoven: přijmout sjednocení (VZP přestane být červená v Atlasu) | ano; `--red` = brand + `--bad` |
+| R1 | Paleta pojišťoven: sjednocení Atlasu a Srovnávače | rozhodnuto 2. 11. 2026: brandové odstíny (VZP červená, ale ΔE ≥ 15 od `--red`); `--red` = hrot kompasu + `--bad` |
 | R2 | „Moje pojišťovna“ v localStorage: je to v souladu s politikou soukromí (bez cookies, bez odeslání)? | ano, stejný mechanismus jako `hspa-theme`; zapsat do `o-projektu.html` sekce soukromí (C) |
 | R3 | Seřazené bary u faktů ≠ žebříček pojišťoven: schválit formulaci „řazeno podle hodnoty, ne hodnocení“ v popisku | ano, popisek pod každým seřazeným grafem |
 | R4 | Věková standardizace: kdo dodá nákladové váhy podle věku (index přerozdělení MZ?) | Fable navrhne z veřejných zdrojů, Advance potvrdí |

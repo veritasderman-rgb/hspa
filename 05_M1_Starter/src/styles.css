@@ -22307,27 +22307,52 @@ h6.pop-doc-h { font-size: 16px; font-style: italic; }
 
 /* === Srovnávač pojišťoven: tokeny palety pojišťoven (--zp-*) — plní balíček P1.1 === */
 /* Jedna paleta pojišťoven pro Atlas pojištěnců i Srovnávač (src/zp-palette.js).
-   Pevné pořadí podle kódu, nikdy se nerecykluje; žádná pojišťovna není červená
-   (--red = hrot kompasu a stav bad). Text se barvou série nikdy nebarví —
-   identitu nese tečka, popisek zůstává --ink. */
+   Rozhodnutí vydavatele 2. 11. 2026: barvy drží napříč stránkou podle pojišťovny
+   a vycházejí z jejího BRANDU (barva loga z webu pojišťovny), ne z referenční
+   dataviz palety. Odstín (hue) zůstává brandový, upravena je světlost a sytost,
+   aby paleta prošla validátorem dataviz (světlost, chroma, CVD ΔE ≥ 8 u sousedů
+   v pořadí kódů 111…213, normal-vision ≥ 15) v light i dark a nekolidovala se
+   stavovými barvami webu (--red/--bad, --good, --warn).
+   Pevné pořadí podle kódu, nikdy se nerecykluje. Stavy se nikdy nenesou barvou
+   série: stav = ikona + text; --red zůstává hrotu kompasu a stavu bad.
+   Text se barvou série nikdy nebarví — identitu nese tečka, popisek zůstává --ink.
+   Brand zdroje a hexy originálů: docs/visual-components.md → „Paleta pojišťoven“
+   a ZP[].brand v src/zp-palette.js. */
 :root {
-  --zp-111: #2a78d6; /* VZP ČR */
-  --zp-201: #eb6834; /* VoZP */
-  --zp-205: #1baf7a; /* ČPZP */
-  --zp-207: #eda100; /* OZP */
-  --zp-209: #e87ba4; /* ZPŠ */
-  --zp-211: #008300; /* ZP MV ČR */
-  --zp-213: #6250d6; /* RBP */
+  /* VZP ČR — brand červená #e6300e (logo; v CSS webu .Logo color #d22d0f). Posun k malinové/karmínu
+     (h 32→17) a výš ve světlosti: ΔE vůči stavové --red #b8361e = 15,7 (brand originál 9,0). */
+  --zp-111: #fe4160;
+  /* VoZP — brand tmavě zelená #166937 (logo). Světlejší a sytější: od stavové --good #2f6b1f
+     (ΔE 3 → 11,9); odstín mírně k smaragdu. */
+  --zp-201: #0b9353;
+  /* ČPZP — brand azurová #00aee7 (symbol loga; text loga je karmínový #ce1141, ten nese VZP).
+     Mírně tmavší pro kontrast; od RBP se liší světlostí. */
+  --zp-205: #1db4ee;
+  /* OZP — brand fialová #702082 (logo). Skoro beze změny (L 0,415 → 0,436, pod pásmem). */
+  --zp-207: #772689;
+  /* ZPŠ — brand oranžová #f36f21 (háček v logu „zpš“). Jen o píď sytější, odstín držen;
+     od --warn #a05a08 ΔE 16,9, od --red 17,0. */
+  --zp-209: #f56c0c;
+  /* ZP MV ČR — brand tmavě modrá #283796 (logo). Zesvětlena do pásma (L 0,389 → 0,435). */
+  --zp-211: #3344a7;
+  /* RBP — brand azurová #00a3e0 (ikona, web #0197cf). Tmavší než ČPZP, aby se obě azurové
+     lišily (ΔE ČPZP↔RBP 12,2). */
+  --zp-213: #0f8cbf;
   --zp-neutral: var(--neutral); /* „ostatní pojišťovny“ při zvýraznění jedné */
 }
 :root[data-theme="dark"] {
-  --zp-111: #3987e5;
-  --zp-201: #d95926;
-  --zp-205: #199e70;
-  --zp-207: #c98500;
-  --zp-209: #d55181;
-  --zp-211: #008300;
-  --zp-213: #9085e9;
+  /* Dark = stejné odstíny, posunutá světlost. VZP: hluboký karmín (L 0,485) — jen tak je ΔE vůči
+     stavové dark --red #e0563a 15,0; kontrast na pozadí 2,6 : 1 (WARN) → série se vždy čte i
+     z popisků/tabulky, stav bad nese ikona + text. */
+  --zp-111: #b30420;
+  --zp-201: #288f5f;
+  --zp-205: #069ee3;
+  --zp-207: #9934b2;
+  /* ZPŠ dark: pálená oranž; od stavové dark --red #e0563a ΔE 10,0 (nejtěsnější místo palety;
+     stav má vždy ikonu + text, ZPŠ je tečka/linka). */
+  --zp-209: #ac642d;
+  --zp-211: #5c4dd6;
+  --zp-213: #007ea1;
 }
 
 /* === Srovnávač pojišťoven: stránka pojistovny.html (.zpc-) — plní balíček P0.4 === */

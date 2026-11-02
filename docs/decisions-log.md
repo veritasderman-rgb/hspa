@@ -34,6 +34,15 @@ Formát: každá položka má `Datum`, `PR`, `Co`, `Proč`, `Důsledek`.
 
 ---
 
+## 2026-11-02 — Paleta pojišťoven: brandové odstíny místo referenční dataviz palety (rozhodnutí vydavatele)
+
+- **PR**: úprava balíčku P1.1 z `05_M1_Starter/PLAN-SROVNAVAC-POJISTOVEN.md` § 2.3
+- **Co**: tokeny `--zp-111 … --zp-213` byly z referenční kategorické palety dataviz (VZP modrá, RBP fialová). Vydavatel: „držet barvy napříč celou stránkou podle pojišťovny, paletu udělat víc podle jejich brandu (VZP má třeba červenou)“. Každá pojišťovna má teď odstín svého loga stažený z webu (vzp.cz červená `#e6300e`, vozp.cz zelená `#166937`, cpzp.cz azurová `#00aee7`, ozp.cz fialová `#702082`, zpskoda.cz oranžová `#f36f21`, zpmvcr.cz navy `#283796`, rbp213.cz azurová `#00a3e0`), upravený ve světlosti/sytosti pro validátor dataviz (light i dark). Brand originály a zdroje v `ZP[].brand` (`src/zp-palette.js`), tabulka v `docs/visual-components.md` → „Paleta pojišťoven“.
+- **Proč**: čtenář má poznat pojišťovnu po barvě napříč Atlasem, Srovnávačem i podstránkami; referenční paleta s brandem nesouvisela (RBP není fialová ani červená, je azurová; VZP je červená).
+- **Důsledek**: VZP je červená rodina (malinová/karmín), ale **ne stavová `--red`** — ΔE v OKLab ≥ 15 (light 15,7, dark 15,0), hlídá `tests/zp-palette.test.js`; `--red` zůstává hrotu kompasu a stavu bad. **Série = brand rodina, stavy = ikona + text**, nikdy barva sama. Dark VZP (`#b30420`) má kontrast 2,6 : 1 na pozadí (WARN, relief = popisky/tabulka), ZPŠ dark vs dark `--red` ΔE 10,0 je nejtěsnější místo palety. Při změně odstínu vždy znovu validátor v obou režimech + ΔE vůči `--red`/`--good`/`--warn`. **NEVRACET** referenční paletu (VZP modrá) ani červenou VZP v hex podobě `--red`. Popisky uvnitř segmentů (`--zpv-on-*` v sekci zp-viz) závisejí na jasu série a po změně palety je nutné je přepočítat.
+
+---
+
 ## 2026-11-02 — Seed-audit, dávka 3: ambulantní kontakty, sestry, lékaři 55+, antibiotika, HPV, odvratitelné hospitalizace
 
 - **PR**: `claude/gallant-heisenberg-wibiow` (dávka 3, `docs/seed-audit.md`)
