@@ -83,6 +83,11 @@ afterEach(() => {
 const verejnostBody = (odpovedi, over = {}) => ({
   sada_id: 'rizikovi-pojistenci', sada_verze: '1', respondent_typ: 'verejnost', odpovedi, ...over,
 });
+// Veřejná anketa: jediná sada, kterou handler nad skutečnými definicemi přijme od typu verejnost.
+const anketaBody = (odpovedi = { fondPrevence: 'ano' }, over = {}) => ({
+  sada_id: 'pojistenci-anketa', sada_verze: '1', respondent_typ: 'verejnost',
+  odpovedi: odpovedi.fondPrevence !== undefined && Object.keys(odpovedi).length === 1 ? { 'fond-prevence': odpovedi.fondPrevence } : odpovedi, ...over,
+});
 const tokenBody = (odpovedi, over = {}) => ({
   sada_id: 'rizikovi-pojistenci', sada_verze: '1', respondent_typ: 'pojistovna', token: TOKEN, respondent_kod: '111', odpovedi, ...over,
 });
@@ -252,7 +257,7 @@ test('getSql: s env a bez balíčku vrací 503 chybi-zavislost', async (t) => {
 test('handler: chybějící DATABASE_URL → 503 pro GET i POST', async () => {
   for (const method of ['POST', 'GET']) {
     const res = fakeRes();
-    await handler(fakeReq({ method, body: verejnostBody({ A3: 'ne' }), query: { sada: 'rizikovi-pojistenci', agregace: '1' } }), res);
+    await handler(fakeReq({ method, body: anketaBody(), query: { sada: 'pojistenci-anketa', agregace: '1' } }), res);
     assert.equal(res.statusCode, 503, method);
     assert.equal(res.body.error, 'dotaznik-neni-nakonfigurovan');
     assert.equal(res.body.ok, false);
@@ -272,7 +277,7 @@ test('handler: jiné metody 405 s Allow, OPTIONS 204', async () => {
 test('handler: POST veřejnost → insert volán, IP se do SQL nedostane', async () => {
   const sql = fakeSql([[/insert into dotaznik_odpoved/, [{ id: 'u1' }]]]);
   globalThis.__hspaSqlForTests = sql;
-  const req = fakeReq({ body: verejnostBody({ A3: 'ne', A1: ['obézní děti'] }) });
+  const req = fakeReq({ body: anketaBody({ 'fond-prevence': 'ano', 'co-chybi': ['srozumitelné informace o tom, co hradí'] }) });
   const res = fakeRes();
   await handler(req, res);
   assert.equal(res.statusCode, 200, JSON.stringify(res.body));
@@ -280,9 +285,9 @@ test('handler: POST veřejnost → insert volán, IP se do SQL nedostane', async
   assert.equal(sql.calls.length, 1);
   const c = sql.calls[0];
   assert.match(c.text, /insert into dotaznik_odpoved/);
-  assert.ok(c.values.includes('rizikovi-pojistenci'));
+  assert.ok(c.values.includes('pojistenci-anketa'));
   assert.ok(c.values.includes('verejnost'));
-  assert.deepEqual(JSON.parse(c.values.find((v) => typeof v === 'string' && v.startsWith('{'))), { A3: 'ne', A1: ['obézní děti'] });
+  assert.deepEqual(JSON.parse(c.values.find((v) => typeof v === 'string' && v.startsWith('{'))), { 'fond-prevence': 'ano', 'co-chybi': ['srozumitelné informace o tom, co hradí'] });
   const ip = req.headers['x-forwarded-for'];
   assert.ok(!JSON.stringify(c.values).includes(ip));
   assert.ok(!/ip/i.test(c.text.replace(/\bzip\b/gi, '')));
@@ -313,18 +318,18 @@ test('handler: neplatná odpověď → 400 bez zásahu do DB; neznámá sada 404
   const sql = fakeSql();
   globalThis.__hspaSqlForTests = sql;
   const r1 = fakeRes();
-  await handler(fakeReq({ body: verejnostBody({ A4: 'nikdy' }) }), r1);
+  await handler(fakeReq({ body: anketaBody({ 'fond-prevence': 'nikdy' }) }), r1);
   assert.equal(r1.statusCode, 400);
   assert.equal(r1.body.error, 'neplatna-odpoved');
   assert.ok(r1.body.errors.length > 0);
   const r2 = fakeRes();
-  await handler(fakeReq({ body: verejnostBody({ A3: 'ne' }, { sada_id: 'neni' }) }), r2);
+  await handler(fakeReq({ body: anketaBody({ 'fond-prevence': 'ano' }, { sada_id: 'neni' }) }), r2);
   assert.equal(r2.statusCode, 404);
   const r3 = fakeRes();
   await handler(fakeReq({ body: 'tohle neni json{' }), r3);
   assert.equal(r3.statusCode, 400);
   const r4 = fakeRes();
-  await handler(fakeReq({ body: JSON.stringify(verejnostBody({ A3: 'ne' })) }), r4);
+  await handler(fakeReq({ body: JSON.stringify(anketaBody()) }), r4);
   assert.equal(r4.statusCode, 200);
   assert.equal(sql.calls.length, 1, 'jen poslední (platný) požadavek sáhl na DB');
 });
@@ -332,13 +337,13 @@ test('handler: neplatná odpověď → 400 bez zásahu do DB; neznámá sada 404
 test('handler: příliš velké tělo → 413; chyba DB → 500 bez úniku detailu', async () => {
   globalThis.__hspaSqlForTests = fakeSql();
   const big = fakeRes();
-  await handler(fakeReq({ body: verejnostBody({ A3: 'ne' }, { balast: 'x'.repeat(70000) }) }), big);
+  await handler(fakeReq({ body: anketaBody({ 'fond-prevence': 'ano' }, { balast: 'x'.repeat(70000) }) }), big);
   assert.equal(big.statusCode, 413);
   globalThis.__hspaSqlForTests = () => Promise.reject(new Error('connection refused postgres://secret'));
   const res = fakeRes();
   const origErr = console.error;
   console.error = () => {};
-  try { await handler(fakeReq({ body: verejnostBody({ A3: 'ne' }) }), res); } finally { console.error = origErr; }
+  try { await handler(fakeReq({ body: anketaBody() }), res); } finally { console.error = origErr; }
   assert.equal(res.statusCode, 500);
   assert.ok(!JSON.stringify(res.body).includes('secret'));
 });
@@ -348,15 +353,15 @@ test('handler: rate limit per hash IP → 429 po RATE_MAX odeslání', async () 
   const headers = { 'x-forwarded-for': '198.51.100.7' };
   for (let i = 0; i < RATE_MAX; i++) {
     const res = fakeRes();
-    await handler(fakeReq({ headers, body: verejnostBody({ A3: 'ne' }) }), res);
+    await handler(fakeReq({ headers, body: anketaBody() }), res);
     assert.equal(res.statusCode, 200, `pokus ${i + 1}`);
   }
   const res = fakeRes();
-  await handler(fakeReq({ headers, body: verejnostBody({ A3: 'ne' }) }), res);
+  await handler(fakeReq({ headers, body: anketaBody() }), res);
   assert.equal(res.statusCode, 429);
   assert.ok(Number(res.headers['Retry-After']) >= 1);
   const other = fakeRes();
-  await handler(fakeReq({ headers: { 'x-forwarded-for': '198.51.100.8' }, body: verejnostBody({ A3: 'ne' }) }), other);
+  await handler(fakeReq({ headers: { 'x-forwarded-for': '198.51.100.8' }, body: anketaBody() }), other);
   assert.equal(other.statusCode, 200);
 });
 
@@ -461,7 +466,8 @@ test('dotaznik-token: argumenty, token, hash do DB, URL', async () => {
   assert.equal(chk.value.typ, 'pojistovna');
   assert.equal(checkArgs({ sada: 'neni', kod: '111' }, OTAZKY.sady).ok, false);
   assert.equal(checkArgs({ sada: 'rizikovi-pojistenci', kod: '999' }, OTAZKY.sady).ok, false);
-  assert.equal(checkArgs({ sada: 'rizikovi-pojistenci', kod: 'NAPO', typ: 'pacientska_organizace' }, OTAZKY.sady).ok, true);
+  assert.equal(checkArgs({ sada: 'napo-pacientske-organizace', kod: 'NAPO', typ: 'pacientska_organizace' }, OTAZKY.sady).ok, true);
+  assert.equal(checkArgs({ sada: 'rizikovi-pojistenci', kod: 'NAPO', typ: 'pacientska_organizace' }, OTAZKY.sady).ok, false, 'rizikoví pojištěnci jen pro pojišťovny');
   assert.equal(checkArgs({ sada: 'rizikovi-pojistenci', kod: '111', typ: 'verejnost' }, OTAZKY.sady).ok, false);
   const t1 = createToken(); const t2 = createToken();
   assert.match(t1, /^[A-Za-z0-9_-]{32}$/);
