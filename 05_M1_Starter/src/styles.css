@@ -22335,3 +22335,69 @@ h6.pop-doc-h { font-size: 16px; font-style: italic; }
 /* === Srovnávač pojišťoven: vizuální primitivy src/zp-viz.js (.zpv-) — plní balíček P1.2/P2.1 === */
 
 /* === Srovnávač pojišťoven: interakce src/zp-interact.js (.zpi-) — plní balíček P1.3 === */
+/* Kontrakt pro ostatní moduly:
+   - <main data-moje-zp="<kod>"> = vybraná „Moje pojišťovna“ (kódy 111, 201, 205, 207, 209, 211, 213); event `zp:moje-change` (detail.kod|null) na document
+   - <main class="zpi-hover-<kod>"> = dočasné zvýraznění při hoveru/focusu na .zpv-mark[data-zp]
+   - marks: .zpv-mark[data-zp][data-tip][tabindex=0], barva přes --zpv-mark-color (default ink)
+   - tr[data-zp] dostane aria-current="true" pro vybranou ZP; matching .zpv-mark/tr dostanou i třídu .is-moje
+   - #zpMojeZp → .zpi-chips > button.zpi-chip[data-zp][aria-pressed] + button.zpi-chip--clear
+   - animace: main.zpv-anim-ready + figure.zpv.is-in + --i na marcích (CSS animací dodává zp-viz) */
+.zpi-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 0 0 14px; }
+.zpi-chip, .zpi-expand-all {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 4px 12px;
+  border: 1px solid var(--rule2); border-radius: 999px; background: transparent; color: var(--ink);
+  font-family: var(--sans); font-size: 13px; line-height: 1.2; cursor: pointer;
+  transition: background-color .15s ease, border-color .15s ease;
+}
+.zpi-chip:hover:not(:disabled), .zpi-expand-all:hover { background: var(--paper2); border-color: var(--ink); }
+.zpi-chip[aria-pressed="true"] { background: var(--paper2); border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); font-weight: 600; }
+.zpi-chip:disabled { opacity: .5; cursor: default; }
+.zpi-chip--clear { border-style: dashed; color: var(--ink-mut); }
+.zpi-dot { width: 10px; height: 10px; border-radius: 50%; flex: none; background: var(--c, var(--ink)); }
+
+/* Zvýraznění: bez výběru a bez hoveru se nic nemění (grafy jsou jednobarevné) */
+main[data-moje-zp] .zpv-mark,
+main[class*="zpi-hover-"] .zpv-mark { opacity: .45; transition: opacity .15s ease; }
+main[data-moje-zp="111"] .zpv-mark[data-zp="111"] { opacity: 1; --zpv-mark-color: var(--zp-111); }
+main[data-moje-zp="201"] .zpv-mark[data-zp="201"] { opacity: 1; --zpv-mark-color: var(--zp-201); }
+main[data-moje-zp="205"] .zpv-mark[data-zp="205"] { opacity: 1; --zpv-mark-color: var(--zp-205); }
+main[data-moje-zp="207"] .zpv-mark[data-zp="207"] { opacity: 1; --zpv-mark-color: var(--zp-207); }
+main[data-moje-zp="209"] .zpv-mark[data-zp="209"] { opacity: 1; --zpv-mark-color: var(--zp-209); }
+main[data-moje-zp="211"] .zpv-mark[data-zp="211"] { opacity: 1; --zpv-mark-color: var(--zp-211); }
+main[data-moje-zp="213"] .zpv-mark[data-zp="213"] { opacity: 1; --zpv-mark-color: var(--zp-213); }
+main.zpi-hover-111 .zpv-mark[data-zp="111"] { opacity: 1; --zpv-mark-color: var(--zp-111); }
+main.zpi-hover-201 .zpv-mark[data-zp="201"] { opacity: 1; --zpv-mark-color: var(--zp-201); }
+main.zpi-hover-205 .zpv-mark[data-zp="205"] { opacity: 1; --zpv-mark-color: var(--zp-205); }
+main.zpi-hover-207 .zpv-mark[data-zp="207"] { opacity: 1; --zpv-mark-color: var(--zp-207); }
+main.zpi-hover-209 .zpv-mark[data-zp="209"] { opacity: 1; --zpv-mark-color: var(--zp-209); }
+main.zpi-hover-211 .zpv-mark[data-zp="211"] { opacity: 1; --zpv-mark-color: var(--zp-211); }
+main.zpi-hover-213 .zpv-mark[data-zp="213"] { opacity: 1; --zpv-mark-color: var(--zp-213); }
+
+main tr[data-zp][aria-current="true"] { background: var(--paper2); }
+.zpv-mark:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* Tooltip: jeden na stránku; skrytý stav = vizuálně skrytý live region (čtečka hlásí změnu textu) */
+.zpi-tip {
+  position: fixed; left: 0; top: 0; z-index: 60; max-width: 280px; padding: 6px 10px;
+  background: var(--ink); color: var(--paper); border-radius: 4px;
+  font-family: var(--sans); font-size: 13px; line-height: 1.4; pointer-events: none;
+}
+.zpi-tip:not(.is-on) { width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.zpi-tip.is-on { animation: zpiTipIn .12s ease-out; }
+@keyframes zpiTipIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* Řazení heatmap */
+button.zpv-sort { min-height: 24px; background: transparent; border: 0; color: inherit; font: inherit; cursor: pointer; text-align: inherit; }
+button.zpv-sort:hover { text-decoration: underline; }
+table.zpv-heat th[aria-sort="descending"] button.zpv-sort::after { content: " \2193"; }
+table.zpv-heat th[aria-sort="ascending"] button.zpv-sort::after { content: " \2191"; }
+
+@media (prefers-reduced-motion: reduce) {
+  .zpi-chip, .zpi-expand-all { transition: none; }
+  main[data-moje-zp] .zpv-mark, main[class*="zpi-hover-"] .zpv-mark { transition: none; }
+  .zpi-tip.is-on { animation: none; }
+}
+@media print {
+  .zpi-tip, .zpi-chips { display: none; }
+  main[data-moje-zp] .zpv-mark, main[class*="zpi-hover-"] .zpv-mark { opacity: 1; }
+}
