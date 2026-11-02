@@ -1,54 +1,90 @@
 {
-  "version": "0.1.0",
-  "generated_at": "2026-11-02T18:06:16Z",
+  "version": "0.2.0",
+  "generated_at": "2026-11-02T20:00:00Z",
   "changelog": [
-    {"datum":"2026-11-02","zmena":"Zavedení changelogu podle metodiky § 4.7; data beze změny.","zdroj":"PLAN-SROVNAVAC-POJISTOVEN.md P0.3"},
-    {"datum":"2026-11-02","zmena":"Sady dostaly pole verze (\"1\"); u otázek A3 a A4 přidáno vyber: jeden (jedna volba, ostatní otázky s nabídkou jsou vícenásobné). Text otázek beze změny.","zdroj":"PLAN-SROVNAVAC-POJISTOVEN.md P2.4"}
+    {
+      "datum": "2026-11-02",
+      "zmena": "Zavedení changelogu podle metodiky § 4.7; data beze změny.",
+      "zdroj": "PLAN-SROVNAVAC-POJISTOVEN.md P0.3"
+    },
+    {
+      "datum": "2026-11-02",
+      "zmena": "Sady dostaly pole verze (\"1\"); u otázek A3 a A4 přidáno vyber: jeden (jedna volba, ostatní otázky s nabídkou jsou vícenásobné). Text otázek beze změny.",
+      "zdroj": "PLAN-SROVNAVAC-POJISTOVEN.md P2.4"
+    },
+    {
+      "datum": "2026-11-02",
+      "zmena": "Znění dotazníků pro všechny fáze srovnávače (docs/pojistovny-dotazniky.md): revize sad fond-prevence (7 otázek s formátem odpovědi a nápovědou, co je doloženo) a rizikovi-pojistenci (části A–C přepracované, nová část D Zdravotní gramotnost, 14 otázek); nové sady aplikace-privetivost (interní hodnoticí list), napo-pacientske-organizace, pojistenci-anketa, pravo-na-odpoved a pobocky-definice. Nová volitelná pole sady faze, respondent, kanal, uvod a otázky napoveda, max_delka. Sady zatím nebyly rozeslány, proto zůstává verze 1.",
+      "zdroj": "zadání vydavatele 2. 11. 2026"
+    }
   ],
-  "_doc": "Sady otázek pro pojišťovny: kolo 1 fond prevence (7 otázek), kolo 2 rizikoví pojištěnci a digitalizace (dotazník A/B/C z interní analýzy digitalizace).",
+  "_doc": "Sady otázek srovnávače pojišťoven podle fází projektu (docs/pojistovny-dotazniky.md): kolo 1 fond prevence a pobočky, kolo 2 rizikoví pojištěnci a zdravotní gramotnost, interní hodnoticí list aplikací, dotazník NAPO pro pacientské organizace, veřejná anketa pro pojištěnce a právo na odpověď. kanal: web-token | web-verejnost | interni | dopis+web; interní sady se přes web nevyplňují.",
   "sady": [
     {
       "id": "fond-prevence",
       "nazev": "Fond prevence – první kolo",
       "typ": "otevrene",
       "verze": "1",
-      "pravni_zaklad": "zákon č. 106/1999 Sb.",
+      "faze": "kolo 1 · leden 2027",
+      "respondent": "zdravotní pojišťovny (všech 7, stejné znění týž den)",
+      "kanal": "dopis+web",
+      "uvod": "Ptáme se všech sedmi zdravotních pojišťoven ve stejný den na totéž: zda a jak umíte doložit účast a výsledek preventivních programů za roky 2024 a 2025, ne jakou výši příspěvků nabízíte. Odpovědi zveřejníme v plném znění a návrh hodnocení vám pošleme 10 dní před zveřejněním k vyjádření. Prosíme o odpověď do 15 dnů od doručení; s dotazy se obracejte na redakci (kontakt je v průvodním dopise).",
+      "pravni_zaklad": "Dobrovolná nabídka spolupráce (metodika § 4 bod 3). Pokud do 15 dnů odpověď nepřijde, následuje žádost o informace podle zákona č. 106/1999 Sb., o svobodném přístupu k informacím, se stejným zněním otázek.",
       "otazky": [
         {
           "id": "fp1",
-          "text": "Jaké preventivní programy vaše pojišťovna aktuálně nabízí? Kompletní seznam se stručným popisem."
+          "text": "Které preventivní programy hrazené z fondu prevence jste nabízeli v letech 2024 a 2025? U každého uveďte prosím název, cílovou skupinu (věk, diagnóza, region), formu (příspěvek, vlastní program, kampaň, program se zaměstnavatelem) a období nabídky.",
+          "napoveda": "Doloženo: úplný seznam za oba roky, nejlépe tabulka (CSV nebo XLSX) se sloupci název · cílová skupina · forma · rok. Samotný odkaz na web nestačí, pokud se nabídka mezi lety měnila.",
+          "max_delka": 2000
         },
         {
           "id": "fp2",
-          "text": "Jaké jsou hlavní cíle a zaměření jednotlivých programů: zdravotní přínos, cílová skupina, očekávaný dopad?"
+          "text": "Jaký měřitelný cíl má každý program (např. zvýšit účast na screeningu v cílové skupině o 5 p. b.) a z jakého podkladu cíl vychází (vlastní data, odborné doporučení, analýza)?",
+          "napoveda": "Doloženo: cíl vyjádřený číslem, s výchozí hodnotou a termínem, a dokument nebo odkaz, kde je stanoven. Obecný popis typu „podpora zdraví“ zapíšeme jako deklarovaný cíl.",
+          "max_delka": 2000
         },
         {
           "id": "fp3",
-          "text": "Jaké jsou celkové roční náklady na jednotlivé programy (fond prevence / základní fond)?"
+          "text": "Jaké byly skutečné náklady jednotlivých programů v letech 2024 a 2025 v tis. Kč, z jakého fondu byly hrazeny (fond prevence, základní fond) a kolik unikátních pojištěnců každý program za rok využilo?",
+          "napoveda": "Doloženo: tabulka program × rok s náklady v tis. Kč a počtem unikátních účastníků. Součet za fond prevence by měl odpovídat výroční zprávě; případný rozdíl prosíme vysvětlit. Předběžná data za rok 2025 označte jako předběžná.",
+          "max_delka": 2000
         },
         {
           "id": "fp4",
-          "text": "Jak měříte dopad programů na zdraví, zdravotní gramotnost nebo chování pojištěnců?"
+          "text": "Jak měříte dopad programů na zdraví nebo chování účastníků (např. záchyty při screeningu, změna proočkovanosti, nástup do návazné péče)? Uveďte prosím ukazatele a jejich hodnoty za roky 2024 a 2025.",
+          "napoveda": "Doloženo: konkrétní ukazatel, jeho hodnota za oba roky a srovnání (výchozí stav, neúčastníci nebo kontrolní skupina). Počet vyplacených příspěvků sám o sobě dopad nedokládá.",
+          "max_delka": 2000
         },
         {
           "id": "fp5",
-          "text": "Jaké komunikační kanály používáte k oslovování pojištěnců?"
+          "text": "Jakými kanály pojištěnce s nabídkou prevence oslovujete (dopis, e-mail, aplikace, praktický lékař, zaměstnavatel, kampaň)? Kolik pojištěnců jste v letech 2024 a 2025 jednotlivými kanály oslovili a kolik z nich se programu zúčastnilo?",
+          "napoveda": "Doloženo: počet oslovených a počet účastníků podle kanálu alespoň za jeden rok, ve formátu kanál · rok · oslovení · účastníci. Seznam kanálů bez čísel zapíšeme jako deklaraci.",
+          "max_delka": 2000
         },
         {
           "id": "fp6",
-          "text": "Jak hodnotíte účinnost a nákladovou efektivitu programů? Jaké indikátory sledujete, existuje interní metodika? Pokud ano, prosíme o její předání."
+          "text": "Jak hodnotíte nákladovou efektivitu programů (např. náklady na jednoho účastníka nebo na jeden záchyt)? Máte k tomu interní metodiku? Pokud ano, prosíme o její předání nebo odkaz; pokud ji nelze zveřejnit, uveďte prosím důvod.",
+          "napoveda": "Doloženo: metodika (dokument nebo odkaz), podle které lze výpočet zopakovat, a alespoň jeden výsledek za rok 2024 nebo 2025. Metodiku, kterou nelze předat, uvedeme jako „existuje, nepředložena“.",
+          "max_delka": 2000
         },
         {
           "id": "fp7",
-          "text": "Jak často efektivitu vyhodnocujete: ročně, průběžně, ad hoc?"
+          "text": "Jak často výsledky programů vyhodnocujete (průběžně, ročně, nepravidelně) a co jste na základě vyhodnocení v letech 2024–2025 změnili (program ukončen, upraven, rozšířen)?",
+          "napoveda": "Doloženo: datum posledního vyhodnocení a alespoň jeden příklad rozhodnutí, které z něj vzešlo (zápis, změna podmínek programu, tisková zpráva).",
+          "max_delka": 2000
         }
       ]
     },
     {
       "id": "rizikovi-pojistenci",
-      "nazev": "Jak ZP identifikují rizikové pojištěnce",
+      "nazev": "Rizikoví pojištěnci a zdravotní gramotnost – druhé kolo",
       "typ": "dotaznik",
       "verze": "1",
+      "faze": "kolo 2 · Q2 2027",
+      "respondent": "zdravotní pojišťovny (všech 7, adresný odkaz s tokenem)",
+      "kanal": "web-token",
+      "uvod": "Druhé kolo se ptá, jak vyhledáváte pojištěnce se zvýšeným zdravotním rizikem, jak je oslovujete a co nabízíte pro zdravotní gramotnost; u otázek s nabídkou vyberte vše, co platí, otevřené otázky slouží k doložení. Odpovědi zveřejníme v plném znění spolu s hodnocením, jehož návrh dostanete 10 dní předem k vyjádření, souhrnné počty za všechny pojišťovny až od tří odpovědí. Lhůta je 15 dnů od doručení odkazu; kontakt na redakci je v průvodním dopise.",
+      "pravni_zaklad": "Dobrovolná nabídka spolupráce (metodika § 4 bod 3). Pokud do 15 dnů odpověď nepřijde, následuje žádost o informace podle zákona č. 106/1999 Sb., o svobodném přístupu k informacím, se stejným zněním otázek.",
       "casti": [
         {
           "id": "A",
@@ -56,41 +92,47 @@
           "otazky": [
             {
               "id": "A1",
-              "text": "Jaké rizikové skupiny pojištěnců aktivně identifikujete?",
+              "text": "Které skupiny pojištěnců se zvýšeným zdravotním rizikem aktivně vyhledáváte?",
               "moznosti": [
                 "obézní děti",
-                "vysoce rizikoví mladí dospělí",
+                "dospělí s obezitou nebo metabolickým rizikem (prediabetes, hypertenze)",
+                "mladí dospělí s rizikovým chováním (kouření, alkohol)",
                 "křehcí senioři",
-                "chroničtí pacienti",
-                "polypragmatické pacienty",
+                "chroničtí pacienti (diabetes, srdeční selhání, CHOPN)",
+                "pacienti s polypragmazií (5 a více léků současně)",
+                "pojištěnci, kteří nechodí na preventivní prohlídky nebo screeningy",
+                "rizikové skupiny aktivně nevyhledáváme",
                 "jiné (uveďte)"
-              ]
+              ],
+              "napoveda": "Doloženo: u vybraných skupin počty v otázce A5."
             },
             {
               "id": "A2",
-              "text": "Jaké datové zdroje používáte pro identifikaci rizikových pojištěnců?",
+              "text": "Z jakých dat rizikové pojištěnce vyhledáváte?",
               "moznosti": [
-                "diagnózy (ICD‑10)",
-                "vykázaná péče",
-                "screeningy",
-                "léková data",
-                "preventivní prohlídky",
+                "vykázané diagnózy (MKN-10)",
+                "vykázaná péče a výkony",
+                "výsledky screeningů",
+                "léková data (vydané léčivé přípravky)",
+                "účast na preventivních prohlídkách",
+                "údaje od lékařů nad rámec vykázané péče",
                 "vlastní analytické modely",
                 "jiné (uveďte)"
               ]
             },
             {
               "id": "A3",
-              "text": "Používáte predikční modely?",
+              "text": "Používáte k vyhledání rizikových pojištěnců predikční model (statistický nebo strojového učení)?",
               "vyber": "jeden",
               "moznosti": [
                 "ano – uveďte typ modelu",
                 "ne"
-              ]
+              ],
+              "napoveda": "Doloženo: popis modelu (vstupní proměnné, cílová událost, ověření přesnosti), stačí odkaz nebo příloha."
             },
             {
               "id": "A4",
-              "text": "Jak často aktualizujete seznam rizikových pojištěnců?",
+              "text": "Jak často seznam rizikových pojištěnců aktualizujete?",
               "vyber": "jeden",
               "moznosti": [
                 "měsíčně",
@@ -98,54 +140,730 @@
                 "ročně",
                 "ad hoc"
               ]
+            },
+            {
+              "id": "A5",
+              "text": "Kolik pojištěnců bylo k 31. 12. 2026 zařazeno do jednotlivých skupin z otázky A1 a podle jakého kritéria? Co vyhledávání nejvíc ztěžuje (např. chybějící BMI nebo údaje o životním stylu)?",
+              "napoveda": "Formát: skupina · kritérium zařazení · počet pojištěnců. Doloženo: počty k datu a kritérium, podle kterého je lze zopakovat.",
+              "max_delka": 1500
             }
           ]
         },
         {
           "id": "B",
-          "nazev": "Práce s rizikovými pojištěnci",
+          "nazev": "Personalizovaná komunikace a souhlas s profilováním",
           "otazky": [
             {
               "id": "B1",
-              "text": "Jaké služby nabízíte rizikovým skupinám?",
+              "text": "Jak rizikové pojištěnce oslovujete?",
               "moznosti": [
-                "cílené preventivní programy",
-                "edukace",
-                "digitální nástroje",
-                "koordinace péče",
-                "návazná péče po záchytu rizika",
+                "dopisem",
+                "e-mailem nebo SMS",
+                "notifikací v aplikaci",
+                "telefonicky",
+                "přes praktického nebo jiného ošetřujícího lékaře",
+                "přes zaměstnavatele",
+                "individuálně neoslovujeme, nabídka je jen na webu",
                 "jiné (uveďte)"
               ]
             },
             {
               "id": "B2",
-              "text": "Jak měříte dopad intervence na rizikové skupiny?",
+              "text": "Na jakém základě pojištěnce do rizikové skupiny zařazujete a oslovujete?",
+              "vyber": "jeden",
               "moznosti": [
-                "změna diagnóz",
-                "snížení hospitalizací",
-                "adherence k léčbě",
-                "účast na prevenci",
+                "předem udělený souhlas pojištěnce (opt-in)",
+                "zákonný základ, pojištěnec může oslovování odmítnout (opt-out)",
+                "zákonný základ bez možnosti odmítnutí",
+                "individuálně neoslovujeme",
                 "jiné (uveďte)"
-              ]
+              ],
+              "napoveda": "Uveďte prosím v upřesnění ustanovení, o které se zpracování opírá (zákon, článek GDPR)."
+            },
+            {
+              "id": "B3",
+              "text": "Jak se pojištěnec dozví, že byl do rizikové skupiny zařazen, a jak může oslovování odmítnout?",
+              "napoveda": "Doloženo: odkaz na informace pro pojištěnce nebo znění souhlasu, případně počet pojištěnců, kteří v roce 2026 oslovování odmítli.",
+              "max_delka": 1500
             }
           ]
         },
         {
           "id": "C",
-          "nazev": "Bariéry",
+          "nazev": "Měření výsledků",
           "otazky": [
             {
               "id": "C1",
-              "text": "Jaké jsou největší bariéry identifikace rizikových pojištěnců?",
+              "text": "Jaké výsledky u oslovených rizikových pojištěnců sledujete?",
               "moznosti": [
-                "nedostatek dat",
-                "absence BMI",
-                "absence informací o životním stylu",
-                "nedostatečná návazná péče",
+                "účast na prevenci a screeningu",
+                "adherence k léčbě",
+                "změna klinických hodnot nebo diagnóz",
+                "hospitalizace a návštěvy pohotovosti",
+                "náklady na zdravotní služby",
+                "spokojenost pojištěnců",
+                "výsledky zatím nesledujeme",
                 "jiné (uveďte)"
+              ]
+            },
+            {
+              "id": "C2",
+              "text": "Uveďte prosím jeden výsledek z let 2025–2026 s čísly: skupina, ukazatel, hodnota u oslovených a ve srovnávací skupině (neoslovení nebo stav před zahájením).",
+              "napoveda": "Doloženo: ukazatel s hodnotou a srovnáním, ze kterého je patrný rozdíl. Výsledek bez srovnání zapíšeme jako deklarovaný. Pokud výsledek zveřejňujete, přidejte odkaz.",
+              "max_delka": 1500
+            }
+          ]
+        },
+        {
+          "id": "D",
+          "nazev": "Zdravotní gramotnost",
+          "otazky": [
+            {
+              "id": "D1",
+              "text": "Jaké materiály ke zdravotní gramotnosti pojištěncům nabízíte?",
+              "moznosti": [
+                "tištěné letáky a brožury",
+                "články a průvodce na webu",
+                "obsah v mobilní aplikaci",
+                "videa",
+                "přednášky, kurzy nebo poradny",
+                "materiály ve snadném čtení",
+                "materiály pro rodiče a děti",
+                "jiné (uveďte)"
+              ]
+            },
+            {
+              "id": "D2",
+              "text": "V jakých jazycích jsou materiály k dispozici?",
+              "moznosti": [
+                "čeština",
+                "angličtina",
+                "ukrajinština",
+                "slovenština",
+                "vietnamština",
+                "romština",
+                "český znakový jazyk",
+                "jiné (uveďte)"
+              ]
+            },
+            {
+              "id": "D3",
+              "text": "Co nabízíte pojištěncům 65+, aby se k informacím a službám snadno dostali?",
+              "moznosti": [
+                "osobní konzultace na pobočce",
+                "telefonická linka s obsluhou, bez hlasového automatu",
+                "tištěné výpisy a dopisy na vyžádání",
+                "zvětšené písmo a vysoký kontrast na webu a v aplikaci",
+                "zjednodušený režim aplikace",
+                "zmocnění blízké osoby k elektronickým službám",
+                "nic z uvedeného",
+                "jiné (uveďte)"
+              ]
+            },
+            {
+              "id": "D4",
+              "text": "S kterými pacientskými organizacemi jste v letech 2025–2026 spolupracovali na materiálech nebo programech a v jaké podobě (společný materiál, financování, připomínkování)? Pokud jste nespolupracovali, napište prosím „ne“.",
+              "napoveda": "Doloženo: název organizace, název materiálu nebo programu a rok; stačí odkaz.",
+              "max_delka": 1000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aplikace-privetivost",
+      "nazev": "Uživatelská přívětivost aplikací – hodnoticí list",
+      "typ": "dotaznik",
+      "verze": "1",
+      "faze": "prosinec 2026 (po schválení kritérií na PS 12. 11. 2026)",
+      "respondent": "IT expert redakce; hodnotí každou ze 7 aplikací zvlášť, pojišťovna list nevyplňuje",
+      "kanal": "interni",
+      "uvod": "Hodnoticí list vyplňuje IT expert redakce jednou za každou aplikaci a platformu, na skutečném zařízení a ve stejném týdnu pro všech sedm aplikací. Stupeň 0/1/2 u kritérií K1–K6 zapíše redakce do data/pojistovny-aplikace.json (aplikace[].kriteria[id] = {stupen, zdroj, rok}) a zveřejní ho až po schválení kritérií pracovní skupinou. Pojišťovna dostane výsledek 10 dní před zveřejněním k vyjádření; kontakt je redakce.",
+      "casti": [
+        {
+          "id": "K",
+          "nazev": "Kritéria přívětivosti (stupeň 0 / 1 / 2)",
+          "otazky": [
+            {
+              "id": "prihlaseni-bankid",
+              "text": "K1 · Přihlášení bankovní identitou (BankID) nebo identitou občana",
+              "vyber": "jeden",
+              "moznosti": [
+                "0 – nesplňuje: aktivace ani přihlášení přes BankID nebo identitu občana nejsou možné",
+                "1 – částečně: jen první aktivace účtu, nebo s omezením (např. jen některé banky)",
+                "2 – splňuje: aktivace i běžné přihlášení přes BankID nebo identitu občana, bez návštěvy pobočky"
+              ],
+              "napoveda": "Test: nová instalace, aktivace bez dřívějšího účtu. Zapište, které identity aplikace nabízí."
+            },
+            {
+              "id": "pristupnost-65",
+              "text": "K2 · Přístupnost pro 65+ (velikost písma, kontrast)",
+              "vyber": "jeden",
+              "moznosti": [
+                "0 – nesplňuje: aplikace nereaguje na systémovou velikost písma, nebo se text při zvětšení ořezává; kontrast textu je nízký",
+                "1 – částečně: zvětšení funguje jen na části obrazovek, nebo část textu nemá kontrast 4,5 : 1",
+                "2 – splňuje: při největším systémovém písmu zůstává text na hlavních obrazovkách celý a čitelný, kontrast textu je alespoň 4,5 : 1, dotykové plochy alespoň 44 × 44 bodů"
+              ],
+              "napoveda": "Test: iOS Zpřístupnění → Větší text na maximum, Android Velikost písma a Velikost zobrazení na maximum. Projít čtyři obrazovky: přihlášení, přehled, žádost o příspěvek, průkaz. Kontrast změřit nástrojem platformy (Accessibility Inspector, Accessibility Scanner)."
+            },
+            {
+              "id": "offline-prukaz",
+              "text": "K3 · Digitální průkaz pojištěnce dostupný offline",
+              "vyber": "jeden",
+              "moznosti": [
+                "0 – nesplňuje: aplikace digitální průkaz nemá",
+                "1 – částečně: průkaz je, ale bez připojení se nezobrazí nebo vyžaduje nové přihlášení",
+                "2 – splňuje: průkaz se po dřívějším přihlášení zobrazí v režimu letadlo, včetně čísla pojištěnce a platnosti"
+              ],
+              "napoveda": "Test: přihlásit se, zavřít aplikaci, zapnout režim letadlo, znovu otevřít."
+            },
+            {
+              "id": "notifikace-prevence",
+              "text": "K4 · Připomínky prevence",
+              "vyber": "jeden",
+              "moznosti": [
+                "0 – nesplňuje: aplikace na preventivní prohlídky ani screeningy neupozorňuje",
+                "1 – částečně: obecný přehled nebo upozornění bez vazby na věk a pohlaví pojištěnce",
+                "2 – splňuje: adresná připomínka podle nároku pojištěnce (věk, pohlaví, poslední prohlídka), kterou lze vypnout"
+              ],
+              "napoveda": "Test: testovací účet, nebo popis funkce v aplikaci a nápovědě pojišťovny (zdroj uveďte)."
+            },
+            {
+              "id": "podpora-chat",
+              "text": "K5 · Podpora v aplikaci (chat, žádost o zavolání)",
+              "vyber": "jeden",
+              "moznosti": [
+                "0 – nesplňuje: v aplikaci není kontakt na podporu, jen odkaz na web",
+                "1 – částečně: kontaktní formulář nebo e-mail, bez odpovědi v reálném čase",
+                "2 – splňuje: chat s pracovníkem (ne jen automatický robot) nebo žádost o zavolání přímo v aplikaci, s uvedenou provozní dobou"
+              ]
+            },
+            {
+              "id": "hodnoceni-obchody",
+              "text": "K6 · Hodnocení v obchodech s aplikacemi (ověřeno k datu testu)",
+              "vyber": "jeden",
+              "moznosti": [
+                "0 – nesplňuje: nižší z obou průměrů je pod 3,0, nebo aplikace v jednom z obchodů chybí",
+                "1 – částečně: nižší z obou průměrů je 3,0–3,9",
+                "2 – splňuje: průměr alespoň 4,0 v App Storu i v Google Play"
+              ],
+              "napoveda": "Opište průměr a počet hodnocení z českého App Storu a Google Play k datu testu. Při méně než 50 hodnoceních v obchodě zapište nejvýš stupeň 1 a poznámku. Prahy jsou návrh k PS."
+            }
+          ]
+        },
+        {
+          "id": "Z",
+          "nazev": "Ověření na zařízení",
+          "otazky": [
+            {
+              "id": "zarizeni-platforma",
+              "text": "Na jaké platformě proběhl test?",
+              "moznosti": [
+                "iOS",
+                "Android"
+              ],
+              "napoveda": "Hodnotí se obě platformy; když se výsledek liší, vyplní se list pro každou zvlášť a do datasetu jde nižší stupeň s poznámkou."
+            },
+            {
+              "id": "zarizeni-verze",
+              "text": "Zařízení, verze systému, verze aplikace a datum testu",
+              "napoveda": "Formát: zařízení · verze systému · verze aplikace · datum (RRRR-MM-DD), např. iPhone 13 · iOS 18.1 · 5.12.0 · 2026-12-10.",
+              "max_delka": 300
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "napo-pacientske-organizace",
+      "nazev": "Zkušenost pacientských organizací s pojišťovnami",
+      "typ": "dotaznik",
+      "verze": "1",
+      "faze": "Q1 2027 (s NAPO)",
+      "respondent": "pacientské organizace (členské organizace NAPO); odpovídá organizace za své členy, ne jednotlivec",
+      "kanal": "web-token",
+      "povolene_respondenty": [
+        "pacientska_organizace"
+      ],
+      "uvod": "Ptáme se pacientských organizací, jakou zkušenost mají jejich členové se zdravotními pojišťovnami v šesti oblastech, které srovnávač sleduje; odpovídá organizace jako celek, bez jmen a údajů, podle kterých by šlo poznat konkrétního člověka. Zveřejníme jen souhrnné počty za všechny organizace (od tří odpovědí), volné texty slouží redakci jako podnět k ověření u pojišťoven. Lhůta je 30 dnů od doručení odkazu; kontakt na redakci je v průvodním e-mailu NAPO.",
+      "casti": [
+        {
+          "id": "1",
+          "nazev": "O vaší organizaci",
+          "otazky": [
+            {
+              "id": "typ-organizace",
+              "text": "Jaký typ organizace jste?",
+              "vyber": "jeden",
+              "moznosti": [
+                "pacientská organizace (spolek pacientů)",
+                "zastřešující organizace nebo síť organizací",
+                "organizace rodičů nebo blízkých pacientů",
+                "jiné (uveďte)"
+              ]
+            },
+            {
+              "id": "diagnozova-oblast",
+              "text": "Jakou diagnózovou oblast nebo skupinu pacientů zastupujete?",
+              "moznosti": [
+                "onkologická onemocnění",
+                "kardiovaskulární a metabolická onemocnění (vč. diabetu)",
+                "duševní zdraví",
+                "neurologická onemocnění",
+                "vzácná onemocnění",
+                "autoimunitní a revmatická onemocnění",
+                "respirační onemocnění a alergie",
+                "zdravotní postižení",
+                "senioři",
+                "děti a dospívající",
+                "jiné (uveďte)"
+              ]
+            },
+            {
+              "id": "pocet-clenu",
+              "text": "Kolik má vaše organizace členů?",
+              "vyber": "jeden",
+              "moznosti": [
+                "do 50",
+                "51–200",
+                "201–1 000",
+                "1 001–5 000",
+                "více než 5 000"
               ]
             }
           ]
+        },
+        {
+          "id": "2",
+          "nazev": "Prevence",
+          "otazky": [
+            {
+              "id": "prevence-hodnoceni",
+              "text": "Jak členové hodnotí nabídku preventivních programů a příspěvků pro lidi s vaší diagnózou (informace o nabídce, podmínky čerpání)?",
+              "vyber": "jeden",
+              "moznosti": [
+                "velmi dobrá",
+                "spíše dobrá",
+                "spíše špatná",
+                "velmi špatná",
+                "nemáme zkušenost / nevíme"
+              ]
+            },
+            {
+              "id": "prevence-pojistovna",
+              "text": "Ke které pojišťovně se vaše hodnocení v této oblasti vztahuje především?",
+              "moznosti": [
+                "VZP ČR – Všeobecná zdravotní pojišťovna (111)",
+                "VoZP – Vojenská zdravotní pojišťovna (201)",
+                "ČPZP – Česká průmyslová zdravotní pojišťovna (205)",
+                "OZP – Oborová zdravotní pojišťovna (207)",
+                "ZPŠ – Zaměstnanecká pojišťovna Škoda (209)",
+                "ZP MV ČR – Zdravotní pojišťovna ministerstva vnitra (211)",
+                "RBP, zdravotní pojišťovna (213)",
+                "nevím / nelze určit"
+              ],
+              "napoveda": "Lze vybrat více pojišťoven. Souhrn zveřejníme jen za všechny organizace dohromady."
+            }
+          ]
+        },
+        {
+          "id": "3",
+          "nazev": "Dostupnost a čekací doby",
+          "otazky": [
+            {
+              "id": "dostupnost-hodnoceni",
+              "text": "Jak členové hodnotí pomoc pojišťovny, když nemohou sehnat lékaře nebo vyšetření v přiměřené době (např. zprostředkování termínu)?",
+              "vyber": "jeden",
+              "moznosti": [
+                "velmi dobrá",
+                "spíše dobrá",
+                "spíše špatná",
+                "velmi špatná",
+                "nemáme zkušenost / nevíme"
+              ]
+            },
+            {
+              "id": "dostupnost-pojistovna",
+              "text": "Ke které pojišťovně se vaše hodnocení v této oblasti vztahuje především?",
+              "moznosti": [
+                "VZP ČR – Všeobecná zdravotní pojišťovna (111)",
+                "VoZP – Vojenská zdravotní pojišťovna (201)",
+                "ČPZP – Česká průmyslová zdravotní pojišťovna (205)",
+                "OZP – Oborová zdravotní pojišťovna (207)",
+                "ZPŠ – Zaměstnanecká pojišťovna Škoda (209)",
+                "ZP MV ČR – Zdravotní pojišťovna ministerstva vnitra (211)",
+                "RBP, zdravotní pojišťovna (213)",
+                "nevím / nelze určit"
+              ],
+              "napoveda": "Lze vybrat více pojišťoven. Souhrn zveřejníme jen za všechny organizace dohromady."
+            }
+          ]
+        },
+        {
+          "id": "4",
+          "nazev": "Síť poskytovatelů",
+          "otazky": [
+            {
+              "id": "sit-hodnoceni",
+              "text": "Jak členové hodnotí dostupnost smluvních lékařů a zařízení, které pro svou diagnózu potřebují, v dosahu bydliště?",
+              "vyber": "jeden",
+              "moznosti": [
+                "velmi dobrá",
+                "spíše dobrá",
+                "spíše špatná",
+                "velmi špatná",
+                "nemáme zkušenost / nevíme"
+              ]
+            },
+            {
+              "id": "sit-pojistovna",
+              "text": "Ke které pojišťovně se vaše hodnocení v této oblasti vztahuje především?",
+              "moznosti": [
+                "VZP ČR – Všeobecná zdravotní pojišťovna (111)",
+                "VoZP – Vojenská zdravotní pojišťovna (201)",
+                "ČPZP – Česká průmyslová zdravotní pojišťovna (205)",
+                "OZP – Oborová zdravotní pojišťovna (207)",
+                "ZPŠ – Zaměstnanecká pojišťovna Škoda (209)",
+                "ZP MV ČR – Zdravotní pojišťovna ministerstva vnitra (211)",
+                "RBP, zdravotní pojišťovna (213)",
+                "nevím / nelze určit"
+              ],
+              "napoveda": "Lze vybrat více pojišťoven. Souhrn zveřejníme jen za všechny organizace dohromady."
+            }
+          ]
+        },
+        {
+          "id": "5",
+          "nazev": "Kvalita péče",
+          "otazky": [
+            {
+              "id": "kvalita-hodnoceni",
+              "text": "Jak členové hodnotí informace pojišťovny o kvalitě poskytovatelů a pomoc při výběru, kde se léčit?",
+              "vyber": "jeden",
+              "moznosti": [
+                "velmi dobrá",
+                "spíše dobrá",
+                "spíše špatná",
+                "velmi špatná",
+                "nemáme zkušenost / nevíme"
+              ]
+            },
+            {
+              "id": "kvalita-pojistovna",
+              "text": "Ke které pojišťovně se vaše hodnocení v této oblasti vztahuje především?",
+              "moznosti": [
+                "VZP ČR – Všeobecná zdravotní pojišťovna (111)",
+                "VoZP – Vojenská zdravotní pojišťovna (201)",
+                "ČPZP – Česká průmyslová zdravotní pojišťovna (205)",
+                "OZP – Oborová zdravotní pojišťovna (207)",
+                "ZPŠ – Zaměstnanecká pojišťovna Škoda (209)",
+                "ZP MV ČR – Zdravotní pojišťovna ministerstva vnitra (211)",
+                "RBP, zdravotní pojišťovna (213)",
+                "nevím / nelze určit"
+              ],
+              "napoveda": "Lze vybrat více pojišťoven. Souhrn zveřejníme jen za všechny organizace dohromady."
+            }
+          ]
+        },
+        {
+          "id": "6",
+          "nazev": "Klientský servis",
+          "otazky": [
+            {
+              "id": "servis-hodnoceni",
+              "text": "Jak členové hodnotí jednání s pojišťovnou: pobočka, telefon, aplikace, srozumitelnost dopisů, rychlost vyřízení žádostí?",
+              "vyber": "jeden",
+              "moznosti": [
+                "velmi dobrá",
+                "spíše dobrá",
+                "spíše špatná",
+                "velmi špatná",
+                "nemáme zkušenost / nevíme"
+              ]
+            },
+            {
+              "id": "servis-pojistovna",
+              "text": "Ke které pojišťovně se vaše hodnocení v této oblasti vztahuje především?",
+              "moznosti": [
+                "VZP ČR – Všeobecná zdravotní pojišťovna (111)",
+                "VoZP – Vojenská zdravotní pojišťovna (201)",
+                "ČPZP – Česká průmyslová zdravotní pojišťovna (205)",
+                "OZP – Oborová zdravotní pojišťovna (207)",
+                "ZPŠ – Zaměstnanecká pojišťovna Škoda (209)",
+                "ZP MV ČR – Zdravotní pojišťovna ministerstva vnitra (211)",
+                "RBP, zdravotní pojišťovna (213)",
+                "nevím / nelze určit"
+              ],
+              "napoveda": "Lze vybrat více pojišťoven. Souhrn zveřejníme jen za všechny organizace dohromady."
+            }
+          ]
+        },
+        {
+          "id": "7",
+          "nazev": "Hospodaření a transparentnost",
+          "otazky": [
+            {
+              "id": "hospodareni-hodnoceni",
+              "text": "Jak členové hodnotí srozumitelnost informací o tom, co pojišťovna hradí a proč (např. zdůvodnění rozhodnutí o žádosti o úhradu podle § 16)?",
+              "vyber": "jeden",
+              "moznosti": [
+                "velmi dobrá",
+                "spíše dobrá",
+                "spíše špatná",
+                "velmi špatná",
+                "nemáme zkušenost / nevíme"
+              ]
+            },
+            {
+              "id": "hospodareni-pojistovna",
+              "text": "Ke které pojišťovně se vaše hodnocení v této oblasti vztahuje především?",
+              "moznosti": [
+                "VZP ČR – Všeobecná zdravotní pojišťovna (111)",
+                "VoZP – Vojenská zdravotní pojišťovna (201)",
+                "ČPZP – Česká průmyslová zdravotní pojišťovna (205)",
+                "OZP – Oborová zdravotní pojišťovna (207)",
+                "ZPŠ – Zaměstnanecká pojišťovna Škoda (209)",
+                "ZP MV ČR – Zdravotní pojišťovna ministerstva vnitra (211)",
+                "RBP, zdravotní pojišťovna (213)",
+                "nevím / nelze určit"
+              ],
+              "napoveda": "Lze vybrat více pojišťoven. Souhrn zveřejníme jen za všechny organizace dohromady."
+            }
+          ]
+        },
+        {
+          "id": "8",
+          "nazev": "Konkrétní zkušenost",
+          "otazky": [
+            {
+              "id": "zkusenost",
+              "text": "Popište prosím jednu až tři konkrétní zkušenosti členů, které vaše hodnocení ilustrují: oblast, pojišťovna, co se stalo a jak to dopadlo. Bez osobních údajů.",
+              "napoveda": "Neuvádějte jména, rodná čísla, adresy, data narození ani vzácné diagnózy v kombinaci s místem. Text nezveřejňujeme; redakce ho použije jako podnět k ověření u pojišťovny.",
+              "max_delka": 1500
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pojistenci-anketa",
+      "nazev": "Anketa pro pojištěnce: co vám u pojišťovny chybí",
+      "typ": "dotaznik",
+      "verze": "1",
+      "faze": "od zveřejnění stránky (průběžně)",
+      "respondent": "veřejnost, pojištěnci všech pojišťoven; bez tokenu a bez registrace",
+      "kanal": "web-verejnost",
+      "povolene_respondenty": [
+        "verejnost"
+      ],
+      "uvod": "Anketa je anonymní: neptáme se na jméno, e-mail ani bydliště přesněji než kraj, neukládáme IP adresu a všechny otázky jsou nepovinné. Zveřejňujeme jen souhrnné počty, a to až od tří odpovědí. Vyplnění zabere asi dvě minuty; dotazy a připomínky směřujte na redakci Zdravého Česka.",
+      "casti": [
+        {
+          "id": "1",
+          "nazev": "Vaše pojišťovna",
+          "otazky": [
+            {
+              "id": "pojistovna",
+              "text": "U které zdravotní pojišťovny jste pojištěni?",
+              "vyber": "jeden",
+              "moznosti": [
+                "VZP ČR – Všeobecná zdravotní pojišťovna (111)",
+                "VoZP – Vojenská zdravotní pojišťovna (201)",
+                "ČPZP – Česká průmyslová zdravotní pojišťovna (205)",
+                "OZP – Oborová zdravotní pojišťovna (207)",
+                "ZPŠ – Zaměstnanecká pojišťovna Škoda (209)",
+                "ZP MV ČR – Zdravotní pojišťovna ministerstva vnitra (211)",
+                "RBP, zdravotní pojišťovna (213)",
+                "nechci uvést"
+              ]
+            },
+            {
+              "id": "duvod",
+              "text": "Proč jste právě u této pojišťovny? Vyberte vše, co platí.",
+              "moznosti": [
+                "nevybíral(a) jsem si, jsem u ní odjakživa",
+                "příspěvky z fondu prevence a další výhody",
+                "doporučení rodiny, známých nebo zaměstnavatele",
+                "pobočka nebo kontaktní místo blízko",
+                "aplikace a online služby",
+                "smluvní lékaři a zařízení v okolí",
+                "přestoupil(a) jsem kvůli zkušenosti s předchozí pojišťovnou",
+                "jiný důvod"
+              ]
+            },
+            {
+              "id": "co-chybi",
+              "text": "Co vám u vaší pojišťovny chybí?",
+              "moznosti": [
+                "srozumitelné informace o tom, co hradí",
+                "pomoc se sehnáním lékaře nebo termínu",
+                "příspěvky na prevenci, které bych opravdu využil(a)",
+                "jednodušší vyřizování online",
+                "osobní kontakt (pobočka, telefon s člověkem)",
+                "rychlejší vyřízení žádostí a stížností",
+                "přehled o vykázané péči",
+                "nic mi nechybí",
+                "jiné (uveďte)"
+              ],
+              "napoveda": "Do upřesnění prosím nepište jména, e-maily ani jiné osobní údaje.",
+              "max_delka": 300
+            },
+            {
+              "id": "fond-prevence",
+              "text": "Využil(a) jste za poslední dva roky příspěvek z fondu prevence své pojišťovny?",
+              "vyber": "jeden",
+              "moznosti": [
+                "ano",
+                "ne",
+                "nevím"
+              ]
+            },
+            {
+              "id": "aplikace",
+              "text": "Používáte mobilní aplikaci své pojišťovny?",
+              "vyber": "jeden",
+              "moznosti": [
+                "ano",
+                "ne",
+                "nevím o ní"
+              ]
+            },
+            {
+              "id": "spokojenost",
+              "text": "Jak jste se svou pojišťovnou celkově spokojen(a)?",
+              "vyber": "jeden",
+              "moznosti": [
+                "1 – velmi nespokojen(a)",
+                "2",
+                "3",
+                "4",
+                "5 – velmi spokojen(a)"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "2",
+          "nazev": "O vás (nepovinné)",
+          "otazky": [
+            {
+              "id": "kraj",
+              "text": "Ve kterém kraji bydlíte?",
+              "vyber": "jeden",
+              "moznosti": [
+                "Hlavní město Praha",
+                "Středočeský kraj",
+                "Jihočeský kraj",
+                "Plzeňský kraj",
+                "Karlovarský kraj",
+                "Ústecký kraj",
+                "Liberecký kraj",
+                "Královéhradecký kraj",
+                "Pardubický kraj",
+                "Kraj Vysočina",
+                "Jihomoravský kraj",
+                "Olomoucký kraj",
+                "Zlínský kraj",
+                "Moravskoslezský kraj",
+                "nechci uvést"
+              ]
+            },
+            {
+              "id": "vek",
+              "text": "Kolik vám je let?",
+              "vyber": "jeden",
+              "moznosti": [
+                "18–29",
+                "30–44",
+                "45–64",
+                "65–74",
+                "75 a více",
+                "nechci uvést"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pravo-na-odpoved",
+      "nazev": "Právo na odpověď k návrhu hodnocení",
+      "typ": "otevrene",
+      "verze": "1",
+      "faze": "po návrhu verdiktů · březen 2027",
+      "respondent": "zdravotní pojišťovna, které se návrh hodnocení týká",
+      "kanal": "dopis+web",
+      "povolene_respondenty": [
+        "pojistovna"
+      ],
+      "uvod": "Návrh hodnocení (stav semaforu v šesti oblastech) dostáváte 10 dní před zveřejněním, stejně jako ostatní pojišťovny. S návrhem můžete nesouhlasit, doložit podklady a napsat stanovisko, které zveřejníme doslova vedle hodnocení. Lhůta je 10 dní od doručení návrhu; kontakt na redakci je v průvodním dopise.",
+      "pravni_zaklad": "Právo na odpověď podle metodiky srovnávače, § 4 bod 4. Nejde o žádost podle zákona č. 106/1999 Sb.",
+      "otazky": [
+        {
+          "id": "nesouhlas",
+          "text": "Se kterými návrhy stavu nesouhlasíte? Označte oblasti; popis každé oblasti a odkaz na ni je v návrhu hodnocení.",
+          "moznosti": [
+            "prevence – Prevence s dopadem",
+            "dostupnost – Dostupnost a čekací doby",
+            "sit – Síť a ohrožené oblasti",
+            "kvalita – Kvalita ve smluvní politice",
+            "servis – Klientský servis a informování",
+            "hospodareni – Hospodaření a transparentnost",
+            "s návrhy ve všech oblastech souhlasíme"
+          ],
+          "napoveda": "Popis oblastí a stavů je v metodice srovnávače (pojistovny-metodika.html, § 2 a § 3)."
+        },
+        {
+          "id": "doklady",
+          "text": "U oblastí, se kterými nesouhlasíte: co je podle vás v návrhu nepřesné a jaké podklady to ukazují? Uveďte odkaz (URL) na dokument, nebo název souboru, který posíláte datovou schránkou či e-mailem.",
+          "napoveda": "Formát: oblast · co nesouhlasí · podklad (URL nebo název souboru). Stav „doloženo“ může dostat jen tvrzení, které lze z dat nebo metodiky ověřit a zopakovat (metodika § 3).",
+          "max_delka": 2000
+        },
+        {
+          "id": "stanovisko",
+          "text": "Stanovisko ke zveřejnění: text, který zveřejníme doslova a beze změn vedle hodnocení. Pokud se týká více oblastí, začněte každý odstavec názvem oblasti.",
+          "napoveda": "Redakce text nekrátí ani neupravuje; jen ho podle oblastí rozdělí do pole stanovisko_pojistovny u příslušné oblasti. Bez stanoviska zveřejníme hodnocení s poznámkou, že pojišťovna právo na odpověď nevyužila.",
+          "max_delka": 1500
+        }
+      ]
+    },
+    {
+      "id": "pobocky-definice",
+      "nazev": "Pobočky podle jednotné definice",
+      "typ": "otevrene",
+      "verze": "1",
+      "faze": "kolo 1 · leden 2027 (spolu s fondem prevence)",
+      "respondent": "zdravotní pojišťovny (všech 7, stejné znění týž den)",
+      "kanal": "dopis+web",
+      "povolene_respondenty": [
+        "pojistovna"
+      ],
+      "uvod": "Počty poboček nejsou mezi pojišťovnami srovnatelné, protože každá počítá jiné druhy míst; navrhujeme proto jednotnou definici: pobočka je místo s pravidelnými úředními hodinami pro veřejnost, kde pojištěnec vyřídí agendu osobně s pracovníkem pojišťovny (osobní přepážka), a nepatří sem ústředí bez přepážky, podatelna, partnerské místo třetí strany (pošta, Polpoint, ePodání) ani mobilní či virtuální pobočka. Čísla zveřejníme s datem a s vaším seznamem míst, odděleně podle druhu. Odpovězte prosím do 15 dnů spolu s otázkami k fondu prevence; kontakt na redakci je v průvodním dopise.",
+      "pravni_zaklad": "Dobrovolná nabídka spolupráce (metodika § 4 bod 3). Pokud do 15 dnů odpověď nepřijde, následuje žádost o informace podle zákona č. 106/1999 Sb., o svobodném přístupu k informacím, se stejným zněním otázek.",
+      "otazky": [
+        {
+          "id": "prepazky",
+          "text": "Kolik míst s osobní přepážkou podle uvedené definice jste měli k 31. 12. 2026?",
+          "napoveda": "Odpověď: jedno číslo. Doloženo: číslo k datu a seznam míst (otázka 4), jehož počet řádků druhu „prepazka“ číslu odpovídá.",
+          "max_delka": 300
+        },
+        {
+          "id": "uredni-hodiny",
+          "text": "Kolik z těchto míst mělo k témuž datu úřední hodiny pro veřejnost alespoň 3 dny v týdnu?",
+          "napoveda": "Odpověď: jedno číslo. Úřední hodiny podle stavu k 31. 12. 2026, ne po předchozí domluvě.",
+          "max_delka": 300
+        },
+        {
+          "id": "partnerska-mista",
+          "text": "Kolik dalších kontaktních míst jste k 31. 12. 2026 provozovali mimo definici (partnerská místa, podatelny, mobilní pobočky)? Uveďte prosím počet zvlášť podle druhu.",
+          "napoveda": "Formát: druh · počet. Tato místa zveřejníme odděleně od poboček, aby pojištěnec viděl, kde co vyřídí.",
+          "max_delka": 1000
+        },
+        {
+          "id": "seznam-csv",
+          "text": "Pošlete prosím seznam všech míst z otázek 1–3 jako CSV (UTF-8, středník) se sloupci: nazev; druh (prepazka | partnerske | podatelna | mobilni); adresa; obec; kraj; uredni_hodiny; dny_v_tydnu; stav_k (RRRR-MM-DD). Uveďte odkaz ke stažení nebo název přiloženého souboru.",
+          "napoveda": "Doloženo: soubor, ze kterého jdou čísla z otázek 1–3 spočítat. Pokud seznam zveřejňujete na webu ve strojově čitelné podobě (CSV, JSON), stačí stálý odkaz; budeme ho používat pro průběžnou aktualizaci.",
+          "max_delka": 1000
         }
       ]
     }

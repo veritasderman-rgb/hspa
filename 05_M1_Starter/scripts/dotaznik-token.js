@@ -51,6 +51,10 @@ export function checkArgs(args, sady) {
   const sada = typeof args.sada === 'string' ? args.sada : '';
   const def = (sady ?? []).find((s) => s.id === sada);
   if (!def) errors.push(`--sada: neznámá sada (${(sady ?? []).map((s) => s.id).join(', ')})`);
+  else if (def.kanal === 'interni' || def.kanal === 'web-verejnost') errors.push(`--sada: sada s kanálem ${def.kanal} se tokenem nevyplňuje`);
+  else if (Array.isArray(def.povolene_respondenty) && !def.povolene_respondenty.includes(typ)) {
+    errors.push(`--typ: sadu ${def.id} vyplňuje jen ${def.povolene_respondenty.join(' | ')}`);
+  }
   const kod = typeof args.kod === 'string' ? args.kod : '';
   if (!KOD_RE.test(kod)) errors.push('--kod: 1–40 znaků A–Z, a–z, 0–9, _ . -');
   else if (typ === 'pojistovna' && !ZP_KODY.includes(kod)) errors.push(`--kod: u pojišťovny jeden z ${ZP_KODY.join(', ')}`);
