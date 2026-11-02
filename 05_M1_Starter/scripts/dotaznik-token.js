@@ -5,9 +5,9 @@
 //
 //   DATABASE_URL=postgres://… node scripts/dotaznik-token.js \
 //       --sada rizikovi-pojistenci --kod 111 [--typ pojistovna] \
-//       [--platnost-dni 60] [--base https://hspa-cesko.cz/pojistovny.html]
+//       [--platnost-dni 60] [--base https://hspa-cesko.cz/pojistovny-gramotnost.html]
 //
-// Výstup: URL ve tvaru pojistovny.html?dotaznik=<sada>&token=<token>.
+// Výstup: URL ve tvaru pojistovny-gramotnost.html?dotaznik=<sada>&token=<token>.
 // Typy: pojistovna (výchozí; --kod musí být kód ZP), pacientska_organizace
 // (--kod je zkratka organizace, např. NAPO). Veřejnost tokeny nepotřebuje.
 
@@ -81,7 +81,7 @@ async function main() {
   }
   const token = createToken();
   const rows = await insertToken(db.sql, chk.value, token);
-  const base = typeof args.base === 'string' ? args.base : 'pojistovny.html';
+  const base = typeof args.base === 'string' ? args.base : 'pojistovny-gramotnost.html';
   console.log(`Token pro ${chk.value.typ} ${chk.value.kod}, sada ${chk.value.sada}, platný do ${rows?.[0]?.platny_do ?? `+${chk.value.dny} dní`}`);
   console.log('Odkaz (zobrazí se jen teď, v databázi je jen hash):');
   console.log(tokenUrl(base, chk.value.sada, token));

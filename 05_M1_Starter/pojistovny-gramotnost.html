@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zdravotní gramotnost — Srovnávač pojišťoven, pracovní verze · HSPA Monitor</title>
+<meta name="description" content="Zdravotní gramotnost a rizikoví pojištěnci: rizikové skupiny, chybějící data, dotazník pro pojišťovny a souhrnné odpovědi. Pracovní verze.">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Zdravotní gramotnost — Srovnávač zdravotních pojišťoven">
+<meta property="og:locale" content="cs_CZ">
+<link rel="stylesheet" href="src/styles.min.css">
+<!--
+  audit:
+    status: draft
+    pristup: heslo (middleware.js, POJISTOVNY_HESLO, matcher /pojistovny-:path*) + noindex
+    trida: C (nová stránka, hodnocení pojmenovaných institucí)
+    stranka: gramotnost (P1.6, PLAN-SROVNAVAC-POJISTOVEN.md § 2.8)
+    zdroje: data/pojistovny*.json — každá hodnota má zdroj a rok
+    dotaznik: adresné odkazy ?dotaznik=<sada>&token=<token> (scripts/dotaznik-token.js); starý odkaz na pojistovny.html přesměruje shell
+-->
+</head>
+<body>
+<a class="skip-link" href="#content">Přeskočit na hlavní obsah</a>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Srovnávač pojišťoven</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+  <div id="zpShell" class="zpc-shell" data-aktivni="gramotnost"></div>
+
+  <!-- Modul 4: Zdravotní gramotnost -->
+  <section class="zpc-mod zpc-mod--page" id="modul-gramotnost" aria-labelledby="zpGramHead">
+    <div class="zpc-mod-head"><h1 id="zpGramHead">Zdravotní gramotnost a rizikoví pojištěnci</h1><span class="zpc-stav">v přípravě · druhé téma PS</span></div>
+    <p class="zpc-lead">Druhé téma pracovní skupiny: jak pojišťovny podporují zdravotní gramotnost klientů a pracují s rizikovými skupinami.</p>
+    <div class="zpc-moje-wrap">
+      <p class="zpc-moje-lbl" id="zpMojeLbl">Moje pojišťovna: vyberte ji a zvýrazní se ve všech grafech a tabulkách, i na ostatních stránkách srovnávače.</p>
+      <div id="zpMojeZp" class="zpc-moje" aria-describedby="zpMojeLbl"></div>
+    </div>
+    <details class="zpc-acc">
+      <summary>O tématu a o tom, jak pojišťovny rizikové pojištěnce hledají</summary>
+      <div class="zpc-acc-body"><div id="zpRizikovePopis"></div><p>Personalizovaná komunikace s rizikovými skupinami navíc naráží na souhlas s profilováním.</p></div>
+    </details>
+    <div class="zpc-grid2">
+      <div class="zpc-box"><h4>Rizikové skupiny a data, která chybí<span class="zpc-n" id="zpRizikoveN"></span></h4><div id="zpRizikove"></div></div>
+      <div class="zpc-box">
+        <h4>Dotazník pro pojišťovny (návrh)</h4>
+        <details class="zpc-acc zpc-q">
+          <summary>Otázky kola 2<span class="zpc-n" id="zpOtazkyN"></span></summary>
+          <div class="zpc-acc-body" id="zpOtazky"></div>
+        </details>
+      </div>
+    </div>
+    <details class="zpc-acc">
+      <summary>Další směry zkoumání<span class="zpc-n" id="zpDalsiN"></span></summary>
+      <div class="zpc-acc-body"><ul id="zpDalsi"></ul></div>
+    </details>
+    <div class="zpc-box zpc-mt">
+      <h4>Vyplnit dotazník</h4>
+      <p class="zpc-note">Odpovědi se ukládají bez osobních údajů: bez jména, e-mailu i IP adresy.</p>
+      <details class="zpc-acc">
+        <summary>Jak se s odpověďmi nakládá</summary>
+        <div class="zpc-acc-body"><p>Veřejně zobrazujeme jen souhrnné počty. Pojišťovny a organizace vyplňují dotazník přes osobní odkaz od redakce.</p></div>
+      </details>
+      <div id="zpDotaznik" data-sada="rizikovi-pojistenci"></div>
+      <div id="zpDotaznikAgregace"></div>
+    </div>
+  </section>
+
+
+  <div id="zpZdroje" class="zpc-zdroje-wrap"></div>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/pojistovny.js"></script>
+</body>
+</html>

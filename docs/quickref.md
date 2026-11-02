@@ -21,6 +21,7 @@ Jednostránkový cheatsheet pro rychlou orientaci. Pro hloubku viz
 | ETL/ingest | `05_M1_Starter/ingest/` |
 | Skripty | `05_M1_Starter/scripts/` |
 | Testy | `05_M1_Starter/tests/` (731 testů, 0 failures) |
+| Srovnávač pojišťoven (pracovní, pod heslem) | přehled `pojistovny.html` + podstránky `pojistovny-kmen` / `-prevence` / `-aplikace` / `-gramotnost` / `-metodika.html`; shell `src/pojistovny-shell.js`, přehled `src/pojistovny-prehled.js`, síť odborností `src/pojistovny-sit.js`; plán `PLAN-SROVNAVAC-POJISTOVEN.md` § 2.8 |
 | Doložka (registr tvrzení) | `data/claims.json` → klikatelné doložky v článcích; engine `src/dolozka-engine.js`, UI `src/dolozka-inline.js`, statistiky `redakce.html#duveryhodnost` |
 | Dokumentace pro vývojáře | `docs/` (root level) |
 | Ústava provozu, brána PR, kill switch | `GOVERNANCE.md`; `scripts/pr-gate.js` (třída A/B/C), `data/ai-provoz.json` + `scripts/ai-provoz.js`; incidenty `docs/incidents.md` |
@@ -112,7 +113,7 @@ git push -u origin claude/<branch-name>
 | `.dlz-*` | Doložka (klikatelné doložky tvrzení, panel, badge) | clanek-*.html, redakce.html |
 | `.poh-*` | Pohotovosti (triáž, vyhledávání, karty, mapa, kontext) | pohotovosti.html |
 | `.pop-*` | Poplatky u lékaře (kontrola poplatku, mapa smí/nesmí, průvodce stížností, generátor, plné znění) | poplatky.html |
-| `.zpc-*` | Srovnávač pojišťoven — stránka (strip, nav modulů, karty pojišťoven, tabulky, matice, akordeony, boxy) | pojistovny.html |
+| `.zpc-*` | Srovnávač pojišťoven — stránky (shell: strip, kicker, záložky `.zpc-tabs`; přehled `.zpc-overview-grid`, `.zpc-ov-*`, `.zpc-tema-*`; karty pojišťoven, tabulky, akordeony, boxy; síť `.zpc-sit-*`) | pojistovny.html, pojistovny-*.html |
 | `.zpv-*` | (plánováno) Srovnávač pojišťoven — vizuální primitivy (grafy, sparkliny, ikonové řady) | `src/zp-viz.js` |
 | `.zpi-*` | (plánováno) Srovnávač pojišťoven — interakce (filtry, výběr pojišťoven, porovnání) | `src/zp-interact.js` |
 | `.zpd-*` | Srovnávač pojišťoven — dotazníky (formulář ze sady otázek, vodorovné bary agregátů) | `src/zp-dotaznik.js`, pojistovny.html |

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kmen a hospodaření — Srovnávač pojišťoven, pracovní verze · HSPA Monitor</title>
+<meta name="description" content="Kmen a hospodaření sedmi zdravotních pojišťoven: tržní podíl, vývoj kmene od roku 2010, věk kmene, náklady na pojištěnce, rezervy 2026, kraje a síť smluvních odborností (prototyp). Pracovní verze.">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Kmen a hospodaření — Srovnávač zdravotních pojišťoven">
+<meta property="og:locale" content="cs_CZ">
+<link rel="stylesheet" href="src/styles.min.css">
+<!--
+  audit:
+    status: draft
+    pristup: heslo (middleware.js, POJISTOVNY_HESLO, matcher /pojistovny-:path*) + noindex
+    trida: C (nová stránka, hodnocení pojmenovaných institucí)
+    stranka: kmen (P1.6, PLAN-SROVNAVAC-POJISTOVEN.md § 2.8)
+    zdroje: data/pojistovny*.json — každá hodnota má zdroj a rok
+    sit: data/pojistovny-sit.json — prototyp (docs/pojistovny-sit.md), horní odhad, stav 31. 12. 2024; věta o omezení metody nad grafem povinná
+-->
+</head>
+<body>
+<a class="skip-link" href="#content">Přeskočit na hlavní obsah</a>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Srovnávač pojišťoven</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+  <div id="zpShell" class="zpc-shell" data-aktivni="kmen"></div>
+
+  <!-- Modul 3: Kmen a hospodaření -->
+  <section class="zpc-mod zpc-mod--page" id="modul-kmen" aria-labelledby="zpKmenHead">
+    <div class="zpc-mod-head"><h1 id="zpKmenHead">Kmen a hospodaření</h1><span class="zpc-stav">CRP 2025 · MZ a MF 2024 · ZPP 2026</span></div>
+    <p class="zpc-lead">Kdo koho pojišťuje, jak starý kmen nese, kolik stojí jeho péče a s jakou rezervou vstupuje do roku 2026.</p>
+    <div id="zpHeroStats" class="zpc-kmen-stats"></div>
+    <div class="zpc-moje-wrap">
+      <p class="zpc-moje-lbl" id="zpMojeLbl">Moje pojišťovna: vyberte ji a zvýrazní se ve všech grafech a tabulkách, i na ostatních stránkách srovnávače.</p>
+      <div id="zpMojeZp" class="zpc-moje" aria-describedby="zpMojeLbl"></div>
+    </div>
+    <div id="zpChartShare"></div>
+    <div id="zpCards" class="zpc-cards" role="region" tabindex="0" aria-label="Karty sedmi pojišťoven (na mobilu posuvné do stran)"></div>
+    <p class="zpc-cap">ÚZIS · CRP 2025 · MZ ČR + MF 2024 · ZPP 2026 · pomlčka = nedohledáno</p>
+    <div id="zpKraje" class="zpc-kraje"></div>
+    <h3 class="section-title"><span>Vývoj kmene 2010–2025</span></h3>
+    <div class="zpc-charts">
+      <div class="zpc-chart" id="zpChartTrend"></div>
+      <div class="zpc-chart" id="zpChartGrowth"></div>
+    </div>
+    <h3 class="section-title"><span>Věk kmene a náklady na péči</span></h3>
+    <div class="zpc-charts">
+      <div class="zpc-chart" id="zpChart65"></div>
+      <div class="zpc-chart" id="zpChartNzs"></div>
+    </div>
+    <h3 class="section-title"><span>Hospodaření 2024</span></h3>
+    <div id="zpTableFin"></div>
+    <p class="zpc-cap">MZ ČR + MF · Hodnocení vývoje systému v.z.p. 2024 · výroční zprávy 2024 · sněmovní tisk 280/0 · řazení kliknutím na záhlaví</p>
+    <div class="zpc-charts">
+      <div class="zpc-chart" id="zpChartZust"></div>
+      <div class="zpc-chart" id="zpChartProvoz"></div>
+    </div>
+    <h3 class="section-title"><span>Co ukazují výroční zprávy 2025</span></h3>
+    <div class="zpc-chart" id="zpChartYoy"></div>
+    <h3 class="section-title"><span>Klientský servis</span></h3>
+    <div id="zpTablePrev" class="zpc-tbl" role="region" tabindex="0" aria-label="Klientský servis (tabulka, posuvná)"></div>
+    <h3 class="section-title zpc-h3" id="sit-odbornosti"><span>Síť smluvních odborností (prototyp)</span></h3>
+    <p class="zpc-note zpc-sit-limit"><b>Omezení metody.</b> Jde o horní odhad smluvních pracovišť, stav k 31. 12. 2024; u poliklinik a nemocnic je nadhodnocený. Smlouva se uzavírá na pracoviště a odbornost (IČP), číselník ÚZIS ale nese jen zařízení (IČZ). Pět velkých pojišťoven (VZP ČR, VoZP, ČPZP, OZP, ZP MV ČR) má prakticky stejně širokou síť: rozdíly mezi nimi jsou menší než chyba metody, pořadí velkých pojišťoven z těchto čísel nevyvozujte.</p>
+    <p class="zpc-note"><b>Pobočky.</b> „Počet poboček“ dnes není srovnatelné číslo: VoZP, OZP a ZP MV ČR počítají v jednom čísle různé kategorie, od regionálního ředitelství po poštovního partnera. Srovnávat je lze až po sjednocení definice a ručním spočtení.</p>
+    <div id="zpSit" class="zpc-sit"></div>
+    <div class="zpc-accs">
+      <details class="zpc-acc">
+        <summary>Jak číst modul a odkud jsou data · 5</summary>
+        <div class="zpc-acc-body"><ul>
+          <li><b>Kmen.</b> Počet pojištěnců, věková struktura a regionální těžiště z Centrálního registru pojištěnců (ÚZIS, OIS 11-47, verze 2026-01, rok 2025). Minigraf v kartě a graf vývoje ukazují počet pojištěnců jako index vůči roku 2010 (2010 = 100).</li>
+          <li><b>Hospodaření 2024.</b> Primární zdroj: Hodnocení vývoje systému v.z.p. v roce 2024 (MZ ČR + MF; pojištěnci = roční průměr, saldo = příjmy − výdaje, hotovostní metodika), doplněno výročními zprávami 2024. Příjmy, náklady a saldo v mld Kč, fond prevence a zůstatky v mil. Kč.</li>
+          <li><b>Provoz.</b> Výdaje na vlastní činnost v % příjmů; limit podle vyhlášky 418/2003 Sb. Zůstatky na bankovních účtech podle sněmovního tisku 280/0 (tab. 9).</li>
+          <li><b>Standardizace.</b> Náklady i prevence na pojištěnce se mají přepočítat na věkovou a pohlavní strukturu ČR (metodika § 4.1). Dokud nejsou doložené nákladové indexy, ukazujeme hodnoty nestandardizované a v kartách je tak značíme.</li>
+          <li><b>Řazení.</b> Grafy jsou seřazené podle hodnoty, nejde o hodnocení pojišťoven. Barvu pojišťovny uvidíte po výběru „Moje pojišťovna“ nebo při najetí myší.</li>
+        </ul></div>
+      </details>
+      <details class="zpc-acc">
+        <summary>Poznámky k jednotlivým pojišťovnám · <span id="zpNotesN">0</span></summary>
+        <div class="zpc-acc-body"><ul id="zpNotes"></ul></div>
+      </details>
+      <details class="zpc-acc">
+        <summary>Co se nepodařilo dohledat · <span id="zpChybiN">0</span></summary>
+        <div class="zpc-acc-body"><ul id="zpChybi"></ul></div>
+      </details>
+    </div>
+  </section>
+
+
+  <div id="zpZdroje" class="zpc-zdroje-wrap"></div>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/pojistovny.js"></script>
+<script type="module" src="src/pojistovny-kraje.js"></script>
+<script type="module" src="src/pojistovny-sit.js"></script>
+</body>
+</html>

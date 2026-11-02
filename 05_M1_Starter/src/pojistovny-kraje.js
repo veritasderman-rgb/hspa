@@ -8,8 +8,8 @@
 //       v kterém kraji (rankedBars ze zp-viz.js),
 //   (c) <details> s vývojem podílu v kraji 2010–2025 (tabulka).
 // Pojišťovna = „Moje pojišťovna“ (main[data-moje-zp], event zp:moje-change);
-// bez výběru se ukáže VZP ČR + věta, ať si uživatel vybere nahoře. Lokální chipy
-// přepínají jen tuto sekci (výběr nahoře se jimi nemění).
+// bez výběru se ukáže VZP ČR + věta, ať si uživatel vybere nahoře. Lokální přepínač
+// uvnitř sekce není (revize P1.5: druhý řádek chipů = filtr v grafu, matoucí).
 //
 // Čisté funkce (testované bez DOM): krajLabel, nationalTotals, buildKrajDataset,
 // sequentialRel, tezisteItems, evolutionRows, krajReadout. DOM část je dole.
@@ -206,16 +206,14 @@ export function krajReadout(region, zkratka, avg) {
 }
 
 /** Věta o tom, která pojišťovna se zobrazuje a proč. */
-export function stateSentence({ kod, moje, local }) {
+export function stateSentence({ kod, moje }) {
   const zkr = (ZP_BY_KOD[kod] && ZP_BY_KOD[kod].zkratka) || kod;
-  if (local && local === kod && local !== moje) return `Zobrazena je ${zkr} (přepnuto jen v této sekci).`;
-  if (moje && moje === kod) return `Zobrazena je vaše pojišťovna: ${zkr}. Jinou můžete přepnout jen v této sekci.`;
-  return `Zobrazena je ${zkr} (výchozí). Vyberte svou pojišťovnu nahoře, nebo ji přepněte jen tady.`;
+  if (moje && moje === kod) return `Zobrazena je vaše pojišťovna: ${zkr}.`;
+  return `Zobrazena je ${zkr} (výchozí). Vyberte svou pojišťovnu nahoře.`;
 }
 
-/** Pojišťovna zobrazená v sekci: lokální volba > Moje pojišťovna > výchozí VZP. */
-export function resolveKod({ local, moje }, valid = ZP.map((z) => z.kod)) {
-  if (local && valid.includes(local)) return local;
+/** Pojišťovna zobrazená v sekci: Moje pojišťovna > výchozí VZP. */
+export function resolveKod({ moje } = {}, valid = ZP.map((z) => z.kod)) {
   if (moje && valid.includes(moje)) return moje;
   return DEFAULT_KOD;
 }
@@ -223,11 +221,6 @@ export function resolveKod({ local, moje }, valid = ZP.map((z) => z.kod)) {
 // ---------------------------------------------------------------------------
 // HTML (čisté stringy)
 // ---------------------------------------------------------------------------
-
-export function chipsHtml(kod) {
-  return ZP.map((z) => `<button type="button" class="zpk-chip" data-kod="${esc(z.kod)}" aria-pressed="${z.kod === kod ? 'true' : 'false'}" title="${esc(z.nazev)}">`
-    + `<span class="zpk-dot" style="--c:var(${esc(z.token)})" aria-hidden="true"></span><span>${esc(z.zkratka)}</span></button>`).join('');
-}
 
 export function evolutionTableHtml(d5, kod) {
   const years = d5.years || [];
@@ -240,6 +233,14 @@ export function evolutionTableHtml(d5, kod) {
     + `<table class="zpk-evo"><caption class="zpk-sr">Podíl ${esc(zkr)} mezi pojištěnci kraje v %, podle roku</caption><thead>${head}</thead><tbody>${body}</tbody></table></div>`;
 }
 
+/** Hodnota v legendě: pod 0,1 % jako „<0,1“, nula jako „0“ (nikdy „0,00“). */
+export function legendValue(v) {
+  if (!isNum(v)) return 'nedohledáno';
+  if (v === 0) return '0';
+  if (v > 0 && v < 0.1) return '<0,1';
+  return fmt(v, 1);
+}
+
 /** Legenda rampy: 5 vzorků od nejnižšího po nejvyšší podíl. */
 export function legendHtml(dataset, dark) {
   const vals = dataset.regions.map((r) => r.value).filter(isNum);
@@ -250,7 +251,7 @@ export function legendHtml(dataset, dark) {
     const rel = RAMP_REL_MIN + (RAMP_REL_MAX - RAMP_REL_MIN) * t;
     return `<i class="zpk-sw" style="--c:${esc(pickColorNeutral(rel, dark))}" aria-hidden="true"></i>`;
   }).join('');
-  return `<span class="zpk-lg-end">nejnižší ${esc(fmtShare(min))} %</span><span class="zpk-ramp">${swatches}</span><span class="zpk-lg-end">nejvyšší ${esc(fmtShare(max))} %</span>`;
+  return `<span class="zpk-lg-end">nejnižší ${esc(legendValue(min))} %</span><span class="zpk-ramp">${swatches}</span><span class="zpk-lg-end">nejvyšší ${esc(legendValue(max))} %</span>`;
 }
 
 // ---------------------------------------------------------------------------
@@ -279,13 +280,12 @@ export function bootKraje(doc = globalThis.document, win = globalThis.window) {
   host.innerHTML = '<h3 class="section-title"><span>Kde pojišťovna sedí</span></h3>'
     + '<p class="zpk-loading" role="status">Načítám rozložení pojištěnců podle krajů…</p>';
 
-  const state = { d5: null, moje: mojeFromDom(doc), local: null, dataset: null, started: false };
+  const state = { d5: null, moje: mojeFromDom(doc), dataset: null, started: false };
   const cleanups = [];
 
   const onMoje = (e) => {
     const k = e && e.detail && e.detail.kod;
     state.moje = k && ZP_BY_KOD[k] ? k : null;
-    state.local = null;
     if (state.d5) draw();
   };
   doc.addEventListener(MOJE_EVENT, onMoje);
@@ -317,7 +317,6 @@ export function bootKraje(doc = globalThis.document, win = globalThis.window) {
   let tezHost = null;
   let readout = null;
   let legend = null;
-  let chips = null;
   let stateEl = null;
   let evoHost = null;
 
@@ -325,7 +324,6 @@ export function bootKraje(doc = globalThis.document, win = globalThis.window) {
     host.innerHTML = '<h3 class="section-title"><span>Kde pojišťovna sedí</span></h3>'
       + '<p class="zpk-lead">Mapa ukazuje, jak velkou část pojištěnců v každém kraji tvoří vybraná pojišťovna. Vedle je vidět, ve kterých krajích žije její kmen.</p>'
       + '<p class="zpk-state"></p>'
-      + '<div class="zpk-chips" role="group" aria-label="Pojišťovna zobrazená v této sekci"></div>'
       + '<div class="zpk-body">'
       + '<figure class="zpk-mapfig"><figcaption class="zpk-cap"><span class="zpk-title"></span><span class="zpk-sub"></span></figcaption>'
       + '<div class="zpk-map"></div><div class="zpk-legend"></div><p class="zpk-readout" role="status" aria-live="polite"></p></figure>'
@@ -337,23 +335,14 @@ export function bootKraje(doc = globalThis.document, win = globalThis.window) {
     tezHost = host.querySelector('.zpk-tez');
     readout = host.querySelector('.zpk-readout');
     legend = host.querySelector('.zpk-legend');
-    chips = host.querySelector('.zpk-chips');
     stateEl = host.querySelector('.zpk-state');
     evoHost = host.querySelector('.zpk-evo-body');
 
-    chips.addEventListener('click', (e) => {
-      const b = e.target.closest ? e.target.closest('button[data-kod]') : null;
-      if (!b || !chips.contains(b)) return;
-      state.local = b.getAttribute('data-kod');
-      draw();
-      const again = chips.querySelector(`button[data-kod="${state.local}"]`);
-      if (again) again.focus();
-    });
     cleanups.push(onThemeChange(() => { if (state.dataset) { drawLegend(); } }));
   }
 
   function currentKod() {
-    return resolveKod({ local: state.local, moje: state.moje });
+    return resolveKod({ moje: state.moje });
   }
 
   function drawLegend() {
@@ -375,10 +364,9 @@ export function bootKraje(doc = globalThis.document, win = globalThis.window) {
     state.dataset = dataset;
 
     host.setAttribute('data-zp', kod);
-    stateEl.textContent = stateSentence({ kod, moje: state.moje, local: state.local });
-    chips.innerHTML = chipsHtml(kod);
+    stateEl.textContent = stateSentence({ kod, moje: state.moje });
     host.querySelector('.zpk-title').textContent = `Podíl ${z.zkratka} mezi pojištěnci kraje, ${rok}`;
-    host.querySelector('.zpk-sub').textContent = 'Čím sytější modrá, tím větší podíl pojišťovny v kraji.';
+    host.querySelector('.zpk-sub').textContent = 'Čím výraznější barva, tím větší podíl pojišťovny v kraji.';
 
     const fill = makeFill(dataset);
     const link = (code, on) => {
@@ -399,6 +387,10 @@ export function bootKraje(doc = globalThis.document, win = globalThis.window) {
         link(code, false);
       },
     });
+    // cz-map.js dává SVG role="img", ale dlaždice jsou fokusovatelná tlačítka → axe nested-interactive
+    // (serious). Ve srovnávači je SVG skupina ovládacích prvků, ne obrázek.
+    const svg = mapHost.querySelector('svg.cz-map-svg');
+    if (svg) svg.setAttribute('role', 'group');
     drawLegend();
     readout.textContent = defaultReadout();
 
@@ -407,7 +399,7 @@ export function bootKraje(doc = globalThis.document, win = globalThis.window) {
       sub: `% pojištěnců ${z.zkratka} podle kraje, ${rok}`,
       unit: '%',
       dec: tezisteItems(state.d5, kod, rok).some((i) => i.value < 0.1) ? 2 : 1,
-      source: 'ÚZIS, CRP (OIS 11-47)',
+      source: `ÚZIS · CRP (OIS 11-47) · ${rok}`,
     });
 
     const years = state.d5.years || [];

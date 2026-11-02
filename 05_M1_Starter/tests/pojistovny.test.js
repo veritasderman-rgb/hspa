@@ -50,18 +50,75 @@ test('pojistovny.json: semafor obsahuje všech 6 oblastí a jen povolené stavy'
   }
 });
 
-test('pojistovny.html: noindex dokud je pracovní návrh, jeden h1, modul, footer', () => {
-  const html = fs.readFileSync(path.join(ROOT, 'pojistovny.html'), 'utf8');
-  if (DATA.stav === 'pracovni-navrh') assert.match(html, /<meta name="robots" content="noindex/, 'pracovní návrh musí být noindex');
-  assert.equal((html.match(/<h1\b/g) || []).length, 1);
-  assert.match(html, /class="ed-hero-headline"/);
-  assert.match(html, /src\/styles\.min\.css/);
-  assert.match(html, /<script type="module" src="src\/pojistovny\.js">/);
-  assert.match(html, /id="siteFooter"/);
-  assert.match(html, /id="moduleNav"/);
-  for (const id of ['zpHeroStats', 'zpAppMatrix', 'zpPrevMatrix', 'zpPrevOnko', 'zpPrevDusevni', 'zpFpStruktura', 'zpOdpovedi', 'zpCards', 'zpChartShare', 'zpChart65', 'zpTableFin', 'zpChartNzs', 'zpChartZust', 'zpChartProvoz', 'zpChartTrend', 'zpChartGrowth', 'zpChartYoy', 'zpMojeZp', 'zpTablePrev', 'zpNotes', 'zpChybi', 'zpOtazky', 'zpSemafor', 'zpSources']) {
-    assert.match(html, new RegExp(`id="${id}"`), `chybí kontejner #${id}`);
+// ---------------------------------------------------------------- P1.6: přehled + podstránky
+const STRANKY = {
+  'pojistovny.html': ['zpHeroStats', 'zpMojeZp', 'zpOvKarta', 'zpPrehled', 'zpOvGrafy', 'zpOvSemafor', 'zpOvTemata'],
+  'pojistovny-kmen.html': ['zpHeroStats', 'zpChartShare', 'zpCards', 'zpKraje', 'zpChartTrend', 'zpChartGrowth', 'zpChart65', 'zpChartNzs',
+    'zpTableFin', 'zpChartZust', 'zpChartProvoz', 'zpChartYoy', 'zpTablePrev', 'zpSit', 'zpNotes', 'zpChybi'],
+  'pojistovny-prevence.html': ['zpPrevMatrix', 'zpPrevOnko', 'zpPrevDusevni', 'zpFpStruktura', 'zpDolozene', 'zpMereni', 'zpOdpovediMatrix', 'zpOdpovedi'],
+  'pojistovny-aplikace.html': ['zpAppMatrix', 'zpAppKriteria', 'zpAppSummary', 'zpAppNotes'],
+  'pojistovny-gramotnost.html': ['zpRizikove', 'zpOtazky', 'zpDalsi', 'zpDotaznik', 'zpDotaznikAgregace'],
+  'pojistovny-metodika.html': ['zpSemafor', 'zpZadosti', 'zpVerifikace'],
+};
+const PODSTRANKY = Object.keys(STRANKY).filter((f) => f !== 'pojistovny.html');
+const readPage = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
+
+test('P1.6: každá stránka srovnávače — noindex, jeden h1, styles.min.css, shell, Moje pojišťovna, zdroje, footer', () => {
+  for (const f of Object.keys(STRANKY)) {
+    const html = readPage(f);
+    assert.match(html, /^<!DOCTYPE html>/, f);
+    assert.match(html, /<meta name="robots" content="noindex, nofollow, noarchive">/, `${f}: noindex`);
+    assert.equal((html.match(/<h1\b/g) || []).length, 1, `${f}: jeden h1`);
+    assert.equal((html.match(/<title>/g) || []).length, 1, `${f}: title`);
+    assert.match(html, /<!--\s*\n\s*audit:/, `${f}: audit komentář`);
+    assert.match(html, /href="src\/styles\.min\.css"/, `${f}: styles.min.css (traps § 5)`);
+    assert.doesNotMatch(html, /\.\.\/src\//, `${f}: relativní cesta ../src`);
+    assert.match(html, /<script type="module" src="src\/pojistovny\.js"><\/script>/, `${f}: orchestrátor`);
+    for (const id of ['zpShell', 'zpMojeZp', 'zpZdroje', 'siteFooter', 'moduleNav', 'mastheadDate']) {
+      assert.equal((html.match(new RegExp(`id="${id}"`, 'g')) || []).length, 1, `${f}: #${id}`);
+    }
+    for (const id of STRANKY[f]) assert.match(html, new RegExp(`id="${id}"`), `${f}: chybí #${id}`);
+    assert.doesNotMatch(html, /\sstyle="/, `${f}: žádné inline styly`);
+    // #zpShell je první v <main> a nese aktivní téma
+    const tema = f === 'pojistovny.html' ? 'prehled' : f.replace(/^pojistovny-|\.html$/g, '');
+    assert.match(html, new RegExp(`<main id="content">\\s*<div id="zpShell" class="zpc-shell" data-aktivni="${tema}"></div>`), `${f}: shell`);
   }
+});
+
+test('P1.6: script tagy odkazují na existující moduly, satelity jen tam, kde je jejich kontejner', () => {
+  const SAT = { 'pojistovny-kraje': 'zpKraje', 'pojistovny-sit': 'zpSit', 'pojistovny-semafor': 'zpSemafor',
+    'pojistovny-zadosti': 'zpZadosti', 'pojistovny-verifikace': 'zpVerifikace' };
+  for (const f of Object.keys(STRANKY)) {
+    const html = readPage(f);
+    const srcs = [...html.matchAll(/<script type="module" src="([^"]+)"><\/script>/g)].map((m) => m[1]);
+    assert.ok(srcs.length >= 1, f);
+    for (const src of srcs) assert.ok(fs.existsSync(path.join(ROOT, src)), `${f}: ${src} neexistuje`);
+    for (const [m, id] of Object.entries(SAT)) {
+      const has = srcs.includes(`src/${m}.js`);
+      assert.equal(has, html.includes(`id="${id}"`), `${f}: ${m}.js ↔ #${id}`);
+    }
+  }
+  // přehled je lehký: jen orchestrátor
+  assert.deepEqual([...readPage('pojistovny.html').matchAll(/<script type="module" src="([^"]+)">/g)].map((m) => m[1]), ['src/pojistovny.js']);
+});
+
+test('P1.6: přehled je general view — žádné tabulky ani dlouhé akordeony, rozcestník na 5 podstránek', () => {
+  const html = readPage('pojistovny.html');
+  assert.doesNotMatch(html, /<table/);
+  assert.equal((html.match(/<details/g) || []).length, 1, 'jen „O projektu a datech“');
+  assert.match(html, /class="ed-hero-headline"/);
+  assert.match(html, /id="zpOvGrafy" class="zpc-overview-grid" role="region" tabindex="0"/);
+  for (const f of PODSTRANKY) assert.ok(fs.existsSync(path.join(ROOT, f)), f);
+});
+
+test('P1.6: síť odborností — povinné věty o omezení metody a o pobočkách nad grafem', () => {
+  const html = readPage('pojistovny-kmen.html');
+  const at = html.indexOf('id="zpSit"');
+  const before = html.slice(html.indexOf('id="sit-odbornosti"'), at);
+  assert.match(before, /horní odhad smluvních pracovišť, stav k 31\. 12\. 2024/);
+  assert.match(before, /nese jen zařízení \(IČZ\)/);
+  assert.match(before, /rozdíly mezi nimi jsou menší než chyba metody/);
+  assert.match(before, /„Počet poboček“ dnes není srovnatelné číslo/);
 });
 
 test('middleware.js: chrání stránku i data heslem a posílá noindex', () => {
@@ -71,6 +128,22 @@ test('middleware.js: chrání stránku i data heslem a posílá noindex', () => 
   assert.match(mw, /X-Robots-Tag/);
   assert.match(mw, /'\/pojistovny'/);
   assert.match(mw, /\/data\/pojistovny-:path\*/);
+  assert.match(mw, /'\/pojistovny-:path\*'/, 'podstránky srovnávače (P1.6)');
+});
+
+test('middleware.js: matcher pokrývá přehled, všech pět podstránek a data, nic jiného', async () => {
+  const { config } = await import('../middleware.js');
+  // path-to-regexp v jednoduchosti, jak ho Vercel používá: ':path*' = zbytek cesty, ukotveno na obou koncích
+  const re = config.matcher.map((m) => new RegExp(`^${m.replace(/[.]/g, '\\.').replace(/:path\*/, '.*')}$`));
+  const hit = (u) => re.some((r) => r.test(u));
+  for (const u of ['/pojistovny', '/pojistovny.html', '/pojistovny-kmen.html', '/pojistovny-prevence.html', '/pojistovny-aplikace.html',
+    '/pojistovny-gramotnost.html', '/pojistovny-metodika.html', '/pojistovny-kmen', '/data/pojistovny.json', '/data/pojistovny-sit.json']) {
+    assert.ok(hit(u), `${u} musí být za heslem`);
+  }
+  for (const u of ['/pojistenci.html', '/index.html', '/data/pojistenci-d5-zp.json', '/src/pojistovny.js', '/clanek-pojistne-plany-2026.html']) {
+    assert.ok(!hit(u), `${u} nesmí být za heslem`);
+  }
+  assert.equal(new Set(config.matcher).size, config.matcher.length, 'bez duplicit');
 });
 
 test('pojistovny-aplikace.json a pojistovny-otazky.json: základní tvar', () => {
@@ -139,6 +212,21 @@ test('pojistovny.js: heroTiles ze system/system_crp, null → nedohledáno', () 
   assert.equal(t[1].value, DATA.system.vydaje_celkem_mld);
   assert.equal(t[2].value, DATA.system.saldo_mld);
   assert.equal(t[3].value, DATA.system.fond_prevence_naklady_celkem_mld);
+  // fond prevence jen celkem, nikdy přepočet na pojištěnce (PS 7. 10. 2026, plán § 1.1)
+  assert.ok(t.every((x) => !/na pojištěnce/.test(`${x.label} ${x.meta}`)), 'žádné Kč na pojištěnce v hero');
+  // plán 2026 a kladné saldo z dat, ne natvrdo
+  assert.match(t[1].meta, /570,8/);
+  assert.match(t[2].meta, /−14,9/);
+  assert.match(t[2].meta, /kladně jen VoZP a ZPŠ/);
+  const d2 = copy(DATA);
+  d2.system.plan_2026_vydaje_mld = 600;
+  delete d2.system.plan_2026_saldo_mld;
+  const t2 = mod.heroTiles(d2);
+  assert.match(t2[1].meta, /600,0/);
+  assert.doesNotMatch(t2[2].meta, /plán 2026/);
+  assert.equal(mod.heroTiles(DATA, { bezFondu: true }).length, 3, 'přehled: tři dlaždice');
+  const src = fs.readFileSync(path.join(ROOT, 'src', 'pojistovny.js'), 'utf8');
+  assert.doesNotMatch(src, /570,8|14,9 mld/, 'čísla plánu nejsou natvrdo ve zdroji');
   const html = viz.statTiles(t);
   assert.equal((html.match(/class="zpv-count" data-zpv-anim="count"/g) || []).length, 4);
   const empty = mod.heroTiles({});
@@ -188,22 +276,26 @@ test('pojistovny.js: standardizace „dolozeno“ jde do poznámky s hodnotou', 
   assert.equal(mod.stdInfo(undefined).dolozeno, false);
 });
 
-test('pojistovny.js: P3.4 dumbbell 2024 → 2025 — metrika dostupná u všech ZP s VZ 2025', () => {
+test('pojistovny.js: P3.4 2024 → 2025 — jen příjmy/náklady na pojištěnce, jinak věta místo grafu', () => {
   const ch = mod.buildKmenCharts(DATA);
-  const with25 = DATA.pojistovny.filter((z) => z.hospodareni_2025 && Object.keys(z.hospodareni_2025).length).map((z) => z.kod);
-  assert.ok(ch.yoy.metric, 'nějaká metrika musí být k dispozici');
-  assert.deepEqual(ch.yoy.items.map((i) => i.kod), with25);
-  assert.ok(ch.yoy.items.every((i) => Number.isFinite(i.from) && Number.isFinite(i.to)));
-  const missing = DATA.pojistovny.filter((z) => !with25.includes(z.kod)).map((z) => z.zkratka);
-  assert.deepEqual(ch.yoy.missing, missing);
-  for (const m of missing) assert.ok(ch.yoy.opts.sub.includes(m));
-  assert.match(ch.yoy.opts.sub, /VZ 2025 nedohledána/);
-  // pořadí preference: příjmy → náklady → fond prevence na pojištěnce
+  const with25 = DATA.pojistovny.filter((z) => z.hospodareni_2025 && Object.keys(z.hospodareni_2025).length);
+  if (ch.yoy.metric) {
+    assert.notEqual(ch.yoy.metric.key, 'fond_prevence_na_pojistence_kc');
+    assert.deepEqual(ch.yoy.items.map((i) => i.kod), with25.map((z) => z.kod));
+    assert.equal(ch.yoy.veta, '');
+  } else {
+    // dnešní data: VZ 2025 jen u části ZP a bez společné metriky → graf se nekreslí
+    assert.deepEqual(ch.yoy.items, []);
+    assert.match(ch.yoy.veta, /^Meziroční srovnání 2024 → 2025 doplníme, až budou výroční zprávy 2025 u všech pojišťoven/);
+    for (const z of with25) assert.ok(ch.yoy.veta.includes(z.zkratka), z.zkratka);
+    assert.match(ch.yoy.veta, /chybí\)\.$/);
+  }
+  // fond prevence na pojištěnce už není kandidát (PS 7. 10. 2026 ho odmítla jako ukazatel)
   const z = (kod, a, b) => ({ kod, zkratka: kod,
     hospodareni: { naklady_na_pojistence_kc: { hodnota: a }, fond_prevence_na_pojistence_kc: { hodnota: 1 } },
     hospodareni_2025: { naklady_na_pojistence_kc: { hodnota: b }, fond_prevence_na_pojistence_kc: { hodnota: 2 } } });
   assert.equal(mod.pickYoyMetric([z('111', 10, 11), z('201', 5, 6)]).key, 'naklady_na_pojistence_kc');
-  assert.equal(mod.pickYoyMetric([z('111', 10, null), z('201', 5, 6)]).key, 'fond_prevence_na_pojistence_kc');
+  assert.equal(mod.pickYoyMetric([z('111', 10, null), z('201', 5, 6)]), null);
   assert.equal(mod.pickYoyMetric([{ kod: '111', hospodareni: {}, hospodareni_2025: null }]), null);
   assert.equal(mod.pickYoyMetric([]), null);
   const none = mod.buildKmenCharts({ pojistovny: [{ kod: '111', zkratka: 'VZP', hospodareni: {}, crp: {} }] });
@@ -211,8 +303,10 @@ test('pojistovny.js: P3.4 dumbbell 2024 → 2025 — metrika dostupná u všech 
   assert.match(viz.dumbbell(none.yoy.items, none.yoy.opts), /nedohledáno/);
 });
 
-test('pojistovny.js: tabulka hospodaření — 7 sloupců, další v detailu, řazení s null na konci', () => {
-  assert.equal(mod.FIN_COLS.length, 7);
+test('pojistovny.js: tabulka hospodaření — 6 sloupců, další v detailu, řazení s null na konci', () => {
+  assert.equal(mod.FIN_COLS.length, 6);
+  assert.ok(!mod.FIN_COLS.some((c) => c.key === 'fpp'), 'Kč fondu prevence na pojištěnce jen v Dalších sloupcích');
+  assert.ok(mod.FIN_MORE_COLS.some((c) => c.key === 'fpp'));
   assert.deepEqual(mod.FIN_COLS.filter((c) => c.bar).map((c) => c.key), ['npp', 'provoz']);
   const keys = new Set([...mod.FIN_COLS, ...mod.FIN_MORE_COLS].map((c) => c.key));
   assert.equal(keys.size, mod.FIN_COLS.length + mod.FIN_MORE_COLS.length, 'sloupce se neopakují');

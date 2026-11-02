@@ -13,9 +13,11 @@
 <!--
   audit:
     status: draft
-    pristup: heslo (middleware.js, POJISTOVNY_HESLO) + noindex
+    pristup: heslo (middleware.js, POJISTOVNY_HESLO, matcher /pojistovny-:path*) + noindex
     trida: C (nová stránka, hodnocení pojmenovaných institucí)
+    stranka: prehled (P1.6, PLAN-SROVNAVAC-POJISTOVEN.md § 2.8)
     zdroje: data/pojistovny*.json — každá hodnota má zdroj a rok
+    stranka-typ: přehled (general view): jeden graf na téma, hutný obsah na podstránkách pojistovny-*.html
 -->
 </head>
 <body>
@@ -34,238 +36,51 @@
   <span class="masthead-date" id="mastheadDate"></span>
 </aside>
 
-<div class="zpc-strip" role="note"><b>Pracovní verze pod heslem, neindexovaná.</b> Čísla z výročních zpráv jsou přepsána z PDF a čekají na druhé ověření. Název projektu se teprve hledá („Hlídač“ pracovní skupina odmítla jako konfrontační; ve hře jsou Průvodce pojištěnce, Navigátor, Zrcadlo, Kompas).</div>
-
 <main id="content">
+  <div id="zpShell" class="zpc-shell" data-aktivni="prehled"></div>
 
-  <section class="ed-hero" aria-labelledby="zpHeroHeadline">
+  <section class="ed-hero zpc-ov-hero" aria-labelledby="zpHeroHeadline">
     <div class="ed-hero-content">
-      <div class="ed-kicker">Srovnávač zdravotních pojišťoven · pracovní verze</div>
       <h1 class="ed-hero-headline" id="zpHeroHeadline">Sedm pojišťoven, jeden pojištěnec. Co pro něj která skutečně dělá?</h1>
-      <p class="ed-hero-lead">
-        Srovnávač pomáhá pojištěncům zorientovat se v tom, co jim která pojišťovna nabízí: aplikace, prevenci, kmen a hospodaření. Každé číslo má zdroj a rok, hodnocení vzniká až po právu pojišťovny na odpověď.
-      </p>
-      <details class="zpc-acc zpc-hero-acc">
-        <summary>O projektu a datech</summary>
-        <div class="zpc-acc-body">
-          <p>Projekt think tanku Ministr zdraví a Národní asociace pacientských organizací se zaměřuje na vztah pojišťovny a pojištěnce, ne pojišťovny a nemocnice. Nemá pojišťovny kontrolovat, má pojištěncům pomoci se orientovat: co nabízejí aplikace, co z fondu prevence má doložitelný přínos, jak se liší kmen a hospodaření a jak pojišťovny podporují zdravotní gramotnost.</p>
-          <p>Stavíme na datech, která už existují (Centrální registr pojištěnců, výroční zprávy, pojistné plány, hodnocení MZ a MF), a doplňujeme je dotazy pojišťovnám. Hodnocení v semaforu vzniká až po právu pojišťovny na odpověď.</p>
-        </div>
-      </details>
-      <ul class="zpc-modnav" aria-label="Moduly srovnávače">
-        <li><a href="#modul-aplikace">1 · Aplikace<span class="zpc-faze">první výstup</span></a></li>
-        <li><a href="#modul-prevence">2 · Prevence a fond prevence</a></li>
-        <li><a href="#modul-kmen">3 · Kmen a hospodaření</a></li>
-        <li><a href="#modul-gramotnost">4 · Zdravotní gramotnost<span class="zpc-faze">v přípravě</span></a></li>
-        <li><a href="#modul-metodika">5 · Metodika a semafor</a></li>
-        <li><a href="#modul-plan">6 · Plán a zdroje</a></li>
-      </ul>
-      <p class="zpc-moje-lbl" id="zpMojeLbl">Moje pojišťovna: vyberte ji a zvýrazní se ve všech grafech a tabulkách.</p>
-      <div id="zpMojeZp" class="zpc-moje" aria-describedby="zpMojeLbl"></div>
+      <p class="ed-hero-lead">Srovnávač pomáhá pojištěncům zorientovat se v tom, co jim která pojišťovna nabízí: aplikace, prevenci, kmen a hospodaření. Každé číslo má zdroj a rok, hodnocení vzniká až po právu pojišťovny na odpověď.</p>
     </div>
     <aside class="ed-hero-stats" aria-label="Klíčová čísla" id="zpHeroStats"></aside>
   </section>
 
-  <!-- Modul 1: Aplikace -->
-  <section class="zpc-mod" id="modul-aplikace" aria-labelledby="zpAppHead">
-    <div class="zpc-mod-head"><h2 id="zpAppHead">1 · Co umí aplikace pojišťoven</h2><span class="zpc-stav">první výstup · zápis PS 7. 10. 2026</span></div>
-    <p class="zpc-lead">Deset funkcí aplikací sedmi pojišťoven podle interní analýzy digitalizace a výročních zpráv.</p>
-    <div id="zpAppMatrix"></div>
-    <p class="zpc-cap" id="zpAppCap"></p>
-    <details class="zpc-acc">
-      <summary>Jak číst a proč právě aplikace</summary>
-      <div class="zpc-acc-body"><p>Pracovní skupina zvolila srovnání aplikací jako první téma: je konkrétní, srozumitelné a dá se doložit. Matice ukazuje deset funkcí; kolečko znamená, že funkce je dostupná, nikoli jak dobře funguje. Kritéria uživatelské přívětivosti (5–7 hledisek) doplní IT expert podle podkladu Mariana Rybáře.</p></div>
-    </details>
-    <details class="zpc-acc" id="zpAppKriteriaBox">
-      <summary>Přívětivost aplikací: návrh kritérií, zatím nehodnoceno<span class="zpc-n" id="zpAppKriteriaN"></span></summary>
-      <div class="zpc-acc-body" id="zpAppKriteria"></div>
-    </details>
-    <details class="zpc-acc">
-      <summary>Co z toho plyne<span class="zpc-n" id="zpAppSummaryN"></span></summary>
-      <div class="zpc-acc-body"><ul id="zpAppSummary"></ul></div>
-    </details>
-    <details class="zpc-acc">
-      <summary>Rozpory a chybějící data<span class="zpc-n" id="zpAppNotesN"></span></summary>
-      <div class="zpc-acc-body"><ul id="zpAppNotes"></ul></div>
-    </details>
+  <section class="zpc-ov-moje" aria-labelledby="zpMojeLbl">
+    <p class="zpc-moje-lbl" id="zpMojeLbl">Moje pojišťovna: vyberte ji a zvýrazní se ve všech grafech, i na podstránkách.</p>
+    <div id="zpMojeZp" class="zpc-moje"></div>
+    <div id="zpOvKarta" class="zpc-ov-karta-wrap"></div>
   </section>
 
-  <!-- Modul 2: Prevence -->
-  <section class="zpc-mod" id="modul-prevence" aria-labelledby="zpPrevHead">
-    <div class="zpc-mod-head"><h2 id="zpPrevHead">2 · Preventivní programy a fond prevence</h2><span class="zpc-stav">kolo 1 · rešerše z webů a VZ</span></div>
-    <p class="zpc-lead">Nehodnotíme výši fondu prevence ani seznam benefitů, ale to, zda programy podporují užitečné aktivity a zda lze jejich výsledek doložit.</p>
-    <div id="zpPrevMatrix"></div>
-    <details class="zpc-acc">
-      <summary>Jak číst nabídku a proč nehodnotíme výši fondu</summary>
-      <div class="zpc-acc-body"><p>Stupeň (nejsilnější / silné / základní / minimální) je redakční odhad síly nabídky z webů pojišťoven (interní rešerše 2026), není to hodnocení dopadu. Fond prevence zůstává tématem, ale pracovní skupina nechce hodnotit jeho výši: koruny na pojištěnce o přínosu nevypovídají. Proto vedle nabídky ukazujeme strukturu čerpání a to málo, co pojišťovny o výsledcích uvádějí.</p></div>
-    </details>
-    <div class="zpc-grid2">
-      <div id="zpPrevOnko"></div>
-      <div id="zpPrevDusevni"></div>
-    </div>
-    <details class="zpc-acc">
-      <summary>Nadstandardní onkologické programy<span class="zpc-n" id="zpPrevNadstandardN"></span></summary>
-      <div class="zpc-acc-body"><ul id="zpPrevNadstandard"></ul></div>
-    </details>
-    <h3 class="section-title zpc-h3"><span>Kam jdou peníze z fondu prevence</span></h3>
-    <p class="zpc-note">Struktura čerpání podle účelových položek z výročních zpráv, skutečnost proti plánu.</p>
-    <div id="zpFpStruktura"></div>
-    <details class="zpc-acc">
-      <summary>Doložené výsledky, které pojišťovny samy uvádějí<span class="zpc-n" id="zpDolozeneN"></span></summary>
-      <div class="zpc-acc-body"><ul id="zpDolozene"></ul></div>
-    </details>
-    <details class="zpc-acc">
-      <summary>Měří pojišťovna dopad? (výroční zprávy 2024)<span class="zpc-n" id="zpMereniN"></span></summary>
-      <div class="zpc-acc-body"><ul id="zpMereni"></ul></div>
-    </details>
-    <h3 class="section-title zpc-h3"><span>Odpovědi na sedm otázek z výročních zpráv</span></h3>
-    <div id="zpOdpovediMatrix"></div>
-    <details class="zpc-acc">
-      <summary>Plné znění z VZ<span class="zpc-n" id="zpOdpovediN"></span></summary>
-      <div class="zpc-acc-body" id="zpOdpovedi"></div>
-    </details>
+  <section class="zpc-ov" id="zpPrehled" aria-labelledby="zpOvGrafyH">
+    <h2 class="zpc-ov-h2" id="zpOvGrafyH">Srovnání v kostce</h2>
+    <p class="zpc-ov-swipe">Čtyři grafy vedle sebe: posuňte do stran.</p>
+    <div id="zpOvGrafy" class="zpc-overview-grid" role="region" tabindex="0" aria-label="Jeden graf za každé téma (na mobilu posuvné do stran)"></div>
+    <div id="zpOvSemafor" class="zpc-ov-sem-wrap"></div>
   </section>
 
-  <!-- Modul 3: Kmen a hospodaření -->
-  <section class="zpc-mod" id="modul-kmen" aria-labelledby="zpKmenHead">
-    <div class="zpc-mod-head"><h2 id="zpKmenHead">3 · Kmen a hospodaření</h2><span class="zpc-stav">CRP 2025 · MZ a MF 2024 · ZPP 2026</span></div>
-    <p class="zpc-lead">Kdo koho pojišťuje, jak starý kmen nese, kolik stojí jeho péče a s jakou rezervou vstupuje do roku 2026.</p>
-    <div id="zpChartShare"></div>
-    <div id="zpCards" class="zpc-cards" role="region" tabindex="0" aria-label="Karty sedmi pojišťoven (na mobilu posuvné do stran)"></div>
-    <p class="zpc-cap">ÚZIS · CRP 2025 · MZ ČR + MF 2024 · ZPP 2026 · pomlčka = nedohledáno</p>
-    <div id="zpKraje" class="zpc-kraje"></div>
-    <h3 class="section-title"><span>Vývoj kmene 2010–2025</span></h3>
-    <div class="zpc-charts">
-      <div class="zpc-chart" id="zpChartTrend"></div>
-      <div class="zpc-chart" id="zpChartGrowth"></div>
-    </div>
-    <h3 class="section-title"><span>Věk kmene a náklady na péči</span></h3>
-    <div class="zpc-charts">
-      <div class="zpc-chart" id="zpChart65"></div>
-      <div class="zpc-chart" id="zpChartNzs"></div>
-    </div>
-    <h3 class="section-title"><span>Hospodaření 2024</span></h3>
-    <div id="zpTableFin"></div>
-    <p class="zpc-cap">MZ ČR + MF · Hodnocení vývoje systému v.z.p. 2024 · výroční zprávy 2024 · sněmovní tisk 280/0 · řazení kliknutím na záhlaví</p>
-    <div class="zpc-charts">
-      <div class="zpc-chart" id="zpChartZust"></div>
-      <div class="zpc-chart" id="zpChartProvoz"></div>
-    </div>
-    <h3 class="section-title"><span>Co ukazují výroční zprávy 2025</span></h3>
-    <div class="zpc-chart" id="zpChartYoy"></div>
-    <h3 class="section-title"><span>Klientský servis</span></h3>
-    <div id="zpTablePrev" class="zpc-tbl" role="region" tabindex="0" aria-label="Klientský servis (tabulka, posuvná)"></div>
-    <div class="zpc-accs">
-      <details class="zpc-acc">
-        <summary>Jak číst modul a odkud jsou data · 5</summary>
-        <div class="zpc-acc-body"><ul>
-          <li><b>Kmen.</b> Počet pojištěnců, věková struktura a regionální těžiště z Centrálního registru pojištěnců (ÚZIS, OIS 11-47, verze 2026-01, rok 2025). Minigraf v kartě a graf vývoje ukazují počet pojištěnců jako index vůči roku 2010 (2010 = 100).</li>
-          <li><b>Hospodaření 2024.</b> Primární zdroj: Hodnocení vývoje systému v.z.p. v roce 2024 (MZ ČR + MF; pojištěnci = roční průměr, saldo = příjmy − výdaje, hotovostní metodika), doplněno výročními zprávami 2024. Příjmy, náklady a saldo v mld Kč, fond prevence a zůstatky v mil. Kč.</li>
-          <li><b>Provoz.</b> Výdaje na vlastní činnost v % příjmů; limit podle vyhlášky 418/2003 Sb. Zůstatky na bankovních účtech podle sněmovního tisku 280/0 (tab. 9).</li>
-          <li><b>Standardizace.</b> Náklady i prevence na pojištěnce se mají přepočítat na věkovou a pohlavní strukturu ČR (metodika § 4.1). Dokud nejsou doložené nákladové indexy, ukazujeme hodnoty nestandardizované a v kartách je tak značíme.</li>
-          <li><b>Řazení.</b> Grafy jsou seřazené podle hodnoty, nejde o hodnocení pojišťoven. Barvu pojišťovny uvidíte po výběru „Moje pojišťovna“ nebo při najetí myší.</li>
-        </ul></div>
-      </details>
-      <details class="zpc-acc">
-        <summary>Poznámky k jednotlivým pojišťovnám · <span id="zpNotesN">0</span></summary>
-        <div class="zpc-acc-body"><ul id="zpNotes"></ul></div>
-      </details>
-      <details class="zpc-acc">
-        <summary>Co se nepodařilo dohledat · <span id="zpChybiN">0</span></summary>
-        <div class="zpc-acc-body"><ul id="zpChybi"></ul></div>
-      </details>
-    </div>
+  <section class="zpc-ov" aria-labelledby="zpOvTemataH">
+    <h2 class="zpc-ov-h2" id="zpOvTemataH">Témata srovnávače</h2>
+    <ul id="zpOvTemata" class="zpc-tema-grid"></ul>
   </section>
 
-  <!-- Modul 4: Zdravotní gramotnost -->
-  <section class="zpc-mod" id="modul-gramotnost" aria-labelledby="zpGramHead">
-    <div class="zpc-mod-head"><h2 id="zpGramHead">4 · Zdravotní gramotnost a rizikoví pojištěnci</h2><span class="zpc-stav">v přípravě · druhé téma PS</span></div>
-    <p class="zpc-lead">Druhé téma pracovní skupiny: jak pojišťovny podporují zdravotní gramotnost klientů a pracují s rizikovými skupinami.</p>
-    <details class="zpc-acc">
-      <summary>O tématu a o tom, jak pojišťovny rizikové pojištěnce hledají</summary>
-      <div class="zpc-acc-body"><div id="zpRizikovePopis"></div><p>Personalizovaná komunikace s rizikovými skupinami navíc naráží na souhlas s profilováním.</p></div>
-    </details>
-    <div class="zpc-grid2">
-      <div class="zpc-box"><h4>Rizikové skupiny a data, která chybí<span class="zpc-n" id="zpRizikoveN"></span></h4><div id="zpRizikove"></div></div>
-      <div class="zpc-box">
-        <h4>Dotazník pro pojišťovny (návrh)</h4>
-        <details class="zpc-acc zpc-q">
-          <summary>Otázky kola 2<span class="zpc-n" id="zpOtazkyN"></span></summary>
-          <div class="zpc-acc-body" id="zpOtazky"></div>
-        </details>
-      </div>
+  <details class="zpc-acc zpc-ov-about">
+    <summary>O projektu a datech</summary>
+    <div class="zpc-acc-body">
+      <p>Projekt think tanku Ministr zdraví a Národní asociace pacientských organizací se zaměřuje na vztah pojišťovny a pojištěnce, ne pojišťovny a nemocnice. Nemá pojišťovny kontrolovat, má pojištěncům pomoci se orientovat: co nabízejí aplikace, co z fondu prevence má doložitelný přínos, jak se liší kmen a hospodaření a jak pojišťovny podporují zdravotní gramotnost.</p>
+      <p>Stavíme na datech, která už existují (Centrální registr pojištěnců, výroční zprávy, pojistné plány, hodnocení MZ a MF), a doplňujeme je dotazy pojišťovnám. Hodnocení v semaforu vzniká až po právu pojišťovny na odpověď.</p>
+      <p>Název projektu se teprve hledá („Hlídač“ pracovní skupina odmítla jako konfrontační; ve hře jsou Průvodce pojištěnce, Navigátor, Zrcadlo, Kompas).</p>
     </div>
-    <details class="zpc-acc">
-      <summary>Další směry zkoumání<span class="zpc-n" id="zpDalsiN"></span></summary>
-      <div class="zpc-acc-body"><ul id="zpDalsi"></ul></div>
-    </details>
-    <div class="zpc-box zpc-mt">
-      <h4>Vyplnit dotazník</h4>
-      <p class="zpc-note">Odpovědi se ukládají bez osobních údajů: bez jména, e-mailu i IP adresy.</p>
-      <details class="zpc-acc">
-        <summary>Jak se s odpověďmi nakládá</summary>
-        <div class="zpc-acc-body"><p>Veřejně zobrazujeme jen souhrnné počty. Pojišťovny a organizace vyplňují dotazník přes osobní odkaz od redakce.</p></div>
-      </details>
-      <div id="zpDotaznik" data-sada="rizikovi-pojistenci"></div>
-      <div id="zpDotaznikAgregace"></div>
-    </div>
-  </section>
+  </details>
 
-  <!-- Modul 5: Metodika -->
-  <section class="zpc-mod" id="modul-metodika" aria-labelledby="zpMetHead">
-    <div class="zpc-mod-head"><h2 id="zpMetHead">5 · Metodika a semafor</h2><span class="zpc-stav">derivát metodiky Barometru</span></div>
-    <p class="zpc-lead">Šest oblastí, čtyři stavy, stejná pravidla jako Barometr: doslovná citace, zamrazená baseline, interpretace viditelně oddělená od dat, žádné motivy, právo na odpověď deset dní před zveřejněním. Semafor je zatím prázdný: první verdikty vzniknou až po prvním kole odpovědí a po lidském schválení (třída C).</p>
-    <div id="zpSemafor" class="zpc-tbl" role="region" tabindex="0" aria-label="Semafor metodiky (tabulka, posuvná)"></div>
-    <div id="zpZadosti" class="zpc-zadosti"></div>
-    <div id="zpVerifikace" class="zpc-verifikace"></div>
-    <div class="zpc-grid2 zpc-mt">
-      <div class="zpc-box"><h4>Pravidla férovosti</h4><ul>
-        <li><b>Standardizace na věk a pohlaví.</b> Náklady i prevence na pojištěnce se přepočítávají na strukturu ČR (CRP).</li>
-        <li><b>Stejná otázka, stejná lhůta, stejný formát.</b> Všech sedm pojišťoven dostane totéž podání ve stejný den; odpovědi se zveřejňují v plném znění.</li>
-        <li><b>Partnerský tón.</b> Před oficiálním dotazem nabídka dobrovolného předání dat; pojišťovna je partner i předmět hodnocení.</li>
-        <li><b>Žádné predikce, žádné motivy.</b> Hodnotíme vztah tvrzení k datům, ne osoby ani úmysly.</li>
-        <li><b>Opravy viditelně.</b> Každá změna skóre má záznam s datem a důvodem.</li></ul></div>
-      <div class="zpc-box"><h4>Co dělá vydavatel, co dělá AI</h4><ul>
-        <li>Sběr a přepis dat, grafy, drafty textů: AI rutina (třída B).</li>
-        <li>Verdikty semaforu, texty o pojmenovaných pojišťovnách, odeslání dotazů: člověk (třída C).</li>
-        <li>Metodiku garantuje odborná skupina (Advance, FBMI ČVUT, NAPO), ne redakce.</li></ul></div>
-    </div>
-  </section>
 
-  <!-- Modul 6: Plán -->
-  <section class="zpc-mod" id="modul-plan" aria-labelledby="zpPlanHead">
-    <div class="zpc-mod-head"><h2 id="zpPlanHead">6 · Plán modulů a zdroje</h2><span class="zpc-stav">příští PS 12. 11. 2026</span></div>
-    <p class="zpc-lead">Pracovní skupina chce během roku tři srozumitelná, nízkonákladová a doložitelná témata. Moduly níže jsou seřazené podle toho, co je hotové z existujících dat, a podle náročnosti; podrobný plán s rozdělením práce je v souboru 09_Srovnavac_pojistoven_plan.md.</p>
-    <ul class="zpc-plan">
-      <li><b>hotovo</b><span>Modul 3 Kmen a hospodaření: CRP, MZ a MF 2024, ZPP 2026. Druhé ověření čísel z PDF.</span><span class="zpc-agent">kontrola: člověk</span></li>
-      <li><b>hotovo (data)</b><span>Modul 1 Aplikace: matice funkcí. Chybí 5–7 kritérií přívětivosti a počty uživatelů u šesti ZP (dotaz).</span><span class="zpc-agent">IT expert + dotaz ZP</span></li>
-      <li><b>kolo 1</b><span>Modul 2 Prevence: struktura fondu prevence a odpovědi z VZ hotové; sedm otázek pojišťovnám (nabídka spolupráce, poté zákon 106).</span><span class="zpc-agent">člověk odesílá · AI vyhodnocuje</span></li>
-      <li><b>kolo 2</b><span>Modul 4 Zdravotní gramotnost: dotazník rizikových skupin, personalizace, přístupnost aplikací pro 65+.</span><span class="zpc-agent">metodika PS</span></li>
-      <li><b>průběžně</b><span>Modul 5 Semafor: první verdikty po odpovědích a právu na odpověď; roční aktualizace z VZ a ZPP automaticky.</span><span class="zpc-agent">rutina + vydavatel</span></li>
-      <li><b>později</b><span>Index pojišťoven, průvodce volbou před přestupními termíny (30. 6., 31. 12.), kalkulačka prevence, mapa dostupnosti podle pojišťovny.</span><span class="zpc-agent">rozhodne PS</span></li>
-    </ul>
-    <h3 class="section-title zpc-h3"><span>Zdroje</span></h3>
-    <ul id="zpSources" class="zpc-note zpc-sources"></ul>
-  </section>
-
-  <section class="section related-section" aria-labelledby="relatedHeading">
-    <div class="section-title"><h3 id="relatedHeading">Příbuzné sekce</h3></div>
-    <div class="related-grid">
-      <a class="related-card" href="pojistenci.html"><div class="related-card-kicker">CRP · 2010–2025</div><h4 class="related-card-title">Atlas pojištěnců</h4><p class="related-card-desc">Kmen sedmi pojišťoven kraj po kraji, rok po roce.</p><span class="related-card-arrow" aria-hidden="true">→</span></a>
-      <a class="related-card" href="clanek-pojistne-plany-2026.html"><div class="related-card-kicker">Sněmovní tisk 280</div><h4 class="related-card-title">Schodek podle plánu</h4><p class="related-card-desc">Pojistné plány 2026: saldo −14,9 mld a rezervy u kritické hranice.</p><span class="related-card-arrow" aria-hidden="true">→</span></a>
-      <a class="related-card" href="clanek-bonus-za-zdravi-pojistne.html"><div class="related-card-kicker">Financování</div><h4 class="related-card-title">Bonus za zdraví patří do fondu prevence</h4><p class="related-card-desc">Co říkají randomizované studie o pobídkách a jak to dělá Německo.</p><span class="related-card-arrow" aria-hidden="true">→</span></a>
-      <a class="related-card" href="barometr.html"><div class="related-card-kicker">Metodika</div><h4 class="related-card-title">Barometr</h4><p class="related-card-desc">Pravidla, ze kterých semafor srovnávače vychází.</p><span class="related-card-arrow" aria-hidden="true">→</span></a>
-    </div>
-  </section>
+  <div id="zpZdroje" class="zpc-zdroje-wrap"></div>
 
 </main>
 
 <footer class="bottom" id="siteFooter"></footer>
 
 <script type="module" src="src/pojistovny.js"></script>
-<script type="module" src="src/pojistovny-kraje.js"></script>
-<script type="module" src="src/pojistovny-semafor.js"></script>
-<script type="module" src="src/pojistovny-zadosti.js"></script>
-<script type="module" src="src/pojistovny-verifikace.js"></script>
 </body>
 </html>

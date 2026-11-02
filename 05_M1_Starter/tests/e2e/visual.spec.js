@@ -18,6 +18,12 @@ const PAGES = [
   { path: '/glosar.html',                 name: 'glossary' },
   { path: '/jak-funguje.html',            name: 'how-it-works' },
   { path: '/pojistovny.html',             name: 'insurers' },
+  // Podstránky srovnávače (P1.6, PLAN-SROVNAVAC-POJISTOVEN.md § 2.8)
+  { path: '/pojistovny-kmen.html',        name: 'insurers-kmen' },
+  { path: '/pojistovny-prevence.html',    name: 'insurers-prevence' },
+  { path: '/pojistovny-aplikace.html',    name: 'insurers-aplikace' },
+  { path: '/pojistovny-gramotnost.html',  name: 'insurers-gramotnost' },
+  { path: '/pojistovny-metodika.html',    name: 'insurers-metodika' },
   // Pozn.: dlouhé články (clanek-*.html) se z vizuálních snapshotů vynechávají —
   // Article Visuals používají JS count-up animace (requestAnimationFrame), které
   // CSS `animation:none` nezastaví, takže snapshot padá na nedeterministický
@@ -36,6 +42,8 @@ const PAGES = [
 // barevné plochy (srovnávač pojišťoven: .zpc-lvl-*, karty, matice).
 const DARK_PAGES = [
   { path: '/pojistovny.html', name: 'insurers' },
+  // z podstránek jen kmen (nejvíc barevných ploch); ostatní sdílejí tytéž tokeny, baseline nebobtná
+  { path: '/pojistovny-kmen.html', name: 'insurers-kmen' },
 ];
 
 test.beforeEach(async ({ page }) => {

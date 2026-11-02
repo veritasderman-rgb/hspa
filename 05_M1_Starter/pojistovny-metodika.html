@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metodika a semafor — Srovnávač pojišťoven, pracovní verze · HSPA Monitor</title>
+<meta name="description" content="Metodika srovnávače zdravotních pojišťoven: semafor šesti oblastí s právem na odpověď, registr dotazů a žádostí, ověření čísel proti výročním zprávám, plán modulů a zdroje. Pracovní verze.">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Metodika a semafor — Srovnávač zdravotních pojišťoven">
+<meta property="og:locale" content="cs_CZ">
+<link rel="stylesheet" href="src/styles.min.css">
+<!--
+  audit:
+    status: draft
+    pristup: heslo (middleware.js, POJISTOVNY_HESLO, matcher /pojistovny-:path*) + noindex
+    trida: C (nová stránka, hodnocení pojmenovaných institucí)
+    stranka: metodika (P1.6, PLAN-SROVNAVAC-POJISTOVEN.md § 2.8)
+    zdroje: data/pojistovny*.json — každá hodnota má zdroj a rok
+-->
+</head>
+<body>
+<a class="skip-link" href="#content">Přeskočit na hlavní obsah</a>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Srovnávač pojišťoven</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+  <div id="zpShell" class="zpc-shell" data-aktivni="metodika"></div>
+
+  <!-- Modul 5: Metodika -->
+  <section class="zpc-mod zpc-mod--page" id="modul-metodika" aria-labelledby="zpMetHead">
+    <div class="zpc-mod-head"><h1 id="zpMetHead">Metodika a semafor</h1><span class="zpc-stav">derivát metodiky Barometru</span></div>
+    <p class="zpc-lead">Šest oblastí, čtyři stavy, stejná pravidla jako Barometr: doslovná citace, zamrazená baseline, interpretace viditelně oddělená od dat, žádné motivy, právo na odpověď deset dní před zveřejněním. Semafor je zatím prázdný: první verdikty vzniknou až po prvním kole odpovědí a po lidském schválení (třída C).</p>
+    <div class="zpc-moje-wrap">
+      <p class="zpc-moje-lbl" id="zpMojeLbl">Moje pojišťovna: vyberte ji a zvýrazní se ve všech grafech a tabulkách, i na ostatních stránkách srovnávače.</p>
+      <div id="zpMojeZp" class="zpc-moje" aria-describedby="zpMojeLbl"></div>
+    </div>
+    <div id="zpSemafor" class="zpc-tbl" role="region" tabindex="0" aria-label="Semafor metodiky (tabulka, posuvná)"></div>
+    <div id="zpZadosti" class="zpc-zadosti"></div>
+    <div id="zpVerifikace" class="zpc-verifikace"></div>
+    <div class="zpc-grid2 zpc-mt">
+      <div class="zpc-box"><h4>Pravidla férovosti</h4><ul>
+        <li><b>Standardizace na věk a pohlaví.</b> Náklady i prevence na pojištěnce se přepočítávají na strukturu ČR (CRP).</li>
+        <li><b>Stejná otázka, stejná lhůta, stejný formát.</b> Všech sedm pojišťoven dostane totéž podání ve stejný den; odpovědi se zveřejňují v plném znění.</li>
+        <li><b>Partnerský tón.</b> Před oficiálním dotazem nabídka dobrovolného předání dat; pojišťovna je partner i předmět hodnocení.</li>
+        <li><b>Žádné predikce, žádné motivy.</b> Hodnotíme vztah tvrzení k datům, ne osoby ani úmysly.</li>
+        <li><b>Opravy viditelně.</b> Každá změna skóre má záznam s datem a důvodem.</li></ul></div>
+      <div class="zpc-box"><h4>Co dělá vydavatel, co dělá AI</h4><ul>
+        <li>Sběr a přepis dat, grafy, drafty textů: AI rutina (třída B).</li>
+        <li>Verdikty semaforu, texty o pojmenovaných pojišťovnách, odeslání dotazů: člověk (třída C).</li>
+        <li>Metodiku garantuje odborná skupina (Advance, FBMI ČVUT, NAPO), ne redakce.</li></ul></div>
+    </div>
+  </section>
+
+  <!-- Modul 6: Plán -->
+  <section class="zpc-mod" id="modul-plan" aria-labelledby="zpPlanHead">
+    <div class="zpc-mod-head"><h2 id="zpPlanHead">Plán modulů a zdroje</h2><span class="zpc-stav">příští PS 12. 11. 2026</span></div>
+    <p class="zpc-lead">Pracovní skupina chce během roku tři srozumitelná, nízkonákladová a doložitelná témata. Moduly níže jsou seřazené podle toho, co je hotové z existujících dat, a podle náročnosti; podrobný plán s rozdělením práce je v souboru 09_Srovnavac_pojistoven_plan.md.</p>
+    <ul class="zpc-plan">
+      <li><b>hotovo</b><span>Modul 3 Kmen a hospodaření: CRP, MZ a MF 2024, ZPP 2026. Druhé ověření čísel z PDF.</span><span class="zpc-agent">kontrola: člověk</span></li>
+      <li><b>hotovo (data)</b><span>Modul 1 Aplikace: matice funkcí. Chybí 5–7 kritérií přívětivosti a počty uživatelů u šesti ZP (dotaz).</span><span class="zpc-agent">IT expert + dotaz ZP</span></li>
+      <li><b>kolo 1</b><span>Modul 2 Prevence: struktura fondu prevence a odpovědi z VZ hotové; sedm otázek pojišťovnám (nabídka spolupráce, poté zákon 106).</span><span class="zpc-agent">člověk odesílá · AI vyhodnocuje</span></li>
+      <li><b>kolo 2</b><span>Modul 4 Zdravotní gramotnost: dotazník rizikových skupin, personalizace, přístupnost aplikací pro 65+.</span><span class="zpc-agent">metodika PS</span></li>
+      <li><b>průběžně</b><span>Modul 5 Semafor: první verdikty po odpovědích a právu na odpověď; roční aktualizace z VZ a ZPP automaticky.</span><span class="zpc-agent">rutina + vydavatel</span></li>
+      <li><b>později</b><span>Index pojišťoven, průvodce volbou před přestupními termíny (30. 6., 31. 12.), kalkulačka prevence, mapa dostupnosti podle pojišťovny.</span><span class="zpc-agent">rozhodne PS</span></li>
+    </ul>
+    <p class="zpc-note">Seznam zdrojů dat je v patičce srovnávače níže.</p>
+  </section>
+
+
+  <section class="section related-section" aria-labelledby="relatedHeading">
+    <div class="section-title"><h3 id="relatedHeading">Příbuzné sekce</h3></div>
+    <div class="related-grid">
+      <a class="related-card" href="pojistenci.html"><div class="related-card-kicker">CRP · 2010–2025</div><h4 class="related-card-title">Atlas pojištěnců</h4><p class="related-card-desc">Kmen sedmi pojišťoven kraj po kraji, rok po roce.</p><span class="related-card-arrow" aria-hidden="true">→</span></a>
+      <a class="related-card" href="clanek-pojistne-plany-2026.html"><div class="related-card-kicker">Sněmovní tisk 280</div><h4 class="related-card-title">Schodek podle plánu</h4><p class="related-card-desc">Pojistné plány 2026: saldo −14,9 mld a rezervy u kritické hranice.</p><span class="related-card-arrow" aria-hidden="true">→</span></a>
+      <a class="related-card" href="clanek-bonus-za-zdravi-pojistne.html"><div class="related-card-kicker">Financování</div><h4 class="related-card-title">Bonus za zdraví patří do fondu prevence</h4><p class="related-card-desc">Co říkají randomizované studie o pobídkách a jak to dělá Německo.</p><span class="related-card-arrow" aria-hidden="true">→</span></a>
+      <a class="related-card" href="barometr.html"><div class="related-card-kicker">Metodika</div><h4 class="related-card-title">Barometr</h4><p class="related-card-desc">Pravidla, ze kterých semafor srovnávače vychází.</p><span class="related-card-arrow" aria-hidden="true">→</span></a>
+    </div>
+  </section>
+
+  <div id="zpZdroje" class="zpc-zdroje-wrap"></div>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/pojistovny.js"></script>
+<script type="module" src="src/pojistovny-semafor.js"></script>
+<script type="module" src="src/pojistovny-zadosti.js"></script>
+<script type="module" src="src/pojistovny-verifikace.js"></script>
+</body>
+</html>

@@ -320,7 +320,7 @@ export function buildCoverage(p) {
 
 // ---- stav sekce fondu prevence (výběr ZP, režim)
 
-const fp = { p: null, local: '111', mode: 'auto', bound: false };
+const fp = { p: null, local: '111', mode: 'auto', bound: false }; // local = výchozí VZP ČR bez výběru
 
 function mojeZp() {
   if (typeof document === 'undefined') return null;
@@ -340,10 +340,11 @@ function fpHtml() {
   const mode = fp.mode === 'auto' ? (nItems > 20 ? 'skupiny' : 'polozky') : fp.mode;
   const d = buildFondParts(z, { skupiny: offerGroups && mode === 'skupiny', slovnik });
 
+  // Lokální přepínač pojišťovny tu není (revize P1.5): sekce sleduje jen „Moje pojišťovna“,
+  // bez výběru ukazuje VZP ČR a větu, ať si čtenář vybere nahoře.
   const head = moje
     ? `<p class="zpc-note zpc-fp-who">Zobrazeno: ${dot(z.kod)}<b>${esc(z.zkratka)}</b> (vaše pojišťovna). Jinou zvolíte v řádku „Moje pojišťovna“ nahoře.</p>`
-    : `<p class="zpc-note zpc-fp-who">Zobrazeno: ${dot(z.kod)}<b>${esc(z.zkratka)}</b>. Vyberte svou pojišťovnu nahoře, nebo zde přepněte jen tuto sekci.</p>`
-      + `<div class="zpc-chips" role="group" aria-label="Pojišťovna pro tuto sekci">${zps.map((x) => `<button type="button" class="zpc-chip" data-fp-zp="${esc(x.kod)}" aria-pressed="${x.kod === z.kod ? 'true' : 'false'}">${dot(x.kod)}${esc(x.zkratka)}</button>`).join('')}</div>`;
+    : `<p class="zpc-note zpc-fp-who">Zobrazeno: ${dot(z.kod)}<b>${esc(z.zkratka)}</b> (výchozí). Vyberte svou pojišťovnu nahoře.</p>`;
 
   const toggle = offerGroups
     ? `<div class="zpc-chips zpc-fp-mode" role="group" aria-label="Členění struktury fondu">`
@@ -354,7 +355,7 @@ function fpHtml() {
   if (!d) return `${head}<p class="zpc-na">Struktura není v dostupných dokumentech.</p>`;
 
   const f = z.fond_prevence_struktura;
-  const src = `výroční zpráva ${z.rok_vz}, ${z.zkratka}`;
+  const src = `${z.zkratka} · výroční zpráva · ${z.rok_vz}`;
   const seg = segmentedBar(d.parts, {
     title: `Struktura čerpání fondu prevence (${d.jednotka}, ${d.rok ?? ''})`,
     sub: d.mode === 'skupiny' ? 'Součty účelových položek podle skupin (odhad podle názvu položky).' : 'Pět největších položek a zbytek jako „Ostatní“.',
@@ -367,6 +368,7 @@ function fpHtml() {
     sub: d.notes.join(' ') || undefined,
     fromLabel: d.fromLabel,
     toLabel: 'skutečnost',
+    sortNote: 'Řazeno podle skutečnosti.',
     source: src,
   });
   return head + toggle + seg + bell + fpTable(z, f);
@@ -402,16 +404,12 @@ function bindFond() {
   box?.addEventListener('click', (e) => {
     const t = e.target.closest?.('button');
     if (!t || !box.contains(t)) return;
-    if (t.hasAttribute('data-fp-zp')) {
-      fp.local = t.getAttribute('data-fp-zp');
-      fp.mode = 'auto';
-      renderFond(`[data-fp-zp="${fp.local}"]`);
-    } else if (t.hasAttribute('data-fp-mode')) {
+    if (t.hasAttribute('data-fp-mode')) {
       fp.mode = t.getAttribute('data-fp-mode');
       renderFond(`[data-fp-mode="${fp.mode}"]`);
     }
   });
-  document.addEventListener(MOJE_EVENT, () => renderFond());
+  document.addEventListener(MOJE_EVENT, () => { fp.mode = 'auto'; renderFond(); });
 }
 
 export function renderPrevence(p, d) {
@@ -419,7 +417,7 @@ export function renderPrevence(p, d) {
     for (const id of ['zpPrevMatrix', 'zpPrevOnko', 'zpPrevDusevni', 'zpFpStruktura', 'zpOdpovedi']) set(id, '<p class="zpc-na">Data o preventivních programech zatím nejsou k dispozici.</p>');
   } else {
     const zps = p.pojistovny || [];
-    const srcWeb = 'weby pojišťoven a výroční zprávy, interní rešerše 2026';
+    const srcWeb = 'pojišťovny · weby a výroční zprávy (redakční rešerše) · 2026';
     // nabídka 7 × 9
     const hm = buildPrevHeatmap(p);
     set('zpPrevMatrix', heatmap(hm.rows, hm.cols, hm.cell, {
@@ -451,7 +449,7 @@ export function renderPrevence(p, d) {
     set('zpOdpovediMatrix', coverageMatrix(cv.rows, cv.cols, cv.cell, {
       title: 'Co výroční zprávy odpovídají na sedm otázek',
       sub: 'Prázdná místa jsou přesně to, na co se pojišťoven zeptáme.',
-      source: 'výroční zprávy 2024 (ZPŠ 2020, OZP 2025)', rowHeader: 'Pojišťovna',
+      source: 'pojišťovny · výroční zprávy · 2024 (ZPŠ 2020, OZP 2025)', rowHeader: 'Pojišťovna',
     }));
     set('zpOdpovedi', zps.map((z) => `<details class="zpc-acc"><summary>${dot(z.kod)}${esc(z.zkratka)} <span class="zpc-na">· ${esc(z.rok_vz ? `VZ ${z.rok_vz}` : '')}</span></summary><div class="zpc-acc-body"><dl>${VZ_OTAZKY.map(([k, l]) => { const v = z.odpovedi?.[k]; const txt = Array.isArray(v) ? v.map(esc).join(', ') : esc(v || ''); return `<dt>${l}</dt><dd>${txt || '<span class="zpc-na">VZ neuvádí</span>'}</dd>`; }).join('')}</dl></div></details>`).join(''));
     setN('zpOdpovediN', `${zps.length} pojišťoven`);

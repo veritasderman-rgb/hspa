@@ -47,27 +47,56 @@ Jedna paleta pro Atlas pojištěnců (`src/pojistenci.js`) i Srovnávač pojiš�
 `:root[data-theme="dark"]`), mapování kód → token a pomocné funkce v `src/zp-palette.js`
 (`zpColor(kod)` → `var(--zp-111)`, `zpColorResolved(kod)` → hex pro ECharts,
 `onThemeChange(cb)` pro překreslení po přepnutí tématu). Pevné pořadí podle kódu,
-paleta se nikdy nerecykluje; hex v JS není.
+paleta se nikdy nerecykluje; barva série v JS není (hex jen v metadatech `ZP[].brand`).
 
-| Kód | ZP | Token | Light | Dark |
-|---|---|---|---|---|
-| 111 | VZP ČR | `--zp-111` | `#2a78d6` | `#3987e5` |
-| 201 | VoZP | `--zp-201` | `#eb6834` | `#d95926` |
-| 205 | ČPZP | `--zp-205` | `#1baf7a` | `#199e70` |
-| 207 | OZP | `--zp-207` | `#eda100` | `#c98500` |
-| 209 | ZPŠ | `--zp-209` | `#e87ba4` | `#d55181` |
-| 211 | ZP MV ČR | `--zp-211` | `#008300` | `#008300` |
-| 213 | RBP | `--zp-213` | `#6250d6` | `#9085e9` |
-| ostatní | při zvýraznění jedné ZP | `--zp-neutral` | `= --neutral` | `= --neutral` |
+**Rozhodnutí vydavatele (2. 11. 2026):** barvy drží napříč celou stránkou podle
+pojišťovny a vycházejí z jejího **brandu**, ne z referenční dataviz palety. Každá
+pojišťovna si tedy nese odstín svého loga (VZP je červená), upravený ve světlosti a
+sytosti tak, aby paleta prošla validátorem dataviz (`validate_palette.js`: pásmo
+světlosti, chroma, CVD ΔE ≥ 8 u sousedů v pořadí kódů, normal-vision ΔE ≥ 15) v light i
+dark a nekolidovala se stavovými barvami webu.
+
+| Kód | ZP | Brand originál (zdroj) | Light | Dark | Proč upraveno |
+|---|---|---|---|---|---|
+| 111 | VZP ČR | `#e6300e` červená (logo; CSS webu `.Logo { color:#d22d0f }`) | `#fe4160` | `#b30420` | k malinové/karmínu (h 32 → 17–24) a mimo stavovou `--red`: ΔE 15,7 light / 15,0 dark (originál 9,0). Dark = hluboký karmín (kontrast 2,6 : 1, WARN) |
+| 201 | VoZP | `#166937` tmavě zelená (logo) | `#0b9353` | `#288f5f` | od stavové `--good` `#2f6b1f` (ΔE 3,0 → 11,9 light / 10,0 dark): světlejší, k smaragdu |
+| 205 | ČPZP | `#00aee7` azurová (symbol loga; text loga je karmínový `#ce1141`, `theme-color` `#061ba6`) | `#1db4ee` | `#069ee3` | do pásma světlosti; od RBP se liší světlostí (karmín nese VZP) |
+| 207 | OZP | `#702082` fialová (logo) | `#772689` | `#9934b2` | light skoro beze změny (L do pásma), dark světlejší |
+| 209 | ZPŠ | `#f36f21` oranžová (háček v logu „zpš“, písmo `#58595b`) | `#f56c0c` | `#ac642d` | light téměř originál; dark pálená oranž, aby nesplynula se stavovou `--red`/`--warn` (ΔE 10,0 / 14,1) |
+| 211 | ZP MV ČR | `#283796` navy (logo) | `#3344a7` | `#5c4dd6` | zesvětlena do pásma (L 0,39 → 0,44); od RBP rozlišena světlostí a odstínem |
+| 213 | RBP | `#00a3e0` azurová (ikona, web `#0197cf`) | `#0f8cbf` | `#007ea1` | tmavší než ČPZP (ΔE ČPZP↔RBP 12,2) |
+| ostatní | při zvýraznění jedné ZP | — | `= --neutral` | `= --neutral` | — |
+
+Brand zdroje stažené 2. 11. 2026 (HTTP 200 u všech sedmi webů, UA `ZdraveCesko-HSPA/1.0`);
+URL a barvy originálů jsou i v `ZP[].brand` (`src/zp-palette.js`).
+
+**Validátor (`--surface` = `--paper`):** light `#fbf8f1` PASS (pásmo, chroma, CVD worst
+adjacent VoZP↔VZP ΔE 8,5, normal-vision 19,4), kontrast WARN u ČPZP 2,3 a ZPŠ 2,8 : 1;
+dark `#17140f` PASS (CVD 9,8, normal-vision 17,0), kontrast WARN jen u VZP 2,6 : 1.
+WARN = relief rule: viditelné popisky / tabulkové dvojče (Srovnávač je má vždy).
 
 **Pravidla:**
-- **Text se nikdy nebarví barvou série** (kontrast 205/207/209 na `--paper` je 2,0–2,7 : 1);
-  identitu nese tečka/pruh vedle popisku, popisek zůstává `--ink`. Žádná informace jen barvou.
-- **Žádná pojišťovna není červená** — `--red` patří hrotu kompasu a stavu bad.
+- **Série = brand rodina, stavy = ikona + text.** Barva série nikdy nenese stav, stav
+  nikdy nenese jen barva. Žádná informace jen barvou.
+- **`--red` zůstává hrotu kompasu a stavu bad** (`--bad`). VZP je červená rodina, ale
+  vždy ΔE ≥ 15 od `--red` (hlídá `tests/zp-palette.test.js`); ostatní série ≥ 9
+  od `--red`/`--good`/`--warn`. Nejtěsnější místa: ZPŠ dark vs `--red` 10,0, VoZP dark vs
+  `--good` 10,0.
+- **Text se nikdy nebarví barvou série** (kontrast ČPZP/ZPŠ na `--paper` je 2,3–2,8 : 1);
+  identitu nese tečka/pruh vedle popisku, popisek zůstává `--ink`.
+- **Popisek uvnitř barevného segmentu** (`--zpv-on-*` v sekci zp-viz): bílá/téměř černá
+  podle jasu série. Light: 111 tmavý (5,5), 201 tmavý (4,8), 205 tmavý (7,9), 207 bílý
+  (8,7), 209 tmavý (6,3), 211 bílý (8,3), 213 tmavý (5,0). Dark: 111 bílý (7,1), 201 tmavý
+  (4,6), 205 tmavý (6,3), 207 bílý (6,0), 209 bílý (4,6), 211 bílý (6,0), 213 bílý (4,7).
 - Do canvasu (ECharts) barvy čti přes `zpColorResolved()` a při `onThemeChange()` graf
   překresli; inkoust, pozadí tooltipu a font čti z tokenů (`--ink`, `--paper`, `--rule2`,
   `--sans`), ne natvrdo (`themeTokens()` v `pojistenci.js`, vzor `cz-choropleth.js`).
-- Testy: `tests/zp-palette.test.js` (7 unikátních, definice v obou tématech).
+- Nová pojišťovna = brand z loga + nový token v obou tématech, ověřit validátorem
+  (`node <dataviz>/scripts/validate_palette.js "<7 hexů>" --mode light --surface "#fbf8f1"`
+  a `--mode dark --surface "#17140f"`).
+- Testy: `tests/zp-palette.test.js` (7 unikátních, definice v obou tématech, rychlá
+  kontrola pásma/chroma/ΔE/CVD, VZP vs `--red` ΔE ≥ 15, odstup od stavových barev,
+  validátor dataviz je-li v prostředí).
 
 ---
 
@@ -997,8 +1026,8 @@ primitivy … (.zpv-) === */` na konci `styles.css`.
 | `statTiles(tiles, {title?})` | `tiles[{value, unit, label, meta, decimals, prefix}]` | `<ul class="zpv zpv-stats">`; `<b class="zpv-count" data-value data-decimals>` s konečnou hodnotou jako textem, proporcionální číslice |
 | `meter(value, {max, min, label, thresholds:[{at,signal}], text, unit, dec})` | číslo | `role="meter"` + `aria-valuenow/min/max/valuetext`; track = světlejší krok barvy signálu (`good/warn/bad/neutral`) |
 | `indexedLines(series, {title, sub, base:'first'\|rok, source, unit, dec})` | `series[{kod\|key, label, points[{year, value}]}]` | SVG `viewBox 0 0 360 232`, index základ = 100, jedna osa, hairline mřížka, 2px čáry (`pathLength=1`), koncové tečky r 4 s prstencem, direct labels s leader lines (při přeplnění jen legenda), legenda vždy; dvojče = řádek na rok (index + absolutní hodnota) |
-| `dumbbell(items, {title, sub, unit, dec, fromLabel:'plán', toLabel:'skutečnost', source, sort, maxv})` | `items[{kod\|key, label, from, to}]` | HTML; „from“ prázdné kolečko `--ink-mut`, „to“ plný mark, hodnota u „to“, rozdíl v % v tooltipu a v tabulce |
-| `heatmap(rows, cols, cell, {title, sub, levels, source, sortable:true, rowHeader})` | `cell(row,col) → {level:0..3\|null, text?, tip?}` | `<table class="zpv-matrix zpv-heat">`, `td.zpv-cell[data-level]` s textem stupně, popis v `data-tip` + `sr-only`; rampa `--zpv-ramp-0..3` (light `--paper2`→`#1c5cab`, dark →`#6da7ec`); hlavičky `button.zpv-sort[data-col]` + `aria-sort="none"` (chování jinde) |
+| `dumbbell(items, {title, sub, unit, dec, fromLabel:'plán', toLabel:'skutečnost', source, sort, maxv})` | `items[{kod\|key, label, from, to}]` | HTML; „from“ prázdné kolečko `--ink-mut`, „to“ plný mark; hodnota vždy u plného bodu (při poklesu vlevo od něj přes `--x`, není-li místo, za prázdným bodem); osa od 0,9 × minima, když by body ležely v úzkém pásu (v záhlaví „Osa nezačíná nulou“); `sortNote` jako u `rankedBars`; rozdíl v % v tooltipu a v tabulce |
+| `heatmap(rows, cols, cell, {title, sub, levels, source, sortable:true, rowHeader})` | `cell(row,col) → {level:0..3\|null, text?, tip?}` | `<table class="zpv-matrix zpv-heat">`, `td.zpv-cell[data-level]` s textem stupně, popis v `data-tip` + `sr-only`; rampa `--zpv-ramp-0..3` (light `--paper2`→`#1c5cab`, dark →`#6da7ec`); hlavičky `button.zpv-sort[data-col]` + `aria-sort="none"` (chování jinde); skrytá věta `[data-zpv-sortnote]` („Řazeno podle stupně, nejde o hodnocení pojišťoven“), kterou po prvním seřazení odkryje `zp-interact.js` |
 | `dotMatrix(rows, cols, cell, {title, sub, scoreLabel:'n/10', source, rowHeader})` | `cell → true\|false\|'partial'\|null` | kolečka `.zpv-pip--yes/no/part` s `role="img"` + `aria-label`, „—“ pro null; poslední sloupec `meter` (ano = 1, částečně = 0,5, / počet známých) |
 | `coverageMatrix(rows, cols, cell, {title, sub, source, labels, rowHeader})` | `cell → 'ano'\|'castecne'\|'ne'\|null\|{stav, tip}` | stav vždy ikona (✓ ½ ✕) + text, ikona v `--good/--warn/--bad`, text v inkoustu (SC 1.4.1) |
 

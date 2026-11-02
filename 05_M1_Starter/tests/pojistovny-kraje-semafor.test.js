@@ -13,8 +13,8 @@ import { fileURLToPath } from 'node:url';
 
 import {
   krajLabel, lastYear, nationalTotals, buildKrajDataset, sequentialRel, makeFill, topRegion,
-  tezisteItems, evolutionRows, krajReadout, stateSentence, resolveKod, chipsHtml, evolutionTableHtml,
-  legendHtml, fmtShare, tileValue, RAMP_REL_MIN, RAMP_REL_MAX, DEFAULT_KOD,
+  tezisteItems, evolutionRows, krajReadout, stateSentence, resolveKod, evolutionTableHtml,
+  legendHtml, legendValue, fmtShare, tileValue, RAMP_REL_MIN, RAMP_REL_MAX, DEFAULT_KOD,
 } from '../src/pojistovny-kraje.js';
 import {
   semaforCell, semaforTip, semaforSummary, stanoviska, changelogSorted, fmtDateCz as semDate,
@@ -153,31 +153,27 @@ test('kraje: evolutionRows — 16 let, změna první → poslední rok', () => {
   assert.match(html, /tabindex="0"/);
 });
 
-test('kraje: výběr pojišťovny — lokální volba > Moje pojišťovna > výchozí VZP + věta', () => {
+test('kraje: výběr pojišťovny — jen Moje pojišťovna, jinak výchozí VZP + věta (žádný lokální přepínač)', () => {
   assert.equal(DEFAULT_KOD, '111');
-  assert.equal(resolveKod({ local: null, moje: null }), '111');
-  assert.equal(resolveKod({ local: null, moje: '213' }), '213');
-  assert.equal(resolveKod({ local: '205', moje: '213' }), '205');
-  assert.equal(resolveKod({ local: 'xx', moje: '999' }), '111');
-  assert.match(stateSentence({ kod: '111', moje: null, local: null }), /VZP ČR \(výchozí\).*nahoře/);
-  assert.match(stateSentence({ kod: '213', moje: '213', local: null }), /vaše pojišťovna: RBP/);
-  assert.match(stateSentence({ kod: '205', moje: '213', local: '205' }), /ČPZP.*jen v této sekci/);
-});
-
-test('kraje: chipy — 7 tlačítek, aria-pressed, bez data-zp (nekoliduje s chipy Moje pojišťovna)', () => {
-  const html = chipsHtml('207');
-  assert.equal(count(html, /<button/g), 7);
-  assert.equal(count(html, /aria-pressed="true"/g), 1);
-  assert.match(html, /data-kod="207" aria-pressed="true"/);
-  assert.ok(!/data-zp=/.test(html));
-  assert.ok(!/zpi-chip/.test(html), 'třída zpi-chip patří tlačítkům v #zpMojeZp');
+  assert.equal(resolveKod({ moje: null }), '111');
+  assert.equal(resolveKod({ moje: '213' }), '213');
+  assert.equal(resolveKod({ moje: '999' }), '111');
+  assert.equal(resolveKod(), '111');
+  assert.equal(stateSentence({ kod: '111', moje: null }), 'Zobrazena je VZP ČR (výchozí). Vyberte svou pojišťovnu nahoře.');
+  assert.equal(stateSentence({ kod: '213', moje: '213' }), 'Zobrazena je vaše pojišťovna: RBP.');
+  const src = read('src', 'pojistovny-kraje.js');
+  assert.ok(!/zpk-chip|chipsHtml|state\.local/.test(src), 'lokální chipy jsou pryč');
 });
 
 test('kraje: legenda rampy — 5 vzorků, nejnižší a nejvyšší hodnota', () => {
   const ds = buildKrajDataset(D5, '213', 2025);
   const html = legendHtml(ds, false);
   assert.equal(count(html, /class="zpk-sw"/g), 5);
-  assert.match(html, /nejnižší 0,02\s%/);
+  assert.match(html, /nejnižší &lt;0,1\s%/);
+  assert.equal(legendValue(0), '0');
+  assert.equal(legendValue(0.04), '<0,1');
+  assert.equal(legendValue(12.34), '12,3');
+  assert.ok(!/0,00/.test(html), 'legenda bez „0,00 %“');
   assert.match(html, /nejvyšší 27,3\s%/);
   assert.notEqual(legendHtml(ds, true), html, 'tmavý režim má jiné barvy');
   assert.equal(legendHtml({ regions: [] }, false), '');
@@ -518,16 +514,17 @@ test('validátor: semafor — volitelné stanovisko_pojistovny je neprázdný st
 // HTML, CSS, dokumentace
 // ===========================================================================
 
-test('pojistovny.html: tři nové moduly jako script type=module, původní zůstal, kontejnery existují', () => {
-  const html = read('pojistovny.html');
-  for (const m of ['pojistovny', 'pojistovny-kraje', 'pojistovny-semafor', 'pojistovny-zadosti']) {
-    assert.equal(count(html, new RegExp(`<script type="module" src="src/${m}\\.js"></script>`, 'g')), 1, m);
-  }
-  for (const id of ['zpKraje', 'zpSemafor', 'zpZadosti']) assert.match(html, new RegExp(`id="${id}"`), id);
-  const bodyEnd = html.indexOf('</body>');
-  for (const m of ['pojistovny-kraje', 'pojistovny-semafor', 'pojistovny-zadosti']) {
+test('podstránky (P1.6): satelitní moduly jako script type=module na stránce svého kontejneru, na konci body', () => {
+  const where = { 'pojistovny-kraje': ['pojistovny-kmen.html', 'zpKraje'], 'pojistovny-semafor': ['pojistovny-metodika.html', 'zpSemafor'],
+    'pojistovny-zadosti': ['pojistovny-metodika.html', 'zpZadosti'] };
+  for (const [m, [page, id]] of Object.entries(where)) {
+    const html = read(page);
+    for (const x of ['pojistovny', m]) {
+      assert.equal(count(html, new RegExp(`<script type="module" src="src/${x}\\.js"></script>`, 'g')), 1, `${page}: ${x}`);
+    }
+    assert.match(html, new RegExp(`id="${id}"`), id);
     const at = html.indexOf(`src/${m}.js`);
-    assert.ok(at > html.indexOf('<footer') && at < bodyEnd, `${m} je na konci body`);
+    assert.ok(at > html.indexOf('<footer') && at < html.indexOf('</body>'), `${m} je na konci body`);
   }
 });
 
@@ -538,7 +535,7 @@ test('styles.css: sekce .zpk-/.zps-/.zpz- je pod markerem na konci souboru', () 
   assert.ok(at > 0, 'marker');
   assert.ok(at > css.indexOf('/* === Srovnávač pojišťoven: dotazníky'), 'pod existujícími markery');
   const tail = css.slice(at);
-  for (const sel of ['.zpk-body', '.zpk-chip', '.zpk-sw', '.zps-table', '.zps-cell', '.zps-quote', '.zps-log', '.zpz-table', '.zpz-stav']) {
+  for (const sel of ['.zpk-body', '.zpk-sw', '.zps-table', '.zps-cell', '.zps-quote', '.zps-log', '.zpz-table', '.zpz-stav']) {
     assert.ok(tail.includes(sel), sel);
   }
   const head = css.slice(0, at);

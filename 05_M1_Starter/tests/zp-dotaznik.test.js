@@ -669,9 +669,9 @@ test('zp-dotaznik.js nepoužívá innerHTML ani eval', () => {
   assert.ok(!/innerHTML|insertAdjacentHTML|document\.write|eval\(/.test(src));
 });
 
-test('pojistovny.html a pojistovny.js: kontejnery, věta o soukromí, volání renderu', () => {
-  const html = read('pojistovny.html');
-  const modul = html.slice(html.indexOf('id="modul-gramotnost"'), html.indexOf('id="modul-metodika"'));
+test('pojistovny-gramotnost.html a pojistovny.js: kontejnery, věta o soukromí, volání renderu', () => {
+  const html = read('pojistovny-gramotnost.html');
+  const modul = html.slice(html.indexOf('id="modul-gramotnost"'), html.indexOf('</section>', html.indexOf('id="modul-gramotnost"')));
   assert.match(modul, /<div id="zpDotaznik" data-sada="rizikovi-pojistenci"><\/div>/);
   assert.match(modul, /<div id="zpDotaznikAgregace"><\/div>/);
   assert.match(modul, /bez osobních údajů/);

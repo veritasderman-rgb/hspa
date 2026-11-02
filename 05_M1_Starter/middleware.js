@@ -1,6 +1,6 @@
 // Vercel Edge Middleware — ochrana pracovní verze Srovnávače zdravotních pojišťoven heslem.
 //
-// Chrání stránku /pojistovny(.html) a její datové soubory /data/pojistovny*.json
+// Chrání stránku /pojistovny(.html), podstránky /pojistovny-*.html a datové soubory /data/pojistovny*.json
 // HTTP Basic Auth. Heslo se čte z proměnné prostředí POJISTOVNY_HESLO
 // (Vercel → Project → Settings → Environment Variables; nastavit pro Production
 // i Preview). Uživatelské jméno je libovolné. Bez nastavené proměnné middleware
@@ -12,7 +12,9 @@
 // a zapsat ji do STATIC_PAGES v scripts/generate-sitemap.js.
 
 export const config = {
-  matcher: ['/pojistovny', '/pojistovny.html', '/data/pojistovny.json', '/data/pojistovny-:path*'],
+  // '/pojistovny-:path*' = podstránky srovnávače (pojistovny-kmen.html …, P1.6); je ukotvené na
+  // začátek cesty, takže nekoliduje s '/data/pojistovny-:path*' (datové soubory).
+  matcher: ['/pojistovny', '/pojistovny.html', '/pojistovny-:path*', '/data/pojistovny.json', '/data/pojistovny-:path*'],
 };
 
 const NOINDEX = { 'X-Robots-Tag': 'noindex, nofollow, noarchive' };

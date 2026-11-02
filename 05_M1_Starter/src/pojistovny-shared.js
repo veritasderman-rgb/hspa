@@ -67,14 +67,25 @@ export const li = (arr) => (arr || []).map((s) => `<li>${esc(s)}</li>`).join('')
 export const set = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
 export const short = (s, n = 70) => (s ? (String(s).length > n ? String(s).slice(0, n - 1) + '…' : String(s)) : '');
 
-export async function loadJson(url, attempt = 0) {
+async function fetchJson(url, attempt = 0) {
   try {
     const r = await fetch(url);
     if (!r.ok) throw new Error(`${url} HTTP ${r.status}`);
     return await r.json();
   } catch (err) {
-    if (attempt < 1) { await new Promise((res) => setTimeout(res, 300)); return loadJson(url, attempt + 1); }
+    if (attempt < 1) { await new Promise((res) => setTimeout(res, 300)); return fetchJson(url, attempt + 1); }
     console.warn('pojistovny:', err.message);
     return null;
   }
+}
+
+// Jeden fetch na URL a stránku: shell (zdroje), orchestrátor i semafor čtou
+// data/pojistovny.json — sdílejí tentýž promise. Neúspěch (null) se necachuje.
+const jsonCache = new Map();
+export function loadJson(url) {
+  if (!jsonCache.has(url)) {
+    const pr = fetchJson(url).then((v) => { if (v == null) jsonCache.delete(url); return v; });
+    jsonCache.set(url, pr);
+  }
+  return jsonCache.get(url);
 }

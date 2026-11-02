@@ -22307,27 +22307,52 @@ h6.pop-doc-h { font-size: 16px; font-style: italic; }
 
 /* === Srovnávač pojišťoven: tokeny palety pojišťoven (--zp-*) — plní balíček P1.1 === */
 /* Jedna paleta pojišťoven pro Atlas pojištěnců i Srovnávač (src/zp-palette.js).
-   Pevné pořadí podle kódu, nikdy se nerecykluje; žádná pojišťovna není červená
-   (--red = hrot kompasu a stav bad). Text se barvou série nikdy nebarví —
-   identitu nese tečka, popisek zůstává --ink. */
+   Rozhodnutí vydavatele 2. 11. 2026: barvy drží napříč stránkou podle pojišťovny
+   a vycházejí z jejího BRANDU (barva loga z webu pojišťovny), ne z referenční
+   dataviz palety. Odstín (hue) zůstává brandový, upravena je světlost a sytost,
+   aby paleta prošla validátorem dataviz (světlost, chroma, CVD ΔE ≥ 8 u sousedů
+   v pořadí kódů 111…213, normal-vision ≥ 15) v light i dark a nekolidovala se
+   stavovými barvami webu (--red/--bad, --good, --warn).
+   Pevné pořadí podle kódu, nikdy se nerecykluje. Stavy se nikdy nenesou barvou
+   série: stav = ikona + text; --red zůstává hrotu kompasu a stavu bad.
+   Text se barvou série nikdy nebarví — identitu nese tečka, popisek zůstává --ink.
+   Brand zdroje a hexy originálů: docs/visual-components.md → „Paleta pojišťoven“
+   a ZP[].brand v src/zp-palette.js. */
 :root {
-  --zp-111: #2a78d6; /* VZP ČR */
-  --zp-201: #eb6834; /* VoZP */
-  --zp-205: #1baf7a; /* ČPZP */
-  --zp-207: #eda100; /* OZP */
-  --zp-209: #e87ba4; /* ZPŠ */
-  --zp-211: #008300; /* ZP MV ČR */
-  --zp-213: #6250d6; /* RBP */
+  /* VZP ČR — brand červená #e6300e (logo; v CSS webu .Logo color #d22d0f). Posun k malinové/karmínu
+     (h 32→17) a výš ve světlosti: ΔE vůči stavové --red #b8361e = 15,7 (brand originál 9,0). */
+  --zp-111: #fe4160;
+  /* VoZP — brand tmavě zelená #166937 (logo). Světlejší a sytější: od stavové --good #2f6b1f
+     (ΔE 3 → 11,9); odstín mírně k smaragdu. */
+  --zp-201: #0b9353;
+  /* ČPZP — brand azurová #00aee7 (symbol loga; text loga je karmínový #ce1141, ten nese VZP).
+     Mírně tmavší pro kontrast; od RBP se liší světlostí. */
+  --zp-205: #1db4ee;
+  /* OZP — brand fialová #702082 (logo). Skoro beze změny (L 0,415 → 0,436, pod pásmem). */
+  --zp-207: #772689;
+  /* ZPŠ — brand oranžová #f36f21 (háček v logu „zpš“). Jen o píď sytější, odstín držen;
+     od --warn #a05a08 ΔE 16,9, od --red 17,0. */
+  --zp-209: #f56c0c;
+  /* ZP MV ČR — brand tmavě modrá #283796 (logo). Zesvětlena do pásma (L 0,389 → 0,435). */
+  --zp-211: #3344a7;
+  /* RBP — brand azurová #00a3e0 (ikona, web #0197cf). Tmavší než ČPZP, aby se obě azurové
+     lišily (ΔE ČPZP↔RBP 12,2). */
+  --zp-213: #0f8cbf;
   --zp-neutral: var(--neutral); /* „ostatní pojišťovny“ při zvýraznění jedné */
 }
 :root[data-theme="dark"] {
-  --zp-111: #3987e5;
-  --zp-201: #d95926;
-  --zp-205: #199e70;
-  --zp-207: #c98500;
-  --zp-209: #d55181;
-  --zp-211: #008300;
-  --zp-213: #9085e9;
+  /* Dark = stejné odstíny, posunutá světlost. VZP: hluboký karmín (L 0,485) — jen tak je ΔE vůči
+     stavové dark --red #e0563a 15,0; kontrast na pozadí 2,6 : 1 (WARN) → série se vždy čte i
+     z popisků/tabulky, stav bad nese ikona + text. */
+  --zp-111: #b30420;
+  --zp-201: #288f5f;
+  --zp-205: #069ee3;
+  --zp-207: #9934b2;
+  /* ZPŠ dark: pálená oranž; od stavové dark --red #e0563a ΔE 10,0 (nejtěsnější místo palety;
+     stav má vždy ikonu + text, ZPŠ je tečka/linka). */
+  --zp-209: #ac642d;
+  --zp-211: #5c4dd6;
+  --zp-213: #007ea1;
 }
 
 /* === Srovnávač pojišťoven: stránka pojistovny.html (.zpc-) — plní balíček P0.4 === */
@@ -22335,7 +22360,7 @@ h6.pop-doc-h { font-size: 16px; font-style: italic; }
 .zpc-strip b{color:var(--warn)}
 .zpc-modnav{display:flex;flex-wrap:wrap;gap:6px 10px;font-family:var(--sans);font-size:13px;margin:0 0 8px;padding:0;list-style:none}
 .zpc-modnav a{display:inline-block;padding:6px 12px;border:1px solid var(--rule2);border-radius:999px;text-decoration:none;color:var(--ink)}
-.zpc-modnav a:hover{border-color:var(--red);color:var(--red)}
+.zpc-modnav a:hover{border-color:var(--ink);color:var(--ink)}
 .zpc-modnav .zpc-faze{font-size:11px;color:var(--ink-mut);margin-left:6px}
 .zpc-mod{padding:40px 0 8px;border-top:1px solid var(--rule)}
 .zpc-mod-head{display:grid;grid-template-columns:1fr auto;gap:8px 24px;align-items:end;margin-bottom:14px}
@@ -22385,7 +22410,7 @@ select.zpc-note{color:var(--ink);background:var(--paper);border:1px solid var(--
 .zpc-acc{border:1px solid var(--rule2);margin:0 0 8px}
 .zpc-acc summary{cursor:pointer;padding:10px 14px;font-family:var(--sans);font-weight:600;font-size:14px;list-style:none;display:flex;gap:10px;align-items:center}
 .zpc-acc summary::-webkit-details-marker{display:none}
-.zpc-acc summary::before{content:"+";width:18px;color:var(--red);font-weight:700}
+.zpc-acc summary::before{content:"+";width:18px;color:var(--ink);font-weight:700}
 .zpc-acc[open] summary::before{content:"−"}
 .zpc-acc .zpc-acc-body{padding:4px 16px 14px;font-family:var(--serif);font-size:15px;line-height:1.5}
 .zpc-acc dl{margin:0;display:grid;grid-template-columns:minmax(140px,220px) 1fr;gap:8px 16px;font-size:14px}
@@ -22400,7 +22425,7 @@ select.zpc-note{color:var(--ink);background:var(--paper);border:1px solid var(--
 .zpc-q .zpc-opts{font-family:var(--sans);font-size:12.5px;color:var(--ink-mut);display:block}
 .zpc-plan{list-style:none;padding:0;margin:14px 0 0}
 .zpc-plan li{display:grid;grid-template-columns:96px 1fr auto;gap:12px;padding:12px 0;border-top:1px solid var(--rule);font-family:var(--serif);font-size:15px}
-.zpc-plan b{font-family:var(--sans);font-size:12.5px;color:var(--red)}
+.zpc-plan b{font-family:var(--sans);font-size:12.5px;color:var(--ink)}
 .zpc-plan .zpc-agent{font-family:var(--sans);font-size:12px;color:var(--ink-mut);white-space:nowrap}
 /* P1.4: hero (Moje pojišťovna, akordeon „O projektu“), karty s minigrafem, tabulka hospodaření */
 .zpc-moje-lbl{font-family:var(--sans);font-size:13px;color:var(--ink-mut);margin:16px 0 6px}
@@ -22493,6 +22518,114 @@ select.zpc-note{color:var(--ink);background:var(--paper);border:1px solid var(--
 .zpc-pills li{margin:0;padding:3px 10px;border:1px solid var(--rule2);border-radius:999px;font-family:var(--sans);font-size:12.5px}
 @media print{.zpc-chips{display:none}}
 
+/* P1.6: přehled (general view) + podstránky pojistovny-*.html — shell (pásek, kicker, záložky témat),
+   záhlaví podstránky, karta vybrané pojišťovny, mřížka „jeden graf na téma“, rozcestník, síť odborností.
+   Shell vykresluje src/pojistovny-shell.js, přehled src/pojistovny-prehled.js, síť src/pojistovny-sit.js. */
+.zpc-shell{margin:0 0 18px}
+.zpc-shell .zpc-strip{margin:0 0 14px;padding:8px 14px}
+.zpc-shell-head{display:flex;flex-direction:column;gap:6px}
+.zpc-kicker{font-family:var(--sans);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--ink-mut);margin:0}
+.zpc-tabs ul{display:flex;gap:2px;list-style:none;margin:0;padding:0;border-bottom:1px solid var(--rule2);overflow-x:auto;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+.zpc-tabs li{flex:none;margin:0}
+.zpc-tab{display:inline-flex;align-items:center;min-height:40px;padding:8px 12px;font-family:var(--sans);font-size:14px;color:var(--ink-mut);text-decoration:none;border-bottom:3px solid transparent;white-space:nowrap}
+.zpc-tab:hover{color:var(--ink);border-bottom-color:var(--rule2)}
+.zpc-tab[aria-current="page"]{color:var(--ink);font-weight:600;border-bottom-color:var(--ink)}
+.zpc-tab:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+.zpc-mod--page{border-top:0;padding-top:4px}
+.zpc-mod-head h1{font-family:var(--serif);font-size:clamp(28px,4vw,40px);line-height:1.1;margin:0}
+.zpc-moje-wrap{margin:0 0 20px}
+.zpc-moje-wrap .zpc-moje-lbl{margin-top:0}
+.zpc-zdroje-wrap{margin-top:32px}
+.zpc-zdroje .zpc-acc-body li{font-family:var(--sans);font-size:13px}
+.zpc-zdroje .zpc-acc-body a{overflow-wrap:anywhere}
+/* přehled */
+.zpc-ov-hero{margin-bottom:20px;padding-bottom:22px}
+.zpc-ov-hero .ed-hero-headline{font-size:clamp(30px,4.6vw,48px);margin-bottom:12px}
+.zpc-ov-hero .ed-hero-lead{margin:0}
+@media (min-width: 761px) { .zpc-ov-hero .zpv-stats{grid-template-columns:minmax(0,1fr);gap:14px;margin:0} }
+.zpc-ov-moje{margin:0 0 8px}
+.zpc-ov-moje .zpc-moje-lbl{margin-top:0}
+.zpc-ov-minis{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.zpc-ov-minis li{margin:0}
+.zpc-ov-mini{width:100%;display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-height:44px;padding:8px 10px;border:1px solid var(--rule2);border-radius:4px;background:var(--paper);color:var(--ink);font-family:var(--sans);text-align:left;cursor:pointer}
+.zpc-ov-mini:hover{border-color:var(--ink);background:var(--paper2)}
+.zpc-ov-mini:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.zpc-ov-mini-h{display:flex;align-items:center;font-size:14px}
+.zpc-ov-mini-h .zpc-dot{margin-right:6px}
+.zpc-ov-mini-v{font-size:12px;color:var(--ink-mut);font-variant-numeric:tabular-nums}
+.zpc-ov-karta{border:1px solid var(--rule2);border-top:4px solid var(--c,var(--ink));background:var(--paper);padding:14px 16px}
+.zpc-ov-karta[data-zp="111"]{--c:var(--zp-111)}
+.zpc-ov-karta[data-zp="201"]{--c:var(--zp-201)}
+.zpc-ov-karta[data-zp="205"]{--c:var(--zp-205)}
+.zpc-ov-karta[data-zp="207"]{--c:var(--zp-207)}
+.zpc-ov-karta[data-zp="209"]{--c:var(--zp-209)}
+.zpc-ov-karta[data-zp="211"]{--c:var(--zp-211)}
+.zpc-ov-karta[data-zp="213"]{--c:var(--zp-213)}
+.zpc-ov-karta header{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px;margin-bottom:10px}
+.zpc-ov-karta h2{font-family:var(--serif);font-size:24px;line-height:1.15;margin:0}
+.zpc-ov-karta .zpc-full{font-family:var(--sans);font-size:12.5px;color:var(--ink-mut)}
+.zpc-ov-karta dl{margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px 18px;font-family:var(--sans)}
+.zpc-ov-karta dt{font-size:11.5px;color:var(--ink-mut)}
+.zpc-ov-karta dd{margin:0;font-size:17px;font-weight:600;font-variant-numeric:tabular-nums}
+.zpc-ov-karta-more{margin:12px 0 0;font-family:var(--sans);font-size:13.5px}
+.zpc-ov{margin:0 0 28px}
+.zpc-ov-h2{font-family:var(--serif);font-size:clamp(22px,3vw,28px);line-height:1.2;margin:0 0 4px;padding-top:22px;border-top:1px solid var(--rule)}
+.zpc-ov-swipe{display:none;font-family:var(--sans);font-size:12.5px;color:var(--ink-mut);margin:0 0 8px}
+.zpc-overview-grid:focus-visible{outline:2px solid var(--ink);outline-offset:4px}
+.zpc-overview-grid{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 44px}
+.zpc-ov-tile{min-width:0;display:flex;flex-direction:column}
+.zpc-ov-tile .zpv-figure{margin:0}
+.zpc-ov-more{align-self:flex-start;display:inline-block;min-height:24px;line-height:24px;margin-top:6px;font-family:var(--sans);font-size:13.5px;font-weight:600;color:var(--ink);text-underline-offset:3px}
+.zpc-ov-sem-wrap{margin:22px 0 0}
+.zpc-ov-semline{display:flex;gap:8px;align-items:baseline;margin:0;padding:10px 14px;border:1px dashed var(--rule2);font-family:var(--sans);font-size:14px;color:var(--ink)}
+.zpc-ov-semline>span:first-child{flex:none}
+.zpc-ov-sem-intro{font-family:var(--sans);font-size:13px;color:var(--ink-mut);margin:2px 0 8px}
+.zpc-ov-semtab{border-collapse:collapse;font-family:var(--sans);font-size:12px;width:100%}
+.zpc-ov-semtab th,.zpc-ov-semtab td{padding:5px 2px;border-bottom:1px solid var(--rule);text-align:center}
+.zpc-ov-semtab thead th{font-size:11px;font-weight:600;color:var(--ink-mut);vertical-align:bottom}
+.zpc-ov-semtab tbody th{text-align:left;white-space:nowrap;font-weight:600}
+.zpc-ov-semtab td{font-size:15px}
+.zpc-ov-semtab tr[aria-current="true"]>*{background:var(--paper2)}
+.zpc-tema-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.zpc-tema-grid li{margin:0}
+.zpc-tema-card{display:flex;flex-direction:column;gap:4px;height:100%;padding:14px 16px;border:1px solid var(--rule2);border-top:3px solid var(--ink);text-decoration:none;color:var(--ink);background:var(--paper)}
+.zpc-tema-card:hover{background:var(--paper2)}
+.zpc-tema-card:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.zpc-tema-kicker{font-family:var(--sans);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-mut)}
+.zpc-tema-title{font-family:var(--serif);font-size:19px;font-weight:700;line-height:1.2}
+.zpc-tema-veta{font-family:var(--serif);font-size:15px;line-height:1.45}
+.zpc-tema-co{font-family:var(--sans);font-size:12.5px;color:var(--ink-mut)}
+.zpc-ov-about{margin:0 0 8px}
+/* síť odborností (prototyp) */
+.zpc-sit-limit{color:var(--ink);border-left:3px solid var(--warn);padding-left:12px}
+.zpc-sit .zpv-cell{min-width:64px}
+.zpc-sit-acc{margin-top:12px}
+.zpc-sit-lbl{display:inline-flex;flex-wrap:wrap;gap:8px;align-items:center;font-family:var(--sans);font-size:13.5px;margin:4px 0 10px}
+.zpc-sit-select{color:var(--ink);background:var(--paper);border:1px solid var(--rule2);border-radius:4px;padding:4px 8px;font:inherit;min-height:32px;max-width:100%}
+.zpc-sit-tbl table{min-width:760px}
+.zpc-sit-tbl td small{text-align:right;max-width:none}
+@media (max-width: 760px) {
+  /* mobil: jeden graf na šířku, další vedle (posuvné, snap) — přehled tak zůstane do tří obrazovek */
+  .zpc-overview-grid{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:88%;gap:14px;align-items:stretch;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+  .zpc-ov-tile{scroll-snap-align:start;border:1px solid var(--rule);padding:12px 12px 8px;background:var(--paper)}
+  .zpc-ov-swipe{display:block}
+  .zpc-ov-hero{gap:18px}
+  .zpc-tema-grid{grid-template-columns:minmax(0,1fr);gap:8px}
+  .zpc-tema-card{padding:10px 14px;gap:2px}
+  .zpc-tema-title{font-size:18px}
+  .zpc-tema-veta{display:none}
+  .zpc-ov-minis{gap:6px}
+  .zpc-ov-mini{min-height:40px;padding:5px 9px}
+  .zpc-ov-hero .ed-hero-lead{font-size:16px}
+  .zpc-ov-hero .zpv-tile-meta{display:none}
+  .zpc-ov-hero .zpv-stats{gap:10px 18px;margin-bottom:0}
+}
+@media print {
+  .zpc-tabs, .zpc-ov-more, .zpc-ov-minis, .zpc-ov-swipe { display: none; }
+  .zpc-overview-grid { display: block; overflow: visible; }
+  .zpc-tema-card { border-color: var(--ink-mut); }
+}
+
 /* === Srovnávač pojišťoven: vizuální primitivy src/zp-viz.js (.zpv-) — plní balíček P1.2/P2.1 === */
 /* Grafové primitivy srovnávače (rankedBars, segmentedBar, statTiles, meter,
    indexedLines, dumbbell, heatmap, dotMatrix, coverageMatrix). Barvy jen přes
@@ -22515,14 +22648,15 @@ select.zpc-note{color:var(--ink);background:var(--paper);border:1px solid var(--
      tytéž dvě); volba podle jasu kroku pojišťovny (WCAG poměr v komentáři) */
   --zpv-on-dark: #fff;
   --zpv-on-light: #14110c;
-  --zpv-on-111: var(--zpv-on-dark);  /* 4,4 → s jemným stínem pod popiskem 5,0 */
-  --zpv-on-shade-111: rgba(0, 0, 0, .18);
-  --zpv-on-201: var(--zpv-on-light); /* 5,9 */
-  --zpv-on-205: var(--zpv-on-light); /* 6,7 */
-  --zpv-on-207: var(--zpv-on-light); /* 8,7 */
-  --zpv-on-209: var(--zpv-on-light); /* 7,0 */
-  --zpv-on-211: var(--zpv-on-dark);  /* 5,0 */
-  --zpv-on-213: var(--zpv-on-dark);  /* 5,8 */
+  /* brandová paleta (2026-11-02): poměry WCAG viz docs/visual-components.md „Paleta pojišťoven“ */
+  --zpv-on-111: var(--zpv-on-light); /* malinová #fe4160: tmavý text */
+  --zpv-on-shade-111: transparent;
+  --zpv-on-201: var(--zpv-on-light); /* zelená #0b9353 */
+  --zpv-on-205: var(--zpv-on-light); /* azurová #1db4ee */
+  --zpv-on-207: var(--zpv-on-dark);  /* fialová #772689: bílý text */
+  --zpv-on-209: var(--zpv-on-light); /* oranžová #f56c0c */
+  --zpv-on-211: var(--zpv-on-dark);  /* indigo #3344a7: bílý text */
+  --zpv-on-213: var(--zpv-on-light); /* modrá #0f8cbf */
   --zpv-surface: var(--paper);
   /* tóny inkoustu pro části bez identity pojišťovny (segmentedBar s data-key);
      popisek: papír na 0–1 (11,5 / 6,2 : 1), inkoust na 2–4 (≥ 6 : 1) */
@@ -22541,9 +22675,14 @@ select.zpc-note{color:var(--ink);background:var(--paper);border:1px solid var(--
   /* dark: inkoust 13 / 6,7 : 1, téměř černá 5,2 / 7,5 : 1 */
   --zpv-ramp-on-2: var(--zpv-on-light);
   --zpv-ramp-on-3: var(--zpv-on-light);
-  --zpv-on-111: var(--zpv-on-light); /* 5,2 */
+  --zpv-on-111: var(--zpv-on-dark);  /* karmín #b30420: bílý text */
   --zpv-on-shade-111: transparent;
-  --zpv-on-213: var(--zpv-on-light); /* 6,0 */
+  --zpv-on-201: var(--zpv-on-light); /* #288f5f */
+  --zpv-on-205: var(--zpv-on-light); /* #069ee3 */
+  --zpv-on-207: var(--zpv-on-dark);  /* #9934b2 */
+  --zpv-on-209: var(--zpv-on-dark);  /* #ac642d */
+  --zpv-on-211: var(--zpv-on-dark);  /* #5c4dd6 */
+  --zpv-on-213: var(--zpv-on-dark);  /* #007ea1 */
   /* tmavý povrch stlačí tóny k sobě → širší rozestupy; krok 2 nese
      téměř černou (≥ 4,5 : 1), kroky 3–4 světlý inkoust (≥ 5 : 1) */
   --zpv-slot-1: 72%;
@@ -22619,6 +22758,7 @@ select.zpc-note{color:var(--ink);background:var(--paper);border:1px solid var(--
 .zpv-dbplot { --zpv-labw: 11em; }
 .zpv-dbplot .zpv-row { min-height: 30px; }
 .zpv-dbplot .zpv-val { margin-left: 4px; }
+.zpv-dbplot .zpv-val--db { margin-left: 0; margin-right: 4px; }
 .zpv-db-line { position: absolute; left: var(--w); top: calc(50% - 1px); height: 2px; background: var(--ink-mut); }
 .zpv-db-from { position: absolute; left: var(--w); top: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: var(--zpv-surface); box-shadow: inset 0 0 0 2px var(--ink-mut); }
 .zpv-db-to { position: absolute; left: var(--w); top: 50%; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: var(--zpv-mark-color, var(--ink)); box-shadow: 0 0 0 2px var(--zpv-surface); }
@@ -22804,6 +22944,14 @@ main.zpi-hover-207 .zpv-mark[data-zp="207"] { opacity: 1; --zpv-mark-color: var(
 main.zpi-hover-209 .zpv-mark[data-zp="209"] { opacity: 1; --zpv-mark-color: var(--zp-209); }
 main.zpi-hover-211 .zpv-mark[data-zp="211"] { opacity: 1; --zpv-mark-color: var(--zp-211); }
 main.zpi-hover-213 .zpv-mark[data-zp="213"] { opacity: 1; --zpv-mark-color: var(--zp-213); }
+/* Barevné grafy (segmentovaný pruh, index kmene): .zpv-figure.is-colored drží opacity 1, proto vyšší
+   specificita. Vybraná ZP (.is-moje, dodává zp-interact.js) zůstane plná a dostane obrys / silnější čáru;
+   ostatní segmenty se netlumí průhledností (popisek uvnitř by ztratil kontrast), ale světlejší výplní
+   s inkoustovým popiskem. */
+main[data-moje-zp] .zpv-figure.is-colored .zpv-mark:not(.is-moje) { opacity: .35; }
+main[data-moje-zp] .zpv-figure.is-colored .zpv-seg:not(.is-moje) { opacity: 1; background: color-mix(in srgb, var(--zpv-mark-color, var(--ink)) 28%, var(--paper)); --zpv-on: var(--ink); --zpv-on-bg: transparent; }
+main[data-moje-zp] .zpv-figure.is-colored .zpv-seg.is-moje { position: relative; z-index: 1; box-shadow: 0 0 0 2px var(--paper), 0 0 0 4px var(--ink); }
+main[data-moje-zp] .zpv-figure.is-colored .zpv-line.is-moje { stroke-width: 3.5; }
 
 main tr[data-zp][aria-current="true"] { background: var(--paper2); }
 .zpv-mark:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
@@ -22832,6 +22980,7 @@ table.zpv-heat th[aria-sort="ascending"] button.zpv-sort::after { content: " \21
 @media print {
   .zpi-tip, .zpi-chips { display: none; }
   main[data-moje-zp] .zpv-mark, main[class*="zpi-hover-"] .zpv-mark { opacity: 1; }
+  main[data-moje-zp] .zpv-figure.is-colored .zpv-mark:not(.is-moje) { opacity: 1; }
 }
 
 /* === Srovnávač pojišťoven: dotazníky src/zp-dotaznik.js (.zpd-) — balíček P2.4 === */
@@ -22892,11 +23041,6 @@ main .zps .zpv-mark, main[data-moje-zp] .zps .zpv-mark, main[class*="zpi-hover-"
 .zpk-loading { font-size: 13.5px; color: var(--ink-mut); min-height: 6em; margin: 8px 0; }
 .zpk-lead { font-family: var(--serif); font-size: 16px; line-height: 1.5; max-width: 70ch; margin: 0 0 6px; color: var(--ink); }
 .zpk-state { font-size: 13.5px; color: var(--ink-mut); margin: 0 0 10px; max-width: 80ch; }
-.zpk-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 18px; }
-.zpk-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 4px 12px; border: 1px solid var(--rule2); border-radius: 999px; background: transparent; color: var(--ink); font-family: var(--sans); font-size: 13px; line-height: 1.2; cursor: pointer; transition: background-color .15s ease, border-color .15s ease; }
-.zpk-chip:hover { background: var(--paper2); border-color: var(--ink); }
-.zpk-chip[aria-pressed="true"] { background: var(--paper2); border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); font-weight: 600; }
-.zpk-chip:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .zpk-dot { width: 10px; height: 10px; border-radius: 50%; flex: none; background: var(--c, var(--ink)); }
 .zpk-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 24px 40px; align-items: start; margin: 0 0 14px; }
 .zpk-mapfig { margin: 0; min-width: 0; }
@@ -22979,14 +23123,16 @@ main .zps .zpv-mark, main[data-moje-zp] .zps .zpv-mark, main[class*="zpi-hover-"
   .zpk-body { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 520px) {
+  /* mapa krajů: viewBox 768 jednotek se na telefonu zmenší na ~0,47 → písmo ve viewBoxu zvětšit (zkratka ≥ 11 px, hodnota ≥ 13 px) */
+  .zpk-map .cz-tile-lbl { font-size: 24px; }
+  .zpk-map .cz-tile-val { font-size: 28px; }
   .zps-log li { grid-template-columns: minmax(0, 1fr); }
   .zps-log-src { grid-column: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .zpk-chip { transition: none; }
+  .zpk-tez .zpv-row { transition: none; }
 }
 @media print {
-  .zpk-chips { display: none; }
   .zpk-scroll, .zps-scroll, .zpz-scroll { overflow: visible; }
   .zpk-evo, .zps-table, .zpz-table { min-width: 0; font-size: 9pt; }
   .zpk-evo th, .zpk-evo td, .zps-table th, .zps-table td, .zpz-table th, .zpz-table td { white-space: normal; }

@@ -127,25 +127,31 @@ dočasně (linked highlighting přes `data-zp="111"` na každém marku a jeden d
 ### 2.3 Jedna paleta pojišťoven, tokeny, obě témata
 
 Pevné pořadí podle kódu, nikdy se nerecykluje, sdílená se `src/pojistenci.js`
-(a výhledově `financovani.js`). Hex vychází z referenční kategorické palety dataviz
-metodiky (sloty 1–7, slot 8 „red“ vynechán kvůli brandu). Validátor
-(`dataviz/scripts/validate_palette.js`) nad povrchem `--paper`:
+(a výhledově `financovani.js`). **Rozhodnutí vydavatele 2. 11. 2026: barvy drží napříč
+celou stránkou podle pojišťovny a vycházejí z jejího brandu** (barva loga stažená z webu
+pojišťovny; hex originálů a zdroje v `ZP[].brand` v `src/zp-palette.js`), ne z referenční
+kategorické palety dataviz. Odstín zůstává brandový, upravena je světlost/sytost, aby
+paleta prošla validátorem (`dataviz/scripts/validate_palette.js`, povrch `--paper`) a
+nekolidovala se stavovými barvami (`--red`/`--bad`, `--good`, `--warn`).
 
-| Kód | ZP | Light (`#fbf8f1`) | Dark (`#17140f`) |
-|---|---|---|---|
-| 111 | VZP ČR | `#2a78d6` | `#3987e5` |
-| 201 | VoZP | `#eb6834` | `#d95926` |
-| 205 | ČPZP | `#1baf7a` | `#199e70` |
-| 207 | OZP | `#eda100` | `#c98500` |
-| 209 | ZPŠ | `#e87ba4` | `#d55181` |
-| 211 | ZP MV ČR | `#008300` | `#008300` |
-| 213 | RBP | `#6250d6` | `#9085e9` |
+| Kód | ZP | Brand originál | Light (`#fbf8f1`) | Dark (`#17140f`) |
+|---|---|---|---|---|
+| 111 | VZP ČR | `#e6300e` červená | `#fe4160` | `#b30420` |
+| 201 | VoZP | `#166937` zelená | `#0b9353` | `#288f5f` |
+| 205 | ČPZP | `#00aee7` azurová | `#1db4ee` | `#069ee3` |
+| 207 | OZP | `#702082` fialová | `#772689` | `#9934b2` |
+| 209 | ZPŠ | `#f36f21` oranžová | `#f56c0c` | `#ac642d` |
+| 211 | ZP MV ČR | `#283796` navy | `#3344a7` | `#5c4dd6` |
+| 213 | RBP | `#00a3e0` azurová | `#0f8cbf` | `#007ea1` |
 
-Výsledek: light PASS/PASS/PASS (CVD ΔE 9,1)/PASS, kontrast **WARN** u 205/207/209
-(2,0–2,7 : 1) → vyžaduje viditelné popisky a tabulkové dvojče, což 2.1 zaručuje;
-dark PASS ve všech pěti kontrolách. Tokeny `--zp-111 … --zp-213` v `src/styles.css`
-(`:root` + `:root[data-theme="dark"]`), JS je čte přes `getComputedStyle` (vzor
-`cz-choropleth.js:72`). Text se barvou série nikdy nebarví; identitu nese tečka.
+Výsledek: light i dark PASS (pásmo, chroma, CVD ΔE 8,5 / 9,8, normal-vision 19,4 / 17,0),
+kontrast **WARN** u ČPZP a ZPŠ (light 2,3 / 2,8 : 1) a u VZP v dark (2,6 : 1) →
+vyžaduje viditelné popisky a tabulkové dvojče, což 2.1 zaručuje. VZP je malinová/karmínová,
+ale ΔE vůči stavové `--red` ≥ 15 (light 15,7, dark 15,0): **série = brand rodina, stavy =
+ikona + text**, `--red` zůstává hrotu kompasu a stavu bad. Tokeny `--zp-111 … --zp-213` v
+`src/styles.css` (`:root` + `:root[data-theme="dark"]`), JS je čte přes `getComputedStyle`
+(vzor `cz-choropleth.js:72`). Text se barvou série nikdy nebarví; identitu nese tečka.
+Podrobná tabulka s důvody úprav: `docs/visual-components.md` → „Paleta pojišťoven“.
 
 ### 2.4 Formy grafů podle dat
 
@@ -244,7 +250,7 @@ Princip doplňuje § 2.6: rozklikávání řeší hloubku *uvnitř* stránky, po
 
 | Stránka | Obsah | Z čeho vzniká |
 |---|---|---|
-| `pojistovny.html` (přehled) | hero + KPI řada, výběr „Moje pojišťovna“ (sdílený přes `localStorage` na všech podstránkách), karta pojišťovny (vybrané), **jeden graf na téma**: tržní podíl (segmentovaný pruh), index kmene 2010 = 100, nabídka prevence (heatmapa 7 × 9 zkrácená na Σ), funkce aplikací (meter n/10 per ZP), semafor 7 × 6 jako miniatura; pod každým grafem odkaz „Celé téma →“; rozcestník karet podstránek | dnešní moduly, ořezané na headline |
+| `pojistovny.html` (přehled) | hero + 3 KPI, výběr „Moje pojišťovna“ (sdílený přes `localStorage` na všech podstránkách), karta pojišťovny (vybrané; bez výběru 7 malých karet), **jeden graf na téma**: tržní podíl (segmentovaný pruh), rezervy 2026 se zónou 3–4 %, co VZ odpovídají o prevenci (matice pokrytí — ukazuje mezery, nehodnotí), funkce aplikací n/10; semafor do prvních verdiktů jako jeden řádek „zatím nehodnoceno“; pod každým grafem odkaz „Celé téma →“; rozcestník karet podstránek. *Upřesněno revizí P1.5 (2. 11. 2026): index kmene jen na podstránce Kmen, Σ stupňů prevence ne (žebříček, § 1.1).* | dnešní moduly, ořezané na headline |
 | `pojistovny-kmen.html` | Kmen a hospodaření v plném rozsahu: karty, seřazené bary, index 2010 = 100, dumbbell 2024 → 2025, mapa kraj × ZP a těžiště, tabulky, standardizace (jakmile budou váhy) | modul 3 + `pojistovny-kraje.js` |
 | `pojistovny-prevence.html` | Nabídka 7 × 9, onko a duševní, fond prevence (segmentovaný pruh + dumbbell + skupiny), odpovědi z VZ (matice pokrytí + plné znění), doložené výsledky | modul 2 |
 | `pojistovny-aplikace.html` | Funkce 7 × 10, přívětivost (po PS), uživatelé, rozpory a chybějící data | modul 1 |
@@ -411,7 +417,7 @@ GOVERNANCE § 4).
 
 | # | Otázka | Návrh |
 |---|---|---|
-| R1 | Paleta pojišťoven: přijmout sjednocení (VZP přestane být červená v Atlasu) | ano; `--red` = brand + `--bad` |
+| R1 | Paleta pojišťoven: sjednocení Atlasu a Srovnávače | rozhodnuto 2. 11. 2026: brandové odstíny (VZP červená, ale ΔE ≥ 15 od `--red`); `--red` = hrot kompasu + `--bad` |
 | R2 | „Moje pojišťovna“ v localStorage: je to v souladu s politikou soukromí (bez cookies, bez odeslání)? | ano, stejný mechanismus jako `hspa-theme`; zapsat do `o-projektu.html` sekce soukromí (C) |
 | R3 | Seřazené bary u faktů ≠ žebříček pojišťoven: schválit formulaci „řazeno podle hodnoty, ne hodnocení“ v popisku | ano, popisek pod každým seřazeným grafem |
 | R4 | Věková standardizace: kdo dodá nákladové váhy podle věku (index přerozdělení MZ?) | Fable navrhne z veřejných zdrojů, Advance potvrdí |
@@ -435,17 +441,19 @@ GOVERNANCE § 4).
 
 ---
 
-## Příloha A — Mapa modulů → balíčků
+## Příloha A — Mapa modulů → stránek a balíčků
 
-| Modul | Dnes | Balíčky |
-|---|---|---|
-| Hero | statická čísla | P1.4 |
-| 1 Aplikace | ✓/✗ tabulka | P2.3 |
-| 2 Prevence | štítková matice, tabulka se selectem, akordeony | P2.1, P2.2 |
-| 3 Kmen a hospodaření | karty + 4 bary + 2 tabulky | P1.4, P3.1, P3.2, P3.3, P3.4 |
-| 4 Gramotnost | text | P2.4 (dotazník jako formulář → Neon), obsah po kole 2 |
-| 5 Metodika a semafor | prázdná tabulka | P4.1, P4.2 |
-| 6 Plán | seznam | odkaz na tento dokument |
+Od P1.6 (2. 11. 2026) je každý modul na vlastní podstránce; přehled `pojistovny.html` z něj nese jen jeden graf (§ 2.8).
+
+| Modul | Stránka (P1.6) | Na přehledu | Balíčky |
+|---|---|---|---|
+| Hero | `pojistovny.html` (3 KPI) · `pojistovny-kmen.html` (4 KPI vč. fondu prevence celkem) | ano | P1.4, P1.6 |
+| 1 Aplikace | `pojistovny-aplikace.html` | funkce n/10 (`rankedBars`) | P2.3 |
+| 2 Prevence | `pojistovny-prevence.html` | matice pokrytí „co VZ odpovídají na 7 otázek“ (ne heatmapa ani Σ stupňů — žebříček, § 1.1) | P2.1, P2.2 |
+| 3 Kmen a hospodaření | `pojistovny-kmen.html` (+ kraje, + síť odborností prototyp) | tržní podíl, rezervy 2026 | P1.4, P3.1, P3.2, P3.3, P3.4, P3.5 (prototyp sítě) |
+| 4 Gramotnost | `pojistovny-gramotnost.html` (+ dotazník, adresné odkazy) | jen rozcestník | P2.4, obsah po kole 2 |
+| 5 Metodika a semafor | `pojistovny-metodika.html` (+ žádosti, ověření VZ) | jeden řádek „zatím nehodnoceno“; miniatura 7 × 6 až po prvním verdiktu | P4.1, P4.2 |
+| 6 Plán | `pojistovny-metodika.html#modul-plan` | — | odkaz na tento dokument |
 
 ## Příloha B — Výstup validátoru palety (2. 11. 2026)
 

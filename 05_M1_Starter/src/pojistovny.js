@@ -8,8 +8,16 @@
 // Každý soubor je nepovinný: chybí-li, modul vypíše stav „data zatím nejsou k dispozici“ a zbytek stránky funguje.
 //
 // Tenhle soubor drží hero, modul 3 (kmen a hospodaření; P1.4 + P3.1 + P3.4) a init.
-// Moduly 1, 2 a 4 renderuje src/pojistovny-prevence.js. Semafor, mapu kraj × ZP
-// a tracker žádostí renderují samostatné moduly (#zpSemafor, #zpKraje, #zpZadosti).
+// Moduly 1, 2 a 4 renderuje src/pojistovny-prevence.js. Semafor, mapu kraj × ZP,
+// síť odborností a tracker žádostí renderují samostatné moduly (#zpSemafor,
+// #zpKraje, #zpSit, #zpZadosti).
+//
+// P1.6 (§ 2.8): srovnávač má přehled (pojistovny.html) a pět podstránek
+// (pojistovny-kmen / -prevence / -aplikace / -gramotnost / -metodika.html).
+// Tenhle orchestrátor běží na všech šesti: shell (src/pojistovny-shell.js)
+// vykreslí hlavičku a zdroje, pak se podle kontejnerů na stránce rozhodne, která
+// data načíst (jen potřebná) a které renderery zavolat. Chybějící kontejner =
+// renderer nic nevykreslí (set() kontejner nenajde).
 //
 // Grafy kreslí primitivy src/zp-viz.js (čisté funkce → HTML string). Příprava
 // vstupů je oddělená od renderu: heroTiles(), buildKmenCharts(), buildFinRows(),
@@ -18,37 +26,56 @@
 // initZpInteract() se volá po vyrenderování všech modulů (idempotentní).
 
 import './analytics.js';
-import { renderModuleNav, renderMastheadDate, renderFooter } from './page-shared.js';
 import { NA, esc, num, h, fmtKc, levelBadge, boolMark, dot, li, set, short, loadJson, miniIndexSvg } from './pojistovny-shared.js';
 import { renderApps, renderPrevence, renderOtazky } from './pojistovny-prevence.js';
 import { renderDotaznik, renderDotaznikAgregace } from './zp-dotaznik.js';
 import { statTiles, rankedBars, segmentedBar, indexedLines, dumbbell, isNum, pct } from './zp-viz.js';
 import { initZpInteract, MOJE_EVENT } from './zp-interact.js';
+import { renderZpShell, legacyRedirect } from './pojistovny-shell.js';
+import { renderPrehled } from './pojistovny-prehled.js';
 
 // Re-export čistých funkcí kvůli tests/pojistovny.test.js.
 export { fmtKc, levelBadge, miniIndexSvg };
 
 const SRC_CRP = 'ÚZIS · CRP (OIS 11-47) · 2025';
-const SRC_MZ = 'MZ ČR + MF · hodnocení v.z.p. · 2024';
-const SRC_ZPP = 'zdravotně pojistné plány · 2026';
+const SRC_MZ = 'MZ ČR + MF · hodnocení systému v.z.p. · 2024';
+const SRC_ZPP = 'PS ČR · zdravotně pojistné plány (tisk 280) · 2026';
 export const STD_PENDING = 'standardizace čeká na nákladové indexy';
 
 // ---------------------------------------------------------------- čisté funkce
 
-/** Čtyři dlaždice hero ze system / system_crp (vstup pro statTiles). */
-export function heroTiles(d) {
+/** Kladné saldo: zkratky pojišťoven s hospodářským výsledkem > 0 (pro popisek hero). */
+export function kladneSaldo(d) {
+  return (d?.pojistovny || []).filter((z) => isNum(h(z.hospodareni?.hospodarsky_vysledek_mld)) && h(z.hospodareni.hospodarsky_vysledek_mld) > 0)
+    .map((z) => z.zkratka);
+}
+
+const aList = (arr) => (arr.length > 1 ? `${arr.slice(0, -1).join(', ')} a ${arr[arr.length - 1]}` : arr.join(''));
+
+/**
+ * Dlaždice hero ze system / system_crp (vstup pro statTiles). Žádné natvrdo psané
+ * číslo: plán 2026 je v system.plan_2026_* (tisk 280). Fond prevence jen celkem,
+ * bez přepočtu na pojištěnce (rozhodnutí PS 7. 10. 2026, plán § 1.1).
+ * @param {{bezFondu?: boolean}} [opt]  bezFondu: jen tři dlaždice (přehled)
+ */
+export function heroTiles(d, { bezFondu = false } = {}) {
   const s = d?.system || {};
   const c = d?.system_crp || {};
-  return [
+  const kladne = kladneSaldo(d);
+  const tiles = [
     { value: isNum(c.pojistenci_2025) ? c.pojistenci_2025 : null, unit: 'osob', label: `pojištěnců v CRP (${d?.rok_crp ?? 2025})`,
-      meta: `7 pojišťoven · senioři 65+ tvoří ${fmtKc(c.podil_65plus_pct, 1)} % kmene` },
+      meta: `7 pojišťoven · senioři 65+ tvoří ${fmtKc(c.podil_65plus_pct, 1)}\u00a0% kmene` },
     { value: isNum(s.vydaje_celkem_mld) ? s.vydaje_celkem_mld : null, decimals: 1, unit: 'mld Kč', label: `výdaje systému v.z.p. ${s.rok ?? ''}`.trim(),
-      meta: 'plán 2026: 570,8 mld (sněmovní tisk 280)' },
+      meta: isNum(s.plan_2026_vydaje_mld) ? `plán 2026: ${fmtKc(s.plan_2026_vydaje_mld, 1)}\u00a0mld (sněmovní tisk 280)` : '' },
     { value: isNum(s.saldo_mld) ? s.saldo_mld : null, decimals: 1, unit: 'mld Kč', label: `saldo systému ${s.rok ?? ''}`.trim(),
-      meta: 'kladně jen VoZP a ZPŠ; plán 2026 −14,9 mld' },
-    { value: isNum(s.fond_prevence_naklady_celkem_mld) ? s.fond_prevence_naklady_celkem_mld : null, decimals: 2, unit: 'mld Kč',
-      label: `čerpání fondů prevence ${s.rok ?? ''}`.trim(), meta: `${fmtKc(s.fond_prevence_na_pojistence_kc)} Kč na pojištěnce` },
+      meta: [kladne.length ? `kladně jen ${aList(kladne)}` : '', isNum(s.plan_2026_saldo_mld) ? `plán 2026 ${fmtKc(s.plan_2026_saldo_mld, 1)}\u00a0mld` : '']
+        .filter(Boolean).join('; ') },
   ];
+  if (!bezFondu) {
+    tiles.push({ value: isNum(s.fond_prevence_naklady_celkem_mld) ? s.fond_prevence_naklady_celkem_mld : null, decimals: 2, unit: 'mld Kč',
+      label: `fond prevence celkem ${s.rok ?? ''}`.trim(), meta: 'čerpání všech sedmi pojišťoven' });
+  }
+  return tiles;
 }
 
 /** Stav standardizace nákladů na pojištěnce: {dolozeno, hodnota, poznamka}. */
@@ -61,8 +88,8 @@ export function stdInfo(hosp) {
 const YOY_METRICS = [
   { key: 'prijmy_na_pojistence_kc', title: 'Příjmy na pojištěnce', unit: 'Kč' },
   { key: 'naklady_na_pojistence_kc', title: 'Náklady na zdravotní služby na pojištěnce', unit: 'Kč' },
-  { key: 'fond_prevence_na_pojistence_kc', title: 'Fond prevence na pojištěnce', unit: 'Kč' },
 ];
+// Kč fondu prevence na pojištěnce sem nepatří: PS 7. 10. 2026 ho odmítla jako ukazatel (plán § 1.1).
 
 /**
  * Metrika pro srovnání 2024 → 2025: první z YOY_METRICS, kterou mají v obou
@@ -140,14 +167,19 @@ export function buildKmenCharts(d) {
   const metric = pickYoyMetric(zps);
   const has25 = (z) => metric && z.hospodareni_2025 && isNum(h(z.hospodareni_2025[metric.key]));
   const missing = zps.filter((z) => !has25(z)).map((z) => z.zkratka);
+  const s25 = (z) => z.hospodareni_2025 && typeof z.hospodareni_2025 === 'object' && Object.keys(z.hospodareni_2025).length;
+  const vz25 = zps.filter(s25).map((z) => z.zkratka);
+  const bez25 = zps.filter((z) => !s25(z)).map((z) => z.zkratka);
   const yoy = {
     metric,
     missing,
+    // Bez metriky, kterou mají všechny dostupné VZ 2025, se graf nekreslí — jen věta.
+    veta: metric ? '' : `Meziroční srovnání 2024 → 2025 doplníme, až budou výroční zprávy 2025 u všech pojišťoven (dnes ${aList(vz25) || 'žádná'}; ${aList(bez25)} chybí).`,
     items: metric ? zps.filter(has25).map((z) => ({ ...base(z), from: h(z.hospodareni[metric.key]), to: h(z.hospodareni_2025[metric.key]) })) : [],
     opts: {
       title: metric ? `${metric.title}: 2024 → 2025` : 'Hospodaření 2024 → 2025',
       sub: `${missing.length ? `${missing.join(', ')}: VZ 2025 nedohledána.` : 'Všech sedm pojišťoven.'}${metric ? ' Metrika, kterou mají všechny dostupné VZ 2025.' : ''}`,
-      unit: metric?.unit || '', dec: 0, fromLabel: '2024', toLabel: '2025', source: 'MZ ČR + MF 2024 · výroční zprávy 2025',
+      unit: metric?.unit || '', dec: 0, fromLabel: '2024', toLabel: '2025', source: 'MZ ČR + MF · hodnocení v.z.p. 2024 · výroční zprávy 2025',
     },
   };
 
@@ -160,13 +192,13 @@ export const FIN_COLS = [
   { key: 'prijmy', head: 'Příjmy mld Kč', dec: 1 },
   { key: 'nzs', head: 'Náklady ZS mld Kč', dec: 1 },
   { key: 'npp', head: 'Náklady na pojištěnce Kč', dec: 0, bar: true },
-  { key: 'fpp', head: 'Fond prevence na pojištěnce Kč', dec: 0 },
   { key: 'provoz', head: 'Provoz % příjmů', dec: 1, bar: true },
   { key: 'saldo', head: 'Saldo mld Kč', dec: 1 },
 ];
 /** Sloupce v rozbalovacím detailu „Další sloupce“. */
 export const FIN_MORE_COLS = [
   { key: 'fond_mil', head: 'Fond prevence mil. Kč', dec: 0 },
+  { key: 'fpp', head: 'Fond prevence na pojištěnce Kč', dec: 0 },
   { key: 'limit', head: 'Limit provozu %', dec: 2 },
   { key: 'zust25', head: 'Zůstatek BÚ 2025 mil. Kč', dec: 0 },
   { key: 'zust26', head: 'Zůstatek BÚ 2026 mil. Kč', dec: 0 },
@@ -296,7 +328,7 @@ function renderKmen(d) {
   renderFin(d);
   set('zpChartZust', rankedBars(ch.zust.items, ch.zust.opts));
   set('zpChartProvoz', rankedBars(ch.provoz.items, ch.provoz.opts));
-  set('zpChartYoy', dumbbell(ch.yoy.items, ch.yoy.opts));
+  set('zpChartYoy', ch.yoy.metric ? dumbbell(ch.yoy.items, ch.yoy.opts) : `<p class="zpc-note">${esc(ch.yoy.veta)}</p>`);
   set('zpTablePrev', `<table><thead><tr><th>Pojišťovna</th><th class="zpc-txt">Aplikace</th><th>Pobočky</th><th>Online přepážka</th><th class="zpc-txt">Bonusový program</th><th class="zpc-txt">Pro zaměstnavatele</th></tr></thead><tbody>` +
     zps.map((z) => { const s = z.servis || {}, p = z.prevence || {}; const b = p.bonusovy_program || {}, e = p.programy_pro_zamestnavatele || {}; return `<tr data-zp="${esc(z.kod)}"><th scope="row">${dot(z.kod)}${esc(z.zkratka)}</th><td class="zpc-txt">${esc(s.mobilni_aplikace || '') || NA}</td><td>${num(s.pocet_pobocek)}${s.pocet_pobocek_poznamka ? `<small>${esc(short(s.pocet_pobocek_poznamka, 90))}</small>` : ''}</td><td>${boolMark(s.online_prepazka)}</td><td class="zpc-txt">${b.nazev ? esc(short(b.nazev, 110)) : b.existuje === null ? '<span class="zpc-na">nenalezen</span>' : NA}</td><td class="zpc-txt">${e.nazev ? esc(short(e.nazev, 90)) : e.existuje === null ? '<span class="zpc-na">nenalezen</span>' : NA}</td></tr>`; }).join('') + '</tbody></table>');
   const notes = zps.flatMap((z) => (z.poznamky || []).map((n) => `<li><b>${esc(z.zkratka)}</b> — ${esc(n)}</li>`));
@@ -304,7 +336,6 @@ function renderKmen(d) {
   set('zpNotesN', String(notes.length));
   set('zpChybi', li(d.chybi));
   set('zpChybiN', String((d.chybi || []).length));
-  set('zpSources', (d.zdroje || []).map((z) => `<li>${esc(z.nazev || z.id)}${z.url ? ` — <a href="${esc(z.url)}" rel="noopener">${esc(z.url)}</a>` : ''}${z.clanek ? ` · <a href="${esc(z.clanek)}">článek</a>` : ''}</li>`).join(''));
 }
 
 // Výběr „Moje pojišťovna“ v kartách: vybraná karta se zvýrazní a rozbalí detail.
@@ -327,7 +358,8 @@ function syncCards(kod) {
 
 // ---------------------------------------------------------------- dotazník (P2.4)
 // Formulář se vyrenderuje ze sady v pojistovny-otazky.json. Adresný odkaz
-// pojistovny.html?dotaznik=<sada>&token=<token> přepne sadu a doplní token.
+// pojistovny-gramotnost.html?dotaznik=<sada>&token=<token> přepne sadu a doplní
+// token (starý odkaz na pojistovny.html přesměruje legacyRedirect v shellu).
 function renderDotazniky(otazky, agregaty) {
   const box = document.getElementById('zpDotaznik');
   if (!box || !otazky) return;
@@ -343,20 +375,44 @@ function renderDotazniky(otazky, agregaty) {
 }
 
 // ---------------------------------------------------------------- init
+
+/** Které datasety stránka potřebuje — podle kontejnerů, které na ní jsou. */
+export const POTREBA = {
+  aplikace: ['zpPrehled', 'zpAppMatrix', 'zpRizikove', 'zpDalsi'],
+  prevence: ['zpPrehled', 'zpPrevMatrix', 'zpFpStruktura', 'zpOdpovediMatrix'],
+  otazky: ['zpOtazky', 'zpDotaznik'],
+  agregaty: ['zpDotaznikAgregace'],
+};
+
 async function init() {
-  renderModuleNav('pojistovny');
-  renderMastheadDate();
-  if (typeof renderFooter === 'function') renderFooter();
+  const doc = document;
+  const has = (ids) => ids.some((id) => doc.getElementById(id));
+  if (has(['zpPrehled'])) {
+    const to = legacyRedirect(location.search, location.hash);
+    if (to) { location.replace(to); return; }
+  }
+  const shell = renderZpShell();
+  const skip = Promise.resolve(null);
   const [d, a, p, o, agg] = await Promise.all([
-    loadJson('data/pojistovny.json'), loadJson('data/pojistovny-aplikace.json'),
-    loadJson('data/pojistovny-prevence.json'), loadJson('data/pojistovny-otazky.json'),
-    loadJson('data/pojistovny-dotaznik-agregaty.json'),
+    loadJson('data/pojistovny.json'),
+    has(POTREBA.aplikace) ? loadJson('data/pojistovny-aplikace.json') : skip,
+    has(POTREBA.prevence) ? loadJson('data/pojistovny-prevence.json') : skip,
+    has(POTREBA.otazky) ? loadJson('data/pojistovny-otazky.json') : skip,
+    has(POTREBA.agregaty) ? loadJson('data/pojistovny-dotaznik-agregaty.json') : skip,
   ]);
-  renderHero(d); renderApps(a); renderPrevence(p, d); renderKmen(d); renderOtazky(o);
-  renderDotazniky(o, agg);
-  document.addEventListener(MOJE_EVENT, (e) => syncCards(e.detail?.kod ?? null));
-  await initZpInteract(document);
-  syncCards(document.querySelector('main')?.getAttribute('data-moje-zp') || null);
+  if (has(['zpPrehled'])) {
+    renderPrehled({ d, a, p, tiles: d ? heroTiles(d, { bezFondu: true }) : null, kmen: d ? buildKmenCharts(d) : null });
+  } else {
+    renderHero(d);
+  }
+  if (has(['zpAppMatrix', 'zpRizikove', 'zpDalsi'])) renderApps(a);
+  if (has(['zpPrevMatrix', 'zpFpStruktura', 'zpMereni'])) renderPrevence(p, d);
+  if (has(['zpCards', 'zpChartShare', 'zpTableFin'])) renderKmen(d);
+  if (has(POTREBA.otazky)) { renderOtazky(o); renderDotazniky(o, agg); }
+  doc.addEventListener(MOJE_EVENT, (e) => syncCards(e.detail?.kod ?? null));
+  await initZpInteract(doc);
+  syncCards(doc.querySelector('main')?.getAttribute('data-moje-zp') || null);
+  await shell;
 }
 
 if (typeof document !== 'undefined') {
