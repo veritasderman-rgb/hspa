@@ -53,8 +53,42 @@ Průměr OECD = prostý průměr členských zemí s údajem za daný rok, prům
 | `nadeje_doziti_vzdelani_gap_muzi` | **neověřitelné** | 13 let — zdrojová analýza „Hamplová & Katrňák (CDK 2018)“ nedohledána, Eurostat `demo_mlexpecedu` ČR nemá; řada 1999–2016 je podle karty sama „orientační“. 4 tvrzení. Dohledat publikaci, nebo indikátor stáhnout |
 | `incidence_kolorektalni` | neověřeno | hrubá incidence z NOR — v této dávce nedošlo na stažení dat NOR; zůstává ve frontě |
 
+## Dávka 3 (2. 11. 2026)
+
+| Indikátor | Výsledek | Seed → zdroj |
+|---|---|---|
+| `ambulantni_kontakty_per_capita` | **opraveno**, živě z OECD | 11,2 kontaktu (OECD 6,8, EU 7,2) → 9,0 konzultace lékaře na obyvatele (2024, `DF_CONSULT`), OECD 8,1, EU 7,6; ČR nad průměrem zhruba o desetinu, ne „dvakrát víc“ |
+| `sestry_per_1000` | **opraveno**, živě z OECD | 9,0 (OECD 9,2) s klesající řadou → 9,09 (2024), řada roste (8,56 → 9,09); OECD 9,64, EU 8,56 |
+| `podil_lekaru_55plus` | **opraveno** | 41 % (2022), řada 2013–2022 orientační → 40,1 % (2024, OECD, vlastní výpočet z věkových skupin), 2022 39,1 %; OECD 29,8, EU 33,7. Srovnání zemí v článku ponecháno podle HaaG Europe 2024 |
+| `podil_prakticti_lekari` | ověřeno, řada nahrazena, živě z OECD | 16,9 % (2023) = OECD 16,86; nově 17,17 % (2024), OECD 22,5, EU 17,5 |
+| `spotreba_antibiotik` | ověřeno, řada odstraněna | 15,0 DDD (2023) = ECDC ESAC-Net, komunitní; OECD (primární péče) 15,4, průměr 15,7; EU 18,3 = ESAC-Net komunitní; řada 2020–2022 bez zdroje. Celková spotřeba (OECD/ECDC) roste: 13,4 (2020) → 18,9 (2024) |
+| `vakcinace_hpv` | ověřeno, benchmark odstraněn | 69,8 % (2023) = ÚZIS NZIS; nově 68,3 % (2024); „OECD 75 %, EU 72 %“ bez zdroje — OECD HPV nevede |
+| `hospitalizace_acsc` | ověřeno, řada a rok opraveny | 592 / OECD 473 = Health at a Glance 2025; jde o rok 2023 (součet OECD HCQI astma + CHOPN, srdeční selhání, diabetes), seed řada 650 / 600 / 615 → OECD 725 / 619 / 577 / 604 / 592 (2019–2023) |
+| `prevalence_dusevni_poruchy_dospeli` | ověřeno | 20,02 / 29,63 / 27,22 % = PMID 32988427 a 38042095; rok 2022 ovlivněn metodikou sběru (domácnostní vzorek 19,9 %) |
+| `naklady_centrove_leky_total` | ověřeno | 36,1 / 40,7 / 43,8 mld. Kč = OIS-11-06, edice 2026-01 |
+| `incidence_prsu` | ověřeno | 133 / EU 148 (ASR, 2022) = EU Country Cancer Profile Czechia 2025 |
+| `incidence_kolorektalni` | ASR srovnání ověřeno, hrubá míra ne | srovnání EU (muži na úrovni, ženy o 9 % níž) = Country Cancer Profile 2025; hrubá míra 73,5 z NOR nedohledána |
+| `predcasne_porody_pct` | nelze potvrdit | 6,4 % (2023) — ÚZIS prezentace uvádí 6,4 % bez roku; ročenka Rodička a novorozenec 2023 zatím nevyšla |
+| `hospicova_pece_luzka` | nelze potvrdit | 5 / 100 000 vs „OECD 8,1, EU 7,4“ — OECD hospicová lůžka samostatně nevede; benchmark podezřelý |
+| `screening_plicni` | nelze potvrdit | 2,7 % (2024) — NSC publikuje počty zapojených (15 673 osob do 3/2024), jmenovatel cílové populace nedohledán |
+| `bezpecnost_padu_nemocnice` | **neověřitelné, podezřelé** | 2,1 pádu / 1 000 hosp. vs „OECD 1,8, EU 2,0“ — zdroj „NRC — šetření kvality péče“ jako u `spokojenost_informovani`; OECD pády nevykazuje. Rozhodnutí vydavatele |
+
+Poznámka k dávkám 1 a 3: čísla „lékaři 4,2 vs OECD 3,9“, „sestry 9,0 vs 9,2“ a „antibiotika 15 vs 16“ jsou přesné citace OECD Health at a Glance 2025 (country note Czechia, data za rok 2023). Indikátory nově ukazují OECD data za rok 2024; citace HaaG 2025 v článcích s rokem 2023 zůstávají platné. Z téhož country note jdou ověřit i další seedy (např. `podil_generik_objem` 63 % vs OECD 56 %) — kandidáti na další dávku.
+
+## Dávka 4 (2. 11. 2026)
+
+| Indikátor | Výsledek | Seed → zdroj |
+|---|---|---|
+| `hiv_nove_diagnozy` | ověřeno | 2,7 / 100 000 (2025) a řada 2022–2025 = SZÚ NRL (293 / 269 / 253 / 292 případů); EU/EHP 5,3 = ECDC/WHO 2025 (data 2024) |
+| `vydaje_dlouhodoba_pece_hdp` | ověřeno, řada nahrazena | 1,9 % HDP (2023) = OECD SHA HC.3 + HCR.1 (1,88); OECD 1,84, EU 1,66; seed řada 1,5 → 1,9 nahrazena OECD (1,83 → 1,96 → 1,88) |
+| `podil_generik_objem` | ověřeno, řada nahrazena | 62,8 % (2023) = OECD `DF_GEN_MRKT`, HaaG 2025 63 % vs OECD 56 %; seed řada rostla z 58,2 %, OECD je od 2013 stabilní kolem 63 % |
+| `alkohol_adolescenti` | hodnota sedí, řada a srovnání ne | 56 % = ESPAD 2024 CZ 56,2 %; řada 2011–2019 a průměr ESPAD 42 % neověřeny |
+| `spotreba_antidiabetik` | benchmark sedí, hodnota ne | OECD 94,2 a EU 92,7 = OECD 2024; hodnota 113,1 (2025) je vlastní přepočet SÚKL, OECD pro ČR uvádí 107,1 (2024) |
+| `pm25_expozice` | hodnota a OECD sedí, rok ne | 14,1 µg/m³ vs OECD 11,2 = HaaG 2025; seed ji vede jako rok 2024 s řadou od 2020 — rok a řadu ověřit v datech OECD/EEA |
+| `klistova_encefalitida` | hodnota konzistentní, EU neověřeno | 6,1 / 100 000 (2024) odpovídá 670 případům; 2020 7,9 = ECDC; EU 0,81 nedohledáno |
+
 ## Fronta na další dávky
 
-Podle počtu publikovaných článků (k 2. 11. 2026), bez indikátorů, které už čekají na rozhodnutí vydavatele (`ehealth_adoption`, `cekaci_doby_specialist`, `spokojenost_informovani`, `nadeje_doziti_vzdelani_gap_muzi`) nebo nejdou ověřit z veřejných agregátů (viz dávka 1): `sestry_per_1000` (14), `spotreba_antibiotik` (14), `incidence_kolorektalni` (8), `podil_prakticti_lekari` (8), `ambulantni_kontakty_per_capita`, `hospicova_pece_luzka`, `incidence_prsu`, `naklady_centrove_leky_total`, `podil_lekaru_55plus`, `predcasne_porody_pct`, `prevalence_dusevni_poruchy_dospeli`, `screening_plicni`, `vakcinace_hpv` (po 7), `bezpecnost_padu_nemocnice` (6), … Neověřených seedů zbývá 114.
+Podle počtu publikovaných článků (k 2. 11. 2026), bez indikátorů čekajících na rozhodnutí vydavatele (`ehealth_adoption`, `cekaci_doby_specialist`, `spokojenost_informovani`, `nadeje_doziti_vzdelani_gap_muzi`, `bezpecnost_padu_nemocnice`) a bez těch, které nejdou ověřit z veřejných agregátů (dávky 1–3): kandidáti z country note Health at a Glance 2025 (`podil_generik_objem`, `luzka_psychiatricka_per_1000`, `pet_skenery_per_milion`, `readmise_30d_ami`), dále `alkohol_adolescenti`, `koureni_v_tehotenstvi`, `mamografy_per_100k`, `trombolyza_ischemicka_cmp`, … Neověřených seedů zbývá 101.
 
 Pojistka: `npm run validate:claims` (kontrola `ingest/validate-seed-claims.js`) hlídá, aby nově publikovaná tvrzení (`data/claims.json`, `check: auto`) nestála na neověřeném seedu. Stávající případy jsou v baseline `data/seed-claims-baseline.json`; s každou dávkou auditu se baseline zmenšuje a nesmí růst.
