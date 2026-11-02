@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-11-02
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-11-02
+    creation_phase: rutina+indicator-add
+    primary_sources_count: 3
+    evidence_sources_count: 7
+    visual_elements_count: 6
+    notes: "Doprovodny clanek k novemu indikatoru omezeni_zdravim_prijmovy_gap (Vysledky · Socialni determinanty zdravi · Nerovnosti ve zdravi, framework hspa, dimension spravedlnost, direction lower_is_better, signal warn). KPI: 15,4 p. b. (2025; Eurostat hlth_silc_12, unit PC, sex T, age Y16-64, lev_limit SM_SEV, QU1 26,6 − QU5 11,2; celkem 17,4; dataset aktualizovan 20. 10. 2026, stazeno pres API 2. 11. 2026, prepocteno redakci z ulozeneho JSON). RADA CZ rozdil 2015–2025: 17,4 · 16,4 · 22,0 · 19,0 · 20,8 · 22,0 · 12,1 · 17,1 · 14,6 · 11,3 · 15,4 (prumer 17,1; trilety prumer 2023–2025 13,8). BENCH EU27_2020 2025: 24,6 − 11,1 = 13,5 (celkem 16,3; rada 2015–2025 11,3–13,5; 2015–2016 odhad e; trilety prumer 13,1). SIGNAL: (15,4 − 13,5)/13,5 = +14,1 % → warn (prahy good 5, warn 15; computeSignal overen). SOUSEDE 2025 QU1/QU5/celkem/rozdil: DE 31,7/12,8/19,6/18,9 (zlom b 2015, 2020, 2022; odhad e 2023) · AT 31,0/19,6/24,1/11,4 · PL 20,6/10,0/14,2/10,6 · SK 19,1/13,2/16,8/5,9. 16+: CZ 39,7/13,8 (25,9), EU 33,5/15,4 (18,1). Pomery QU1/QU5: CZ 2,4 · EU 2,2 · DE 2,5 · AT 1,6 · PL 2,1 · SK 1,4. EVIDENCE (vse overeno v PubMed 2. 11. 2026, cisla jen z abstraktu): Cambois 2015 PMID 26546286 (CZ OR 1,9 [1,7–2,2], SE 1,2); Rubio-Valverde 2021 PMID 33674458; Rubio-Valverde 2018 PMID 30478617 (EU-SILC o 52,5 % / 28,1 % vyssi nerovnosti nez EHIS); Asgeirsdottir 2013 PMID 23866925 (440 000 osob, 26 zemi); Garcia-Gomez 2013 PMID 25067853 (−7 p. b. zamestnanost, −5 % prijem, domacnost o 50 % vic); Lenhart 2018 PMID 29876764; Garcia Gomez 2006 PMID 16929474. Consensus 2 dotazy jen jako vyhledavac. Ceska paka: jen existence zakonu 187/2006 Sb. a 155/1995 Sb. bez parametru. Forma: standardni clanek (esej ne — chybi dolozena scena; uvodni situace je modelova; obrat ve vyzkumu by unesla obracena kauzalita, ale bez sceny podminka 1 neplati). Ceka na schvaleni redakce."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zdraví omezuje 26,6 % nejchudších Čechů v produktivním věku, ale jen 11,2 % nejbohatších · HSPA Monitor</title>
+<meta name="description" content="Kvůli zdravotnímu problému je dlouhodobě omezeno v běžných činnostech 26,6 % Čechů ve věku 16–64 let z nejchudší příjmové pětiny, ale jen 11,2 % z nejbohatší. Rozdíl 15,4 procentního bodu je větší než v EU (13,5). Nejbohatší pětina je přitom na úrovni průměru EU, nejchudší je na tom hůř. Nový indikátor HSPA Monitoru z dat EU-SILC ukazuje i to, proč příjmový gradient nelze číst jen jedním směrem: nemoc sama snižuje příjem.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Zdraví omezuje 26,6 % nejchudších Čechů v produktivním věku, ale jen 11,2 % nejbohatších">
+<meta property="og:description" content="Rozdíl mezi nejchudší a nejbohatší pětinou 15,4 bodu, v EU 13,5 (Eurostat, EU-SILC 2025). Nerovnost je v dolní části rozdělení a běží oběma směry.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-omezeni-zdravim-prijem-2026.html">
+<meta property="article:published_time" content="2026-11-03">
+<meta property="article:section" content="Sociální determinanty">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-omezeni-zdravim-prijem-2026.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "Zdraví omezuje 26,6 % nejchudších Čechů v produktivním věku, ale jen 11,2 % nejbohatších",
+  "description": "Kvůli zdravotnímu problému je dlouhodobě omezeno v běžných činnostech 26,6 % Čechů ve věku 16–64 let z nejchudší příjmové pětiny, ale jen 11,2 % z nejbohatší. Rozdíl 15,4 procentního bodu je větší než v EU (13,5). Nejbohatší pětina je přitom na úrovni průměru EU, nejchudší je na tom hůř. Nový indikátor HSPA Monitoru z dat EU-SILC ukazuje i to, proč příjmový gradient nelze číst jen jedním směrem: nemoc sama snižuje příjem.",
+  "datePublished": "2026-11-03T06:00:00+01:00",
+  "dateModified": "2026-11-02",
+  "inLanguage": "cs",
+  "articleSection": "Sociální determinanty",
+  "author": { "@type": "Organization", "name": "Redakce HSPA Monitoru" },
+  "publisher": { "@type": "Organization", "name": "HSPA Monitor · Skóre zdravotnictví", "url": "https://skorezdravotnictvi.cz" },
+  "mainEntityOfPage": "https://skorezdravotnictvi.cz/clanek-omezeni-zdravim-prijem-2026.html"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Sociální determinanty</span>
+        <span class="article-tag article-tag-muted">nerovnosti ve zdraví · příjem · EU-SILC · Eurostat</span>
+      </div>
+      <h1 class="article-title">Zdraví omezuje 26,6 % nejchudších Čechů v produktivním věku, ale jen 11,2 % nejbohatších</h1>
+      <p class="article-deck">
+        Kvůli zdravotnímu problému je dlouhodobě omezeno v běžných činnostech 26,6 % Čechů ve věku 16–64 let z nejchudší příjmové pětiny, ale jen 11,2 % z nejbohatší. Rozdíl 15,4 procentního bodu je větší než v EU (13,5). Nejbohatší pětina je přitom na úrovni průměru EU, nejchudší je na tom hůř. Nový indikátor HSPA Monitoru z dat EU-SILC ukazuje i to, proč příjmový gradient nelze číst jen jedním směrem: nemoc sama snižuje příjem.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">3. listopadu 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">12 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Představte si modelovou situaci, ne skutečný případ: dva čtyřicátníci ze stejného města, oba s bolavými zády. Jeden nosí ve skladu krabice, druhý sedí u počítače v projekční kanceláři. Prvnímu bolest postupně bere směny, úvazek a s ním i část výplaty. Druhému občas zkazí víkend. Když se jich statistici zeptají, jestli je zdravotní problém už půl roku omezuje v tom, co lidé běžně dělají, první odpoví ano a druhý ne. Evropská data ukazují, že takových odpovědí je v nejchudší pětině Čechů v produktivním věku <strong>26,6 %, v nejbohatší 11,2 %</strong>. A ukazují také, že česká nerovnost neleží nahoře, ale dole.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCntH">
+        <figcaption class="av-figure-h" id="avCntH">Dlouhodobé omezení zdravím podle příjmu, věk 16–64 let: čtyři čísla (Eurostat, EU-SILC 2025)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="15.4" data-decimals="1" data-suffix=" p. b.">15,4 p. b.</span>
+            <span class="av-counter-label">rozdíl mezi nejchudší a nejbohatší pětinou</span>
+            <span class="av-counter-foot">Česko 2025, výpočet redakce (EU 13,5)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="26.6" data-decimals="1" data-suffix=" %">26,6 %</span>
+            <span class="av-counter-label">omezených v nejchudší pětině</span>
+            <span class="av-counter-foot">Česko 2025 (EU 24,6 %)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="11.2" data-decimals="1" data-suffix=" %">11,2 %</span>
+            <span class="av-counter-label">omezených v nejbohatší pětině</span>
+            <span class="av-counter-foot">Česko 2025 (EU 11,1 %)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="17.4" data-decimals="1" data-suffix=" %">17,4 %</span>
+            <span class="av-counter-label">omezených v celé populaci 16–64 let</span>
+            <span class="av-counter-foot">Česko 2025 (EU 16,3 %)</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat, hlth_silc_12 (EU-SILC, omezení v obvyklých činnostech kvůli zdravotnímu problému podle příjmového kvintilu; „značně“ nebo „do určité míry“), vlna 2025, dataset aktualizován 20. 10. 2026, staženo přes API 2. 11. 2026. Rozdíl mezi pětinami spočítala redakce HSPA Monitoru.</p>
+      </figure>
+
+      <h3>Co indikátor měří</h3>
+      <p>
+        Nový indikátor <a href="indicator.html?id=omezeni_zdravim_prijmovy_gap">Rozdíl v omezení zdravím mezi nejchudší a nejbohatší pětinou</a> stojí na jedné otázce, kterou Český statistický úřad každý rok klade v šetření Životní podmínky, české části evropského šetření EU-SILC. Respondent říká, zda ho zdravotní problém alespoň posledních šest měsíců omezuje v činnostech, které lidé obvykle dělají, a pokud ano, zda značně, nebo jen do určité míry. Epidemiologové otázku znají pod zkratkou GALI (Global Activity Limitation Indicator). Je to tatáž otázka, ze které Eurostat počítá <a href="indicator.html?id=nadeje_doziti_zdravi_65">naději dožití ve zdraví</a>.
+      </p>
+      <p>
+        Lidi pak rozdělíme do pěti stejně velkých skupin podle ekvivalizovaného disponibilního příjmu domácnosti, tedy příjmu po zdanění a sociálních dávkách přepočteného na velikost domácnosti. Indikátor je rozdíl v procentních bodech mezi podílem omezených v nejchudší pětině a v nejbohatší pětině. V roce 2025 je to 26,6 minus 11,2, tedy 15,4 bodu. Eurostat publikuje podíly za jednotlivé pětiny, samotný rozdíl spočítala redakce.
+      </p>
+      <p>
+        Indikátor patří do oblasti Výsledky a dimenze spravedlnosti, menší hodnota je lepší. Proti evropskému průměru 13,5 bodu je česká hodnota zhruba o 14 % vyšší, signál je proto <em>warn</em>. Prahy signálu jsme nastavili šířeji než u jiných ukazatelů, protože rozdíl dvou malých podskupin vzorku je zatížený výběrovou chybou. Důvod ukazuje hned další graf.
+      </p>
+
+      <h3>Stav v Česku: rozkolísaná řada, stálý vzorec</h3>
+
+      <figure class="av-trend" data-unit=" p. b.">
+        <figcaption class="av-trend-h">Rozdíl v podílu osob 16–64 let omezených zdravím mezi nejchudší a nejbohatší příjmovou pětinou, Česko 2015–2025, p. b. (Eurostat hlth_silc_12)</figcaption>
+        <div class="av-trend-chart"
+             data-points='[{"year":2015,"value":17.4},{"year":2016,"value":16.4},{"year":2017,"value":22.0},{"year":2018,"value":19.0},{"year":2019,"value":20.8},{"year":2020,"value":22.0},{"year":2021,"value":12.1},{"year":2022,"value":17.1},{"year":2023,"value":14.6},{"year":2024,"value":11.3},{"year":2025,"value":15.4}]'
+             data-min="0" data-max="25"></div>
+        <p class="av-trend-note">Zdroj: Eurostat, hlth_silc_12, Česko, věk 16–64 let, rozdíl QU1 − QU5, staženo 2. 11. 2026; rozdíl spočítala redakce. Unijní průměr se ve stejném období pohyboval mezi 11,3 a 13,5 p. b.</p>
+      </figure>
+
+      <p>
+        Česká řada za jedenáct let skáče mezi 11,3 a 22,0 bodu. Nejvyšší byla v letech 2017 a 2020 (shodně 22,0), nejnižší v roce 2024 (11,3). Mezi lety 2020 a 2021 klesla o 9,9 bodu, protože podíl omezených v nejchudší pětině spadl z 34,5 na 24,0 %. Mezi lety 2016 a 2017 naopak vyskočil z 27,5 na 33,7 %. Eurostat ani u jednoho z těchto pohybů neoznačuje zlom řady a z dat jejich příčinu určit neumíme. Takové výkyvy jsou typické pro malé podskupiny výběrového šetření, a proto je rozumné nečíst jednotlivý rok, ale směr.
+      </p>
+      <p>
+        Ten je stabilní na druhém konci rozdělení. Podíl omezených v nejbohatší pětině se celou dobu drží mezi 9,4 a 12,5 %. Veškerý pohyb se odehrává dole, kde se hodnoty pohybují mezi 23,7 a 34,5 %. Průměr české mezery za celé období je 17,1 bodu. Za poslední tři roky, které jsou klidnější, je to 13,8 bodu proti evropským 13,1. V žádném roce od roku 2015 nebyla česká mezera menší než 11,3 bodu a v celé populaci 16–64 let se podíl omezených držel mezi 15,7 a 19,4 %.
+      </p>
+
+      <h3>Kde nerovnost vzniká: nahoře jako Evropa, dole hůř</h3>
+
+      <figure class="av-figure" aria-labelledby="avBarH">
+        <figcaption class="av-figure-h" id="avBarH">Podíl osob 16–64 let dlouhodobě omezených zdravím, nejchudší a nejbohatší pětina, Česko a EU, 2025, % (Eurostat)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="30">
+          <li class="av-bar-row av-bar-row-highlight" data-value="26.6" data-label="Česko — nejchudší pětina" data-display="26,6"></li>
+          <li class="av-bar-row" data-value="24.6" data-label="EU — nejchudší pětina" data-display="24,6"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="11.2" data-label="Česko — nejbohatší pětina" data-display="11,2"></li>
+          <li class="av-bar-row" data-value="11.1" data-label="EU — nejbohatší pětina" data-display="11,1"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat, hlth_silc_12, věk 16–64 let, vlna 2025, staženo 2. 11. 2026. EU = agregát EU27_2020 publikovaný Eurostatem.</p>
+      </figure>
+
+      <p>
+        Tohle je hlavní zjištění indikátoru. Nejbohatší pětina Čechů v produktivním věku je na tom prakticky stejně jako nejbohatší pětina v průměru Evropské unie: 11,2 proti 11,1 %. Rozdíl jedné desetiny bodu je pod rozlišovací schopností šetření. Nejchudší pětina je na tom hůř: 26,6 proti 24,6 %. Celý český náskok v nerovnosti, tedy rozdíl mezi 15,4 a 13,5 bodu, se tak odehrává v dolní části příjmového rozdělení.
+      </p>
+      <p>
+        Má to praktický význam. Kdyby česká nerovnost vznikala tím, že bohatší Češi jsou mimořádně zdraví, šlo by o jiný problém než ten, který data ukazují. Nejchudší pětina má podíl omezených 2,4krát vyšší než nejbohatší, v EU je to 2,2krát. Stejný vzorec dřív popsala recenzovaná literatura pro vzdělání. Studie Emmanuelle Cambois a kolegů nad daty EU-SILC z roku 2009 pro 26 evropských zemí rozlišila „znevýhodnění“ nejníže vzdělaných a „výhodu“ nejvýše vzdělaných vůči středu. Relativní znevýhodnění lidí s nízkým vzděláním bylo velké mimo jiné v Česku, s poměrem šancí 1,9 (1,7–2,2), zatímco ve Švédsku jen 1,2 (<em>Cambois et al., 2015, Journal of Epidemiology and Community Health</em>, <a href="https://doi.org/10.1136/jech-2015-205978" target="_blank" rel="noopener">doi.org ↗</a>). Jiné měřítko a jiný rok, ale stejný směr: české nerovnosti v omezení zdravím jsou silné hlavně dole.
+      </p>
+      <p>
+        Je dobré připomenout, že Česko má podle Eurostatu výrazně nižší <a href="indicator.html?id=ohrozeni_chudobou">míru ohrožení příjmovou chudobou</a> než průměr EU (9,6 % v roce 2025 proti 16,3 %). Nízká chudoba a zároveň nadprůměrný zdravotní gradient se nevylučují. Příjmové pětiny se počítají v každé zemi zvlášť, takže i v zemi s malými příjmovými rozdíly existuje nejchudší pětina a v ní se mohou soustředit lidé, které nemoc vyřadila z plné práce. K tomu se vrátíme u otázky kauzality.
+      </p>
+
+      <h3>Mezinárodní srovnání: Česko mezi Německem a Polskem</h3>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTabH">
+        <figcaption class="av-figure-h" id="avTabH">Dlouhodobé omezení zdravím podle příjmové pětiny, věk 16–64 let, Česko, sousední státy a EU, 2025, % a p. b. (Eurostat hlth_silc_12)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Stát</th>
+                <th scope="col" class="av-num">Nejchudší pětina</th>
+                <th scope="col" class="av-num">Nejbohatší pětina</th>
+                <th scope="col" class="av-num">Celkem</th>
+                <th scope="col" class="av-num">Rozdíl (p. b.)</th>
+                <th scope="col" class="av-num">Poměr</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Německo</th><td class="av-num">31,7</td><td class="av-num">12,8</td><td class="av-num">19,6</td><td class="av-num">18,9</td><td class="av-num">2,5×</td></tr>
+              <tr class="av-row-highlight"><th scope="row">Česko</th><td class="av-num">26,6</td><td class="av-num">11,2</td><td class="av-num">17,4</td><td class="av-num av-warn">15,4</td><td class="av-num">2,4×</td></tr>
+              <tr><th scope="row">EU27</th><td class="av-num">24,6</td><td class="av-num">11,1</td><td class="av-num">16,3</td><td class="av-num">13,5</td><td class="av-num">2,2×</td></tr>
+              <tr><th scope="row">Rakousko</th><td class="av-num">31,0</td><td class="av-num">19,6</td><td class="av-num">24,1</td><td class="av-num">11,4</td><td class="av-num">1,6×</td></tr>
+              <tr><th scope="row">Polsko</th><td class="av-num">20,6</td><td class="av-num">10,0</td><td class="av-num">14,2</td><td class="av-num">10,6</td><td class="av-num">2,1×</td></tr>
+              <tr><th scope="row">Slovensko</th><td class="av-num">19,1</td><td class="av-num">13,2</td><td class="av-num">16,8</td><td class="av-num">5,9</td><td class="av-num">1,4×</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat, hlth_silc_12, vlna 2025, staženo 2. 11. 2026. Rozdíly a poměry spočítala redakce HSPA Monitoru. Německo má v řadě příznaky zlomu (2015, 2020, 2022) a odhadu (2023).</p>
+      </figure>
+
+      <p>
+        Ze sousedů má větší příjmový rozdíl jen Německo s 18,9 bodu. Rakousko (11,4), Polsko (10,6) a Slovensko (5,9) jsou pod evropským průměrem. Stojí ale za to dívat se i na úroveň, nejen na rozdíl. Rakousko má malý rozdíl hlavně proto, že i v jeho nejbohatší pětině uvádí omezení 19,6 % lidí, což je víc než v celé české populaci 16–64 let. Celkový podíl omezených se mezi státy liší téměř o deset bodů (Polsko 14,2 %, Rakousko 24,1 %). Část té variability může souviset s tím, jak lidé v různých zemích otázku chápou a jak ji šetření kladou; literatura ukazuje, že na odhady GALI má volba a podoba šetření velký vliv.
+      </p>
+      <p>
+        Na kolísání rozdílu upozorňuje i Slovensko. Jeho mezera byla v roce 2023 jen 1,9 bodu, o rok dřív 7,8 a v roce 2020 14,7. Takové skoky nejsou změnou společnosti, ale vlastností dat. Proto Česko neřadíme podle jednoho roku, ale podle opakujícího se vzorce: česká mezera byla nad evropskou v devíti z jedenácti let. Pod evropskou úrovní byla jen ve dvou letech, 2021 (12,1 proti 12,2) a 2024 (11,3 proti 13,1).
+      </p>
+
+      <div class="article-callout-caveat" role="note">
+        <strong>Jak číst mezinárodní srovnání</strong>
+        GALI je sebehodnocení a odpověď závisí na tom, co člověk považuje za „obvyklé činnosti“. Znění otázky a způsob sběru se mezi státy liší. Analýza tří evropských šetření zjistila, že EU-SILC ukazuje o 52,5 % (muži) a 28,1 % (ženy) vyšší vzdělanostní nerovnosti v GALI než Evropské výběrové šetření o zdraví (EHIS) a že se pořadí zemí mezi šetřeními neshoduje (<em>Rubio-Valverde et al., 2018, International Journal of Public Health</em>, <a href="https://doi.org/10.1007/s00038-018-1174-7" target="_blank" rel="noopener">doi.org ↗</a>). Příjmové pětiny jsou národní: nejchudší pětina v Německu a v Česku má jinou absolutní úroveň příjmu. Každá pětina tvoří jen pětinu vzorku, takže rozdíl dvou pětin kolísá víc než celostátní podíl. Šetření pokrývá jen soukromé domácnosti, lidé v ústavní péči v něm nejsou. Rozdíly i poměry počítá redakce, Eurostat je nepublikuje.
+      </div>
+
+      <h3>Proč jen 16–64 let</h3>
+      <p>
+        Eurostat publikuje stejná data i pro celou dospělou populaci od 16 let. Tam je česká mezera výrazně větší: 39,7 % omezených v nejchudší pětině proti 13,8 % v nejbohatší, tedy 25,9 bodu (EU 33,5 proti 15,4, tedy 18,1 bodu). Tuto širší verzi jsme už popsali v článku <a href="clanek-prijem-a-zdravi.html">Třicet bodů mezi pětinami</a>. Pro indikátor jsme ale zvolili věk 16–64 let, a to z jednoho důvodu: v nejchudší pětině celé dospělé populace je hodně starobních důchodců a s věkem omezení přirozeně přibývá. Část rozdílu v populaci 16+ tak neměří příjmový gradient, ale věkové složení pětin.
+      </p>
+      <p>
+        Zúžení na produktivní věk tento vliv zmenší, ale neodstraní. Ani pětiny ve věku 16–64 let nejsou věkově stejné a data nejsou věkově standardizovaná. Nejde přitom o to schovat seniory: i mezi lidmi nad 65 let je v Česku podíl omezených v nejchudší pětině 64,7 % a v nejbohatší 36,3 %. Jen tam se příjmový a věkový efekt míchá ještě víc, protože příjem seniorů tvoří hlavně důchod.
+      </p>
+
+      <h3>Co říkají studie: gradient je všude, ale běží oběma směry</h3>
+      <p>
+        Že zdraví v Evropě sleduje příjem, je dobře doložené. Analýza dat EU-SILC z roku 2007 pro 440 000 lidí ve 26 zemích našla příjmovou nerovnost ve zdraví ve prospěch bohatších ve všech zkoumaných státech. Uvnitř zemí ji vysvětloval hlavně samotný příjem, věk, vzdělání a ekonomická aktivita, tedy zda člověk pracuje, je nezaměstnaný nebo v důchodu (<em>Ásgeirsdóttir a Ragnarsdóttir, 2013, International Journal for Equity in Health</em>, <a href="https://doi.org/10.1186/1475-9276-12-53" target="_blank" rel="noopener">doi.org ↗</a>). Dlouhodobé sledování 26 zemí v letech 2002 až 2017 navíc ukázalo, že podle EU-SILC se vzdělanostní rozdíl v GALI zvětšoval, protože omezení ubývalo hlavně u vzdělanějších. V jiném šetření (ESS) ale takový trend vidět nebyl (<em>Rubio Valverde et al., 2021, Journal of Epidemiology and Community Health</em>, <a href="https://doi.org/10.1136/jech-2020-216141" target="_blank" rel="noopener">doi.org ↗</a>).
+      </p>
+      <p>
+        Z těchto čísel by se dalo snadno vyvodit, že chudoba lidi omezuje a stačí zvýšit příjmy. Jenže u příjmu a zdraví platí víc než jinde, že korelace není kauzalita, a tady konkrétně ne v jednom směru. Výzkumníci z rotterdamské Erasmovy univerzity propojili nizozemská data o hospitalizacích s daňovými registry a porovnali lidi po náhlé akutní hospitalizaci s podobnými lidmi bez ní. Dva roky po události byla u hospitalizovaných pravděpodobnost zaměstnání o 7 procentních bodů nižší a osobní příjem o 5 % nižší, a k zotavení v dalších letech nedošlo. Příjem celé domácnosti klesl o 50 % víc než příjem samotného nemocného (<em>García-Gómez et al., 2013, Journal of Human Resources</em>, <a href="https://doi.org/10.1353/jhr.2013.0031" target="_blank" rel="noopener">doi.org ↗</a>).
+      </p>
+      <p>
+        K podobnému závěru došla analýza britského panelového šetření domácností: náhlé zhoršení zdraví vedlo k významnému a trvalému poklesu výdělků, nejvíc po závažných zdravotních šocích (<em>Lenhart, 2018, European Journal of Health Economics</em>, <a href="https://doi.org/10.1007/s10198-018-0985-z" target="_blank" rel="noopener">doi.org ↗</a>). Starší španělská studie nad evropským panelem domácností pak ukázala obě strany najednou: zdravotní šok snižoval pravděpodobnost zaměstnání i pracovní příjem, a lidé, kteří o práci přišli, zároveň častěji hlásili horší zdraví než jinak srovnatelní lidé, kteří pracovat nepřestali (<em>García Gómez a López Nicolás, 2006, Health Economics</em>, <a href="https://doi.org/10.1002/hec.1151" target="_blank" rel="noopener">doi.org ↗</a>).
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avFlowH">
+        <figcaption class="av-figure-h" id="avFlowH">Proč rozdíl mezi pětinami neříká, co je příčina: dva směry, které indikátor sčítá (schéma redakce podle citovaných studií)</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Nižší příjem → horší zdraví</h4>
+            <p class="av-flow-desc">Fyzicky náročnější práce, horší bydlení, víc rizikových faktorů a pozdější léčba zvyšují šanci na dlouhodobé omezení.</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Nemoc → nižší příjem</h4>
+            <p class="av-flow-desc">Dlouhodobá nemoc nebo úraz snižují pracovní schopnost, úvazek i výdělek; člověk se posune do nižší pětiny.</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Průřezové šetření</h4>
+            <p class="av-flow-desc">EU-SILC zachytí oba stavy ve stejném okamžiku a nerozliší, co bylo dřív.</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Indikátor</h4>
+            <p class="av-flow-desc">Rozdíl 15,4 p. b. je součet obou mechanismů. Kolik připadá na který, data neříkají.</p>
+            <span class="av-flow-tag">chybí: panelová data za Česko</span>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> schéma sestavila redakce HSPA Monitoru podle studií García-Gómez et al. (2013), Lenhart (2018) a García Gómez a López Nicolás (2006); hodnota 15,4 p. b. z Eurostatu, hlth_silc_12, 2025.</p>
+      </figure>
+
+      <p>
+        Pro náš indikátor to znamená jednu nepohodlnou věc. Část lidí je v nejchudší pětině právě proto, že je omezuje zdraví. Rozdíl 15,4 bodu proto nelze číst jako „chudoba způsobuje omezení“ ani jako „nemocní jsou chudí“. Je to součet obou mechanismů a z průřezových dat nejde rozdělit. Z toho ale plyne i praktická informace: rozdíl mezi pětinami je zároveň měřítkem toho, jak dobře systém chrání příjem lidí, kteří onemocní. Pokud by se v nějaké zemi lidé s dlouhodobou nemocí propadali do nejnižší pětiny častěji, vyjde i větší rozdíl, aniž by se změnilo cokoli na zdraví chudých.
+      </p>
+
+      <h3>Co s tím</h3>
+      <p>
+        <strong>Pro ministerstvo zdravotnictví a pojišťovny:</strong> EU-SILC se neptá na diagnózu, takže z indikátoru nevyčteme, které nemoci omezení v produktivním věku způsobují. To je první mezera, kterou by stálo za to zaplnit, například propojením se šetřením EHIS nebo s daty pojišťoven. Teprve pak lze včasné rozpoznání a léčbu cílit tam, kde se omezení soustřeďuje. Prevence nabízená všem stejně dopadá nejslaběji právě na nejchudší pětinu; jak se to projevuje u preventivních prohlídek a zdravotní gramotnosti, popisujeme v textu o <a href="clanek-zdravotni-gramotnost.html">zdravotní gramotnosti</a>.
+      </p>
+      <p>
+        <strong>Pro ministerstvo práce a sociálních věcí:</strong> druhý směr vztahu, tedy nemoc, která snižuje příjem, ovlivňují nástroje mimo zdravotnictví. Česko má nemocenské pojištění (<a href="https://www.zakonyprolidi.cz/cs/2006-187" target="_blank" rel="noopener">zákon č. 187/2006 Sb.</a>) a invalidní důchody v rámci důchodového pojištění (<a href="https://www.zakonyprolidi.cz/cs/1995-155" target="_blank" rel="noopener">zákon č. 155/1995 Sb.</a>). Indikátor neumí říct, jak dobře tyto nástroje fungují, ale umožňuje sledovat, zda se rozdíl mezi pětinami v čase zmenšuje. Citované studie z Nizozemska a Británie přitom ukazují, že ztráta zaměstnání a příjmu po zdravotním šoku bývá trvalá, takže na ochraně příjmu a zaměstnání po onemocnění záleží.
+      </p>
+      <p>
+        <strong>Pro statistiku:</strong> skutečnou odpověď na otázku, kolik z rozdílu je příčina a kolik důsledek, by daly panelové údaje sledující tytéž lidi v čase, nebo propojení údajů o zdravotní péči s daňovými a sociálními registry, jaké použila nizozemská studie. Bez nich zůstává tento indikátor ukazatelem nerovnosti, ne její diagnózou.
+      </p>
+      <p>
+        <strong>Pro čtenáře:</strong> dlouhodobé omezení zdravím není osud jedné příjmové skupiny. Pokud vás nemoc vyřazuje z práce, je dobré včas řešit s praktickým lékařem i se zaměstnavatelem úpravu práce a rehabilitaci, ne až ve chvíli, kdy končí nemocenská.
+      </p>
+
+      <h3>Co tenhle ukazatel nedokáže</h3>
+      <p>
+        Rozdíl mezi pětinami nerozliší příčinu a důsledek. Neříká, jak závažné omezení je, protože spojuje odpovědi „značně“ a „do určité míry“. Je to sebehodnocení, takže odráží i očekávání a zvyklosti respondentů. Není věkově standardizovaný. Každoročně kolísá o několik bodů jen kvůli velikosti vzorku, proto ho čteme spíš přes víceleté průměry: za roky 2023 až 2025 je to v Česku 13,8 a v EU 13,1 bodu. Signál <em>warn</em> v roce 2025 tak neznamená, že se situace zhoršila; o rok dřív by stejný výpočet dal <em>good</em>. Stálé je to, co čísla opakují rok co rok: nahoře je Česko jako Evropa, dole je na tom hůř.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=omezeni_zdravim_prijmovy_gap"><strong>Rozdíl v omezení zdravím mezi nejchudší a nejbohatší pětinou (16–64 let)</strong></a> — 15,4 p. b. (2025, Eurostat EU-SILC) proti EU 13,5 · Výsledky · signál warn</li>
+        <li><a href="indicator.html?id=nadeje_doziti_zdravi_65"><strong>Naděje dožití ve zdraví (65 let)</strong></a> — 8 let (2024, Eurostat) proti EU 10,3; počítá se ze stejné otázky GALI</li>
+        <li><a href="indicator.html?id=subjektivni_zdravi"><strong>Subjektivní hodnocení zdraví (16+)</strong></a> — 67 % dobré nebo velmi dobré (2025, Eurostat EU-SILC) proti EU 67,9 %</li>
+        <li><a href="indicator.html?id=ohrozeni_chudobou"><strong>Míra ohrožení příjmovou chudobou</strong></a> — 9,6 % (2025, Eurostat) proti EU 16,3 %</li>
+        <li><a href="indicator.html?id=nadeje_doziti_vzdelani_gap_muzi"><strong>Rozdíl v naději dožití mužů podle vzdělání</strong></a> — 13 let (ČSÚ, analýza Hamplová a Katrňák)</li>
+      </ul>
+      <p>Související články: <a href="clanek-prijem-a-zdravi.html">Třicet bodů mezi pětinami</a> · <a href="clanek-nadeje-doziti-vzdelani.html">Naděje dožití podle vzdělání</a> · <a href="clanek-zdravotni-gramotnost.html">Zdravotní gramotnost</a></p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární zdroje dat</h5>
+        <ul class="article-sources-list">
+          <li><strong>Eurostat — Self-perceived long-standing limitations in usual activities due to health problem by sex, age and income quintile (hlth_silc_12)</strong>. Podíl osob omezených „značně“ nebo „do určité míry“ (SM_SEV) podle příjmové pětiny, věk 16–64 let, 16+ a 65+, Česko, Německo, Rakousko, Polsko, Slovensko a EU27, 2015–2025; dataset aktualizován 20. 10. 2026, staženo přes API 2. 11. 2026. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_silc_12/default/table" target="_blank" rel="noopener">ec.europa.eu ↗</a> · <a href="https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/hlth_silc_12?format=JSON&amp;lang=EN&amp;geo=CZ&amp;geo=EU27_2020&amp;geo=DE&amp;geo=AT&amp;geo=PL&amp;geo=SK&amp;unit=PC&amp;sex=T&amp;lev_limit=SM_SEV&amp;age=Y16-64&amp;age=Y_GE16&amp;quant_inc=QU1&amp;quant_inc=QU5&amp;quant_inc=TOTAL&amp;sinceTimePeriod=2015" target="_blank" rel="noopener">API ↗</a></li>
+          <li><strong>Český statistický úřad — šetření Životní podmínky (EU-SILC)</strong>, zdroj dat za Česko pro evropskou statistiku. <a href="https://csu.gov.cz/" target="_blank" rel="noopener">csu.gov.cz ↗</a></li>
+          <li><strong>Zákon č. 187/2006 Sb., o nemocenském pojištění, a zákon č. 155/1995 Sb., o důchodovém pojištění</strong>. <a href="https://www.zakonyprolidi.cz/cs/2006-187" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a> · <a href="https://www.zakonyprolidi.cz/cs/1995-155" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Evidence</h5>
+        <ul class="article-sources-list">
+          <li><strong>Cambois E, Solé-Auró A, Brønnum-Hansen H et al. Educational differentials in disability vary across and within welfare regimes: a comparison of 26 European countries in 2009.</strong> <em>Journal of Epidemiology and Community Health</em> 2016;70(4):331–8. DOI 10.1136/jech-2015-205978. PMID 26546286. Průřezová studie. Ověřeno v PubMed 2. 11. 2026. <a href="https://doi.org/10.1136/jech-2015-205978" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Rubio Valverde JR, Mackenbach JP, Nusselder WJ. Trends in inequalities in disability in Europe between 2002 and 2017.</strong> <em>Journal of Epidemiology and Community Health</em> 2021;75(8):712–20. DOI 10.1136/jech-2020-216141. PMID 33674458. Opakovaná průřezová analýza. Ověřeno v PubMed 2. 11. 2026. <a href="https://doi.org/10.1136/jech-2020-216141" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Rubio-Valverde JR, Nusselder WJ, Mackenbach JP. Educational inequalities in Global Activity Limitation Indicator disability in 28 European Countries: Does the choice of survey matter?</strong> <em>International Journal of Public Health</em> 2019;64(3):461–74. DOI 10.1007/s00038-018-1174-7. PMID 30478617. Srovnávací studie. Ověřeno v PubMed 2. 11. 2026. <a href="https://doi.org/10.1007/s00038-018-1174-7" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Ásgeirsdóttir TL, Ragnarsdóttir DÓ. Determinants of relative and absolute concentration indices: evidence from 26 European countries.</strong> <em>International Journal for Equity in Health</em> 2013;12:53. DOI 10.1186/1475-9276-12-53. PMID 23866925. Průřezová studie. Ověřeno v PubMed 2. 11. 2026. <a href="https://doi.org/10.1186/1475-9276-12-53" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>García-Gómez P, van Kippersluis H, O'Donnell O, van Doorslaer E. Long Term and Spillover Effects of Health Shocks on Employment and Income.</strong> <em>Journal of Human Resources</em> 2013;48(4):873–909. DOI 10.1353/jhr.2013.0031. PMID 25067853. Kvazi-experimentální studie. Ověřeno v PubMed 2. 11. 2026. <a href="https://doi.org/10.1353/jhr.2013.0031" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Lenhart O. The effects of health shocks on labor market outcomes: evidence from UK panel data.</strong> <em>European Journal of Health Economics</em> 2019;20(1):83–98. DOI 10.1007/s10198-018-0985-z. PMID 29876764. Kvazi-experimentální studie. Ověřeno v PubMed 2. 11. 2026. <a href="https://doi.org/10.1007/s10198-018-0985-z" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>García Gómez P, López Nicolás A. Health shocks, employment and income in the Spanish labour market.</strong> <em>Health Economics</em> 2006;15(9):997–1009. DOI 10.1002/hec.1151. PMID 16929474. Kvazi-experimentální studie. Ověřeno v PubMed 2. 11. 2026. <a href="https://doi.org/10.1002/hec.1151" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Rozdíly mezi pětinami (např. 15,4 = 26,6 − 11,2; 13,5 = 24,6 − 11,1), poměry, průměry za období a tříleté průměry spočítala redakce HSPA Monitoru z podílů publikovaných Eurostatem (stav 2. 11. 2026). Příjem se v EU-SILC vztahuje k předchozímu kalendářnímu roku, vlna 2025 tedy odráží příjmy roku 2024. Výsledky studií přebíráme z jejich abstraktů. Postavy v úvodu jsou modelové.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
