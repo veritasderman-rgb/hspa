@@ -119,11 +119,13 @@ test('stránka: HTML má kontejnery, shell data-aktivni, oba moduly; sitemap noi
   assert.match(fs.readFileSync(path.join(ROOT, 'tests', 'e2e', 'visual.spec.js'), 'utf8'), /pojistovny-indikatory\.html/);
 });
 
-test('opendata soubor (pokud existuje): validní tvar, 7 ZP, každé tvrzení se zdrojem a datem ověření', (t) => {
+test('opendata soubor: existuje vždy (i zástupný); plný = validní tvar, 7 ZP, každé tvrzení se zdrojem a datem ověření', () => {
   const p = path.join(ROOT, 'data', 'pojistovny-opendata.json');
-  if (!fs.existsSync(p)) { t.skip('data/pojistovny-opendata.json zatím není'); return; }
+  assert.ok(fs.existsSync(p), 'data/pojistovny-opendata.json musí existovat (jinak e2e networkidle na CI vyprší)');
   const od = JSON.parse(fs.readFileSync(p, 'utf8'));
   assert.ok(od.stav_k && Array.isArray(od.pojistovny) && Array.isArray(od.centralni_zdroje));
+  // soubor musí existovat i jako zástupný (http-server u 404 nechá požadavek viset → e2e networkidle vyprší)
+  if (od.stav === 'placeholder' && od.pojistovny.length === 0) { assert.match(opendataHtml(od), /zatím není k dispozici/); return; }
   assert.equal(od.pojistovny.length, 7);
   assert.deepEqual(od.pojistovny.map((z) => String(z.kod)).sort(), ['111', '201', '205', '207', '209', '211', '213']);
   for (const z of od.pojistovny) {

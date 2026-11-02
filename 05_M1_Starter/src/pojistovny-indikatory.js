@@ -150,7 +150,7 @@ export function buildOpendataSouhrn(od) {
 }
 
 export function opendataHtml(od) {
-  if (!od || !Array.isArray(od.pojistovny)) return '<p class="zpc-note">Audit otevřených dat pojišťoven zatím není k dispozici.</p>';
+  if (!od || !Array.isArray(od.pojistovny) || !od.pojistovny.length) return '<p class="zpc-note">Audit otevřených dat pojišťoven zatím není k dispozici.</p>';
   const rows = buildOpendataSouhrn(od);
   const table = '<div class="zpc-tbl" role="region" tabindex="0" aria-label="Otevřená data pojišťoven (tabulka, posuvná)"><table><thead><tr><th class="zpc-txt">Pojišťovna</th><th>Open data na webu</th><th>Sady</th><th>NKOD</th><th>VZ a jiné</th><th class="zpc-txt">Shrnutí</th></tr></thead><tbody>'
     + rows.map((r) => `<tr data-zp="${esc(r.kod)}"><th scope="row" class="zpc-txt">${dot(r.kod)}${esc(r.zkratka)}</th><td>${r.web_url ? `<a href="${esc(r.web_url)}" rel="noopener">${odStav(r.web)}</a>` : odStav(r.web)}</td><td>${r.sady || NA}</td><td>${r.nkod_url ? `<a href="${esc(r.nkod_url)}" rel="noopener">${odStav(r.nkod)}</a>` : odStav(r.nkod)}${r.nkod_pocet ? ` <small>${r.nkod_pocet} sad</small>` : ''}</td><td>${odStav(r.vz)}</td><td class="zpc-txt">${esc(r.shrnuti)}</td></tr>`).join('')
