@@ -31,10 +31,11 @@
       .viz-timeline-dot-3 { animation-delay: 1.0s; }
       .viz-timeline-dot-4 { animation-delay: 1.25s; }
       .viz-timeline-line { stroke-dasharray: 400; stroke-dashoffset: 400; animation: drawIn 1.2s ease-out 0.3s forwards; }
+      .viz-line { stroke-dasharray: 1400; stroke-dashoffset: 1400; animation: drawIn 1.4s ease-out 0.4s forwards; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .accent-bar, .title-underline, .pulse-dot, .viz-bar, .viz-donut-segment, .viz-timeline-dot, .viz-timeline-line { animation: none !important; }
-      .title-underline, .viz-timeline-line { stroke-dashoffset: 0; }
+      .accent-bar, .title-underline, .pulse-dot, .viz-bar, .viz-donut-segment, .viz-timeline-dot, .viz-timeline-line, .viz-line { animation: none !important; }
+      .title-underline, .viz-timeline-line, .viz-line { stroke-dashoffset: 0; }
       .viz-donut-segment { stroke-dashoffset: 0; }
     }
     @keyframes barGrow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
@@ -58,7 +59,7 @@
   <rect width="1200" height="630" fill="url(#grain)"/>
 
   <!-- Top border (editorial rule) -->
-  <line x1="80" y1="60" x2="1060" y2="60" stroke="#1f1a14" stroke-width="2"/>
+  <line x1="80" y1="60" x2="660" y2="60" stroke="#1f1a14" stroke-width="2"/>
 
   <!-- Kicker row: tag + article number -->
   <g class="root">
@@ -71,18 +72,33 @@
 
   <!-- Headline -->
   <g class="root">
-    <text class="title" x="80" y="235" font-size="52">
-      <tspan x="80" dy="0">Pelhřimov, Znojmo a co</tspan><tspan x="80" dy="55">dál. Tichá personální</tspan><tspan x="80" dy="55">krize okresních</tspan><tspan x="80" dy="55">nemocnic</tspan>
+    <text class="title" x="80" y="160" font-size="42">
+      <tspan x="80" dy="0">Pelhřimov, Znojmo</tspan><tspan x="80" dy="45">a co dál. Tichá</tspan><tspan x="80" dy="45">personální krize</tspan><tspan x="80" dy="45">okresních nemocnic</tspan>
     </text>
     <line class="title-underline"
-          x1="80" y1="422"
-          x2="280" y2="422"
+          x1="80" y1="317"
+          x2="280" y2="317"
           stroke="#2c5a8a" stroke-width="4" stroke-linecap="round"/>
     
   </g>
 
   <!-- Data viz panel (volitelně) -->
-  
+  <g>
+    <text x="670" y="144" class="viz-title">Praktikující lékaři / 1 000 obyvatel</text>
+    <line x1="678" y1="430" x2="1022.0" y2="430" stroke="rgba(31,26,20,0.13)" stroke-width="1"/>
+    <line x1="678" y1="409.3" x2="1022.0" y2="409.3" stroke="#5f574e" stroke-width="1.5" stroke-dasharray="5 5"/>
+    <text x="1032.0" y="413.3" class="viz-sub" style="text-transform:none;letter-spacing:0">průměr OECD</text>
+    <text x="1032.0" y="429.3" class="viz-label" font-weight="700">4,02</text>
+    <path d="M678.0,377.3 L746.8,358.2 L815.6,255.9 L884.4,281.5 L953.2,281.5 L1022.0,236.7 L1022.0,430.0 L678.0,430.0 Z" fill="#2c5a8a" opacity="0.08"/>
+    <path class="viz-line" d="M678.0,377.3 L746.8,358.2 L815.6,255.9 L884.4,281.5 L953.2,281.5 L1022.0,236.7" fill="none" stroke="#1f1a14" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="678.0" cy="377.3" r="4" fill="#1f1a14"/>
+    <text x="678.0" y="365.3" class="viz-label">4,07</text>
+    <circle cx="1022.0" cy="236.7" r="7" fill="#2c5a8a"/>
+    <text x="1022.0" y="200.0" text-anchor="end" class="viz-value" font-size="28" fill="#2c5a8a">4,29<tspan dx="6" font-size="14" fill="#5f574e" font-weight="500">/ 1 000</tspan></text>
+    <text x="678" y="452" class="viz-sub">2019</text>
+    <text x="1022.0" y="452" text-anchor="end" class="viz-sub">2024</text>
+    <text x="670" y="490" class="viz-sub" style="text-transform:none;letter-spacing:0">Zdroj: OECD Health Statistics — Physicians (practising)</text>
+  </g>
 
   <!-- Bottom: branding + date -->
   <g class="root">
