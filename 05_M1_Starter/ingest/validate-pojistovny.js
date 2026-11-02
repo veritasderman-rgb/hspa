@@ -8,6 +8,7 @@
 //  - data/pojistovny-aplikace.json   funkce[], aplikace[7], funkce true|false|null, uzivatele, rizikové skupiny, rozpory
 //  - data/pojistovny-prevence.json   enum stupňů, oblasti, matice 7 ZP, onko/duševní sloupce, struktura fondu prevence
 //  - data/pojistovny-otazky.json     sady otázek (typ otevrene | dotaznik), unikátní id
+//  - data/pojistovny-sit.json        (volitelný, P3.5 prototyp) matice ZP × odbornost × kraj, validateSit() na konci souboru
 //  - data/pojistovny-vek.json        (volitelný, P3.3) 7 ZP, součet struktury = celkem ±0,1 %,
 //                                    ČR celkem = součet ZP ±0,5 %; hospodareni.*_std_kc obálka s faktorem 0,5–2 a stavem
 //
@@ -33,6 +34,7 @@ export const FILES = {
 export const OPTIONAL_FILES = {
   vek: 'pojistovny-vek.json',
   zadosti: 'zadosti-106.json',
+  sit: 'pojistovny-sit.json',
 };
 export const STD_STAVY = ['dolozeno', 'placeholder-bez-vah'];
 
@@ -435,6 +437,13 @@ export function validateAll(datasets) {
     checks += zr.checks;
   }
 
+  if (datasets?.sit != null) {
+    const sr = validateSit(datasets.sit);
+    errors.push(...sr.errors);
+    warnings.push(...sr.warnings);
+    checks += sr.checks;
+  }
+
   return { errors, warnings, checks };
 }
 
@@ -531,5 +540,83 @@ export function validateZadosti(Z) {
     if (trojice.has(t)) warnings.push(`${tag}: další záznam pro kolo ${z.kolo}, typ ${z.typ}, ZP ${z.pojistovna_kod}`);
     trojice.add(t);
   });
+  return { errors, warnings, checks };
+}
+
+/**
+ * Síť smluvních poskytovatelů per ZP × odbornost × kraj (data/pojistovny-sit.json, volitelný prototyp).
+ * Hlídá tvar, kódy ZP a krajů, nezáporná celá čísla, že buňka ZP nepřekročí celkem v NRPZS
+ * (pojišťovna nemůže mít víc smluvních míst, než kolik jich registr eviduje) a že kvalita párování sedí.
+ * (Konstanty jsou uvnitř funkce: main() se volá už při načtení modulu, před vyhodnocením konstant níže.)
+ */
+export function validateSit(S) {
+  const errors = [];
+  const warnings = [];
+  let checks = 0;
+  const ok = (cond, msg) => { checks++; if (!cond) errors.push(msg); return !!cond; };
+  const ZP = ['111', '201', '205', '207', '209', '211', '213'];
+  const T = 'pojistovny-sit.json';
+
+  if (!ok(isObj(S), `${T}: chybí nebo není objekt`)) return { errors, warnings, checks };
+  ok(isStr(S.version), `${T}: chybí version`);
+  ok(isStr(S.generated_at) && !Number.isNaN(Date.parse(S.generated_at)), `${T}: generated_at není ISO čas`);
+  ok(Number.isInteger(S.rok) && S.rok >= 2010 && S.rok <= 2100, `${T}: rok musí být celé číslo (${JSON.stringify(S.rok)})`);
+  ok(isObj(S.zdroj) && isObj(S.zdroj.nrpzs) && isObj(S.zdroj.icz), `${T}: zdroj musí obsahovat nrpzs a icz`);
+  ok(isStr(S.jednotka), `${T}: chybí jednotka (co se počítá)`);
+
+  const odb = Array.isArray(S.odbornosti) ? S.odbornosti : [];
+  ok(odb.length > 0, `${T}: odbornosti musí být neprázdné pole`);
+  const kody = new Set();
+  odb.forEach((o, i) => {
+    ok(isObj(o) && /^\d{3}$/.test(String(o.kod)) && isStr(o.nazev), `${T} odbornosti[${i}]: čekám {kod:'NNN', nazev}`);
+    ok(!kody.has(o?.kod), `${T} odbornosti[${i}]: duplicitní kód '${o?.kod}'`);
+    kody.add(o?.kod);
+  });
+  const kr = Array.isArray(S.kraje) ? S.kraje : [];
+  ok(kr.length >= 14, `${T}: kraje musí mít aspoň 14 položek (je ${kr.length})`);
+  const krKody = new Set();
+  kr.forEach((k, i) => {
+    ok(isObj(k) && isStr(k.kod) && isStr(k.nazev), `${T} kraje[${i}]: čekám {kod, nazev}`);
+    ok(!krKody.has(k?.kod), `${T} kraje[${i}]: duplicitní kód '${k?.kod}'`);
+    krKody.add(k?.kod);
+  });
+
+  const checkCells = (cell, tag) => {
+    if (!ok(isObj(cell), `${tag}: musí být objekt kraj → počet`)) return;
+    for (const [k, v] of Object.entries(cell)) {
+      ok(krKody.has(k), `${tag}: neznámý kraj '${k}'`);
+      ok(Number.isInteger(v) && v >= 0, `${tag}.${k}: musí být nezáporné celé číslo (${JSON.stringify(v)})`);
+    }
+  };
+
+  if (ok(isObj(S.celkem_cr), `${T}: chybí celkem_cr`)) {
+    for (const k of kody) {
+      if (ok(isObj(S.celkem_cr[k]), `${T} celkem_cr: chybí odbornost ${k}`)) checkCells(S.celkem_cr[k], `${T} celkem_cr[${k}]`);
+    }
+  }
+  if (ok(isObj(S.matice), `${T}: chybí matice`)) {
+    for (const zp of ZP) ok(isObj(S.matice[zp]), `${T} matice: chybí ZP ${zp}`);
+    for (const zp of Object.keys(S.matice)) {
+      ok(ZP.includes(zp), `${T} matice: neznámý kód ZP '${zp}'`);
+      for (const k of kody) {
+        const cell = S.matice[zp]?.[k];
+        if (!ok(isObj(cell), `${T} matice[${zp}]: chybí odbornost ${k}`)) continue;
+        checkCells(cell, `${T} matice[${zp}][${k}]`);
+        for (const [kraj, v] of Object.entries(cell)) {
+          const tot = S.celkem_cr?.[k]?.[kraj] ?? 0;
+          ok(v <= tot, `${T} matice[${zp}][${k}][${kraj}]: ${v} > celkem v registru ${tot} (smluvních míst nemůže být víc než evidovaných)`);
+        }
+      }
+    }
+  }
+  if (ok(isObj(S.kvalita), `${T}: chybí kvalita (statistika párování IČZ → NRPZS)`)) {
+    for (const zp of ZP) {
+      const q = S.kvalita[zp];
+      if (!ok(isObj(q), `${T} kvalita: chybí ZP ${zp}`)) continue;
+      const sum = ['adresa', 'okres', 'jediny', 'nepriraditelne'].reduce((a, x) => a + (q[x] || 0), 0);
+      ok(Number.isInteger(q.icz_smluvni) && sum === q.icz_smluvni, `${T} kvalita[${zp}]: adresa+okres+jediny+nepriraditelne (${sum}) ≠ icz_smluvni (${q.icz_smluvni})`);
+      if (q.icz_smluvni > 0 && q.nepriraditelne / q.icz_smluvni > 0.25) warnings.push(`${T} kvalita[${zp}]: ${Math.round(100 * q.nepriraditelne / q.icz_smluvni)} % IČZ nepřiřazeno k místu NRPZS (> 25 %)`);
+    }
+  }
   return { errors, warnings, checks };
 }
