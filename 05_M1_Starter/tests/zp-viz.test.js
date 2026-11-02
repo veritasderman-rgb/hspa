@@ -375,7 +375,10 @@ test('CSS: sekce .zpv- pod markerem, tokeny ZP, rampa, animace a reduced motion'
 });
 
 test('CSS: každý selektor sekce .zpv- je definovaný jen jednou (v rámci kontextu)', () => {
-  const sec = CSS.slice(CSS.indexOf('/* === Srovnávač pojišťoven: vizuální primitivy'));
+  // Jen sekce .zpv-: od jejího markeru po další marker „Srovnávač pojišťoven“ (sekce .zpi-/.zpd- mají vlastní testy).
+  const start = CSS.indexOf('/* === Srovnávač pojišťoven: vizuální primitivy');
+  const next = CSS.indexOf('/* === Srovnávač pojišťoven:', start + 1);
+  const sec = CSS.slice(start, next === -1 ? undefined : next);
   // odstraň komentáře a obsah @-bloků zpracuj zvlášť podle kontextu
   const clean = sec.replace(/\/\*[\s\S]*?\*\//g, '');
   const seen = new Map();
