@@ -13,6 +13,7 @@
 
 import './analytics.js';
 import { renderModuleNav, renderMastheadDate } from './page-shared.js';
+import { ZP, zpColorResolved, onThemeChange } from './zp-palette.js';
 
 // Mapování CZ-NUTS3 kód → display name v geojson (sdíleno s kraje.js).
 const KRAJ_NAME_BY_CODE = {
@@ -76,17 +77,38 @@ const METRICS = {
   },
 };
 
-// Barevná paleta zdravotních pojišťoven pro stacked area chart.
-// VZP záměrně červená (HSPA brand accent) — je dominantní hráč.
-const ZP_COLORS = {
-  '111': '#b8361e', // VZP
-  '201': '#1F7A1F', // VoZP
-  '205': '#2563EB', // ČPZP
-  '207': '#D97706', // OZP
-  '209': '#7C3AED', // ZPŠ
-  '211': '#0891B2', // ZPMV
-  '213': '#BE185D', // RBP
-};
+// Barvy zdravotních pojišťoven: jedna paleta se Srovnávačem (tokeny --zp-* v styles.css,
+// src/zp-palette.js). ECharts neumí CSS proměnné, proto se čtou přeložené (hex) hodnoty
+// aktuálního tématu; refreshZpColors() je obnoví po přepnutí světlý/tmavý.
+const ZP_COLORS = {};
+function refreshZpColors() {
+  for (const z of ZP) ZP_COLORS[z.kod] = zpColorResolved(z.kod);
+  return ZP_COLORS;
+}
+refreshZpColors();
+
+/**
+ * Přečte designové tokeny webu za běhu (vzor cz-choropleth.js themeTokens) — grafy
+ * tak drží krok se světlým/tmavým tématem bez natvrdo zapsaných hexů a fontu.
+ */
+function themeTokens() {
+  const fallback = {
+    ink: '#111', inkMut: '#555', rule2: '#ccc',
+    paper: '#fff', warn: '#a05a08', sans: 'system-ui, sans-serif',
+  };
+  if (typeof document === 'undefined' || typeof getComputedStyle === 'undefined') return { ...fallback, dark: false };
+  const cs = getComputedStyle(document.documentElement);
+  const read = (name, fb) => (cs.getPropertyValue(name) || '').trim() || fb;
+  return {
+    ink: read('--ink', fallback.ink),
+    inkMut: read('--ink-mut', fallback.inkMut),
+    rule2: read('--rule2', fallback.rule2),
+    paper: read('--paper', fallback.paper),
+    warn: read('--warn', fallback.warn),
+    sans: read('--sans', fallback.sans),
+    dark: document.documentElement.getAttribute('data-theme') === 'dark',
+  };
+}
 
 const PLAY_STEP_MS = 800;
 const RACE_PLAY_STEP_MS = 700;
@@ -170,6 +192,7 @@ async function init() {
     state.raceYear = state.year;
 
     echarts.registerMap('cz-regions', geo);
+    refreshZpColors(); // CSS už je načtené → hex aktuálního tématu
 
     populatePyramidKrajSelect();
     populateZpKrajSelect();
@@ -183,6 +206,17 @@ async function init() {
     initOkresDetail();
 
     bindControls();
+
+    // ECharts kreslí do canvasu, takže barvy (tokeny --zp-*, --ink, --paper …) nepřepnou
+    // samy: po změně data-theme obnovíme paletu pojišťoven a překreslíme všech 7 grafů.
+    onThemeChange(() => {
+      refreshZpColors();
+      renderMap();
+      renderPyramid();
+      renderZp();
+      renderRace();
+      renderOkresDetail();
+    });
 
     window.addEventListener('resize', () => {
       state.charts.map?.resize();
@@ -285,14 +319,20 @@ function renderMap() {
 
   // Barevná škála: aging = červená/horké tóny pro vyšší hodnotu;
   // pro vzp_share = neutrální modrá-šedá-oranžová (kontextová).
+  // Pastely ve světlém, hluboké tóny v tmavém režimu — popisky (--ink) zůstávají čitelné.
   let inRange;
   if (m.scheme === 'aging') {
     // Inverzní: vyšší = problematičtější (více seniorů)
-    inRange = { color: ['#E6F4EA', '#FFF7E0', '#FCE8E6', '#b8361e'] };
+    inRange = { color: themeTokens().dark
+      ? ['#26401f', '#4a3b1c', '#5a231a', '#b8361e']
+      : ['#E6F4EA', '#FFF7E0', '#FCE8E6', '#b8361e'] };
   } else {
-    inRange = { color: ['#FFF4E6', '#FFE4C7', '#E2E8F0', '#C7D7E2', '#9AB5C9'] };
+    inRange = { color: themeTokens().dark
+      ? ['#4a3b1c', '#3d3a36', '#34404f', '#3b5266', '#4a6a85']
+      : ['#FFF4E6', '#FFE4C7', '#E2E8F0', '#C7D7E2', '#9AB5C9'] };
   }
 
+  const T = themeTokens();
   const option = {
     backgroundColor: 'transparent',
     animation: !prefersReducedMotion(),
@@ -300,9 +340,9 @@ function renderMap() {
     animationDurationUpdate: 600,
     tooltip: {
       trigger: 'item',
-      backgroundColor: '#1f1a14',
+      backgroundColor: T.ink,
       borderWidth: 0,
-      textStyle: { color: '#fffaf2', fontFamily: 'Inter, system-ui, sans-serif', fontSize: 13 },
+      textStyle: { color: T.paper, fontFamily: T.sans, fontSize: 13 },
       formatter: function (params) {
         const code = KRAJ_CODE_BY_NAME[params.name];
         if (!code) return params.name;
@@ -326,7 +366,7 @@ function renderMap() {
       calculable: true,
       inRange,
       text: m.scheme === 'aging' ? ['více', 'méně'] : ['', ''],
-      textStyle: { fontSize: 11, fontFamily: 'Inter, system-ui, sans-serif', color: '#1f1a14' },
+      textStyle: { fontSize: 11, fontFamily: T.sans, color: T.ink },
       formatter: function (v) { return formatVal(v) + m.unit; },
     },
     title: {
@@ -334,8 +374,8 @@ function renderMap() {
       subtext: m.description,
       left: 16,
       top: 12,
-      textStyle: { fontFamily: 'Inter, system-ui, sans-serif', fontSize: 14, fontWeight: 600, color: '#1f1a14' },
-      subtextStyle: { fontFamily: 'Inter, system-ui, sans-serif', fontSize: 11, color: '#5a5347' },
+      textStyle: { fontFamily: T.sans, fontSize: 14, fontWeight: 600, color: T.ink },
+      subtextStyle: { fontFamily: T.sans, fontSize: 11, color: T.inkMut },
     },
     series: [{
       name: m.label,
@@ -353,11 +393,11 @@ function renderMap() {
           return formatValShort(v);
         },
         fontSize: 10,
-        fontFamily: 'Inter, system-ui, sans-serif',
+        fontFamily: T.sans,
         fontWeight: 600,
-        color: '#1f1a14',
+        color: T.ink,
       },
-      itemStyle: { borderColor: '#1f1a14', borderWidth: 0.8 },
+      itemStyle: { borderColor: T.ink, borderWidth: 0.8 },
       emphasis: {
         itemStyle: { borderWidth: 2, borderColor: '#b8361e' },
         label: { color: '#b8361e' },
@@ -403,6 +443,7 @@ function renderPyramid() {
 
   const krajName = KRAJ_NAME_BY_CODE[krajCode] || krajCode;
 
+  const T = themeTokens();
   const option = {
     backgroundColor: 'transparent',
     animation: !prefersReducedMotion(),
@@ -413,16 +454,16 @@ function renderPyramid() {
       subtext: `${block.total.toLocaleString('cs-CZ')} pojištěnců · medián věku ${block.median_age} let · 65+ ${block.pct_65plus} % · 80+ ${block.pct_80plus} %`,
       left: 'center',
       top: 8,
-      textStyle: { fontFamily: 'Inter, system-ui, sans-serif', fontSize: 14, fontWeight: 600, color: '#1f1a14' },
-      subtextStyle: { fontFamily: 'Inter, system-ui, sans-serif', fontSize: 11, color: '#5a5347' },
+      textStyle: { fontFamily: T.sans, fontSize: 14, fontWeight: 600, color: T.ink },
+      subtextStyle: { fontFamily: T.sans, fontSize: 11, color: T.inkMut },
     },
     grid: { left: 110, right: 30, top: 70, bottom: 36 },
     tooltip: {
       trigger: 'axis',
       axisPointer: { type: 'shadow' },
-      backgroundColor: '#1f1a14',
+      backgroundColor: T.ink,
       borderWidth: 0,
-      textStyle: { color: '#fffaf2', fontFamily: 'Inter, system-ui, sans-serif', fontSize: 12 },
+      textStyle: { color: T.paper, fontFamily: T.sans, fontSize: 12 },
       formatter: (params) => {
         if (!params.length) return '';
         const idx = params[0].dataIndex;
@@ -440,7 +481,7 @@ function renderPyramid() {
     legend: {
       data: ['Muži', 'Ženy'],
       bottom: 6,
-      textStyle: { fontFamily: 'Inter, system-ui, sans-serif', fontSize: 12 },
+      textStyle: { color: T.ink, fontFamily: T.sans, fontSize: 12 },
     },
     xAxis: {
       type: 'value',
@@ -448,18 +489,18 @@ function renderPyramid() {
       max: maxAbs * 1.05,
       axisLabel: {
         formatter: (v) => Math.abs(v).toLocaleString('cs-CZ'),
-        fontFamily: 'Inter, system-ui, sans-serif',
+        color: T.inkMut, fontFamily: T.sans,
         fontSize: 11,
       },
-      splitLine: { lineStyle: { color: '#e8e2d4', type: 'dashed' } },
+      splitLine: { lineStyle: { color: T.rule2, type: 'dashed' } },
     },
     yAxis: {
       type: 'category',
       data: labels,
       axisLabel: {
-        fontFamily: 'Inter, system-ui, sans-serif',
+        fontFamily: T.sans,
         fontSize: 11,
-        color: '#1f1a14',
+        color: T.ink,
       },
       axisTick: { show: false },
     },
@@ -539,6 +580,8 @@ function renderZp() {
     smooth: 0.3,
     symbol: 'none',
     lineStyle: { width: 0 },
+    // itemStyle.color řídí swatch v legendě a tooltipu (jinak by padl na výchozí paletu ECharts).
+    itemStyle: { color: ZP_COLORS[ins.code] },
     areaStyle: { color: ZP_COLORS[ins.code], opacity: 0.92 },
     emphasis: { focus: 'series' },
     data: years.map(y => blockByYear[y]?.shares?.[ins.code] ?? 0),
@@ -548,6 +591,7 @@ function renderZp() {
     ? 'Celá ČR (agregát všech krajů)'
     : (KRAJ_NAME_BY_CODE[krajCode] || krajCode);
 
+  const T = themeTokens();
   const option = {
     backgroundColor: 'transparent',
     animation: !prefersReducedMotion(),
@@ -557,15 +601,15 @@ function renderZp() {
       subtext: 'Pohled na vývoj 2010–2025; 100 % stacked area',
       left: 16,
       top: 8,
-      textStyle: { fontFamily: 'Inter, system-ui, sans-serif', fontSize: 14, fontWeight: 600, color: '#1f1a14' },
-      subtextStyle: { fontFamily: 'Inter, system-ui, sans-serif', fontSize: 11, color: '#5a5347' },
+      textStyle: { fontFamily: T.sans, fontSize: 14, fontWeight: 600, color: T.ink },
+      subtextStyle: { fontFamily: T.sans, fontSize: 11, color: T.inkMut },
     },
     grid: { left: 50, right: 18, top: 70, bottom: 60 },
     tooltip: {
       trigger: 'axis',
-      backgroundColor: '#1f1a14',
+      backgroundColor: T.ink,
       borderWidth: 0,
-      textStyle: { color: '#fffaf2', fontFamily: 'Inter, system-ui, sans-serif', fontSize: 12 },
+      textStyle: { color: T.paper, fontFamily: T.sans, fontSize: 12 },
       formatter: (params) => {
         if (!params.length) return '';
         const year = params[0].axisValue;
@@ -583,20 +627,20 @@ function renderZp() {
       data: series.map(s => s.name),
       bottom: 6,
       type: 'scroll',
-      textStyle: { fontFamily: 'Inter, system-ui, sans-serif', fontSize: 11 },
+      textStyle: { color: T.ink, fontFamily: T.sans, fontSize: 11 },
     },
     xAxis: {
       type: 'category',
       data: years,
       boundaryGap: false,
-      axisLabel: { fontFamily: 'Inter, system-ui, sans-serif', fontSize: 11 },
+      axisLabel: { color: T.inkMut, fontFamily: T.sans, fontSize: 11 },
     },
     yAxis: {
       type: 'value',
       min: 0,
       max: 100,
-      axisLabel: { formatter: '{value} %', fontFamily: 'Inter, system-ui, sans-serif', fontSize: 11 },
-      splitLine: { lineStyle: { color: '#e8e2d4', type: 'dashed' } },
+      axisLabel: { formatter: '{value} %', color: T.inkMut, fontFamily: T.sans, fontSize: 11 },
+      splitLine: { lineStyle: { color: T.rule2, type: 'dashed' } },
     },
     series,
   };
@@ -671,7 +715,8 @@ function renderRace() {
   // Echarts nakreslí horizontální bar; nejvyšší hodnota nahoře (yAxis inverse).
   const labels = top.map(o => `${o.name} (${KRAJ_NAME_BY_CODE[o.kraj]?.replace(' kraj', '') || o.kraj})`);
   const values = top.map(o => o.value);
-  const colors = top.map(o => jumpers.has(o.code) ? '#D97706' : '#1f1a14');
+  const T = themeTokens();
+  const colors = top.map(o => jumpers.has(o.code) ? T.warn : T.ink);
 
   const option = {
     backgroundColor: 'transparent',
@@ -684,32 +729,32 @@ function renderRace() {
       subtext: m.description + (jumpers.size > 0 ? ` · oranžově vyznačené odskočily oproti 2010` : ''),
       left: 16,
       top: 10,
-      textStyle: { fontFamily: 'Inter, system-ui, sans-serif', fontSize: 14, fontWeight: 600, color: '#1f1a14' },
-      subtextStyle: { fontFamily: 'Inter, system-ui, sans-serif', fontSize: 11, color: '#5a5347' },
+      textStyle: { fontFamily: T.sans, fontSize: 14, fontWeight: 600, color: T.ink },
+      subtextStyle: { fontFamily: T.sans, fontSize: 11, color: T.inkMut },
     },
     grid: { left: 10, right: 60, top: 70, bottom: 30, containLabel: true },
     xAxis: {
       type: 'value',
       axisLabel: {
         formatter: m.isPercent ? '{value} %' : (v) => Number(v).toLocaleString('cs-CZ'),
-        fontFamily: 'Inter, system-ui, sans-serif',
+        color: T.inkMut, fontFamily: T.sans,
         fontSize: 11,
       },
-      splitLine: { lineStyle: { color: '#e8e2d4', type: 'dashed' } },
+      splitLine: { lineStyle: { color: T.rule2, type: 'dashed' } },
     },
     yAxis: {
       type: 'category',
       data: labels,
       inverse: true,
-      axisLabel: { fontFamily: 'Inter, system-ui, sans-serif', fontSize: 11, color: '#1f1a14' },
+      axisLabel: { fontFamily: T.sans, fontSize: 11, color: T.ink },
       axisTick: { show: false },
     },
     tooltip: {
       trigger: 'axis',
       axisPointer: { type: 'shadow' },
-      backgroundColor: '#1f1a14',
+      backgroundColor: T.ink,
       borderWidth: 0,
-      textStyle: { color: '#fffaf2', fontFamily: 'Inter, system-ui, sans-serif', fontSize: 12 },
+      textStyle: { color: T.paper, fontFamily: T.sans, fontSize: 12 },
       formatter: (params) => {
         if (!params.length) return '';
         const idx = params[0].dataIndex;
@@ -736,10 +781,10 @@ function renderRace() {
         formatter: (p) => m.isPercent
           ? p.value.toFixed(1) + ' %'
           : Math.round(p.value).toLocaleString('cs-CZ'),
-        fontFamily: 'Inter, system-ui, sans-serif',
+        fontFamily: T.sans,
         fontSize: 11,
         fontWeight: 600,
-        color: '#1f1a14',
+        color: T.ink,
       },
     }],
   };
@@ -827,34 +872,35 @@ function renderOkresTotal() {
   const years = state.okresData.years;
   const totals = years.map(y => state.okresData.data[okresCode]?.[y]?.total ?? null);
 
+  const T = themeTokens();
   const option = {
     backgroundColor: 'transparent',
     animation: !prefersReducedMotion(),
     title: {
       text: okres ? `${okres.name}: celkem pojištěnců` : '',
       left: 12, top: 6,
-      textStyle: { fontFamily: 'Inter, system-ui, sans-serif', fontSize: 12, fontWeight: 600 },
+      textStyle: { color: T.ink, fontFamily: T.sans, fontSize: 12, fontWeight: 600 },
     },
     grid: { left: 60, right: 16, top: 36, bottom: 28 },
     xAxis: {
       type: 'category',
       data: years,
-      axisLabel: { fontFamily: 'Inter, system-ui, sans-serif', fontSize: 10 },
+      axisLabel: { color: T.inkMut, fontFamily: T.sans, fontSize: 10 },
     },
     yAxis: {
       type: 'value',
       axisLabel: {
         formatter: (v) => v >= 100000 ? (v / 1000).toFixed(0) + 'k' : Number(v).toLocaleString('cs-CZ'),
-        fontFamily: 'Inter, system-ui, sans-serif',
+        color: T.inkMut, fontFamily: T.sans,
         fontSize: 10,
       },
-      splitLine: { lineStyle: { color: '#e8e2d4', type: 'dashed' } },
+      splitLine: { lineStyle: { color: T.rule2, type: 'dashed' } },
     },
     tooltip: {
       trigger: 'axis',
-      backgroundColor: '#1f1a14',
+      backgroundColor: T.ink,
       borderWidth: 0,
-      textStyle: { color: '#fffaf2', fontSize: 12 },
+      textStyle: { color: T.paper, fontSize: 12 },
       formatter: (params) => `<strong>${params[0].axisValue}</strong><br/>${params[0].value?.toLocaleString('cs-CZ') || '—'} pojištěnců`,
     },
     series: [{
@@ -892,39 +938,40 @@ function renderOkresAge() {
     }),
   }));
 
+  const T = themeTokens();
   const option = {
     backgroundColor: 'transparent',
     animation: !prefersReducedMotion(),
     title: {
       text: 'Věková struktura (4 skupiny)',
       left: 12, top: 6,
-      textStyle: { fontFamily: 'Inter, system-ui, sans-serif', fontSize: 12, fontWeight: 600 },
+      textStyle: { color: T.ink, fontFamily: T.sans, fontSize: 12, fontWeight: 600 },
     },
     grid: { left: 60, right: 16, top: 36, bottom: 36 },
     legend: {
       bottom: 4,
-      textStyle: { fontFamily: 'Inter, system-ui, sans-serif', fontSize: 10 },
+      textStyle: { color: T.ink, fontFamily: T.sans, fontSize: 10 },
       itemHeight: 6, itemWidth: 18,
     },
     xAxis: {
       type: 'category',
       data: years,
-      axisLabel: { fontFamily: 'Inter, system-ui, sans-serif', fontSize: 10 },
+      axisLabel: { color: T.inkMut, fontFamily: T.sans, fontSize: 10 },
     },
     yAxis: {
       type: 'value',
       axisLabel: {
         formatter: (v) => v >= 1000 ? (v / 1000).toFixed(0) + 'k' : Number(v).toLocaleString('cs-CZ'),
-        fontFamily: 'Inter, system-ui, sans-serif',
+        color: T.inkMut, fontFamily: T.sans,
         fontSize: 10,
       },
-      splitLine: { lineStyle: { color: '#e8e2d4', type: 'dashed' } },
+      splitLine: { lineStyle: { color: T.rule2, type: 'dashed' } },
     },
     tooltip: {
       trigger: 'axis',
-      backgroundColor: '#1f1a14',
+      backgroundColor: T.ink,
       borderWidth: 0,
-      textStyle: { color: '#fffaf2', fontSize: 11 },
+      textStyle: { color: T.paper, fontSize: 11 },
     },
     series: seriesData,
   };
@@ -943,35 +990,36 @@ function renderOkresCompare() {
   const krajLine = years.map(y => state.krajData.data[okres?.kraj]?.[y]?.pct_65plus ?? null);
   const crLine = years.map(y => aggregateCRMetric(y, 'pct_65plus'));
 
+  const T = themeTokens();
   const option = {
     backgroundColor: 'transparent',
     animation: !prefersReducedMotion(),
     title: {
       text: 'Srovnání % 65+: okres / kraj / ČR',
       left: 12, top: 6,
-      textStyle: { fontFamily: 'Inter, system-ui, sans-serif', fontSize: 12, fontWeight: 600 },
+      textStyle: { color: T.ink, fontFamily: T.sans, fontSize: 12, fontWeight: 600 },
     },
     grid: { left: 50, right: 16, top: 36, bottom: 36 },
     legend: {
       bottom: 4,
-      textStyle: { fontFamily: 'Inter, system-ui, sans-serif', fontSize: 10 },
+      textStyle: { color: T.ink, fontFamily: T.sans, fontSize: 10 },
       itemHeight: 6, itemWidth: 18,
     },
     xAxis: {
       type: 'category',
       data: years,
-      axisLabel: { fontFamily: 'Inter, system-ui, sans-serif', fontSize: 10 },
+      axisLabel: { color: T.inkMut, fontFamily: T.sans, fontSize: 10 },
     },
     yAxis: {
       type: 'value',
-      axisLabel: { formatter: '{value} %', fontFamily: 'Inter, system-ui, sans-serif', fontSize: 10 },
-      splitLine: { lineStyle: { color: '#e8e2d4', type: 'dashed' } },
+      axisLabel: { formatter: '{value} %', color: T.inkMut, fontFamily: T.sans, fontSize: 10 },
+      splitLine: { lineStyle: { color: T.rule2, type: 'dashed' } },
     },
     tooltip: {
       trigger: 'axis',
-      backgroundColor: '#1f1a14',
+      backgroundColor: T.ink,
       borderWidth: 0,
-      textStyle: { color: '#fffaf2', fontSize: 11 },
+      textStyle: { color: T.paper, fontSize: 11 },
       valueFormatter: (v) => v != null ? v.toFixed(1) + ' %' : '—',
     },
     series: [
@@ -985,15 +1033,15 @@ function renderOkresCompare() {
       {
         name: KRAJ_NAME_BY_CODE[okres?.kraj] || 'Kraj',
         type: 'line', smooth: 0.3, symbol: 'none',
-        lineStyle: { color: '#5a5347', width: 1.6, type: 'solid' },
-        itemStyle: { color: '#5a5347' },
+        lineStyle: { color: T.inkMut, width: 1.6, type: 'solid' },
+        itemStyle: { color: T.inkMut },
         data: krajLine,
       },
       {
         name: 'ČR (agregát)',
         type: 'line', smooth: 0.3, symbol: 'none',
-        lineStyle: { color: '#1f1a14', width: 1.4, type: 'dashed' },
-        itemStyle: { color: '#1f1a14' },
+        lineStyle: { color: T.ink, width: 1.4, type: 'dashed' },
+        itemStyle: { color: T.ink },
         data: crLine,
       },
     ],

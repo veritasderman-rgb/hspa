@@ -44,13 +44,18 @@ test('pojistenci frontend: METRICS má 5 metrik se všemi povinnými poli', () =
   }
 });
 
-test('pojistenci frontend: ZP_COLORS má 7 unikátních barev pro 7 ZP', () => {
+test('pojistenci frontend: ZP_COLORS má 7 unikátních barev/tokenů pro 7 ZP (paleta --zp-*)', () => {
   const expected = ['111', '201', '205', '207', '209', '211', '213'];
   assert.deepEqual(Object.keys(ZP_COLORS).sort(), expected.sort());
   const colors = Object.values(ZP_COLORS);
   assert.equal(new Set(colors).size, 7, 'všechny barvy musí být unikátní');
-  for (const c of colors) {
-    assert.match(c, /^#[0-9A-Fa-f]{6}$/, `barva ${c} není 6místný hex`);
+  // V prohlížeči jsou to přeložené hex hodnoty tokenů (ECharts neumí var()),
+  // v node bez DOMu zůstává token `var(--zp-<kód>)` — hex v JS být nesmí.
+  for (const [kod, c] of Object.entries(ZP_COLORS)) {
+    assert.ok(
+      c === `var(--zp-${kod})` || /^#[0-9A-Fa-f]{6}$/.test(c) || /^rgb/.test(c),
+      `barva ${c} pro ${kod} není token ani přeložená barva`,
+    );
   }
 });
 
