@@ -62,6 +62,8 @@ Stránka není v seznamu vizuálních (`tests/e2e/visual.spec.js`) ani a11y test
 
 ### 0.3 Data, která v repu leží a stránka je nečte
 
+_Úplný inventář indikátorů a datasetů o pojišťovnách (včetně toho, které údaje ukazují, kdo je u koho pojištěn, a co chybí): [`docs/pojistovny-indikatory.md`](../docs/pojistovny-indikatory.md)._
+
 | Data | Kde | Co z nich jde postavit |
 |---|---|---|
 | Absolutní počty pojištěnců 2010–2025 per ZP | `ingest/manual/pojistovny/crp-agregaty-2025.json` → `zp[kod].trend` | Indexovaný vývoj kmene (2010 = 100) na jedné ose; bar-chart „kdo roste, kdo ztrácí“ |
@@ -348,6 +350,8 @@ plánování a sporná rozhodnutí, „Sonnet“ = implementace s jasným zadán
 | P5.1 | Odebrat matcher z `middleware.js`, `noindex` pryč, `STATIC_PAGES`, navigace (`page-shared.js`), OG cover (`generate-article-cover.js` má kompas), sitemap | **C** | Sonnet připraví PR, vydavatel merguje |
 | P5.2 | Článek „Sedm pojišťoven, jeden pojištěnec“ (rutina Florence), newsletter, video dne (skill `animovane-prispevky`: Kompík vysvětluje „Moje pojišťovna“) | B | rutina `PROMPT_ROUTINE.md` |
 | P5.3 | Roční rutina: po vydání VZ (květen–červen) a ZPP (srpen) přepis tabulek do JSON + validátor + `changelog` | B | Haiku/Sonnet (nový blok v `PROMPT_ROUTINE.md` = třída C, jednorázově) |
+| P5.4 | Rutina výročních zpráv: crawler webů ZP → text VZ v repu → automatická verifikace čísel proti textu; cron ročně | B (workflow C) | Sonnet |
+| P5.5 | Inventář indikátorů o pojišťovnách (`docs/pojistovny-indikatory.md`) + návrh nových per-ZP indikátorů (§ 4 inventáře: zdroje, granularita, co už v repu leží) | B | Sonnet |
 
 ---
 
