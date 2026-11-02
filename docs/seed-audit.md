@@ -87,8 +87,22 @@ Poznámka k dávkám 1 a 3: čísla „lékaři 4,2 vs OECD 3,9“, „sestry 9,
 | `pm25_expozice` | hodnota a OECD sedí, rok ne | 14,1 µg/m³ vs OECD 11,2 = HaaG 2025; seed ji vede jako rok 2024 s řadou od 2020 — rok a řadu ověřit v datech OECD/EEA |
 | `klistova_encefalitida` | hodnota konzistentní, EU neověřeno | 6,1 / 100 000 (2024) odpovídá 670 případům; 2020 7,9 = ECDC; EU 0,81 nedohledáno |
 
+## Dávka 5 (2. 11. 2026)
+
+| Indikátor | Výsledek | Seed → zdroj |
+|---|---|---|
+| `luzka_psychiatricka_per_1000` | ověřeno | 0,87 (2023) a celá řada od 2013 = OECD `DF_BEDS_FUNC`; OECD 0,65; EU 0,69 → 0,67 (rok 2023) |
+| `pet_skenery_per_milion` | ověřeno | 2,1 (2024) a řada 2016–2024 = OECD `DF_MED_TECH`; OECD 2,6 |
+| `mamografy_per_100k` | ověřeno | 1,05 (2024) a řada = Eurostat `hlth_rs_medim`; 1,84 = medián vykazujících států EU |
+| `spotreba_antidiabetik` | ověřeno (doložený výpočet) | 113,1 DDD (2025) = reprodukovatelný výpočet z otevřených dat SÚKL DIS-13; benchmark = OECD 2024; OECD pro ČR uvádí 107,1 (2024) |
+| `readmise_30d_ami` | nelze potvrdit | OECD rehospitalizace po IM pro ČR nevykazuje (`DF_AC` má jen 30denní mortalitu); benchmark „OECD 13,2, EU 13,5“ bez zdroje |
+| `umrtnost_predavkovani_drogy` | benchmark sedí | EU 22,5 = European Drug Report 2024 (rok 2022); EDR 2025 uvádí pro rok 2023 24,7. Hodnota ČR je odvozena z počtů NMS uvedených v kartě |
+| `transplantace_per_milion` | nelze potvrdit | 90 / mil. (2025) odpovídá 975 orgánům z coveru, výroční zpráva KST nedohledána; benchmark „OECD 75, EU 70“ bez zdroje |
+
+Poznámka: indikátory přidané po zavedení ověřovacího protokolu (srpen 2026), např. `kojeni_pri_propusteni`, `rehospitalizace_schizofrenie_30d`, `umrtnost_predavkovani_drogy`, mají v kartě doložené odvození (čitatel, jmenovatel, zdrojový soubor). Riziko vymyšlených čísel je u nich nižší než u původních seedů z M1, proto mají v dalších dávkách nižší prioritu.
+
 ## Fronta na další dávky
 
-Podle počtu publikovaných článků (k 2. 11. 2026), bez indikátorů čekajících na rozhodnutí vydavatele (`ehealth_adoption`, `cekaci_doby_specialist`, `spokojenost_informovani`, `nadeje_doziti_vzdelani_gap_muzi`, `bezpecnost_padu_nemocnice`) a bez těch, které nejdou ověřit z veřejných agregátů (dávky 1–3): kandidáti z country note Health at a Glance 2025 (`podil_generik_objem`, `luzka_psychiatricka_per_1000`, `pet_skenery_per_milion`, `readmise_30d_ami`), dále `alkohol_adolescenti`, `koureni_v_tehotenstvi`, `mamografy_per_100k`, `trombolyza_ischemicka_cmp`, … Neověřených seedů zbývá 101.
+Podle počtu publikovaných článků (k 2. 11. 2026), bez indikátorů čekajících na rozhodnutí vydavatele (`ehealth_adoption`, `cekaci_doby_specialist`, `spokojenost_informovani`, `nadeje_doziti_vzdelani_gap_muzi`, `bezpecnost_padu_nemocnice`) a bez těch, které nejdou ověřit z veřejných agregátů (dávky 1–3): kandidáti z country note Health at a Glance 2025 (`podil_generik_objem`, `luzka_psychiatricka_per_1000`, `pet_skenery_per_milion`, `readmise_30d_ami`), dále `alkohol_adolescenti`, `koureni_v_tehotenstvi`, `mamografy_per_100k`, `trombolyza_ischemicka_cmp`, … Neověřených seedů zbývá 97.
 
 Pojistka: `npm run validate:claims` (kontrola `ingest/validate-seed-claims.js`) hlídá, aby nově publikovaná tvrzení (`data/claims.json`, `check: auto`) nestála na neověřeném seedu. Stávající případy jsou v baseline `data/seed-claims-baseline.json`; s každou dávkou auditu se baseline zmenšuje a nesmí růst.
