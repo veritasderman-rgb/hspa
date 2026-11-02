@@ -32,6 +32,7 @@ export const FILES = {
 /** Volitelné datasety: když soubor chybí, validace se přeskočí (P3.3 věková struktura z CRP). */
 export const OPTIONAL_FILES = {
   vek: 'pojistovny-vek.json',
+  zadosti: 'zadosti-106.json',
 };
 export const STD_STAVY = ['dolozeno', 'placeholder-bez-vah'];
 
@@ -176,6 +177,7 @@ export function validateAll(datasets) {
           ok(STAVY.includes(s.stav), `${tag}.semafor.${ob}: neznámý stav '${s.stav}'`);
           ok(!!(s.zduvodneni && s.zdroj && s.rok), `${tag}.semafor.${ob}: stav bez zdůvodnění/zdroje/roku`);
         }
+        if (s?.stanovisko_pojistovny != null) ok(isStr(s.stanovisko_pojistovny), `${tag}.semafor.${ob}.stanovisko_pojistovny: musí být neprázdný string (doslovné stanovisko)`);
       }
     }
     ok(seen.size === 7, `pojistovny: očekáváno 7, nalezeno ${seen.size}`);
@@ -426,6 +428,13 @@ export function validateAll(datasets) {
     }
   }
 
+  if (datasets?.zadosti != null) {
+    const zr = validateZadosti(datasets.zadosti);
+    errors.push(...zr.errors);
+    warnings.push(...zr.warnings);
+    checks += zr.checks;
+  }
+
   return { errors, warnings, checks };
 }
 
@@ -459,3 +468,68 @@ function main() {
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
+
+/**
+ * Registr dotazů a žádostí pojišťovnám (data/zadosti-106.json, volitelný dataset).
+ * Hlídá enumy, kódy ZP, ISO data, unikátní id a konzistenci stavu s daty odeslání/doručení.
+ * (Enumy jsou uvnitř funkce: main() se volá už při načtení modulu, před vyhodnocením konstant níže.)
+ */
+export function validateZadosti(Z) {
+  const errors = [];
+  const warnings = [];
+  let checks = 0;
+  const ok = (cond, msg) => { checks++; if (!cond) errors.push(msg); return !!cond; };
+  const typy = ['nabidka-spoluprace', 'zadost-106', 'pravo-na-odpoved'];
+  const stavy = ['pripravena', 'odeslana', 'odpovezeno', 'po-lhute', 'bez-odpovedi'];
+  const T = 'zadosti-106.json';
+
+  if (!ok(isObj(Z), `${T}: chybí nebo není objekt`)) return { errors, warnings, checks };
+  ok(isStr(Z.version), `${T}: chybí version`);
+  ok(isStr(Z.generated_at), `${T}: chybí generated_at`);
+  if (Z.changelog != null && ok(Array.isArray(Z.changelog), `${T} changelog: musí být pole`)) {
+    Z.changelog.forEach((c, i) => {
+      const tag = `${T} changelog[${i}]`;
+      if (!ok(isObj(c), `${tag}: musí být objekt`)) return;
+      ok(isIsoDate(c.datum), `${tag}.datum: není ISO datum YYYY-MM-DD (${JSON.stringify(c.datum)})`);
+      ok(isStr(c.zmena), `${tag}.zmena: musí být neprázdný string`);
+      ok(typeof c.zdroj === 'string', `${tag}.zdroj: musí být string`);
+    });
+  }
+  if (!ok(Array.isArray(Z.zadosti), `${T} zadosti: musí být pole`)) return { errors, warnings, checks };
+
+  const ids = new Set();
+  const trojice = new Set();
+  Z.zadosti.forEach((z, i) => {
+    const tag = `${T} zadosti[${i}]`;
+    if (!ok(isObj(z), `${tag}: musí být objekt`)) return;
+    if (ok(isStr(z.id), `${tag}.id: chybí`)) {
+      ok(!ids.has(z.id), `${tag}.id: duplicitní '${z.id}'`);
+      ids.add(z.id);
+    }
+    ok(Number.isInteger(z.kolo) && z.kolo >= 1, `${tag}.kolo: musí být celé číslo ≥ 1 (${JSON.stringify(z.kolo)})`);
+    ok(typy.includes(z.typ), `${tag}.typ: '${z.typ}' není z enumu ${JSON.stringify(typy)}`);
+    ok(ZP_CODES.includes(z.pojistovna_kod), `${tag}.pojistovna_kod: neznámý kód '${z.pojistovna_kod}'`);
+    ok(z.odeslano == null || isIsoDate(z.odeslano), `${tag}.odeslano: musí být null nebo ISO datum (${JSON.stringify(z.odeslano)})`);
+    ok(Number.isInteger(z.lhuta_dni) && z.lhuta_dni >= 1, `${tag}.lhuta_dni: musí být celé číslo ≥ 1 (${JSON.stringify(z.lhuta_dni)})`);
+    ok(z.doruceno == null || isIsoDate(z.doruceno), `${tag}.doruceno: musí být null nebo ISO datum (${JSON.stringify(z.doruceno)})`);
+    ok(z.odpoved_soubor == null || (isStr(z.odpoved_soubor) && !/^\/|\.\./.test(z.odpoved_soubor)),
+      `${tag}.odpoved_soubor: musí být null nebo relativní název souboru bez '..' (${JSON.stringify(z.odpoved_soubor)})`);
+    if (!ok(stavy.includes(z.stav), `${tag}.stav: '${z.stav}' není z enumu ${JSON.stringify(stavy)}`)) return;
+
+    if (z.stav === 'pripravena') {
+      ok(z.odeslano == null && z.doruceno == null, `${tag}: stav 'pripravena' nesmí mít odeslano ani doruceno (nic nebylo odesláno)`);
+    } else {
+      ok(isIsoDate(z.odeslano), `${tag}: stav '${z.stav}' vyžaduje datum odeslano`);
+    }
+    if (z.stav === 'odpovezeno') ok(isIsoDate(z.doruceno), `${tag}: stav 'odpovezeno' vyžaduje datum doruceno`);
+    if (z.doruceno != null) {
+      ok(z.stav === 'odpovezeno', `${tag}: doruceno je vyplněno, stav musí být 'odpovezeno' (je '${z.stav}')`);
+      if (isIsoDate(z.odeslano) && isIsoDate(z.doruceno)) ok(z.doruceno >= z.odeslano, `${tag}: doruceno (${z.doruceno}) je dřív než odeslano (${z.odeslano})`);
+    }
+    if (z.odpoved_soubor != null && z.stav !== 'odpovezeno') warnings.push(`${tag}: odpoved_soubor u stavu '${z.stav}'`);
+    const t = `${z.kolo}|${z.typ}|${z.pojistovna_kod}`;
+    if (trojice.has(t)) warnings.push(`${tag}: další záznam pro kolo ${z.kolo}, typ ${z.typ}, ZP ${z.pojistovna_kod}`);
+    trojice.add(t);
+  });
+  return { errors, warnings, checks };
+}

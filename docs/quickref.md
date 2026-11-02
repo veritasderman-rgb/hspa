@@ -114,6 +114,9 @@ git push -u origin claude/<branch-name>
 | `.zpv-*` | (plánováno) Srovnávač pojišťoven — vizuální primitivy (grafy, sparkliny, ikonové řady) | `src/zp-viz.js` |
 | `.zpi-*` | (plánováno) Srovnávač pojišťoven — interakce (filtry, výběr pojišťoven, porovnání) | `src/zp-interact.js` |
 | `.zpd-*` | Srovnávač pojišťoven — dotazníky (formulář ze sady otázek, vodorovné bary agregátů) | `src/zp-dotaznik.js`, pojistovny.html |
+| `.zpk-*` | Srovnávač pojišťoven — kraj × ZP (dlaždicová mapa, lokální chipy, těžiště kmene, tabulka vývoje) | `src/pojistovny-kraje.js`, pojistovny.html |
+| `.zps-*` | Srovnávač pojišťoven — semafor (tabulka stavů, stanoviska, changelog) | `src/pojistovny-semafor.js`, pojistovny.html |
+| `.zpz-*` | Srovnávač pojišťoven — registr dotazů a žádostí (matice, tabulka lhůt) | `src/pojistovny-zadosti.js`, `data/zadosti-106.json`, pojistovny.html |
 
 ---
 
