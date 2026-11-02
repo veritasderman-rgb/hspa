@@ -40,6 +40,35 @@ bázových tokenů; aliasy (`--bg --text --border …`) i přímé použití se 
   takže baselines drží; dark snímky lze doplnit později přes `colorScheme:'dark'`.
 - Regresní guard: `tests/dark-mode.test.js` (dark blok v CSS + minifikátu, exporty přepínače).
 
+## Paleta pojišťoven (`--zp-*`)
+
+Jedna paleta pro Atlas pojištěnců (`src/pojistenci.js`) i Srovnávač pojišťoven
+(`src/pojistovny*.js`). Tokeny jsou v `src/styles.css` (light v `:root`, dark v
+`:root[data-theme="dark"]`), mapování kód → token a pomocné funkce v `src/zp-palette.js`
+(`zpColor(kod)` → `var(--zp-111)`, `zpColorResolved(kod)` → hex pro ECharts,
+`onThemeChange(cb)` pro překreslení po přepnutí tématu). Pevné pořadí podle kódu,
+paleta se nikdy nerecykluje; hex v JS není.
+
+| Kód | ZP | Token | Light | Dark |
+|---|---|---|---|---|
+| 111 | VZP ČR | `--zp-111` | `#2a78d6` | `#3987e5` |
+| 201 | VoZP | `--zp-201` | `#eb6834` | `#d95926` |
+| 205 | ČPZP | `--zp-205` | `#1baf7a` | `#199e70` |
+| 207 | OZP | `--zp-207` | `#eda100` | `#c98500` |
+| 209 | ZPŠ | `--zp-209` | `#e87ba4` | `#d55181` |
+| 211 | ZP MV ČR | `--zp-211` | `#008300` | `#008300` |
+| 213 | RBP | `--zp-213` | `#6250d6` | `#9085e9` |
+| ostatní | při zvýraznění jedné ZP | `--zp-neutral` | `= --neutral` | `= --neutral` |
+
+**Pravidla:**
+- **Text se nikdy nebarví barvou série** (kontrast 205/207/209 na `--paper` je 2,0–2,7 : 1);
+  identitu nese tečka/pruh vedle popisku, popisek zůstává `--ink`. Žádná informace jen barvou.
+- **Žádná pojišťovna není červená** — `--red` patří hrotu kompasu a stavu bad.
+- Do canvasu (ECharts) barvy čti přes `zpColorResolved()` a při `onThemeChange()` graf
+  překresli; inkoust, pozadí tooltipu a font čti z tokenů (`--ink`, `--paper`, `--rule2`,
+  `--sans`), ne natvrdo (`themeTokens()` v `pojistenci.js`, vzor `cz-choropleth.js`).
+- Testy: `tests/zp-palette.test.js` (7 unikátních, definice v obou tématech).
+
 ---
 
 # 0. Brand mark — HSPA Kompas

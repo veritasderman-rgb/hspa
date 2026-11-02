@@ -6,6 +6,15 @@ Formát: každá položka má `Datum`, `PR`, `Co`, `Proč`, `Důsledek`.
 
 ---
 
+## 2026-11-02 — Jedna paleta pojišťoven (`--zp-*`): VZP přestává být červená
+
+- **PR**: balíček P1.1 z `05_M1_Starter/PLAN-SROVNAVAC-POJISTOVEN.md`
+- **Co**: Atlas pojištěnců (`ZP_COLORS`, VZP brand červená `#b8361e`) a Srovnávač (`ZP_COLOR`, VZP v `--ink`) měly dvě různé palety bez dark varianty. Nahrazeno jednou paletou sedmi tokenů `--zp-111 … --zp-213` (light v `:root`, dark v `:root[data-theme="dark"]`) + `--zp-neutral`; logika v `src/zp-palette.js`. Atlas čte přeložené hodnoty tokenů a po přepnutí tématu překresluje grafy; natvrdo zapsaný inkoust, pozadí tooltipů a font Inter v `pojistenci.js` nahrazeny tokeny `--ink`, `--paper`, `--rule2`, `--sans`.
+- **Proč**: `--red` patří hrotu kompasu a stavu bad (`--bad`); červená VZP v Atlasu kolidovala s významem „špatně“ a čtenář se musel mezi stránkami učit barvy znovu. Stará paleta Srovnávače padala na validátoru palety (lightness, chroma), stará paleta Atlasu na CVD (ΔE 3,5). V tmavém režimu zůstával v Atlasu světlý/nečitelný tooltip a tmavý text na tmavém pozadí.
+- **Důsledek**: **NEVRACET** červenou VZP ani barvy pojišťoven jako hex v JS. Nová pojišťovna = nový token v obou tématech + řádek v `ZP` (pořadí podle kódu, nerecyklovat). Text se barvou série nebarví, identitu nese tečka.
+
+---
+
 ## 2026-11-02 — Seed-audit, dávka 3: ambulantní kontakty, sestry, lékaři 55+, antibiotika, HPV, odvratitelné hospitalizace
 
 - **PR**: `claude/gallant-heisenberg-wibiow` (dávka 3, `docs/seed-audit.md`)

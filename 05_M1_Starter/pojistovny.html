@@ -16,78 +16,7 @@
     pristup: heslo (middleware.js, POJISTOVNY_HESLO) + noindex
     trida: C (nová stránka, hodnocení pojmenovaných institucí)
     zdroje: data/pojistovny*.json — každá hodnota má zdroj a rok
-  Stránkově specifické styly jsou zatím inline (.zpc-*); při merge přesunout do src/styles.css a spustit npm run build:css.
 -->
-<style>
-.zpc-strip{font-family:var(--sans);font-size:13px;background:var(--surface-warn);border-top:1px solid var(--warn);border-bottom:1px solid var(--warn);padding:8px 20px;color:var(--ink)}
-.zpc-strip b{color:var(--warn)}
-.zpc-modnav{display:flex;flex-wrap:wrap;gap:6px 10px;font-family:var(--sans);font-size:13px;margin:0 0 8px;padding:0;list-style:none}
-.zpc-modnav a{display:inline-block;padding:6px 12px;border:1px solid var(--rule2);border-radius:999px;text-decoration:none;color:var(--ink)}
-.zpc-modnav a:hover{border-color:var(--red);color:var(--red)}
-.zpc-modnav .zpc-faze{font-size:11px;color:var(--ink-mut);margin-left:6px}
-.zpc-mod{padding:40px 0 8px;border-top:1px solid var(--rule)}
-.zpc-mod-head{display:grid;grid-template-columns:1fr auto;gap:8px 24px;align-items:end;margin-bottom:14px}
-.zpc-mod-head h2{font-family:var(--serif);font-size:clamp(24px,3vw,32px);line-height:1.15;margin:0}
-.zpc-mod-head .zpc-stav{font-family:var(--sans);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-mut);white-space:nowrap}
-.zpc-lead{font-family:var(--serif);font-size:17px;line-height:1.55;max-width:70ch;color:var(--ink);margin:0 0 18px}
-.zpc-note{font-family:var(--sans);font-size:13.5px;color:var(--ink-mut);max-width:80ch;margin:8px 0 18px}
-.zpc-grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px 36px;align-items:start}
-.zpc-charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px 40px;margin:12px 0 20px}
-.zpc-chart h4{font-family:var(--sans);font-size:14px;font-weight:600;margin:0 0 2px}
-.zpc-chart .zpc-sub{font-family:var(--sans);font-size:12.5px;color:var(--ink-mut);display:block;margin-bottom:8px}
-.zpc-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin:14px 0 10px}
-.zpc-card{border:1px solid var(--rule2);border-top:4px solid var(--c,var(--ink));padding:14px 16px;background:var(--paper);display:flex;flex-direction:column;gap:10px;min-width:0}
-.zpc-card header{display:grid;grid-template-columns:auto 1fr;gap:0 10px;align-items:baseline}
-.zpc-card .zpc-kod{font-family:var(--mono,ui-monospace,monospace);font-size:12px;color:var(--ink-mut)}
-.zpc-card h3{font-family:var(--serif);font-size:22px;margin:0}
-.zpc-card .zpc-full{grid-column:1/-1;font-family:var(--sans);font-size:12px;color:var(--ink-mut)}
-.zpc-card .zpc-kpi{display:grid;grid-template-columns:1fr auto;align-items:end;gap:0 10px;border-bottom:1px solid var(--rule);padding-bottom:8px}
-.zpc-card .zpc-kpi b{font-family:var(--sans);font-size:24px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1}
-.zpc-card .zpc-kpi span{font-family:var(--sans);font-size:12px;color:var(--ink-mut);grid-row:2}
-.zpc-card .zpc-kpi svg{grid-row:1/3;align-self:center}
-.zpc-card dl{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:7px 12px;font-family:var(--sans);font-size:12.5px}
-.zpc-card dt{color:var(--ink-mut);font-size:11px;letter-spacing:.02em}
-.zpc-card dd{margin:0;font-weight:600;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
-.zpc-tbl{overflow-x:auto;border:1px solid var(--rule2);margin:10px 0 6px;-webkit-overflow-scrolling:touch}
-.zpc-tbl table{border-collapse:collapse;width:100%;font-family:var(--sans);font-size:13px;min-width:680px}
-.zpc-tbl th,.zpc-tbl td{padding:8px 10px;border-bottom:1px solid var(--rule);text-align:right;vertical-align:top;font-variant-numeric:tabular-nums;white-space:nowrap}
-.zpc-tbl thead th{background:var(--paper2);font-size:11.5px;letter-spacing:.03em;color:var(--ink-mut);font-weight:600}
-.zpc-tbl tbody th,.zpc-tbl thead th:first-child{text-align:left}
-.zpc-tbl td.zpc-txt,.zpc-tbl th.zpc-txt{text-align:left;white-space:normal;min-width:200px;max-width:380px}
-.zpc-tbl td small{display:block;white-space:normal;color:var(--ink-mut);font-size:11px;max-width:280px;text-align:left}
-.zpc-cap{font-family:var(--sans);font-size:12px;color:var(--ink-mut);margin:0 0 18px;max-width:90ch}
-.zpc-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--c,var(--ink));margin-right:8px;vertical-align:-1px}
-.zpc-na{color:var(--ink-mut)}
-.zpc-yes{color:var(--good);font-weight:700}.zpc-no{color:var(--bad);font-weight:700}.zpc-part{color:var(--warn);font-weight:700}
-.zpc-lvl{display:inline-block;min-width:22px;padding:2px 7px;border-radius:4px;font-size:11.5px;font-weight:600;text-align:center;white-space:normal}
-.zpc-lvl-3{background:var(--good);color:var(--paper)}.zpc-lvl-2{background:rgba(47,107,31,.18);color:var(--good)}.zpc-lvl-1{background:rgba(160,90,8,.16);color:var(--warn)}.zpc-lvl-0{background:var(--red-soft);color:var(--bad)}
-.zpc-matrix td{text-align:left;white-space:normal;min-width:120px;font-size:12px}
-.zpc-matrix td .zpc-desc{display:block;color:var(--ink-mut);font-size:11px;margin-top:2px}
-.zpc-sem{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 16px;font-family:var(--sans);font-size:12.5px}
-.zpc-sem span{padding:3px 9px;border:1px solid var(--rule2);border-radius:999px}
-.zpc-sem .g{border-color:var(--good);color:var(--good)}.zpc-sem .w{border-color:var(--warn);color:var(--warn)}.zpc-sem .b{border-color:var(--bad);color:var(--bad)}
-.zpc-acc{border:1px solid var(--rule2);margin:0 0 8px}
-.zpc-acc summary{cursor:pointer;padding:10px 14px;font-family:var(--sans);font-weight:600;font-size:14px;list-style:none;display:flex;gap:10px;align-items:center}
-.zpc-acc summary::-webkit-details-marker{display:none}
-.zpc-acc summary::before{content:"+";width:18px;color:var(--red);font-weight:700}
-.zpc-acc[open] summary::before{content:"−"}
-.zpc-acc .zpc-acc-body{padding:4px 16px 14px;font-family:var(--serif);font-size:15px;line-height:1.5}
-.zpc-acc dl{margin:0;display:grid;grid-template-columns:minmax(140px,220px) 1fr;gap:8px 16px;font-size:14px}
-.zpc-acc dt{font-family:var(--sans);font-size:12px;color:var(--ink-mut);padding-top:2px}
-.zpc-acc dd{margin:0}
-.zpc-box{border:1px solid var(--rule2);padding:16px 18px;background:var(--paper)}
-.zpc-box h4{font-family:var(--sans);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-mut);margin:0 0 8px}
-.zpc-box ul{padding-left:1.1em;margin:0}
-.zpc-box li{margin-bottom:6px;font-size:15px}
-.zpc-q ol{padding-left:1.3em;margin:0}
-.zpc-q li{margin-bottom:6px;font-size:14.5px}
-.zpc-q .zpc-opts{font-family:var(--sans);font-size:12.5px;color:var(--ink-mut);display:block}
-.zpc-plan{list-style:none;padding:0;margin:14px 0 0}
-.zpc-plan li{display:grid;grid-template-columns:96px 1fr auto;gap:12px;padding:12px 0;border-top:1px solid var(--rule);font-family:var(--serif);font-size:15px}
-.zpc-plan b{font-family:var(--sans);font-size:12.5px;color:var(--red)}
-.zpc-plan .zpc-agent{font-family:var(--sans);font-size:12px;color:var(--ink-mut);white-space:nowrap}
-@media (max-width:640px){.zpc-mod-head{grid-template-columns:1fr}.zpc-plan li{grid-template-columns:1fr}.zpc-acc dl{grid-template-columns:1fr}}
-</style>
 </head>
 <body>
 <a class="skip-link" href="#content">Přeskočit na hlavní obsah</a>
@@ -135,7 +64,7 @@
   <section class="zpc-mod" id="modul-aplikace" aria-labelledby="zpAppHead">
     <div class="zpc-mod-head"><h2 id="zpAppHead">1 · Co umí aplikace pojišťoven</h2><span class="zpc-stav">první výstup · zápis PS 7. 10. 2026</span></div>
     <p class="zpc-lead">Pracovní skupina zvolila srovnání aplikací jako první téma: je konkrétní, srozumitelné a dá se doložit. Matice ukazuje deset funkcí podle interní analýzy digitalizace a výročních zpráv. Kritéria uživatelské přívětivosti (5–7 hledisek) doplní IT expert podle podkladu Mariana Rybáře.</p>
-    <div id="zpAppMatrix" class="zpc-tbl"></div>
+    <div id="zpAppMatrix" class="zpc-tbl" role="region" tabindex="0" aria-label="Funkce aplikací pojišťoven (tabulka, posuvná)"></div>
     <p class="zpc-cap" id="zpAppCap"></p>
     <div class="zpc-grid2">
       <div class="zpc-box"><h4>Co z toho plyne</h4><ul id="zpAppSummary"></ul></div>
@@ -149,10 +78,10 @@
     <p class="zpc-lead">Fond prevence zůstává tématem, ale pracovní skupina nechce hodnotit jeho výši ani seznam benefitů. Koruny na pojištěnce o přínosu nevypovídají. Otázka zní, zda programy podporují užitečné aktivity a zda lze jejich výsledek doložit. Proto vedle nabídky ukazujeme strukturu čerpání a to málo, co pojišťovny o výsledcích uvádějí.</p>
     <h3 class="section-title"><span>Nabídka podle oblastí</span></h3>
     <p class="zpc-note">Redakční odhad síly nabídky z webů pojišťoven (interní rešerše 2026): nejsilnější / silné / základní / minimální. Není to hodnocení dopadu.</p>
-    <div id="zpPrevMatrix" class="zpc-tbl"></div>
+    <div id="zpPrevMatrix" class="zpc-tbl" role="region" tabindex="0" aria-label="Preventivní programy podle oblastí (tabulka, posuvná)"></div>
     <div class="zpc-grid2">
-      <div><h3 class="section-title"><span>Onkologický screening</span></h3><div id="zpPrevOnko" class="zpc-tbl"></div></div>
-      <div><h3 class="section-title"><span>Duševní zdraví</span></h3><div id="zpPrevDusevni" class="zpc-tbl"></div></div>
+      <div><h3 class="section-title"><span>Onkologický screening</span></h3><div id="zpPrevOnko" class="zpc-tbl" role="region" tabindex="0" aria-label="Onkologický screening (tabulka, posuvná)"></div></div>
+      <div><h3 class="section-title"><span>Duševní zdraví</span></h3><div id="zpPrevDusevni" class="zpc-tbl" role="region" tabindex="0" aria-label="Duševní zdraví (tabulka, posuvná)"></div></div>
     </div>
     <h3 class="section-title" style="margin-top:28px"><span>Kam jdou peníze z fondu prevence</span></h3>
     <p class="zpc-note">Struktura čerpání podle účelových položek z výročních zpráv (tis. Kč, skutečnost vs. plán). Vyberte pojišťovnu.</p>
@@ -177,14 +106,14 @@
       <div class="zpc-chart"><h4>Podíl seniorů 65+ v kmeni</h4><span class="zpc-sub">Starší kmen = vyšší náklady; přerozdělení to má vyrovnávat. ČR průměr přerušovaně.</span><div id="zpChart65"></div></div>
     </div>
     <h3 class="section-title"><span>Hospodaření 2024</span></h3>
-    <div id="zpTableFin" class="zpc-tbl"></div>
+    <div id="zpTableFin" class="zpc-tbl" role="region" tabindex="0" aria-label="Hospodaření pojišťoven 2024 (tabulka, posuvná)"></div>
     <p class="zpc-cap">Primární zdroj: Hodnocení vývoje systému v.z.p. v roce 2024 (MZ ČR + MF; pojištěnci = roční průměr, saldo = příjmy − výdaje, hotovostní metodika), doplněno výročními zprávami 2024. Provoz = výdaje na vlastní činnost v % příjmů (limit podle vyhlášky 418/2003 Sb.). Zůstatky na bankovních účtech podle sněmovního tisku 280/0 (tab. 9). Příjmy, náklady a saldo v mld Kč; fond prevence a zůstatky v mil. Kč.</p>
     <div class="zpc-charts">
       <div class="zpc-chart"><h4>Náklady na zdravotní služby na pojištěnce</h4><span class="zpc-sub">Kč za rok 2024 · nestandardizováno na věk</span><div id="zpChartNzs"></div></div>
       <div class="zpc-chart"><h4>Rezervy na konci roku 2026</h4><span class="zpc-sub">Zůstatek na účtech jako % ročních výdajů · plán ZPP 2026. Pod 3–4 % vznikají dluhy po splatnosti.</span><div id="zpChartZust"></div></div>
     </div>
     <h3 class="section-title"><span>Klientský servis</span></h3>
-    <div id="zpTablePrev" class="zpc-tbl"></div>
+    <div id="zpTablePrev" class="zpc-tbl" role="region" tabindex="0" aria-label="Klientský servis (tabulka, posuvná)"></div>
     <div class="zpc-grid2">
       <div class="zpc-box"><h4>Poznámky k jednotlivým pojišťovnám</h4><ul id="zpNotes"></ul></div>
       <div class="zpc-box"><h4>Co se nepodařilo dohledat</h4><ul id="zpChybi"></ul></div>
@@ -207,7 +136,7 @@
     <div class="zpc-mod-head"><h2 id="zpMetHead">5 · Metodika a semafor</h2><span class="zpc-stav">derivát metodiky Barometru</span></div>
     <p class="zpc-lead">Šest oblastí, čtyři stavy, stejná pravidla jako Barometr: doslovná citace, zamrazená baseline, interpretace viditelně oddělená od dat, žádné motivy, právo na odpověď deset dní před zveřejněním. Semafor je zatím prázdný: první verdikty vzniknou až po prvním kole odpovědí a po lidském schválení (třída C).</p>
     <div class="zpc-sem" aria-label="Stavy semaforu"><span class="g">doloženo daty</span><span class="w">deklarováno, nedoloženo</span><span class="b">nedoloženo</span><span>neodpověděla / mimo lhůtu</span><span>zatím nehodnoceno</span></div>
-    <div id="zpSemafor" class="zpc-tbl"></div>
+    <div id="zpSemafor" class="zpc-tbl" role="region" tabindex="0" aria-label="Semafor metodiky (tabulka, posuvná)"></div>
     <div class="zpc-grid2" style="margin-top:20px">
       <div class="zpc-box"><h4>Pravidla férovosti</h4><ul>
         <li><b>Standardizace na věk a pohlaví.</b> Náklady i prevence na pojištěnce se přepočítávají na strukturu ČR (CRP).</li>

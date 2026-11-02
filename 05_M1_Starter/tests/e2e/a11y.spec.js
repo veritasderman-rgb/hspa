@@ -19,6 +19,7 @@ const PAGES = [
   { path: '/jak-funguje.html',     name: 'how-it-works' },
   { path: '/legislativa.html',     name: 'legislativa' },
   { path: '/barometr.html',        name: 'barometr' },
+  { path: '/pojistovny.html',      name: 'insurers' },
   // Stabilní článek drží v gate pokrytí sdílené article šablony (CSS/JS).
   // Visual snapshot článku je vynechán (nedeterministické count-up animace),
   // ale axe analýza je deterministická.
