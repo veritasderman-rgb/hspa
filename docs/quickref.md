@@ -44,6 +44,8 @@ npm run validate:evidence        # registr evidence-auditu (data/evidence-audit.
 npm run evidence:queue -- --status   # fronta evidence-auditu: kolik článků/indikátorů čeká na ověření v PubMed
 npm run validate:pojistovny      # dataset Srovnávače pojišťoven (data/pojistovny*.json; součást validate:all)
 npm run data:pojistovny-crp      # CRP agregace pojištěnců (věkové pásy) + standardizace nákladů na pojištěnce
+node ingest/fetchers/pojistovny-vz.js   # výroční zprávy 7 ZP: stažení PDF (cache) + manifest + text do ingest/manual/pojistovny/vz-text/ (volby --jen-stazeni | --jen-text | --force | --kod 111 | --rok-od 2024; potřebuje `pdftotext`, tj. poppler-utils; bez skriptu v package.json = třída C)
+node scripts/pojistovny-verify.js       # ověří čísla srovnávače proti textům VZ → data/pojistovny-verifikace.json (--dry = jen souhrn); roční rutina .github/workflows/pojistovny-vz.yml
 npm run export:dotaznik          # export odpovědí z dotazníku pojišťoven (Neon, vyžaduje DATABASE_URL)
 
 # Testy

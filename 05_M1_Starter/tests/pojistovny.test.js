@@ -251,6 +251,7 @@ test('validate-pojistovny: prevence — neznámé id oblasti, stupen "super", du
 
 test('validate-pojistovny: fond prevence — nesoulad součtu je WARN, ne FAIL', () => {
   const s = realSets();
+  delete s.verifikace; // WARN „nenalezeno ve VZ“ patří jinému testu (tests/pojistovny-vz.test.js)
   s.prevence.pojistovny[0].fond_prevence_struktura.celkem.skutecnost += 100000;
   const { errors, warnings } = validateAll(s);
   assert.deepEqual(errors, []);
@@ -258,6 +259,7 @@ test('validate-pojistovny: fond prevence — nesoulad součtu je WARN, ne FAIL',
   assert.match(warnings[0], /součet položek .* ≠ celkem/);
   // v toleranci ±1 % bez varování
   const t = realSets();
+  delete t.verifikace;
   t.prevence.pojistovny[0].fond_prevence_struktura.celkem.skutecnost += 1000;
   assert.deepEqual(validateAll(t).warnings, []);
 });

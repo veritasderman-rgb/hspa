@@ -1,0 +1,66 @@
+{
+  "_doc": "Konfigurace fetcheru výročních zpráv zdravotních pojišťoven (ingest/fetchers/pojistovny-vz.js). stranka_vz = stránka (nebo pole stránek) s odkazy na PDF; vzory_odkazu = regexy (bez příznaků, vyhodnocují se case-insensitive nad dekódovanou URL odkazu), PDF odkaz musí odpovídat aspoň jednomu; rok se bere z textu odkazu, atributu title, názvu souboru a nakonec z textu těsně před odkazem; sekce_od = regex nadpisu, od kterého se na stránce odkazy hledají (do dalšího nadpisu); rucni_pdf = {rok: url} má přednost před nalezeným odkazem (pro VZ, které na stránce ještě není); roky_navic = roky mimo okno roky_od, které jiná data repa potřebují (např. struktura fondu prevence ZPŠ je z VZ 2020). Odkazy se NIKDY nestahují s vypnutým ověřením TLS; při HTTP 403/429 se stav zapíše do manifestu a nic se neobchází.",
+  "roky_od": 2023,
+  "pojistovny": [
+    {
+      "kod": "111",
+      "zkratka": "VZP",
+      "web": "https://www.vzp.cz",
+      "stranka_vz": "https://www.vzp.cz/o-nas/dokumenty/vyrocni-zpravy",
+      "vzory_odkazu": ["vyrocni[-_]zprava[-_](vzp[-_])?20\\d\\d\\.pdf$", "vzp_vyrocni_zprava_20\\d\\d\\.pdf$"],
+      "rucni_pdf": {
+        "2025": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vzp_vyrocni_zprava_2025.pdf"
+      }
+    },
+    {
+      "kod": "201",
+      "zkratka": "VoZP",
+      "web": "https://www.vozp.cz",
+      "stranka_vz": "https://www.vozp.cz/vyrocni-zpravy",
+      "vzory_odkazu": ["/assets/[^/]*(vz|vyrocni)[^/]*\\.pdf$"],
+      "rucni_pdf": {}
+    },
+    {
+      "kod": "205",
+      "zkratka": "ČPZP",
+      "web": "https://www.cpzp.cz",
+      "stranka_vz": "https://www.cpzp.cz/clanek/50-0-Ekonomicke-informace.html",
+      "sekce_od": "<h[1-6][^>]*>\\s*Výroční zprávy",
+      "vzory_odkazu": ["/cdn/file/[^/]+\\.pdf$"],
+      "rucni_pdf": {}
+    },
+    {
+      "kod": "207",
+      "zkratka": "OZP",
+      "web": "https://www.ozp.cz",
+      "stranka_vz": "https://www.ozp.cz/tiskove-centrum/vyrocni-zpravy",
+      "vzory_odkazu": ["vz_ozp_20\\d\\d[^/]*\\.pdf$"],
+      "rucni_pdf": {}
+    },
+    {
+      "kod": "209",
+      "zkratka": "ZPŠ",
+      "web": "https://www.zpskoda.cz",
+      "stranka_vz": ["https://www.zpskoda.cz/o-nas", "https://www.zpskoda.cz/archiv-vyrocnich-zprav"],
+      "vzory_odkazu": ["/vz[-_]?20\\d\\d[^/]*\\.pdf$"],
+      "roky_navic": [2020],
+      "rucni_pdf": {}
+    },
+    {
+      "kod": "211",
+      "zkratka": "ZP MV ČR",
+      "web": "https://www.zpmvcr.cz",
+      "stranka_vz": "https://www.zpmvcr.cz/o-nas/dokumenty/vyrocni-zpravy",
+      "vzory_odkazu": ["/VZ\\s*20\\d\\d[^/]*\\.pdf$"],
+      "rucni_pdf": {}
+    },
+    {
+      "kod": "213",
+      "zkratka": "RBP",
+      "web": "https://www.rbp213.cz",
+      "stranka_vz": "https://www.rbp213.cz/o-nas/pro-verejnost-a-media/vyrocni-zprava/a-380/",
+      "vzory_odkazu": ["/systemfiles/file/[^/]+\\.pdf$"],
+      "rucni_pdf": {}
+    }
+  ]
+}
