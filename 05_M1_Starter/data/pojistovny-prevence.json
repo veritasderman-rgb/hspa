@@ -2,9 +2,20 @@
   "version": "0.1.0",
   "generated_at": "2026-11-02T18:11:13Z",
   "changelog": [
-    {"datum":"2026-11-02","zmena":"Zavedení changelogu podle metodiky § 4.7; data beze změny.","zdroj":"PLAN-SROVNAVAC-POJISTOVEN.md P0.3"}
+    {"datum":"2026-11-02","zmena":"Zavedení changelogu podle metodiky § 4.7; data beze změny.","zdroj":"PLAN-SROVNAVAC-POJISTOVEN.md P0.3"},
+    {"datum":"2026-11-02","zmena":"Přidáno pole fond_prevence_struktura.polozky[].skupina (slovník fond_prevence_skupiny, 8 skupin) u všech položek; skupina odhadnuta podle klíčových slov v názvu položky (funkce odhadniSkupinu v src/pojistovny-prevence.js). Hodnoty ostatních polí beze změny.","zdroj":"PLAN-SROVNAVAC-POJISTOVEN.md P2.2"}
   ],
   "_doc": "Preventivní programy ZP: matice oblastí z webů (interní rešerše 2026), struktura čerpání fondu prevence a odpovědi na 7 otázek z výročních zpráv. Hodnocení silné/základní/minimální je redakční odhad z webů, ne doložený dopad.",
+  "fond_prevence_skupiny": [
+    {"id":"screening","label":"Screening a onkologie"},
+    {"id":"ockovani","label":"Očkování"},
+    {"id":"pohyb","label":"Pohyb a rehabilitace"},
+    {"id":"dusevni","label":"Duševní zdraví"},
+    {"id":"dentalni","label":"Zubní péče"},
+    {"id":"tehotenstvi_deti","label":"Těhotenství a děti"},
+    {"id":"zivotni_styl","label":"Životní styl a chronická onemocnění"},
+    {"id":"ostatni","label":"Ostatní a nezařazeno"}
+  ],
   "stupne": {
     "nejsilnejsi": 3,
     "silne": 2,
@@ -160,78 +171,91 @@
         "polozky": [
           {
             "nazev": "Prevence kardiovaskulárních onemocnění",
+            "skupina": "zivotni_styl",
             "zpp": 600000,
             "skutecnost": 787767,
             "predchozi_rok": 259943
           },
           {
             "nazev": "Prevence DM",
+            "skupina": "zivotni_styl",
             "zpp": 44000,
             "skutecnost": 62570,
             "predchozi_rok": 45342
           },
           {
             "nazev": "Zdravé stárnutí",
+            "skupina": "zivotni_styl",
             "zpp": 58000,
             "skutecnost": 58861,
             "predchozi_rok": 25330
           },
           {
             "nazev": "Prevence duševního zdraví",
+            "skupina": "dusevni",
             "zpp": 48000,
             "skutecnost": 61175,
             "predchozi_rok": 38502
           },
           {
             "nazev": "Prevence onkologických onemocnění",
+            "skupina": "screening",
             "zpp": 37000,
             "skutecnost": 45281,
             "predchozi_rok": 34202
           },
           {
             "nazev": "Očkování",
+            "skupina": "ockovani",
             "zpp": 134000,
             "skutecnost": 198791,
             "predchozi_rok": 110798
           },
           {
             "nazev": "Dietní programy",
+            "skupina": "zivotni_styl",
             "zpp": 90000,
             "skutecnost": 72784,
             "predchozi_rok": 68670
           },
           {
             "nazev": "Dentální hygiena",
+            "skupina": "dentalni",
             "zpp": 229000,
             "skutecnost": 345096,
             "predchozi_rok": 106153
           },
           {
             "nazev": "Rehabilitační aktivity",
+            "skupina": "pohyb",
             "zpp": 44000,
             "skutecnost": 148307,
             "predchozi_rok": 32411
           },
           {
             "nazev": "Zdravotnické pomůcky",
+            "skupina": "ostatni",
             "zpp": null,
             "skutecnost": 615,
             "predchozi_rok": null
           },
           {
             "nazev": "Doúčtování projektů z předchozího roku",
+            "skupina": "ostatni",
             "zpp": null,
             "skutecnost": 426,
             "predchozi_rok": 179
           },
           {
             "nazev": "Maminka a novorozenec",
+            "skupina": "tehotenstvi_deti",
             "zpp": 183000,
             "skutecnost": 179739,
             "predchozi_rok": 140601
           },
           {
             "nazev": "Bezpříspěvkoví dárci krve",
+            "skupina": "ostatni",
             "zpp": 133000,
             "skutecnost": 117610,
             "predchozi_rok": 92827
@@ -343,54 +367,63 @@
         "polozky": [
           {
             "nazev": "Program pro podporu aktivního životního stylu",
+            "skupina": "pohyb",
             "zpp": 65150,
             "skutecnost": 69709,
             "predchozi_rok": 71619
           },
           {
             "nazev": "Prevence infekčních chorob, podporu imunity a dárcovství krve a kostní dřeně",
+            "skupina": "ockovani",
             "zpp": 28142,
             "skutecnost": 33764,
             "predchozi_rok": 33827
           },
           {
             "nazev": "Podpora péče o chrup",
+            "skupina": "dentalni",
             "zpp": 32885,
             "skutecnost": 30361,
             "predchozi_rok": 31330
           },
           {
             "nazev": "Programy pro těhotné a rodiče kojenců",
+            "skupina": "tehotenstvi_deti",
             "zpp": 12670,
             "skutecnost": 12979,
             "predchozi_rok": 11110
           },
           {
             "nazev": "Prevence nádorových onemocnění",
+            "skupina": "screening",
             "zpp": 4228,
             "skutecnost": 4930,
             "predchozi_rok": 4275
           },
           {
             "nazev": "Další programy fondu prevence",
+            "skupina": "ostatni",
             "zpp": 8745,
             "skutecnost": 5498,
             "predchozi_rok": 3040
           },
           {
             "nazev": "Programy pro vojáky",
+            "skupina": "ostatni",
             "zpp": 20280,
             "skutecnost": 19087,
             "predchozi_rok": 27756
           },
           {
             "nazev": "Náklady na letní ozdravné pobyty",
+            "skupina": "ostatni",
             "zpp": 6000,
             "skutecnost": 3631,
             "predchozi_rok": 4553
           },
           {
             "nazev": "Ostatní činnost",
+            "skupina": "ostatni",
             "zpp": 1900,
             "skutecnost": 1225,
             "predchozi_rok": 1522
@@ -502,30 +535,35 @@
         "polozky": [
           {
             "nazev": "Preventivní programy podporující zdravý způsob života",
+            "skupina": "zivotni_styl",
             "zpp": 186500,
             "skutecnost": 211875,
             "predchozi_rok": 192816
           },
           {
             "nazev": "Preventivní programy proti vzniku závažných onemocnění",
+            "skupina": "ostatni",
             "zpp": 140700,
             "skutecnost": 159622,
             "predchozi_rok": 139056
           },
           {
             "nazev": "Rehabilitačně rekondiční preventivní programy",
+            "skupina": "pohyb",
             "zpp": 38000,
             "skutecnost": 23129,
             "predchozi_rok": 29518
           },
           {
             "nazev": "Programy pro dárce krve, plazmy a kostní dřeně",
+            "skupina": "ostatni",
             "zpp": 6900,
             "skutecnost": 6321,
             "predchozi_rok": 6708
           },
           {
             "nazev": "Náklady na ozdravné pobyty",
+            "skupina": "ostatni",
             "zpp": 5900,
             "skutecnost": 2948,
             "predchozi_rok": 2628
@@ -636,54 +674,63 @@
         "polozky": [
           {
             "nazev": "Zdravotně preventivní programy plně hrazené OZP",
+            "skupina": "ostatni",
             "zpp": null,
             "skutecnost": 25096,
             "predchozi_rok": 20927
           },
           {
             "nazev": "Zdravotně preventivní programy s příspěvkem OZP",
+            "skupina": "ostatni",
             "zpp": null,
             "skutecnost": 143680,
             "predchozi_rok": 141357
           },
           {
             "nazev": "Preventivně motivační systém Moje bonusy",
+            "skupina": "zivotni_styl",
             "zpp": null,
             "skutecnost": 82386,
             "predchozi_rok": 65420
           },
           {
             "nazev": "Programy primární prevence v terénu",
+            "skupina": "ostatni",
             "zpp": null,
             "skutecnost": 1782,
             "predchozi_rok": 1628
           },
           {
             "nazev": "Preventivní programy ve spolupráci se zaměstnavateli",
+            "skupina": "ostatni",
             "zpp": null,
             "skutecnost": 9524,
             "predchozi_rok": 7619
           },
           {
             "nazev": "Ostatní zdravotně preventivní programy",
+            "skupina": "ostatni",
             "zpp": null,
             "skutecnost": 2268,
             "predchozi_rok": 2656
           },
           {
             "nazev": "Náklady na ozdravné pobyty",
+            "skupina": "ostatni",
             "zpp": null,
             "skutecnost": 1330,
             "predchozi_rok": 1425
           },
           {
             "nazev": "Asistenční služba OZP",
+            "skupina": "ostatni",
             "zpp": null,
             "skutecnost": 130,
             "predchozi_rok": 240
           },
           {
             "nazev": "Náklady na antigenní testování",
+            "skupina": "ostatni",
             "zpp": null,
             "skutecnost": -1,
             "predchozi_rok": null
@@ -807,210 +854,245 @@
         "polozky": [
           {
             "nazev": "Klíšťová encefalitida",
+            "skupina": "ockovani",
             "zpp": 3000,
             "skutecnost": 3734,
             "predchozi_rok": 3730
           },
           {
             "nazev": "Chřipka",
+            "skupina": "ockovani",
             "zpp": 830,
             "skutecnost": 890,
             "predchozi_rok": 773
           },
           {
             "nazev": "Meningokok",
+            "skupina": "ockovani",
             "zpp": 750,
             "skutecnost": 1640,
             "predchozi_rok": 961
           },
           {
             "nazev": "Hepatitida",
+            "skupina": "ockovani",
             "zpp": 480,
             "skutecnost": 905,
             "predchozi_rok": 382
           },
           {
             "nazev": "HPV infekce",
+            "skupina": "ockovani",
             "zpp": 120,
             "skutecnost": 160,
             "predchozi_rok": 131
           },
           {
             "nazev": "HPV infekce pro prekancerózu",
+            "skupina": "ockovani",
             "zpp": 4,
             "skutecnost": 5,
             "predchozi_rok": 5
           },
           {
             "nazev": "Rotavirové infekce",
+            "skupina": "ockovani",
             "zpp": 500,
             "skutecnost": 685,
             "predchozi_rok": 510
           },
           {
             "nazev": "Pásový opar",
+            "skupina": "ockovani",
             "zpp": 20,
             "skutecnost": 0,
             "predchozi_rok": 3
           },
           {
             "nazev": "Balíček ostatních očkování",
+            "skupina": "ockovani",
             "zpp": 1500,
             "skutecnost": 600,
             "predchozi_rok": 969
           },
           {
             "nazev": "Prevence karcinomu prsů",
+            "skupina": "screening",
             "zpp": 2000,
             "skutecnost": 1370,
             "predchozi_rok": 1509
           },
           {
             "nazev": "Prevence karcinomu prostaty",
+            "skupina": "screening",
             "zpp": 250,
             "skutecnost": 182,
             "predchozi_rok": 226
           },
           {
             "nazev": "Prevence kolorektálního karcinomu",
+            "skupina": "screening",
             "zpp": 210,
             "skutecnost": 125,
             "predchozi_rok": 87
           },
           {
             "nazev": "Program pro zjišťování nádorů v dutině břišní a ledvin",
+            "skupina": "screening",
             "zpp": 20,
             "skutecnost": 17,
             "predchozi_rok": 20
           },
           {
             "nazev": "Prevence onemocnění štítné žlázy",
+            "skupina": "screening",
             "zpp": 350,
             "skutecnost": 277,
             "predchozi_rok": 357
           },
           {
             "nazev": "Prevence melanomu",
+            "skupina": "screening",
             "zpp": 400,
             "skutecnost": 307,
             "predchozi_rok": 347
           },
           {
             "nazev": "Prevence u těhotných",
+            "skupina": "tehotenstvi_deti",
             "zpp": 1375,
             "skutecnost": 1398,
             "predchozi_rok": 1346
           },
           {
             "nazev": "Prevence zubního kazu u dětí",
+            "skupina": "dentalni",
             "zpp": 300,
             "skutecnost": 246,
             "predchozi_rok": 250
           },
           {
             "nazev": "Program na odhalování kardiovaskulárního rizika",
+            "skupina": "screening",
             "zpp": 250,
             "skutecnost": 0,
             "predchozi_rok": 0
           },
           {
             "nazev": "Příspěvek pro děti s neurolog. nebo onkolog. onemocněním či nadváhou",
+            "skupina": "tehotenstvi_deti",
             "zpp": 10,
             "skutecnost": 6,
             "predchozi_rok": 11
           },
           {
             "nazev": "Příspěvek pro děti s chronickým onemocněním dýchacích cest a kůže",
+            "skupina": "tehotenstvi_deti",
             "zpp": 150,
             "skutecnost": 18,
             "predchozi_rok": 101
           },
           {
             "nazev": "Příspěvek na pobyty pro dospělé pro zaměstnavatele",
+            "skupina": "ostatni",
             "zpp": 1800,
             "skutecnost": 171,
             "predchozi_rok": 1438
           },
           {
             "nazev": "Příspěvek na pobyty pro dárce kostní dřeně",
+            "skupina": "ostatni",
             "zpp": 50,
             "skutecnost": 0,
             "predchozi_rok": 0
           },
           {
             "nazev": "Podpora ortodontické léčby",
+            "skupina": "dentalni",
             "zpp": 1200,
             "skutecnost": 683,
             "predchozi_rok": 594
           },
           {
             "nazev": "Podpora zlepšených služeb v době těhotenství a po porodu",
+            "skupina": "tehotenstvi_deti",
             "zpp": 5000,
             "skutecnost": 3518,
             "predchozi_rok": 3201
           },
           {
             "nazev": "Příspěvek na paruku po aktivní onkologické léčbě",
+            "skupina": "screening",
             "zpp": 400,
             "skutecnost": 225,
             "predchozi_rok": 235
           },
           {
             "nazev": "Příspěvek na dentální hygienu pro děti od 6-18 let",
+            "skupina": "dentalni",
             "zpp": 750,
             "skutecnost": 881,
             "predchozi_rok": 631
           },
           {
             "nazev": "Příspěvek na plastovou sádru",
+            "skupina": "ostatni",
             "zpp": 60,
             "skutecnost": 26,
             "predchozi_rok": 47
           },
           {
             "nazev": "Příspěvek na moderní diagnostické a léčebné metody",
+            "skupina": "ostatni",
             "zpp": 2500,
             "skutecnost": 1468,
             "predchozi_rok": 2024
           },
           {
             "nazev": "Podpora cílených preventivních aktivit – odvykání kouření",
+            "skupina": "zivotni_styl",
             "zpp": 50,
             "skutecnost": 2,
             "predchozi_rok": 8
           },
           {
             "nazev": "Podpora aktivit na snížení nadváhy u dospělých",
+            "skupina": "zivotni_styl",
             "zpp": 750,
             "skutecnost": 328,
             "predchozi_rok": 615
           },
           {
             "nazev": "Podpora cílených aktivit pro děti",
+            "skupina": "tehotenstvi_deti",
             "zpp": 500,
             "skutecnost": 5,
             "predchozi_rok": 146
           },
           {
             "nazev": "Podpora cílených aktivit posilujících duševní a tělesné zdraví",
+            "skupina": "dusevni",
             "zpp": 12300,
             "skutecnost": 5904,
             "predchozi_rok": 4749
           },
           {
             "nazev": "Podpora cílených aktivit pro dárce krve",
+            "skupina": "ostatni",
             "zpp": 2460,
             "skutecnost": 2872,
             "predchozi_rok": 1997
           },
           {
             "nazev": "Podpora pro pojištěnce trpící celiakií fenylketonurií a dalšími vzácnými metabol. poruchami",
+            "skupina": "zivotni_styl",
             "zpp": 1600,
             "skutecnost": 1840,
             "predchozi_rok": 1784
           },
           {
             "nazev": "Podpora cílených preventivních aktivit - ostatní",
+            "skupina": "ostatni",
             "zpp": 1061,
             "skutecnost": 1211,
             "predchozi_rok": 872
@@ -1229,30 +1311,35 @@
         "polozky": [
           {
             "nazev": "Programy prevence pro pojištěnce ZP MV ČR",
+            "skupina": "ostatni",
             "zpp": 285000,
             "skutecnost": 423311,
             "predchozi_rok": 364378
           },
           {
             "nazev": "Program prevence na podporu profesí pojištěnců",
+            "skupina": "ostatni",
             "zpp": 24000,
             "skutecnost": 13531,
             "predchozi_rok": 3984
           },
           {
             "nazev": "Léčebně ozdravné pobyty + edukační pobyty a kurzy",
+            "skupina": "ostatni",
             "zpp": 3000,
             "skutecnost": 3708,
             "predchozi_rok": 3369
           },
           {
             "nazev": "Rehabilitační, léčebně preventivní a ozdravné pobyty",
+            "skupina": "pohyb",
             "zpp": 18000,
             "skutecnost": 13437,
             "predchozi_rok": 15700
           },
           {
             "nazev": "Ostatní činnosti",
+            "skupina": "ostatni",
             "zpp": 0,
             "skutecnost": 0,
             "predchozi_rok": 0
@@ -1365,288 +1452,336 @@
         "polozky": [
           {
             "nazev": "Zdravý podnik",
+            "skupina": "zivotni_styl",
             "zpp": 4365,
             "skutecnost": 2457,
             "predchozi_rok": 3150
           },
           {
             "nazev": "Vitaminózní fortifikace",
+            "skupina": "zivotni_styl",
             "zpp": 1600,
             "skutecnost": 4253,
             "predchozi_rok": 2907
           },
           {
             "nazev": "Prevence u dárců krve a kostní dřeně",
+            "skupina": "ostatni",
             "zpp": 5180,
             "skutecnost": 6077,
             "predchozi_rok": 6154
           },
           {
             "nazev": "Ortodontická prevence u dětí a dorostu",
+            "skupina": "dentalni",
             "zpp": 2500,
             "skutecnost": 1929,
             "predchozi_rok": 2431
           },
           {
             "nazev": "Onkologické preventivní programy",
+            "skupina": "screening",
             "zpp": 3234,
             "skutecnost": 2635,
             "predchozi_rok": 2483
           },
           {
             "nazev": "Preventivní očkování proti HPV",
+            "skupina": "ockovani",
             "zpp": 1000,
             "skutecnost": 325,
             "predchozi_rok": 396
           },
           {
             "nazev": "Preventivní očkování - pneumokok",
+            "skupina": "ockovani",
             "zpp": 1375,
             "skutecnost": 358,
             "predchozi_rok": 1373
           },
           {
             "nazev": "Preventivní očkování - encefalitida",
+            "skupina": "ockovani",
             "zpp": 5850,
             "skutecnost": 5579,
             "predchozi_rok": 5111
           },
           {
             "nazev": "Preventivní očkování - hepatitida",
+            "skupina": "ockovani",
             "zpp": 630,
             "skutecnost": 1060,
             "predchozi_rok": 783
           },
           {
             "nazev": "Preventivní očkování - chřipka",
+            "skupina": "ockovani",
             "zpp": 185,
             "skutecnost": 714,
             "predchozi_rok": 835
           },
           {
             "nazev": "Preventivní očkování - meningokokové onemocnění",
+            "skupina": "ockovani",
             "zpp": 670,
             "skutecnost": 301,
             "predchozi_rok": 513
           },
           {
             "nazev": "Preventivní očkování - plané neštovice, spalničky, zarděnky, příušnice",
+            "skupina": "ockovani",
             "zpp": 350,
             "skutecnost": 371,
             "predchozi_rok": 326
           },
           {
             "nazev": "Preventivní očkování - rotavir",
+            "skupina": "ockovani",
             "zpp": 1100,
             "skutecnost": 1100,
             "predchozi_rok": 1191
           },
           {
             "nazev": "Preventivní očkování - černý kašel, záškrt, tetanus",
+            "skupina": "ockovani",
             "zpp": 265,
             "skutecnost": 2710,
             "predchozi_rok": 298
           },
           {
             "nazev": "Preventivní očkování - TBC",
+            "skupina": "ockovani",
             "zpp": 77,
             "skutecnost": 6,
             "predchozi_rok": 6
           },
           {
             "nazev": "Preventivní očkování ostatní",
+            "skupina": "ockovani",
             "zpp": 400,
             "skutecnost": 745,
             "predchozi_rok": 536
           },
           {
             "nazev": "Příspěvek pojištěncům s diagnózou celiakie na nákup potravin",
+            "skupina": "zivotni_styl",
             "zpp": 2320,
             "skutecnost": 2648,
             "predchozi_rok": 2721
           },
           {
             "nazev": "Program Zdraví 90, Bonus 90+",
+            "skupina": "zivotni_styl",
             "zpp": 12586,
             "skutecnost": 2036,
             "predchozi_rok": 589
           },
           {
             "nazev": "Přímořské a vysokohorské léčebné pobyty",
+            "skupina": "ostatni",
             "zpp": 230,
             "skutecnost": 281,
             "predchozi_rok": 246
           },
           {
             "nazev": "Příspěvek na školky a školy v přírodě",
+            "skupina": "tehotenstvi_deti",
             "zpp": 2000,
             "skutecnost": 1182,
             "predchozi_rok": 1141
           },
           {
             "nazev": "Příspěvek na léčebné pobyty pro seniory",
+            "skupina": "ostatni",
             "zpp": 300,
             "skutecnost": 270,
             "predchozi_rok": 230
           },
           {
             "nazev": "Příspěvek na léčebné pobyty pro pojištěnce s BMI nad 30",
+            "skupina": "zivotni_styl",
             "zpp": 200,
             "skutecnost": 100,
             "predchozi_rok": 90
           },
           {
             "nazev": "Příspěvek na letní prázdninový pobyt",
+            "skupina": "tehotenstvi_deti",
             "zpp": 13000,
             "skutecnost": 13706,
             "predchozi_rok": 12885
           },
           {
             "nazev": "Prevence osteoporózy a negativních menopauzálních stavů",
+            "skupina": "zivotni_styl",
             "zpp": 1015,
             "skutecnost": 1068,
             "predchozi_rok": 1169
           },
           {
             "nazev": "Prevence nádorového zbytnění prostaty",
+            "skupina": "screening",
             "zpp": 890,
             "skutecnost": 852,
             "predchozi_rok": 945
           },
           {
             "nazev": "Příprava ženy k porodu (psychoprofylaxe a těhotenský tělocvik, epidurální analgezie, těhotenské vitamíny)",
+            "skupina": "tehotenstvi_deti",
             "zpp": 3320,
             "skutecnost": 2534,
             "predchozi_rok": 2896
           },
           {
             "nazev": "Žena po porodu a Cvičení žen po porodu",
+            "skupina": "tehotenstvi_deti",
             "zpp": 1500,
             "skutecnost": 892,
             "predchozi_rok": 1039
           },
           {
             "nazev": "Periodické prohlídky sportovců, členské příspěvky",
+            "skupina": "pohyb",
             "zpp": 2062,
             "skutecnost": 2908,
             "predchozi_rok": 2512
           },
           {
             "nazev": "Léčení obezity",
+            "skupina": "zivotni_styl",
             "zpp": 15,
             "skutecnost": 3,
             "predchozi_rok": 4
           },
           {
             "nazev": "Nákup mléčné výživy",
+            "skupina": "zivotni_styl",
             "zpp": 600,
             "skutecnost": 224,
             "predchozi_rok": 319
           },
           {
             "nazev": "Pohybové aktivity pro diabetiky, diagnostické proužky atd.",
+            "skupina": "pohyb",
             "zpp": 137,
             "skutecnost": 137,
             "predchozi_rok": 131
           },
           {
             "nazev": "Pohybové aktivity pro uživatele my213",
+            "skupina": "pohyb",
             "zpp": 5700,
             "skutecnost": 8621,
             "predchozi_rok": 6410
           },
           {
             "nazev": "Diagnostické vyšetření nebo ošetření pro uživatele my213",
+            "skupina": "ostatni",
             "zpp": 15000,
             "skutecnost": 2564,
             "predchozi_rok": 13620
           },
           {
             "nazev": "Příspěvek brýlové obruby děti pro uživatele my213",
+            "skupina": "tehotenstvi_deti",
             "zpp": 300,
             "skutecnost": 519,
             "predchozi_rok": 319
           },
           {
             "nazev": "Nákup permanentky na plavání nad 60 let",
+            "skupina": "pohyb",
             "zpp": 850,
             "skutecnost": 917,
             "predchozi_rok": 871
           },
           {
             "nazev": "Plavání pojištěnců v bazénech",
+            "skupina": "pohyb",
             "zpp": 3000,
             "skutecnost": 2890,
             "predchozi_rok": 2964
           },
           {
             "nazev": "Kurz plavání do dokončení školní docházky",
+            "skupina": "tehotenstvi_deti",
             "zpp": 1650,
             "skutecnost": 1475,
             "predchozi_rok": 1470
           },
           {
             "nazev": "Příspěvky na stomatologii a úhrada zubních náhrad, fluoridace zubů",
+            "skupina": "dentalni",
             "zpp": 3500,
             "skutecnost": 23560,
             "predchozi_rok": 790
           },
           {
             "nazev": "Nákup kloubní výživy nad 60 let",
+            "skupina": "zivotni_styl",
             "zpp": 1800,
             "skutecnost": 1895,
             "predchozi_rok": 2099
           },
           {
             "nazev": "Příspěvek na ošetření rázovou vlnou",
+            "skupina": "ostatni",
             "zpp": 455,
             "skutecnost": 472,
             "predchozi_rok": 541
           },
           {
             "nazev": "Projekty",
+            "skupina": "ostatni",
             "zpp": 839,
             "skutecnost": 1024,
             "predchozi_rok": 803
           },
           {
             "nazev": "Měsíční akce",
+            "skupina": "ostatni",
             "zpp": 6000,
             "skutecnost": 0,
             "predchozi_rok": 5619
           },
           {
             "nazev": "Duševní pohoda",
+            "skupina": "dusevni",
             "zpp": 3000,
             "skutecnost": 1728,
             "predchozi_rok": 683
           },
           {
             "nazev": "Horizont213",
+            "skupina": "ostatni",
             "zpp": 3000,
             "skutecnost": 0,
             "predchozi_rok": 0
           },
           {
             "nazev": "preDia",
+            "skupina": "zivotni_styl",
             "zpp": 3000,
             "skutecnost": 41,
             "predchozi_rok": 0
           },
           {
             "nazev": "TeleMedPoint",
+            "skupina": "ostatni",
             "zpp": 150,
             "skutecnost": 0,
             "predchozi_rok": 40
           },
           {
             "nazev": "Moje Geny",
+            "skupina": "ostatni",
             "zpp": 1800,
             "skutecnost": 564,
             "predchozi_rok": 11513
           },
           {
             "nazev": "Ostatní",
+            "skupina": "ostatni",
             "zpp": 11000,
             "skutecnost": 11532,
             "predchozi_rok": null

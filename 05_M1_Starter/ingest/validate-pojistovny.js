@@ -189,6 +189,23 @@ export function validateAll(datasets) {
         labels.add(f?.label);
       });
     }
+    // P2.3: schéma kritérií přívětivosti (volitelné; prázdné aplikace[].kriteria = zatím nehodnoceno)
+    const kritIds = [];
+    const kp = A.kriteria_privetivosti;
+    const skalaKeys = Object.keys(kp?.skala ?? {});
+    if (kp != null && ok(isObj(kp), `${AT}: kriteria_privetivosti musí být objekt`)) {
+      ok(['navrh', 'schvaleno'].includes(kp.stav), `${AT} kriteria_privetivosti.stav: 'navrh'|'schvaleno' (${JSON.stringify(kp.stav)})`);
+      ok(isStr(kp.zdroj), `${AT} kriteria_privetivosti: chybí zdroj`);
+      ok(skalaKeys.length > 0 && skalaKeys.every((k) => /^\d+$/.test(k)), `${AT} kriteria_privetivosti.skala: neprázdný objekt s číselnými klíči`);
+      if (ok(Array.isArray(kp.kriteria), `${AT} kriteria_privetivosti.kriteria musí být pole`)) {
+        kp.kriteria.forEach((k, i) => {
+          ok(isStr(k?.id), `${AT} kriteria_privetivosti.kriteria[${i}]: chybí id`);
+          ok(isStr(k?.label), `${AT} kriteria_privetivosti.kriteria[${i}]: chybí label`);
+          ok(!kritIds.includes(k?.id), `${AT} kriteria_privetivosti.kriteria: duplicitní id '${k?.id}'`);
+          kritIds.push(k?.id);
+        });
+      }
+    }
     if (ok(Array.isArray(A.aplikace), `${AT}: aplikace musí být pole`)) {
       const codes = new Set();
       for (const a of A.aplikace) {
@@ -203,6 +220,13 @@ export function validateAll(datasets) {
           }
         }
         if (a?.uzivatele != null) checkEnvelope(a.uzivatele, `${tag}.uzivatele`);
+        if (a?.kriteria != null && ok(isObj(a.kriteria), `${tag}.kriteria: musí být objekt`)) {
+          for (const [k, v] of Object.entries(a.kriteria)) {
+            ok(kritIds.includes(k), `${tag}.kriteria: neznámé id '${k}'`);
+            ok(isObj(v) && skalaKeys.includes(String(v.stupen)), `${tag}.kriteria.${k}.stupen: '${v?.stupen}' není ze škály ${JSON.stringify(skalaKeys)}`);
+            ok(isStr(v?.zdroj) && isNum(v?.rok), `${tag}.kriteria.${k}: chybí zdroj nebo rok`);
+          }
+        }
       }
       ok(A.aplikace.length === 7, `${AT}: aplikace očekáváno 7, nalezeno ${A.aplikace.length}`);
       for (const k of ZP_CODES) ok(codes.has(k), `${AT}: chybí aplikace pro ZP ${k}`);
@@ -232,6 +256,12 @@ export function validateAll(datasets) {
       ok(isStr(o?.id), `${VT} oblasti[${i}]: chybí id`);
       ok(!oblIds.includes(o?.id), `${VT} oblasti: duplicitní id '${o?.id}'`);
       oblIds.push(o?.id);
+    });
+    const skupinaIds = [];
+    (V.fond_prevence_skupiny ?? []).forEach((s, i) => {
+      ok(isStr(s?.id) && isStr(s?.label), `${VT} fond_prevence_skupiny[${i}]: chybí id nebo label`);
+      ok(!skupinaIds.includes(s?.id), `${VT} fond_prevence_skupiny: duplicitní id '${s?.id}'`);
+      skupinaIds.push(s?.id);
     });
     const onkoCols = V.onko_screening_sloupce ?? [];
     const dusIds = (V.dusevni_sloupce ?? []).map((s) => s.id);
@@ -268,6 +298,7 @@ export function validateAll(datasets) {
         let sum = 0;
         pol.forEach((p, i) => {
           ok(p?.skutecnost === null || isNum(p?.skutecnost), `${tag}.fond_prevence_struktura.polozky[${i}].skutecnost: musí být číslo|null`);
+          if (skupinaIds.length) ok(skupinaIds.includes(p?.skupina), `${tag}.fond_prevence_struktura.polozky[${i}].skupina: '${p?.skupina}' chybí nebo není ve slovníku fond_prevence_skupiny`);
           if (isNum(p?.skutecnost)) sum += p.skutecnost;
         });
         const celkem = fps.celkem?.skutecnost;
