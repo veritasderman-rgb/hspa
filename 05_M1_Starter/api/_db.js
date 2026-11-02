@@ -14,9 +14,9 @@
 // Pro testy: globalThis.__hspaSqlForTests (funkce `sql`, tagged template)
 // má přednost před env i před balíčkem, takže se testuje bez živé DB.
 //
-// Balíček @neondatabase/serverless je záměrně načítaný dynamicky a NENÍ
-// v package.json (přidání závislosti je změna třídy C, dělá ji vydavatel:
-// `npm i @neondatabase/serverless`).
+// Balíček @neondatabase/serverless je v package.json jako produkční závislost;
+// načítá se dynamicky, aby handler bez něj (nebo bez DATABASE_URL) selhal
+// čistě s 503; testy ho nahrazují stubem.
 
 export const ERR_NEKONFIGUROVANO = 'dotaznik-neni-nakonfigurovan';
 export const ERR_ZAVISLOST = 'chybi-zavislost';

@@ -480,8 +480,10 @@ test('migrace: tabulky, sloupce, indexy a view', () => {
   assert.match(read('api', 'migrations', 'README.md'), /psql "\$DATABASE_URL" -f/);
 });
 
-test('package.json: žádná nová závislost @neondatabase/serverless (třída C, dělá vydavatel)', () => {
-  assert.ok(!/@neondatabase\/serverless/.test(read('package.json')));
+test('package.json: @neondatabase/serverless je produkční závislost (api/_db.js ho načítá dynamicky)', () => {
+  const pkg = JSON.parse(read('package.json'));
+  assert.ok(pkg.dependencies && pkg.dependencies['@neondatabase/serverless']);
+  assert.ok(!(pkg.devDependencies && pkg.devDependencies['@neondatabase/serverless']));
 });
 
 // --- frontend: DOM stub --------------------------------------------------------------------

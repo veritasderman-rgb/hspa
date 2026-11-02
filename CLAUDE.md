@@ -239,6 +239,7 @@ npm run setup:git         # Merge driver pro generované soubory (běží i sám
 npm run validate:all      # Validuje indicators + strategies + explainers + prevention
 npm run pr:gate -- --base origin/main   # Třída PR (A/B/C) podle GOVERNANCE.md § 3 — co smí zmergovat editor a co čeká na vydavatele
 npm run ai:provoz -- check              # Kill switch: exit 1 = provoz pozastaveno, nic nepublikovat ani nemergovat
+npm run validate:pojistovny # Dataset Srovnávače pojišťoven (součást validate:all)
 npm run validate:evidence # Registr evidence-auditu (studie k tvrzením článků a indikátorů)
 npm run evidence:queue    # Fronta evidence-auditu (--status | --batch --articles 12 --indicators 8 | --hash soubor)
 npm run data:pohotovosti  # Celá pipeline pohotovostí (NRPZS + VZP + kraje → data/pohotovosti.json, ~10 min)

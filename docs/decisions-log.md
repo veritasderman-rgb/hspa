@@ -6,6 +6,16 @@ Formát: každá položka má `Datum`, `PR`, `Co`, `Proč`, `Důsledek`.
 
 ---
 
+
+## 2026-11-02 — Srovnávač pojišťoven: P0.1 (validace, Neon, ochrana podkladů, brána semaforu)
+
+- **PR**: balíček P0.1 z `05_M1_Starter/PLAN-SROVNAVAC-POJISTOVEN.md`, třída C (merguje vydavatel)
+- **Co**: `validate:pojistovny` ve `validate:all`; závislost `@neondatabase/serverless` pro `api/dotaznik.js`; `.vercelignore` s celým `ingest/` (z `src/`, `api/` ani HTML se za běhu `ingest/` nečte, takže matcher `middleware.js` se nerozšiřuje); pravidlo `semafor-pojistoven` v `scripts/pr-gate.js` (`data/pojistovny-semafor.json` = C); workflow `visual-a11y.yml` přidává snímky do indexu před kontrolou změn, aby se commitla i baseline nové stránky.
+- **Proč**: ruční podklady v `ingest/manual/pojistovny/` by se na Vercelu servírovaly mimo Basic Auth; verdikty semaforu jsou soudy o jmenovaných institucích (metodika § 6), brána je ale zařazuje podle cesty.
+- **Důsledek**: verdikty semaforu patří do samostatného souboru `data/pojistovny-semafor.json`, **ne** do klíče `semafor` v `data/pojistovny.json` (ten by brána pustila jako B). Něco z `ingest/` číst za běhu = nejdřív zúžit `.vercelignore`. Nenasazeno, ochranu `ingest/` ověří vydavatel `curl -I` na produkci.
+
+---
+
 ## 2026-11-02 — Srovnávač pojišťoven: věková standardizace „Kč na pojištěnce“ (P3.3), váhy zatím placeholder
 
 - **PR**: balíček P3.3 z `05_M1_Starter/PLAN-SROVNAVAC-POJISTOVEN.md`

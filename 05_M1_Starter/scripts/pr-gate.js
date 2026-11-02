@@ -41,6 +41,7 @@ export const PRAVIDLA = [
   { trida: 'C', id: 'osoby',         test: p => /^05_M1_Starter\/data\/(barometr|ppo-coi|ppo|ppo-osoby)\.json$/.test(p) || p.startsWith(`${S}data/ppo-analyza/`) || p.startsWith(`${S}ingest/ppo/`) },
   { trida: 'C', id: 'pohotovosti',   test: p => /^05_M1_Starter\/data\/(pohotovosti[^/]*|dojezdy|obce-gps)\.json$/.test(p) || /^05_M1_Starter\/pohotovost(i|-[^/]+)\.html$/.test(p) || p === `${S}sw-pohotovosti.js` || /^05_M1_Starter\/src\/pohotovosti[^/]*\.js$/.test(p) },
   { trida: 'C', id: 'zavislosti',    test: p => /^05_M1_Starter\/package(-lock)?\.json$/.test(p) || /(^|\/)vercel\.json$/.test(p) || /(^|\/)\.env/.test(p) },
+  { trida: 'C', id: 'semafor-pojistoven', test: p => p === `${S}data/pojistovny-semafor.json` }, // verdikty o jmenovaných institucích, metodika srovnávače § 6
   { trida: 'C', id: 'soukromi',      test: p => /^05_M1_Starter\/src\/(page-shared|analytics[^/]*|schema)\.js$/.test(p) },
   { trida: 'C', id: 'nova-stranka',  status: ['A', 'R'], test: p => /^05_M1_Starter\/[^/]+\.html$/.test(p) && !/^05_M1_Starter\/(clanek|indikator)-[^/]+\.html$/.test(p) },
   { trida: 'C', id: 'smazany-obsah', status: ['D'],      test: p => /^05_M1_Starter\/(clanek-[^/]+\.html|indicators\/[^/]+\.json)$/.test(p) },
