@@ -7,6 +7,13 @@ Formát: každá položka má `Datum`, `PR`, `Co`, `Proč`, `Důsledek`.
 ---
 
 
+## 2026-11-02 — Neon projekt `hspa-dotazniky` založen, migrace spuštěny
+
+Na pokyn vydavatele založen Neon projekt `hspa-dotazniky` (org vydavatele, `aws-eu-central-1`,
+Postgres 18, databáze `dotazniky`), větve `main` (produkce) a `test` (Preview/zkoušky),
+migrace `api/migrations/0001_dotaznik.sql` a `0002_agregace.sql` spuštěny na obou větvích a
+ověřeny. `DATABASE_URL` ve Vercelu nastavuje vydavatel ručně (konektor nemá oprávnění).
+Podrobnosti: `05_M1_Starter/api/migrations/README.md`.
 ## 2026-11-02 — Srovnávač pojišťoven: P0.1 (validace, Neon, ochrana podkladů, brána semaforu)
 
 - **PR**: balíček P0.1 z `05_M1_Starter/PLAN-SROVNAVAC-POJISTOVEN.md`, třída C (merguje vydavatel)
