@@ -914,6 +914,66 @@ hodnota datového kontraktu, primární zdroj). K tomu badge v `.article-meta`
 Chipy nesou `data-dlz-status`, sufix ✓/⚠ řeší CSS přes `::after`. Jen design
 tokeny, dark mode výhradně přes `[data-theme="dark"]`.
 
+## 2.10 Primitivy srovnávače (`.zpv-`)
+
+Grafové primitivy srovnávače pojišťoven — `05_M1_Starter/src/zp-viz.js`
+(balíčky P1.2 + P2.1, `PLAN-SROVNAVAC-POJISTOVEN.md` § 2.4). Čisté funkce:
+data + options → HTML/SVG string, bez DOM a bez knihoven; testy
+`tests/zp-viz.test.js`. CSS v sekci `/* === Srovnávač pojišťoven: vizuální
+primitivy … (.zpv-) === */` na konci `styles.css`.
+
+**Společný kontrakt** (staví na něm `src/zp-interact.js` a `src/pojistovny.js`):
+
+- Grafy vrací `<figure class="zpv zpv-figure zpv-<typ>">` s `<figcaption class="zpv-cap">`
+  (title · sub · meta · „Zdroj: …“), plochou `.zpv-plot` s `role="group"` +
+  složeným `aria-label` (všechny hodnoty) a tabulkovým dvojčetem
+  `<details class="zpv-table"><summary>Zobrazit jako tabulku</summary>…`.
+  Matice (heatmap, dotMatrix, coverageMatrix) jsou rovnou `<table>` ve
+  fokusovatelném `.zpv-scroll` se sticky prvním sloupcem — dvojče nemají.
+  *Proč ne `figure role="img"`:* role img má „children presentational“, schovala
+  by tabulku i fokusovatelné marky (axe `nested-interactive`, serious). Každý
+  mark proto nese vlastní `role="img"` + `aria-label`.
+- Datový mark: třída `zpv-mark`, `data-zp="<kód ZP>"` nebo `data-key="<klíč>"`,
+  barva `var(--zpv-mark-color, var(--ink))` (výchozí inkoust, `opacity:.85`).
+  Fokusovatelné marky mají `tabindex="0"` + `data-tip` (hodnota · rok · zdroj);
+  řádek (`.zpv-row`, hit area ≥ 26 px) nese stejné `data-zp`/`data-tip`.
+  U `indexedLines` je fokus/tip na `<g class="zpv-series">` (+ průhledná 24px
+  `.zpv-hit` cesta), `path`/`circle` uvnitř jsou `zpv-mark` bez tabindexu.
+- Barvy ZP: `.zpv [data-zp="111"] { --zpv-zp: var(--zp-111) }` … pro 7 kódů;
+  `.zpv-figure.is-colored .zpv-mark` bere `--zpv-zp` vždy (segmentedBar,
+  indexedLines). Zvýraznění „Moje pojišťovna“ dodává jiný balíček přes
+  `--zpv-mark-color`. Části bez identity ZP (`data-key`) v segmentedBar dostanou
+  `data-slot="0…4|other"` = tóny inkoustu.
+- Animace: `data-zpv-anim="bar|seg|line|dot|count"` + `--i` (stagger 60 ms).
+  Skryté jen pod `main.zpv-anim-ready`, odhalí je `.is-in`; pravidla jsou
+  v `@media screen and (prefers-reduced-motion: no-preference)` → bez JS,
+  v tisku i při reduce je vidět konečný stav. Count-up (`.zpv-count`) řeší JS.
+- Null hodnota se nikdy nekreslí, píše se „nedohledáno“ (`NA_TEXT`).
+- Inline `style=` jen `--w`, `--i` a `width` (segmenty, spojnice dumbbellu).
+
+| Funkce | Vstup | Výstup / poznámky |
+|---|---|---|
+| `rankedBars(items, {title, sub, unit, dec, ref:{value,label,kind:'zone-below'\|'zone-above'\|'line'}, sort:'desc'\|'none', maxv, source, sortNote})` | `items[{kod\|key, label, value, rok?, zdroj?, note?, tip?}]` | HTML bary ≤ 20 px, 4px zaoblená špička, hodnota na špičce (rezerva `zpv-vw-s/m/l`); reference = pás 8 % nebo hairline v tracku, popisek v záhlaví; pod seřazeným grafem „Řazeno podle hodnoty, nejde o hodnocení“ (`sortNote:false` vypne) |
+| `segmentedBar(parts, {title, sub, unit, dec, maxParts:6, otherLabel:'Ostatní', source})` | `parts[{kod\|key, label, value}]` | tall bar 28 px, 2px mezery, podíl uvnitř od 14 % (7–14 % jen v kontejneru ≥ 720 px), legenda názvů v pořadí segmentů, fold zbytku do „Ostatní“; tabulka nese všechny části |
+| `statTiles(tiles, {title?})` | `tiles[{value, unit, label, meta, decimals, prefix}]` | `<ul class="zpv zpv-stats">`; `<b class="zpv-count" data-value data-decimals>` s konečnou hodnotou jako textem, proporcionální číslice |
+| `meter(value, {max, min, label, thresholds:[{at,signal}], text, unit, dec})` | číslo | `role="meter"` + `aria-valuenow/min/max/valuetext`; track = světlejší krok barvy signálu (`good/warn/bad/neutral`) |
+| `indexedLines(series, {title, sub, base:'first'\|rok, source, unit, dec})` | `series[{kod\|key, label, points[{year, value}]}]` | SVG `viewBox 0 0 360 232`, index základ = 100, jedna osa, hairline mřížka, 2px čáry (`pathLength=1`), koncové tečky r 4 s prstencem, direct labels s leader lines (při přeplnění jen legenda), legenda vždy; dvojče = řádek na rok (index + absolutní hodnota) |
+| `dumbbell(items, {title, sub, unit, dec, fromLabel:'plán', toLabel:'skutečnost', source, sort, maxv})` | `items[{kod\|key, label, from, to}]` | HTML; „from“ prázdné kolečko `--ink-mut`, „to“ plný mark, hodnota u „to“, rozdíl v % v tooltipu a v tabulce |
+| `heatmap(rows, cols, cell, {title, sub, levels, source, sortable:true, rowHeader})` | `cell(row,col) → {level:0..3\|null, text?, tip?}` | `<table class="zpv-matrix zpv-heat">`, `td.zpv-cell[data-level]` s textem stupně, popis v `data-tip` + `sr-only`; rampa `--zpv-ramp-0..3` (light `--paper2`→`#1c5cab`, dark →`#6da7ec`); hlavičky `button.zpv-sort[data-col]` + `aria-sort="none"` (chování jinde) |
+| `dotMatrix(rows, cols, cell, {title, sub, scoreLabel:'n/10', source, rowHeader})` | `cell → true\|false\|'partial'\|null` | kolečka `.zpv-pip--yes/no/part` s `role="img"` + `aria-label`, „—“ pro null; poslední sloupec `meter` (ano = 1, částečně = 0,5, / počet známých) |
+| `coverageMatrix(rows, cols, cell, {title, sub, source, labels, rowHeader})` | `cell → 'ano'\|'castecne'\|'ne'\|null\|{stav, tip}` | stav vždy ikona (✓ ½ ✕) + text, ikona v `--good/--warn/--bad`, text v inkoustu (SC 1.4.1) |
+
+Pomocné exporty: `foldParts`, `indexSeries`, `niceTicks`, `dodgeLabels`,
+`meterSignal`, `dotScore`, `diffPct`, `sortDesc`, `pct`, `fmtValue`,
+`NA_TEXT`, `ZP_KODY`, `HEAT_LEVELS`, `COVERAGE_STATES`.
+
+**Mobil (indexedLines):** SVG se škáluje rovnoměrně (žádné
+`preserveAspectRatio="none"`). ViewBox 360 je šitý na telefon (390px viewport ≈
+358px graf → text 12 jednotek ≈ 12 px). Na širších kontejnerech SVG končí na
+`max-width: 600px` a container query ≥ 480 px zmenší písmo na 9 jednotek
+a čáru na 1,5 → text 12–15 px, čára 2–2,5 px. Popisky se rozmísťují pro
+12 jednotek (horší případ).
+
 ---
 
 # 3. Animation patterns
