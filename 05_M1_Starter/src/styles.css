@@ -22432,6 +22432,267 @@ select.zpc-note{color:var(--ink);background:var(--paper);border:1px solid var(--
 }
 
 /* === Srovnávač pojišťoven: vizuální primitivy src/zp-viz.js (.zpv-) — plní balíček P1.2/P2.1 === */
+/* Grafové primitivy srovnávače (rankedBars, segmentedBar, statTiles, meter,
+   indexedLines, dumbbell, heatmap, dotMatrix, coverageMatrix). Barvy jen přes
+   tokeny; identitu pojišťovny nese mark (--zpv-mark-color), text zůstává
+   v inkoustu. Tokeny --zp-111 … --zp-213 definuje balíček P1.1 (zde jen
+   odkaz s fallbackem na inkoust). Zvýraznění „Moje pojišťovna“ (main
+   [data-moje-zp]) a tooltip dodává src/zp-interact.js. */
+:root {
+  /* sekvenční rampa heatmapy: jedna modrá, 4 kroky od --paper2 */
+  --zpv-ramp-0: var(--paper2);
+  --zpv-ramp-1: #b3c2d2;
+  --zpv-ramp-2: #6e93c0;
+  --zpv-ramp-3: #1c5cab;
+  /* text v buňce rampy: inkoust 15 / 9,5 / 5,4 : 1, bílá na kroku 3 6,6 : 1 */
+  --zpv-ramp-on-0: var(--ink);
+  --zpv-ramp-on-1: var(--ink);
+  --zpv-ramp-on-2: var(--ink);
+  --zpv-ramp-on-3: #fff;
+  /* popisek uvnitř barevného segmentu: bílá, nebo téměř černá (v obou režimech
+     tytéž dvě); volba podle jasu kroku pojišťovny (WCAG poměr v komentáři) */
+  --zpv-on-dark: #fff;
+  --zpv-on-light: #14110c;
+  --zpv-on-111: var(--zpv-on-dark);  /* 4,4 → s jemným stínem pod popiskem 5,0 */
+  --zpv-on-shade-111: rgba(0, 0, 0, .18);
+  --zpv-on-201: var(--zpv-on-light); /* 5,9 */
+  --zpv-on-205: var(--zpv-on-light); /* 6,7 */
+  --zpv-on-207: var(--zpv-on-light); /* 8,7 */
+  --zpv-on-209: var(--zpv-on-light); /* 7,0 */
+  --zpv-on-211: var(--zpv-on-dark);  /* 5,0 */
+  --zpv-on-213: var(--zpv-on-dark);  /* 5,8 */
+  --zpv-surface: var(--paper);
+  /* tóny inkoustu pro části bez identity pojišťovny (segmentedBar s data-key);
+     popisek: papír na 0–1 (11,5 / 6,2 : 1), inkoust na 2–4 (≥ 6 : 1) */
+  --zpv-slot-0: 90%;
+  --zpv-slot-1: 68%;
+  --zpv-slot-2: 42%;
+  --zpv-slot-3: 28%;
+  --zpv-slot-4: 18%;
+  --zpv-slot-other: 9%;
+  --zpv-slot-on-2: var(--ink);
+}
+:root[data-theme="dark"] {
+  --zpv-ramp-1: #3d4f63;
+  --zpv-ramp-2: #5c89bd;
+  --zpv-ramp-3: #6da7ec;
+  /* dark: inkoust 13 / 6,7 : 1, téměř černá 5,2 / 7,5 : 1 */
+  --zpv-ramp-on-2: var(--zpv-on-light);
+  --zpv-ramp-on-3: var(--zpv-on-light);
+  --zpv-on-111: var(--zpv-on-light); /* 5,2 */
+  --zpv-on-shade-111: transparent;
+  --zpv-on-213: var(--zpv-on-light); /* 6,0 */
+  /* tmavý povrch stlačí tóny k sobě → širší rozestupy; krok 2 nese
+     téměř černou (≥ 4,5 : 1), kroky 3–4 světlý inkoust (≥ 5 : 1) */
+  --zpv-slot-1: 72%;
+  --zpv-slot-2: 54%;
+  --zpv-slot-3: 34%;
+  --zpv-slot-4: 22%;
+  --zpv-slot-other: 11%;
+  --zpv-slot-on-2: var(--zpv-on-light);
+}
+
+/* identita pojišťovny → --zpv-zp (mark, swatch, řádek) */
+.zpv [data-zp="111"] { --zpv-zp: var(--zp-111, var(--ink)); --zpv-on: var(--zpv-on-111); --zpv-on-bg: var(--zpv-on-shade-111); }
+.zpv [data-zp="201"] { --zpv-zp: var(--zp-201, var(--ink)); --zpv-on: var(--zpv-on-201); }
+.zpv [data-zp="205"] { --zpv-zp: var(--zp-205, var(--ink)); --zpv-on: var(--zpv-on-205); }
+.zpv [data-zp="207"] { --zpv-zp: var(--zp-207, var(--ink)); --zpv-on: var(--zpv-on-207); }
+.zpv [data-zp="209"] { --zpv-zp: var(--zp-209, var(--ink)); --zpv-on: var(--zpv-on-209); }
+.zpv [data-zp="211"] { --zpv-zp: var(--zp-211, var(--ink)); --zpv-on: var(--zpv-on-211); }
+.zpv [data-zp="213"] { --zpv-zp: var(--zp-213, var(--ink)); --zpv-on: var(--zpv-on-213); }
+/* části, které nejsou pojišťovny (segmentedBar s data-key): tóny inkoustu
+   v pevném pořadí, „Ostatní“ nejsvětlejší; popisek inkoust/papír ≥ 4,5 : 1 */
+.zpv [data-slot="0"] { --zpv-zp: color-mix(in srgb, var(--ink) var(--zpv-slot-0), var(--paper)); --zpv-on: var(--paper); }
+.zpv [data-slot="1"] { --zpv-zp: color-mix(in srgb, var(--ink) var(--zpv-slot-1), var(--paper)); --zpv-on: var(--paper); }
+.zpv [data-slot="2"] { --zpv-zp: color-mix(in srgb, var(--ink) var(--zpv-slot-2), var(--paper)); --zpv-on: var(--zpv-slot-on-2); }
+.zpv [data-slot="3"] { --zpv-zp: color-mix(in srgb, var(--ink) var(--zpv-slot-3), var(--paper)); --zpv-on: var(--ink); }
+.zpv [data-slot="4"] { --zpv-zp: color-mix(in srgb, var(--ink) var(--zpv-slot-4), var(--paper)); --zpv-on: var(--ink); }
+.zpv [data-slot="other"] { --zpv-zp: color-mix(in srgb, var(--ink) var(--zpv-slot-other), var(--paper)); --zpv-on: var(--ink); }
+
+/* výchozí mark: jedna barva (inkoust 85 %), barva ZP až po výběru/hoveru */
+.zpv-mark { opacity: .85; }
+.zpv-figure.is-colored .zpv-mark { --zpv-mark-color: var(--zpv-zp); opacity: 1; }
+
+/* rámec figury */
+.zpv-figure { margin: 0 0 28px; min-width: 0; font-family: var(--sans); color: var(--ink); }
+.zpv-cap { display: flex; flex-direction: column; gap: 3px; margin-bottom: 12px; }
+.zpv-title { font-size: 14px; font-weight: 600; line-height: 1.3; }
+.zpv-sub { font-size: 12.5px; line-height: 1.4; color: var(--ink-mut); }
+.zpv-meta { display: flex; flex-wrap: wrap; gap: 2px 14px; font-size: 12px; line-height: 1.4; color: var(--ink-mut); }
+.zpv-src { font-size: 11.5px; line-height: 1.4; color: var(--ink-mut2); }
+.zpv-refkey { display: inline-flex; align-items: center; gap: 6px; }
+.zpv-refkey-sw { display: inline-block; flex: none; width: 14px; height: 12px; }
+.zpv-refkey-sw--zone { background: color-mix(in srgb, var(--ink) 10%, transparent); }
+.zpv-refkey-sw--line { width: 0; border-left: 1px solid var(--ink-mut); }
+.zpv-empty { font-size: 13px; font-style: italic; color: var(--ink-mut); }
+.zpv-na { font-size: 12.5px; font-style: italic; color: var(--ink-mut); }
+
+/* rankedBars + dumbbell: řádek = popisek | track; hit area = celý řádek ≥ 26 px */
+.zpv-barlist { --zpv-labw: 6.5em; display: flex; flex-direction: column; font-size: 13px; }
+.zpv-row { display: grid; grid-template-columns: var(--zpv-labw) minmax(0, 1fr); column-gap: 10px; align-items: center; min-height: 26px; }
+.zpv-label { font-size: 13px; line-height: 1.25; overflow-wrap: break-word; hyphens: auto; }
+.zpv-track { display: flex; align-self: stretch; }
+.zpv-area { position: relative; flex: 1 1 auto; min-height: 26px; }
+.zpv-vw-s .zpv-area { margin-right: 4.5em; }
+.zpv-vw-m .zpv-area { margin-right: 6.5em; }
+.zpv-vw-l .zpv-area { margin-right: 8.5em; }
+.zpv-area > .zpv-na { position: absolute; left: 0; top: 50%; transform: translateY(-50%); white-space: nowrap; }
+.zpv-bar { position: absolute; left: 0; top: calc(50% - 10px); width: var(--w); height: 20px; border-radius: 0 4px 4px 0; background: var(--zpv-mark-color, var(--ink)); }
+.zpv-val { position: absolute; left: calc(var(--w) + 6px); top: 50%; transform: translateY(-50%); white-space: nowrap; font-weight: 600; line-height: 1.2; }
+.zpv-has-refline .zpv-val { padding: 0 3px; margin-left: -3px; background: var(--zpv-surface); }
+.zpv-ref { position: absolute; top: 0; bottom: 0; pointer-events: none; }
+.zpv-ref--below { left: 0; width: var(--w); background: color-mix(in srgb, var(--ink) 8%, transparent); }
+.zpv-ref--above { left: var(--w); right: 0; background: color-mix(in srgb, var(--ink) 8%, transparent); }
+.zpv-ref--line { left: var(--w); width: 0; border-left: 1px solid var(--ink-mut); }
+
+/* dumbbell */
+.zpv-dbplot { --zpv-labw: 11em; }
+.zpv-dbplot .zpv-row { min-height: 30px; }
+.zpv-dbplot .zpv-val { margin-left: 4px; }
+.zpv-db-line { position: absolute; left: var(--w); top: calc(50% - 1px); height: 2px; background: var(--ink-mut); }
+.zpv-db-from { position: absolute; left: var(--w); top: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: var(--zpv-surface); box-shadow: inset 0 0 0 2px var(--ink-mut); }
+.zpv-db-to { position: absolute; left: var(--w); top: 50%; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: var(--zpv-mark-color, var(--ink)); box-shadow: 0 0 0 2px var(--zpv-surface); }
+
+/* segmentedBar: tall 28 px, 2px mezera, popisek uvnitř jen když se vejde */
+.zpv-segplot { container-type: inline-size; }
+.zpv-segbar { display: flex; gap: 2px; height: 28px; }
+.zpv-seg { display: flex; align-items: center; flex: 0 1 auto; min-width: 0; height: 100%; padding-left: 6px; border-radius: 4px; background: var(--zpv-mark-color, var(--ink)); color: var(--zpv-on, var(--paper)); font-size: 12px; font-weight: 600; white-space: nowrap; }
+.zpv-seg-lab { margin-left: -3px; padding: 1px 3px; border-radius: 3px; background: var(--zpv-on-bg, transparent); pointer-events: none; }
+@container (max-width: 719px) {
+  .zpv-seg-lab--s { display: none; }
+}
+
+/* legenda (pořadí = pořadí marků; čísla neopakuje) */
+.zpv-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 10px 0 0; padding: 0; list-style: none; font-size: 12.5px; line-height: 1.5; }
+.zpv-legend li { display: inline-flex; align-items: center; gap: 6px; }
+.zpv-legend--db { margin: 0 0 6px; }
+.zpv-sw { display: inline-block; flex: none; width: 10px; height: 10px; border-radius: 2px; background: var(--zpv-zp, var(--ink)); }
+.zpv-sw--line { width: 16px; height: 2px; border-radius: 1px; }
+.zpv-sw--from { border-radius: 50%; background: var(--zpv-surface); box-shadow: inset 0 0 0 2px var(--ink-mut); }
+.zpv-sw--to { border-radius: 50%; background: var(--ink); }
+.zpv-sw--ramp { width: 16px; height: 12px; }
+.zpv-sw[data-slot="other"] { box-shadow: inset 0 0 0 1px var(--rule2); }
+
+/* statTiles: KPI řada, proporcionální číslice (žádné tabular-nums) */
+.zpv-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px 22px; margin: 0 0 24px; padding: 0; list-style: none; font-family: var(--sans); color: var(--ink); }
+.zpv-tile { display: flex; flex-direction: column; gap: 4px; padding-top: 10px; border-top: 2px solid var(--ink); }
+.zpv-tile-val { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 6px; }
+.zpv-count { font-size: 30px; font-weight: 650; line-height: 1.05; letter-spacing: -0.01em; font-variant-numeric: proportional-nums; }
+.zpv-count.zpv-na { font-size: 20px; font-weight: 600; letter-spacing: 0; }
+.zpv-tile-unit { font-size: 14px; color: var(--ink-mut); }
+.zpv-tile-label { font-size: 13px; line-height: 1.35; }
+.zpv-tile-meta { font-size: 11.5px; line-height: 1.35; color: var(--ink-mut); }
+
+/* meter: track = světlejší krok téže barvy */
+.zpv-meter { --zpv-meter-c: var(--ink); display: inline-flex; align-items: center; gap: 8px; font-family: var(--sans); font-size: 12.5px; }
+.zpv-meter--good { --zpv-meter-c: var(--good); }
+.zpv-meter--warn { --zpv-meter-c: var(--warn); }
+.zpv-meter--bad { --zpv-meter-c: var(--bad); }
+.zpv-meter-track { position: relative; display: block; flex: none; width: 64px; height: 8px; border-radius: 4px; background: color-mix(in srgb, var(--zpv-meter-c) 20%, var(--zpv-surface)); }
+.zpv-meter-fill { position: absolute; top: 0; bottom: 0; left: 0; width: var(--w); border-radius: 4px; background: var(--zpv-meter-c); }
+.zpv-meter-text { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* indexedLines (SVG, viewBox 360 × 232 — zdůvodnění v src/zp-viz.js) */
+.zpv-linesplot { container-type: inline-size; }
+.zpv-svg { display: block; width: 100%; max-width: 600px; height: auto; overflow: visible; font-family: var(--sans); }
+.zpv-svg text { font-size: 12px; fill: var(--ink-mut); }
+.zpv-svg .zpv-endlab { font-weight: 600; fill: var(--ink); }
+.zpv-grid { stroke: var(--rule); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+.zpv-grid--base { stroke: var(--rule2); }
+.zpv-axis { stroke: var(--rule2); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+.zpv-line { fill: none; stroke: var(--zpv-mark-color, var(--ink)); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.zpv-hit { fill: none; stroke: transparent; stroke-width: 24px; vector-effect: non-scaling-stroke; pointer-events: stroke; }
+.zpv-dot { fill: var(--zpv-mark-color, var(--ink)); stroke: var(--zpv-surface); stroke-width: 2; }
+.zpv-leader { fill: none; stroke: var(--ink-mut); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+.zpv-series:focus-visible .zpv-line { stroke-width: 3.5; }
+@container (min-width: 480px) {
+  .zpv-svg text { font-size: 9px; }
+  .zpv-line { stroke-width: 1.5; }
+  .zpv-dot { stroke-width: 1.5; }
+}
+
+/* tabulkové dvojče */
+.zpv-table { margin-top: 10px; font-size: 12.5px; }
+.zpv-table > summary { display: list-item; min-height: 24px; padding: 3px 0; cursor: pointer; color: var(--ink-mut); }
+.zpv-table table { width: 100%; margin-top: 6px; border-collapse: collapse; font-size: 12.5px; }
+.zpv-table th, .zpv-table td { padding: 4px 8px; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
+.zpv-table .zpv-num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.zpv-raw { color: var(--ink-mut); }
+.zpv-scroll { position: relative; max-width: 100%; overflow-x: auto; }
+
+/* maticové tabulky: heatmap, dotMatrix, coverageMatrix (sticky 1. sloupec) */
+.zpv-matrix { border-collapse: separate; border-spacing: 2px; font-size: 12.5px; line-height: 1.3; }
+.zpv-matrix th { padding: 4px 6px; font-weight: 600; text-align: left; }
+.zpv-matrix thead th { min-width: 4.5em; max-width: 8em; vertical-align: bottom; font-size: 12px; color: var(--ink-mut); }
+.zpv-matrix tbody th { position: sticky; left: 0; z-index: 1; min-width: 6em; background: var(--zpv-surface); }
+.zpv-corner { position: sticky; left: 0; z-index: 1; background: var(--zpv-surface); }
+.zpv-rowlab { display: block; }
+.zpv-rowsub { display: block; font-size: 11.5px; font-weight: 400; color: var(--ink-mut); }
+.zpv-sort { display: inline-flex; align-items: center; gap: 4px; min-height: 24px; padding: 0; border: 0; background: none; font: inherit; color: inherit; text-align: left; cursor: pointer; }
+.zpv-sort-ic::after { content: "↕"; opacity: .55; }
+.zpv-matrix th[aria-sort="ascending"] .zpv-sort-ic::after { content: "↑"; opacity: 1; }
+.zpv-matrix th[aria-sort="descending"] .zpv-sort-ic::after { content: "↓"; opacity: 1; }
+.zpv-cell { min-width: 5.5em; height: 32px; padding: 4px 6px; border-radius: 2px; text-align: center; white-space: nowrap; }
+.zpv-cell[data-level="0"] { background: var(--zpv-ramp-0); color: var(--zpv-ramp-on-0); }
+.zpv-cell[data-level="1"] { background: var(--zpv-ramp-1); color: var(--zpv-ramp-on-1); }
+.zpv-cell[data-level="2"] { background: var(--zpv-ramp-2); color: var(--zpv-ramp-on-2); }
+.zpv-cell[data-level="3"] { background: var(--zpv-ramp-3); color: var(--zpv-ramp-on-3); font-weight: 600; }
+.zpv-cell[data-level="na"] { color: var(--ink-mut); }
+.zpv-sw--ramp[data-level="0"] { background: var(--zpv-ramp-0); box-shadow: inset 0 0 0 1px var(--rule); }
+.zpv-sw--ramp[data-level="1"] { background: var(--zpv-ramp-1); }
+.zpv-sw--ramp[data-level="2"] { background: var(--zpv-ramp-2); }
+.zpv-sw--ramp[data-level="3"] { background: var(--zpv-ramp-3); }
+.zpv-dotcell { min-width: 2.75em; height: 30px; padding: 4px; text-align: center; color: var(--ink-mut); }
+.zpv-pip { display: inline-block; width: 12px; height: 12px; border-radius: 50%; vertical-align: middle; }
+.zpv-pip--yes { background: var(--zpv-mark-color, var(--ink)); }
+.zpv-pip--no { box-shadow: inset 0 0 0 2px var(--ink-mut); }
+.zpv-pip--part { background: linear-gradient(90deg, var(--zpv-mark-color, var(--ink)) 50%, transparent 50%); box-shadow: inset 0 0 0 2px var(--zpv-mark-color, var(--ink)); }
+.zpv-dash { display: inline-block; width: 12px; text-align: center; color: var(--ink-mut); }
+.zpv-scorehead { white-space: nowrap; }
+.zpv-scorecell { padding-left: 10px; white-space: nowrap; }
+.zpv-scorenote { display: block; font-size: 11px; color: var(--ink-mut); }
+.zpv-cov { padding: 5px 8px; white-space: nowrap; }
+.zpv-cov[data-state="ano"] { background: color-mix(in srgb, var(--good) 8%, transparent); }
+.zpv-cov[data-state="castecne"] { background: color-mix(in srgb, var(--warn) 8%, transparent); }
+.zpv-cov[data-state="ne"] { background: color-mix(in srgb, var(--bad) 7%, transparent); }
+.zpv-cov[data-state="na"] { color: var(--ink-mut); }
+.zpv-cov-ic { display: inline-block; width: 1.1em; margin-right: 4px; font-weight: 700; text-align: center; }
+.zpv-tone-good { color: var(--good); }
+.zpv-tone-warn { color: var(--warn); }
+.zpv-tone-bad { color: var(--bad); }
+
+@media (max-width: 480px) {
+  .zpv-barlist { --zpv-labw: 5.5em; }
+  .zpv-dbplot { --zpv-labw: 9em; }
+  .zpv-dbplot .zpv-label { font-size: 12px; }
+  .zpv-count { font-size: 26px; }
+}
+
+/* animace: schovají se jen pod main.zpv-anim-ready (JS), odhalí je .is-in;
+   jen na obrazovce a jen bez reduced motion → bez JS, v tisku a při reduce
+   je vidět konečný stav */
+@media screen and (prefers-reduced-motion: no-preference) {
+  .zpv-anim-ready [data-zpv-anim="bar"],
+  .zpv-anim-ready [data-zpv-anim="seg"] { transform: scaleX(0); transform-origin: left center; }
+  .zpv-anim-ready .zpv-db-line--down { transform-origin: right center; }
+  .zpv-anim-ready .is-in [data-zpv-anim="bar"],
+  .zpv-anim-ready .is-in [data-zpv-anim="seg"] { transform: scaleX(1); transition: transform .6s cubic-bezier(.2, .8, .2, 1); transition-delay: calc(var(--i, 0) * 60ms); }
+  .zpv-anim-ready [data-zpv-anim="line"] { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .zpv-anim-ready .is-in [data-zpv-anim="line"] { stroke-dashoffset: 0; transition: stroke-dashoffset 1.2s cubic-bezier(.2, .8, .2, 1); transition-delay: calc(var(--i, 0) * 60ms); }
+  .zpv-anim-ready [data-zpv-anim="dot"] { transform: scale(0); transform-box: fill-box; transform-origin: center; }
+  .zpv-anim-ready .is-in [data-zpv-anim="dot"] { transform: scale(1); transition: transform .3s ease-out; transition-delay: calc(var(--i, 0) * 60ms + 600ms); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .zpv [data-zpv-anim] { transition: none; }
+}
+
+@media print {
+  .zpv-figure { break-inside: avoid; }
+  .zpv-table[open] > summary { display: none; }
+  .zpv-table::details-content { content-visibility: visible; display: block; }
+  .zpv-scroll { overflow: visible; }
+  .zpv-mark { print-color-adjust: exact; -webkit-print-color-adjust: exact; background-image: repeating-linear-gradient(45deg, transparent 0 3px, color-mix(in srgb, var(--paper) 40%, transparent) 3px 4.5px); }
+  .zpv-cell { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
 
 /* === Srovnávač pojišťoven: interakce src/zp-interact.js (.zpi-) — plní balíček P1.3 === */
 /* Kontrakt pro ostatní moduly:
