@@ -1,0 +1,75 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-11-02T23:00:00Z",
+  "stav_k": "2026-11-02",
+  "_doc": "Stížnosti a podněty pojištěnců na dostupnost hrazených služeb podle výročních zpráv pojišťoven (kapitola 4.6.1 Místní a časová dostupnost dle § 40 zákona č. 48/1997 Sb. a kapitoly o kontrole a stížnostech). Přepsáno z ingest/manual/pojistovny/vz-text/<kod>-<rok>.txt (řádek v poli radek). Každá pojišťovna počítá něco jiného (definice v poli definice), proto se hodnoty NESMĚJÍ řadit do jednoho žebříčku; srovnatelné napříč pojišťovnami jsou jen stížnosti podle § 16a zákona č. 106/1999 Sb. (povinná položka VZ). Chybějící rok = VZ v repu není nebo číslo neuvádí.",
+  "srovnatelnost": [
+    "VZP ČR eviduje všechny podněty k místní a časové dostupnosti přes všechny kanály, rozepsané podle odbornosti (dvouinstanční řízení); ZP MV ČR uvádí zvlášť všechna podání (včetně ombudsmana) a zvlášť podání na nedostupnost přes formulář MZ; ČPZP a RBP počítají žádosti o zajištění péče (RBP jen u vybraných odborností); VoZP, OZP a ZPŠ počty neuvádějí.",
+    "Jediná položka se stejnou definicí u všech sedmi je počet stížností podle § 16a zákona č. 106/1999 Sb. (stížnost na postup při vyřizování žádosti o informace), kterou VZ musí obsahovat; o dostupnosti péče nic neříká.",
+    "Přepočet na 100 tisíc pojištěnců je uveden jen u pojišťoven, které počítají všechna podání k dostupnosti (VZP ČR, ČPZP); jmenovatel = průměrný počet pojištěnců podle MZ (data/pojistovny.json → hospodareni.pocet_pojistencu, rok 2024).",
+    "Co by bylo potřeba pro skutečné srovnání: jednotná definice podání (otázka pro kolo 1 nebo žádost 106): počet podání k dostupnosti za rok podle odbornosti a okresu, podíl vyřízených zajištěním péče do 30 dnů, počet eskalací na MZ."
+  ],
+  "pojistovny": [
+    {
+      "kod": "111", "zkratka": "VZP ČR",
+      "definice": "Podněty pojištěnců k místní a časové dostupnosti hrazených služeb (všechny kanály, 1. a 2. instance), tabulka podle odbornosti; hodnota = součet sloupce Celkem",
+      "roky": [
+        { "rok": 2023, "podani_dostupnost": 46866, "poznamka": "součet 105 řádků tabulky; stomatologie 23 906, VPL 9 909, PLDD 5 222, oftalmologie 1 656", "nejcastejsi": ["klinická stomatologie", "všeobecné praktické lékařství", "PLDD", "oftalmologie"], "stiznosti_16a": null, "soubor": "111-2023.txt", "radek": 1821 },
+        { "rok": 2024, "podani_dostupnost": 46975, "poznamka": "součet 126 řádků tabulky; stomatologie 20 790, VPL 10 989, PLDD 4 939, oftalmologie 2 176, psychiatrie 1 010", "nejcastejsi": ["klinická stomatologie", "všeobecné praktické lékařství", "PLDD", "oftalmologie", "psychiatrie"], "stiznosti_16a": null, "soubor": "111-2024.txt", "radek": 1920 },
+        { "rok": 2025, "podani_dostupnost": 42700, "poznamka": "VZ uvádí „42,7 tis. podnětů“: stomatologie 41,6 %, VPL 24,5 %, PLDD 8,2 %; tabulka podle odbornosti ve VZ 2025 není", "nejcastejsi": ["klinická stomatologie", "všeobecné praktické lékařství", "PLDD"], "stiznosti_16a": 4, "soubor": "111-2025.txt", "radek": 1320 }
+      ]
+    },
+    {
+      "kod": "201", "zkratka": "VoZP",
+      "definice": "Počty podání VZ neuvádí; popisuje evidenci podnětů na nedostupnost (zubní lékařství napříč ČR, zejména Jihočeský kraj; PLDD) a individuální řešení. Centrální evidence stížností podle § 175 správního řádu vede interní audit",
+      "roky": [
+        { "rok": 2023, "podani_dostupnost": null, "poznamka": "bez počtu", "nejcastejsi": ["zubní lékařství", "PLDD", "VPL"], "stiznosti_16a": 0, "soubor": "201-2023.txt", "radek": 719 },
+        { "rok": 2024, "podani_dostupnost": null, "poznamka": "bez počtu", "nejcastejsi": ["zubní lékařství", "PLDD"], "stiznosti_16a": 2, "soubor": "201-2024.txt", "radek": 718 },
+        { "rok": 2025, "podani_dostupnost": null, "poznamka": "bez počtu", "nejcastejsi": [], "stiznosti_16a": 3, "soubor": "201-2025.txt", "radek": 3329 }
+      ]
+    },
+    {
+      "kod": "205", "zkratka": "ČPZP",
+      "definice": "Přijatá podání pojištěnců na zajištění zdravotní péče (všechny kanály); zvlášť žádosti o zajištění stomatologické péče",
+      "roky": [
+        { "rok": 2023, "podani_dostupnost": 8000, "poznamka": "„řádově kolem 8 000“; nárůst proti 2022", "nejcastejsi": ["praktický lékař", "klinická stomatologie", "psychiatrie", "dětská a dorostová psychiatrie", "klinická psychologie"], "stiznosti_16a": 0, "soubor": "205-2023.txt", "radek": 1492 },
+        { "rok": 2024, "podani_dostupnost": 8000, "poznamka": "„řádově kolem 8 000“, proti 2023 beze změny; stomatologie 4 703 žádostí, z toho 2 610 v Moravskoslezském kraji; vedle toho 1 761 žádostí o prošetření osobního účtu (799 revizí)", "nejcastejsi": ["praktický lékař", "klinická stomatologie", "psychiatrie", "dětská a dorostová psychiatrie", "klinická psychologie"], "stiznosti_16a": 1, "soubor": "205-2024.txt", "radek": 1630 },
+        { "rok": 2025, "podani_dostupnost": 6590, "poznamka": "pokles proti 2024; stomatologie 3 539 žádostí, z toho 1 567 v Moravskoslezském kraji", "nejcastejsi": ["praktický lékař", "klinická stomatologie", "psychiatrie", "dětská a dorostová psychiatrie", "klinická psychologie"], "stiznosti_16a": 2, "soubor": "205-2025.txt", "radek": 1717 }
+      ]
+    },
+    {
+      "kod": "207", "zkratka": "OZP",
+      "definice": "Počty podání VZ neuvádí; dostupnost řeší Asistenční služba OZP a Komise pro tvorbu sítě, revizní lékaři odpovídají na stížnosti a reklamace pojištěnců i poskytovatelů",
+      "roky": [
+        { "rok": 2023, "podani_dostupnost": null, "poznamka": "bez počtu", "nejcastejsi": [], "stiznosti_16a": 1, "soubor": "207-2023.txt", "radek": 3695 },
+        { "rok": 2024, "podani_dostupnost": null, "poznamka": "bez počtu; problém PLDD a stomatologie v příhraničí", "nejcastejsi": ["PLDD", "stomatologie"], "stiznosti_16a": 1, "soubor": "207-2024.txt", "radek": 1215 },
+        { "rok": 2025, "podani_dostupnost": null, "poznamka": "bez počtu", "nejcastejsi": [], "stiznosti_16a": 2, "soubor": "207-2025.txt", "radek": 2856 }
+      ]
+    },
+    {
+      "kod": "209", "zkratka": "ZPŠ",
+      "definice": "Počty podání VZ neuvádí; žádosti o zajištění služeb a stížnosti na nedostupnost „evidovány a vyřízeny v termínech“, zohledňuje je Komise pro rozšiřování sítě",
+      "roky": [
+        { "rok": 2023, "podani_dostupnost": null, "poznamka": "bez počtu", "nejcastejsi": [], "stiznosti_16a": 0, "soubor": "209-2023.txt", "radek": 1063 },
+        { "rok": 2024, "podani_dostupnost": null, "poznamka": "bez počtu", "nejcastejsi": [], "stiznosti_16a": 0, "soubor": "209-2024.txt", "radek": 1005 }
+      ]
+    },
+    {
+      "kod": "211", "zkratka": "ZP MV ČR",
+      "definice": "Dvě řady: (a) všechna zaevidovaná podání včetně podání ombudsmanovi, z nich oprávněné stížnosti a průměrná doba vyřízení; (b) podání na nedostupnost péče podaná přes formulář na webu MZ. Hodnota = (b)",
+      "roky": [
+        { "rok": 2023, "podani_dostupnost": 1391, "podani_celkem": 1574, "opravnene_stiznosti": 4, "doba_vyrizeni_dni": 16.5, "poznamka": "1 391 podání na nedostupnost přes formulář MZ", "nejcastejsi": ["stomatologie", "PLDD", "VPL", "oftalmologie"], "stiznosti_16a": 2, "soubor": "211-2023.txt", "radek": 540 },
+        { "rok": 2024, "podani_dostupnost": 741, "podani_celkem": 917, "opravnene_stiznosti": 14, "doba_vyrizeni_dni": 8.65, "poznamka": "741 podání na nedostupnost přes formulář MZ; VZ uvádí tabulku problematických okresů podle odborností primární péče", "nejcastejsi": ["stomatologie", "VPL", "PLDD", "oftalmologie"], "stiznosti_16a": 1, "soubor": "211-2024.txt", "radek": 511 },
+        { "rok": 2025, "podani_dostupnost": 672, "podani_celkem": 919, "opravnene_stiznosti": 2, "doba_vyrizeni_dni": 9.05, "poznamka": "672 podání na nedostupnost přes formulář MZ", "nejcastejsi": ["stomatologie", "VPL", "PLDD", "oftalmologie"], "stiznosti_16a": 4, "soubor": "211-2025.txt", "radek": 490 }
+      ]
+    },
+    {
+      "kod": "213", "zkratka": "RBP",
+      "definice": "Žádosti pojištěnců o zajištění péče u vybraných odborností (zubní lékař vždy; od VZ 2025 i VPL, PLDD, psychiatrie, dětská psychiatrie, klinická psychologie). Hodnota = součet uvedených odborností",
+      "roky": [
+        { "rok": 2023, "podani_dostupnost": 3970, "poznamka": "jen zubní lékař: 3 970 žádostí; 36 zubních lékařů v projektu zvýšené dostupnosti", "nejcastejsi": ["zubní lékařství"], "stiznosti_16a": null, "soubor": "213-2023.txt", "radek": 1501 },
+        { "rok": 2025, "podani_dostupnost": 6049, "poznamka": "zubní lékař 4 623 + VPL 811 + PLDD 248 + psychiatrie 148 + dětská psychiatrie 56 + klinická psychologie 163; 42 zubních lékařů převzalo 2 980 pojištěnců, 25 VPL 87 pojištěnců, 6 PLDD 42 pojištěnců", "nejcastejsi": ["zubní lékařství", "VPL", "PLDD", "klinická psychologie", "psychiatrie"], "stiznosti_16a": null, "soubor": "213-2025.txt", "radek": 1676 }
+      ]
+    }
+  ]
+}

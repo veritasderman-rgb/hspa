@@ -229,6 +229,13 @@ rutina, PDF zůstávají v cache.
   se vyrenderuje z definice (`src/zp-dotaznik.js`), takže se otázky mění v gitu.
   Změna znění nebo nabídky otázky zvyšuje `verze` sady, odpověď nese verzi, na kterou se
   odpovídalo.
+- **Vyhodnocení** každé sady je v jejím poli `vyhodnoceni` (oblasti semaforu, vstup, pravidla,
+  výstup) a zobrazuje se pod otázkami na `pojistovny-metodika.html` (blok „Návrh dotazníků a jak se
+  vyhodnocují“, hned pod semaforem). Společná pravidla: stav otázky podle nápovědy (doloženo = čísla
+  s rokem a jednotkou nebo metodika; deklarováno = tvrzení bez podkladu; nedoloženo = nic k věci nebo
+  rozpor s vlastními daty; neodpověděla = ani po žádosti 106), stav oblasti podle otázek o dopadu, ne
+  průměr; anketa veřejnosti a dotazník NAPO do semaforu nevstupují, jsou signál. Prahy označené jako
+  návrh schvaluje PS.
 - **Odpovědi** ukládá `api/dotaznik.js` do Neonu (Postgres, projekt `hspa-dotazniky`,
   tabulka `dotaznik_odpoved`, schéma v `api/migrations/`). Funkce odpověď ověří proti
   definici sady (jen známé otázky, hodnoty z nabídky, texty do 2 000 znaků). Bez

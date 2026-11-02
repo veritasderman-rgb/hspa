@@ -398,7 +398,10 @@ test('žádosti: renderZadosti — matice 7 × 3, prázdné buňky = neodesláno
   const html = renderZadosti(ZAD, '2026-11-02');
   assert.equal(count(html, /<tr data-zp="/g), 7 + 7, 'matice 7 ZP + tabulka 7 záznamů');
   assert.match(html, /Dotazy a žádosti pojišťovnám/);
-  assert.match(html, /Kolo 1: 7 připraveno k odeslání/);
+  assert.match(html, /Zatím nebyl odeslán žádný dotaz; kolo 1 se připravuje \(7 dotazů\)/);
+  assert.doesNotMatch(html, /připraveno k odeslání/, 'bez odeslaných dotazů se souhrn „připraveno k odeslání“ neukazuje');
+  // matice je uvnitř sbalené evidence, ne nad ní
+  assert.ok(html.indexOf('<details class="zpc-acc zpz-acc">') < html.indexOf('zpv-cov-tx'), 'matice až v evidenci');
   for (const t of Object.values(ZADOST_TYPY)) assert.ok(html.includes(t), t);
   assert.ok(html.includes(`<span class="zpv-cov-tx">${NOT_SENT}</span>`));
   assert.ok(!html.includes('nedohledáno'), 'NA text matice je přejmenován');

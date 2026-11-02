@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indikátory a pojišťovny — Srovnávač pojišťoven, pracovní verze · HSPA Monitor</title>
+<meta name="description" content="Které indikátory a datové sady evidují pojištěnce podle jednotlivých zdravotních pojišťoven, co říká datový kontrakt HSPA, kde data chybí a jak pojišťovny publikují otevřená data. Pracovní verze.">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Indikátory a pojišťovny — Srovnávač zdravotních pojišťoven">
+<meta property="og:locale" content="cs_CZ">
+<link rel="stylesheet" href="src/styles.min.css">
+<!--
+  audit:
+    status: draft
+    pristup: heslo (middleware.js, POJISTOVNY_HESLO, matcher /pojistovny-:path*) + noindex
+    trida: C (nová stránka srovnávače, hodnocení pojmenovaných institucí v auditu otevřených dat)
+    stranka: indikatory (P5.5, PLAN-SROVNAVAC-POJISTOVEN.md; docs/pojistovny-indikatory.md)
+    zdroje: data/pojistovny-indikatory.json (inventář), data/indicators.json (kontrakt), data/pojistovny-opendata.json (audit open dat; každé tvrzení má URL a datum ověření)
+-->
+</head>
+<body>
+<a class="skip-link" href="#content">Přeskočit na hlavní obsah</a>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Srovnávač pojišťoven</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+  <div id="zpShell" class="zpc-shell" data-aktivni="indikatory"></div>
+
+  <!-- Modul 7: Indikátory a pojišťovny -->
+  <section class="zpc-mod zpc-mod--page" id="modul-indikatory" aria-labelledby="zpIndHead">
+    <div class="zpc-mod-head"><h1 id="zpIndHead">Indikátory a pojišťovny</h1><span class="zpc-stav">inventář · stav k 2. 11. 2026</span></div>
+    <p class="zpc-lead">Které údaje říkají, kdo je u koho pojištěn, které indikátory HSPA se pojišťoven týkají a kde pojišťovna jako rozměr chybí. Seznam vzniká z datového kontraktu za běhu, takže odpovídá tomu, co web právě ukazuje.</p>
+    <div class="zpc-moje-wrap">
+      <p class="zpc-moje-lbl" id="zpMojeLbl">Moje pojišťovna: vyberte ji a zvýrazní se ve všech grafech a tabulkách, i na ostatních stránkách srovnávače.</p>
+      <div id="zpMojeZp" class="zpc-moje" aria-describedby="zpMojeLbl"></div>
+    </div>
+
+    <div class="zpc-box"><h4>Stručně</h4><div id="zpIndStrucne"></div></div>
+
+    <h3 class="section-title zpc-h3"><span>Kdo je u koho pojištěn: které údaje to jsou</span></h3>
+    <p class="zpc-note">Pět zdrojů, které evidují pojištěnce podle pojišťovny; každý měří něco trochu jiného (stav k datu, průměr za rok, plán), proto se nesmějí míchat v jedné řadě.</p>
+    <div id="zpIndKdo"></div>
+
+    <h3 class="section-title zpc-h3"><span>Indikátory datového kontraktu, které se pojišťoven týkají<span class="zpc-n" id="zpIndKontraktN"></span></span></h3>
+    <p class="zpc-note">Název, jednotka, rok, zdroj a stav ověření jsou z data/indicators.json; sloupec „Za co hodnota je“ říká granularitu. Žádný z nich nemá rozměr „pojišťovna“.</p>
+    <div id="zpIndKontrakt"></div>
+    <details class="zpc-acc">
+      <summary>Další indikátory postavené z dat pojišťoven (NRHZS), bez rozpadu na pojišťovny<span class="zpc-n" id="zpIndAutoN"></span></summary>
+      <div class="zpc-acc-body">
+        <p class="zpc-note">Výběr podle zdroje indikátoru v kontraktu (NRHZS, VZP, KZP, SZP, ZFZP, v.z.p., datové souhrny OIS-11-06/-20/-24/-47) nebo podle názvu. Národní registr hrazených zdravotních služeb je sběr výkazů všech sedmi pojišťoven, takže se z jejich dat počítá většina klinických a preventivních indikátorů; pojišťovna v hodnotě ale nezůstává.</p>
+        <div id="zpIndAuto"></div>
+      </div>
+    </details>
+
+    <h3 class="section-title zpc-h3"><span>Datové sady v repu s rozměrem pojišťovna<span class="zpc-n" id="zpIndDatasetyN"></span></span></h3>
+    <div id="zpIndDatasety"></div>
+
+    <h3 class="section-title zpc-h3"><span>Navržené indikátory per pojišťovna<span class="zpc-n" id="zpIndNavrhyN"></span></span></h3>
+    <p class="zpc-note">Prefix zp_; v kontraktu by potřebovaly nový rozměr (třída C), do té doby jako pole v datech srovnávače. Sloupec vpravo říká, zda jde spočítat z toho, co už v repu leží.</p>
+    <div id="zpIndNavrhy"></div>
+    <details class="zpc-acc">
+      <summary>Mezery bez nového indikátoru</summary>
+      <div class="zpc-acc-body"><ul id="zpIndMezery"></ul></div>
+    </details>
+
+    <h3 class="section-title zpc-h3"><span>Co ještě jde z výročních zpráv vytáhnout: stížnosti a podnět na dostupnost péče</span></h3>
+    <p class="zpc-note">Zákon ukládá pojišťovně zajistit místní a časovou dostupnost hrazených služeb (§ 40 zákona č. 48/1997 Sb., nařízení vlády č. 307/2012 Sb.) a výroční zpráva má o tom kapitolu. Počty podání pojištěnců v ní uvádějí jen čtyři pojišťovny a každá počítá něco jiného; proto tabulka bez pořadí.</p>
+    <div id="zpStiznosti"></div>
+
+    <h3 class="section-title zpc-h3"><span>Jak pojišťovny publikují otevřená data</span></h3>
+    <p class="zpc-note">Rešerše tří kanálů: vlastní web (sekce open data, datové sady, seznamy smluvních partnerů), Národní katalog otevřených dat (data.gov.cz) a výroční zprávy či jiné dokumenty. Každé tvrzení má odkaz a datum ověření; „ne“ znamená, že jsme při uvedeném hledání nic nenašli, ne že to neexistuje.</p>
+    <div id="zpOpendata"></div>
+  </section>
+
+  <div id="zpZdroje" class="zpc-zdroje-wrap"></div>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/pojistovny.js"></script>
+<script type="module" src="src/pojistovny-indikatory.js"></script>
+</body>
+</html>

@@ -24,6 +24,7 @@ const PAGES = [
   { path: '/pojistovny-aplikace.html',    name: 'insurers-aplikace' },
   { path: '/pojistovny-gramotnost.html',  name: 'insurers-gramotnost' },
   { path: '/pojistovny-metodika.html',    name: 'insurers-metodika' },
+  { path: '/pojistovny-indikatory.html',  name: 'insurers-indikatory' },
   // Pozn.: dlouhé články (clanek-*.html) se z vizuálních snapshotů vynechávají —
   // Article Visuals používají JS count-up animace (requestAnimationFrame), které
   // CSS `animation:none` nezastaví, takže snapshot padá na nedeterministický

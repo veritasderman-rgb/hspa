@@ -10,6 +10,7 @@ import { fileURLToPath } from 'node:url';
 import {
   buildAppMatrix, buildKriteriaMatrix, buildPrevHeatmap, buildOnkoMatrix, buildDusevniHeatmap,
   buildFondParts, coverageState, buildCoverage, odhadniSkupinu, normSkupina, levelOf,
+  buildPrevProc, prevProcHtml, buildOtazkySady, otazkySadyHtml, SADY_PORADI, sadaCasti, vyhodnoceniHtml,
   FOND_SKUPINY, VZ_OTAZKY,
 } from '../src/pojistovny-prevence.js';
 import { dotMatrix, heatmap, segmentedBar, coverageMatrix, dumbbell } from '../src/zp-viz.js';
@@ -110,7 +111,7 @@ test('buildOnkoMatrix a buildDusevniHeatmap: 7 × 5, nadstandard v sub řádku',
   const o = buildOnkoMatrix(PREV);
   assert.equal(o.rows.length, 7);
   assert.equal(o.cols.length, 5);
-  assert.match(o.rows.find((r) => r.kod === '211').sub, /nadstandard: nejsilnější/);
+  assert.match(o.rows.find((r) => r.kod === '211').sub, /nadstandard: nejsilnější — /, 'stupeň má za pomlčkou důvod (popis z webu)');
   assert.equal(o.cell(o.rows[0], o.cols[0]), true);
   const d = buildDusevniHeatmap(PREV);
   assert.equal(d.rows.length, 7);
@@ -292,7 +293,7 @@ test('podstránky aplikace / prevence / gramotnost (P1.6): kontejnery modulů 1,
   const page = { 'modul-aplikace': 'pojistovny-aplikace.html', 'modul-prevence': 'pojistovny-prevence.html', 'modul-gramotnost': 'pojistovny-gramotnost.html' };
   const ids = {
     'modul-aplikace': ['zpAppMatrix', 'zpAppKriteria'],
-    'modul-prevence': ['zpPrevMatrix', 'zpPrevOnko', 'zpPrevDusevni', 'zpFpStruktura', 'zpOdpovediMatrix', 'zpOdpovedi', 'zpDolozene', 'zpMereni'],
+    'modul-prevence': ['zpPrevMatrix', 'zpPrevProc', 'zpPrevOnko', 'zpPrevDusevni', 'zpFpStruktura', 'zpOdpovediMatrix', 'zpOdpovedi', 'zpDolozene', 'zpMereni'],
     'modul-gramotnost': ['zpRizikove', 'zpOtazky', 'zpDalsi', 'zpDotaznik', 'zpDotaznikAgregace'],
   };
   for (const [mod, file] of Object.entries(page)) {
@@ -304,4 +305,88 @@ test('podstránky aplikace / prevence / gramotnost (P1.6): kontejnery modulů 1,
     assert.ok((sec.match(/<details class="zpc-acc/g) || []).length >= 3, `${mod}: rozklikávací vysvětlivky`);
     assert.equal((sec.match(/<p class="zpc-lead">/g) || []).length, 1, `${mod}: jeden lead`);
   }
+});
+
+test('buildPrevProc / prevProcHtml: každý stupeň má viditelný důvod (popis z webu), bez popisu je to řečeno', () => {
+  const list = buildPrevProc(PREV);
+  assert.equal(list.length, 7);
+  const mv = list.find((z) => z.kod === '211');
+  const onko = mv.items.find((i) => i.skupina === 'Onkologický screening');
+  assert.equal(onko.stupen, 'nejsilnější');
+  assert.match(onko.popis, /markery/);
+  assert.ok(mv.items.some((i) => i.skupina === 'Nabídka' && i.label === 'Onkologie'));
+  assert.ok(mv.items.some((i) => i.skupina === 'Duševní zdraví'));
+  const html = prevProcHtml(PREV);
+  assert.equal((html.match(/<details class="zpc-acc zpc-proc" data-zp="/g) || []).length, 7);
+  assert.match(html, /markery/);
+  // bez popisu → „bez uvedeného důvodu“ a počítá se v summary
+  const p2 = structuredClone(PREV);
+  const base = buildPrevProc(PREV).find((z) => z.kod === p2.pojistovny[0].kod).bezDuvodu;
+  p2.pojistovny[0].oblasti.onkologie = { stupen: 'silne' };
+  const l2 = buildPrevProc(p2).find((z) => z.kod === p2.pojistovny[0].kod);
+  assert.equal(l2.bezDuvodu, base + 1);
+  assert.match(prevProcHtml(p2), /bez uvedeného důvodu/);
+  // bez stupně se položka vynechá
+  p2.pojistovny[0].oblasti.onkologie = { stupen: null, popis: 'x' };
+  assert.ok(!buildPrevProc(p2).find((z) => z.kod === p2.pojistovny[0].kod).items.some((i) => i.label === 'Onkologie'));
+});
+
+test('buildOtazkySady / otazkySadyHtml: všech 7 sad v pořadí fází, číslované 1…7, znění otázek doslova', () => {
+  const o = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'pojistovny-otazky.json'), 'utf8'));
+  const list = buildOtazkySady(o);
+  assert.equal(list.length, o.sady.length);
+  assert.deepEqual(list.map((x) => x.sada.id), SADY_PORADI, 'pořadí = fáze z docs/pojistovny-dotazniky.md');
+  assert.ok(list.every((x) => x.pocet > 0));
+  const html = otazkySadyHtml(o);
+  for (let i = 0; i < list.length; i++) assert.match(html, new RegExp(`<summary>${i + 1}\\. `), `sada ${i + 1} je číslovaná`);
+  assert.equal((html.match(/<details class="zpc-acc zpc-q" id="dotaznik-/g) || []).length, list.length);
+  for (const { sada } of list) {
+    for (const c of sadaCasti(sada)) for (const q of c.otazky || []) assert.ok(html.includes(q.text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')), `${sada.id}/${q.id}`);
+  }
+  assert.match(html, /jedna volba/);
+  assert.match(html, /více voleb/);
+  assert.match(html, /Nápověda: /);
+  // neznámá sada jde na konec, prázdný vstup nevybouchne
+  const o2 = { sady: [{ id: 'zzz', nazev: 'Z', casti: [{ id: 'A', nazev: 'a', otazky: [{ id: 'A1', text: 't', max_delka: 200 }] }] }, ...o.sady] };
+  assert.equal(buildOtazkySady(o2).at(-1).sada.id, 'zzz');
+  assert.match(otazkySadyHtml(o2), /nejvýš 200 znaků/);
+  assert.match(otazkySadyHtml({ sady: [] }), /zatím nejsou/);
+});
+
+test('vyhodnoceniHtml + otazkySadyHtml: každá sada má vyhodnocení (oblasti semaforu, vstup, pravidla, výstup); režim metodika bez procesních textů', () => {
+  const o = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'pojistovny-otazky.json'), 'utf8'));
+  for (const s of o.sady) {
+    assert.ok(s.vyhodnoceni && s.vyhodnoceni.oblasti.length && s.vyhodnoceni.pravidla.length >= 3 && s.vyhodnoceni.vstup && s.vyhodnoceni.vystup, s.id);
+    const h = vyhodnoceniHtml(s.vyhodnoceni);
+    assert.match(h, /<b>Vyhodnocení<\/b> · oblast semaforu: /);
+    assert.match(h, /Výstup:/);
+    assert.equal((h.match(/<li>/g) || []).length, s.vyhodnoceni.pravidla.length);
+  }
+  assert.match(vyhodnoceniHtml({ oblasti: ['servis'] }), /Klientský servis a informování/);
+  assert.equal(vyhodnoceniHtml(null), '');
+  const plne = otazkySadyHtml(o);
+  const metodika = otazkySadyHtml(o, { proces: false });
+  const bez = otazkySadyHtml(o, { vyhodnoceni: false });
+  assert.match(plne, /zpc-vyhod/);
+  assert.match(metodika, /zpc-vyhod/);
+  assert.doesNotMatch(bez, /zpc-vyhod/);
+  const fp = o.sady.find((s) => s.id === 'fond-prevence');
+  assert.ok(plne.includes(fp.uvod.slice(0, 40)), 'plný režim má úvod pro respondenta');
+  assert.ok(!metodika.includes(fp.uvod.slice(0, 40)), 'režim metodika úvod vynechá');
+  assert.ok(!metodika.includes('osobní odkaz od redakce'), 'režim metodika bez kanálu');
+  const met = fs.readFileSync(path.join(ROOT, 'pojistovny-metodika.html'), 'utf8');
+  const iSem = met.indexOf('id="zpSemafor"'), iOt = met.indexOf('<div id="zpOtazky" data-rezim="metodika">'), iZad = met.indexOf('id="zpZadosti"');
+  assert.ok(iSem > 0 && iOt > iSem && iZad > iOt, 'pořadí: semafor → návrh dotazníků → žádosti');
+  assert.match(fs.readFileSync(path.join(ROOT, 'pojistovny-gramotnost.html'), 'utf8'), /<div id="zpOtazky"><\/div>/);
+});
+
+test('validátor: vyhodnoceni — neznámá oblast, prázdná pravidla, chybějící vstup', () => {
+  const ds = loadDatasets();
+  assert.equal(validateAll(ds).errors.length, 0, validateAll(ds).errors.join('; '));
+  const a = structuredClone(ds); a.otazky.sady[0].vyhodnoceni.oblasti = ['neexistuje'];
+  assert.ok(validateAll(a).errors.some((e) => /vyhodnoceni\.oblasti/.test(e)));
+  const b = structuredClone(ds); b.otazky.sady[0].vyhodnoceni.pravidla = [];
+  assert.ok(validateAll(b).errors.some((e) => /vyhodnoceni\.pravidla/.test(e)));
+  const c = structuredClone(ds); delete c.otazky.sady[0].vyhodnoceni.vstup;
+  assert.ok(validateAll(c).errors.some((e) => /vyhodnoceni\.vstup/.test(e)));
 });

@@ -25,6 +25,7 @@ const PAGES = [
   { path: '/pojistovny-aplikace.html',   name: 'insurers-aplikace' },
   { path: '/pojistovny-gramotnost.html', name: 'insurers-gramotnost' },
   { path: '/pojistovny-metodika.html',   name: 'insurers-metodika' },
+  { path: '/pojistovny-indikatory.html', name: 'insurers-indikatory' },
   // Stabilní článek drží v gate pokrytí sdílené article šablony (CSS/JS).
   // Visual snapshot článku je vynechán (nedeterministické count-up animace),
   // ale axe analýza je deterministická.
