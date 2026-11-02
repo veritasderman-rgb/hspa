@@ -33,6 +33,7 @@ export const FILES = {
 export const OPTIONAL_FILES = {
   vek: 'pojistovny-vek.json',
   zadosti: 'zadosti-106.json',
+  verifikace: 'pojistovny-verifikace.json', // výstup scripts/pojistovny-verify.js (ověření čísel proti VZ)
 };
 export const STD_STAVY = ['dolozeno', 'placeholder-bez-vah'];
 
@@ -62,7 +63,7 @@ export function validateAll(datasets) {
   const ok = (cond, msg) => { checks++; if (!cond) errors.push(msg); return !!cond; };
   const warn = (msg) => warnings.push(msg);
 
-  const { pojistovny: P, aplikace: A, prevence: V, otazky: Q, vek: VK } = datasets ?? {};
+  const { pojistovny: P, aplikace: A, prevence: V, otazky: Q, vek: VK, verifikace: VF } = datasets ?? {};
 
   // Obálka {hodnota, rok, zdroj}: hodnota číslo nebo null; hodnota bez zdroje je chyba.
   function checkEnvelope(v, tag) {
@@ -433,6 +434,38 @@ export function validateAll(datasets) {
     errors.push(...zr.errors);
     warnings.push(...zr.warnings);
     checks += zr.checks;
+  }
+
+  // ---------------------------------------------------------------- pojistovny-verifikace.json (volitelný)
+  // Výstup scripts/pojistovny-verify.js. Nenalezené číslo je signál pro redakci (WARN), ne chyba dat.
+  if (VF != null) {
+    const FT = 'pojistovny-verifikace.json';
+    if (ok(isObj(VF), `${FT}: není objekt`)) {
+      for (const f of ['version', 'generated_at', 'souhrn', 'per_zp', 'polozky']) ok(VF[f] != null, `${FT} root: missing '${f}'`);
+      ok(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/.test(VF.generated_at ?? ''), `${FT}: generated_at není ISO 8601 UTC`);
+      const NALEZENO = [true, false, 'bez-textu', 'mimo-rozsah'];
+      if (ok(Array.isArray(VF.polozky), `${FT}.polozky: musí být pole`)) {
+        const cnt = { nalezeno: 0, nenalezeno: 0, bez_textu: 0, mimo_rozsah: 0 };
+        VF.polozky.forEach((p, i) => {
+          const tag = `${FT} polozky[${i}]`;
+          if (!ok(isObj(p), `${tag}: musí být objekt`)) return;
+          ok(isStr(p.cesta), `${tag}.cesta: chybí`);
+          ok(isNum(p.hodnota), `${tag}.hodnota: není číslo`);
+          ok(ZP_CODES.includes(String(p.kod)), `${tag}.kod: neznámý kód ZP (${p.kod})`);
+          if (!ok(NALEZENO.includes(p.nalezeno), `${tag}.nalezeno: musí být true | false | 'bez-textu' | 'mimo-rozsah' (je ${JSON.stringify(p.nalezeno)})`)) return;
+          if (p.nalezeno === true) { cnt.nalezeno++; ok(isStr(p.kontext), `${tag}: nalezená hodnota bez kontextu`); }
+          else if (p.nalezeno === false) { cnt.nenalezeno++; warn(`ověření VZ: nenalezeno ${p.cesta} = ${p.hodnota} (VZ ${p.dokument ?? '?'})`); }
+          else if (p.nalezeno === 'bez-textu') cnt.bez_textu++;
+          else cnt.mimo_rozsah++;
+        });
+        const s = VF.souhrn ?? {};
+        for (const [k, v] of Object.entries(cnt)) ok(s[k] === v, `${FT}.souhrn.${k}: ${s[k]} ≠ počet v polozky[] ${v}`);
+        ok(s.celkem === cnt.nalezeno + cnt.nenalezeno + cnt.bez_textu, `${FT}.souhrn.celkem: musí být nalezeno + nenalezeno + bez_textu`);
+      }
+      if (ok(isObj(VF.per_zp), `${FT}.per_zp: musí být objekt`)) {
+        for (const kod of Object.keys(VF.per_zp)) ok(ZP_CODES.includes(kod), `${FT}.per_zp: neznámý kód ${kod}`);
+      }
+    }
   }
 
   return { errors, warnings, checks };
