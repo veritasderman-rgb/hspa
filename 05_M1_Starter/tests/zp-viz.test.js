@@ -401,3 +401,13 @@ test('modul: čisté funkce bez DOM, importy jen escapeHtml + formatNumberCz', (
   const imports = [...SRC.matchAll(/^import .*$/gm)].map((m) => m[0]);
   assert.deepEqual(imports, ["import { escapeHtml, formatNumberCz } from './page-shared.js';"]);
 });
+
+test('CSS: každá sekce srovnávače má vyrovnané závorky (chybějící } u @media print zanořila sekce .zpi- a .zpd- do tisku)', () => {
+  const markers = [...CSS.matchAll(/\/\* === Srovnávač pojišťoven:[^\n]*\*\//g)].map((m) => m.index);
+  assert.ok(markers.length >= 4, 'markery sekcí');
+  markers.forEach((start, i) => {
+    const sec = CSS.slice(start, markers[i + 1]).replace(/\/\*[\s\S]*?\*\//g, '');
+    const open = (sec.match(/\{/g) || []).length, close = (sec.match(/\}/g) || []).length;
+    assert.equal(open, close, `nevyrovnané závorky v sekci začínající na pozici ${start}`);
+  });
+});
