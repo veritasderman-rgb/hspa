@@ -14,6 +14,7 @@
     visual_elements_added: 1
     notes: "Ověřeno proti OECD Health at a Glance 2025 (Avoidable hospital admissions, referenční rok 2021/2022). Centrální hodnoty 580 / 480 aktualizovány na 592 / 473 (Czechia / OECD průměr, OECD HAAG 2025). Title článku, og:title a article-title H2 aktualizovány z „Pět set osmdesát…" na „Téměř šest set…" pro konzistenci s revidovaným číslem 592 (Codex review #254). Opravena metodická chyba: 'OECD a Eurostat měří ACSC u pěti diagnóz' — Eurostat publikuje avoidable MORTALITY (Joint OECD/Eurostat list 2019), ne avoidable hospital admissions; ACSC je metodikou OECD HCQI (Definitions of Health Care Quality Indicators 2022). Smazán neověřitelný řádek z databoxu: 'Kontrolovaná hypertenze 68 % vs OECD 72 %' — primární domácí studie (Bruthans et al. 2019; Cifkova et al. Post-MONICA) ukazují kontrolu hypertenze v ČR cca 32-37 % (muži/ženy, kohorta 25-64), nikoli 68 %; OECD nepublikuje srovnatelný standardizovaný indikátor kontroly TK na úrovni populace. Opraven překlep v sekci 'Co s tím': 'desetitisíce úmrtí ročně' → 'desetitisíce hospitalizací ročně' (téma článku jsou hospitalizace). Aktualizovány zdrojové URL z generických OECD landing page na konkrétní HAAG 2025 sekci avoidable hospital admissions a HCQI metodické dokumenty. Doplněn caveat callout s vysvětlením OECD vs Eurostat metodiky. Status published → review-pending."
     av_sweep4_2026-07-10: "Doplněny AV vizuály (článek měl jen hero counter-grid + caveat callout): av-aside counter paradox ambulantních kontaktů (11,2 vs OECD 6,8, ale ACSC vysoké → koordinace, ne počet), av-data-table 4 mezinárodní modely (QOF / care groups / vårdcentral / telekonzultace). Čísla 1:1 z textu/databoxu, text nezměněn (aditivní), claims nedotčeny."
+    OPRAVA 2026-11-02 (seed-audit dávka 3): "Ambulantní kontakty 11,2 vs. OECD 6,8 → OECD (DF_CONSULT) 9,0 (2024), průměr OECD 8,1, EU 7,6."
 -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,7 +52,7 @@
         "@id": "https://skorezdravotnictvi.cz/clanek-vyhnutelne-hospitalizace"
       },
       "datePublished": "2026-05-07",
-      "dateModified": "2026-07-10",
+      "dateModified": "2026-11-02",
       "author": {
         "@type": "Organization",
         "name": "HSPA Monitor",
@@ -149,6 +150,13 @@
     </header>
 
     <div class="article-body">
+      <aside class="article-callout article-callout-update" aria-label="Oprava článku">
+        <div class="ed-kicker">Oprava · 2. listopadu 2026</div>
+        <p>
+          Předchozí verze uváděla 11,2 ambulantního kontaktu na obyvatele a rok proti průměru OECD 6,8. Podle OECD Health Statistics je to 9,0 (2024) proti průměru OECD 8,1 a EU 7,6 — Česko je nad průměrem zhruba o desetinu, ne násobně.
+        </p>
+      </aside>
+
 
       <p class="article-lead">
         ACSC je v zdravotnické statistice nepřímý indikátor — nemá jednu klinickou definici, ale skupinu vybraných diagnóz, jejichž akutní hospitalizace se v dobré primární péči nemá stávat. <strong>OECD HCQI</strong> (Health Care Quality Indicators) měří avoidable hospital admissions u pěti diagnóz dospělých 15+: diabetu, CHOPN, srdečního selhání, nekomplikované hypertenze a astmatu (OECD, <em>Definitions of Health Care Quality Indicators</em>, 2022). Eurostat publikuje příbuzný, ale <em>odlišný</em> indikátor — <strong>avoidable mortality</strong> (preventabilní + treatable úmrtí) podle společného OECD/Eurostat seznamu z roku 2019; měří se na ní úmrtí, ne hospitalizace. Když se v ČR pět chronických ACSC diagnóz hospitalizuje častěji, než kolik by se hospitalizovat <em>muselo</em>, ukazuje to na slabší primární péči — buď v dispenzární práci s chronicky nemocnými, nebo v dostupnosti, kvalitě a kompetencích primárního lékaře. Limitace, kterou metodická karta uvádí explicitně: indikátor je proxy a nemůže izolovat efekt primární péče od dostupnosti specialistů, kvality nemocnic a chování pacientů.
@@ -200,9 +208,9 @@
 
       <aside class="av-aside av-aside-left">
         <div class="av-counter-block av-counter-block-bad">
-          <span class="av-counter" data-value="11.2" data-decimals="1">11,2</span>
+          <span class="av-counter" data-value="9.0" data-decimals="1">9,0</span>
           <span class="av-counter-label">ambulantních kontaktů na osobu a rok</span>
-          <span class="av-counter-foot">OECD 6,8 — hodně kontaktů, ale ACSC přesto vysoké: problém není počet, ale koordinace</span>
+          <span class="av-counter-foot">OECD 8,1 (2024) — kontaktů nadprůměrně, ale ACSC přesto vysoké: problém není počet, ale koordinace</span>
         </div>
       </aside>
 
@@ -314,7 +322,7 @@
       <ul class="article-databox-list">
         <li><a href="indikator-hospitalizace_acsc.html"><strong>Odvratitelné hospitalizace (ACSC)</strong></a> — 592 / 100 000 vs. OECD 473 (OECD HAAG 2025, ref. rok 2021/2022; proxy primární péče)</li>
         <li><a href="indikator-prohlidka_prakticky_lekar.html"><strong>Pokrytí preventivní prohlídkou u praktika</strong></a> — 52,6 % (ÚZIS/NZIP mikrodata PPS-08-01, 2023; zákon 48/1997, vyhl. 70/2012)</li>
-        <li><a href="indikator-ambulantni_kontakty_per_capita.html"><strong>Ambulantní kontakty</strong></a> — 11,2 / os./rok vs. OECD 6,8 (OECD HAAG 2023)</li>
+        <li><a href="indikator-ambulantni_kontakty_per_capita.html"><strong>Ambulantní kontakty</strong></a> — 9,0 / os./rok vs. OECD 8,1 (OECD Health Statistics, 2024)</li>
         <li><a href="indikator-hospitalizace_na_100k.html"><strong>Míra hospitalizací (všechna onemocnění)</strong></a> — 17 990 / 100 000 vs. OECD 14 600 (2024, ÚZIS NRH)</li>
         <li><a href="indikator-prevalence_diabetu.html"><strong>Prevalence diabetu</strong></a> — 9,5 % vs. OECD 7 % (EHIS · SZÚ)</li>
       </ul>

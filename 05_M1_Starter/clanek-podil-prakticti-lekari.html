@@ -23,6 +23,7 @@
     visual_elements_count: 4
     notes: "Nový HSPA indikátor podil_prakticti_lekari (podíl praktických lékařů/generalistů na všech lékařích). Headline CZ = 16,9 % (2023), zdroj ÚZIS NRZP / OECD Health Statistics (Doctors by category) přes veřejné přehledy OECD Health at a Glance 2023 a healthsystemsfacts.org (16,9 % GP, 79,3 % specialisté, 2021; ~7 730 praktiků 2023). Benchmark OECD ~23 % (nevážený průměr, definice generalisty se mezi zeměmi liší → řádové srovnání). Mezinárodní srovnání hustoty generalistů na 100 000 obyv. (Eurostat/OECD 2022–2023): Nizozemsko 183,4; Rakousko 146,1; Německo ~106 (88 286 GP / 83,3 mil.); Česko ~71 (7 730 / 10,9 mil., dopočet); Bulharsko 59,8 (nízká reference). Polsko a Slovensko: bez ověřené hodnoty za dané období → řešeno v prose s explicitní poznámkou o mezeře, bez smyšlených čísel. direction higher_is_better, signal bad (16,9 vs OECD 23). origin seed / draft do potvrzení živým ingestem NRZP + OECD. Hodnoty v patient_story literálně odpovídají indicators.json (16,9)."
     nightly_2026-08-10: "Noční auto-fix (FÁZE 2.2) — oprava mrtvých zdrojových odkazů (HTTP 404). Náhrady ověřeny živě HTTP 200 dne 10. 8. 2026, vždy na témže primárním zdroji; žádné tvrzení ani číslo v textu se nemění. Změny: https://www.uzis.cz/index.php?pg=vystupy--datova-nabidka → https://www.uzis.cz/index.php?pg=vystupy"
+    OPRAVA 2026-11-02 (seed-audit dávka 3): "Věta „Česko patří k zemím s nejnižším podílem praktiků vůbec“ neodpovídala OECD (DF_PHYS_CAT, praktičtí lékaři / všichni lékaři, 2023): ČR 16,86 %, DE 16,1, AT 13,2, HU 12,4, PL 8,4; průměr OECD 22,5 %, EU 17,5 % (2024). Hodnota 16,9 % ověřena. Tabulka: lékaři 4,2/3,9 → 4,3/4,0 (2024), 55+ 41 % → 40,1 % (2024)."
 -->
 <meta name="article:audit-status" content="review-pending">
 <link rel="stylesheet" href="src/styles.min.css">
@@ -57,7 +58,7 @@
         "@id": "https://skorezdravotnictvi.cz/clanek-podil-prakticti-lekari"
       },
       "datePublished": "2026-08-05",
-      "dateModified": "2026-08-05",
+      "dateModified": "2026-11-02",
       "author": {
         "@type": "Organization",
         "name": "HSPA Monitor",
@@ -147,6 +148,13 @@
     </header>
 
     <div class="article-body">
+      <aside class="article-callout article-callout-update" aria-label="Oprava článku">
+        <div class="ed-kicker">Oprava · 2. listopadu 2026</div>
+        <p>
+          Předchozí verze tvrdila, že Česko patří podílem praktických lékařů (16,9 %) k zemím s nejnižším podílem vůbec. Podle OECD je pod průměrem OECD (22,5 %), ale v Evropě v průměru — nižší podíl mají například Německo, Rakousko, Maďarsko i Polsko. Hodnota 16,9 % je správná.
+        </p>
+      </aside>
+
 
       <p class="article-lead">
         Malá obec na Bruntálsku, jaro 2026. Panu Jaroslavovi je 72 let a minulý měsíc mu odešel do důchodu obvodní lékař, ke kterému chodil čtyřicet let. Nejbližší praktik, který bere nové pacienty, ordinuje o dvě obce dál a má seznam plný — registraci mu potvrdí nejdřív za půl roku. Mezitím panu Jaroslavovi došly léky na tlak a cukrovku a na kontrolu si musel zajet rovnou k internistovi do okresní nemocnice. Paradoxně přitom lékařů má Česko dost. Tento text vysvětluje, proč se to nevylučuje, co měří podíl generalistů mezi lékaři a proč je to jedno z nejsilnějších strukturních čísel celého systému.
@@ -221,7 +229,7 @@
       <h3>Mezinárodní srovnání: Česko u dna</h3>
 
       <p>
-        Nejvíc vypoví srovnání se zeměmi OECD a se sousedy. Průměrný podíl generalistů mezi lékaři je napříč OECD kolem 23 % — Česko se svými 16,9 % patří k zemím s nejnižším podílem vůbec. Ještě názornější je pohled přes hustotu praktiků na obyvatele. Zatímco Česko má zhruba 71 praktiků na 100 000 lidí, sousední Rakousko jich má 146,1 (Eurostat, 2022) — více než dvojnásobek — a Německo kolem 106. Nizozemsko, které je vyhlášené silnou rolí rodinných lékařů coby strážců systému, se blíží 183. Česko se naopak řadí spíš ke spodní části evropského žebříčku, poblíž zemí jako Bulharsko.
+        Nejvíc vypoví srovnání se zeměmi OECD a se sousedy. Průměrný podíl praktických lékařů mezi lékaři je napříč OECD kolem 23 % (22,5 % v roce 2024) — Česko se svými 16,9 % je pod ním. V Evropě ale není výjimkou: podle téže statistiky OECD mají nižší podíl praktiků Německo (16,1 %), Rakousko (13,2 %), Maďarsko (12,4 %) i Polsko (8,4 %; vše 2023) a průměr členů EU je 17,5 % (2024). Jinak vychází pohled přes hustotu generalistů na obyvatele, kam některé země započítávají i lékaře bez specializace. Zatímco Česko má zhruba 71 praktiků na 100 000 lidí, sousední Rakousko jich má 146,1 (Eurostat, 2022) — více než dvojnásobek — a Německo kolem 106. Nizozemsko, které je vyhlášené silnou rolí rodinných lékařů coby strážců systému, se blíží 183. Česko se naopak řadí spíš ke spodní části evropského žebříčku, poblíž zemí jako Bulharsko.
       </p>
 
       <figure class="av-figure av-figure-wide" aria-labelledby="avGpIntlH">
@@ -238,7 +246,7 @@
       </figure>
 
       <p>
-        Jedna metodická poznámka je tu na místě. Mezinárodní srovnání podílu generalistů provází zlomy v časových řadách a rozdíly v tom, koho která země počítá jako „generalistu“ — proto se čísla čtou jako řádová, nikoli na desetinu přesná. To ale nic nemění na jasném vzorci: ať se dívá optikou podílu, nebo hustoty na obyvatele, Česko se opakovaně objevuje ve spodní části žebříčku. Regionální sousedé Polsko a Slovensko na tom podle dostupných přehledů také nejsou silně — jejich rodinnělékařské systémy jsou mladší a poddimenzované — ale spolehlivé srovnatelné číslo za shodné období se pro ně nepodařilo dohledat, a proto je zde neuvádíme jako tvrdý údaj. Poctivější než dosadit odhad je přiznat mezeru v datech.
+        Jedna metodická poznámka je tu na místě. Mezinárodní srovnání podílu generalistů provází zlomy v časových řadách a rozdíly v tom, koho která země počítá jako „generalistu“ — proto se čísla čtou jako řádová, nikoli na desetinu přesná. To ale nic nemění na jasném vzorci: Česko je pod průměrem OECD; v hustotě generalistů na obyvatele se objevuje ve spodní části evropského žebříčku, v podílu praktiků mezi lékaři je spíš v evropském středu. Regionální sousedé Polsko a Slovensko na tom podle dostupných přehledů také nejsou silně — jejich rodinnělékařské systémy jsou mladší a poddimenzované — ale spolehlivé srovnatelné číslo za shodné období se pro ně nepodařilo dohledat, a proto je zde neuvádíme jako tvrdý údaj. Poctivější než dosadit odhad je přiznat mezeru v datech.
       </p>
 
       <figure class="av-figure" aria-labelledby="avGpTableH">
@@ -251,8 +259,8 @@
             <tbody>
               <tr><td>Podíl praktiků mezi lékaři</td><td><strong>16,9 %</strong></td><td>průměr OECD ~23 %</td></tr>
               <tr><td>Praktiků na 100 000 obyvatel</td><td>~71</td><td>Rakousko 146,1; Německo ~106</td></tr>
-              <tr><td>Lékařů na 1 000 obyvatel celkem</td><td>4,2</td><td>OECD ~3,9 (Česko nad průměrem)</td></tr>
-              <tr><td>Podíl lékařů ve věku 55+</td><td>41 %</td><td>generační výměna pod tlakem</td></tr>
+              <tr><td>Lékařů na 1 000 obyvatel celkem</td><td>4,3 (2024)</td><td>OECD 4,0 (Česko nad průměrem), EU 4,4</td></tr>
+              <tr><td>Podíl lékařů ve věku 55+</td><td>40,1 % (2024)</td><td>generační výměna pod tlakem</td></tr>
             </tbody>
           </table>
         </div>
