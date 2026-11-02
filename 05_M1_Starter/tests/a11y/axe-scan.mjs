@@ -53,6 +53,7 @@ const PAGES = [
   'redakce.html',
   'legislativa.html',
   'barometr.html',
+  'pojistovny.html',
   'indikator-nadeje_doziti_total.html',
   'indicator.html?id=nadeje_doziti_total',
   'clanek-vydaje-prevence.html',

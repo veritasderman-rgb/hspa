@@ -47,7 +47,7 @@ export function renderPrevence(p, d) {
     set('zpPrevDusevni', `<table class="zpc-matrix"><thead><tr><th class="zpc-txt">ZP</th>${ds.map((c) => `<th>${esc(c.label)}</th>`).join('')}</tr></thead><tbody>` +
       zps.map((z) => `<tr><th scope="row" class="zpc-txt">${dot(z.kod)}${esc(z.zkratka)}</th>${ds.map((c) => `<td>${levelBadge(z.dusevni?.[c.id]?.stupen)}</td>`).join('')}</tr>`).join('') + '</tbody></table>');
     // struktura fondu prevence — výběr ZP
-    const sel = `<label class="zpc-note" for="zpFpSelect">Pojišťovna: </label><select id="zpFpSelect" class="zpc-note">${zps.map((z) => `<option value="${z.kod}">${esc(z.zkratka)} (${esc(z.fond_prevence_struktura?.rok || z.rok_vz || '')})</option>`).join('')}</select><div id="zpFpTable" class="zpc-tbl"></div>`;
+    const sel = `<label class="zpc-note" for="zpFpSelect">Pojišťovna: </label><select id="zpFpSelect" class="zpc-note">${zps.map((z) => `<option value="${z.kod}">${esc(z.zkratka)} (${esc(z.fond_prevence_struktura?.rok || z.rok_vz || '')})</option>`).join('')}</select><div id="zpFpTable" class="zpc-tbl" role="region" tabindex="0" aria-label="Struktura fondu prevence (tabulka, posuvná)"></div>`;
     set('zpFpStruktura', sel);
     const renderFp = (kod) => {
       const z = zps.find((x) => x.kod === kod); const f = z?.fond_prevence_struktura;

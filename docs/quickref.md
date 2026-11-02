@@ -107,6 +107,9 @@ git push -u origin claude/<branch-name>
 | `.dlz-*` | Doložka (klikatelné doložky tvrzení, panel, badge) | clanek-*.html, redakce.html |
 | `.poh-*` | Pohotovosti (triáž, vyhledávání, karty, mapa, kontext) | pohotovosti.html |
 | `.pop-*` | Poplatky u lékaře (kontrola poplatku, mapa smí/nesmí, průvodce stížností, generátor, plné znění) | poplatky.html |
+| `.zpc-*` | Srovnávač pojišťoven — stránka (strip, nav modulů, karty pojišťoven, tabulky, matice, akordeony, boxy) | pojistovny.html |
+| `.zpv-*` | (plánováno) Srovnávač pojišťoven — vizuální primitivy (grafy, sparkliny, ikonové řady) | `src/zp-viz.js` |
+| `.zpi-*` | (plánováno) Srovnávač pojišťoven — interakce (filtry, výběr pojišťoven, porovnání) | `src/zp-interact.js` |
 
 ---
 
