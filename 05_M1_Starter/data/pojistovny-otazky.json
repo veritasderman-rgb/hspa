@@ -26,6 +26,11 @@
       "datum": "2026-11-02",
       "zmena": "Sady fond-prevence a rizikovi-pojistenci mají povolene_respondenty [\"pojistovna\"] (API odmítne jiný typ respondenta i s tokenem); výchozí sada na stránce Zdravotní gramotnost bez osobního odkazu je veřejná anketa pojistenci-anketa místo rizikovi-pojistenci, který bez tokenu nejde odeslat. Návrh pro PS 12. 11. 2026 (docs/ps-2026-11-12-podklady.md § 5), znění otázek beze změny, verze sad 1.",
       "zdroj": "docs/ps-2026-11-12-podklady.md"
+    },
+    {
+      "datum": "2026-11-03",
+      "zmena": "Nová sada dostupnost-prechody (kolo 1, 4 otázky): žádosti podle § 16 zák. 48/1997 Sb., žádosti o zajištění péče podle § 40, zveřejňování čekacích dob a hrubé toky přestupů pojištěnců. Ostatní sady beze změny, verze sad zůstává 1 (nic nebylo rozesláno).",
+      "zdroj": "PLAN-SROVNAVAC-ANALYTIK.md A3.1 a A3.3, data/pojistovny-dostupnost.json"
     }
   ],
   "_doc": "Sady otázek srovnávače pojišťoven podle fází projektu (docs/pojistovny-dotazniky.md): kolo 1 fond prevence a pobočky, kolo 2 rizikoví pojištěnci a zdravotní gramotnost, interní hodnoticí list aplikací, dotazník NAPO pro pacientské organizace, veřejná anketa pro pojištěnce a právo na odpověď. kanal: web-token | web-verejnost | interni | dopis+web; interní sady se přes web nevyplňují.",
@@ -985,6 +990,60 @@
           "Seznam se jednou ročně kontroluje namátkou (5 adres na pojišťovnu proti webu); rozpor se zapíše do changelogu, verdikt se nemění bez práva na odpověď."
         ],
         "vystup": "Tabulka míst podle definice a na 100 tisíc pojištěnců, mapa pokrytí krajů; vstup do oblasti Klientský servis (spolu s aplikacemi), ne samostatný verdikt."
+      }
+    },
+    {
+      "id": "dostupnost-prechody",
+      "nazev": "Dostupnost péče a přestupy pojištěnců – první kolo",
+      "typ": "otevrene",
+      "verze": "1",
+      "faze": "kolo 1 · leden 2027 (spolu s fondem prevence)",
+      "respondent": "zdravotní pojišťovny (všech 7, stejné znění týž den)",
+      "kanal": "dopis+web",
+      "povolene_respondenty": [
+        "pojistovna"
+      ],
+      "uvod": "Výroční zprávy neuvádějí počty žádostí podle § 16 zákona č. 48/1997 Sb., počty žádostí o zajištění péče podle odbornosti a kraje ani počty přestupů pojištěnců mezi pojišťovnami. Ptáme se všech sedmi pojišťoven ve stejný den na totéž a čísla zveřejníme s datem a vaším vysvětlením, vedle sebe a bez pořadí. Odpovězte prosím do 15 dnů spolu s otázkami k fondu prevence a k pobočkám.",
+      "pravni_zaklad": "Dobrovolná nabídka spolupráce (metodika § 4 bod 3). Pokud do 15 dnů odpověď nepřijde, následuje žádost o informace podle zákona č. 106/1999 Sb., o svobodném přístupu k informacím, se stejným zněním otázek.",
+      "otazky": [
+        {
+          "id": "par16",
+          "text": "Kolik žádostí o úhradu podle § 16 zákona č. 48/1997 Sb. jste obdrželi v letech 2023, 2024 a 2025, jaký podíl z nich byl schválen (zcela nebo zčásti) a jaká byla medián doby od doručení žádosti do rozhodnutí ve dnech?",
+          "napoveda": "Doloženo: tabulka rok · počet žádostí · schváleno · zamítnuto · medián dnů, za každý ze tří let. Počet odvolání nebo náklady na léčiva podle § 16 samy o sobě počet žádostí nedokládají.",
+          "max_delka": 2000
+        },
+        {
+          "id": "zajisteni-pece",
+          "text": "Kolik žádostí pojištěnců o zajištění péče podle § 40 zákona č. 48/1997 Sb. (pojištěnec nenašel smluvního poskytovatele) jste obdrželi v letech 2024 a 2025, rozepsaných podle odbornosti a kraje, a u kolika z nich jste poskytovatele zajistili?",
+          "napoveda": "Doloženo: tabulka rok · odbornost · kraj · počet žádostí · počet zajištěných. Součet za odbornosti by měl odpovídat počtu uvedenému ve výroční zprávě; případný rozdíl prosíme vysvětlit.",
+          "max_delka": 2000
+        },
+        {
+          "id": "cekaci-doby",
+          "text": "Zveřejňujete čekací nebo objednací doby na plánovanou péči (vlastní data, nebo odkazy na poskytovatele)? Pokud ano, uveďte prosím odkaz, rozsah výkonů, metodu a datum poslední aktualizace.",
+          "napoveda": "Doloženo: stálý odkaz a popis rozsahu a metody. Odkaz na weby jednotlivých nemocnic zapíšeme jako rozcestník, ne jako vlastní údaj pojišťovny.",
+          "max_delka": 1000
+        },
+        {
+          "id": "prechody",
+          "text": "Kolik pojištěnců k 1. 1. a k 1. 7. v letech 2025 a 2026 k vám přešlo z jiných zdravotních pojišťoven a kolik od vás odešlo (počet příchozích a odchozích zvlášť, bez rozpisu podle pojišťoven)?",
+          "napoveda": "Doloženo: čtyři údaje za rok · datum · příchozí · odchozí, s uvedením zdroje (CRP, evidence přihlášek). Čistou změnu stavu pojištěnců už známe z dat MZ; ptáme se na hrubé toky.",
+          "max_delka": 1000
+        }
+      ],
+      "vyhodnoceni": {
+        "oblasti": [
+          "dostupnost",
+          "hospodareni"
+        ],
+        "vstup": "Odpovědi pojišťovny na čtyři otázky (dopis a web, lhůta 15 dnů); každá odpověď se zveřejní v plném znění.",
+        "pravidla": [
+          "Každá otázka dostane vlastní stav: doloženo = odpověď obsahuje to, co žádá nápověda (čísla s rokem a jednotkou, odkaz); deklarováno = pojišťovna tvrdí, že údaj má, ale čísla nepředložila; nedoloženo = odpověď k věci nic neříká, nebo ji vlastní data pojišťovny vyvracejí.",
+          "Počty se ukazují vedle sebe s datem a znění odpovědi, bez pořadí a bez součtu do indexu; různé definice (viz data/pojistovny-dostupnost.json, srovnatelnost) se nesrovnávají.",
+          "Otázka prechody je kontext pro oblast Hospodaření (pohyb pojištěnců), ne verdikt; otázky par16, zajisteni-pece a cekaci-doby jsou vstupem do oblasti Dostupnost, prahy čekají na schválení PS.",
+          "Bez odpovědi do 15 dnů od doručení následuje žádost podle zákona 106 se stejným zněním; bez odpovědi ani na ni = neodpověděla (stav neutral, ne bad)."
+        ],
+        "vystup": "Tabulka 7 pojišťoven × 4 otázky se stavy a plným zněním odpovědí; aktualizace inventáře data/pojistovny-dostupnost.json (stav ano nebo castecne tam, kde odpověď přinese veřejný údaj)."
       }
     }
   ]

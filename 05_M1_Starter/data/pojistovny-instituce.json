@@ -1,0 +1,1791 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-11-03T06:54:57Z",
+  "stav_k": "2026-11-03",
+  "_doc": "Instituční rámec 7 zdravotních pojišťoven: zákon, vznik a sloučení, složení a způsob obsazení správní a dozorčí rady, ředitel, dohled, limit nákladů na činnost, členství. Bez jmen osob (jména členů orgánů jsou třída C a rozhodne o nich vydavatel). Každé pole nese zdroj (zákon + paragraf + URL, případně výroční zpráva + strana PDF). Co se nepodařilo ověřit, je null a je uvedeno v chybi[]. Zaměstnanci: viz data/pojistovny.json (hospodareni.zamestnanci_prepocteni), zde se neduplikují. vznik.datum má u pojišťoven různý význam, určuje ho vznik.datum_typ: zakon (účinnost zákona), zapis_or (zápis do obchodního rejstříku), zrizovaci_listina (den, ke kterému byla pojišťovna zřízena podle zřizovací listiny), rozhodnuti_mpsv (rozhodnutí MPSV o zřízení); null = výroční zpráva uvádí jen datum vzniku bez druhu. vznik.datum_zapisu_or je datum zápisu do OR, je-li známo (jinak null).",
+  "limit_vzorec": {
+    "predpis": "vyhláška č. 418/2003 Sb., § 7 odst. 2",
+    "vzorec": "L = (PC : 100) x koef.; koef. = -0,3 / P x p + 3,08 + 0,3 / P x 100",
+    "vyznam": "P = 10 410 (tisícina průměrného počtu pojištěnců systému zahrnutá do propočtu); p = tisíce průměrných pojištěnců pojišťovny zaokrouhlené nahoru; koef. v procentech na 2 desetinná místa; PC = příjmy z veřejného zdravotního pojištění po přerozdělení, z penále, pokut a přirážek.",
+    "url": "https://www.zakonyprolidi.cz/cs/2003-418",
+    "overeno": "2026-11-03",
+    "poznamka": "Procento v provozni_limit_pct je koeficient z výroční zprávy (řádek 19), tedy maximální podíl příjmů, který smí jít do provozu; nemusí být vyčerpán."
+  },
+  "zdroje": [
+    {
+      "id": "zak-280-1992",
+      "nazev": "Zákon č. 280/1992 Sb., o resortních, oborových, podnikových a dalších zdravotních pojišťovnách, aktuální znění od 1. 1. 2026 (verze 37)",
+      "url": "https://www.zakonyprolidi.cz/cs/1992-280",
+      "overeno": "2026-11-03",
+      "poznamka": "Konsolidované znění z e-Sbírky převzaté na zakonyprolidi.cz; přímý text na e-sbirka.cz (SPA) nebyl z prostředí dostupný. Oficiální místo: https://www.e-sbirka.cz/sb/1992/280."
+    },
+    {
+      "id": "zak-551-1991",
+      "nazev": "Zákon č. 551/1991 Sb., o Všeobecné zdravotní pojišťovně České republiky, aktuální znění od 1. 1. 2026 (verze 34)",
+      "url": "https://www.zakonyprolidi.cz/cs/1991-551",
+      "overeno": "2026-11-03",
+      "poznamka": "Konsolidované znění z e-Sbírky převzaté na zakonyprolidi.cz. Oficiální místo: https://www.e-sbirka.cz/sb/1991/551."
+    },
+    {
+      "id": "vyh-418-2003",
+      "nazev": "Vyhláška č. 418/2003 Sb., o fondech zdravotních pojišťoven (limit nákladů na činnost, § 7), znění 1. 1. 2026 – 31. 12. 2026 (verze 11)",
+      "url": "https://www.zakonyprolidi.cz/cs/2003-418",
+      "overeno": "2026-11-03"
+    },
+    {
+      "id": "zak-48-1997",
+      "nazev": "Zákon č. 48/1997 Sb., o veřejném zdravotním pojištění, znění 1. 11. 2026 – 31. 12. 2027 (verze 94); § 53 odst. 9 rozhodčí orgán",
+      "url": "https://www.zakonyprolidi.cz/cs/1997-48",
+      "overeno": "2026-11-03",
+      "poznamka": "Existenci rozhodčího orgánu u každé pojišťovny dokládá její výroční zpráva (potvrzeni_vz)."
+    },
+    {
+      "id": "szp-cr",
+      "nazev": "Svaz zdravotních pojišťoven ČR, z.s. – O Svazu (základní informace a seznam členů)",
+      "url": "https://szpcr.cz/o-svazu/zakladni-informace/",
+      "overeno": "2026-11-03"
+    },
+    {
+      "id": "szp-cr-pojistovny",
+      "nazev": "Svaz zdravotních pojišťoven ČR – seznam členských pojišťoven",
+      "url": "https://szpcr.cz/o-svazu/pojistovny/",
+      "overeno": "2026-11-03"
+    },
+    {
+      "id": "vz-111-2024",
+      "nazev": "Výroční zpráva 111 za rok 2024",
+      "url": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vyrocni-zprava-2024.pdf",
+      "overeno": "2026-11-02",
+      "poznamka": "Text v repu: ingest/manual/pojistovny/vz-text/111-2024.txt (stažení 2. 11. 2026, vz-manifest.json); čísla stran jsou strany PDF."
+    },
+    {
+      "id": "vz-111-2025",
+      "nazev": "Výroční zpráva 111 za rok 2025",
+      "url": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vzp_vyrocni_zprava_2025.pdf",
+      "overeno": "2026-11-02",
+      "poznamka": "Text v repu: ingest/manual/pojistovny/vz-text/111-2025.txt (stažení 2. 11. 2026, vz-manifest.json); čísla stran jsou strany PDF."
+    },
+    {
+      "id": "vz-205-2024",
+      "nazev": "Výroční zpráva 205 za rok 2024",
+      "url": "https://www.cpzp.cz/cdn/file/dBsRubRJnfQF8h7D7wgH0Se4cNJWi9kR.pdf",
+      "overeno": "2026-11-02",
+      "poznamka": "Text v repu: ingest/manual/pojistovny/vz-text/205-2024.txt (stažení 2. 11. 2026, vz-manifest.json); čísla stran jsou strany PDF."
+    },
+    {
+      "id": "vz-205-2025",
+      "nazev": "Výroční zpráva 205 za rok 2025",
+      "url": "https://www.cpzp.cz/cdn/file/dZAT3vXGFhQ4bZcw9MdN1wgn0VHSYyfu.pdf",
+      "overeno": "2026-11-02",
+      "poznamka": "Text v repu: ingest/manual/pojistovny/vz-text/205-2025.txt (stažení 2. 11. 2026, vz-manifest.json); čísla stran jsou strany PDF."
+    },
+    {
+      "id": "vz-207-2024",
+      "nazev": "Výroční zpráva 207 za rok 2024",
+      "url": "https://www.ozp.cz/web/files-c/510/vz_ozp_2024.pdf",
+      "overeno": "2026-11-02",
+      "poznamka": "Text v repu: ingest/manual/pojistovny/vz-text/207-2024.txt (stažení 2. 11. 2026, vz-manifest.json); čísla stran jsou strany PDF."
+    },
+    {
+      "id": "vz-207-2025",
+      "nazev": "Výroční zpráva 207 za rok 2025",
+      "url": "https://www.ozp.cz/web/files-c/510/vz_ozp_2025.pdf",
+      "overeno": "2026-11-02",
+      "poznamka": "Text v repu: ingest/manual/pojistovny/vz-text/207-2025.txt (stažení 2. 11. 2026, vz-manifest.json); čísla stran jsou strany PDF."
+    },
+    {
+      "id": "vz-213-2025",
+      "nazev": "Výroční zpráva 213 za rok 2025",
+      "url": "https://www.rbp213.cz/systemfiles/file/1780467908vz-2026-01-1-.pdf",
+      "overeno": "2026-11-02",
+      "poznamka": "Text v repu: ingest/manual/pojistovny/vz-text/213-2025.txt (stažení 2. 11. 2026, vz-manifest.json); čísla stran jsou strany PDF."
+    },
+    {
+      "id": "vz-213-2024",
+      "nazev": "Výroční zpráva 213 za rok 2024",
+      "url": "https://www.rbp213.cz/systemfiles/file/RBP-Vyrocni-zprava-2024.pdf",
+      "overeno": "2026-11-02",
+      "poznamka": "Text v repu: ingest/manual/pojistovny/vz-text/213-2024.txt (stažení 2. 11. 2026, vz-manifest.json); čísla stran jsou strany PDF."
+    },
+    {
+      "id": "vz-201-2024",
+      "nazev": "Výroční zpráva 201 za rok 2024",
+      "url": "https://www.vozp.cz/assets/vz_2024_vozp.pdf",
+      "overeno": "2026-11-02",
+      "poznamka": "Text v repu: ingest/manual/pojistovny/vz-text/201-2024.txt (stažení 2. 11. 2026, vz-manifest.json); čísla stran jsou strany PDF."
+    },
+    {
+      "id": "vz-201-2025",
+      "nazev": "Výroční zpráva 201 za rok 2025",
+      "url": "https://www.vozp.cz/assets/vz_2025_vozp.pdf",
+      "overeno": "2026-11-02",
+      "poznamka": "Text v repu: ingest/manual/pojistovny/vz-text/201-2025.txt (stažení 2. 11. 2026, vz-manifest.json); čísla stran jsou strany PDF."
+    },
+    {
+      "id": "vz-211-2024",
+      "nazev": "Výroční zpráva 211 za rok 2024",
+      "url": "https://www.zpmvcr.cz/system/files/dokumenty/2026-02/VZ%202024%20ZPMVCR_komplet.pdf",
+      "overeno": "2026-11-02",
+      "poznamka": "Text v repu: ingest/manual/pojistovny/vz-text/211-2024.txt (stažení 2. 11. 2026, vz-manifest.json); čísla stran jsou strany PDF."
+    },
+    {
+      "id": "vz-211-2025",
+      "nazev": "Výroční zpráva 211 za rok 2025",
+      "url": "https://www.zpmvcr.cz/system/files/dokumenty/2026-10/VZ%202025%20ZPMVCR_komplet.pdf",
+      "overeno": "2026-11-02",
+      "poznamka": "Text v repu: ingest/manual/pojistovny/vz-text/211-2025.txt (stažení 2. 11. 2026, vz-manifest.json); čísla stran jsou strany PDF."
+    },
+    {
+      "id": "vz-209-2024",
+      "nazev": "Výroční zpráva 209 za rok 2024",
+      "url": "https://www.zpskoda.cz/sites/default/files/docs/2025/10/vz-2024-zps.pdf",
+      "overeno": "2026-11-02",
+      "poznamka": "Text v repu: ingest/manual/pojistovny/vz-text/209-2024.txt (stažení 2. 11. 2026, vz-manifest.json); čísla stran jsou strany PDF."
+    }
+  ],
+  "pojistovny": [
+    {
+      "kod": "111",
+      "zkratka": "VZP ČR",
+      "nazev": "Všeobecná zdravotní pojišťovna ČR",
+      "ico": "41197518",
+      "sidlo_mesto": "Praha",
+      "ico_zdroj": {
+        "soubor": "ingest/manual/pojistovny/vz-text/111-2025.txt",
+        "strana": 4,
+        "vz_url": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vzp_vyrocni_zprava_2025.pdf",
+        "shoda": true
+      },
+      "zakon": {
+        "cislo": "551/1991 Sb.",
+        "nazev": "Zákon ČNR č. 551/1991 Sb., o Všeobecné zdravotní pojišťovně České republiky",
+        "zdroj": {
+          "citace": "Pojišťovna byla zřízena zákonem č. 551/1991 Sb. s účinností od 1. ledna 1992.",
+          "paragraf": "výroční zpráva VZP 2025, kap. A.3.1 a Vstupní údaje",
+          "url": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vzp_vyrocni_zprava_2025.pdf",
+          "vz": {
+            "soubor": "ingest/manual/pojistovny/vz-text/111-2025.txt",
+            "strana": 4,
+            "vz_url": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vzp_vyrocni_zprava_2025.pdf",
+            "shoda": true
+          }
+        }
+      },
+      "vznik": {
+        "rok": 1992,
+        "datum": "1992-01-01",
+        "datum_typ": "zakon",
+        "datum_zapisu_or": null,
+        "puvod": "statni",
+        "poznamka": "Zřízena zákonem České národní rady č. 551/1991 Sb. dnem 1. ledna 1992.",
+        "sloucene": [],
+        "zdroj": {
+          "citace": "Zřízena zákonem ČNR č. 551/1991 Sb., o Všeobecné zdravotní pojišťovně České republiky, dnem 1. ledna 1992.",
+          "paragraf": "výroční zpráva VZP 2025, Vstupní údaje",
+          "url": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vzp_vyrocni_zprava_2025.pdf",
+          "vz": {
+            "soubor": "ingest/manual/pojistovny/vz-text/111-2025.txt",
+            "strana": 4,
+            "vz_url": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vzp_vyrocni_zprava_2025.pdf",
+            "shoda": true
+          }
+        }
+      },
+      "organy": {
+        "spravni_rada": {
+          "pocet": 30,
+          "obsazeni": [
+            {
+              "kdo": "vláda",
+              "pocet": 10,
+              "poznamka": "jmenuje a odvolává vláda na návrh ministra zdravotnictví"
+            },
+            {
+              "kdo": "Poslanecká sněmovna",
+              "pocet": 20,
+              "poznamka": "volí a odvolává Poslanecká sněmovna podle poměrného zastoupení politických stran; nové volby do 90 dnů po ustavující schůzi Sněmovny (§ 20 odst. 7)"
+            }
+          ],
+          "funkcni_obdobi_let": 4,
+          "zdroj": {
+            "citace": "Správní radu tvoří 10 členů jmenovaných vládou a 20 členů volených Poslaneckou sněmovnou Parlamentu podle principu poměrného zastoupení politických stran v Poslanecké sněmovně Parlamentu. Členy Správní rady jmenované vládou jmenuje a odvolává vláda na návrh ministra zdravotnictví.",
+            "paragraf": "§ 20 odst. 2 zákona č. 551/1991 Sb.; funkční období § 18 odst. 4",
+            "url": "https://www.zakonyprolidi.cz/cs/1991-551",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/111-2025.txt",
+                "strana": 59,
+                "vz_url": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vzp_vyrocni_zprava_2025.pdf",
+                "shoda": true
+              }
+            ]
+          }
+        },
+        "dozorci_rada": {
+          "pocet": 13,
+          "obsazeni": [
+            {
+              "kdo": "vláda",
+              "pocet": 3,
+              "poznamka": "jmenuje a odvolává vláda na návrh ministra financí, ministra práce a sociálních věcí a ministra zdravotnictví"
+            },
+            {
+              "kdo": "Poslanecká sněmovna",
+              "pocet": 10,
+              "poznamka": "volí a odvolává Poslanecká sněmovna podle poměrného zastoupení politických stran; nové volby do 90 dnů po ustavující schůzi Sněmovny (§ 21 odst. 5)"
+            }
+          ],
+          "funkcni_obdobi_let": 4,
+          "zdroj": {
+            "citace": "Dozorčí radu tvoří a) 3 členové, které na návrh ministra financí, ministra práce a sociálních věcí a ministra zdravotnictví jmenuje a odvolává vláda, b) 10 členů volených a odvolávaných Poslaneckou sněmovnou Parlamentu; při obsazování funkcí členů Dozorčí rady se postupuje podle principu poměrného zastoupení politických stran v Poslanecké sněmovně Parlamentu.",
+            "paragraf": "§ 21 odst. 3 zákona č. 551/1991 Sb.; funkční období § 18 odst. 4",
+            "url": "https://www.zakonyprolidi.cz/cs/1991-551",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/111-2025.txt",
+                "strana": 59,
+                "vz_url": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vzp_vyrocni_zprava_2025.pdf",
+                "shoda": true
+              }
+            ]
+          }
+        },
+        "reditel": {
+          "funkce": "ředitel Pojišťovny",
+          "jmenuje": "správní rada",
+          "funkcni_obdobi_let": 4,
+          "ve_funkci_od": null,
+          "poznamka": "Statutární orgán; správní rada ho jmenuje a odvolává (§ 14 odst. 1, § 20 odst. 1 písm. d); funkční období 4 roky (§ 15 odst. 1).",
+          "zdroj": {
+            "citace": "Statutárním orgánem Pojišťovny je ředitel. Ředitele Pojišťovny jmenuje a odvolává Správní rada Pojišťovny. Ředitel Pojišťovny je jmenován na dobu 4 let.",
+            "paragraf": "§ 14 odst. 1 a § 15 odst. 1 zákona č. 551/1991 Sb.",
+            "url": "https://www.zakonyprolidi.cz/cs/1991-551",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/111-2025.txt",
+                "strana": 59,
+                "vz_url": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vzp_vyrocni_zprava_2025.pdf",
+                "shoda": true
+              }
+            ]
+          }
+        },
+        "rozhodci_organ": {
+          "existuje": true,
+          "poznamka": "Rozhodčí orgán podle § 53 zákona č. 48/1997 Sb.; ve výroční zprávě mezi členy zástupci pojišťovny, MZ, správní a dozorčí rady, MF a MPSV.",
+          "slozeni_zakon": "1 zástupce pojišťovny, 1 MZ, 1 MPSV, 1 MF, 3 určení správní radou ze svých členů, 3 určení dozorčí radou ze svých členů (10 členů)",
+          "zdroj": {
+            "citace": "Rozhodčí orgán se skládá z jednoho zástupce zdravotní pojišťovny, jednoho zástupce Ministerstva zdravotnictví, jednoho zástupce Ministerstva práce a sociálních věcí, jednoho zástupce Ministerstva financí, tří zástupců, které určí ze svých členů Správní rada zdravotní pojišťovny, a tří zástupců, které určí ze svých členů Dozorčí rada zdravotní pojišťovny.",
+            "paragraf": "§ 53 odst. 9 zákona č. 48/1997 Sb.",
+            "url": "https://www.zakonyprolidi.cz/cs/1997-48",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/111-2025.txt",
+                "strana": 10,
+                "vz_url": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vzp_vyrocni_zprava_2025.pdf",
+                "shoda": true
+              }
+            ]
+          }
+        }
+      },
+      "dohled": {
+        "organy": [
+          "MZ ČR",
+          "MF ČR"
+        ],
+        "poznamka": "Pojišťovna podává MZ a MF zprávu o hospodaření do 60 dnů po skončení čtvrtletí (§ 8 odst. 1); při platební neschopnosti zaručuje úhradu státní rozpočet formou návratné finanční výpomoci (§ 8 odst. 2). Výroční zpráva dále uvádí schvalovací procesy ministerstev, vlády, Poslanecké sněmovny a Senátu.",
+        "zdroj": {
+          "citace": "Kontrolu činnosti Pojišťovny provádí Ministerstvo zdravotnictví v součinnosti s Ministerstvem financí.",
+          "paragraf": "§ 7d odst. 1 zákona č. 551/1991 Sb.",
+          "url": "https://www.zakonyprolidi.cz/cs/1991-551",
+          "potvrzeni_vz": [
+            {
+              "soubor": "ingest/manual/pojistovny/vz-text/111-2025.txt",
+              "strana": 14,
+              "vz_url": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vzp_vyrocni_zprava_2025.pdf",
+              "shoda": true
+            }
+          ]
+        }
+      },
+      "provozni_limit_pct": {
+        "hodnota": 2.91,
+        "rok": 2024,
+        "zdroj": {
+          "citace": "Výpočet limitu nákladů na činnost podle vyhlášky č. 418/2003 Sb. (v %): plán 2,91, skutečnost 2,91.",
+          "paragraf": "výroční zpráva VZP 2024, tabulka ř. 19",
+          "url": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vyrocni-zprava-2024.pdf",
+          "vz": {
+            "soubor": "ingest/manual/pojistovny/vz-text/111-2024.txt",
+            "strana": 102,
+            "vz_url": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vyrocni-zprava-2024.pdf",
+            "shoda": true
+          }
+        },
+        "dalsi_roky": [
+          {
+            "rok": 2025,
+            "hodnota": 2.9,
+            "poznamka": "plán 2,91; skutečnost 2,90",
+            "zdroj": {
+              "citace": "Výpočet limitu nákladů na činnost (v %): plán 2,91, skutečnost 2,90.",
+              "paragraf": "výroční zpráva VZP 2025, tabulka ř. 19",
+              "url": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vzp_vyrocni_zprava_2025.pdf",
+              "vz": {
+                "soubor": "ingest/manual/pojistovny/vz-text/111-2025.txt",
+                "strana": 77,
+                "vz_url": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vzp_vyrocni_zprava_2025.pdf",
+                "shoda": true
+              }
+            }
+          }
+        ],
+        "poznamka": "Koeficient podle § 7 odst. 2 vyhlášky č. 418/2003 Sb. klesá s počtem pojištěnců; VZP má nejnižší, protože má nejvíc pojištěnců."
+      },
+      "clenstvi": [
+        {
+          "nazev": "Otevřený svaz zdravotních pojišťoven",
+          "url": null,
+          "poznamka": "Jiný svaz než Svaz zdravotních pojišťoven ČR (ten sdružuje jen 6 zaměstnaneckých pojišťoven); účel: koordinace účasti v dohodovacím řízení (§ 17 zákona č. 48/1997 Sb.).",
+          "zdroj": {
+            "citace": "Pojišťovna je členem Otevřeného svazu zdravotních pojišťoven.",
+            "paragraf": "výroční zpráva VZP 2025, kap. A.3",
+            "url": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vzp_vyrocni_zprava_2025.pdf",
+            "vz": {
+              "soubor": "ingest/manual/pojistovny/vz-text/111-2025.txt",
+              "strana": 12,
+              "vz_url": "https://media.vzpstatic.cz/media/Default/vyrocni-zpravy/vzp_vyrocni_zprava_2025.pdf",
+              "shoda": true
+            }
+          }
+        }
+      ],
+      "weby": {
+        "hlavni": "https://www.vzp.cz",
+        "pro_poskytovatele": "https://www.vzp.cz/poskytovatele",
+        "vyrocni_zpravy": "https://www.vzp.cz/o-nas/dokumenty"
+      },
+      "zamestnanci_odkaz": "data/pojistovny.json → pojistovny[kod=111].hospodareni.zamestnanci_prepocteni",
+      "poznamky": [
+        "Dvě třetiny členů správní rady (20 z 30) a tři čtvrtiny dozorčí rady (10 ze 13) volí Poslanecká sněmovna podle poměrného zastoupení stran.",
+        "Výroční zprávy VZP 2023–2025 neuvádějí žádné sloučení s jinou pojišťovnou."
+      ]
+    },
+    {
+      "kod": "201",
+      "zkratka": "VoZP",
+      "nazev": "Vojenská zdravotní pojišťovna ČR",
+      "ico": "47114975",
+      "sidlo_mesto": "Praha",
+      "ico_zdroj": {
+        "soubor": "ingest/manual/pojistovny/vz-text/201-2025.txt",
+        "strana": 6,
+        "vz_url": "https://www.vozp.cz/assets/vz_2025_vozp.pdf",
+        "shoda": true
+      },
+      "zakon": {
+        "cislo": "280/1992 Sb.",
+        "nazev": "Zákon ČNR č. 280/1992 Sb., o resortních, oborových, podnikových a dalších zdravotních pojišťovnách",
+        "zdroj": {
+          "citace": "Zákon upravuje vznik, činnost a zánik resortních, oborových, podnikových a dalších zdravotních pojišťoven (zaměstnanecká pojišťovna).",
+          "paragraf": "§ 1 zákona č. 280/1992 Sb.",
+          "url": "https://www.zakonyprolidi.cz/cs/1992-280",
+          "potvrzeni_vz": [
+            {
+              "soubor": "ingest/manual/pojistovny/vz-text/201-2025.txt",
+              "strana": 64,
+              "vz_url": "https://www.vozp.cz/assets/vz_2025_vozp.pdf",
+              "shoda": true
+            }
+          ]
+        }
+      },
+      "vznik": {
+        "rok": 1992,
+        "datum": "1992-12-23",
+        "datum_typ": null,
+        "datum_zapisu_or": null,
+        "puvod": "resortni",
+        "poznamka": "Zřizovatel Ministerstvo práce a sociálních věcí ČR, zakladatelský subjekt Ministerstvo obrany ČSFR. Resortní pojišťovna pro vojáky v činné službě a žáky vojenských škol.",
+        "sloucene": [],
+        "zdroj": {
+          "citace": "Zřizovatel: Ministerstvo práce a sociálních věcí ČR; zakladatelský subjekt: Ministerstvo obrany ČSFR; datum vzniku 23. prosince 1992.",
+          "paragraf": "výroční zpráva VoZP 2025, kap. 1 Vstupní údaje",
+          "url": "https://www.vozp.cz/assets/vz_2025_vozp.pdf",
+          "vz": {
+            "soubor": "ingest/manual/pojistovny/vz-text/201-2025.txt",
+            "strana": 6,
+            "vz_url": "https://www.vozp.cz/assets/vz_2025_vozp.pdf",
+            "shoda": true
+          }
+        }
+      },
+      "organy": {
+        "spravni_rada": {
+          "pocet": 15,
+          "obsazeni": [
+            {
+              "kdo": "vláda",
+              "pocet": 5,
+              "poznamka": "jmenuje a odvolává vláda na návrh ministra zdravotnictví"
+            },
+            {
+              "kdo": "zaměstnavatelé a OSVČ",
+              "pocet": 5,
+              "poznamka": "volí společně zaměstnavatelé a osoby samostatně výdělečně činné (hlasují v rozsahu odvedeného pojistného)"
+            },
+            {
+              "kdo": "zaměstnanci a osoby bez zdanitelných příjmů",
+              "pocet": 5,
+              "poznamka": "volí společně zaměstnanci a osoby bez zdanitelných příjmů (jeden hlas na plátce)"
+            }
+          ],
+          "funkcni_obdobi_let": 4,
+          "zdroj": {
+            "citace": "Správní radu zaměstnanecké pojišťovny tvoří 5 členů jmenovaných vládou a 10 členů volených z řad pojištěnců této zaměstnanecké pojišťovny plátci pojistného na veřejné zdravotní pojištění této zaměstnanecké pojišťovně s tím, že 5 členů volí společně zaměstnavatelé a osoby samostatně výdělečně činné a 5 členů volí společně zaměstnanci a osoby bez zdanitelných příjmů. Členy Správní rady jmenované vládou jmenuje a odvolává vláda na návrh ministra zdravotnictví.",
+            "paragraf": "§ 10a odst. 1 zákona č. 280/1992 Sb.; funkční období § 10 odst. 8",
+            "url": "https://www.zakonyprolidi.cz/cs/1992-280",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/201-2025.txt",
+                "strana": 9,
+                "vz_url": "https://www.vozp.cz/assets/vz_2025_vozp.pdf",
+                "poznamka": "Výroční zpráva uvádí jen jmenný seznam bez rozdělení podle původu a se změnami v průběhu roku; počet 15 a rozdělení 5+5+5 plynou ze zákona.",
+                "shoda_neurceno": true
+              }
+            ]
+          }
+        },
+        "dozorci_rada": {
+          "pocet": 9,
+          "obsazeni": [
+            {
+              "kdo": "vláda",
+              "pocet": 3,
+              "poznamka": "jmenuje a odvolává vláda na návrh ministra financí, ministra práce a sociálních věcí a ministra zdravotnictví"
+            },
+            {
+              "kdo": "zaměstnavatelé a OSVČ",
+              "pocet": 3,
+              "poznamka": "volí společně zaměstnavatelé a osoby samostatně výdělečně činné"
+            },
+            {
+              "kdo": "zaměstnanci a osoby bez zdanitelných příjmů",
+              "pocet": 3,
+              "poznamka": "volí společně zaměstnanci a osoby bez zdanitelných příjmů"
+            }
+          ],
+          "funkcni_obdobi_let": 4,
+          "zdroj": {
+            "citace": "Dozorčí radu zaměstnanecké pojišťovny tvoří a) 3 členové, které na návrh ministra financí, ministra práce a sociálních věcí a ministra zdravotnictví jmenuje a odvolává vláda, b) 6 členů volených z řad pojištěnců této zaměstnanecké pojišťovny plátci pojistného na veřejné zdravotní pojištění této zaměstnanecké pojišťovně s tím, že 3 členy volí společně zaměstnavatelé a osoby samostatně výdělečně činné a 3 členy volí společně zaměstnanci a osoby bez zdanitelných příjmů.",
+            "paragraf": "§ 10a odst. 2 zákona č. 280/1992 Sb.; funkční období § 10 odst. 8",
+            "url": "https://www.zakonyprolidi.cz/cs/1992-280",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/201-2025.txt",
+                "strana": 9,
+                "vz_url": "https://www.vozp.cz/assets/vz_2025_vozp.pdf",
+                "shoda": true,
+                "poznamka": "Jmenný seznam odpovídá 9 členům na konci roku; rozdělení podle původu VZ neuvádí."
+              }
+            ]
+          }
+        },
+        "reditel": {
+          "funkce": "generální ředitel",
+          "jmenuje": "správní rada",
+          "funkcni_obdobi_let": 4,
+          "ve_funkci_od": null,
+          "poznamka": "Výroční zpráva používá označení generální ředitel; nástup do funkce neuvádí.",
+          "zdroj": {
+            "citace": "Statutárním orgánem zaměstnanecké pojišťovny je ředitel. Ředitele zaměstnanecké pojišťovny jmenuje a odvolává Správní rada zaměstnanecké pojišťovny. Ředitel zaměstnanecké pojišťovny je jmenován na dobu 4 let.",
+            "paragraf": "§ 9a odst. 1 a 2 zákona č. 280/1992 Sb.",
+            "url": "https://www.zakonyprolidi.cz/cs/1992-280",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/201-2025.txt",
+                "strana": 10,
+                "vz_url": "https://www.vozp.cz/assets/vz_2025_vozp.pdf",
+                "shoda": true
+              }
+            ]
+          }
+        },
+        "rozhodci_organ": {
+          "existuje": true,
+          "poznamka": "Rozhodčí orgán posuzuje žádosti o odstranění tvrdosti zákona a odvolání plátců pojistného (VZ 2025: 5 zasedání, 93 žádostí o odstranění tvrdosti).",
+          "slozeni_zakon": "1 zástupce pojišťovny, 1 MZ, 1 MPSV, 1 MF, 3 určení správní radou ze svých členů, 3 určení dozorčí radou ze svých členů (10 členů)",
+          "zdroj": {
+            "citace": "Rozhodčí orgán se skládá z jednoho zástupce zdravotní pojišťovny, jednoho zástupce Ministerstva zdravotnictví, jednoho zástupce Ministerstva práce a sociálních věcí, jednoho zástupce Ministerstva financí, tří zástupců, které určí ze svých členů Správní rada zdravotní pojišťovny, a tří zástupců, které určí ze svých členů Dozorčí rada zdravotní pojišťovny.",
+            "paragraf": "§ 53 odst. 9 zákona č. 48/1997 Sb.",
+            "url": "https://www.zakonyprolidi.cz/cs/1997-48",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/201-2025.txt",
+                "strana": 10,
+                "vz_url": "https://www.vozp.cz/assets/vz_2025_vozp.pdf",
+                "shoda": true
+              }
+            ]
+          }
+        }
+      },
+      "dohled": {
+        "organy": [
+          "MZ ČR",
+          "MF ČR"
+        ],
+        "poznamka": "Zaměstnanecká pojišťovna podává MZ a MF zprávu o hospodaření do 60 dnů po skončení čtvrtletí; při závažných nedostatcích může MZ požadovat nápravu nebo zavést nucenou správu na nejvýše 1 rok (§ 7). Statut pojišťovny schvaluje MZ (§ 9).",
+        "zdroj": {
+          "citace": "Kontrolu činnosti zaměstnanecké pojišťovny provádí Ministerstvo zdravotnictví v součinnosti s Ministerstvem financí.",
+          "paragraf": "§ 7 odst. 1 zákona č. 280/1992 Sb.; statut § 9",
+          "url": "https://www.zakonyprolidi.cz/cs/1992-280",
+          "potvrzeni_vz": [
+            {
+              "soubor": "ingest/manual/pojistovny/vz-text/201-2025.txt",
+              "strana": 64,
+              "vz_url": "https://www.vozp.cz/assets/vz_2025_vozp.pdf",
+              "poznamka": "VZ zmiňuje jednání o případném sloučení za účasti hostů z MF a MZ (19. 3. 2025).",
+              "shoda_neurceno": true
+            }
+          ]
+        }
+      },
+      "provozni_limit_pct": {
+        "hodnota": 3.06,
+        "rok": 2024,
+        "zdroj": {
+          "citace": "Výpočet limitu nákladů na činnost podle vyhlášky č. 418/2003 Sb. (v %): plán 3,06, skutečnost 3,06.",
+          "paragraf": "výroční zpráva VoZP 2024, tabulka ř. 19",
+          "url": "https://www.vozp.cz/assets/vz_2024_vozp.pdf",
+          "vz": {
+            "soubor": "ingest/manual/pojistovny/vz-text/201-2024.txt",
+            "strana": 57,
+            "vz_url": "https://www.vozp.cz/assets/vz_2024_vozp.pdf",
+            "shoda": true
+          }
+        },
+        "poznamka": "V data/pojistovny.json je tato hodnota dosud null; zde doplněna z výroční zprávy."
+      },
+      "clenstvi": [
+        {
+          "nazev": "Svaz zdravotních pojišťoven ČR, z.s.",
+          "url": "https://szpcr.cz/",
+          "poznamka": "Sdružuje všech 6 zaměstnaneckých zdravotních pojišťoven; seznam členů na stránce Pojišťovny.",
+          "zdroj": {
+            "citace": "Sdružuje všech 6 zaměstnaneckých zdravotních pojišťoven v České republice.",
+            "paragraf": "web SZP ČR, O Svazu / Základní informace; seznam členů O Svazu / Pojišťovny",
+            "url": "https://szpcr.cz/o-svazu/zakladni-informace/"
+          }
+        }
+      ],
+      "weby": {
+        "hlavni": "https://www.vozp.cz",
+        "pro_poskytovatele": "https://www.vozp.cz/poskytovatele",
+        "vyrocni_zpravy": "https://www.vozp.cz/vyrocni-zpravy"
+      },
+      "zamestnanci_odkaz": "data/pojistovny.json → pojistovny[kod=201].hospodareni.zamestnanci_prepocteni",
+      "poznamky": [
+        "VZ 2025: správní rada na mimořádném zasedání 19. 3. 2025 pověřila generálního ředitele jednáním o možném sloučení s jinou zaměstnaneckou pojišťovnou při zachování specifičnosti resortní pojišťovny pro vojáky; jednání vedou i MZ, MF a MO."
+      ]
+    },
+    {
+      "kod": "205",
+      "zkratka": "ČPZP",
+      "nazev": "Česká průmyslová zdravotní pojišťovna",
+      "ico": "47672234",
+      "sidlo_mesto": "Ostrava",
+      "ico_zdroj": {
+        "soubor": "ingest/manual/pojistovny/vz-text/205-2025.txt",
+        "strana": 5,
+        "vz_url": "https://www.cpzp.cz/cdn/file/dZAT3vXGFhQ4bZcw9MdN1wgn0VHSYyfu.pdf",
+        "shoda": true
+      },
+      "zakon": {
+        "cislo": "280/1992 Sb.",
+        "nazev": "Zákon ČNR č. 280/1992 Sb., o resortních, oborových, podnikových a dalších zdravotních pojišťovnách",
+        "zdroj": {
+          "citace": "Pojišťovna byla zřízena podle zákona č. 280/1992 Sb. na základě žádosti hutních a železárenských podniků.",
+          "paragraf": "výroční zpráva ČPZP 2025, kap. 1 Vstupní údaje",
+          "url": "https://www.cpzp.cz/cdn/file/dZAT3vXGFhQ4bZcw9MdN1wgn0VHSYyfu.pdf",
+          "vz": {
+            "soubor": "ingest/manual/pojistovny/vz-text/205-2025.txt",
+            "strana": 5,
+            "vz_url": "https://www.cpzp.cz/cdn/file/dZAT3vXGFhQ4bZcw9MdN1wgn0VHSYyfu.pdf",
+            "shoda": true
+          }
+        }
+      },
+      "vznik": {
+        "rok": 1992,
+        "datum": "1992-12-01",
+        "datum_typ": "zapis_or",
+        "datum_zapisu_or": "1992-12-01",
+        "puvod": "oborova",
+        "poznamka": "Pod názvem Hutnická zaměstnanecká pojišťovna zřízena rozhodnutím MPSV z 28. 9. 1992 na žádost šesti podniků (mj. Třinecké železárny, VÍTKOVICE); vznikla zápisem do obchodního rejstříku 1. 12. 1992. Název Česká průmyslová zdravotní pojišťovna od 1. 10. 2009.",
+        "sloucene": [
+          {
+            "nazev": "ZZP ATLAS (Zaměstnanecká zdravotní pojišťovna), Zlín",
+            "kod": null,
+            "rok": 1996,
+            "datum": "1996-07-01"
+          },
+          {
+            "nazev": "Zdravotní pojišťovna AGEL, Ostrava-Vítkovice",
+            "kod": null,
+            "rok": 2009,
+            "datum": "2009-07-01"
+          },
+          {
+            "nazev": "Česká národní zdravotní pojišťovna, Praha",
+            "kod": null,
+            "rok": 2009,
+            "datum": "2009-10-01"
+          },
+          {
+            "nazev": "Zdravotní pojišťovna METAL - ALIANCE, Kladno",
+            "kod": null,
+            "rok": 2012,
+            "datum": "2012-10-01"
+          }
+        ],
+        "zdroj": {
+          "citace": "Hutnická zaměstnanecká pojišťovna vznikla dne 1. prosince 1992 zápisem do obchodního rejstříku; sloučení ZZP ATLAS (1. 7. 1996), ZP AGEL (1. 7. 2009), České národní ZP (1. 10. 2009) a ZP METAL - ALIANCE (1. 10. 2012).",
+          "paragraf": "výroční zpráva ČPZP 2025, kap. 1 Vstupní údaje",
+          "url": "https://www.cpzp.cz/cdn/file/dZAT3vXGFhQ4bZcw9MdN1wgn0VHSYyfu.pdf",
+          "vz": {
+            "soubor": "ingest/manual/pojistovny/vz-text/205-2025.txt",
+            "strana": 5,
+            "vz_url": "https://www.cpzp.cz/cdn/file/dZAT3vXGFhQ4bZcw9MdN1wgn0VHSYyfu.pdf",
+            "shoda": true
+          }
+        }
+      },
+      "organy": {
+        "spravni_rada": {
+          "pocet": 15,
+          "obsazeni": [
+            {
+              "kdo": "vláda",
+              "pocet": 5,
+              "poznamka": "jmenuje a odvolává vláda na návrh ministra zdravotnictví"
+            },
+            {
+              "kdo": "zaměstnavatelé a OSVČ",
+              "pocet": 5,
+              "poznamka": "volí společně zaměstnavatelé a osoby samostatně výdělečně činné (hlasují v rozsahu odvedeného pojistného)"
+            },
+            {
+              "kdo": "zaměstnanci a osoby bez zdanitelných příjmů",
+              "pocet": 5,
+              "poznamka": "volí společně zaměstnanci a osoby bez zdanitelných příjmů (jeden hlas na plátce)"
+            }
+          ],
+          "funkcni_obdobi_let": 4,
+          "zdroj": {
+            "citace": "Správní radu zaměstnanecké pojišťovny tvoří 5 členů jmenovaných vládou a 10 členů volených z řad pojištěnců této zaměstnanecké pojišťovny plátci pojistného na veřejné zdravotní pojištění této zaměstnanecké pojišťovně s tím, že 5 členů volí společně zaměstnavatelé a osoby samostatně výdělečně činné a 5 členů volí společně zaměstnanci a osoby bez zdanitelných příjmů. Členy Správní rady jmenované vládou jmenuje a odvolává vláda na návrh ministra zdravotnictví.",
+            "paragraf": "§ 10a odst. 1 zákona č. 280/1992 Sb.; funkční období § 10 odst. 8",
+            "url": "https://www.zakonyprolidi.cz/cs/1992-280",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/205-2025.txt",
+                "strana": 7,
+                "vz_url": "https://www.cpzp.cz/cdn/file/dZAT3vXGFhQ4bZcw9MdN1wgn0VHSYyfu.pdf",
+                "shoda": true,
+                "poznamka": "VZ člení členy na zvolené za zaměstnavatele a OSVČ (5), zvolené za zaměstnance a OBZP (5) a jmenované vládou (5; jeden z nich do 14. 10. 2025)."
+              }
+            ]
+          }
+        },
+        "dozorci_rada": {
+          "pocet": 9,
+          "obsazeni": [
+            {
+              "kdo": "vláda",
+              "pocet": 3,
+              "poznamka": "jmenuje a odvolává vláda na návrh ministra financí, ministra práce a sociálních věcí a ministra zdravotnictví"
+            },
+            {
+              "kdo": "zaměstnavatelé a OSVČ",
+              "pocet": 3,
+              "poznamka": "volí společně zaměstnavatelé a osoby samostatně výdělečně činné"
+            },
+            {
+              "kdo": "zaměstnanci a osoby bez zdanitelných příjmů",
+              "pocet": 3,
+              "poznamka": "volí společně zaměstnanci a osoby bez zdanitelných příjmů"
+            }
+          ],
+          "funkcni_obdobi_let": 4,
+          "zdroj": {
+            "citace": "Dozorčí radu zaměstnanecké pojišťovny tvoří a) 3 členové, které na návrh ministra financí, ministra práce a sociálních věcí a ministra zdravotnictví jmenuje a odvolává vláda, b) 6 členů volených z řad pojištěnců této zaměstnanecké pojišťovny plátci pojistného na veřejné zdravotní pojištění této zaměstnanecké pojišťovně s tím, že 3 členy volí společně zaměstnavatelé a osoby samostatně výdělečně činné a 3 členy volí společně zaměstnanci a osoby bez zdanitelných příjmů.",
+            "paragraf": "§ 10a odst. 2 zákona č. 280/1992 Sb.; funkční období § 10 odst. 8",
+            "url": "https://www.zakonyprolidi.cz/cs/1992-280",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/205-2025.txt",
+                "strana": 7,
+                "vz_url": "https://www.cpzp.cz/cdn/file/dZAT3vXGFhQ4bZcw9MdN1wgn0VHSYyfu.pdf",
+                "shoda": true,
+                "poznamka": "VZ člení členy na 3 + 3 zvolené a 3 jmenované vládou."
+              }
+            ]
+          }
+        },
+        "reditel": {
+          "funkce": "generální ředitel",
+          "jmenuje": "správní rada",
+          "funkcni_obdobi_let": 4,
+          "ve_funkci_od": "2026-03-12",
+          "poznamka": "Datum 12. 3. 2026 je začátek funkce současného generálního ředitele podle výroční zprávy 2025.",
+          "zdroj": {
+            "citace": "Statutárním orgánem zaměstnanecké pojišťovny je ředitel. Ředitele zaměstnanecké pojišťovny jmenuje a odvolává Správní rada zaměstnanecké pojišťovny. Ředitel zaměstnanecké pojišťovny je jmenován na dobu 4 let.",
+            "paragraf": "§ 9a odst. 1 a 2 zákona č. 280/1992 Sb.",
+            "url": "https://www.zakonyprolidi.cz/cs/1992-280",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/205-2025.txt",
+                "strana": 5,
+                "vz_url": "https://www.cpzp.cz/cdn/file/dZAT3vXGFhQ4bZcw9MdN1wgn0VHSYyfu.pdf",
+                "shoda": true,
+                "poznamka": "Současný generální ředitel ve funkci od 12. 3. 2026; předchozí do 11. 3. 2026."
+              }
+            ]
+          }
+        },
+        "rozhodci_organ": {
+          "existuje": true,
+          "poznamka": "Rozhodčí orgán: zástupci správní a dozorčí rady (3 + 3), ČPZP, MPSV, MZ a MF.",
+          "slozeni_zakon": "1 zástupce pojišťovny, 1 MZ, 1 MPSV, 1 MF, 3 určení správní radou ze svých členů, 3 určení dozorčí radou ze svých členů (10 členů)",
+          "zdroj": {
+            "citace": "Rozhodčí orgán se skládá z jednoho zástupce zdravotní pojišťovny, jednoho zástupce Ministerstva zdravotnictví, jednoho zástupce Ministerstva práce a sociálních věcí, jednoho zástupce Ministerstva financí, tří zástupců, které určí ze svých členů Správní rada zdravotní pojišťovny, a tří zástupců, které určí ze svých členů Dozorčí rada zdravotní pojišťovny.",
+            "paragraf": "§ 53 odst. 9 zákona č. 48/1997 Sb.",
+            "url": "https://www.zakonyprolidi.cz/cs/1997-48",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/205-2025.txt",
+                "strana": 8,
+                "vz_url": "https://www.cpzp.cz/cdn/file/dZAT3vXGFhQ4bZcw9MdN1wgn0VHSYyfu.pdf",
+                "shoda": true
+              }
+            ]
+          }
+        }
+      },
+      "dohled": {
+        "organy": [
+          "MZ ČR",
+          "MF ČR"
+        ],
+        "poznamka": "Zaměstnanecká pojišťovna podává MZ a MF zprávu o hospodaření do 60 dnů po skončení čtvrtletí; při závažných nedostatcích může MZ požadovat nápravu nebo zavést nucenou správu na nejvýše 1 rok (§ 7). Statut pojišťovny schvaluje MZ (§ 9).",
+        "zdroj": {
+          "citace": "Kontrolu činnosti zaměstnanecké pojišťovny provádí Ministerstvo zdravotnictví v součinnosti s Ministerstvem financí.",
+          "paragraf": "§ 7 odst. 1 zákona č. 280/1992 Sb.; statut § 9",
+          "url": "https://www.zakonyprolidi.cz/cs/1992-280",
+          "potvrzeni_vz": [
+            {
+              "soubor": "ingest/manual/pojistovny/vz-text/205-2025.txt",
+              "strana": 7,
+              "vz_url": "https://www.cpzp.cz/cdn/file/dZAT3vXGFhQ4bZcw9MdN1wgn0VHSYyfu.pdf",
+              "poznamka": "Potvrzuje, že orgány tvoří správní rada, dozorčí rada a generální ředitel podle zákona č. 280/1992 Sb.",
+              "shoda_neurceno": true
+            }
+          ]
+        }
+      },
+      "provozni_limit_pct": {
+        "hodnota": 3.05,
+        "rok": 2024,
+        "zdroj": {
+          "citace": "Výpočet limitu nákladů na činnost podle vyhlášky č. 418/2003 Sb. (v %): plán 3,05, skutečnost 3,05.",
+          "paragraf": "výroční zpráva ČPZP 2024, tabulka ř. 19",
+          "url": "https://www.cpzp.cz/cdn/file/dBsRubRJnfQF8h7D7wgH0Se4cNJWi9kR.pdf",
+          "vz": {
+            "soubor": "ingest/manual/pojistovny/vz-text/205-2024.txt",
+            "strana": 51,
+            "vz_url": "https://www.cpzp.cz/cdn/file/dBsRubRJnfQF8h7D7wgH0Se4cNJWi9kR.pdf",
+            "shoda": true
+          }
+        }
+      },
+      "clenstvi": [
+        {
+          "nazev": "Svaz zdravotních pojišťoven ČR, z.s.",
+          "url": "https://szpcr.cz/",
+          "poznamka": "Sdružuje všech 6 zaměstnaneckých zdravotních pojišťoven; seznam členů na stránce Pojišťovny.",
+          "zdroj": {
+            "citace": "Sdružuje všech 6 zaměstnaneckých zdravotních pojišťoven v České republice.",
+            "paragraf": "web SZP ČR, O Svazu / Základní informace; seznam členů O Svazu / Pojišťovny",
+            "url": "https://szpcr.cz/o-svazu/zakladni-informace/"
+          }
+        }
+      ],
+      "weby": {
+        "hlavni": "https://www.cpzp.cz",
+        "pro_poskytovatele": "https://www.cpzp.cz/lekari",
+        "vyrocni_zpravy": "https://www.cpzp.cz/clanek/50-0-Ekonomicke-informace.html"
+      },
+      "zamestnanci_odkaz": "data/pojistovny.json → pojistovny[kod=205].hospodareni.zamestnanci_prepocteni",
+      "poznamky": []
+    },
+    {
+      "kod": "207",
+      "zkratka": "OZP",
+      "nazev": "Oborová zdravotní pojišťovna zaměstnanců bank, pojišťoven a stavebnictví",
+      "ico": "47114321",
+      "sidlo_mesto": "Praha",
+      "ico_zdroj": {
+        "soubor": "ingest/manual/pojistovny/vz-text/207-2025.txt",
+        "strana": 6,
+        "vz_url": "https://www.ozp.cz/web/files-c/510/vz_ozp_2025.pdf",
+        "shoda": true
+      },
+      "zakon": {
+        "cislo": "280/1992 Sb.",
+        "nazev": "Zákon ČNR č. 280/1992 Sb., o resortních, oborových, podnikových a dalších zdravotních pojišťovnách",
+        "zdroj": {
+          "citace": "Orgány OZP jsou v souladu se zákonem č. 280/1992 Sb. správní rada, dozorčí rada a statutární orgán generální ředitel.",
+          "paragraf": "výroční zpráva OZP 2025, kap. 3",
+          "url": "https://www.ozp.cz/web/files-c/510/vz_ozp_2025.pdf",
+          "vz": {
+            "soubor": "ingest/manual/pojistovny/vz-text/207-2025.txt",
+            "strana": 10,
+            "vz_url": "https://www.ozp.cz/web/files-c/510/vz_ozp_2025.pdf",
+            "shoda": true
+          }
+        }
+      },
+      "vznik": {
+        "rok": 1992,
+        "datum": "1992-10-29",
+        "datum_typ": null,
+        "datum_zapisu_or": null,
+        "puvod": "oborova",
+        "poznamka": "Žadatelský subjekt: Svaz bank a pojišťoven. Název ve výroční zprávě Oborová zdravotní pojišťovna; pojišťovna původně zaměstnanců bank a pojišťoven. K 1. 1. 2000 sloučena se Stavební zdravotní pojišťovnou STAZPO (rozhodnutí MZ z 19. 10. 1999).",
+        "sloucene": [
+          {
+            "nazev": "Stavební zdravotní pojišťovna STAZPO",
+            "kod": null,
+            "rok": 2000,
+            "datum": "2000-01-01"
+          }
+        ],
+        "zdroj": {
+          "citace": "Datum vzniku 29. října 1992; žadatelské subjekty o zřízení: Svaz bank a pojišťoven; sloučení se Stavební zdravotní pojišťovnou STAZPO k 1. 1. 2000.",
+          "paragraf": "výroční zpráva OZP 2025, Vstupní údaje",
+          "url": "https://www.ozp.cz/web/files-c/510/vz_ozp_2025.pdf",
+          "vz": {
+            "soubor": "ingest/manual/pojistovny/vz-text/207-2025.txt",
+            "strana": 6,
+            "vz_url": "https://www.ozp.cz/web/files-c/510/vz_ozp_2025.pdf",
+            "shoda": true
+          }
+        }
+      },
+      "organy": {
+        "spravni_rada": {
+          "pocet": 15,
+          "obsazeni": [
+            {
+              "kdo": "vláda",
+              "pocet": 5,
+              "poznamka": "jmenuje a odvolává vláda na návrh ministra zdravotnictví"
+            },
+            {
+              "kdo": "zaměstnavatelé a OSVČ",
+              "pocet": 5,
+              "poznamka": "volí společně zaměstnavatelé a osoby samostatně výdělečně činné (hlasují v rozsahu odvedeného pojistného)"
+            },
+            {
+              "kdo": "zaměstnanci a osoby bez zdanitelných příjmů",
+              "pocet": 5,
+              "poznamka": "volí společně zaměstnanci a osoby bez zdanitelných příjmů (jeden hlas na plátce)"
+            }
+          ],
+          "funkcni_obdobi_let": 4,
+          "zdroj": {
+            "citace": "Správní radu zaměstnanecké pojišťovny tvoří 5 členů jmenovaných vládou a 10 členů volených z řad pojištěnců této zaměstnanecké pojišťovny plátci pojistného na veřejné zdravotní pojištění této zaměstnanecké pojišťovně s tím, že 5 členů volí společně zaměstnavatelé a osoby samostatně výdělečně činné a 5 členů volí společně zaměstnanci a osoby bez zdanitelných příjmů. Členy Správní rady jmenované vládou jmenuje a odvolává vláda na návrh ministra zdravotnictví.",
+            "paragraf": "§ 10a odst. 1 zákona č. 280/1992 Sb.; funkční období § 10 odst. 8",
+            "url": "https://www.zakonyprolidi.cz/cs/1992-280",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/207-2025.txt",
+                "strana": 10,
+                "vz_url": "https://www.ozp.cz/web/files-c/510/vz_ozp_2025.pdf",
+                "shoda": true,
+                "poznamka": "VZ člení členy na 5 jmenovaných vládou, 5 zástupců zaměstnavatelů a OSVČ a 5 zástupců zaměstnanců a OBZP; 9. funkční období od 25. 2. 2023 do 25. 2. 2027."
+              }
+            ]
+          },
+          "poznamka": "Funkční období 4 roky: 9. funkční období správní rady od 25. 2. 2023 do 25. 2. 2027 (VZ 2025, str. 10)."
+        },
+        "dozorci_rada": {
+          "pocet": 9,
+          "obsazeni": [
+            {
+              "kdo": "vláda",
+              "pocet": 3,
+              "poznamka": "jmenuje a odvolává vláda na návrh ministra financí, ministra práce a sociálních věcí a ministra zdravotnictví"
+            },
+            {
+              "kdo": "zaměstnavatelé a OSVČ",
+              "pocet": 3,
+              "poznamka": "volí společně zaměstnavatelé a osoby samostatně výdělečně činné"
+            },
+            {
+              "kdo": "zaměstnanci a osoby bez zdanitelných příjmů",
+              "pocet": 3,
+              "poznamka": "volí společně zaměstnanci a osoby bez zdanitelných příjmů"
+            }
+          ],
+          "funkcni_obdobi_let": 4,
+          "zdroj": {
+            "citace": "Dozorčí radu zaměstnanecké pojišťovny tvoří a) 3 členové, které na návrh ministra financí, ministra práce a sociálních věcí a ministra zdravotnictví jmenuje a odvolává vláda, b) 6 členů volených z řad pojištěnců této zaměstnanecké pojišťovny plátci pojistného na veřejné zdravotní pojištění této zaměstnanecké pojišťovně s tím, že 3 členy volí společně zaměstnavatelé a osoby samostatně výdělečně činné a 3 členy volí společně zaměstnanci a osoby bez zdanitelných příjmů.",
+            "paragraf": "§ 10a odst. 2 zákona č. 280/1992 Sb.; funkční období § 10 odst. 8",
+            "url": "https://www.zakonyprolidi.cz/cs/1992-280",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/207-2025.txt",
+                "strana": 10,
+                "vz_url": "https://www.ozp.cz/web/files-c/510/vz_ozp_2025.pdf",
+                "shoda": true,
+                "poznamka": "VZ člení členy na 3 jmenované vládou (na návrh MPSV, MF a MZ), 3 + 3 zvolené; 9. funkční období od 25. 2. 2023 do 25. 2. 2027."
+              }
+            ]
+          },
+          "poznamka": "9. funkční období dozorčí rady od 25. 2. 2023 do 25. 2. 2027 (VZ 2025, str. 11)."
+        },
+        "reditel": {
+          "funkce": "generální ředitel",
+          "jmenuje": "správní rada",
+          "funkcni_obdobi_let": 4,
+          "ve_funkci_od": null,
+          "poznamka": "Výroční zpráva uvádí generálního ředitele jako statutárního zástupce; datum nástupu neuvádí.",
+          "zdroj": {
+            "citace": "Statutárním orgánem zaměstnanecké pojišťovny je ředitel. Ředitele zaměstnanecké pojišťovny jmenuje a odvolává Správní rada zaměstnanecké pojišťovny. Ředitel zaměstnanecké pojišťovny je jmenován na dobu 4 let.",
+            "paragraf": "§ 9a odst. 1 a 2 zákona č. 280/1992 Sb.",
+            "url": "https://www.zakonyprolidi.cz/cs/1992-280",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/207-2025.txt",
+                "strana": 6,
+                "vz_url": "https://www.ozp.cz/web/files-c/510/vz_ozp_2025.pdf",
+                "shoda": true
+              }
+            ]
+          }
+        },
+        "rozhodci_organ": {
+          "existuje": true,
+          "poznamka": "Rozhodčí orgán: zástupci OZP, MZ, MF, MPSV, správní rady (3) a dozorčí rady (3).",
+          "slozeni_zakon": "1 zástupce pojišťovny, 1 MZ, 1 MPSV, 1 MF, 3 určení správní radou ze svých členů, 3 určení dozorčí radou ze svých členů (10 členů)",
+          "zdroj": {
+            "citace": "Rozhodčí orgán se skládá z jednoho zástupce zdravotní pojišťovny, jednoho zástupce Ministerstva zdravotnictví, jednoho zástupce Ministerstva práce a sociálních věcí, jednoho zástupce Ministerstva financí, tří zástupců, které určí ze svých členů Správní rada zdravotní pojišťovny, a tří zástupců, které určí ze svých členů Dozorčí rada zdravotní pojišťovny.",
+            "paragraf": "§ 53 odst. 9 zákona č. 48/1997 Sb.",
+            "url": "https://www.zakonyprolidi.cz/cs/1997-48",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/207-2025.txt",
+                "strana": 11,
+                "vz_url": "https://www.ozp.cz/web/files-c/510/vz_ozp_2025.pdf",
+                "shoda": true
+              }
+            ]
+          }
+        }
+      },
+      "dohled": {
+        "organy": [
+          "MZ ČR",
+          "MF ČR"
+        ],
+        "poznamka": "Zaměstnanecká pojišťovna podává MZ a MF zprávu o hospodaření do 60 dnů po skončení čtvrtletí; při závažných nedostatcích může MZ požadovat nápravu nebo zavést nucenou správu na nejvýše 1 rok (§ 7). Statut pojišťovny schvaluje MZ (§ 9).",
+        "zdroj": {
+          "citace": "Kontrolu činnosti zaměstnanecké pojišťovny provádí Ministerstvo zdravotnictví v součinnosti s Ministerstvem financí.",
+          "paragraf": "§ 7 odst. 1 zákona č. 280/1992 Sb.; statut § 9",
+          "url": "https://www.zakonyprolidi.cz/cs/1992-280",
+          "potvrzeni_vz": [
+            {
+              "soubor": "ingest/manual/pojistovny/vz-text/207-2025.txt",
+              "strana": 10,
+              "vz_url": "https://www.ozp.cz/web/files-c/510/vz_ozp_2025.pdf",
+              "poznamka": "Potvrzuje právní základ orgánů v zákoně č. 280/1992 Sb.",
+              "shoda_neurceno": true
+            }
+          ]
+        }
+      },
+      "provozni_limit_pct": {
+        "hodnota": 3.06,
+        "rok": 2024,
+        "zdroj": {
+          "citace": "Výpočet limitu nákladů na činnost podle vyhlášky o fondech (v %): plán 3,06, skutečnost 3,06.",
+          "paragraf": "výroční zpráva OZP 2024, tabulka ř. 19",
+          "url": "https://www.ozp.cz/web/files-c/510/vz_ozp_2024.pdf",
+          "vz": {
+            "soubor": "ingest/manual/pojistovny/vz-text/207-2024.txt",
+            "strana": 76,
+            "vz_url": "https://www.ozp.cz/web/files-c/510/vz_ozp_2024.pdf",
+            "shoda": true
+          }
+        },
+        "poznamka": "V data/pojistovny.json je tato hodnota dosud null; zde doplněna z výroční zprávy."
+      },
+      "clenstvi": [
+        {
+          "nazev": "Svaz zdravotních pojišťoven ČR, z.s.",
+          "url": "https://szpcr.cz/",
+          "poznamka": "Sdružuje všech 6 zaměstnaneckých zdravotních pojišťoven; seznam členů na stránce Pojišťovny.",
+          "zdroj": {
+            "citace": "Sdružuje všech 6 zaměstnaneckých zdravotních pojišťoven v České republice.",
+            "paragraf": "web SZP ČR, O Svazu / Základní informace; seznam členů O Svazu / Pojišťovny",
+            "url": "https://szpcr.cz/o-svazu/zakladni-informace/"
+          }
+        }
+      ],
+      "weby": {
+        "hlavni": "https://www.ozp.cz",
+        "pro_poskytovatele": "https://www.ozp.cz/pro-lekare",
+        "vyrocni_zpravy": "https://www.ozp.cz/tiskove-centrum/vyrocni-zpravy"
+      },
+      "zamestnanci_odkaz": "data/pojistovny.json → pojistovny[kod=207].hospodareni.zamestnanci_prepocteni",
+      "poznamky": []
+    },
+    {
+      "kod": "209",
+      "zkratka": "ZPŠ",
+      "nazev": "Zaměstnanecká pojišťovna Škoda",
+      "ico": "46354182",
+      "sidlo_mesto": "Mladá Boleslav",
+      "ico_zdroj": {
+        "soubor": "ingest/manual/pojistovny/vz-text/209-2024.txt",
+        "strana": 4,
+        "vz_url": "https://www.zpskoda.cz/sites/default/files/docs/2025/10/vz-2024-zps.pdf",
+        "shoda": true
+      },
+      "zakon": {
+        "cislo": "280/1992 Sb.",
+        "nazev": "Zákon ČNR č. 280/1992 Sb., o resortních, oborových, podnikových a dalších zdravotních pojišťovnách",
+        "zdroj": {
+          "citace": "Zřizovatelem ZPŠ podle zákona č. 280/1992 Sb. bylo MPSV ČR.",
+          "paragraf": "výroční zpráva ZPŠ 2024, kap. 1 Vstupní údaje",
+          "url": "https://www.zpskoda.cz/sites/default/files/docs/2025/10/vz-2024-zps.pdf",
+          "vz": {
+            "soubor": "ingest/manual/pojistovny/vz-text/209-2024.txt",
+            "strana": 4,
+            "vz_url": "https://www.zpskoda.cz/sites/default/files/docs/2025/10/vz-2024-zps.pdf",
+            "shoda": true
+          }
+        }
+      },
+      "vznik": {
+        "rok": 1992,
+        "datum": "1992-10-15",
+        "datum_typ": "zrizovaci_listina",
+        "datum_zapisu_or": "1992-12-21",
+        "puvod": "podnikova",
+        "poznamka": "Zřízena zřizovací listinou MPSV (vydána 19. 10. 1992) ke dni 15. 10. 1992 na žádost společnosti ŠKODA, automobilová akciová společnost (dnes Škoda Auto a.s.); zapsána do obchodního rejstříku 21. 12. 1992.",
+        "sloucene": [],
+        "zdroj": {
+          "citace": "Zřizovací listinou vydanou dne 19. 10. 1992 MPSV byla ZPŠ zřízena ke dni 15. 10. 1992 na základě žádosti podané firmou ŠKODA, automobilová akciová společnost; do obchodního rejstříku zapsána 21. 12. 1992.",
+          "paragraf": "výroční zpráva ZPŠ 2024, kap. 1 Vstupní údaje",
+          "url": "https://www.zpskoda.cz/sites/default/files/docs/2025/10/vz-2024-zps.pdf",
+          "vz": {
+            "soubor": "ingest/manual/pojistovny/vz-text/209-2024.txt",
+            "strana": 4,
+            "vz_url": "https://www.zpskoda.cz/sites/default/files/docs/2025/10/vz-2024-zps.pdf",
+            "shoda": true
+          }
+        }
+      },
+      "organy": {
+        "spravni_rada": {
+          "pocet": 15,
+          "obsazeni": [
+            {
+              "kdo": "vláda",
+              "pocet": 5,
+              "poznamka": "jmenuje a odvolává vláda na návrh ministra zdravotnictví"
+            },
+            {
+              "kdo": "zaměstnavatelé a OSVČ",
+              "pocet": 5,
+              "poznamka": "volí společně zaměstnavatelé a osoby samostatně výdělečně činné (hlasují v rozsahu odvedeného pojistného)"
+            },
+            {
+              "kdo": "zaměstnanci a osoby bez zdanitelných příjmů",
+              "pocet": 5,
+              "poznamka": "volí společně zaměstnanci a osoby bez zdanitelných příjmů (jeden hlas na plátce)"
+            }
+          ],
+          "funkcni_obdobi_let": 4,
+          "zdroj": {
+            "citace": "Správní radu zaměstnanecké pojišťovny tvoří 5 členů jmenovaných vládou a 10 členů volených z řad pojištěnců této zaměstnanecké pojišťovny plátci pojistného na veřejné zdravotní pojištění této zaměstnanecké pojišťovně s tím, že 5 členů volí společně zaměstnavatelé a osoby samostatně výdělečně činné a 5 členů volí společně zaměstnanci a osoby bez zdanitelných příjmů. Členy Správní rady jmenované vládou jmenuje a odvolává vláda na návrh ministra zdravotnictví.",
+            "paragraf": "§ 10a odst. 1 zákona č. 280/1992 Sb.; funkční období § 10 odst. 8",
+            "url": "https://www.zakonyprolidi.cz/cs/1992-280",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/209-2024.txt",
+                "strana": 6,
+                "vz_url": "https://www.zpskoda.cz/sites/default/files/docs/2025/10/vz-2024-zps.pdf",
+                "shoda": true,
+                "poznamka": "Seznam k 31. 12. 2024: 5 členů zvolených zaměstnavateli a OSVČ, 5 zvolených zaměstnanci a OBZP, 5 jmenovaných vládou (4 za MZ, 1 za MF)."
+              }
+            ]
+          }
+        },
+        "dozorci_rada": {
+          "pocet": 9,
+          "obsazeni": [
+            {
+              "kdo": "vláda",
+              "pocet": 3,
+              "poznamka": "jmenuje a odvolává vláda na návrh ministra financí, ministra práce a sociálních věcí a ministra zdravotnictví"
+            },
+            {
+              "kdo": "zaměstnavatelé a OSVČ",
+              "pocet": 3,
+              "poznamka": "volí společně zaměstnavatelé a osoby samostatně výdělečně činné"
+            },
+            {
+              "kdo": "zaměstnanci a osoby bez zdanitelných příjmů",
+              "pocet": 3,
+              "poznamka": "volí společně zaměstnanci a osoby bez zdanitelných příjmů"
+            }
+          ],
+          "funkcni_obdobi_let": 4,
+          "zdroj": {
+            "citace": "Dozorčí radu zaměstnanecké pojišťovny tvoří a) 3 členové, které na návrh ministra financí, ministra práce a sociálních věcí a ministra zdravotnictví jmenuje a odvolává vláda, b) 6 členů volených z řad pojištěnců této zaměstnanecké pojišťovny plátci pojistného na veřejné zdravotní pojištění této zaměstnanecké pojišťovně s tím, že 3 členy volí společně zaměstnavatelé a osoby samostatně výdělečně činné a 3 členy volí společně zaměstnanci a osoby bez zdanitelných příjmů.",
+            "paragraf": "§ 10a odst. 2 zákona č. 280/1992 Sb.; funkční období § 10 odst. 8",
+            "url": "https://www.zakonyprolidi.cz/cs/1992-280",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/209-2024.txt",
+                "strana": 7,
+                "vz_url": "https://www.zpskoda.cz/sites/default/files/docs/2025/10/vz-2024-zps.pdf",
+                "shoda": true,
+                "poznamka": "Seznam k 31. 12. 2024: 3 + 3 zvolení a 3 jmenovaní vládou (za MPSV, MF, MZ)."
+              }
+            ]
+          }
+        },
+        "reditel": {
+          "funkce": "ředitel",
+          "jmenuje": "správní rada",
+          "funkcni_obdobi_let": 4,
+          "ve_funkci_od": null,
+          "poznamka": "Výroční zpráva 2024 uvádí ředitelku ZPŠ jako statutární zástupkyni; datum nástupu neuvádí. Pro rok 2025 výroční zpráva ZPŠ není v repu (stav nenalezeno).",
+          "zdroj": {
+            "citace": "Statutárním orgánem zaměstnanecké pojišťovny je ředitel. Ředitele zaměstnanecké pojišťovny jmenuje a odvolává Správní rada zaměstnanecké pojišťovny. Ředitel zaměstnanecké pojišťovny je jmenován na dobu 4 let.",
+            "paragraf": "§ 9a odst. 1 a 2 zákona č. 280/1992 Sb.",
+            "url": "https://www.zakonyprolidi.cz/cs/1992-280",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/209-2024.txt",
+                "strana": 4,
+                "vz_url": "https://www.zpskoda.cz/sites/default/files/docs/2025/10/vz-2024-zps.pdf",
+                "shoda": true
+              }
+            ]
+          }
+        },
+        "rozhodci_organ": {
+          "existuje": true,
+          "poznamka": "Rozhodčí orgán ZPŠ jednal v roce 2024 dvakrát.",
+          "slozeni_zakon": "1 zástupce pojišťovny, 1 MZ, 1 MPSV, 1 MF, 3 určení správní radou ze svých členů, 3 určení dozorčí radou ze svých členů (10 členů)",
+          "zdroj": {
+            "citace": "Rozhodčí orgán se skládá z jednoho zástupce zdravotní pojišťovny, jednoho zástupce Ministerstva zdravotnictví, jednoho zástupce Ministerstva práce a sociálních věcí, jednoho zástupce Ministerstva financí, tří zástupců, které určí ze svých členů Správní rada zdravotní pojišťovny, a tří zástupců, které určí ze svých členů Dozorčí rada zdravotní pojišťovny.",
+            "paragraf": "§ 53 odst. 9 zákona č. 48/1997 Sb.",
+            "url": "https://www.zakonyprolidi.cz/cs/1997-48",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/209-2024.txt",
+                "strana": 7,
+                "vz_url": "https://www.zpskoda.cz/sites/default/files/docs/2025/10/vz-2024-zps.pdf",
+                "shoda": true
+              }
+            ]
+          }
+        }
+      },
+      "dohled": {
+        "organy": [
+          "MZ ČR",
+          "MF ČR"
+        ],
+        "poznamka": "Zaměstnanecká pojišťovna podává MZ a MF zprávu o hospodaření do 60 dnů po skončení čtvrtletí; při závažných nedostatcích může MZ požadovat nápravu nebo zavést nucenou správu na nejvýše 1 rok (§ 7). Statut pojišťovny schvaluje MZ (§ 9).",
+        "zdroj": {
+          "citace": "Kontrolu činnosti zaměstnanecké pojišťovny provádí Ministerstvo zdravotnictví v součinnosti s Ministerstvem financí.",
+          "paragraf": "§ 7 odst. 1 zákona č. 280/1992 Sb.; statut § 9",
+          "url": "https://www.zakonyprolidi.cz/cs/1992-280",
+          "potvrzeni_vz": [
+            {
+              "soubor": "ingest/manual/pojistovny/vz-text/209-2024.txt",
+              "strana": 4,
+              "vz_url": "https://www.zpskoda.cz/sites/default/files/docs/2025/10/vz-2024-zps.pdf",
+              "poznamka": "Potvrzuje právní základ ve 280/1992 Sb.",
+              "shoda_neurceno": true
+            }
+          ]
+        }
+      },
+      "provozni_limit_pct": {
+        "hodnota": 3.08,
+        "rok": 2024,
+        "zdroj": {
+          "citace": "Výpočet limitu nákladů na činnost podle vyhlášky č. 418/2003 Sb. (v %): plán 3,08, skutečnost 3,08.",
+          "paragraf": "výroční zpráva ZPŠ 2024, tabulka ř. 19",
+          "url": "https://www.zpskoda.cz/sites/default/files/docs/2025/10/vz-2024-zps.pdf",
+          "vz": {
+            "soubor": "ingest/manual/pojistovny/vz-text/209-2024.txt",
+            "strana": 62,
+            "vz_url": "https://www.zpskoda.cz/sites/default/files/docs/2025/10/vz-2024-zps.pdf",
+            "shoda": true
+          }
+        },
+        "poznamka": "Nejvyšší koeficient: nejmenší pojišťovna (vzorec v § 7 odst. 2 vyhlášky 418/2003 Sb. dává pojišťovnám s málo pojištěnci vyšší procento)."
+      },
+      "clenstvi": [
+        {
+          "nazev": "Svaz zdravotních pojišťoven ČR, z.s.",
+          "url": "https://szpcr.cz/",
+          "poznamka": "Sdružuje všech 6 zaměstnaneckých zdravotních pojišťoven; seznam členů na stránce Pojišťovny.",
+          "zdroj": {
+            "citace": "Sdružuje všech 6 zaměstnaneckých zdravotních pojišťoven v České republice.",
+            "paragraf": "web SZP ČR, O Svazu / Základní informace; seznam členů O Svazu / Pojišťovny",
+            "url": "https://szpcr.cz/o-svazu/zakladni-informace/"
+          }
+        }
+      ],
+      "weby": {
+        "hlavni": "https://www.zpskoda.cz",
+        "pro_poskytovatele": "https://www.zpskoda.cz/smlouvy-s-poskytovateli",
+        "vyrocni_zpravy": "https://www.zpskoda.cz/o-nas"
+      },
+      "zamestnanci_odkaz": "data/pojistovny.json → pojistovny[kod=209].hospodareni.zamestnanci_prepocteni",
+      "poznamky": []
+    },
+    {
+      "kod": "211",
+      "zkratka": "ZP MV ČR",
+      "nazev": "Zdravotní pojišťovna ministerstva vnitra České republiky",
+      "ico": "47114304",
+      "sidlo_mesto": "Praha",
+      "ico_zdroj": {
+        "soubor": "ingest/manual/pojistovny/vz-text/211-2025.txt",
+        "strana": 8,
+        "vz_url": "https://www.zpmvcr.cz/system/files/dokumenty/2026-10/VZ%202025%20ZPMVCR_komplet.pdf",
+        "shoda": true
+      },
+      "zakon": {
+        "cislo": "280/1992 Sb.",
+        "nazev": "Zákon ČNR č. 280/1992 Sb., o resortních, oborových, podnikových a dalších zdravotních pojišťovnách",
+        "zdroj": {
+          "citace": "Orgány pojišťovny jsou ve smyslu zákona č. 280/1992 Sb. SR, DR a statutárním orgánem je GŘ.",
+          "paragraf": "výroční zpráva ZP MV ČR 2025, kap. Vybrané orgány",
+          "url": "https://www.zpmvcr.cz/system/files/dokumenty/2026-10/VZ%202025%20ZPMVCR_komplet.pdf",
+          "vz": {
+            "soubor": "ingest/manual/pojistovny/vz-text/211-2025.txt",
+            "strana": 10,
+            "vz_url": "https://www.zpmvcr.cz/system/files/dokumenty/2026-10/VZ%202025%20ZPMVCR_komplet.pdf",
+            "shoda": true
+          }
+        }
+      },
+      "vznik": {
+        "rok": 1992,
+        "datum": "1992-10-26",
+        "datum_typ": "zapis_or",
+        "datum_zapisu_or": "1992-10-26",
+        "puvod": "resortni",
+        "poznamka": "Datem vzniku a zápisu do obchodního rejstříku je 26. října 1992; žadatelem o založení bylo Ministerstvo vnitra. Sloučena s pojišťovnou GRÁL – Železniční zdravotní pojišťovna (1. 5. 1997) a s Regionální zaměstnaneckou zdravotní pojišťovnou (1. 1. 1998).",
+        "sloucene": [
+          {
+            "nazev": "GRÁL – Železniční zdravotní pojišťovna",
+            "kod": null,
+            "rok": 1997,
+            "datum": "1997-05-01"
+          },
+          {
+            "nazev": "Regionální zaměstnanecká zdravotní pojišťovna",
+            "kod": null,
+            "rok": 1998,
+            "datum": "1998-01-01"
+          }
+        ],
+        "zdroj": {
+          "citace": "Datem vzniku a zápisu ZP MV ČR do obchodního rejstříku je 26. říjen 1992. Žadatelem o založení pojišťovny bylo MV. Ke dni 1. 5. 1997 se sloučila GRÁL – Železniční zdravotní pojišťovna a ke dni 1. 1. 1998 Regionální zaměstnanecká zdravotní pojišťovna.",
+          "paragraf": "výroční zpráva ZP MV ČR 2025, Vstupní údaje",
+          "url": "https://www.zpmvcr.cz/system/files/dokumenty/2026-10/VZ%202025%20ZPMVCR_komplet.pdf",
+          "vz": {
+            "soubor": "ingest/manual/pojistovny/vz-text/211-2025.txt",
+            "strana": 8,
+            "vz_url": "https://www.zpmvcr.cz/system/files/dokumenty/2026-10/VZ%202025%20ZPMVCR_komplet.pdf",
+            "shoda": true
+          }
+        }
+      },
+      "organy": {
+        "spravni_rada": {
+          "pocet": 15,
+          "obsazeni": [
+            {
+              "kdo": "vláda",
+              "pocet": 5,
+              "poznamka": "jmenuje a odvolává vláda na návrh ministra zdravotnictví"
+            },
+            {
+              "kdo": "zaměstnavatelé a OSVČ",
+              "pocet": 5,
+              "poznamka": "volí společně zaměstnavatelé a osoby samostatně výdělečně činné (hlasují v rozsahu odvedeného pojistného)"
+            },
+            {
+              "kdo": "zaměstnanci a osoby bez zdanitelných příjmů",
+              "pocet": 5,
+              "poznamka": "volí společně zaměstnanci a osoby bez zdanitelných příjmů (jeden hlas na plátce)"
+            }
+          ],
+          "funkcni_obdobi_let": 4,
+          "zdroj": {
+            "citace": "Správní radu zaměstnanecké pojišťovny tvoří 5 členů jmenovaných vládou a 10 členů volených z řad pojištěnců této zaměstnanecké pojišťovny plátci pojistného na veřejné zdravotní pojištění této zaměstnanecké pojišťovně s tím, že 5 členů volí společně zaměstnavatelé a osoby samostatně výdělečně činné a 5 členů volí společně zaměstnanci a osoby bez zdanitelných příjmů. Členy Správní rady jmenované vládou jmenuje a odvolává vláda na návrh ministra zdravotnictví.",
+            "paragraf": "§ 10a odst. 1 zákona č. 280/1992 Sb.; funkční období § 10 odst. 8",
+            "url": "https://www.zakonyprolidi.cz/cs/1992-280",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/211-2025.txt",
+                "strana": 10,
+                "vz_url": "https://www.zpmvcr.cz/system/files/dokumenty/2026-10/VZ%202025%20ZPMVCR_komplet.pdf",
+                "shoda": true,
+                "poznamka": "VZ: patnáct členů, z toho 5 jmenovaných vládou, 5 zvolených skupinou zaměstnavatelé a OSVČ a 5 skupinou zaměstnanci a OBZP."
+              }
+            ]
+          }
+        },
+        "dozorci_rada": {
+          "pocet": 9,
+          "obsazeni": [
+            {
+              "kdo": "vláda",
+              "pocet": 3,
+              "poznamka": "jmenuje a odvolává vláda na návrh ministra financí, ministra práce a sociálních věcí a ministra zdravotnictví"
+            },
+            {
+              "kdo": "zaměstnavatelé a OSVČ",
+              "pocet": 3,
+              "poznamka": "volí společně zaměstnavatelé a osoby samostatně výdělečně činné"
+            },
+            {
+              "kdo": "zaměstnanci a osoby bez zdanitelných příjmů",
+              "pocet": 3,
+              "poznamka": "volí společně zaměstnanci a osoby bez zdanitelných příjmů"
+            }
+          ],
+          "funkcni_obdobi_let": 4,
+          "zdroj": {
+            "citace": "Dozorčí radu zaměstnanecké pojišťovny tvoří a) 3 členové, které na návrh ministra financí, ministra práce a sociálních věcí a ministra zdravotnictví jmenuje a odvolává vláda, b) 6 členů volených z řad pojištěnců této zaměstnanecké pojišťovny plátci pojistného na veřejné zdravotní pojištění této zaměstnanecké pojišťovně s tím, že 3 členy volí společně zaměstnavatelé a osoby samostatně výdělečně činné a 3 členy volí společně zaměstnanci a osoby bez zdanitelných příjmů.",
+            "paragraf": "§ 10a odst. 2 zákona č. 280/1992 Sb.; funkční období § 10 odst. 8",
+            "url": "https://www.zakonyprolidi.cz/cs/1992-280",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/211-2025.txt",
+                "strana": 10,
+                "vz_url": "https://www.zpmvcr.cz/system/files/dokumenty/2026-10/VZ%202025%20ZPMVCR_komplet.pdf",
+                "shoda": true,
+                "poznamka": "VZ: devět členů, 3 jmenovaní vládou, 3 + 3 zvolení; volby podle § 10a odst. 4 písm. a) proběhly 11.–13. 6. 2025."
+              }
+            ]
+          }
+        },
+        "reditel": {
+          "funkce": "generální ředitel",
+          "jmenuje": "správní rada",
+          "funkcni_obdobi_let": 4,
+          "ve_funkci_od": null,
+          "poznamka": "Výroční zpráva používá zkratku GŘ (generální ředitel); datum nástupu neuvádí.",
+          "zdroj": {
+            "citace": "Statutárním orgánem zaměstnanecké pojišťovny je ředitel. Ředitele zaměstnanecké pojišťovny jmenuje a odvolává Správní rada zaměstnanecké pojišťovny. Ředitel zaměstnanecké pojišťovny je jmenován na dobu 4 let.",
+            "paragraf": "§ 9a odst. 1 a 2 zákona č. 280/1992 Sb.",
+            "url": "https://www.zakonyprolidi.cz/cs/1992-280",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/211-2025.txt",
+                "strana": 10,
+                "vz_url": "https://www.zpmvcr.cz/system/files/dokumenty/2026-10/VZ%202025%20ZPMVCR_komplet.pdf",
+                "shoda": true
+              }
+            ]
+          }
+        },
+        "rozhodci_organ": {
+          "existuje": true,
+          "poznamka": "Podle VZ se rozhodčí orgán (§ 53 zákona č. 48/1997 Sb.) skládá z 1 zástupce ZP MV ČR, 1 MZ, 1 MPSV, 1 MF, 3 zástupců správní rady a 3 zástupců dozorčí rady (10 členů).",
+          "slozeni_zakon": "1 zástupce pojišťovny, 1 MZ, 1 MPSV, 1 MF, 3 určení správní radou ze svých členů, 3 určení dozorčí radou ze svých členů (10 členů)",
+          "zdroj": {
+            "citace": "Rozhodčí orgán se skládá z jednoho zástupce zdravotní pojišťovny, jednoho zástupce Ministerstva zdravotnictví, jednoho zástupce Ministerstva práce a sociálních věcí, jednoho zástupce Ministerstva financí, tří zástupců, které určí ze svých členů Správní rada zdravotní pojišťovny, a tří zástupců, které určí ze svých členů Dozorčí rada zdravotní pojišťovny.",
+            "paragraf": "§ 53 odst. 9 zákona č. 48/1997 Sb.",
+            "url": "https://www.zakonyprolidi.cz/cs/1997-48",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/211-2025.txt",
+                "strana": 11,
+                "vz_url": "https://www.zpmvcr.cz/system/files/dokumenty/2026-10/VZ%202025%20ZPMVCR_komplet.pdf",
+                "shoda": true
+              }
+            ]
+          }
+        }
+      },
+      "dohled": {
+        "organy": [
+          "MZ ČR",
+          "MF ČR"
+        ],
+        "poznamka": "Zaměstnanecká pojišťovna podává MZ a MF zprávu o hospodaření do 60 dnů po skončení čtvrtletí; při závažných nedostatcích může MZ požadovat nápravu nebo zavést nucenou správu na nejvýše 1 rok (§ 7). Statut pojišťovny schvaluje MZ (§ 9).",
+        "zdroj": {
+          "citace": "Kontrolu činnosti zaměstnanecké pojišťovny provádí Ministerstvo zdravotnictví v součinnosti s Ministerstvem financí.",
+          "paragraf": "§ 7 odst. 1 zákona č. 280/1992 Sb.; statut § 9",
+          "url": "https://www.zakonyprolidi.cz/cs/1992-280",
+          "potvrzeni_vz": [
+            {
+              "soubor": "ingest/manual/pojistovny/vz-text/211-2025.txt",
+              "strana": 10,
+              "vz_url": "https://www.zpmvcr.cz/system/files/dokumenty/2026-10/VZ%202025%20ZPMVCR_komplet.pdf",
+              "shoda_neurceno": true
+            }
+          ]
+        }
+      },
+      "provozni_limit_pct": {
+        "hodnota": 3.04,
+        "rok": 2024,
+        "zdroj": {
+          "citace": "Výpočet limitu nákladů na činnost podle vyhlášky č. 418/2003 Sb. (v %): plán 3,04, skutečnost 3,04; maximální limit 1 876 068 tis. Kč, skutečný příděl do provozního fondu 809 000 tis. Kč.",
+          "paragraf": "výroční zpráva ZP MV ČR 2024, tabulka ř. 19",
+          "url": "https://www.zpmvcr.cz/system/files/dokumenty/2026-02/VZ%202024%20ZPMVCR_komplet.pdf",
+          "vz": {
+            "soubor": "ingest/manual/pojistovny/vz-text/211-2024.txt",
+            "strana": 41,
+            "vz_url": "https://www.zpmvcr.cz/system/files/dokumenty/2026-02/VZ%202024%20ZPMVCR_komplet.pdf",
+            "shoda": true
+          }
+        },
+        "poznamka": "V data/pojistovny.json je tato hodnota dosud null; zde doplněna z výroční zprávy."
+      },
+      "clenstvi": [
+        {
+          "nazev": "Svaz zdravotních pojišťoven ČR, z.s.",
+          "url": "https://szpcr.cz/",
+          "poznamka": "Sdružuje všech 6 zaměstnaneckých zdravotních pojišťoven; seznam členů na stránce Pojišťovny.",
+          "zdroj": {
+            "citace": "Sdružuje všech 6 zaměstnaneckých zdravotních pojišťoven v České republice.",
+            "paragraf": "web SZP ČR, O Svazu / Základní informace; seznam členů O Svazu / Pojišťovny",
+            "url": "https://szpcr.cz/o-svazu/zakladni-informace/"
+          }
+        }
+      ],
+      "weby": {
+        "hlavni": "https://www.zpmvcr.cz",
+        "pro_poskytovatele": "https://www.zpmvcr.cz/poskytovatele",
+        "vyrocni_zpravy": "https://www.zpmvcr.cz/o-nas/dokumenty/vyrocni-zpravy"
+      },
+      "zamestnanci_odkaz": "data/pojistovny.json → pojistovny[kod=211].hospodareni.zamestnanci_prepocteni",
+      "poznamky": []
+    },
+    {
+      "kod": "213",
+      "zkratka": "RBP",
+      "nazev": "RBP, zdravotní pojišťovna",
+      "ico": "47673036",
+      "sidlo_mesto": "Ostrava",
+      "ico_zdroj": {
+        "soubor": "ingest/manual/pojistovny/vz-text/213-2025.txt",
+        "strana": 7,
+        "vz_url": "https://www.rbp213.cz/systemfiles/file/1780467908vz-2026-01-1-.pdf",
+        "shoda": true
+      },
+      "zakon": {
+        "cislo": "280/1992 Sb.",
+        "nazev": "Zákon ČNR č. 280/1992 Sb., o resortních, oborových, podnikových a dalších zdravotních pojišťovnách",
+        "zdroj": {
+          "citace": "Revírní bratrská pokladna byla zřízena rozhodnutím MPSV z 29. 1. 1993 v souladu se zákonem č. 280/1992 Sb.",
+          "paragraf": "výroční zpráva RBP 2025, kap. 1 Vstupní údaje",
+          "url": "https://www.rbp213.cz/systemfiles/file/1780467908vz-2026-01-1-.pdf",
+          "vz": {
+            "soubor": "ingest/manual/pojistovny/vz-text/213-2025.txt",
+            "strana": 7,
+            "vz_url": "https://www.rbp213.cz/systemfiles/file/1780467908vz-2026-01-1-.pdf",
+            "shoda": true
+          }
+        }
+      },
+      "vznik": {
+        "rok": 1993,
+        "datum": "1993-01-29",
+        "datum_typ": "rozhodnuti_mpsv",
+        "datum_zapisu_or": "1993-04-20",
+        "puvod": "oborova",
+        "poznamka": "Zřízena rozhodnutím MPSV ze dne 29. 1. 1993 (zápis do obchodního rejstříku 20. 4. 1993) na žádost zaměstnavatelů z báňského prostředí (Ostravsko-karvinské doly aj.). Od 1. 9. 1996 sloučena s Moravskou zdravotní pojišťovnou. Název RBP, zdravotní pojišťovna.",
+        "sloucene": [
+          {
+            "nazev": "Moravská zdravotní pojišťovna, Kopřivnice",
+            "kod": null,
+            "rok": 1996,
+            "datum": "1996-09-01"
+          }
+        ],
+        "zdroj": {
+          "citace": "Zřízena rozhodnutím MPSV č. j. 23-901/93-15 ze dne 29. 1. 1993; do obchodního rejstříku zapsána 20. 4. 1993; sloučení s Moravskou zdravotní pojišťovnou ke dni 1. 9. 1996; V duchu tradic báňského zdravotního pojišťovnictví podaly žádost o zřízení RBP zaměstnavatelé.",
+          "paragraf": "výroční zpráva RBP 2025, kap. 1 Vstupní údaje",
+          "url": "https://www.rbp213.cz/systemfiles/file/1780467908vz-2026-01-1-.pdf",
+          "vz": {
+            "soubor": "ingest/manual/pojistovny/vz-text/213-2025.txt",
+            "strana": 7,
+            "vz_url": "https://www.rbp213.cz/systemfiles/file/1780467908vz-2026-01-1-.pdf",
+            "shoda": true
+          }
+        }
+      },
+      "organy": {
+        "spravni_rada": {
+          "pocet": 15,
+          "obsazeni": [
+            {
+              "kdo": "vláda",
+              "pocet": 5,
+              "poznamka": "jmenuje a odvolává vláda na návrh ministra zdravotnictví"
+            },
+            {
+              "kdo": "zaměstnavatelé a OSVČ",
+              "pocet": 5,
+              "poznamka": "volí společně zaměstnavatelé a osoby samostatně výdělečně činné (hlasují v rozsahu odvedeného pojistného)"
+            },
+            {
+              "kdo": "zaměstnanci a osoby bez zdanitelných příjmů",
+              "pocet": 5,
+              "poznamka": "volí společně zaměstnanci a osoby bez zdanitelných příjmů (jeden hlas na plátce)"
+            }
+          ],
+          "funkcni_obdobi_let": 4,
+          "zdroj": {
+            "citace": "Správní radu zaměstnanecké pojišťovny tvoří 5 členů jmenovaných vládou a 10 členů volených z řad pojištěnců této zaměstnanecké pojišťovny plátci pojistného na veřejné zdravotní pojištění této zaměstnanecké pojišťovně s tím, že 5 členů volí společně zaměstnavatelé a osoby samostatně výdělečně činné a 5 členů volí společně zaměstnanci a osoby bez zdanitelných příjmů. Členy Správní rady jmenované vládou jmenuje a odvolává vláda na návrh ministra zdravotnictví.",
+            "paragraf": "§ 10a odst. 1 zákona č. 280/1992 Sb.; funkční období § 10 odst. 8",
+            "url": "https://www.zakonyprolidi.cz/cs/1992-280",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/213-2025.txt",
+                "strana": 10,
+                "vz_url": "https://www.rbp213.cz/systemfiles/file/1780467908vz-2026-01-1-.pdf",
+                "shoda": true,
+                "poznamka": "VZ: 10 členů volených zaměstnavateli a pojištěnci (bez rozdělení na skupiny) a 5 jmenovaných vládou; volby 14.–16. 4. 2025, mandát od 1. 7. 2025."
+              }
+            ]
+          },
+          "poznamka": "VZ 2025 uvádí 10 volených členů souhrnně (zaměstnavatelé a pojištěnci); rozdělení 5 + 5 plyne ze zákona."
+        },
+        "dozorci_rada": {
+          "pocet": 9,
+          "obsazeni": [
+            {
+              "kdo": "vláda",
+              "pocet": 3,
+              "poznamka": "jmenuje a odvolává vláda na návrh ministra financí, ministra práce a sociálních věcí a ministra zdravotnictví"
+            },
+            {
+              "kdo": "zaměstnavatelé a OSVČ",
+              "pocet": 3,
+              "poznamka": "volí společně zaměstnavatelé a osoby samostatně výdělečně činné"
+            },
+            {
+              "kdo": "zaměstnanci a osoby bez zdanitelných příjmů",
+              "pocet": 3,
+              "poznamka": "volí společně zaměstnanci a osoby bez zdanitelných příjmů"
+            }
+          ],
+          "funkcni_obdobi_let": 4,
+          "zdroj": {
+            "citace": "Dozorčí radu zaměstnanecké pojišťovny tvoří a) 3 členové, které na návrh ministra financí, ministra práce a sociálních věcí a ministra zdravotnictví jmenuje a odvolává vláda, b) 6 členů volených z řad pojištěnců této zaměstnanecké pojišťovny plátci pojistného na veřejné zdravotní pojištění této zaměstnanecké pojišťovně s tím, že 3 členy volí společně zaměstnavatelé a osoby samostatně výdělečně činné a 3 členy volí společně zaměstnanci a osoby bez zdanitelných příjmů.",
+            "paragraf": "§ 10a odst. 2 zákona č. 280/1992 Sb.; funkční období § 10 odst. 8",
+            "url": "https://www.zakonyprolidi.cz/cs/1992-280",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/213-2025.txt",
+                "strana": 11,
+                "vz_url": "https://www.rbp213.cz/systemfiles/file/1780467908vz-2026-01-1-.pdf",
+                "shoda": true,
+                "poznamka": "VZ: 6 volených a 3 jmenovaní vládou; volby 14.–16. 4. 2025, mandát od 1. 7. 2025."
+              }
+            ]
+          },
+          "poznamka": "VZ 2025 uvádí 6 volených členů souhrnně; rozdělení 3 + 3 plyne ze zákona."
+        },
+        "reditel": {
+          "funkce": "výkonný ředitel",
+          "jmenuje": "správní rada",
+          "funkcni_obdobi_let": 4,
+          "ve_funkci_od": null,
+          "poznamka": "Výroční zpráva používá označení výkonný ředitel; datum nástupu neuvádí.",
+          "zdroj": {
+            "citace": "Statutárním orgánem zaměstnanecké pojišťovny je ředitel. Ředitele zaměstnanecké pojišťovny jmenuje a odvolává Správní rada zaměstnanecké pojišťovny. Ředitel zaměstnanecké pojišťovny je jmenován na dobu 4 let.",
+            "paragraf": "§ 9a odst. 1 a 2 zákona č. 280/1992 Sb.",
+            "url": "https://www.zakonyprolidi.cz/cs/1992-280",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/213-2025.txt",
+                "strana": 7,
+                "vz_url": "https://www.rbp213.cz/systemfiles/file/1780467908vz-2026-01-1-.pdf",
+                "shoda": true
+              }
+            ]
+          }
+        },
+        "rozhodci_organ": {
+          "existuje": true,
+          "poznamka": "Rozhodčí orgán s předsedou a zástupci správní a dozorčí rady (VZ 2025).",
+          "slozeni_zakon": "1 zástupce pojišťovny, 1 MZ, 1 MPSV, 1 MF, 3 určení správní radou ze svých členů, 3 určení dozorčí radou ze svých členů (10 členů)",
+          "zdroj": {
+            "citace": "Rozhodčí orgán se skládá z jednoho zástupce zdravotní pojišťovny, jednoho zástupce Ministerstva zdravotnictví, jednoho zástupce Ministerstva práce a sociálních věcí, jednoho zástupce Ministerstva financí, tří zástupců, které určí ze svých členů Správní rada zdravotní pojišťovny, a tří zástupců, které určí ze svých členů Dozorčí rada zdravotní pojišťovny.",
+            "paragraf": "§ 53 odst. 9 zákona č. 48/1997 Sb.",
+            "url": "https://www.zakonyprolidi.cz/cs/1997-48",
+            "potvrzeni_vz": [
+              {
+                "soubor": "ingest/manual/pojistovny/vz-text/213-2025.txt",
+                "strana": 12,
+                "vz_url": "https://www.rbp213.cz/systemfiles/file/1780467908vz-2026-01-1-.pdf",
+                "shoda": true
+              }
+            ]
+          }
+        }
+      },
+      "dohled": {
+        "organy": [
+          "MZ ČR",
+          "MF ČR"
+        ],
+        "poznamka": "Zaměstnanecká pojišťovna podává MZ a MF zprávu o hospodaření do 60 dnů po skončení čtvrtletí; při závažných nedostatcích může MZ požadovat nápravu nebo zavést nucenou správu na nejvýše 1 rok (§ 7). Statut pojišťovny schvaluje MZ (§ 9).",
+        "zdroj": {
+          "citace": "Kontrolu činnosti zaměstnanecké pojišťovny provádí Ministerstvo zdravotnictví v součinnosti s Ministerstvem financí.",
+          "paragraf": "§ 7 odst. 1 zákona č. 280/1992 Sb.; statut § 9",
+          "url": "https://www.zakonyprolidi.cz/cs/1992-280",
+          "potvrzeni_vz": [
+            {
+              "soubor": "ingest/manual/pojistovny/vz-text/213-2025.txt",
+              "strana": 10,
+              "vz_url": "https://www.rbp213.cz/systemfiles/file/1780467908vz-2026-01-1-.pdf",
+              "shoda_neurceno": true
+            }
+          ]
+        }
+      },
+      "provozni_limit_pct": {
+        "hodnota": 3.07,
+        "rok": 2024,
+        "zdroj": {
+          "citace": "Koeficient limitu nákladů na činnost 3,07 % (rok 2024) podle výroční zprávy RBP 2024, převzato z data/pojistovny.json; text PDF 2024 není v repu (stav bez-textu).",
+          "paragraf": "výroční zpráva RBP 2024; data/pojistovny.json",
+          "url": "https://www.rbp213.cz/systemfiles/file/RBP-Vyrocni-zprava-2024.pdf"
+        },
+        "dalsi_roky": [
+          {
+            "rok": 2025,
+            "hodnota": 3.07,
+            "poznamka": "plán 3,07; skutečnost 3,07",
+            "zdroj": {
+              "citace": "Výpočet limitu nákladů na činnost podle vyhlášky č. 418/2003 Sb. (v %): plán 3,07, skutečnost 3,07.",
+              "paragraf": "výroční zpráva RBP 2025, tabulka ř. 19",
+              "url": "https://www.rbp213.cz/systemfiles/file/1780467908vz-2026-01-1-.pdf",
+              "vz": {
+                "soubor": "ingest/manual/pojistovny/vz-text/213-2025.txt",
+                "strana": 70,
+                "vz_url": "https://www.rbp213.cz/systemfiles/file/1780467908vz-2026-01-1-.pdf",
+                "shoda": true
+              }
+            }
+          }
+        ]
+      },
+      "clenstvi": [
+        {
+          "nazev": "Svaz zdravotních pojišťoven ČR, z.s.",
+          "url": "https://szpcr.cz/",
+          "poznamka": "Sdružuje všech 6 zaměstnaneckých zdravotních pojišťoven; seznam členů na stránce Pojišťovny.",
+          "zdroj": {
+            "citace": "Sdružuje všech 6 zaměstnaneckých zdravotních pojišťoven v České republice.",
+            "paragraf": "web SZP ČR, O Svazu / Základní informace; seznam členů O Svazu / Pojišťovny",
+            "url": "https://szpcr.cz/o-svazu/zakladni-informace/"
+          }
+        }
+      ],
+      "weby": {
+        "hlavni": "https://www.rbp213.cz",
+        "pro_poskytovatele": "https://www.rbp213.cz/poskytovatele/obecne/smluvni-vztahy/a-2/",
+        "vyrocni_zpravy": "https://www.rbp213.cz/o-nas/pro-verejnost-a-media/vyrocni-zprava/a-380/"
+      },
+      "zamestnanci_odkaz": "data/pojistovny.json → pojistovny[kod=213].hospodareni.zamestnanci_prepocteni",
+      "poznamky": []
+    }
+  ],
+  "chybi": [
+    {
+      "kod": null,
+      "pole": "organy.*.osoby",
+      "duvod": "Jména členů orgánů se záměrně nezapisují (třída C, rozhodne vydavatel); dataset obsahuje jen počty, způsob obsazení, funkce a data."
+    },
+    {
+      "kod": "111,201,207,209,211,213",
+      "pole": "organy.reditel.ve_funkci_od",
+      "duvod": "Výroční zprávy 2023–2025 neuvádějí datum nástupu současného ředitele u šesti ze sedmi pojišťoven (vyplněno jen u ČPZP); doplnit z obchodního rejstříku nebo tiskových zpráv."
+    },
+    {
+      "kod": "201",
+      "pole": "organy.spravni_rada.obsazeni (ověření z VZ)",
+      "duvod": "Výroční zpráva VoZP 2025 uvádí jen jmenný seznam se změnami v průběhu roku bez rozdělení podle původu; počet 15 a rozdělení 5+5+5 plynou jen ze zákona (u dozorčí rady VZ potvrzuje 9 členů)."
+    },
+    {
+      "kod": "213",
+      "pole": "organy.*.obsazeni (rozdělení volených)",
+      "duvod": "VZ RBP uvádí volené členy souhrnně (10 a 6); rozdělení podle skupin plátců (5+5, 3+3) plyne jen ze zákona."
+    },
+    {
+      "kod": "111",
+      "pole": "clenstvi.url",
+      "duvod": "Adresa webu Otevřeného svazu zdravotních pojišťoven nebyla ověřena; členství dokládá jen výroční zpráva VZP 2025."
+    },
+    {
+      "kod": "209",
+      "pole": "provozni_limit_pct (2025)",
+      "duvod": "Výroční zpráva ZPŠ za rok 2025 nebyla nalezena (vz-manifest: nenalezeno); limit je za rok 2024."
+    },
+    {
+      "kod": "213",
+      "pole": "provozni_limit_pct (2024, ověření v textu)",
+      "duvod": "PDF výroční zprávy RBP 2024 nemá textovou vrstvu; hodnota 3,07 převzata z data/pojistovny.json a potvrzena shodnou hodnotou ve VZ 2025."
+    },
+    {
+      "kod": "201,205,209,211,213",
+      "pole": "vznik.sloucene[].kod",
+      "duvod": "Kódy zaniklých pojišťoven výroční zprávy neuvádějí; ponecháno null."
+    },
+    {
+      "kod": null,
+      "pole": "zakon (platné znění od)",
+      "duvod": "Znění k 1. 1. 2026 (280/1992 Sb. verze 37, 551/1991 Sb. verze 34) potvrzeno přes zakonyprolidi.cz; historický vývoj složení orgánů a přesné datum zavedení voleného modelu 5+5+5 u zaměstnaneckých pojišťoven nebyl zkoumán (historická znění se z prostředí nepodařilo načíst). Plán uvádí PSP jako volící orgán zaměstnaneckých pojišťoven; podle platného znění volí členy zaměstnaneckých pojišťoven plátci pojistného, PSP volí jen členy orgánů VZP."
+    },
+    {
+      "kod": null,
+      "pole": "statuty pojišťoven",
+      "duvod": "Statut zaměstnanecké pojišťovny schvaluje MZ (§ 9 zák. 280/1992 Sb.) a upravuje postavení orgánů; statuty nebyly zkoumány."
+    },
+    {
+      "kod": "205,209,211,213",
+      "pole": "clenstvi (Kancelář zdravotních pojišťoven)",
+      "duvod": "Členství v dalších asociacích (např. Kancelář zdravotních pojišťoven, uvedená u VoZP) výroční zprávy neuvádějí jednotně; zapsáno jen členství v SZP ČR (seznam členů na webu svazu)."
+    },
+    {
+      "kod": "201,207",
+      "pole": "vznik.datum_typ",
+      "duvod": "Výroční zprávy VoZP (23. 12. 1992) a OZP (29. 10. 1992) uvádějí jen Datum vzniku bez určení druhu data (zápis do OR / rozhodnutí); datum_typ a datum_zapisu_or ponechány null. Datum zápisu VZP do OR se nevztahuje (zřízena zákonem)."
+    }
+  ]
+}

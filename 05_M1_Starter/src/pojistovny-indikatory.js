@@ -1,6 +1,7 @@
 // Podstránka „Indikátory a pojišťovny“ (pojistovny-indikatory.html): inventář
 // indikátorů a datových zdrojů o zdravotních pojišťovnách, zvlášť těch, které
-// říkají, kdo je u koho pojištěn, a přehled, jak pojišťovny publikují otevřená data.
+// říkají, kdo je u koho pojištěn. Stížnosti na dostupnost a přehled otevřených dat pojišťoven
+// (bootServis) jsou od A0.5 na stránce „Aplikace a servis“.
 //
 // Vstupy:
 //   data/pojistovny-indikatory.json  inventář (sekce strucne, kontrakt, datasety, kdo_u_koho, navrhy, mezery)
@@ -9,7 +10,7 @@
 //
 // Čisté funkce (build*/…Html) jsou bez DOM kvůli testům; bootIndikatory() plní kontejnery
 // #zpIndStrucne, #zpIndKontrakt, #zpIndAuto, #zpIndDatasety, #zpIndKdo, #zpIndNavrhy,
-// #zpIndMezery, #zpOpendata. Zdroje a shell kreslí pojistovny.js jako na ostatních podstránkách.
+// #zpIndMezery; bootServis() plní #zpStiznosti a #zpOpendata na stránce „Aplikace a servis“. Zdroje a shell kreslí pojistovny.js jako na ostatních podstránkách.
 
 import { escapeHtml } from './page-shared.js';
 import { loadJson } from './pojistovny-shared.js';
@@ -234,7 +235,7 @@ export async function bootIndikatory(doc = globalThis.document) {
   const host = doc && doc.getElementById('zpIndKontrakt');
   if (!host || host.dataset.zpiInit === '1') return;
   host.dataset.zpiInit = '1';
-  const [inv, kontrakt, od, st, poj] = await Promise.all([loadJson(INV_URL), loadJson(KONTRAKT_URL), loadJson(OPENDATA_URL), loadJson(STIZNOSTI_URL), loadJson(POJ_URL)]);
+  const [inv, kontrakt] = await Promise.all([loadJson(INV_URL), loadJson(KONTRAKT_URL)]);
   set(doc, 'zpIndStrucne', `<ol class="zpc-strucne">${li(inv?.strucne)}</ol>`);
   const skupiny = buildKontraktSkupiny(inv, kontrakt);
   set(doc, 'zpIndKontrakt', kontraktHtml(skupiny));
@@ -249,12 +250,26 @@ export async function bootIndikatory(doc = globalThis.document) {
   set(doc, 'zpIndNavrhy', navrhyHtml(inv));
   setN(doc, 'zpIndNavrhyN', (inv?.navrhy?.polozky || []).length);
   set(doc, 'zpIndMezery', li(inv?.mezery));
+}
+
+/**
+ * Klientský servis, stížnosti na dostupnost a otevřená data (A0.5): přesunuto na stránku
+ * „Aplikace a servis“. Plní #zpStiznosti a #zpOpendata; idempotentní přes dataset flag.
+ */
+export async function bootServis(doc = globalThis.document) {
+  const hosts = doc ? ['zpStiznosti', 'zpOpendata'].map((id) => doc.getElementById(id)).filter(Boolean) : [];
+  if (!hosts.length || hosts[0].dataset.zpiInit === '1') return;
+  hosts.forEach((el) => { el.dataset.zpiInit = '1'; });
+  const [od, st, poj] = await Promise.all([loadJson(OPENDATA_URL), loadJson(STIZNOSTI_URL), loadJson(POJ_URL)]);
   set(doc, 'zpOpendata', opendataHtml(od));
   set(doc, 'zpStiznosti', stiznostiHtml(st, poj));
 }
 
-if (typeof document !== 'undefined' && document.getElementById('zpIndKontrakt')) {
-  const boot = () => { bootIndikatory(document); };
+if (typeof document !== 'undefined' && (document.getElementById('zpIndKontrakt') || document.getElementById('zpStiznosti') || document.getElementById('zpOpendata'))) {
+  const boot = () => {
+    if (document.getElementById('zpIndKontrakt')) bootIndikatory(document);
+    if (document.getElementById('zpStiznosti') || document.getElementById('zpOpendata')) bootServis(document);
+  };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
   else boot();
 }

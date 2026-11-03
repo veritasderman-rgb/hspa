@@ -9,12 +9,19 @@
 //   (b) #zpKmenPrestupy tabulku změn kmene k 1. 1. a 1. 7. v posledních dvou letech.
 // Načítá a volá ho orchestrátor src/pojistovny.js (jen na stránce, která má kontejner).
 //
-// Čisté funkce (testované bez DOM): mesicLabel, mesicX, buildMesicniSeries, prestupyTabulka,
-// prestupyHtml, veta. Žádné pořadí ani hodnocení: řádky jsou v pevném pořadí podle kódu pojišťovny.
+// Nad grafem je přepínač rozsahu (A0.6): „Všech 7“ / „Bez VZP ČR“ / „Od 1/2023“ — VZP kmenem
+// a skokem z uprchlické registrace roztahuje osu, ostatní pojišťovny se pak slévají. Přepínač je
+// společná komponenta figureSwitch (src/zp-viz.js, A4.3): klik, šipky a zápis do URL
+// (?kmen=bez-vzp|od-2023, výchozí „Všech 7“ se nezapisuje) řeší src/zp-interact.js, tenhle modul
+// jen poslouchá událost `zp:switch` (id „kmen“) a překreslí graf.
+//
+// Čisté funkce (testované bez DOM): mesicLabel, mesicX, buildMesicniSeries, mesicniVyber,
+// rezimZUrl, prepinacHtml, prestupyTabulka, prestupyHtml, veta. Žádné pořadí ani hodnocení: řádky jsou v pevném pořadí podle kódu pojišťovny.
 
 import { escapeHtml, formatNumberCz } from './page-shared.js';
-import { indexedLines, isNum } from './zp-viz.js';
+import { indexedLines, isNum, figureSwitch, readSwitchFromUrl } from './zp-viz.js';
 import { dot, set } from './pojistovny-shared.js';
+import { initZpInteract, SWITCH_EVENT } from './zp-interact.js';
 
 const esc = escapeHtml;
 
@@ -63,6 +70,55 @@ export function buildMesicniSeries(K) {
       source: SOURCE_MESICNI,
     },
   };
+}
+
+/** Režimy přepínače rozsahu grafu: id → popisek. */
+export const MESICNI_REZIMY = [
+  { id: 'vse', label: 'Všech 7' },
+  { id: 'bez-vzp', label: 'Bez VZP ČR' },
+  { id: 'od-2023', label: 'Od 1/2023' },
+];
+const KOD_VZP = '111';
+const OD_2023 = '2023-01';
+
+/** Hodnota parametru ?kmen= → režim; neznámé nebo chybějící = 'vse'. */
+export function rezimZUrl(search) {
+  return readSwitchFromUrl('kmen', MESICNI_REZIMY.map((r) => r.id), 'vse', String(search ?? ''));
+}
+
+/**
+ * Výběr rozsahu měsíčního kmene. 'bez-vzp' vyřadí VZP ČR (kód 111), 'od-2023' ořízne měsíce před
+ * 1/2023 (a u každé pojišťovny odpovídající počty); 'vse' a neznámý režim vrací vstup beze změny.
+ * Index (= 100 v prvním měsíci) se přepočítá v buildMesicniSeries sám, protože základ je první měsíc.
+ * Vstup se nemění (vrací se kopie).
+ */
+export function mesicniVyber(K, rezim) {
+  if (rezim !== 'bez-vzp' && rezim !== 'od-2023') return K;
+  if (!K || !Array.isArray(K.pojistovny)) return K;
+  if (rezim === 'bez-vzp') return { ...K, pojistovny: K.pojistovny.filter((z) => String(z.kod) !== KOD_VZP) };
+  const mesice = Array.isArray(K.mesice) ? K.mesice : [];
+  const od = Math.max(0, mesice.findIndex((m) => m >= OD_2023));
+  const zacatek = mesice.some((m) => m >= OD_2023) ? od : mesice.length;
+  return {
+    ...K,
+    mesice: mesice.slice(zacatek),
+    pojistovny: K.pojistovny.map((z) => ({ ...z, pocty: Array.isArray(z.pocty) ? z.pocty.slice(zacatek) : z.pocty })),
+  };
+}
+
+/** Přepínač rozsahu: figureSwitch (radiogroup ze tří tlačítek, roving tabindex), id/parametr `kmen`. */
+export function prepinacHtml(rezim) {
+  return figureSwitch({
+    id: 'kmen', label: 'Rozsah grafu', kind: 'radio', selected: rezim, defaultValue: 'vse',
+    options: MESICNI_REZIMY.map((r) => ({ value: r.id, label: r.label })),
+  });
+}
+
+/** Graf pro zvolený rozsah (jen figura, bez přepínače a poznámky). */
+export function grafMesicni(K, rezim) {
+  const ch = buildMesicniSeries(mesicniVyber(K, rezim));
+  if (rezim === 'bez-vzp') ch.opts.sub += ' Bez VZP ČR, jejíž kmen skočil registrací uprchlíků; osa je proto jemnější.';
+  return indexedLines(ch.series, ch.opts);
 }
 
 /**
@@ -124,14 +180,38 @@ export function veta(K) {
   return `Počty pojištěnců jsou odvozené podílem dvou částek z měsíčního přerozdělení MZ (částka po přerozdělení na pojišťovnu děleno částkou na jednoho pojištěnce), MZ je takto přímo nezveřejňuje; průměr roku 2024 se od ročního průměru podle MZ liší o méně než 0,1 %. Skoky mezi prosincem a lednem a mezi červnem a červencem odpovídají přestupním termínům 1. 1. a 1. 7.; změny mimo ně zdroj MZ nevysvětluje. Skok VZP ČR v dubnu 2022 časově odpovídá registraci uprchlíků z Ukrajiny s dočasnou ochranou, kteří jsou podle zákona č. 65/2022 Sb. (účinnost 21. 3. 2022) pojištěnci vedenými u VZP ČR (do února 2023 jich VZP registrovala téměř 367,5 tisíce); pokles v dubnu 2023 časově odpovídá konci dočasné ochrany u osob, které si ji do konce března 2023 neprodloužily. Počet osob v těchto skocích zdroje neuvádějí. Období ${od} až ${do_}. Řazeno podle kódu pojišťovny, nejde o hodnocení.`;
 }
 
+/** Překreslí jen figuru podle režimu (přepínač drží stav sám); předchozí render zbledne na 60 % (is-busy), bez skoku výšky. */
+function prekresliGraf(host, K, rezim) {
+  const fig = host.querySelector ? host.querySelector('[data-kmen-fig]') : null;
+  if (!fig) return;
+  const h = fig.offsetHeight;
+  if (h) fig.style.minHeight = `${h}px`;
+  fig.classList.add('is-busy');
+  const swap = () => {
+    fig.innerHTML = grafMesicni(K, rezim);
+    try { const r = initZpInteract(); if (r && typeof r.catch === 'function') r.catch(() => {}); } catch (_) { /* bez interakce graf funguje */ }
+    const done = () => { fig.classList.remove('is-busy'); fig.style.minHeight = ''; };
+    if (typeof requestAnimationFrame === 'function') requestAnimationFrame(done); else done();
+  };
+  if (typeof requestAnimationFrame === 'function') requestAnimationFrame(swap); else swap();
+}
+
 /** Vykreslí obě kontejnery (chybí-li dataset, ukáže stav „nedohledáno“). */
-export function renderKmenMesicni(K) {
+export function renderKmenMesicni(K, rezimVstup) {
   if (!K || !Array.isArray(K.pojistovny) || !K.pojistovny.length) {
     set('zpKmenMesicni', '<p class="zpc-na">Měsíční kmen zatím není k dispozici (nedohledáno).</p>');
     set('zpKmenPrestupy', '');
     return;
   }
-  const ch = buildMesicniSeries(K);
-  set('zpKmenMesicni', indexedLines(ch.series, ch.opts) + `<p class="zpc-note">${esc(veta(K))}</p>`);
+  const rezim = rezimVstup || rezimZUrl(globalThis.location?.search);
+  set('zpKmenMesicni', prepinacHtml(rezim) + `<div class="zpc-kmen-fig" data-kmen-fig>${grafMesicni(K, rezim)}</div><p class="zpc-note">${esc(veta(K))}</p>`);
   set('zpKmenPrestupy', prestupyHtml(K, 2));
+  const host = globalThis.document?.getElementById('zpKmenMesicni');
+  if (!host || !host.addEventListener || host.dataset?.rezimInit === '1') return;
+  host.dataset.rezimInit = '1';
+  globalThis.document.addEventListener(SWITCH_EVENT, (e) => {
+    if (e.detail?.id !== 'kmen') return;
+    const id = MESICNI_REZIMY.some((r) => r.id === e.detail.value) ? e.detail.value : 'vse';
+    prekresliGraf(host, K, id);
+  });
 }

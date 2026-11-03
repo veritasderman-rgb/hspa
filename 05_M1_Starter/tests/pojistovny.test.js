@@ -54,12 +54,14 @@ test('pojistovny.json: semafor obsahuje všech 6 oblastí a jen povolené stavy'
 const STRANKY = {
   'pojistovny.html': ['zpHeroStats', 'zpMojeZp', 'zpOvKarta', 'zpPrehled', 'zpOvGrafy', 'zpOvSemafor', 'zpOvTemata'],
   'pojistovny-kmen.html': ['zpHeroStats', 'zpChartShare', 'zpCards', 'zpKraje', 'zpChartTrend', 'zpChartGrowth', 'zpKmenMesicni', 'zpKmenPrestupy', 'zpChart65', 'zpChartNzs',
-    'zpTableFin', 'zpChartZust', 'zpChartProvoz', 'zpChartYoy', 'zpTablePrev', 'zpSit', 'zpNotes', 'zpChybi'],
+    'zpNotes', 'zpChybi'],
+  'pojistovny-penize.html': ['zpPrerozdeleni', 'zpRady', 'zpStatni', 'zpSegmenty', 'zpFondProvoz', 'zpTableFin', 'zpChartZust', 'zpChartProvoz', 'zpChartYoy'],
   'pojistovny-prevence.html': ['zpPrevMatrix', 'zpPrevProc', 'zpPrevOnko', 'zpPrevDusevni', 'zpFpStruktura', 'zpDolozene', 'zpMereni', 'zpOdpovediMatrix', 'zpOdpovedi'],
-  'pojistovny-aplikace.html': ['zpAppMatrix', 'zpAppKriteria', 'zpAppSummary', 'zpAppNotes'],
+  'pojistovny-aplikace.html': ['zpAppMatrix', 'zpAppFunkce', 'zpAppKriteria', 'zpAppSummary', 'zpAppNotes', 'zpTablePrev', 'zpStiznosti', 'zpOpendata'],
   'pojistovny-gramotnost.html': ['zpRizikove', 'zpOtazky', 'zpDalsi', 'zpDotaznik', 'zpDotaznikAgregace'],
+  'pojistovny-instituce.html': ['zpInstOrgany', 'zpInstAparat', 'zpInstProgramy', 'zpInstDostupnost', 'zpSit'],
   'pojistovny-metodika.html': ['zpSemafor', 'zpOtazky', 'zpZadosti', 'zpVerifikace'],
-  'pojistovny-indikatory.html': ['zpIndStrucne', 'zpIndKdo', 'zpIndKontrakt', 'zpIndAuto', 'zpIndDatasety', 'zpIndNavrhy', 'zpIndMezery', 'zpStiznosti', 'zpOpendata'],
+  'pojistovny-indikatory.html': ['zpIndStrucne', 'zpIndKdo', 'zpIndKontrakt', 'zpIndAuto', 'zpIndDatasety', 'zpIndNavrhy', 'zpIndMezery'],
 };
 const PODSTRANKY = Object.keys(STRANKY).filter((f) => f !== 'pojistovny.html');
 const readPage = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
@@ -108,12 +110,14 @@ test('P1.6: přehled je general view — žádné tabulky ani dlouhé akordeony,
   assert.doesNotMatch(html, /<table/);
   assert.equal((html.match(/<details/g) || []).length, 1, 'jen „O projektu a datech“');
   assert.match(html, /class="ed-hero-headline"/);
-  assert.match(html, /id="zpOvGrafy" class="zpc-overview-grid" role="region" tabindex="0"/);
+  assert.match(html, /id="zpOvGrafy" class="zpc-overview-grid" role="group"/);
+  assert.match(html, /<details class="zpc-acc zpc-ov-about">\s*<summary>O projektu a datech<\/summary>\s*<div class="zpc-acc-body">\s*<p><b>Jak systém funguje\.<\/b>[\s\S]*href="jak-funguje\.html\?id=pojistovny"/, 'A0.7: vysvětlující vrstva s odkazem na explainer');
+  assert.doesNotMatch(html, /zpc-ov-swipe|posuňte/, 'grafy přehledu jsou pod sebou, ne v posuvném pásu (A0.2)');
   for (const f of PODSTRANKY) assert.ok(fs.existsSync(path.join(ROOT, f)), f);
 });
 
 test('P1.6: síť odborností — povinné věty o omezení metody a o pobočkách nad grafem', () => {
-  const html = readPage('pojistovny-kmen.html');
+  const html = readPage('pojistovny-instituce.html');
   const at = html.indexOf('id="zpSit"');
   const before = html.slice(html.indexOf('id="sit-odbornosti"'), at);
   assert.match(before, /horní odhad smluvních pracovišť, stav k 31\. 12\. 2024/);
@@ -137,8 +141,8 @@ test('middleware.js: matcher pokrývá přehled, všech pět podstránek a data,
   // path-to-regexp v jednoduchosti, jak ho Vercel používá: ':path*' = zbytek cesty, ukotveno na obou koncích
   const re = config.matcher.map((m) => new RegExp(`^${m.replace(/[.]/g, '\\.').replace(/:path\*/, '.*')}$`));
   const hit = (u) => re.some((r) => r.test(u));
-  for (const u of ['/pojistovny', '/pojistovny.html', '/pojistovny-kmen.html', '/pojistovny-prevence.html', '/pojistovny-aplikace.html',
-    '/pojistovny-gramotnost.html', '/pojistovny-metodika.html', '/pojistovny-indikatory.html', '/pojistovny-kmen', '/data/pojistovny.json', '/data/pojistovny-sit.json', '/data/pojistovny-indikatory.json']) {
+  for (const u of ['/pojistovny', '/pojistovny.html', '/pojistovny-kmen.html', '/pojistovny-penize.html', '/pojistovny-prevence.html', '/pojistovny-aplikace.html',
+    '/pojistovny-gramotnost.html', '/pojistovny-metodika.html', '/pojistovny-indikatory.html', '/pojistovny-instituce.html', '/pojistovna.html', '/pojistovna', '/pojistovny-kmen', '/data/pojistovny.json', '/data/pojistovny-sit.json', '/data/pojistovny-indikatory.json']) {
     assert.ok(hit(u), `${u} musí být za heslem`);
   }
   for (const u of ['/pojistenci.html', '/index.html', '/data/pojistenci-d5-zp.json', '/src/pojistovny.js', '/clanek-pojistne-plany-2026.html']) {
@@ -246,7 +250,7 @@ test('pojistovny.js: buildKmenCharts — vstupy pro všechny grafy modulu 3', ()
   assert.deepEqual(ch.senior.opts.ref, { value: DATA.system_crp.podil_65plus_pct, label: 'průměr ČR', kind: 'line' });
   assert.equal(ch.nzs.opts.ref.value, DATA.system.naklady_zs_na_pojistence_kc);
   assert.match(ch.nzs.opts.sub, /akruálně/);
-  assert.deepEqual(ch.zust.opts.ref, { value: 3.5, label: 'kritická hranice 3–4 %', kind: 'zone-below' });
+  assert.deepEqual(ch.zust.opts.ref, { value: 3.5, label: 'kritické pásmo 3–4 % výdajů', text: 'kritické pásmo 3–4 % výdajů', kind: 'zone-below' });
   assert.ok(ch.zust.items.every((i) => /závazky po splatnosti/.test(i.tip)));
   // provoz: limit v tipu, null limit → „limit nedohledán“
   assert.match(ch.provoz.items.find((i) => i.kod === '201').tip, /limit nedohledán/);
@@ -255,11 +259,14 @@ test('pojistovny.js: buildKmenCharts — vstupy pro všechny grafy modulu 3', ()
   const phD = copy(DATA); for (const z of phD.pojistovny) Object.assign(z.hospodareni.naklady_na_pojistence_std_kc, { stav: 'placeholder-bez-vah', faktor: 1, hodnota: z.hospodareni.naklady_na_pojistence_kc.hodnota });
   assert.ok(mod.buildKmenCharts(phD).nzs.items.every((i) => i.note.includes(mod.STD_PENDING)));
   if (DATA.pojistovny[0].hospodareni.naklady_na_pojistence_std_kc?.stav === 'index-prerozdeleni') {
-    assert.ok(ch.nzs.items.every((i) => /standardizováno indexem nákladovosti kmene/.test(i.note)));
+    assert.ok(ch.nzs.items.every((i) => /^přepočteno na index přerozdělení \d[\d\s]*\sKč$/.test(i.note) && !/standardizováno/.test(i.note)));
     assert.equal(ch.nzs.std, true);
     assert.equal(ch.nzs.dbItems.length, 7);
     assert.ok(ch.nzs.dbItems.every((i) => Number.isFinite(i.from) && Number.isFinite(i.to)));
-    assert.match(ch.nzs.dbOpts.sub, /stejný kmen/);
+    assert.match(ch.nzs.dbOpts.sub, /index přerozdělení MZ/);
+    assert.match(ch.nzs.dbOpts.sub, /není to věková standardizace/);
+    assert.equal(ch.nzs.dbOpts.title, 'Náklady na zdravotní služby na pojištěnce: vykázáno → přepočteno');
+    assert.equal(ch.nzs.dbOpts.toLabel, 'přepočteno');
   }
   assert.equal(mod.buildKmenCharts(phD).nzs.std, false, 'bez standardizace zůstává žebříček');
   // kmen 2010–2025: 7 sérií po 16 bodech, index proti 2010
@@ -281,10 +288,10 @@ test('pojistovny.js: standardizace „dolozeno“ jde do poznámky s hodnotou', 
   Object.assign(std, { stav: 'dolozeno', hodnota: 45000 });
   const ch = mod.buildKmenCharts(d);
   assert.match(ch.nzs.items[0].note, /standardizováno na věk a pohlaví 45\s000\sKč/);
-  assert.deepEqual(mod.stdInfo(d.pojistovny[0].hospodareni), { dolozeno: true, hodnota: 45000, poznamka: std.poznamka, metoda: 'na věk a pohlaví' });
+  assert.deepEqual(mod.stdInfo(d.pojistovny[0].hospodareni), { dolozeno: true, stav: 'dolozeno', hodnota: 45000, poznamka: std.poznamka, metoda: 'na věk a pohlaví' });
   const ph = copy(DATA); Object.assign(ph.pojistovny[0].hospodareni.naklady_na_pojistence_std_kc, { stav: 'placeholder-bez-vah', faktor: 1 });
   assert.equal(mod.stdInfo(ph.pojistovny[0].hospodareni).dolozeno, false);
-  assert.match(mod.stdInfo(DATA.pojistovny[0].hospodareni).metoda || '', /přerozdělení MZ/);
+  assert.match(mod.stdInfo(DATA.pojistovny[0].hospodareni).metoda || '', /index přerozdělení/);
   assert.equal(mod.stdInfo(undefined).dolozeno, false);
 });
 
@@ -509,6 +516,8 @@ test('validate-pojistovny: prevence — neznámé id oblasti, stupen "super", du
 test('validate-pojistovny: fond prevence — nesoulad součtu je WARN, ne FAIL', () => {
   const s = realSets();
   delete s.verifikace; // WARN „nenalezeno ve VZ“ patří jinému testu (tests/pojistovny-vz.test.js)
+  // analytické datasety (PLAN-SROVNAVAC-ANALYTIK.md) mají vlastní validátory i vlastní WARN (např. výběr 2024 vs. Tab. 1 MZ)
+  for (const k of ['hospodareniRady', 'prerozdeleni', 'instituce', 'smluvniProgramy', 'dostupnost', 'segmenty']) delete s[k];
   s.prevence.pojistovny[0].fond_prevence_struktura.celkem.skutecnost += 100000;
   const { errors, warnings } = validateAll(s);
   assert.deepEqual(errors, []);
@@ -517,6 +526,7 @@ test('validate-pojistovny: fond prevence — nesoulad součtu je WARN, ne FAIL',
   // v toleranci ±1 % bez varování
   const t = realSets();
   delete t.verifikace;
+  for (const k of ['hospodareniRady', 'prerozdeleni', 'instituce', 'smluvniProgramy', 'dostupnost', 'segmenty']) delete t[k];
   t.prevence.pojistovny[0].fond_prevence_struktura.celkem.skutecnost += 1000;
   assert.deepEqual(validateAll(t).warnings, []);
 });

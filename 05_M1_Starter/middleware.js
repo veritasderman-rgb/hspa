@@ -14,7 +14,8 @@
 export const config = {
   // '/pojistovny-:path*' = podstránky srovnávače (pojistovny-kmen.html …, P1.6); je ukotvené na
   // začátek cesty, takže nekoliduje s '/data/pojistovny-:path*' (datové soubory).
-  matcher: ['/pojistovny', '/pojistovny.html', '/pojistovny-:path*', '/data/pojistovny.json', '/data/pojistovny-:path*'],
+  // '/pojistovna.html' = profil jedné pojišťovny (?zp=…, PLAN-SROVNAVAC-ANALYTIK.md A2.3).
+  matcher: ['/pojistovny', '/pojistovny.html', '/pojistovny-:path*', '/pojistovna', '/pojistovna.html', '/data/pojistovny.json', '/data/pojistovny-:path*'],
 };
 
 const NOINDEX = { 'X-Robots-Tag': 'noindex, nofollow, noarchive' };

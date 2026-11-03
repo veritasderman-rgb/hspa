@@ -1,0 +1,113 @@
+name: Pojišťovny — data MZ (Hodnocení, přerozdělení)
+
+# Rutina Srovnávače zdravotních pojišťoven (PLAN-SROVNAVAC-ANALYTIK.md A1.6 / A5.1): stáhne veřejná data
+# Ministerstva zdravotnictví po pojišťovnách a přepíše je do datasetů srovnávače:
+#
+#   1) node ingest/fetchers/mz-hodnoceni.js                 Hodnocení vývoje systému v.z.p. (PDF + XLSX, 2015→) → ingest/cache (gitignored)
+#   2) node ingest/fetchers/mz-prerozdeleni.js              měsíční přerozdělení (výběr, výsledek) → cache + ingest/manual/pojistovny/prerozdeleni-mz-vyber.json
+#   3) node ingest/transform_pojistovny_hospodareni_rady.js data/pojistovny-hospodareni-rady.json (24 řad × 7 ZP × roky)
+#      node ingest/transform_pojistovny_prerozdeleni.js      data/pojistovny-prerozdeleni.json (výběr, výsledek, relativní saldo)
+#      node ingest/transform_pojistovny_segmenty.js          data/pojistovny-segmenty.json (náklady podle segmentů)
+#   4) node ingest/validate-pojistovny.js                    tvar dat; nesoulady = WARN (signál pro redakci)
+#
+# Výsledek jde jako PR (větev chore/pojistovny-mz-<rok>-<měsíc>), nikdy přímo do main. Nové ročníky Hodnocení
+# si fetcher najde sám podle odkazů na stránce MZ; měsíční PDF přerozdělení MZ přidává průběžně.
+#
+# TŘÍDA C (GOVERNANCE.md § 3): nový workflow v .github/workflows/ smí zavést jen vydavatel. Před prvním
+# během: (1) schválit tento soubor, (2) v Settings → Actions → General musí být zapnuté „Allow GitHub
+# Actions to create and approve pull requests" (stejně jako u pojistovny-vz.yml).
+
+on:
+  schedule:
+    - cron: '0 3 20 6 *'   # 1× ročně 20. června 03:00 UTC: Hodnocení MZ vychází do konce května
+    - cron: '0 4 10 * *'   # 1× měsíčně 10. den 04:00 UTC: nový měsíc přerozdělení (MZ publikuje začátkem měsíce)
+  workflow_dispatch:        # ruční doběh
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: pojistovny-mz
+  cancel-in-progress: false
+
+jobs:
+  mz:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: 05_M1_Starter
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: 05_M1_Starter/package-lock.json
+
+      - name: Kill switch AI provozu
+        # GOVERNANCE.md § 5: při stavu „pozastaveno" v data/ai-provoz.json skončí job tady kódem 1.
+        run: |
+          git fetch --no-tags --depth=1 origin main
+          git show origin/main:05_M1_Starter/data/ai-provoz.json > "$RUNNER_TEMP/ai-provoz.json"
+          AI_PROVOZ_STATE="$RUNNER_TEMP/ai-provoz.json" node scripts/ai-provoz.js check
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install poppler (pdftotext)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y poppler-utils
+
+      - name: Stažení dat MZ (max 1 požadavek/s)
+        run: npm run fetch:pojistovny-mz
+
+      - name: Transformace do datasetů srovnávače
+        run: npm run transform:pojistovny-mz
+
+      - name: Validace datasetů srovnávače
+        run: node ingest/validate-pojistovny.js
+
+      - name: Testy parserů a transformů
+        run: node --test tests/mz-hodnoceni.test.js tests/mz-prerozdeleni.test.js tests/pojistovny-segmenty.test.js
+
+      - name: Období pro název větve
+        id: obdobi
+        run: echo "obdobi=$(date -u +%Y-%m)" >> "$GITHUB_OUTPUT"
+
+      - name: Otevřít PR
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: chore/pojistovny-mz-${{ steps.obdobi.outputs.obdobi }}
+          base: main
+          commit-message: 'chore(pojistovny): data MZ ${{ steps.obdobi.outputs.obdobi }} — Hodnocení v.z.p., přerozdělení, segmenty'
+          title: 'chore(pojistovny): data MZ ${{ steps.obdobi.outputs.obdobi }} — Hodnocení v.z.p., přerozdělení, segmenty'
+          # Jen výstupy rutiny; PDF a XLSX zůstávají v gitignorované cache.
+          add-paths: |
+            05_M1_Starter/ingest/manual/pojistovny/prerozdeleni-mz-vyber.json
+            05_M1_Starter/data/pojistovny-hospodareni-rady.json
+            05_M1_Starter/data/pojistovny-prerozdeleni.json
+            05_M1_Starter/data/pojistovny-segmenty.json
+          delete-branch: true
+          body: |
+            ## Souhrn
+            Rutina `pojistovny-mz.yml`: veřejná data MZ po pojišťovnách (Hodnocení vývoje systému v.z.p., měsíční přerozdělení pojistného) přepsaná do datasetů srovnávače. Žádný odhad: co MZ nezveřejnilo, zůstává `null` a je v `chybi[]`.
+
+            ## Změny
+            - `data/pojistovny-hospodareni-rady.json` — řady 2015→ po pojišťovnách (pojištěnci, státní pojištěnci, zaměstnanci, příjmy, pojistné před/po přerozdělení, náklady, provoz, zůstatky, rezervní fond, pohledávky a závazky po lhůtě, fond prevence)
+            - `data/pojistovny-prerozdeleni.json` — měsíční výběr a výsledek přerozdělení 1/2019→, relativní saldo (identita, součet 0)
+            - `data/pojistovny-segmenty.json` — náklady na zdravotní služby podle segmentů po pojišťovnách
+            - `ingest/manual/pojistovny/prerozdeleni-mz-vyber.json` — přepis PDF MZ (100% výběr)
+
+            ## Verifikace
+            `node ingest/validate-pojistovny.js` a testy parserů doběhly. Varování validátoru jsou v logu jobu; nesoulad s předchozím stavem posoudí redakce (třída B) a doplní `changelog` v `data/pojistovny.json`.
+
+            ## Test plan
+            - [ ] Zkontrolovat, že nový ročník Hodnocení / nový měsíc přerozdělení přibyl (roky a měsíce v souborech)
+            - [ ] Projít `chybi[]` a varování validátoru
+            - [ ] Po merge: `pojistovny-penize.html` a `pojistovny-kmen.html` ukazují nový rok (stáří dat)
+
+            🤖 Generated with [Claude Code](https://claude.com/claude-code)

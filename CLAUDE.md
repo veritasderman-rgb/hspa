@@ -97,6 +97,9 @@ git push -u origin claude/<branch>
 ├── zdravi-2035.html            ← Plní se Zdraví 2035? (strategie po kapitolách a úkolech, každý s indikátory)
 ├── plneni-*.html               ← 7 dalších stránek plnění strategií (onko 2030, KV 2035, AMR, duševní zdraví, Zdraví 2030 retrospektivně, sociální služby 2026–2030, sociální služby 2016–2025 retrospektivně) — sdílený renderer src/strategie-plneni.js, datasety data/plneni-*.json
 ├── kalkulacka-pece-2035.html   ← Kdo se o nás postará v roce 2035? (interaktivní model dlouhodobé péče: lůžka × pečovatelé v terénu × přesměrování do terénu → kolik seniorů zůstane bez místa, úvazky rodin, náklad systému; src/ltc-engine.js + src/ltc-kalkulacka.js, data/ltc-scenare.json)
+├── pojistovny-penize.html      ← Srovnávač pojišťoven (pod heslem): Peníze — relativní saldo přerozdělení, řady hospodaření MZ 2015–2024, státní pojištěnci, segmenty, fond prevence a provoz
+├── pojistovny-instituce.html   ← Srovnávač pojišťoven (pod heslem): Instituce — zákon a orgány bez jmen, smluvní programy pro poskytovatele, dostupnost a § 16, síť odborností
+├── pojistovna.html             ← Srovnávač pojišťoven (pod heslem): profil jedné pojišťovny (`?zp=<kód>`), bez parametru rozcestník sedmi ZP
 ├── o-projektu.html             ← O projektu, metodika
 ├── newsletter.html             ← Newsletter: teaser, přihlášení k odběru (Brevo přes /api/subscribe), archiv minulých čísel z data/newsletter-log.json — src/newsletter-page.js
 ├── jak-funguje.html            ← Jak HSPA hodnocení funguje (vysvětlení)
@@ -152,6 +155,12 @@ git push -u origin claude/<branch>
 │   ├── zdravi2035-plneni.json  ← Zdraví 2035 rozložené na 12 SC × 113 dílčích cílů × 68 indikátorů dokumentu, mapované na kontrakt (validate:plneni)
 │   ├── plneni-*.json           ← Datasety plnění dalších strategií (onko-2030, kv-2035, amr, dusevni-zdravi, zdravi-2030, socialni-sluzby, socialni-sluzby-2016-2025) — stejné schéma, validate:plneni
 │   ├── ltc-scenare.json        ← Parametry kalkulačky Kdo se o nás postará v roce 2035 (4 scénáře studie Deloitte pro APSS ČR, červen 2026, s citacemi stran; validuje tests/ltc-engine.test.js)
+│   ├── pojistovny-hospodareni-rady.json ← Hodnocení MZ 2015–2024 po ZP (příjmy, náklady, provoz, rezervy, fond prevence, státní pojištěnci); stránka Peníze
+│   ├── pojistovny-prerozdeleni.json ← Měsíční výběr a částka po přerozdělení po ZP od 1/2019 a relativní saldo přerozdělení (Peníze, přehled)
+│   ├── pojistovny-segmenty.json ← Náklady podle segmentů po ZP 2015–2024 (Tabulka č. 3 a 3a Hodnocení MZ; Peníze)
+│   ├── pojistovny-instituce.json ← Zákon, vznik, orgány bez jmen, aparát, dohled a limit provozu u 7 ZP (stránka Instituce)
+│   ├── pojistovny-smluvni-programy.json ← Inventář smluvních programů pro poskytovatele, každý s citací a datem ověření (Instituce)
+│   ├── pojistovny-dostupnost.json ← Co ZP publikují o dostupnosti a § 16 zák. 48/1997 Sb. (Instituce)
 │   ├── explainers.json         ← Kontextové texty (politika, reformy, koncepty)
 │   ├── prevention.json         ← Vakcinace + screeningy
 │   ├── pohotovosti.json        ← 283 pohotovostí s ordinační dobou (VZP + NRPZS + 4 kraje) + 21 denních nemocničních ambulancí (ruční ověření + týdenní drift-check citátů), online pohotovosti, poplatek, dojezdová analýza (souhrn), rozcestník, poradní linky ZZS, EN/UK
@@ -240,6 +249,7 @@ npm run validate:all      # Validuje indicators + strategies + explainers + prev
 npm run pr:gate -- --base origin/main   # Třída PR (A/B/C) podle GOVERNANCE.md § 3 — co smí zmergovat editor a co čeká na vydavatele
 npm run ai:provoz -- check              # Kill switch: exit 1 = provoz pozastaveno, nic nepublikovat ani nemergovat
 npm run validate:pojistovny # Dataset Srovnávače pojišťoven (součást validate:all)
+npm run data:pojistovny-mz # Hodnocení MZ 2015–2024 + měsíční přerozdělení → data/pojistovny-{hospodareni-rady,prerozdeleni,segmenty}.json (stahuje z MZ; roční běh = workflow pojistovny-mz.yml)
 npm run validate:evidence # Registr evidence-auditu (studie k tvrzením článků a indikátorů)
 npm run evidence:queue    # Fronta evidence-auditu (--status | --batch --articles 12 --indicators 8 | --hash soubor)
 npm run data:pohotovosti  # Celá pipeline pohotovostí (NRPZS + VZP + kraje → data/pohotovosti.json, ~10 min)
@@ -532,7 +542,7 @@ přesné číslo ve fallbacku neprojde, a zaokrouhlení nesmí utéct od skuteč
 - [`05_M1_Starter/PLAN-KRAJE-GRANULARITA.md`](05_M1_Starter/PLAN-KRAJE-GRANULARITA.md) — audit okresní/obecní granularity krajského dashboardu (42 datasetů, ČSÚ open-data API, okresní drill-down); **vstupní bod pro prohlubování krajských dat**
 - [`05_M1_Starter/PLAN-POHOTOVOSTI-DOMENA.md`](05_M1_Starter/PLAN-POHOTOVOSTI-DOMENA.md) — samostatná doména pro pohotovosti jako druhý výstup repa (`npm run build:pohotovosti-site` → `dist-pohotovosti/`, odlehčený shell `src/pohotovosti-shell.js`, konfigurace `data/pohotovosti-site.json`); **čeká na kroky mimo repo: doména, druhý Vercel projekt, přepnutí 301**
 - [`05_M1_Starter/PLAN-SROVNAVAC-POJISTOVEN.md`](05_M1_Starter/PLAN-SROVNAVAC-POJISTOVEN.md) — Srovnávač zdravotních pojišťoven (`pojistovny.html`, pod heslem): diagnóza grafů, koncept „Moje pojišťovna“ (jedna validovaná paleta ZP, emphasis místo rainbow, rozklikávací vysvětlivky), primitivy `src/zp-viz.js`, dotazníky na Neonu, balíčky P0–P5 s třídou PR a agentem; navazuje na `09_Srovnavac_pojistoven_plan.md` a `docs/metodika-srovnavac-pojistoven.md`; **vstupní bod pro práci na srovnávači**
-- [`05_M1_Starter/PLAN-SROVNAVAC-ANALYTIK.md`](05_M1_Starter/PLAN-SROVNAVAC-ANALYTIK.md) — Srovnávač pojišťoven, pohled analytika: co jde postavit z veřejných dat MZ (Hodnocení systému v.z.p. 2015–2024 jako XLSX, měsíční výběr pojistného od 2019) bez součinnosti pojišťoven — podstránka Peníze (přerozdělení: kdo platí a kdo bere, hospodaření 2015–2024, náklady podle segmentů), Instituce (zákon, orgány, zaměstnanci, smluvní programy, co ZP publikují o dostupnosti), profil `pojistovna.html?zp=`, export CSV, „Porovnat s“, přepínač roku; balíčky A0–A5 s třídou PR, § 5 = co veřejně není a řeší se dotazem; **vstupní bod pro analytické rozšíření srovnávače**
+- [`05_M1_Starter/PLAN-SROVNAVAC-ANALYTIK.md`](05_M1_Starter/PLAN-SROVNAVAC-ANALYTIK.md) — Srovnávač pojišťoven, pohled analytika: co jde postavit z veřejných dat MZ (Hodnocení systému v.z.p. 2015–2024 jako XLSX, měsíční výběr pojistného od 2019) bez součinnosti pojišťoven — podstránka Peníze (přerozdělení: kdo platí a kdo bere, hospodaření 2015–2024, náklady podle segmentů), Instituce (zákon, orgány, zaměstnanci, smluvní programy, co ZP publikují o dostupnosti), profil `pojistovna.html?zp=`, export CSV, „Porovnat s“, přepínač roku; balíčky A0–A5 s třídou PR, § 5 = co veřejně není a řeší se dotazem; stav 3. 11. 2026: A0–A5.1 implementováno, viz § 8 Stav; **vstupní bod pro analytické rozšíření srovnávače**
 - [`docs/pojistovny-indikatory.md`](docs/pojistovny-indikatory.md) — inventář indikátorů a datasetů o zdravotních pojišťovnách: které údaje ukazují, kdo je u koho pojištěn (OIS 11-47, MZ Hodnocení v.z.p., VZ, ZPP, přerozdělení), co v repu je a chybí, návrh per-ZP indikátorů; vstup pro P5.5 srovnávače
 - [`05_M1_Starter/PLAN-ONKO.md`](05_M1_Starter/PLAN-ONKO.md) — návrh sekce „Rakovina: co teď" (`rakovina.html` + `data/onko-navigace.json`): systémová osa nad klinickou `cesta-pacienta.html` — kam patřím, nárok a § 16, na co se ptát, čemu věřit; **čeká na schválení vlastníkem**
 - [`BACKLOG.md`](BACKLOG.md) — backlog (historický; aktuální vstupní bod je PLAN-PRACE.md)
