@@ -146,6 +146,36 @@ pořadí implementace uvnitř fáze. DoD vždy navíc: `npm test`, `npm run vali
 |---|---|---|---|---|
 | A5.1 | Blok do `PROMPT_ROUTINE.md`: po merge A1.6 kontrola PR z `pojistovny-mz.yml` (nový rok Hodnocení v červnu, nový měsíc přerozdělení) = přepis do dat je automatický, redakce jen schválí PR a doplní `changelog`; ročně po VZ (červen) aktualizace `pojistovny-instituce.json` (orgány, ředitel) a `pojistovny-smluvni-programy.json` (drift URL) | `PROMPT_ROUTINE.md`, `docs/scheduled-sessions.md` | C | zapsáno, jeden odstavec |
 
+### Fáze A6 — Fond prevence jinak (rozhodnutí vydavatele 3. 11. 2026: směry 1 + 4)
+
+**Proč se to předělává.** Revize dat 3. 11. 2026 (MZ Hodnocení Tab. 16/17 za 2018–2024, NKÚ 20/24,
+e-Sbírka) ukázala, že A1.5 uchopilo fond prevence špatně:
+
+- Řada „fond prevence na pojištěnce 2015–2024“ sčítá zdravotní programy, ozdravné pobyty a „ostatní
+  činnosti“. V letech 2021–2022 šlo přes „ostatní činnosti“ antigenní testování na covid (967 a
+  1 012 mil. Kč, u VZP 65 % a 59 % fondu). Index 2015 = 100 ukazuje covidový hrb jako „růst prevence“.
+- Pořadí pojišťoven se po očištění obrací: ZPŠ má celkem 402 Kč na pojištěnce (2024), ale 71 % fondu
+  jsou „ostatní činnosti“; jen zdravotní programy dávají ZP MV 323, OZP 316, ČPZP 306, VZP 290, VoZP 250,
+  ZPŠ 105, RBP 82 Kč. Co MZ počítá do „ostatních činností“, Hodnocení nedefinuje (otázka pro ZPP/VZ).
+- Skok VZP 2023 → 2024 (955 → 2 079 mil.) je legislativní: od 1. 1. 2023 má VZP stejné zdroje fondu
+  jako ZZP (§ 7c zák. 551/1991, § 18b zák. 280/1992: ze ZF až 3 % pojistného po přerozdělení za
+  předchozí rok, jen při neschodkovém ZPP; dál pokuty, penále, přirážky a provozní fond). Reálně
+  čerpají všechny 0,7–1,0 %.
+- Položková struktura z VZ není srovnatelná (ZP MV 1 položka, ČPZP 5, RBP 48, ZPŠ 35 z roku 2020);
+  regexové skupiny u tří ZP hází většinu do „ostatní“.
+- Fond je nenárokový, MZ do podmínek nezasahuje (odpověď MZ podle zák. 106, 11/2025: odepření
+  příspěvku pojištěnci s podanou přeregistrací není vybočení ze zákona). NKÚ 20/24: skryté
+  financování výzkumu z fondu (1,36 mil.), 182 tis. za klienty jiných ZP, zakázka na ozdravné pobyty
+  58,9 mil. v rozporu se ZZVZ, nevyčerpaných 536 mil. k 31. 12. 2020.
+
+Směry 2 (fond jako % pojistného a plán vs. skutečnost) a 3 (nárok vs. čerpání, počty příspěvků)
+zůstávají v záloze; 2 je z A6.1 dopočitatelný bez nových dat.
+
+| ID | Úkol | Zdroj | Soubory | Třída | Odhad | DoD |
+|---|---|---|---|---|---|---|
+| A6.1 | **Kam fond skutečně teče (Tab. 17).** Parser `parseTab17` z textu PDF Hodnocení 2018–2024 (2015–2017 mají jen celek) → do `pojistovny-hospodareni-rady.json` řady `fond_prevence_programy_mil`, `fond_prevence_pobyty_mil`, `fond_prevence_ostatni_mil`, `fond_prevence_jine_zdroje_mil` (jen VoZP), `fond_prevence_programy_na_pojistence_kc`; `cr.rady` totéž 2015–2024 z Tab. 16. Peníze: indexovaný graf fondu celkem **stáhnout**; místo něj (a) `rankedBars` „Zdravotní programy z fondu prevence na pojištěnce“ s `figureSwitch` roku 2018–2024 a poznámkou k covidu 2021–22 a k legislativní změně VZP 2023, (b) `stackedRows` programy / pobyty / ostatní po ZP (rok z přepínače), (c) řádek ČR 2015–2024 s podílem „ostatních činností“ (covid viditelný), (d) kontextová tabulka „programy na pojištěnce × změna kmene k 1. 1. a 1. 7.“ z `pojistovny-kmen-mesicni.json` (`prestupy`, 2022–2025) výslovně bez kauzality. Validace: Σ složek = celkem ±1 mil. Kč, programy ≤ celkem | Z1 | `ingest/lib/mz-hodnoceni.js`, `ingest/transform_pojistovny_hospodareni_rady.js`, `ingest/lib/validate-hospodareni-rady.js`, `data/pojistovny-hospodareni-rady.json`, `src/pojistovny-penize.js`, `tests/mz-hodnoceni.test.js`, `tests/pojistovny-penize.test.js`, `docs/data-model.md` | B | 1 | řady bez `null` 2018–2024 u 7 ZP; fixtura z textu PDF v `tests/fixtures/mz-hodnoceni/`; idempotence transformu |
+| A6.2 | **Prevence, nebo nábor? (pravidla a kontroly fondu).** Nový `data/pojistovny-fond-pravidla.json`: zákonný rámec (§ 7b/7c zák. 551/1991, § 18a/18b zák. 280/1992, strop 3 %, nenárokovost, stanovisko MZ 106 11/2025), podmínky čerpání po ZP z dokumentů „Podmínky fondu prevence“ (trvání registrace / nepodání přeregistrace, preventivní prohlídka podle § 18a, dluh na pojistném, lhůta podání, roční strop dospělý/dítě, čerpání jen přes aplikaci), každá položka `{stav: ano\|ne\|castecne\|null, citace, url, overeno_at}`; kontroly NKÚ (18/14 VoZP, 20/24 VZP, 23/12 ZP MV: rok, co se kontrolovalo, zjištění k fondu, částky, reakce ZP, url) a kontroly MZ/MF z kap. 4.4 Hodnocení. Stránka Prevence: sekce „Pravidla fondu: kdo smí čerpat a kdo to kontroluje“ (`coverageMatrix` podmínek 7 × n, časová osa kontrol, odkaz na explainer `fond_prevence` v `explainers.json`). Žádná jména osob | NKÚ, weby ZP, e-Sbírka, MZ | `data/pojistovny-fond-pravidla.json`, `ingest/lib/validate-fond-pravidla.js`, `ingest/validate-pojistovny.js`, `src/pojistovny-prevence.js`, `pojistovny-prevence.html`, `data/explainers.json`, `tests/pojistovny-fond-pravidla.test.js`, `docs/data-model.md` | C | 1,5 | každé tvrzení s `url` a citací; validátor enumů a https; prázdná buňka = otázka do kola 1; screenshoty 1280/390/dark |
+
 ---
 
 ## 4. Pořadí a odhad
@@ -198,6 +228,7 @@ do `validateAll`), schéma do `docs/data-model.md` v témž PR.
 | `data/pojistovny-instituce.json` | `pojistovny[].{zakon, vznik, organy, dohled, provozni_limit_pct, clenstvi}` | enumy; Σ jmenovaných = počet členů |
 | `data/pojistovny-dostupnost.json` | `pojistovny[].{cekaci_doby, sit_nedostatkove, zajisteni_pece, lhuty_307, par16}` každé `{stav: ano|castecne|ne|null, co, url, citace, rok}` | enum stavů; `ano` vyžaduje `url` |
 | `data/pojistovny-smluvni-programy.json` | `pojistovny[].programy[]{id, nazev, segment, kriteria[], od_roku, url, citace, overeno_at}` | enumy segmentů a kritérií; `url` https |
+| `data/pojistovny-fond-pravidla.json` | `ramec{zakon[], strop_pct, nenarokovost, stanovisko_mz}`, `podminky[]{id, nazev}` × `pojistovny[].podminky{id: {stav, citace, url, overeno_at}}`, `kontroly[]{organ, cislo, rok, pojistovna, zjisteni[], castky, reakce, url}` | enumy stavů; `url` https; žádná jména osob |
 | `ingest/manual/pojistovny/prerozdeleni-mz-vyber.json` | jako `prerozdeleni-mz-pojistovna.json` (rok → kód → 12 měsíců, tis. Kč) | jako Z3 |
 
 ---
@@ -245,6 +276,8 @@ Commity jsou v historii větve `claude/focused-hopper-ley6gn`. Odchylky od plán
 | A4.2 | hotovo | 64eb832 · `src/zp-interact.js`, `src/pojistovny-prehled.js`, `src/pojistovna.js` | druhý výběr „Porovnat s“ (`hspa-porovnat-zp`): obrys marků, karta se třemi sloupci na přehledu, profil `?porovnat=`; výběr přežívá přechod mezi stránkami |
 | A4.3 | hotovo | 64eb832 · `src/zp-viz.js`, `src/zp-interact.js` | `figureSwitch` (radio/select, `zp:switch`, URL parametry `?kmen=`, `?ukazatel=`, `?rok=`, `?segment=`, `?vyber=`); měsíční kmen i Peníze přepnuté na komponentu; složky salda a částky na pojištěnce na Penězích |
 | A5.1 | hotovo | 428901a · `PROMPT_ROUTINE.md` | blok „Data MZ po pojišťovnách“ |
+| A6.1 | hotovo | ae41b285 · `ingest/lib/mz-hodnoceni.js` (`parseTab16/17`), `src/pojistovny-penize.js` | složky fondu z Tab. 16/17 (ZP 2018–2024, ČR 2015–2024), indexovaný graf stažen; v Hodnocení 2018 má MZ zaměněné sloupce 2018/2018 ZPP, parser to řeší součtem Tab. 17 |
+| A6.2 | hotovo (třída C) | `data/pojistovny-fond-pravidla.json`, `src/pojistovny-prevence.js`, explainer `fond_prevence` | 9 podmínek × 7 ZP s citacemi, 11 kontrol NKÚ/MZ/MF 2014–2025; nedohledáno (null = otázka do kola 1): registrace trvá u OZP a ZPŠ, vazba na screening u ČPZP/OZP/ZPŠ/RBP, roční strop ZPŠ a dětský OZP, kontrolní závěr NKÚ u OZP/ZPŠ/RBP |
 
 Nezávislá revize datové vrstvy (Opus, 3. 11. 2026) a její opravy: commity dda3df4 a 59e9a01. Revize UI (Opus, 3. 11. 2026) a její opravy: commit c8e0aa9. PR #1363 zmergován 3. 11. 2026; vizuální baseline e2e pro stránky srovnávače přegenerována na CI runneru (9bef173) a doplněna navazujícím PR. Zbývá z revize UI (PR třídy B s vlastní regenerací baselinu): onkologická matice bez Σ n/5, sloupec „na 100 tis.“ u stížností, karta Instituce na mobilu jako karty.
 

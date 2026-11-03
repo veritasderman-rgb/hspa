@@ -1,0 +1,863 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-11-03T15:00:00Z",
+  "stav_k": "2026-11-03",
+  "_doc": "Pravidla fondu prevence a kontroly (PLAN-SROVNAVAC-ANALYTIK.md, A6.2). Co soubor je: inventář pravidel, podle kterých sedm zdravotních pojišťoven přiznává příspěvky z fondu prevence (podmínky čerpání platné v roce 2026, stav webů 3. 11. 2026), zákonný rámec a přehled veřejně dostupných kontrol fondu (NKÚ, Ministerstvo zdravotnictví, Ministerstvo financí). Co není: hodnocení. Podmínka není dobrá ani špatná; MZ uvádí, že fond je nenárokový nadstandard a pravidla určuje každá pojišťovna. Prázdná buňka (stav null) znamená, že jsme podmínku v dokumentech pojišťovny nenašli, ne že neplatí. Každá položka nese doslovnou citaci, odkaz a datum ověření. Soubor neobsahuje jména osob; kontroly jsou popsány podle orgánu, čísla a roku. Počet kontrol u pojišťovny se nesmí řadit ani sčítat do pořadí: zda NKÚ pojišťovnu kontroloval, závisí na jeho plánu.",
+  "skala": {
+    "ano": "podmínka platí (nebo strop existuje); detail u buňky",
+    "castecne": "platí jen pro část příspěvků nebo jen s výhradou; detail u buňky",
+    "ne": "podmínka neplatí (nebo souhrnný strop není); detail u buňky",
+    "null": "v podmínkách pojišťovny jsme to nenašli; otázka do kola 1"
+  },
+  "ramec": {
+    "zakon": [
+      {
+        "predpis": "zákon č. 551/1991 Sb., o Všeobecné zdravotní pojišťovně ČR",
+        "paragraf": "§ 7b",
+        "obsah": "Použití fondu prevence VZP: zdravotní služby s prokazatelným preventivním, diagnostickým nebo léčebným efektem, rekondiční aktivity a programy řízené péče; odstavec 2 umožňuje odměny za preventivní prohlídky a očkování.",
+        "url": "https://www.zakonyprolidi.cz/cs/1991-551"
+      },
+      {
+        "predpis": "zákon č. 551/1991 Sb., o Všeobecné zdravotní pojišťovně ČR",
+        "paragraf": "§ 7c",
+        "obsah": "Zdroje fondu prevence VZP: ze základního fondu až 3 % pojistného po přerozdělení za předchozí rok, a to jen když zdravotně pojistný plán není schodkový; dále pokuty, přirážky a penále, činnosti nad rámec veřejného zdravotního pojištění a provozní fond.",
+        "url": "https://www.zakonyprolidi.cz/cs/1991-551"
+      },
+      {
+        "predpis": "zákon č. 280/1992 Sb., o resortních, oborových, podnikových a dalších zdravotních pojišťovnách",
+        "paragraf": "§ 18a",
+        "obsah": "Použití fondu prevence zaměstnaneckých pojišťoven; odstavec 2 počítá se základní částkou a odměnou za preventivní aktivity; odstavec 4 zakazuje dát příspěvek zletilému s neuhrazeným splatným závazkem na pojistném nebo bez účasti na všeobecné preventivní prohlídce, s výjimkami.",
+        "url": "https://www.zakonyprolidi.cz/cs/1992-280"
+      },
+      {
+        "predpis": "zákon č. 280/1992 Sb., o resortních, oborových, podnikových a dalších zdravotních pojišťovnách",
+        "paragraf": "§ 18b",
+        "obsah": "Zdroje fondu prevence zaměstnaneckých pojišťoven: stejně jako u VZP až 3 % pojistného po přerozdělení za předchozí rok ze základního fondu, jen při neschodkovém plánu, a dále pokuty, přirážky a penále.",
+        "url": "https://www.zakonyprolidi.cz/cs/1992-280"
+      }
+    ],
+    "zmena_2026": {
+      "obsah": "Podle OZP ukládá novela zákona č. 280/1992 Sb. všem zdravotním pojišťovnám od 1. 1. 2026 povinnost kontrolovat u vybraných programů účast na prevenci a bezdlužnost.",
+      "citace": "Novela zákona č. 280/1992 Sb. ukládá všem zdravotním pojišťovnám od 1. 1. 2026 jako povinnost kontrolovat u vybraných programů „účast na prevenci“ a „bezdlužnost“.",
+      "url": "https://www.ozp.cz/aktuality/aktualita-preventivni-programy-ozp-v-roce-2026",
+      "overeno_at": "2026-11-03"
+    },
+    "strop_pct": 3,
+    "strop_popis": "Až 3 % pojistného po přerozdělení za předchozí rok ze základního fondu, jen při neschodkovém zdravotně pojistném plánu (§ 7c zák. 551/1991 Sb., § 18b zák. 280/1992 Sb.). Od 1. 1. 2023 má VZP stejné zdroje fondu jako zaměstnanecké pojišťovny (Hodnocení MZ 2024, kap. 4.3).",
+    "nenarokovost": {
+      "text": "Na příspěvek z fondu prevence není právní nárok; pojišťovny jej poskytují dobrovolně a samy určují programy, výši i podmínky.",
+      "citace": "Nutno podotknout, že na poskytnutí příspěvků hrazených z fondu prevence není právní nárok",
+      "url": "https://mzd.gov.cz/wp-content/uploads/2025/11/300.pdf",
+      "overeno_at": "2026-11-03"
+    },
+    "stanovisko_mz": {
+      "datum": "2025-11",
+      "forma": "odpověď Ministerstva zdravotnictví na žádost o informaci podle zák. č. 106/1999 Sb.",
+      "obsah": "Podmiňuje-li pojišťovna příspěvek tím, že se pojištěnec nepřeregistruje k jiné pojišťovně, MZ v tom nespatřuje nepřípustné vybočení ze zákonného rámce. MZ preventivní programy pojišťoven neřídí a není oprávněno zasahovat do pravidel vyplácení příspěvků.",
+      "citace": "Podmiňuje-li zdravotní pojišťovna proplacení příspěvku pojištěnci z fondu prevence neprovedením přeregistrace tohoto pojištěnce k jiné zdravotní pojišťovně, Ministerstvo zdravotnictví v tom nespatřuje nepřípustné vybočení ze zákonného rámce.",
+      "url": "https://mzd.gov.cz/wp-content/uploads/2025/11/300.pdf",
+      "overeno_at": "2026-11-03"
+    }
+  },
+  "podminky": [
+    {
+      "id": "registrace_trva",
+      "nazev": "Registrace trvá",
+      "popis": "Příspěvek dostane jen pojištěnec, který je u pojišťovny registrován nepřetržitě od úhrady služby do data výplaty (případně nejméně v době čerpání a nárokování)."
+    },
+    {
+      "id": "bez_preregistrace",
+      "nazev": "Bez přeregistrace",
+      "popis": "Pojištěnec, který podal přihlášku k jiné pojišťovně, o příspěvek přichází. U části pojišťoven i zpětně k datu úhrady."
+    },
+    {
+      "id": "preventivni_prohlidka",
+      "nazev": "Preventivní prohlídka",
+      "popis": "Část příspěvků je vázána na účast na všeobecné preventivní prohlídce u praktického lékaře (§ 18a odst. 4 zák. 280/1992 Sb. od 1. 1. 2026)."
+    },
+    {
+      "id": "bez_dluhu",
+      "nazev": "Bez dluhu",
+      "popis": "Příspěvek nedostane pojištěnec s neuhrazeným splatným závazkem na pojistném. Pojišťovny se liší v tom, zda uznají splátkový kalendář."
+    },
+    {
+      "id": "lhuta_podani_dni",
+      "nazev": "Lhůta podání",
+      "popis": "Do kdy od zaplacení dokladu je třeba požádat, v jednotce, kterou pojišťovna uvádí (dny, nebo kalendářní měsíce)."
+    },
+    {
+      "id": "strop_dospely_kc",
+      "nazev": "Roční strop, dospělý",
+      "popis": "Souhrnný roční strop příspěvků na dospělého v Kč, pokud ho pojišťovna stanoví (jinak mají limity jen jednotlivé příspěvky)."
+    },
+    {
+      "id": "strop_dite_kc",
+      "nazev": "Roční strop, dítě",
+      "popis": "Souhrnný roční strop příspěvků na dítě v Kč, pokud ho pojišťovna stanoví."
+    },
+    {
+      "id": "jen_aplikace",
+      "nazev": "Jen přes aplikaci",
+      "popis": "Zda lze o příspěvek žádat jen elektronicky přes aplikaci pojišťovny, nebo i na pobočce, poštou či e-mailem."
+    },
+    {
+      "id": "podminene_prispevky",
+      "nazev": "Vazba na screening",
+      "popis": "Část příspěvků je vázána na účast na screeningovém vyšetření nebo na jiný hrazený výkon (nejen na prohlídku)."
+    }
+  ],
+  "pojistovny": [
+    {
+      "kod": "111",
+      "zkratka": "VZP ČR",
+      "podminky": {
+        "registrace_trva": {
+          "stav": "castecne",
+          "citace": "musí být doklad pro přiznání příspěvku uhrazen až po registraci klienta u VZP ČR",
+          "url": "https://www.vzp.cz/pojistenci/vyhody-a-prispevky/podminky-pro-cerpani-financnich-prispevku",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Pravidlo se týká nových pojištěnců (od 1. 7. 2026). Požadavek nepřetržité registrace od úhrady do výplaty, jako u VoZP, ČPZP a ZP MV, jsme v obecných podmínkách nenašli."
+        },
+        "bez_preregistrace": {
+          "stav": "ano",
+          "citace": "ke dni podání žádosti o příspěvek nebo při čerpání příspěvku nesmí být u pojištěnce evidována přeregistrace k jiné zdravotní pojišťovně",
+          "url": "https://www.vzp.cz/pojistenci/vyhody-a-prispevky/podminky-pro-cerpani-financnich-prispevku",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Rozhoduje stav ke dni podání žádosti nebo čerpání, ne zpětně k datu úhrady jako u VoZP, ČPZP a ZP MV."
+        },
+        "preventivni_prohlidka": {
+          "stav": "castecne",
+          "citace": "u příspěvků podmíněných preventivní prohlídkou (příspěvky na Pohybové aktivity a dentální hygienu a Rehabilitační aktivity)",
+          "url": "https://www.vzp.cz/pojistenci/vyhody-a-prispevky/podminky-pro-cerpani-financnich-prispevku",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Jen vybrané příspěvky pro dospělé."
+        },
+        "bez_dluhu": {
+          "stav": "ano",
+          "citace": "nedluží na pojistném, penále nebo příslušenství na zdravotním pojištění",
+          "url": "https://www.vzp.cz/pojistenci/vyhody-a-prispevky/podminky-pro-cerpani-financnich-prispevku",
+          "overeno_at": "2026-11-03"
+        },
+        "lhuta_podani_dni": {
+          "stav": "ano",
+          "hodnota": 3,
+          "citace": "nesmí být starší než 3 měsíce od data úhrady",
+          "url": "https://www.vzp.cz/pojistenci/vyhody-a-prispevky/podminky-pro-cerpani-financnich-prispevku",
+          "overeno_at": "2026-11-03",
+          "poznamka": "3 měsíce od data úhrady (6 měsíců u příspěvků podmíněných preventivní prohlídkou)",
+          "jednotka": "mesice"
+        },
+        "strop_dospely_kc": {
+          "stav": "ne",
+          "citace": "mohou vybírat ze zhruba dvou desítek benefitů a kombinovat je bez omezení",
+          "url": "https://www.vzp.cz/o-nas/aktuality/predsevzeti-v-roce-2026-pujde-s-vzp-snadneji-diky-prispevkum-z-fondu-prevence",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Souhrnný roční strop VZP nestanovuje; limity mají jednotlivé příspěvky. Rok pravidel 2026."
+        },
+        "strop_dite_kc": {
+          "stav": "ne",
+          "citace": "mohou vybírat ze zhruba dvou desítek benefitů a kombinovat je bez omezení",
+          "url": "https://www.vzp.cz/o-nas/aktuality/predsevzeti-v-roce-2026-pujde-s-vzp-snadneji-diky-prispevkum-z-fondu-prevence",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Souhrnný roční strop VZP nestanovuje; limity mají jednotlivé příspěvky. Rok pravidel 2026."
+        },
+        "jen_aplikace": {
+          "stav": "castecne",
+          "citace": "lze požádat pouze touto cestou. Toto neplatí pro seniory 65+ a osoby se smyslovým postižením",
+          "url": "https://www.vzp.cz/pojistenci/vyhody-a-prispevky/podminky-pro-cerpani-financnich-prispevku",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Některé příspěvky (např. pohybové aktivity a dentální hygiena dospělých, rehabilitační procedury navázané na screening) jen přes aplikaci Moje VZP; ostatní i na pobočce nebo poštou."
+        },
+        "podminene_prispevky": {
+          "stav": "ano",
+          "citace": "Dospělí klienti, kteří absolvují preventivní screeningové vyšetření (kolorektální screening, screening děložního hrdla, mamografický screening, screening plic nebo screening prostaty) mohou získat 1000 Kč na rehabilitační a rekondiční aktivity lázeňského typu",
+          "url": "https://www.vzp.cz/o-nas/aktuality/predsevzeti-v-roce-2026-pujde-s-vzp-snadneji-diky-prispevkum-z-fondu-prevence",
+          "overeno_at": "2026-11-03"
+        }
+      },
+      "kontroly": [
+        {
+          "id": "nku-20-24-111",
+          "organ": "NKÚ",
+          "cislo": "20/24",
+          "rok_kontroly": 2022,
+          "obdobi": "2018–2019",
+          "predmet": "Prostředky vybírané na základě zákona ve prospěch Všeobecné zdravotní pojišťovny ČR (kolegium NKÚ 7. 3. 2022).",
+          "zjisteni": [
+            "Z fondu prevence částečně hradila minimálně dva pilotní projekty (IBD Asistent a CMP), které neplnily zákonný účel: šlo o skryté financování výzkumu a vývoje, 1 357 168 Kč neúčelně a nehospodárně.",
+            "Projekt IBD Asistent spolufinancovala 53 osobám, které nebyly jejími pojištěnci (182 061 Kč).",
+            "Netransparentně a diskriminačně: podmínky z vnitřního předpisu pro pilotní projekty nezveřejnila na webu a peníze šly vybraným poskytovatelům, kteří léčili úzkou skupinu pacientů.",
+            "Zakázka na ozdravné pobyty dětí z fondu prevence: dodavateli uhradila za 2018–2019 celkem 58 873 417 Kč, ačkoli ho nevyloučila ze zadávacího řízení, přestože byly důvody vyloučení.",
+            "Dvě smlouvy k fondu prevence neuveřejnila v registru smluv a další nezaslala k uveřejnění do 30 dnů.",
+            "Nevyužité prostředky fondu byly k 31. 12. 2020 536 158 tis. Kč."
+          ],
+          "castky_kc": [
+            {
+              "popis": "pilotní projekty hrazené neúčelně",
+              "kc": 1357168
+            },
+            {
+              "popis": "z toho za 53 osob, které nebyly pojištěnci VZP",
+              "kc": 182061
+            },
+            {
+              "popis": "zakázka na ozdravné pobyty dětí 2018–2019",
+              "kc": 58873417
+            },
+            {
+              "popis": "nevyužité prostředky fondu k 31. 12. 2020",
+              "kc": 536158000
+            }
+          ],
+          "reakce": "VZP podle ČTK uvedla, že kontrola neodhalila žádné zásadní nedostatky, závěry bere na vědomí a u nepřesností přijme vnitřní opatření; s hodnocením zakázky na ozdravné pobyty nesouhlasí (tvrdí, že dodavatele vybrala transparentně elektronickou aukcí).",
+          "url": "https://nku.cz/assets/kon-zavery/K20024.pdf",
+          "url_dalsi": "https://www.ceskenoviny.cz/zpravy/2206737"
+        }
+      ]
+    },
+    {
+      "kod": "201",
+      "zkratka": "VoZP",
+      "podminky": {
+        "registrace_trva": {
+          "stav": "ano",
+          "citace": "Žádost o příspěvek může podat pojištěnec, který je nepřetržitě pojištěn u VoZP od data úhrady služby nebo věci do data vyplacení příspěvku",
+          "url": "https://www.vozp.cz/vseobecne-podminky-cerpani-prispevku",
+          "overeno_at": "2026-11-03"
+        },
+        "bez_preregistrace": {
+          "stav": "ano",
+          "citace": "Možnost čerpat příspěvky ztrácejí pojištěnci, u nichž VoZP zjistila, že jsou přihlášeni k jiné zdravotní pojišťovně, bez ohledu na to, kdy uhradili službu či věc, na kterou žádají příspěvek.",
+          "url": "https://www.vozp.cz/vseobecne-podminky-cerpani-prispevku",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Platí zpětně k datu úhrady."
+        },
+        "preventivni_prohlidka": {
+          "stav": "castecne",
+          "citace": "Podmínkou pro poskytnutí jakéhokoli bonusu (odměny) je podle zákona prokázané absolvování preventivní prohlídky u praktického lékaře",
+          "url": "https://www.vozp.cz/vseobecne-podminky-cerpani-prispevku",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Podmínka platí pro bonusy (odměny) za prevenci pojištěncům starším 18 let, ne pro všechny příspěvky."
+        },
+        "bez_dluhu": {
+          "stav": "ano",
+          "citace": "Příspěvky mohou čerpat pouze pojištěnci, kteří nemají vůči VoZP závazky a mají splněny všechny povinnosti.",
+          "url": "https://www.vozp.cz/vseobecne-podminky-cerpani-prispevku",
+          "overeno_at": "2026-11-03"
+        },
+        "lhuta_podani_dni": {
+          "stav": "ano",
+          "hodnota": 90,
+          "citace": "Žádost o příspěvek je nutné podat do 90 dnů od data na dokladu o úhradě",
+          "url": "https://www.vozp.cz/vseobecne-podminky-cerpani-prispevku",
+          "overeno_at": "2026-11-03",
+          "jednotka": "dni"
+        },
+        "strop_dospely_kc": {
+          "stav": "castecne",
+          "citace": "může v kalendářním roce vyčerpat nanejvýš tři RŮZNÉ příspěvky ze všech preventivních programů",
+          "url": "https://www.vozp.cz/vseobecne-podminky-cerpani-prispevku",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Limit je počet různých příspěvků (3 za rok), ne částka v Kč; každý příspěvek má vlastní limit. Mimo limit jsou dárci krve a kostní dřeně a některé programy."
+        },
+        "strop_dite_kc": {
+          "stav": "castecne",
+          "citace": "může v kalendářním roce vyčerpat nanejvýš tři RŮZNÉ příspěvky ze všech preventivních programů",
+          "url": "https://www.vozp.cz/vseobecne-podminky-cerpani-prispevku",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Limit je počet různých příspěvků (3 za rok), ne částka v Kč; stejný limit pro děti a dospělé."
+        },
+        "jen_aplikace": {
+          "stav": "ne",
+          "citace": "c) papírové žádosti, jejíž formulář je k dispozici na www.vozp.cz nebo na každém kontaktním místě VoZP",
+          "url": "https://www.vozp.cz/vseobecne-podminky-cerpani-prispevku",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Žádost lze podat elektronicky, v aplikaci i papírově; e-mailem ne."
+        },
+        "podminene_prispevky": {
+          "stav": "castecne",
+          "citace": "mohou jako součást příspěvků čerpat také finanční bonusy (odměny) za absolvování určených preventivních prohlídek a screeningových vyšetření",
+          "url": "https://www.vozp.cz/vseobecne-podminky-cerpani-prispevku",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Vazba na prohlídku a screening je formou bonusu k příspěvku."
+        }
+      },
+      "kontroly": [
+        {
+          "id": "nku-18-14-201",
+          "organ": "NKÚ",
+          "cislo": "18/14",
+          "rok_kontroly": 2019,
+          "obdobi": "2015–2017",
+          "predmet": "Prostředky vybírané na základě zákona ve prospěch Vojenské zdravotní pojišťovny ČR (kolegium NKÚ 15. 4. 2019).",
+          "zjisteni": [
+            "Netransparentně a diskriminačně při čerpání fondu prevence: Manažerský program a Balíček prevence nezveřejnila na webu a vyplatila z nich vybrané skupině pojištěnců 12 373 112 Kč.",
+            "Manažerský program: v letech 2015–2017 šlo 1 096 632 Kč jen vybraným jedincům z cílové skupiny; podmínky znali jen předem vybraní pojištěnci.",
+            "Balíček prevence: příspěvek podmínila tím, že pojištěnec je zároveň zaměstnancem jednoho zaměstnavatele; podmínku použití prostředků (3 470 520 Kč v letech 2015–2017, především pro vojáky v zahraničních misích) nedodržela.",
+            "Z fondu prevence uhradila zdravotní balíčky a vitamínové přípravky pro marketing (79 199 Kč), které měla hradit z provozního fondu."
+          ],
+          "castky_kc": [
+            {
+              "popis": "Manažerský program a Balíček prevence vyplacené vybrané skupině",
+              "kc": 12373112
+            },
+            {
+              "popis": "Manažerský program 2015–2017",
+              "kc": 1096632
+            },
+            {
+              "popis": "Balíček prevence, nedodržená podmínka použití",
+              "kc": 3470520
+            },
+            {
+              "popis": "marketing hrazený z fondu prevence",
+              "kc": 79199
+            }
+          ],
+          "reakce": "VoZP ve zveřejněném stanovisku uvedla, že výtky se týkají především období předchozího vedení a že současný management modernizoval IT a nově nastavil vnitřní kontrolu (podle zpravodajství Echo24).",
+          "url": "https://nkuweb.nku.cz/assets/kon-zavery/k18014.pdf"
+        },
+        {
+          "id": "mz-mf-8-2020-201",
+          "organ": "MZ a MF",
+          "cislo": "8/2020",
+          "rok_kontroly": 2020,
+          "obdobi": "plnění opatření k NKÚ 18/14",
+          "predmet": "Kontrola plnění nápravných opatření z kontrolní akce NKÚ 18/14 (7. 8. až 13. 11. 2020), uložená usnesením vlády č. 678 z 30. 9. 2019.",
+          "zjisteni": [
+            "Ze 61 nápravných opatření VoZP splnila 55, částečně 5 a jedno nesplnila.",
+            "Nesplněné opatření se týkalo čerpání fondu prevence (manažerské programy): chyběl nový vnitřní předpis, který sladí pravidla čerpání s účetním zákonem."
+          ],
+          "reakce": "Navazující kontrola č. 8/2021 ověřila, že VoZP upravila systémy, procesy a řídicí dokumentaci k dokončení opatření.",
+          "url": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2020_hodnoceni.pdf"
+        }
+      ]
+    },
+    {
+      "kod": "205",
+      "zkratka": "ČPZP",
+      "podminky": {
+        "registrace_trva": {
+          "stav": "ano",
+          "citace": "Pojištěnec musí být v době čerpání (pořízení dokladu o úhradě služby či zboží) i nárokování (předložení dokladu v ČPZP) programu pojištěn u ČPZP a nesmí být pro následující období přeregistrován k jiné zdravotní pojišťovně.",
+          "url": "https://www.cpzp.cz/preventivni-programy",
+          "overeno_at": "2026-11-03"
+        },
+        "bez_preregistrace": {
+          "stav": "ano",
+          "citace": "Pojištěnec, který se pro následující období zaregistroval k jiné zdravotní pojišťovně. Toto opatření se týká všech předložených dokladů, z jakéhokoli období roku 2026.",
+          "url": "https://www.cpzp.cz/preventivni-programy",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Uvedeno v seznamu „Kdo o příspěvek požádat nemůže?“. Platí zpětně pro všechny doklady roku."
+        },
+        "preventivni_prohlidka": {
+          "stav": "castecne",
+          "citace": "Dalšími programy, kde bude čerpání příspěvku podmíněno preventivní prohlídkou, jsou Diabetes, Pravidelný pohyb, Jedeme dál, program Těhotenství+",
+          "url": "https://www.cpzp.cz/cpzp-v-roce-2026-bude-vice-programu-navazanych-na-preventivni-prohlidk",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Od 2026 podle tiskové zprávy ČPZP osm programů (dentální hygiena a dalších sedm); platnost prohlídky 24 měsíců."
+        },
+        "bez_dluhu": {
+          "stav": "ano",
+          "citace": "Pojištěnec, který má evidovaný splatný a ve lhůtě neuhrazený závazek podle zákona o pojistném na veřejné zdravotní pojištění.",
+          "url": "https://www.cpzp.cz/preventivni-programy",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Uvedeno v seznamu „Kdo o příspěvek požádat nemůže?“."
+        },
+        "lhuta_podani_dni": {
+          "stav": "ano",
+          "hodnota": 3,
+          "citace": "Doklady o úhradě lze uplatnit nejpozději do 3 měsíců od data vystavení.",
+          "url": "https://www.cpzp.cz/preventivni-programy",
+          "overeno_at": "2026-11-03",
+          "jednotka": "mesice"
+        },
+        "strop_dospely_kc": {
+          "stav": "ano",
+          "hodnota": 1000,
+          "citace": "Ženy od 18 let - až 1 000 Kč + programy, které lze čerpat nad stanovený roční limit.",
+          "url": "https://www.cpzp.cz/preventivni-programy",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Stejný limit pro muže od 18 let; vedle limitu doplňkové programy nad limit (např. dárci)."
+        },
+        "strop_dite_kc": {
+          "stav": "ano",
+          "hodnota": 1500,
+          "citace": "Děti a mládež do 17 let včetně - až 1 500 Kč + programy, které lze čerpat nad stanovený roční limit.",
+          "url": "https://www.cpzp.cz/preventivni-programy",
+          "overeno_at": "2026-11-03"
+        },
+        "jen_aplikace": {
+          "stav": "castecne",
+          "citace": "Program Krok pro zdraví je těsně spjat s fungováním mobilní aplikace, lze jej tedy proplácet jen prostřednictvím mobilní aplikace Zdraví v mobilu.",
+          "url": "https://www.cpzp.cz/preventivni-programy",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Ostatní programy i na pobočce, elektronickou přepážkou nebo poštou."
+        },
+        "podminene_prispevky": {
+          "stav": null,
+          "poznamka": "Vazbu příspěvků na screening nebo jiný hrazený výkon (mimo prohlídku) jsme v podmínkách ČPZP nenašli."
+        }
+      },
+      "kontroly": [
+        {
+          "id": "nku-13-22-205",
+          "organ": "NKÚ",
+          "cislo": "13/22",
+          "rok_kontroly": 2014,
+          "obdobi": "2009–2012",
+          "predmet": "Prostředky vybírané na základě zákona ve prospěch České průmyslové zdravotní pojišťovny, včetně dopadu procesu sloučení (kontrola červen 2013 až duben 2014).",
+          "zjisteni": [
+            "K fondu prevence kontrolní závěr uvádí hlavně popis: ČPZP byla v letech 2009 a 2010 vázána dohodou s MZ o maximální výši tvorby fondu a přesahující část převedla do základního fondu.",
+            "Fond prevence zrušené zdravotní pojišťovny, která zanikla sloučením, převzala se záporným zůstatkem (−201 638,06 Kč).",
+            "Výtky k čerpání příspěvků pojištěncům jsme v části o fondu prevence nenašli; záznam je zařazen pro úplnost přehledu."
+          ],
+          "castky_kc": [
+            {
+              "popis": "převod části tvorby fondu prevence do základního fondu za rok 2009",
+              "kc": 30342895
+            },
+            {
+              "popis": "převod části tvorby fondu prevence do základního fondu za rok 2010",
+              "kc": 68609114
+            }
+          ],
+          "reakce": "ČPZP podala námitky proti kontrolnímu protokolu; vypořádal je vedoucí skupiny kontrolujících a odvolání vypořádalo kolegium NKÚ (usnesení č. 6/VIII/2014).",
+          "url": "https://www.nku.cz/assets/kon-zavery/K13022.pdf"
+        }
+      ]
+    },
+    {
+      "kod": "207",
+      "zkratka": "OZP",
+      "podminky": {
+        "registrace_trva": {
+          "stav": null,
+          "poznamka": "Požadavek nepřetržité registrace od úhrady do výplaty jsme v podmínkách OZP nenašli; ověřit dotazem."
+        },
+        "bez_preregistrace": {
+          "stav": "ano",
+          "citace": "U klientů, kteří avizují odchod k jiné pojišťovně (tzn. podali žádost o přeregistraci), je nutné respektovat, že jejich rozhodnutí o změně zdravotní pojišťovny je z čerpání finančních prostředků Fondu prevence OZP zcela vylučuje.",
+          "url": "https://www.ozp.cz/web/files/zdrav_prog/podminky_cerpani_preventivnich_programu_ozp.pdf",
+          "overeno_at": "2026-11-03"
+        },
+        "preventivni_prohlidka": {
+          "stav": "castecne",
+          "citace": "je čerpání některých preventivních programů, především tzv. kuponů, vázáno na absolvování právními předpisy stanovených preventivních prohlídek",
+          "url": "https://www.ozp.cz/web/files/zdrav_prog/podminky_cerpani_preventivnich_programu_ozp.pdf",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Jen vybrané programy, především kupony."
+        },
+        "bez_dluhu": {
+          "stav": "ano",
+          "citace": "Příspěvek nebude poskytnut pojištěnci, který má jako plátce pojistného evidovaný splatný a ve lhůtě neuhrazený závazek vůči zdravotní pojišťovně podle zákona o pojistném na veřejné zdravotní pojištění",
+          "url": "https://www.ozp.cz/web/files/zdrav_prog/podminky_cerpani_preventivnich_programu_ozp.pdf",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Pojištěnec s řádně spláceným splátkovým kalendářem příspěvek získat může (na rozdíl od ZP MV a RBP)."
+        },
+        "lhuta_podani_dni": {
+          "stav": "ano",
+          "hodnota": 3,
+          "citace": "jsou akceptovány doklady maximálně 3 měsíce staré",
+          "url": "https://www.ozp.cz/web/files/zdrav_prog/podminky_cerpani_preventivnich_programu_ozp.pdf",
+          "overeno_at": "2026-11-03",
+          "poznamka": "U vybraných programů 12 měsíců; žádosti do 30. 11. 2026.",
+          "jednotka": "mesice"
+        },
+        "strop_dospely_kc": {
+          "stav": "castecne",
+          "hodnota": 10000,
+          "citace": "Odměnu v podobě kreditů pak můžete vyměnit za finanční příspěvky ve výši až 10 000 Kč podle vlastního uvážení.",
+          "url": "https://www.ozp.cz/",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Strop platí pro programy za kredity (kurz kreditů OZP může měnit kdykoli); kupony mají vlastní limity."
+        },
+        "strop_dite_kc": {
+          "stav": null,
+          "poznamka": "OZP strop zvlášť pro děti neuvádí; kreditový systém není členěn podle věku."
+        },
+        "jen_aplikace": {
+          "stav": "castecne",
+          "citace": "Řadu programů je vázána na portál VITAKARTA",
+          "url": "https://www.ozp.cz/web/files/zdrav_prog/podminky_cerpani_preventivnich_programu_ozp.pdf",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Programy za kredity jen přes VITAKARTU; žádosti o kupony i papírově."
+        },
+        "podminene_prispevky": {
+          "stav": null,
+          "poznamka": "Vazbu příspěvků na screening (mimo prohlídku) jsme v obecných podmínkách OZP nenašli."
+        }
+      },
+      "kontroly": []
+    },
+    {
+      "kod": "209",
+      "zkratka": "ZPŠ",
+      "podminky": {
+        "registrace_trva": {
+          "stav": null,
+          "poznamka": "Požadavek nepřetržité registrace jsme v podmínkách ZPŠ nenašli; platí jen stav „v době předložení žádosti“. Ověřit dotazem."
+        },
+        "bez_preregistrace": {
+          "stav": "ano",
+          "citace": "Příspěvek nebude proplacen pojištěnci, který v době předložení žádosti: je dlužníkem vůči ZPŠ, podepsal přihlášku k jiné zdravotní pojišťovně",
+          "url": "https://www.zpskoda.cz/podminky-proplaceni",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Rozhoduje stav v době předložení žádosti."
+        },
+        "preventivni_prohlidka": {
+          "stav": "castecne",
+          "citace": "U vybraných příspěvků je podmínkou absolvování preventivní prohlídky u praktického lékaře v posledních 30 měsících",
+          "url": "https://www.zpskoda.cz/podminky-proplaceni",
+          "overeno_at": "2026-11-03"
+        },
+        "bez_dluhu": {
+          "stav": "ano",
+          "citace": "Příspěvek nebude proplacen pojištěnci, který v době předložení žádosti: je dlužníkem vůči ZPŠ",
+          "url": "https://www.zpskoda.cz/podminky-proplaceni",
+          "overeno_at": "2026-11-03"
+        },
+        "lhuta_podani_dni": {
+          "stav": "ano",
+          "hodnota": 3,
+          "citace": "Doklady k proplacení nesmí být starší 3 měsíců od data vystavení",
+          "url": "https://www.zpskoda.cz/podminky-proplaceni",
+          "overeno_at": "2026-11-03",
+          "jednotka": "mesice"
+        },
+        "strop_dospely_kc": {
+          "stav": null,
+          "poznamka": "Souhrnný roční strop jsme v podmínkách ZPŠ nenašli; limity mají jednotlivé příspěvky."
+        },
+        "strop_dite_kc": {
+          "stav": null,
+          "poznamka": "Souhrnný roční strop jsme v podmínkách ZPŠ nenašli; limity mají jednotlivé příspěvky."
+        },
+        "jen_aplikace": {
+          "stav": "ne",
+          "citace": "Žádost s doklady můžete poslat e-mailem, datovou schránkou nebo poštou.",
+          "url": "https://www.zpskoda.cz/podminky-proplaceni",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Žádost lze podat také osobně a v aplikaci Karta mého srdce."
+        },
+        "podminene_prispevky": {
+          "stav": null,
+          "poznamka": "Vazbu příspěvků na screening (mimo prohlídku) jsme v podmínkách ZPŠ nenašli."
+        }
+      },
+      "kontroly": []
+    },
+    {
+      "kod": "211",
+      "zkratka": "ZP MV ČR",
+      "podminky": {
+        "registrace_trva": {
+          "stav": "ano",
+          "citace": "jsou registrováni u ZP MV ČR nepřetržitě od úhrady zboží či služby nebo ukončení pobytu do data vyplacení příspěvku",
+          "url": "https://www.zpmvcr.cz/podminky-pro-cerpani-preventivnich-programu",
+          "overeno_at": "2026-11-03"
+        },
+        "bez_preregistrace": {
+          "stav": "ano",
+          "citace": "se pro následující období přeregistrovali k jiné zdravotní pojišťovně, a to bez ohledu na datum úhrady či ukončení pobytu, a bez ohledu na to, ve které fázi zpracování se jejich žádost o příspěvek nachází",
+          "url": "https://www.zpmvcr.cz/podminky-pro-cerpani-preventivnich-programu",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Platí zpětně, i pro žádost, která je už ve zpracování."
+        },
+        "preventivni_prohlidka": {
+          "stav": "castecne",
+          "citace": "Čerpání příspěvků z tohoto programu je podmíněno absolvováním preventivní prohlídky u praktického lékaře.",
+          "url": "https://www.zpmvcr.cz/sites/www.zpmvcr.cz/files/casopis/Letak_FP_2026_1Q_web.pdf",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Program Preventivní vyšetření a podpora pohybu pro dospělé; další vazby viz podmíněné příspěvky."
+        },
+        "bez_dluhu": {
+          "stav": "ano",
+          "citace": "mají vůči naší pojišťovně nevyrovnaný dluh na pojistném nebo jiné závazky (splátkový kalendář nelze akceptovat jako bezdlužnost)",
+          "url": "https://www.zpmvcr.cz/podminky-pro-cerpani-preventivnich-programu",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Splátkový kalendář bezdlužnost nezakládá (na rozdíl od OZP)."
+        },
+        "lhuta_podani_dni": {
+          "stav": "ano",
+          "hodnota": 3,
+          "citace": "Žádost je třeba podat do tří měsíců od úhrady, ukončení pobytu nebo vyhodnocení efektu",
+          "url": "https://www.zpmvcr.cz/podminky-pro-cerpani-preventivnich-programu",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Listinně nejpozději 30. 11., elektronicky 31. 12. 2026.",
+          "jednotka": "mesice"
+        },
+        "strop_dospely_kc": {
+          "stav": "ne",
+          "citace": "Každý pojištěnec může při splnění podmínek čerpat z každého programu až do maximální částky.",
+          "url": "https://www.zpmvcr.cz/podminky-pro-cerpani-preventivnich-programu",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Souhrnný strop není; limit mají programy. Leták uvádí „až 10 000 Kč pro dospělého“ jen jako modelový součet programů."
+        },
+        "strop_dite_kc": {
+          "stav": "ne",
+          "citace": "Každý pojištěnec může při splnění podmínek čerpat z každého programu až do maximální částky.",
+          "url": "https://www.zpmvcr.cz/podminky-pro-cerpani-preventivnich-programu",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Souhrnný strop není; limit mají programy. Leták uvádí „až 15 000 Kč pro dítě do 18 let“ jen jako modelový součet programů."
+        },
+        "jen_aplikace": {
+          "stav": "castecne",
+          "citace": "Žádost o některé příspěvky lze podat pouze elektronickou cestou, to je vždy uvedeno ve specifických podmínkách příspěvku.",
+          "url": "https://www.zpmvcr.cz/podminky-pro-cerpani-preventivnich-programu",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Většinu příspěvků lze podat i listinně na klientském centru nebo poštou."
+        },
+        "podminene_prispevky": {
+          "stav": "ano",
+          "citace": "za účast alespoň v jednom celorepublikovém screeningovém programu v roce 2026: program Podpora screeningových vyšetření",
+          "url": "https://www.zpmvcr.cz/podminky-pro-cerpani-preventivnich-programu",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Navíc příspěvky vázané na hrazené očkování (program pro klienty od 65 let)."
+        }
+      },
+      "kontroly": [
+        {
+          "id": "nku-14-33-211",
+          "organ": "NKÚ",
+          "cislo": "14/33",
+          "rok_kontroly": 2015,
+          "obdobi": "2012–2013",
+          "predmet": "Prostředky vybírané na základě zákona ve prospěch Zdravotní pojišťovny ministerstva vnitra ČR (kolegium NKÚ 30. 11. 2015).",
+          "zjisteni": [
+            "Nehospodárný postup při čerpání fondu prevence a ve věcných souvislostech provozního fondu v úhrnné výši 635 125 Kč, například sportovní a kulturní program, který už byl součástí ceny léčebně ozdravných pobytů dětí.",
+            "U dvou nadlimitních veřejných zakázek na léčebně ozdravné pobyty dětí neuzavřela smlouvu v souladu s nabídkou.",
+            "Nerespektovala pravidla schválená správní radou: některým pojištěncům uhradila pobyt dvakrát ročně, přestože šlo nejvýše jednou, a 1 083 161 Kč za pobyty 44 pojištěnců, kteří nespadali do cílové skupiny programu (osoby ohrožené charakterem práce)."
+          ],
+          "castky_kc": [
+            {
+              "popis": "nehospodárný postup (fond prevence a provozní fond)",
+              "kc": 635125
+            },
+            {
+              "popis": "pobyty 44 pojištěnců mimo cílovou skupinu",
+              "kc": 1083161
+            }
+          ],
+          "reakce": "ZP MV ČR podala námitky proti kontrolnímu protokolu; vypořádal je vedoucí skupiny kontrolujících a odvolání vypořádalo kolegium NKÚ (podle úvodu kontrolního závěru).",
+          "url": "https://nkuweb.nku.cz/assets/kon-zavery/k14033.pdf"
+        },
+        {
+          "id": "mz-mf-2018-211",
+          "organ": "MZ a MF",
+          "cislo": "veřejnosprávní kontrola 2018",
+          "rok_kontroly": 2018,
+          "obdobi": "2017 a související",
+          "predmet": "Veřejnosprávní kontrola ZP MV ČR provedená Ministerstvem zdravotnictví a Ministerstvem financí (tisková zpráva MZ z 29. 6. 2018).",
+          "zjisteni": [
+            "Pojišťovna dosud až na výjimky neprováděla vyhodnocování efektů a přínosů u výdajů z fondu prevence.",
+            "U jednoho z preventivních programů nebyli dostatečně specifikováni příjemci příspěvku a čerpání neodpovídalo původnímu záměru programu.",
+            "Kontrola podle MZ nekonstatovala žádná závažná pochybení ohrožující činnost pojišťovny."
+          ],
+          "reakce": "Podle MZ pojišťovna na většinu nedostatků reagovala už v průběhu kontroly; zbylá nápravná opatření měla být předmětem následné kontroly MF a MZ.",
+          "url": "https://mzd.gov.cz/tiskove-centrum-mz/vysledky-kontroly-v-nejvetsi-zamestnanecke-zdravotni-pojistovne/"
+        },
+        {
+          "id": "mz-8-2023-211",
+          "organ": "MZ",
+          "cislo": "8/2023",
+          "rok_kontroly": 2023,
+          "obdobi": "2023",
+          "predmet": "Realizace a účinnost opatření přijatých ZP MV ČR k odstranění nedostatků zjištěných při předchozí kontrole náboru pojištěnců (odpověď MZ podle zák. 106/1999 Sb. ze září 2026).",
+          "zjisteni": [
+            "Pojišťovna přijala jen částečná opatření k nápravě: změnila vnitřní pravidla pro nábor pojištěnců.",
+            "V roce 2023 postupovala v rozporu se společným stanoviskem Svazu zdravotních pojišťoven a VZP, protože měla uzavřenu dohodu o provedení práce na nábory; stanovisko slibovalo ukončit odměňování za nábor nejpozději od 1. 1. 2023."
+          ],
+          "reakce": "Reakci pojišťovny jsme nedohledali.",
+          "url": "https://mzd.gov.cz/wp-content/uploads/2026/09/293.pdf"
+        },
+        {
+          "id": "nku-23-12-211",
+          "organ": "NKÚ",
+          "cislo": "23/12",
+          "rok_kontroly": 2024,
+          "obdobi": "2020–2022",
+          "predmet": "Prostředky vybírané na základě zákona ve prospěch Zdravotní pojišťovny ministerstva vnitra ČR (kolegium NKÚ 20. 5. 2024).",
+          "zjisteni": [
+            "Program podpory profesí s vyšším zdravotním rizikem (téměř 66 mil. Kč): zařazení zaměstnavatele podmínila nejméně 300 registrovanými pojištěnci nebo 25 % zaměstnanců a rozdělení prostředků mezi pojištěnce ponechala na zaměstnavateli; pojištěnci plnící podmínky byli znevýhodněni tím, že jejich zaměstnavatel podmínky nesplnil.",
+            "Do programu zařadila spolek, který podmínky nesplňoval; spolek čerpal 2 510 325 Kč.",
+            "Na rehabilitační a léčebně preventivní pobyty šlo 39 469 890 Kč; pojišťovna nevstupovala do výběru pojištěnců a neověřovala oprávněnost, ve všech třech letech čerpalo 375 týchž pojištěnců.",
+            "Na vzorku 146 pojištěnců (191 883 Kč) vyplatila u 37 příspěvek v nesprávné výši; 15 pojištěnců přeplatek vrátilo.",
+            "Při vyřizování stížností k sezónní akci na posílení imunity (2020, 2022) rozhodovala rozdílně: části pojištěnců příspěvek vyplatila, jiným v obdobných případech ne."
+          ],
+          "castky_kc": [
+            {
+              "popis": "program podpory profesí s vyšším zdravotním rizikem (téměř)",
+              "kc": 66000000
+            },
+            {
+              "popis": "spolek zařazený do programu bez splnění podmínek",
+              "kc": 2510325
+            },
+            {
+              "popis": "rehabilitační a léčebně preventivní pobyty",
+              "kc": 39469890
+            },
+            {
+              "popis": "vzorek 146 pojištěnců",
+              "kc": 191883
+            }
+          ],
+          "reakce": "Veřejnou reakci pojišťovny k zjištěním o fondu prevence jsme nedohledali; opatření k nápravě přijala a MZ jejich plnění zkontrolovalo (kontrola č. 1/2024 níže).",
+          "url": "https://nku.gov.cz/assets/kon-zavery/K23012.pdf"
+        },
+        {
+          "id": "mz-1-2024-211",
+          "organ": "MZ",
+          "cislo": "1/2024",
+          "rok_kontroly": 2025,
+          "obdobi": "2023–2024",
+          "predmet": "Realizace a účinnost opatření přijatých ZP MV ČR po kontrolní akci NKÚ 23/12; uloženo usnesením vlády č. 778 ze 6. 11. 2024, ukončeno v dubnu 2025.",
+          "zjisteni": [
+            "I v roce 2024 vyplácela příspěvky z fondu prevence pojištěncům, kteří na ně neměli nárok: u 17 z 26 žádostí k programu Prevence zubních onemocnění nebyla splněna podmínka podání do tří měsíců od úhrady, přesto byla udělena výjimka.",
+            "Rozdělení prostředků mezi pojištěnce ponechala zcela na zaměstnavateli a do programu pro profese s vyšším zdravotním rizikem opět zařadila organizaci, u které NKÚ konstatoval, že není zaměstnavatelem; podmínky čerpání nezveřejnila.",
+            "Nezveřejnila všechny podmínky příspěvku na rehabilitační a léčebně preventivní pobyty; v letech 2023 a 2024 jej čerpalo 491 týchž pojištěnců (38 % všech čerpajících).",
+            "Funkčnost přijatých opatření MZ nemohlo ověřit kvůli krátkému času od kontroly NKÚ; ověří se při další kontrole."
+          ],
+          "reakce": "Reakci pojišťovny jsme nedohledali.",
+          "url": "https://mzd.gov.cz/wp-content/uploads/2026/09/293.pdf"
+        }
+      ]
+    },
+    {
+      "kod": "213",
+      "zkratka": "RBP",
+      "podminky": {
+        "registrace_trva": {
+          "stav": "castecne",
+          "citace": "Nový pojištěnec má nárok na příspěvek z fondu prevence na základě předložení dokladů, kdy datum na těchto dokladech musí být shodné nebo pozdější než datum přechodu pojištěnce k RBP.",
+          "url": "https://www.rbp213.cz/pojistenci/zakladni-informace/zasady-proplaceni/a-105/",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Pravidlo pro nové pojištěnce; nepřetržitost do data výplaty výslovně neuvedena."
+        },
+        "bez_preregistrace": {
+          "stav": "ano",
+          "citace": "podepsal registraci (přihlášku) k jiné zdravotní pojišťovně pro následující období",
+          "url": "https://www.rbp213.cz/pojistenci/zakladni-informace/zasady-proplaceni/a-105/",
+          "overeno_at": "2026-11-03"
+        },
+        "preventivni_prohlidka": {
+          "stav": "castecne",
+          "citace": "Vybrané preventivní a bonusové programy jsou podmíněny absolvováním preventivní prohlídky u praktického lékaře",
+          "url": "https://www.rbp213.cz/pojistenci/zakladni-informace/zasady-proplaceni/a-105/",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Prohlídka nesmí být starší 24 měsíců; podle RBP jde o čtyři vybrané programy."
+        },
+        "bez_dluhu": {
+          "stav": "ano",
+          "citace": "je u pojištěnce evidován nedoplatek na zdravotním pojištění, penále či jiný závazek vůči zdravotní pojišťovně (vztahuje se na insolvence, splátkové kalendáře atd.)",
+          "url": "https://www.rbp213.cz/pojistenci/zakladni-informace/zasady-proplaceni/a-105/",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Splátkový kalendář se výslovně počítá jako závazek."
+        },
+        "lhuta_podani_dni": {
+          "stav": "ano",
+          "hodnota": 3,
+          "citace": "U ostatních příspěvků musí být doklady o zaplacení vystavené na jméno pojištěnce a ne starší 3 měsíce (od data skutečné úhrady).",
+          "url": "https://www.rbp213.cz/pojistenci/zakladni-informace/zasady-proplaceni/a-105/",
+          "overeno_at": "2026-11-03",
+          "poznamka": "6 měsíců u příspěvků podmíněných prohlídkou; žádosti do 30. 11. 2026.",
+          "jednotka": "mesice"
+        },
+        "strop_dospely_kc": {
+          "stav": "ano",
+          "hodnota": 1000,
+          "citace": "lze čerpat jen do výše celkové hodnoty finančního příspěvku ve výši 1 000 Kč",
+          "url": "https://www.rbp213.cz/pojistenci/zakladni-informace/zasady-proplaceni/a-105/",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Aktivity označené jako bonusy lze čerpat nad limit."
+        },
+        "strop_dite_kc": {
+          "stav": "ano",
+          "hodnota": 1000,
+          "citace": "lze čerpat jen do výše celkové hodnoty finančního příspěvku ve výši 1 000 Kč",
+          "url": "https://www.rbp213.cz/pojistenci/zakladni-informace/zasady-proplaceni/a-105/",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Rodič může převést část limitu 500 Kč na dítě (celkem 1 500 Kč); aktivity označené jako bonusy lze čerpat nad limit."
+        },
+        "jen_aplikace": {
+          "stav": "castecne",
+          "citace": "žádosti o příspěvky z balíčku Uživatelé my213 lze podat pouze přes aplikaci my213",
+          "url": "https://www.rbp213.cz/pojistenci/zakladni-informace/zasady-proplaceni/a-105/",
+          "overeno_at": "2026-11-03",
+          "poznamka": "Jinak podání i na pobočce nebo poštou."
+        },
+        "podminene_prispevky": {
+          "stav": null,
+          "poznamka": "Vazbu příspěvků na screening (mimo prohlídku) jsme v podmínkách RBP nenašli."
+        }
+      },
+      "kontroly": []
+    }
+  ],
+  "kontroly_plosne": [
+    {
+      "id": "mz-akvizice-2022",
+      "organ": "MZ",
+      "cislo": "akvizice nových pojištěnců",
+      "rok_kontroly": 2022,
+      "obdobi": "do 2022",
+      "predmet": "Kontrola postupu veřejných zdravotních pojišťoven při akvizici nových pojištěnců u všech sedmi pojišťoven; podnětem byly stížnosti na neoprávněné přeregistrace. Týká se fondu prevence nepřímo: přeregistrace je právě to, co pravidla fondu u většiny pojišťoven trestají.",
+      "zjisteni": [
+        "Pojišťovny se dohodly, že nejpozději od 1. 1. 2023 skončí jakékoli odměňování zaměstnanců za akvizici pojištěnců bez ohledu na typ pracovněprávního vztahu."
+      ],
+      "reakce": "Dohoda všech pojišťoven (Svaz zdravotních pojišťoven a VZP ČR ji 12. 12. 2022 předložily ministrovi).",
+      "url": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2022_hodnoceni.pdf"
+    },
+    {
+      "id": "mz-akvizice-nasledna-2025",
+      "organ": "MZ",
+      "cislo": "následná kontrola akvizice",
+      "rok_kontroly": 2025,
+      "obdobi": "2023–2024",
+      "predmet": "Realizace a účinnost opatření přijatých po kontrole akvizice nových pojištěnců, u všech pojišťoven (ukončena v roce 2025).",
+      "zjisteni": [
+        "V roce 2022 došlo k významnému poklesu nežádoucích přeregistrací a související odměňování akvizičních zaměstnanců z veřejných prostředků; v roce 2023 byly takové případy zjištěny jen jednotlivě.",
+        "Slib ukončit jakékoli odměňování za akvizici od 1. 1. 2023 se podle MZ bez výjimek nenaplnil."
+      ],
+      "reakce": "Reakci pojišťoven jsme nedohledali.",
+      "url": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni.pdf"
+    }
+  ],
+  "zdroje": [
+    {
+      "id": "nku",
+      "nazev": "NKÚ: kontrolní závěry 13/22, 14/33, 18/14, 20/24, 23/12",
+      "url": "https://www.nku.gov.cz/"
+    },
+    {
+      "id": "mz_hodnoceni",
+      "nazev": "MZ: Hodnocení vývoje systému veřejného zdravotního pojištění, kap. 4.4 Kontroly a šetření (2020 až 2024)",
+      "url": "https://mzd.gov.cz/hodnoceni-vyvoje-systemu-verejneho-zdravotniho-pojisteni/"
+    },
+    {
+      "id": "mz_106",
+      "nazev": "MZ: odpověď podle zák. 106/1999 Sb. z 11/2025 (stanovisko k podmínce nepřeregistrace)",
+      "url": "https://mzd.gov.cz/wp-content/uploads/2025/11/300.pdf"
+    },
+    {
+      "id": "mz_293",
+      "nazev": "MZ: odpověď podle zák. 106/1999 Sb. z 9/2026 (zprávy z kontrol ZP MV ČR od roku 2023)",
+      "url": "https://mzd.gov.cz/wp-content/uploads/2026/09/293.pdf"
+    },
+    {
+      "id": "zakony",
+      "nazev": "Zákony 551/1991 Sb. a 280/1992 Sb. (zakonyprolidi.cz)",
+      "url": "https://www.zakonyprolidi.cz/cs/1992-280"
+    }
+  ],
+  "poznamky_autora": [
+    "Podmínky jsou z webů pojišťoven ke 3. 11. 2026 (pravidla pro rok 2026). Pojišťovny je během roku mění; datum ověření je u každé položky.",
+    "ZP MV ČR: PDF „Podmínky FP“ nelze stáhnout (server vrací HTTP 403), proto citujeme webovou stránku Podmínky pro čerpání preventivních programů a leták Bonusy 2026.",
+    "OZP, ZPŠ, RBP: nepřetržitost registrace od úhrady do výplaty v obecných podmínkách nenalezena (stav null); otázka do kola 1.",
+    "Souhrnný roční strop: VZP a ZP MV jej nemají (limity mají programy), VoZP limituje počet příspěvků (3 různé za rok), ČPZP a RBP mají strop v Kč s programy nad limit, OZP má strop jen u kreditů. U ZPŠ a strop pro děti u OZP jsme nenašli.",
+    "Všech sedm pojišťoven vylučuje pojištěnce s podanou přihláškou k jiné pojišťovně; liší se tím, zda rozhoduje stav ke dni podání žádosti (VZP, ZPŠ) nebo zpětně i datum úhrady (VoZP, ČPZP, ZP MV).",
+    "NKÚ kontroloval fond prevence u VoZP (18/14), VZP (20/24) a ZP MV ČR (14/33, 23/12); u ČPZP (13/22) jen okrajově. U OZP, ZPŠ a RBP jsme zveřejněný kontrolní závěr NKÚ k fondu prevence nenašli. Počet kontrol závisí na plánu NKÚ a nevypovídá o kvalitě pojišťovny.",
+    "Odpověď MZ ze září 2026 (kontroly ZP MV ČR od roku 2023) obsahuje jména osob a poskytovatelů začerněná; zjištění jsme převzali bez nich."
+  ]
+}

@@ -483,6 +483,136 @@ export function parseTab4Vydaje(text) {
   return null;
 }
 
+// ---------------------------------------------------------------------------------- PDF Tab. 16 a 17 (fond prevence)
+
+const POMLCKA = /^[–—-]$/;
+const FOND_RADKY = ['programy', 'pobyty', 'ostatni', 'jine_zdroje', 'celkem'];
+const FOND_POPISKY = [/zdravotn[ií] programy/i, /ozdravn[eé] pobyty/i, /ostatn[ií] [cč]innosti/i, /z jin[yý]ch zdroj/i, /celkov[eé] n[aá]klady/i];
+
+/**
+ * Rozdělí číselnou část řádku tabulky na buňky. Sloupce jsou odděleny ≥ 2 mezerami, tisíce jednou („1 782“),
+ * pomlčka „–“ je buňka (nula / neuvedeno) → null. Vrací pole buněk nebo null, když řádek není číselný.
+ */
+function bunkyRadku(line, ocekavano) {
+  const telo = String(line).replace(/^[^\d–—-]*/, '').trim();
+  if (!telo) return null;
+  const tokeny = telo.split(/\s{2,}/);
+  const out = [];
+  let nevalidni = false;
+  for (const t of tokeny) {
+    if (POMLCKA.test(t)) { out.push(null); continue; }
+    if (!/^\d{1,3}( \d{3})*$|^\d+$/.test(t)) { nevalidni = true; if (!/^[\d ]+$/.test(t)) return null; continue; }
+    out.push(Number(t.replace(/ /g, '')));
+  }
+  if (nevalidni && !(ocekavano && /^[\d ]+$/.test(telo))) return null;
+  // úzké sloupce: „922 304 1 161 291“ (sloupec odděluje jediná mezera) → rozklad na očekávaný počet buněk
+  if (ocekavano && out.length !== ocekavano && /^[\d ]+$/.test(telo)) return rozdelCisla(telo, ocekavano, { maxDigits: 7 })[0] ?? out;
+  return out;
+}
+
+/**
+ * Řádky tabulky fondu prevence (programy, pobyty, ostatní, jiné zdroje, celkem): popisek je v PDF zalomený na dva
+ * řádky a čísla leží podle ročníku na prvním, druhém nebo (2021) prostředním řádku, proto se řádky berou jako první
+ * pět číselných řádků v okně a popisky se jen ověřují v pořadí. `od` = index řádku hlavičky tabulky.
+ * @returns {{ hlavicka: string[], radky: (number|null)[][] }|null}
+ */
+function okenkoFondu(radky, od, nSloupcu) {
+  const hlavicka = [];
+  const cisla = [];
+  for (let i = od; i < Math.min(radky.length, od + 24) && cisla.length < FOND_RADKY.length; i++) {
+    const b = /Ukazatel|[ÚU][cč]elov[aá] polo[zž]ka|^\s*\(v (?:mil|tis)\. K[cč]\)/i.test(radky[i]) ? null : bunkyRadku(radky[i], nSloupcu ?? cisla[0]?.length);
+    if (b && b.length >= 6 && b.length === (nSloupcu ?? cisla[0]?.length ?? b.length)) cisla.push(b);
+    else if (!cisla.length) hlavicka.push(radky[i]);
+  }
+  if (cisla.length < FOND_RADKY.length) return null;
+  const okno = radky.slice(od, od + 28).join('\n');
+  let pozice = 0;
+  for (const re of FOND_POPISKY) {
+    const m = re.exec(okno.slice(pozice));
+    if (!m) return null;
+    pozice += m.index + m[0].length;
+  }
+  return { hlavicka, radky: cisla };
+}
+
+/**
+ * Tabulka „Náklady na preventivní zdravotní péči (a další programy) čerpané z fondu prevence ZP a specifických fondů
+ * VoZP ČR podle zdravotních pojišťoven v roce <rok>“ (Tab. 17 v ročnících 2018–2024; v 2015–2017 není → null), mil. Kč.
+ * Sloupce VZP ČR, VoZP ČR, ČPZP, OZP, ZPŠ, ZP MV ČR, RBP; „–“ = null (nula / neuvedeno).
+ * @returns {null | { programy, pobyty, ostatni, jine_zdroje, celkem }} každé = {kod → číslo|null}
+ */
+export function parseTab17(text, { rok } = {}) {
+  const radky = String(text).split(/\r?\n/);
+  const re = new RegExp(`^\\s*Tab(?:ulka|\\.)?\\s*(?:č\\.\\s*)?17\\s*:`, 'i');
+  for (let i = 0; i < radky.length; i++) {
+    if (!re.test(radky[i])) continue;
+    const nadpis = radky.slice(i, i + 3).join(' ');
+    if (rok != null && !new RegExp(`v roce ${rok}(?!\\d)`).test(nadpis)) continue;
+    if (!/Ukazatel/i.test(radky.slice(i + 1, i + 6).join('\n'))) continue;
+    const t = okenkoFondu(radky, i + 1, 7);
+    if (!t) continue;
+    const out = {};
+    FOND_RADKY.forEach((id, j) => { out[id] = mapujZp(t.radky[j]); });
+    return out;
+  }
+  return null;
+}
+
+/**
+ * Vývoj nákladů fondu prevence za celou ČR (Tab. 16; v ročnících 2015–2017 Tab. 8 v tis. Kč): šestiletá okna
+ * v každém PDF + sloupec ZPP (plán) posledního roku. Hodnoty v mil. Kč.
+ * @returns {null | { jednotka: 'mil'|'tis', roky: Record<number, {programy,pobyty,ostatni,jine_zdroje,celkem}>, zpp: null|{rok:number, programy,pobyty,ostatni,jine_zdroje,celkem} }}
+ */
+export function parseTab16(text) {
+  const radky = String(text).split(/\r?\n/);
+  const re = /^\s*Tab(?:ulka|\.)?\s*(?:č\.\s*)?(?:16\s*:|8\s*:\s*N[aá]klady na preventivn)/i;
+  for (let i = 0; i < radky.length; i++) {
+    if (!re.test(radky[i])) continue;
+    const okno = radky.slice(i + 1, i + 8).join('\n');
+    if (!/Ukazatel|[ÚU][cč]elov[aá] polo[zž]ka/i.test(okno)) continue;
+    const t = okenkoFondu(radky, i + 1, null);
+    if (!t) continue;
+    // hlavička: řádek s nejvíce roky (u 2019+ je ve 2. řádku, rok ZPP se opakuje v 1.)
+    let roky = [];
+    for (const h of t.hlavicka) {
+      const r = [...h.matchAll(/(?<!\d)(20\d\d)(?!\d)/g)].map((m) => Number(m[1]));
+      if (r.length > roky.length) roky = r;
+    }
+    if (roky.length < 2) continue;
+    const sloupce = [];
+    roky.forEach((r) => { if (sloupce.at(-1) !== r) sloupce.push(r); });
+    const n = t.radky[0].length;
+    if (n !== sloupce.length && n !== sloupce.length + 1) continue;
+    const tis = /v tis\. K[cč]/i.test(t.hlavicka.join('\n'));
+    const prevod = (v) => (v == null ? null : tis ? Math.round(v) / 1000 : v);
+    const hodnotyAt = (j) => Object.fromEntries(FOND_RADKY.map((id, k) => [id, prevod(t.radky[k][j])]));
+    const out = { jednotka: tis ? 'tis' : 'mil', roky: {}, zpp: null };
+    sloupce.forEach((r, j) => { out.roky[r] = hodnotyAt(j); });
+    if (n === sloupce.length + 1) out.zpp = { rok: sloupce.at(-1), ...hodnotyAt(n - 1) };
+    return out;
+  }
+  return null;
+}
+
+/**
+ * Hodnota ČR za rok z Tab. 16 PDF téhož roku (sloupec roku). V PDF Hodnocení 2018 jsou sloupce „2018“ a „2018 ZPP“
+ * zaměněny (914 / 876 programy; skutečnost 876 sedí na součet Tab. 17 a na řady v Hodnocení 2019–2020): když součet
+ * celkem Tab. 17 neodpovídá sloupci roku (±3 mil.), ale odpovídá sloupci ZPP, použije se ZPP a vrátí se poznámka.
+ * @returns {null | { hodnoty: {programy,pobyty,ostatni,jine_zdroje,celkem}, poznamka: string|null }}
+ */
+export function vyberTab16(tab16, rok, tab17 = null) {
+  const skut = tab16?.roky?.[rok];
+  if (!skut) return null;
+  if (tab17 && tab16.zpp?.rok === rok) {
+    const soucet = Object.values(tab17.celkem).reduce((a, v) => a + (v ?? 0), 0);
+    if (Math.abs(skut.celkem - soucet) > 3 && Math.abs(tab16.zpp.celkem - soucet) <= 3) {
+      const { rok: _r, ...zpp } = tab16.zpp;
+      return { hodnoty: zpp, poznamka: `V PDF Hodnocení ${rok} jsou sloupce „${rok}“ (${skut.celkem}) a „${rok} ZPP“ (${zpp.celkem}) zaměněny; použit sloupec, který sedí na součet Tab. 17 (${soucet}) a na Hodnocení ${rok + 1}` };
+    }
+  }
+  return { hodnoty: { ...skut }, poznamka: null };
+}
+
 // ---------------------------------------------------------------------------------- jeden ročník
 
 /** Kanonické klíče listů → klíč pro findSheet. */
@@ -532,6 +662,8 @@ export function parseRok({ rok, listy, pdfText }) {
     tab3c: zkus('Tabulka č. 3c', () => parseTab3c(r('tab3c'), { rok })),
     tab7: pdfText == null ? null : zkus('PDF Tab. 7', () => parseTab7(pdfText)),
     tab4: pdfText == null ? null : zkus('PDF Tab. 4', () => parseTab4Vydaje(pdfText)),
+    tab17: pdfText == null ? null : zkus('PDF Tab. 17', () => parseTab17(pdfText, { rok })),
+    tab16: pdfText == null ? null : zkus('PDF Tab. 16', () => parseTab16(pdfText)),
     chyby,
   };
 }
