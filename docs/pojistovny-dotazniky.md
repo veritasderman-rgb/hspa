@@ -9,6 +9,7 @@
 | prosinec 2026 (po schválení kritérií na PS 12. 11. 2026) | `aplikace-privetivost` | IT expert redakce; hodnotí každou ze 7 aplikací zvlášť, pojišťovna list nevyplňuje | `interni` | 8 |
 | kolo 1 · leden 2027 | `fond-prevence` | zdravotní pojišťovny (všech 7, stejné znění týž den) | `dopis+web` | 7 |
 | kolo 1 · leden 2027 (spolu s fondem prevence) | `pobocky-definice` | zdravotní pojišťovny (všech 7, stejné znění týž den) | `dopis+web` | 4 |
+| kolo 1 · leden 2027 (spolu s fondem prevence) | `dostupnost-prechody` | zdravotní pojišťovny (všech 7, stejné znění týž den) | `dopis+web` | 4 |
 | Q1 2027 (s NAPO) | `napo-pacientske-organizace` | pacientské organizace (členské organizace NAPO); odpovídá organizace za své členy, ne jednotlivec | `web-token` | 16 |
 | po návrhu verdiktů · březen 2027 | `pravo-na-odpoved` | zdravotní pojišťovna, které se návrh hodnocení týká | `dopis+web` | 3 |
 | kolo 2 · Q2 2027 | `rizikovi-pojistenci` | zdravotní pojišťovny (všech 7, adresný odkaz s tokenem) | `web-token` | 14 |
@@ -113,9 +114,9 @@ _Vstup:_ Hodnoticí list IT experta: stupeň 0 / 1 / 2 u šesti kritérií K1–
 
 _Výstup:_ Matice kritérií 7 × 6 a skóre na stránce Aplikace; po právu na odpověď (10 dní) návrh stavu v semaforu, oblast Klientský servis.
 
-## 2. Leden 2027: kolo 1 (fond prevence + pobočky)
+## 2. Leden 2027: kolo 1 (fond prevence, pobočky, dostupnost a přestupy)
 
-Obě sady jdou všem sedmi pojišťovnám v jednom dopise, týž den a ve stejném znění (metodika § 4 bod 2). Odpovídá se písemně (dokumenty jsou podkladem a zveřejňují se v plném znění) nebo přes formulář s tokenem. Před žádostí podle zákona č. 106/1999 Sb. je vždy dobrovolná nabídka spolupráce (§ 4 bod 3).
+Všechny tři sady jdou všem sedmi pojišťovnám v jednom dopise, týž den a ve stejném znění (metodika § 4 bod 2). Odpovídá se písemně (dokumenty jsou podkladem a zveřejňují se v plném znění) nebo přes formulář s tokenem. Před žádostí podle zákona č. 106/1999 Sb. je vždy dobrovolná nabídka spolupráce (§ 4 bod 3).
 
 ### Fond prevence – první kolo (`fond-prevence`)
 
@@ -211,6 +212,43 @@ _Vstup:_ Počty míst podle jednotné definice (přepážka, úřední hodiny �
 4. Seznam se jednou ročně kontroluje namátkou (5 adres na pojišťovnu proti webu); rozpor se zapíše do changelogu, verdikt se nemění bez práva na odpověď.
 
 _Výstup:_ Tabulka míst podle definice a na 100 tisíc pojištěnců, mapa pokrytí krajů; vstup do oblasti Klientský servis (spolu s aplikacemi), ne samostatný verdikt.
+
+### Dostupnost péče a přestupy pojištěnců (`dostupnost-prechody`)
+
+| Kdy | Komu | Kanál | Lhůta | Co se zveřejní |
+|---|---|---|---|---|
+| kolo 1 · leden 2027 (spolu s fondem prevence) | zdravotní pojišťovny (všech 7, stejné znění týž den) | `dopis+web`: dopis + web s tokenem nebo písemná odpověď | 15 dnů (s kolem 1) | čísla k § 16, zajištění péče, odkaz na čekací doby a hrubé toky přestupů; aktualizace inventáře `data/pojistovny-dostupnost.json` |
+
+Sada `dostupnost-prechody` · typ `otevrene` · verze 1 · 4 otázky · povolení respondenti: `pojistovna`
+
+**Právní základ:** Dobrovolná nabídka spolupráce (metodika § 4 bod 3). Pokud do 15 dnů odpověď nepřijde, následuje žádost o informace podle zákona č. 106/1999 Sb., o svobodném přístupu k informacím, se stejným zněním otázek.
+
+**Úvod pro respondenta:** Výroční zprávy neuvádějí počty žádostí podle § 16 zákona č. 48/1997 Sb., počty žádostí o zajištění péče podle odbornosti a kraje ani počty přestupů pojištěnců mezi pojišťovnami. Ptáme se všech sedmi pojišťoven ve stejný den na totéž a čísla zveřejníme s datem a vaším vysvětlením, vedle sebe a bez pořadí. Odpovězte prosím do 15 dnů spolu s otázkami k fondu prevence a k pobočkám.
+
+1. **Kolik žádostí o úhradu podle § 16 zákona č. 48/1997 Sb. jste obdrželi v letech 2023, 2024 a 2025, jaký podíl z nich byl schválen (zcela nebo zčásti) a jaká byla medián doby od doručení žádosti do rozhodnutí ve dnech?** `par16` · _otevřená, nejvýš 2 000 znaků_
+
+   > Doloženo: tabulka rok · počet žádostí · schváleno · zamítnuto · medián dnů, za každý ze tří let. Počet odvolání nebo náklady na léčiva podle § 16 samy o sobě počet žádostí nedokládají.
+
+2. **Kolik žádostí pojištěnců o zajištění péče podle § 40 zákona č. 48/1997 Sb. (pojištěnec nenašel smluvního poskytovatele) jste obdrželi v letech 2024 a 2025, rozepsaných podle odbornosti a kraje, a u kolika z nich jste poskytovatele zajistili?** `zajisteni-pece` · _otevřená, nejvýš 2 000 znaků_
+
+   > Doloženo: tabulka rok · odbornost · kraj · počet žádostí · počet zajištěných. Součet za odbornosti by měl odpovídat počtu uvedenému ve výroční zprávě; případný rozdíl prosíme vysvětlit.
+
+3. **Zveřejňujete čekací nebo objednací doby na plánovanou péči (vlastní data, nebo odkazy na poskytovatele)? Pokud ano, uveďte prosím odkaz, rozsah výkonů, metodu a datum poslední aktualizace.** `cekaci-doby` · _otevřená, nejvýš 1 000 znaků_
+
+   > Doloženo: stálý odkaz a popis rozsahu a metody. Odkaz na weby jednotlivých nemocnic zapíšeme jako rozcestník, ne jako vlastní údaj pojišťovny.
+
+4. **Kolik pojištěnců k 1. 1. a k 1. 7. v letech 2025 a 2026 k vám přešlo z jiných zdravotních pojišťoven a kolik od vás odešlo (počet příchozích a odchozích zvlášť, bez rozpisu podle pojišťoven)?** `prechody` · _otevřená, nejvýš 1 000 znaků_
+
+   > Doloženo: čtyři údaje za rok · datum · příchozí · odchozí, s uvedením zdroje (CRP, evidence přihlášek). Čistou změnu stavu pojištěnců už známe z dat MZ; ptáme se na hrubé toky.
+
+_Vstup:_ Odpovědi pojišťovny na čtyři otázky (dopis a web, lhůta 15 dnů); každá odpověď se zveřejní v plném znění.
+
+1. Každá otázka dostane vlastní stav: doloženo = odpověď obsahuje to, co žádá nápověda (čísla s rokem a jednotkou, odkaz); deklarováno = pojišťovna tvrdí, že údaj má, ale čísla nepředložila; nedoloženo = odpověď k věci nic neříká, nebo ji vlastní data pojišťovny vyvracejí.
+2. Počty se ukazují vedle sebe s datem a znění odpovědi, bez pořadí a bez součtu do indexu; různé definice (viz data/pojistovny-dostupnost.json, srovnatelnost) se nesrovnávají.
+3. Otázka prechody je kontext pro oblast Hospodaření (pohyb pojištěnců), ne verdikt; otázky par16, zajisteni-pece a cekaci-doby jsou vstupem do oblasti Dostupnost, prahy čekají na schválení PS.
+4. Bez odpovědi do 15 dnů od doručení následuje žádost podle zákona 106 se stejným zněním; bez odpovědi ani na ni = neodpověděla (stav neutral, ne bad).
+
+_Výstup:_ Tabulka 7 pojišťoven × 4 otázky se stavy a plným zněním odpovědí; aktualizace inventáře data/pojistovny-dostupnost.json (stav ano nebo castecne tam, kde odpověď přinese veřejný údaj).
 
 ## 3. Q1 2027: pacientské organizace přes NAPO
 

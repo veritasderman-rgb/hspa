@@ -1,0 +1,447 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-11-03T12:00:00Z",
+  "stav_k": "2026-11-03",
+  "_doc": "Inventář: co zdravotní pojišťovny veřejně publikují o dostupnosti péče (5 sloupců × 7 ZP). Nehodnotí dostupnost ani pojišťovny; říká jen, zda a kde je údaj k dispozici. Zdroje: výroční zprávy 2023–2025 (ingest/manual/pojistovny/vz-text/<kod>-<rok>.txt, radek = číslo řádku textu; citace je doslovný zlomek jednoho řádku, dvousloupcový text z PDF může být rozdělen do více řádků) a weby pojišťoven (url, ověřeno 3. 11. 2026 přímým stažením stránky; sitemap.xml každého webu prohledán na klíčová slova čekací, dostupnost, nedostat, zajist, § 16, výběrová řízení, stížnost, podnět). KZP a MZ nejsou zdroj po pojišťovnách. Kde nic nenalezeno, je stav ne s popisem, kde se hledalo; to neznamená, že údaj pojišťovna nemá, jen že jej veřejně nenašel nikdo z redakce. Čekací doby: ve VZ VZP ČR a ZP MV ČR se slovo čekací týká čekací listiny k transplantaci, ne čekacích dob na péči. K ukazateli čekací doby na kyčelní kloub viz data/indicators.json, id cekaci_doba_kycel (zdroj VZP ČR; v datech zatím origin seed, tj. ilustrativní, ne ověřený údaj z VZP); inventář ho nenahrazuje. Žádost o údaje: data/pojistovny-otazky.json, sada dostupnost-prechody (navržená, viz changelog).",
+  "skala": {
+    "ano": "Údaj je veřejný a konkrétní: seznam oblastí, počty podání nebo žádostí, nebo vyhodnocení s čísly, s odkazem na zdroj.",
+    "castecne": "Pojišťovna o věci veřejně píše, ale neúplně: jen slovní popis nebo program bez seznamu či čísel, počty jen pro část agendy (např. jen odvolání), neaktuální data, nebo jen rozcestník odkazů na jiné subjekty.",
+    "ne": "Při uvedeném hledání nenalezeno (VZ texty, sitemap a stránky webu); popis v poli co říká, kde se hledalo."
+  },
+  "sloupce": [
+    {
+      "id": "cekaci_doby",
+      "nazev": "Čekací doby",
+      "popis": "Publikuje pojišťovna, jak dlouho pojištěnci čekají na plánovanou péči (objednací doby, čekací doby na operace a vyšetření), nebo odkazuje na tato data?",
+      "pravni_zaklad": "Žádný zákon publikaci čekacích dob pojišťovnám neukládá; NV 307/2012 Sb. stanoví jen nejzazší lhůty plánovaných výkonů."
+    },
+    {
+      "id": "sit_nedostatkove",
+      "nazev": "Nedostatkové oblasti",
+      "popis": "Publikuje pojišťovna seznam oblastí či okresů se zhoršenou dostupností, nebo programy (bonifikace, výběrová řízení) pro ně?",
+      "pravni_zaklad": "§ 40 zák. 48/1997 Sb. (povinnost zajistit místní a časovou dostupnost), NV 307/2012 Sb."
+    },
+    {
+      "id": "zajisteni_pece",
+      "nazev": "Zajištění péče na žádost",
+      "popis": "Má pojišťovna postup pro pojištěnce, který nenašel lékaře (formulář, služba), a publikuje počty žádostí či výsledky?",
+      "pravni_zaklad": "§ 40 zák. 48/1997 Sb.; formulář MZ pro podání na nedostupnost péče."
+    },
+    {
+      "id": "lhuty_307",
+      "nazev": "Plnění NV 307/2012",
+      "popis": "Publikuje pojišťovna vyhodnocení plnění dojezdových dob a lhůt plánovaných výkonů podle NV 307/2012 Sb. (číselně), nebo jen tvrdí, že síť kritéria splňuje?",
+      "pravni_zaklad": "NV č. 307/2012 Sb., o místní a časové dostupnosti zdravotních služeb."
+    },
+    {
+      "id": "par16",
+      "nazev": "Mimořádná úhrada § 16",
+      "popis": "Publikuje pojišťovna počty žádostí o mimořádnou úhradu podle § 16 zák. 48/1997 Sb., podíl schválených a lhůty vyřízení?",
+      "pravni_zaklad": "§ 16 zák. 48/1997 Sb.; ve VZ povinné tabulky zahrnují jen náklady, ne počty žádostí."
+    }
+  ],
+  "pojistovny": [
+    {
+      "kod": "111",
+      "zkratka": "VZP ČR",
+      "cekaci_doby": {
+        "stav": "ne",
+        "co": "Čekací doby na péči VZP nepublikuje (hledáno: sitemap vzp.cz s 533 URL, sekce Dostupnost zdravotní péče, plus.vzp.cz). Slovo čekací se ve VZ 2023–2025 týká jen čekací listiny k transplantaci ledviny. VZ uvádí, že pojišťovna objednací doby při rozhodování o smlouvách monitoruje, výsledky ale nezveřejňuje.",
+        "url": null,
+        "soubor": "111-2025.txt",
+        "radek": 1299,
+        "citace": "nadále průběžně monitorovala objednací doby a věkovou",
+        "rok": 2025,
+        "overeno": "2026-11-03"
+      },
+      "sit_nedostatkove": {
+        "stav": "ano",
+        "co": "Veřejná stránka Preferované oblasti pro uzavření smlouvy: seznamy a mapy preferovaných oblastí VZP PLUS pro odbornosti 001, 002 a 014 (aktuální mapa 07/2026) a výběrová řízení; bonifikace za nové pracoviště v těchto oblastech (program VZP PLUS od 1. 1. 2023). VZ 2025 uvádí, že seznam pojišťovna pravidelně publikuje na webu.",
+        "url": "https://www.vzp.cz/poskytovatele/smluvni-vztahy/nabidkove-seznamy-oblasti-pro-uzavreni-smlouvy",
+        "soubor": null,
+        "radek": null,
+        "citace": "seznam preferovaných oblastí VZP PLUS s nejvyšší potřebou uzavření smlouvy v odbornostech všeobecné praktické lékařství, praktické lékařství pro děti a dorost a klinická stomatologie",
+        "rok": 2026,
+        "overeno": "2026-11-03"
+      },
+      "zajisteni_pece": {
+        "stav": "ano",
+        "co": "Podněty pojištěnců k místní a časové dostupnosti se evidují a řeší dvouinstančně; VZ uvádí počty (2023: 46 945; 2024: 47 058; 2025: 42,7 tis.) a u 2023–2024 rozpis podle odbornosti (data/pojistovny-stiznosti.json). Neuvádí podíl vyřešených zajištěním péče ani lhůty.",
+        "url": null,
+        "soubor": "111-2025.txt",
+        "radek": 1320,
+        "citace": "V roce 2025 evidovala Pojišťovna 42,7 tis. podnětů poda-",
+        "rok": 2025,
+        "overeno": "2026-11-03"
+      },
+      "lhuty_307": {
+        "stav": "castecne",
+        "co": "Veřejné mapy Analýza místní dostupnosti zdravotních služeb pro odbornosti (např. 001) s podílem území a obyvatel, kde není splněna dojezdová doba z NV 307/2012 Sb.; databáze k 1. 3. 2023, tj. neaktuální. Časové lhůty plánovaných výkonů (týdny) se nevyhodnocují. Text je v obrázku mapy (PNG), nelze ho strojově ověřit.",
+        "url": "https://media.vzpstatic.cz/media/Default/dostupnost-zdravotni-pece/da-1-01.png",
+        "soubor": null,
+        "radek": null,
+        "citace": "Maximální dojezdovou dobu 35 minut nesplňuje: 0,03 % území, 0,00 % obyvatelstva",
+        "rok": 2023,
+        "overeno": "2026-11-03"
+      },
+      "par16": {
+        "stav": "castecne",
+        "co": "VZ uvádí jen počet odvolání pojištěnců vyřešených ve věci § 16 zák. 48/1997 Sb. (2023: 145; 2024: 136); VZ 2025 číslo neuvádí (agenda popsána slovně). Chybí počet žádostí, podíl schválených a lhůty; odvolání jsou jen část případů.",
+        "url": null,
+        "soubor": "111-2024.txt",
+        "radek": 568,
+        "citace": "řešeno 136 případů na § 16 zákona",
+        "rok": 2024,
+        "overeno": "2026-11-03"
+      },
+      "poznamky": [
+        "VZ 2023 (111-2023.txt, řádek 604): 145 případů podle § 16 z 964 projednaných odvolání; VZ 2024: 136 z 940."
+      ]
+    },
+    {
+      "kod": "201",
+      "zkratka": "VoZP",
+      "cekaci_doby": {
+        "stav": "castecne",
+        "co": "Rozcestník: XLSX s odkazy na weby nemocnic, které čekací doby samy zveřejňují (57 řádků, aktuální list 07/2025; soubor má 11 listů od 03/2022, aktualizace 3–4× ročně). Vlastní čekací doby VoZP nepublikuje; údaje jsou orientační a patří nemocnicím.",
+        "url": "https://www.vozp.cz/mistni-a-casova-dostupnost",
+        "soubor": null,
+        "radek": null,
+        "citace": "Některé nemocnice na svých webových stránkách zveřejňují informace o čekacích dobách na výkony v jejich zařízení.",
+        "rok": 2025,
+        "overeno": "2026-11-03"
+      },
+      "sit_nedostatkove": {
+        "stav": "castecne",
+        "co": "VZ popisuje oblasti se zhoršenou dostupností stomatologie a finanční motivaci poskytovatelů k registraci nových pojištěnců, bez seznamu oblastí a bez počtů; na webu seznam oblastí nenalezen.",
+        "url": null,
+        "soubor": "201-2025.txt",
+        "radek": 933,
+        "citace": "V oblastech se zhoršenou dostupností stomatologické péče,",
+        "rok": 2025,
+        "overeno": "2026-11-03"
+      },
+      "zajisteni_pece": {
+        "stav": "castecne",
+        "co": "Veřejný kontaktní formulář k řešení nedostupnosti zdravotních služeb; VZ potvrzuje evidenci podnětů (nejvíce zubní lékařství, zejm. Jihočeský kraj), ale počty podnětů ani výsledky neuvádí.",
+        "url": "https://www.vozp.cz/mistni-a-casova-dostupnost",
+        "soubor": null,
+        "radek": null,
+        "citace": "Chcete nahlásit a řešit podnět ve vztahu k dostupnosti zdravotních služeb?",
+        "rok": 2026,
+        "overeno": "2026-11-03"
+      },
+      "lhuty_307": {
+        "stav": "castecne",
+        "co": "Stránka Místní a časová dostupnost uvádí dojezdové doby a lhůty plánovaných výkonů z NV 307/2012 Sb. a tvrdí, že síť kritéria splňuje; plnění nedokládá žádným číslem (VZ 2023 a 2024 uvádějí analýzu dostupnosti podle NV jen jako činnost, bez výsledků).",
+        "url": "https://www.vozp.cz/mistni-a-casova-dostupnost",
+        "soubor": null,
+        "radek": null,
+        "citace": "Tato síť splňuje kritéria stanovená vládou v nařízení o Místní a časové dostupnosti.",
+        "rok": 2025,
+        "overeno": "2026-11-03"
+      },
+      "par16": {
+        "stav": "ne",
+        "co": "VZ 2023–2025 zmiňuje § 16 jen u jiných předpisů (fond prevence podle zák. 280/1992 Sb., odvolání podle zák. 106/1999 Sb.); mimořádnou úhradu podle § 16 zák. 48/1997 Sb. nezmiňuje, na webu (sitemap 823 URL) stránka nenalezena.",
+        "url": null,
+        "soubor": null,
+        "radek": null,
+        "citace": null,
+        "rok": 2025,
+        "overeno": "2026-11-03"
+      },
+      "poznamky": []
+    },
+    {
+      "kod": "205",
+      "zkratka": "ČPZP",
+      "cekaci_doby": {
+        "stav": "ne",
+        "co": "Čekací doby na péči nepublikuje (hledáno: sitemap cpzp.cz, VZ 2023–2025; slovo čekací se ve VZ nevyskytuje). Tisková zpráva 3. 4. 2024 mluví o žádostech o zajištění péče, ne o čekacích dobách.",
+        "url": null,
+        "soubor": null,
+        "radek": null,
+        "citace": null,
+        "rok": 2026,
+        "overeno": "2026-11-03"
+      },
+      "sit_nedostatkove": {
+        "stav": "ano",
+        "co": "Na stránce programu pro stomatology je ke stažení PDF Oblasti se sníženou dostupností zdravotní péče v odbornosti klinická stomatologie v roce 2026 a definice ohrožené (preferované) oblasti; VZ 2025 uvádí, že oblasti pro praktické lékaře pojišťovna zveřejnila na webu (jejich seznam jsem nenašel).",
+        "url": "https://cpzp.cz/informace-k-registracim-pojistencu-cpzp-u-poskytovatelu-zdravotnich-sluzeb-v-odbornostech-primarni-pece",
+        "soubor": null,
+        "radek": null,
+        "citace": "Oblasti se sníženou dostupností zdravotní péče v odbornosti klinická stomatologie v roce 2026",
+        "rok": 2026,
+        "overeno": "2026-11-03"
+      },
+      "zajisteni_pece": {
+        "stav": "ano",
+        "co": "VZ uvádí počet přijatých podání pojištěnců na zajištění péče (2023: řádově 8 000; 2024: řádově 8 000; 2025: 6 590) a rozpis stomatologie podle kraje (data/pojistovny-stiznosti.json); tisková zpráva 3. 4. 2024 popisuje postup (pojišťovna předá kontakt na poskytovatele). Podíl vyřešených a lhůty neuvádí.",
+        "url": null,
+        "soubor": "205-2025.txt",
+        "radek": 1717,
+        "citace": "V roce 2025 se jednalo o 6 590 přijatých podání pojištěnců na zajištění",
+        "rok": 2025,
+        "overeno": "2026-11-03"
+      },
+      "lhuty_307": {
+        "stav": "castecne",
+        "co": "VZ 2023 tvrdí, že místní a časová dostupnost v ambulantních odbornostech je prakticky zajištěna; plnění dojezdových dob ani lhůt neuvádí číslem. Kritéria výběru smluvních partnerů (cpzp.cz) NV 307/2012 Sb. zmiňují jako první kritérium.",
+        "url": null,
+        "soubor": "205-2023.txt",
+        "radek": 1461,
+        "citace": "je místní a časová dostupnost v ambulantních odbornostech",
+        "rok": 2023,
+        "overeno": "2026-11-03"
+      },
+      "par16": {
+        "stav": "ne",
+        "co": "VZ zmiňuje § 16 zák. 48/1997 Sb. jen jako součást úhrady centrových léčiv (2025), bez počtů žádostí, schválenosti či lhůt; web nenalezen.",
+        "url": null,
+        "soubor": null,
+        "radek": null,
+        "citace": null,
+        "rok": 2025,
+        "overeno": "2026-11-03"
+      },
+      "poznamky": []
+    },
+    {
+      "kod": "207",
+      "zkratka": "OZP",
+      "cekaci_doby": {
+        "stav": "ne",
+        "co": "Čekací doby na péči nepublikuje (hledáno: sitemap ozp.cz, stránka Asistenční služba OZP, VZ 2023–2025).",
+        "url": null,
+        "soubor": null,
+        "radek": null,
+        "citace": null,
+        "rok": 2026,
+        "overeno": "2026-11-03"
+      },
+      "sit_nedostatkove": {
+        "stav": "castecne",
+        "co": "VZ popisuje relativní nedostatek poskytovatelů (PLDD, stomatologie, psychiatrie, příhraničí) a Asistenční službu jako hlavní nástroj; seznam oblastí nepublikuje.",
+        "url": null,
+        "soubor": "207-2024.txt",
+        "radek": 1222,
+        "citace": "nedostatkem PZS zejména v příhraničních oblastech, a to",
+        "rok": 2024,
+        "overeno": "2026-11-03"
+      },
+      "zajisteni_pece": {
+        "stav": "castecne",
+        "co": "Asistenční služba OZP (telefon, e-mail, Vitakarta) podporuje zajištění dostupnosti péče, např. vyhledáním či objednáním volného termínu; počty žádostí ani výsledky nepublikuje (VZ počty podání neuvádí).",
+        "url": "https://www.ozp.cz/pro-klienty/asistencni-sluzba-ozp",
+        "soubor": null,
+        "radek": null,
+        "citace": "podporu při zajištění dostupnosti zdravotní péče",
+        "rok": 2026,
+        "overeno": "2026-11-03"
+      },
+      "lhuty_307": {
+        "stav": "castecne",
+        "co": "VZ tvrdí, že síť splňuje parametry časové i místní dostupnosti z NV 307/2012 Sb.; číselné vyhodnocení neuvádí.",
+        "url": null,
+        "soubor": "207-2025.txt",
+        "radek": 1052,
+        "citace": "OZP má funkční síť smluvních PZS, která splňuje paramet-",
+        "rok": 2025,
+        "overeno": "2026-11-03"
+      },
+      "par16": {
+        "stav": "ne",
+        "co": "VZ zmiňuje § 16 zák. 48/1997 Sb. jen u kontroly žádanek o schválení léčiv a úspor z ní; počty žádostí, schválenost a lhůty neuvádí; web nenalezen.",
+        "url": null,
+        "soubor": null,
+        "radek": null,
+        "citace": null,
+        "rok": 2025,
+        "overeno": "2026-11-03"
+      },
+      "poznamky": []
+    },
+    {
+      "kod": "209",
+      "zkratka": "ZPŠ",
+      "cekaci_doby": {
+        "stav": "ne",
+        "co": "Čekací doby na péči nepublikuje (hledáno: sitemap zpskoda.cz, VZ 2020, 2023, 2024; slovo čekací se ve VZ nevyskytuje).",
+        "url": null,
+        "soubor": null,
+        "radek": null,
+        "citace": null,
+        "rok": 2026,
+        "overeno": "2026-11-03"
+      },
+      "sit_nedostatkove": {
+        "stav": "castecne",
+        "co": "VZ popisuje Komisi pro rozšiřování sítě smluvních PZS a její vyhodnocování potřeby rozšíření sítě; seznam nedostatkových oblastí nepublikuje.",
+        "url": null,
+        "soubor": "209-2024.txt",
+        "radek": 1000,
+        "citace": "Pravidelně je vyhodnocována potřeba případného rozšíření sítě smluvních partnerů",
+        "rok": 2024,
+        "overeno": "2026-11-03"
+      },
+      "zajisteni_pece": {
+        "stav": "castecne",
+        "co": "VZ uvádí, že žádosti pojištěnců o zajištění služeb a stížnosti na nedostupnost byly evidovány a vyřízeny v zákonných termínech; počty ani výsledky neuvádí.",
+        "url": null,
+        "soubor": "209-2024.txt",
+        "radek": 1006,
+        "citace": "nebo stížnosti na nedostupnost. Všechny tyto podněty od pojištěnců byly evidovány",
+        "rok": 2024,
+        "overeno": "2026-11-03"
+      },
+      "lhuty_307": {
+        "stav": "ne",
+        "co": "VZ 2023 a 2024 zmiňuje NV 307/2012 Sb. jen jako zákonný rámec; vyhodnocení plnění dojezdových dob ani lhůt neuvádí (hledáno ve VZ textech; „307/2012“ se v textech ZPŠ nevyskytuje).",
+        "url": null,
+        "soubor": null,
+        "radek": null,
+        "citace": null,
+        "rok": 2024,
+        "overeno": "2026-11-03"
+      },
+      "par16": {
+        "stav": "castecne",
+        "co": "Jen VZ 2020: tabulka nákladů má řádek léčivé přípravky hrazené na základě § 16 zák. 48/1997 Sb. u lůžkové péče (plán 3 500, skutečnost 2 838; jednotka podle záhlaví tabulky, v textu nepřevzata); žádosti, schválenost ani lhůty neuvádí. VZ 2023 a 2024 řádek v textu nemají.",
+        "url": null,
+        "soubor": "209-2020.txt",
+        "radek": 1981,
+        "citace": "základě § 16 zákona č. 48/1997 Sb.  3 500  2 838",
+        "rok": 2020,
+        "overeno": "2026-11-03"
+      },
+      "poznamky": []
+    },
+    {
+      "kod": "211",
+      "zkratka": "ZP MV ČR",
+      "cekaci_doby": {
+        "stav": "ne",
+        "co": "Čekací doby na péči nepublikuje. Jediný text s pojmem je aktualita z 28. 3. 2022 (analýza sítě stomatologů: pojištěnci na jedno pracoviště, věk, dojezd) bez čekacích dob v dnech či týdnech; ve VZ je čekací jen čekací listina k transplantaci (bonifikace).",
+        "url": null,
+        "soubor": null,
+        "radek": null,
+        "citace": null,
+        "rok": 2022,
+        "overeno": "2026-11-03"
+      },
+      "sit_nedostatkove": {
+        "stav": "ano",
+        "co": "VZ obsahuje Přehled reálně a potenciálně problematických okresů podle odborností primární péče (001, 002, 014) po krajích; stav k 31. 12. 2025 (tabulka v PDF VZ, ne samostatná datová sada); ZP MV ČR k tomu nabízí bonifikační dodatky.",
+        "url": null,
+        "soubor": "211-2025.txt",
+        "radek": 918,
+        "citace": "Přehled reálně a potenciálně problematických okresů dle odborností primární péče k 31. 12. 2025 dle",
+        "rok": 2025,
+        "overeno": "2026-11-03"
+      },
+      "zajisteni_pece": {
+        "stav": "ano",
+        "co": "VZ uvádí počty: 919 zaevidovaných podání celkem (2025), z toho 672 podání na nedostupnost péče přes formulář MZ (2023: 1 391; 2024: 741), průměrná doba vyřízení 9,05 dne; stížnosti a individuální zajišťování poskytovatele popsány (data/pojistovny-stiznosti.json).",
+        "url": null,
+        "soubor": "211-2025.txt",
+        "radek": 493,
+        "citace": "V roce 2025 evidujeme 672 podání na nedostupnost zdravotní péče podaných prostřednictvím",
+        "rok": 2025,
+        "overeno": "2026-11-03"
+      },
+      "lhuty_307": {
+        "stav": "castecne",
+        "co": "VZ uvádí zachování místní a časové dostupnosti podle NV 307/2012 Sb. jako cíl smluvní politiky a vyhodnocuje problematické okresy; podíl území či obyvatel mimo limity a plnění lhůt plánované péče neuvádí.",
+        "url": null,
+        "soubor": "211-2025.txt",
+        "radek": 915,
+        "citace": "regionech uzavření bonifikačních dodatků. Zachování MČD ZS pro pojištěnce ZP MV ČR v souladu",
+        "rok": 2025,
+        "overeno": "2026-11-03"
+      },
+      "par16": {
+        "stav": "ne",
+        "co": "VZ 2023–2025 zmiňuje § 16 zák. 48/1997 Sb. jen jako důvod růstu nákladů na léčiva; počty žádostí, schválenost a lhůty neuvádí; web nenalezen.",
+        "url": null,
+        "soubor": null,
+        "radek": null,
+        "citace": null,
+        "rok": 2025,
+        "overeno": "2026-11-03"
+      },
+      "poznamky": []
+    },
+    {
+      "kod": "213",
+      "zkratka": "RBP",
+      "cekaci_doby": {
+        "stav": "ne",
+        "co": "Čekací doby na péči nepublikuje (hledáno: sitemap rbp213.cz, VZ 2023 a 2025). Web má tiskovou zprávu o projektu Magnet213 (zkrácení čekací doby na MR) bez čísel o čekacích dobách.",
+        "url": null,
+        "soubor": null,
+        "radek": null,
+        "citace": null,
+        "rok": 2026,
+        "overeno": "2026-11-03"
+      },
+      "sit_nedostatkove": {
+        "stav": "castecne",
+        "co": "VZ 2025 popisuje program Zvýšené dostupnosti stomatologických služeb (od 1. 7. 2020; 42 zubních lékařů převzalo 2 980 pojištěnců) a od 1. 1. 2025 program pro VPL, PLDD a psychiatrii; seznam oblastí nepublikuje.",
+        "url": null,
+        "soubor": "213-2025.txt",
+        "radek": 1687,
+        "citace": "poskytovateli v oboru zubní lékařství a zajistit tak péči 2 980 pojištěncům RBP a dále se snaží",
+        "rok": 2025,
+        "overeno": "2026-11-03"
+      },
+      "zajisteni_pece": {
+        "stav": "ano",
+        "co": "VZ uvádí počty žádostí pojištěnců o zajištění péče podle odbornosti (2025: zubní lékař 4 623, VPL 811, PLDD 248, psychiatrie 148, dětská psychiatrie 56, klinická psychologie 163) a kolik pojištěnců se podařilo zajistit u smluvních lékařů (2 980 u zubních lékařů, 87 u VPL, 42 u PLDD); web nabízí také zajištění praktického lékaře přes partnerskou síť Moje Ambulance (aktualita).",
+        "url": null,
+        "soubor": "213-2025.txt",
+        "radek": 1681,
+        "citace": "V této souvislosti za rok 2025 evidujeme 4 623 žádostí pojištěnců RBP",
+        "rok": 2025,
+        "overeno": "2026-11-03"
+      },
+      "lhuty_307": {
+        "stav": "castecne",
+        "co": "VZ popisuje, jak RBP zajišťuje lhůty plánovaných výkonů (TEP, šedý zákal, stenty) smluvně; číselné plnění neuvádí.",
+        "url": null,
+        "soubor": "213-2025.txt",
+        "radek": 1673,
+        "citace": "naplňování parametrů lhůt časové dostupnosti prostřednictvím smluvních poskytovatelů",
+        "rok": 2025,
+        "overeno": "2026-11-03"
+      },
+      "par16": {
+        "stav": "ne",
+        "co": "VZ 2023 a 2025 zmiňuje jen § 16b zák. 48/1997 Sb. (regulační omezení), ne mimořádnou úhradu podle § 16; web nenalezen.",
+        "url": null,
+        "soubor": null,
+        "radek": null,
+        "citace": null,
+        "rok": 2025,
+        "overeno": "2026-11-03"
+      },
+      "poznamky": []
+    }
+  ],
+  "srovnatelnost": [
+    "Stav ano u různých ZP neříká totéž: VZP ČR a ZP MV ČR počítají podněty na dostupnost jinak než ČPZP a RBP počítají žádosti o zajištění péče (viz data/pojistovny-stiznosti.json), proto se počty nesmějí řadit do jednoho žebříčku.",
+    "Veřejný seznam nedostatkových oblastí má VZP ČR (jako web, mapy a seznam), ČPZP (PDF stomatologie) a ZP MV ČR (tabulka okresů ve VZ); každá pojišťovna používá jiné odbornosti a jiná kritéria oblasti, takže seznamy nelze sčítat ani porovnávat velikostí.",
+    "Čekací doby nepublikuje žádná z pojišťoven vlastními daty; VoZP jen odkazuje na weby nemocnic, a ty měří různé výkony různými metodami.",
+    "Plnění NV 307/2012 Sb. dokládá číselně jen VZP ČR a jen u dojezdových dob (mapy k 1. 3. 2023); ostatní píší, že síť kritéria splňuje, bez čísel.",
+    "Pro § 16 nejde z veřejných zdrojů sestavit srovnání: jen VZP ČR uvádí počet vyřešených odvolání a nikdo neuvádí počet žádostí, schválenost ani lhůty."
+  ],
+  "chybi": [
+    "Čekací doby po pojišťovnách (plánovaná péče podle výkonu a kraje): žádná pojišťovna je nepublikuje vlastními daty; KZP data nejsou po pojišťovnách.",
+    "Počet žádostí o zajištění péče podle odbornosti a kraje u VZP ČR (jen podněty celkem), VoZP, OZP a ZPŠ (počty neuvádějí).",
+    "Podíl žádostí o zajištění péče vyřešených do 30 dnů, počet eskalací na MZ.",
+    "Počty žádostí podle § 16 zák. 48/1997 Sb. za poslední tři roky, podíl schválených a medián doby vyřízení: u žádné pojišťovny, otázka do kola 1.",
+    "Hrubé toky přestupů pojištěnců (příchozí a odchozí k 1. 1. a 1. 7.): veřejně jsou jen stavy, otázka do kola 1.",
+    "Číselné plnění NV 307/2012 Sb. u VoZP, ČPZP, OZP, ZPŠ, ZP MV ČR a RBP; u VZP jen k 1. 3. 2023 a jen dojezdové doby."
+  ]
+}

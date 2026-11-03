@@ -555,7 +555,7 @@ export function renderPrevence(p, d) {
 
 // ---------------------------------------------------------------- modul 4: otázky
 /** Pořadí sad podle fází (docs/pojistovny-dotazniky.md § Přehled); neznámé sady až na konec v pořadí JSON. */
-export const SADY_PORADI = ['aplikace-privetivost', 'fond-prevence', 'pobocky-definice', 'napo-pacientske-organizace', 'pravo-na-odpoved', 'rizikovi-pojistenci', 'pojistenci-anketa'];
+export const SADY_PORADI = ['aplikace-privetivost', 'fond-prevence', 'pobocky-definice', 'dostupnost-prechody', 'napo-pacientske-organizace', 'pravo-na-odpoved', 'rizikovi-pojistenci', 'pojistenci-anketa'];
 
 const KANAL_LABEL = { 'web-token': 'osobní odkaz od redakce', 'web-verejnost': 'veřejně na webu, bez tokenu', 'dopis+web': 'dopis s nabídkou spolupráce + web', interni: 'vyplňuje redakce (interní list)' };
 
