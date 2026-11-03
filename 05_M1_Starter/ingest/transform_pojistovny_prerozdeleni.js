@@ -224,7 +224,20 @@ export function serializuj(obj) {
   return `${s.replace(pole, sbal).replace(objekt, sbal)}\n`;
 }
 
-const bezGenerated = (o) => { const c = structuredClone(o); delete c.generated_at; return c; };
+/**
+ * Porovnání bez časových razítek: `generated_at` i každé `stazeno_at` (kdekoli v objektu) se vynechají.
+ * V CI není cache, takže by jinak každý běh přinesl nové `stazeno_at` a soubor by se přepsal i bez změny dat
+ * (workflow pojistovny-mz.yml by otevíral PR jen s razítky). Exportováno kvůli testům.
+ */
+export function bezCasu(o) {
+  const c = structuredClone(o);
+  const strip = (x) => {
+    if (Array.isArray(x)) { x.forEach(strip); return; }
+    if (x && typeof x === 'object') { delete x.generated_at; delete x.stazeno_at; Object.values(x).forEach(strip); }
+  };
+  strip(c);
+  return c;
+}
 const cti = (f) => { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { return null; } };
 
 export function run({ out = OUT_PATH, zapis = true, vstupy = {} } = {}) {
@@ -239,8 +252,9 @@ export function run({ out = OUT_PATH, zapis = true, vstupy = {} } = {}) {
   const v = validatePrerozdeleni(data, { rady });
   if (v.errors.length) throw new Error(`validatePrerozdeleni: ${v.errors.slice(0, 8).join(' | ')}`);
   const predchozi = cti(out);
-  const zmeneno = !predchozi || JSON.stringify(bezGenerated(predchozi)) !== JSON.stringify(data);
-  const hotovo = { version: data.version, generated_at: zmeneno ? new Date().toISOString().replace(/\.\d{3}Z$/, 'Z') : predchozi.generated_at, ...data };
+  const zmeneno = !predchozi || JSON.stringify(bezCasu(predchozi)) !== JSON.stringify(bezCasu(data));
+  // Beze změny dat zůstává předchozí soubor včetně razítek (stazeno_at, generated_at); jinak nová razítka.
+  const hotovo = zmeneno ? { version: data.version, generated_at: new Date().toISOString().replace(/\.\d{3}Z$/, 'Z'), ...data } : predchozi;
   if (zmeneno && zapis) fs.writeFileSync(out, serializuj(hotovo), 'utf8');
   return { zmeneno, data: hotovo, warnings: v.warnings };
 }

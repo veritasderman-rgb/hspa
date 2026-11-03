@@ -282,7 +282,20 @@ export function serializuj(obj) {
   return `${ser(obj, 0, '')}\n`;
 }
 
-const bezGenerated = (o) => { const c = structuredClone(o); delete c.generated_at; return c; };
+/**
+ * Porovnání bez časových razítek: `generated_at` i každé `stazeno_at` (kdekoli v objektu) se vynechají.
+ * V CI není cache, takže by jinak každý běh přinesl nové `stazeno_at` a soubor by se přepsal i bez změny dat
+ * (workflow pojistovny-mz.yml by otevíral PR jen s razítky). Exportováno kvůli testům.
+ */
+export function bezCasu(o) {
+  const c = structuredClone(o);
+  const strip = (x) => {
+    if (Array.isArray(x)) { x.forEach(strip); return; }
+    if (x && typeof x === 'object') { delete x.generated_at; delete x.stazeno_at; Object.values(x).forEach(strip); }
+  };
+  strip(c);
+  return c;
+}
 
 function nactiBundle(rok, soubory, cacheDir) {
   const f = path.join(cacheDir, soubory['xlsx-3'].soubor ?? soubory['xlsx-3'].url.split('/').pop());
@@ -314,8 +327,9 @@ export function run({ out = OUT_PATH, cacheDir = CACHE_DIR, radyPath = RADY_PATH
   const val = validateSegmenty(data, { hospodareniRady });
   let predchozi = null;
   try { predchozi = JSON.parse(fs.readFileSync(out, 'utf8')); } catch (_) { /* ještě není */ }
-  const zmeneno = !predchozi || JSON.stringify(bezGenerated(predchozi)) !== JSON.stringify(data);
-  const hotovo = { version: data.version, generated_at: zmeneno ? new Date().toISOString().replace(/\.\d{3}Z$/, 'Z') : predchozi.generated_at, ...data };
+  const zmeneno = !predchozi || JSON.stringify(bezCasu(predchozi)) !== JSON.stringify(bezCasu(data));
+  // Beze změny dat zůstává předchozí soubor včetně razítek (stazeno_at, generated_at); jinak nová razítka.
+  const hotovo = zmeneno ? { version: data.version, generated_at: new Date().toISOString().replace(/\.\d{3}Z$/, 'Z'), ...data } : predchozi;
   const errors = [...parseChyby, ...chyby, ...val.errors];
   if (!errors.length && zmeneno && zapis) fs.writeFileSync(out, serializuj(hotovo), 'utf8');
   return { zmeneno, data: hotovo, errors, warnings: val.warnings, checks: val.checks };

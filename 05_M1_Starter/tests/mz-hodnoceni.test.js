@@ -11,7 +11,7 @@ import {
   rozdelCisla, findSheet, colLetter,
 } from '../ingest/lib/mz-hodnoceni.js';
 import { validateHospodareniRady } from '../ingest/lib/validate-hospodareni-rady.js';
-import { run, sestavRady, serializuj } from '../ingest/transform_pojistovny_hospodareni_rady.js';
+import { run, sestavRady, serializuj, bezCasu } from '../ingest/transform_pojistovny_hospodareni_rady.js';
 import { fetchMzHodnoceni } from '../ingest/fetchers/mz-hodnoceni.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -254,4 +254,23 @@ test('fetcher --dry-run: z HTML sestaví seznam souborů a nic nestahuje ani nez
   assert.equal(m.polozky.length, 7);
   assert.ok(m.polozky.every((p) => p.poznamka === 'dry-run'));
   assert.deepEqual(fs.readdirSync(tmp), []);
+});
+
+test('bezCasu: odstraní generated_at a stazeno_at v libovolné hloubce, vstup nemění', () => {
+  const vstup = {
+    version: '1.0', generated_at: '2026-11-03T06:00:00Z',
+    zdroje: [{ url: 'a', stazeno_at: '2026-11-03T05:59:00Z', soubory: [{ n: 1, stazeno_at: 'x' }] }],
+    rady: { x: { hodnota: 1, meta: { generated_at: 'y' } } },
+  };
+  const kopie = structuredClone(vstup);
+  const a = bezCasu(vstup);
+  const b = bezCasu({ ...structuredClone(vstup), generated_at: 'jindy',
+    zdroje: [{ url: 'a', stazeno_at: 'jindy', soubory: [{ n: 1, stazeno_at: 'jindy' }] }] });
+  assert.equal(JSON.stringify(a), JSON.stringify(b), 'dva běhy lišící se jen razítky jsou shodné');
+  assert.equal(JSON.stringify(a).includes('stazeno_at'), false);
+  assert.equal(JSON.stringify(a).includes('generated_at'), false);
+  assert.equal(a.rady.x.hodnota, 1, 'věcná data zůstávají');
+  assert.deepEqual(vstup, kopie, 'původní objekt se nemění');
+  const c = bezCasu({ ...structuredClone(vstup), rady: { x: { hodnota: 2 } } });
+  assert.notEqual(JSON.stringify(a), JSON.stringify(c), 'věcná změna se pozná');
 });
