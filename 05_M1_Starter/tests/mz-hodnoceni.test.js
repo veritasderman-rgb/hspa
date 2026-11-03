@@ -333,6 +333,7 @@ test('sestavRady na fixturách (2015 + 2024) dává stejné hodnoty jako reáln�
     const rp = R.pojistovny.find((x) => x.kod === p.kod);
     for (const id of Object.keys(p.rady)) {
       for (const rok of ['2015', '2024']) {
+        if (id === 'fond_prevence_podil_pojistneho_pct') continue; // potřebuje pojistné předchozího roku (2023 v této sadě není), viz test níže
         assert.equal(p.rady[id][rok]?.hodnota ?? null, rp.rady[id][rok]?.hodnota ?? null, `${p.kod} ${id} ${rok}`);
       }
     }
@@ -385,4 +386,99 @@ test('bezCasu: odstraní generated_at a stazeno_at v libovolné hloubce, vstup n
   assert.deepEqual(vstup, kopie, 'původní objekt se nemění');
   const c = bezCasu({ ...structuredClone(vstup), rady: { x: { hodnota: 2 } } });
   assert.notEqual(JSON.stringify(a), JSON.stringify(c), 'věcná změna se pozná');
+});
+
+// ---------------------------------------------------------------------------------- A7.1: plán fondu (ZPP), plnění a podíl na pojistném
+
+test('parseTab3c čte i sloupec „Rok ZPP“ (celkem i na pojištěnce), ve všech rozloženích hlavičky', () => {
+  const c = parseTab3c(rows('tab3c-2024.json'), { rok: 2024 });
+  assert.equal(c.zpp_celkem['111'].hodnota, 1600000);
+  assert.equal(c.zpp_celkem['111'].sloupec, 'G');
+  assert.equal(c.celkem['111'].sloupec, 'H');
+  assert.equal(c.zpp_celkem.cr.hodnota, 2944760);
+  assert.equal(c.zpp_celkem.zzp.hodnota, 1344760);
+  assert.equal(Object.keys(c.zpp_celkem).length, 9);
+  assert.ok(Math.abs(c.zpp_na_pojistence.cr.hodnota - 271.8647629843084) < 1e-9);
+  const c15 = parseTab3c(rows('tab3c-2015.json'), { rok: 2015 });
+  assert.equal(c15.zpp_celkem['111'].hodnota, 452000);
+  assert.equal(Object.keys(c15.zpp_celkem).length, 9);
+  // plán sedmi ZP + cr nikde nechybí (všechny ročníky mají hlavičku „Rok N | ZPP“)
+  for (const k of ['111', '201', '205', '207', '209', '211', '213', 'cr', 'zzp']) assert.ok(c.zpp_celkem[k] && c15.zpp_celkem[k], k);
+});
+
+test('data: ZPP a plnění ZPP 2015–2024 bez null, kontrolní hodnoty 2024 sedí na Tabulku č. 3c MZ', () => {
+  const R = real();
+  const sady = [...R.pojistovny.map((p) => [p.kod, p.rady]), ['cr', R.cr.rady], ['zzp', R.zamestnanecke.rady]];
+  for (const [kod, rady] of sady) {
+    for (const rok of R.roky) {
+      assert.ok(rady.fond_prevence_zpp_mil[String(rok)], `ZPP ${kod} ${rok}`);
+      assert.ok(rady.fond_prevence_plneni_zpp_pct[String(rok)], `plnění ${kod} ${rok}`);
+      const pl = rady.fond_prevence_plneni_zpp_pct[String(rok)].hodnota;
+      assert.ok(pl > 0 && pl < 300);
+    }
+  }
+  const pl = (kod) => Math.round(R.pojistovny.find((p) => p.kod === kod).rady.fond_prevence_plneni_zpp_pct['2024'].hodnota * 10) / 10;
+  assert.deepEqual(
+    ['111', '201', '205', '207', '209', '211', '213'].map(pl),
+    [129.9, 98.1, 106.9, 100.5, 91.6, 137.6, 90.2],
+  );
+  assert.equal(Math.round(R.cr.rady.fond_prevence_plneni_zpp_pct['2024'].hodnota * 10) / 10, 120.7);
+  assert.equal(R.pojistovny[0].rady.fond_prevence_zpp_mil['2024'].hodnota, 1600);
+  assert.equal(R.pojistovny[0].rady.fond_prevence_zpp_mil['2024'].sloupec, 'G');
+  assert.equal(R.jednotky.fond_prevence_plneni_zpp_pct, '%');
+  assert.match(R._doc, /fond_prevence_podil_pojistneho_pct/);
+});
+
+test('data: podíl fondu na pojistném po přerozdělení PŘEDCHOZÍHO roku, 2015 = null a v chybi[], poznámka u VZP před 2023', () => {
+  const R = real();
+  for (const p of R.pojistovny) {
+    assert.equal(p.rady.fond_prevence_podil_pojistneho_pct['2015'], null, `${p.kod} 2015`);
+    for (const rok of R.roky.slice(1)) {
+      const c = p.rady.fond_prevence_podil_pojistneho_pct[String(rok)];
+      const fond = p.rady.fond_prevence_mil[String(rok)].hodnota;
+      const pojistne = p.rady.pojistne_po_prerozdeleni_mld[String(rok - 1)].hodnota;
+      assert.ok(Math.abs(c.hodnota - (fond / (pojistne * 1000)) * 100) < 0.002, `${p.kod} ${rok}: ${c.hodnota}`);
+      assert.equal(c.radek, p.rady.fond_prevence_mil[String(rok)].radek);
+      assert.ok(c.hodnota > 0 && c.hodnota < 3.5);
+      if (p.kod === '111' && rok < 2023) assert.match(c.poznamka, /před 2023 jiný režim zdrojů fondu u VZP/);
+      else assert.equal(c.poznamka, undefined);
+    }
+  }
+  assert.ok(R.chybi.some((c) => c.ukazatel === 'fond_prevence_podil_pojistneho_pct' && c.roky.join() === '2015' && c.kody === 'vsechny'));
+  // ČR i zaměstnanecké ZP: stejná řada
+  assert.ok(R.cr.rady.fond_prevence_podil_pojistneho_pct['2024'].hodnota > 0.5);
+  assert.equal(R.cr.rady.fond_prevence_podil_pojistneho_pct['2015'], null);
+  assert.match(R._doc, /§ 7c zák\. 551\/1991/);
+});
+
+test('sestavRady: podíl fondu = fond roku / pojistné po přerozdělení roku−1, bez předchozího roku null', () => {
+  const t1 = (hodnota) => ({ pojistne_po_prerozdeleni: { 111: { hodnota, radek: 9, sloupec: 'H' } } });
+  const t3c = (celkem, zpp) => ({ celkem: { 111: { hodnota: celkem, radek: 6, sloupec: 'H' } }, zpp_celkem: { 111: { hodnota: zpp, radek: 6, sloupec: 'G' } }, na_pojistence: {}, zpp_na_pojistence: {} });
+  const bundles = [
+    { rok: 2022, tab1: t1(200000000), tab3c: t3c(1000000, 1000000) },
+    { rok: 2023, tab1: t1(210000000), tab3c: t3c(2100000, 1500000) },
+    { rok: 2025, tab1: t1(220000000), tab3c: t3c(3300000, 3000000) },
+  ];
+  const soubory = Object.fromEntries(bundles.map((b) => [b.rok, { 'xlsx-1': { url: `https://x.test/${b.rok}/1` }, 'xlsx-3': { url: `https://x.test/${b.rok}/3` } }]));
+  const D = sestavRady({ bundles, soubory, zkratky: {} });
+  const r = D.pojistovny.find((p) => p.kod === '111').rady;
+  assert.equal(r.fond_prevence_podil_pojistneho_pct['2022'], null);
+  assert.equal(r.fond_prevence_podil_pojistneho_pct['2023'].hodnota, 1.05); // fond 2023 = 2 100 000 tis., pojistné 2022 = 200 000 000 tis. (ne 2023)
+  assert.equal(r.fond_prevence_podil_pojistneho_pct['2023'].poznamka, undefined, 'od 2023 už žádná poznámka o režimu VZP');
+  assert.equal(r.fond_prevence_podil_pojistneho_pct['2025'], null, 'rok 2024 chybí, podíl za 2025 nelze spočítat');
+  assert.equal(r.fond_prevence_plneni_zpp_pct['2023'].hodnota, 140);
+  assert.equal(r.fond_prevence_zpp_mil['2025'].hodnota, 3000);
+});
+
+test('validátor A7.1: plnění ZPP mimo 0–300 a podíl mimo 0–3,5 jsou chyby, podíl nad 3 % je WARN s hodnotou', () => {
+  const base = real();
+  const kopie = (fn) => { const R = structuredClone(base); fn(R); return validateHospodareniRady(R); };
+  assert.ok(kopie((R) => { R.pojistovny[0].rady.fond_prevence_plneni_zpp_pct['2024'].hodnota = 350; }).errors.some((e) => /fond_prevence_plneni_zpp_pct\[2024\] = 350 mimo 0–300/.test(e)));
+  assert.ok(kopie((R) => { R.pojistovny[0].rady.fond_prevence_plneni_zpp_pct['2024'].hodnota = -1; }).errors.some((e) => /mimo 0–300/.test(e)));
+  assert.ok(kopie((R) => { R.pojistovny[1].rady.fond_prevence_podil_pojistneho_pct['2024'].hodnota = 4; }).errors.some((e) => /fond_prevence_podil_pojistneho_pct\[2024\] = 4 mimo 0–3,5/.test(e)));
+  const w = kopie((R) => { R.pojistovny[1].rady.fond_prevence_podil_pojistneho_pct['2024'].hodnota = 3.2; });
+  assert.deepEqual(w.errors.filter((e) => /podil_pojistneho/.test(e)), []);
+  assert.ok(w.warnings.some((x) => /3\.2 % nad zákonným stropem 3 %/.test(x)));
+  assert.ok(kopie((R) => { R.pojistovny[0].rady.fond_prevence_zpp_mil['2024'].hodnota = -5; }).errors.some((e) => /fond_prevence_zpp_mil\[2024\] = -5 < 0/.test(e)));
+  assert.deepEqual(validateHospodareniRady(base).warnings.filter((x) => /podil_pojistneho|plneni_zpp/.test(x)), [], 'reálná data žádné z nových varování nevyvolají');
 });

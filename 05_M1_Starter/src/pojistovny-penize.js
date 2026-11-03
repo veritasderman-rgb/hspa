@@ -5,7 +5,8 @@
 // (náklady podle segmentů). Každý soubor je nepovinný: chybí-li, sekce ukáže „nedohledáno“.
 // Načítá je a renderer volá orchestrátor src/pojistovny.js podle kontejnerů na stránce
 // (#zpPrerozdeleni, #zpRady, #zpStatni, #zpSegmenty, #zpFondProvoz). Fond prevence (A6.1) čte navíc
-// data/pojistovny-kmen-mesicni.json (kontext: změna kmene k 1. 1. a 1. 7.).
+// data/pojistovny-kmen-mesicni.json (kontext: změna kmene k 1. 1. a 1. 7.) a od A7.1 data/pojistovny-fond-bilance.json
+// (zůstatek fondu k 31. 12. z výročních zpráv).
 //
 // Co se tu ukazuje, jsou fakta zákonem daného mechanismu a vykázaná čísla MZ, ne hodnocení
 // pojišťoven: seřazené grafy nesou větu SORT_NOTE, tabulky jsou v pevném pořadí podle kódu.
@@ -657,6 +658,116 @@ export function fondKontextHtml(R, K) {
     + `<div class="zpv-scroll" tabindex="0" role="region" aria-label="${esc(`Tabulka: ${title}`)}"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div></details></div>`;
 }
 
+// ---------------------------------------------------------------- A7.1 fond prevence jako peněženka systému
+
+/** Zákonný strop zdrojů fondu ze základního fondu: 3 % pojistného po přerozdělení za předchozí rok (§ 7c zák. 551/1991, § 18b zák. 280/1992). */
+export const FOND_STROP_PCT = 3;
+export const SRC_BILANCE = 'výroční zprávy pojišťoven 2023–2025 (oddíl Fond prevence, přepisy v data/pojistovny-fond-bilance.json)';
+export const SRC_PODIL = `${SRC_RADY} · tab. č. 3c (fond prevence) a tab. č. 1 (pojistné po přerozdělení předchozího roku)`;
+const KOD_FOND = { poznVzp: 'před 2023 jiný režim zdrojů fondu u VZP' };
+
+/** Fond prevence jako % pojistného po přerozdělení předchozího roku proti zákonnému stropu 3 % (rok z přepínače `fond_rok`). */
+export function buildFondPodil(R, rokVstup = null) {
+  const roky = fondRoky(R);
+  const rok = roky.includes(Number(rokVstup)) ? Number(rokVstup) : (roky[roky.length - 1] ?? null);
+  const items = zpList(R).map((z) => {
+    const env = z.rady?.fond_prevence_podil_pojistneho_pct?.[rok];
+    const v = val(env);
+    const mil = fondVal(z, 'fond_prevence_mil', rok);
+    const pozn = env && typeof env === 'object' && env.poznamka ? ` · pozor: ${env.poznamka}` : '';
+    return { ...base(z), value: isNum(v) ? v : null, rok, tip: isNum(v) ? `${z.zkratka}: fond prevence ${isNum(mil) ? `${fmtKc(mil, 0)} mil. Kč = ` : ''}${fmtKc(v, 2)} % pojistného po přerozdělení roku ${rok - 1} · zákonný strop zdrojů ze ZF ${FOND_STROP_PCT} %${pozn} · ${rok}` : `${z.zkratka}: nedohledáno` };
+  });
+  const vzpPred2023 = rok != null && rok < 2023;
+  return {
+    roky, rok, items, vzpPred2023,
+    opts: {
+      title: `Fond prevence jako % pojistného po přerozdělení předchozího roku, ${rok ?? ''}`.trim(),
+      sub: 'Skutečné náklady fondu prevence (Tab. 3c MZ) dělené pojistným po přerozdělení předchozího roku. Zákon dovoluje do fondu ze základního fondu dát až 3 % (jen při neschodkovém plánu); pojišťovny čerpají zlomek tohoto stropu a fond se plní i z pokut a penále.',
+      unit: '%', dec: 2, source: SRC_PODIL, maxv: FOND_STROP_PCT,
+      ref: { value: FOND_STROP_PCT, label: `zákonný strop ${FOND_STROP_PCT} %`, kind: 'line' },
+    },
+  };
+}
+
+/** Plán (ZPP) → skutečnost fondu prevence v mil. Kč po pojišťovnách za rok; plnění v % je v podtitulku a v tooltipu. */
+export function buildFondPlan(R, rokVstup = null) {
+  const roky = fondRoky(R);
+  const rok = roky.includes(Number(rokVstup)) ? Number(rokVstup) : (roky[roky.length - 1] ?? null);
+  const plneni = [];
+  const items = zpList(R).map((z) => {
+    const plan = fondVal(z, 'fond_prevence_zpp_mil', rok);
+    const real = fondVal(z, 'fond_prevence_mil', rok);
+    const pl = fondVal(z, 'fond_prevence_plneni_zpp_pct', rok);
+    if (isNum(pl)) plneni.push(`${z.zkratka} ${fmtKc(pl, 1)} %`);
+    return { ...base(z), from: isNum(plan) ? plan : null, to: isNum(real) ? real : null, rok,
+      tip: isNum(real) ? `${z.zkratka}: skutečnost ${fmtKc(real, 0)} mil. Kč${isNum(plan) ? ` proti plánu ${fmtKc(plan, 0)} mil. Kč` : ''}${isNum(pl) ? ` = plnění ${fmtKc(pl, 1)} %` : ''} · ${rok}` : `${z.zkratka}: nedohledáno` };
+  });
+  return {
+    roky, rok, items, plneni,
+    opts: {
+      title: `Plán (ZPP) → skutečnost, fond prevence ${rok ?? ''}`.trim(),
+      sub: `Mil. Kč. Plán je z ročního zdravotně pojistného plánu, skutečnost z účetnictví. Plnění plánu: ${plneni.join(' · ') || 'nedohledáno'}. Plnění nad 100 % neznamená lepší ani horší pojišťovnu, jen jiný plán.`,
+      unit: 'mil. Kč', dec: 0, fromLabel: 'plán (ZPP)', toLabel: 'skutečnost', source: `${SRC_RADY} · tab. č. 3c (sloupec ZPP = plán, ostatní sloupce = skutečnost)`,
+    },
+  };
+}
+
+const bilVal = (z, rok, id) => val(z?.roky?.[rok]?.[id]);
+
+/**
+ * Účetní zůstatek fondu prevence k 31. 12. na pojištěnce. Rok = poslední, pro který mají zůstatek (výroční zprávy) i průměrný
+ * počet pojištěnců (Hodnocení MZ) všech sedm pojišťoven. Tooltip nese absolutní zůstatek a kolik ročních čerpání zdravotních
+ * programů zůstatek odpovídá (čerpání z bilance, bez něj Tab. 17 MZ).
+ */
+export function buildFondZustatek(R, B) {
+  const zp = zpList(R);
+  const bz = new Map(zpList(B).map((z) => [String(z.kod), z]));
+  const roky = (Array.isArray(B?.roky) ? B.roky : []).slice().sort((a, b) => b - a);
+  const hodnota = (z, rok) => {
+    const zus = bilVal(bz.get(String(z.kod)), rok, 'zustatek_konecny');
+    const poj = fondVal(z, 'pojistenci_prumer', rok);
+    return isNum(zus) && isNum(poj) && poj > 0 ? { zus, poj } : null;
+  };
+  const rok = roky.find((y) => zp.length && zp.every((z) => hodnota(z, y))) ?? null;
+  const items = zp.map((z) => {
+    const h = rok != null ? hodnota(z, rok) : null;
+    if (!h) return { ...base(z), value: null, rok, tip: `${z.zkratka}: nedohledáno` };
+    const kc = (h.zus * 1000) / h.poj;
+    const cerp = bilVal(bz.get(String(z.kod)), rok, 'cerpani_programy');
+    const cerpMil = isNum(cerp) ? cerp / 1000 : fondVal(z, 'fond_prevence_programy_mil', rok);
+    const nasobek = isNum(cerpMil) && cerpMil > 0 ? (h.zus / 1000) / cerpMil : null;
+    return { ...base(z), value: kc, rok,
+      tip: `${z.zkratka}: zůstatek fondu prevence k 31. 12. ${rok} ${fmtKc(h.zus / 1000, 0)} mil. Kč = ${fmtKc(kc, 0)} Kč na pojištěnce${nasobek != null ? ` · ${fmtKc(nasobek, nasobek < 0.1 ? 2 : 1)} × roční čerpání zdravotních programů (${fmtKc(cerpMil, 0)} mil. Kč${isNum(cerp) ? '' : ', Tab. 17 MZ'})` : ''}` };
+  });
+  return {
+    rok, items,
+    opts: {
+      title: `Zůstatek fondu prevence na pojištěnce k 31. 12. ${rok ?? ''}`.trim(),
+      sub: 'Kč na pojištěnce. Účetní stav fondu na konci roku podle výročních zpráv dělený průměrným počtem pojištěnců téhož roku (Hodnocení MZ).',
+      unit: 'Kč', dec: 0, source: `${SRC_BILANCE}; ${SRC_RADY}`,
+    },
+  };
+}
+
+/** Pár grafů závislý na roce přepínače: podíl na pojistném proti stropu a plán → skutečnost. */
+function fondPenezenkaHtml(R, rok) {
+  const a = buildFondPodil(R, rok);
+  const b = buildFondPlan(R, rok);
+  const pozn = a.vzpPred2023 ? `<p class="zpc-cap">${esc(`U VZP nejsou roky před 2023 srovnatelné: ${KOD_FOND.poznVzp} (§ 7c zák. 551/1991 platí pro VZP od 1. 1. 2023).`)}</p>` : '';
+  return '<div class="zpc-charts">'
+    + `<div class="zpc-chart">${rankedBars(a.items, a.opts)}${pozn}</div>`
+    + `<div class="zpc-chart">${dumbbell(b.items, b.opts)}</div></div>`;
+}
+
+/** Zůstatek na pojištěnce s větou o tom, co zůstatek je a co ne (A7.1 d). */
+function fondZustatekHtml(R, B) {
+  if (!B) return NEDOHLEDANO('Bilance fondu prevence z výročních zpráv zatím není k dispozici (nedohledáno).');
+  const z = buildFondZustatek(R, B);
+  if (z.rok == null) return NEDOHLEDANO('Zůstatek fondu prevence na pojištěnce zatím není k dispozici (nedohledáno).');
+  return `<div class="zpc-chart">${rankedBars(z.items, z.opts)}</div>`
+    + `<p class="zpc-cap">${esc(`Jde o účetní zůstatek fondu podle výročních zpráv, ne o „nevyužité peníze“ v hovorovém smyslu: zůstatek sám neříká, zda pojišťovna peníze zadržuje, nebo je má určené na příští rok. Rok ${z.rok} je poslední, ve kterém jsou zůstatek i průměrný počet pojištěnců u všech sedmi pojišťoven. Pro srovnání: Nejvyšší kontrolní úřad (kontrolní závěr 20/24) u VZP kritizoval nevyčerpaných 536 mil. Kč fondu k 31. 12. 2020.`)}</p>`;
+}
+
 /** Provoz: využití zákonného limitu přídělu na provoz (zůstává z A1.5). */
 export function buildProvoz(R) {
   const roky = rokyUkazatele(R, 'provozni_vyuziti_limitu_pct');
@@ -727,7 +838,7 @@ export function buildSaldoKarta(PR, kod) {
 // ---------------------------------------------------------------- DOM
 
 const stav = { ukazatel: UKAZATEL_VYCHOZI, rok: null, segment: null, vyber: 'vse' };
-const dataRef = { PR: null, R: null, S: null, K: null };
+const dataRef = { PR: null, R: null, S: null, K: null, FB: null };
 const fondStav = { rok: null };
 
 function zapisUrl() {
@@ -824,12 +935,15 @@ function fondFigHtml(f) {
 }
 
 /** Celá sekce Fond prevence a provoz (A6.1): přepínač roku, dvojice grafů, ČR v čase, kontext, provoz. */
-export function fondHtml(R, K, rok = null) {
+export function fondHtml(R, K, rok = null, FB = null) {
   const f = buildFond(R, rok);
   const p = buildProvoz(R);
   const sw = f.roky.length > 1 ? `<div class="zpc-ctl"><div class="zpc-ctl-rok"><span class="zpc-ctl-lbl">Rok čerpání fondu</span>${fondPrepinacHtml(f.roky, f.rok)}</div></div>` : '';
   return sw
     + `<div data-fond-fig>${fondFigHtml(f)}</div>`
+    + '<h4 class="zpc-h4">Fond jako peněženka: strop, plán a zůstatek</h4>'
+    + `<div data-fond-fig2>${fondPenezenkaHtml(R, f.rok)}</div>`
+    + fondZustatekHtml(R, FB)
     + '<div class="zpc-charts">'
     + `<div class="zpc-chart">${rankedBars(f.ostatniCr.items, f.ostatniCr.opts)}</div>`
     + `<div class="zpc-chart">${rankedBars(p.items, p.opts)}</div></div>`
@@ -842,10 +956,10 @@ function radyRender() {
 
 /**
  * Vykreslí sekce stránky Peníze podle přítomných kontejnerů. Chybějící dataset = stav „nedohledáno“.
- * @param {{PR?: object|null, R?: object|null, S?: object|null, K?: object|null}} data  K = měsíční kmen (kontext fondu prevence)
+ * @param {{PR?: object|null, R?: object|null, S?: object|null, K?: object|null, FB?: object|null}} data  K = měsíční kmen (kontext fondu prevence), FB = bilance fondu z výročních zpráv (A7.1)
  */
-export function renderPenize({ PR = null, R = null, S = null, K = null } = {}) {
-  Object.assign(dataRef, { PR, R, S, K });
+export function renderPenize({ PR = null, R = null, S = null, K = null, FB = null } = {}) {
+  Object.assign(dataRef, { PR, R, S, K, FB });
   const doc = globalThis.document;
   Object.assign(stav, stavZUrl(globalThis.location?.search));
   set('zpPrerozdeleni', PR ? prerozdeleniHtml(PR, stav.vyber) : NEDOHLEDANO('Data o přerozdělení zatím nejsou k dispozici (nedohledáno).'));
@@ -859,7 +973,7 @@ export function renderPenize({ PR = null, R = null, S = null, K = null } = {}) {
     if (!R) set('zpFondProvoz', NEDOHLEDANO('Fond prevence a provoz zatím nejsou k dispozici (nedohledáno).'));
     else {
       fondStav.rok = fondRokZUrl(globalThis.location?.search, fondRoky(R));
-      set('zpFondProvoz', fondHtml(R, K, fondStav.rok));
+      set('zpFondProvoz', fondHtml(R, K, fondStav.rok, FB));
     }
   }
   vazbaUdalosti(doc);
@@ -889,6 +1003,8 @@ function vazbaUdalosti(doc) {
       fondStav.rok = Number(value);
       const fig = doc.getElementById('zpFondProvoz')?.querySelector('[data-fond-fig]');
       if (fig) prekresli(fig, fondFigHtml(buildFond(dataRef.R, fondStav.rok)));
+      const fig2 = doc.getElementById('zpFondProvoz')?.querySelector('[data-fond-fig2]');
+      if (fig2) prekresli(fig2, fondPenezenkaHtml(dataRef.R, fondStav.rok));
     } else if (id === 'segment' && seg && dataRef.S) {
       stav.segment = value || null;
       prekresli(seg, segmentyHtml(dataRef.S, dataRef.R, mojeKod() || KOD_VZP), 'select[data-switch="segment"]');

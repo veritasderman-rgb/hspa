@@ -33,6 +33,7 @@ import { validateDostupnost } from './lib/validate-dostupnost.js';
 import { validateSegmenty } from './lib/validate-segmenty.js';
 import { validatePorodniAsistence } from './lib/validate-porodni-asistence.js';
 import { validateFondPravidla } from './lib/validate-fond-pravidla.js';
+import { validateFondBilance } from './lib/validate-fond-bilance.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -59,6 +60,7 @@ export const OPTIONAL_FILES = {
   dostupnost: 'pojistovny-dostupnost.json',
   segmenty: 'pojistovny-segmenty.json',
   fondPravidla: 'pojistovny-fond-pravidla.json', // pravidla čerpání fondu prevence a kontroly (A6.2)
+  fondBilance: 'pojistovny-fond-bilance.json', // bilance fondu prevence z výročních zpráv a počty příspěvků (A7.1 c, A7.2)
   porodniAsistence: 'pojistovny-porodni-asistence.json', // výkon 06211 po pojišťovnách (PLAN-PORODNI-ASISTENCE-06211.md § 5.1 D)
 };
 export const STD_STAVY = ['dolozeno', 'placeholder-bez-vah', 'index-prerozdeleni'];
@@ -581,6 +583,7 @@ export function validateAll(datasets) {
     ['segmenty', (d) => validateSegmenty(d, { hospodareniRady: datasets?.hospodareniRady })],
     ['porodniAsistence', (d) => validatePorodniAsistence(d)],
     ['fondPravidla', (d) => validateFondPravidla(d)],
+    ['fondBilance', (d) => validateFondBilance(d, { hospodareniRady: datasets?.hospodareniRady })],
   ];
   for (const [key, fn] of dalsi) {
     if (datasets?.[key] == null) continue;

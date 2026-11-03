@@ -447,6 +447,8 @@ export const POTREBA = {
   segmenty: ['zpSegmenty', 'zpProfil'],
   /** Fond prevence na Penězích (A6.1): kontext změny kmene k 1. 1. a 1. 7. z měsíčního kmene. */
   fondKmen: ['zpFondProvoz'],
+  /** Bilance fondu prevence z výročních zpráv (A7.1): zůstatek k 31. 12. na Penězích. */
+  fondBilance: ['zpFondProvoz'],
   /** Instituce (A2.1, A3.1, A3.2): orgány, smluvní programy, dostupnost; profil čte všechny tři. */
   instituce: ['zpInstOrgany', 'zpProfil'],
   smluvniProgramy: ['zpInstProgramy', 'zpProfil'],
@@ -464,7 +466,7 @@ async function init() {
   }
   const shell = renderZpShell();
   const skip = Promise.resolve(null);
-  const [d, a, p, o, agg, km, pr, rady, seg, inst, prog, dost, stiz, pa, kmFond] = await Promise.all([
+  const [d, a, p, o, agg, km, pr, rady, seg, inst, prog, dost, stiz, pa, kmFond, fondBil] = await Promise.all([
     loadJson('data/pojistovny.json'),
     has(POTREBA.aplikace) ? loadJson('data/pojistovny-aplikace.json') : skip,
     has(POTREBA.prevence) ? loadJson('data/pojistovny-prevence.json') : skip,
@@ -480,6 +482,7 @@ async function init() {
     has(POTREBA.profil) ? loadJson('data/pojistovny-stiznosti.json') : skip,
     has(POTREBA.profil) ? loadJson('data/pojistovny-porodni-asistence.json') : skip,
     has(POTREBA.fondKmen) ? loadJson('data/pojistovny-kmen-mesicni.json') : skip,
+    has(POTREBA.fondBilance) ? loadJson('data/pojistovny-fond-bilance.json') : skip,
   ]);
   if (has(['zpPrehled'])) {
     renderPrehled({ d, a, p, tiles: d ? heroTiles(d, { bezFondu: true }) : null, kmen: d ? buildKmenCharts(d) : null, prerozdeleni: pr });
@@ -490,7 +493,7 @@ async function init() {
   if (has(['zpPrevMatrix', 'zpFpStruktura', 'zpMereni'])) renderPrevence(p, d);
   if (has(['zpCards', 'zpChartShare'])) renderKmen(d, rady);
   if (has(['zpTableFin', 'zpChartZust', 'zpChartProvoz', 'zpChartYoy'])) renderHospodareni(d);
-  if (has(['zpPrerozdeleni', 'zpRady', 'zpStatni', 'zpSegmenty', 'zpFondProvoz'])) renderPenize({ PR: pr, R: rady, S: seg, K: kmFond });
+  if (has(['zpPrerozdeleni', 'zpRady', 'zpStatni', 'zpSegmenty', 'zpFondProvoz'])) renderPenize({ PR: pr, R: rady, S: seg, K: kmFond, FB: fondBil });
   if (has(['zpInstOrgany', 'zpInstAparat', 'zpInstProgramy', 'zpInstDostupnost'])) renderInstituce({ I: inst, SP: prog, D: dost, R: rady });
   if (has(['zpProfil'])) renderProfil({ kod: zpZUrl(location.search), data: { P: d, A: a, PV: p, PR: pr, R: rady, S: seg, I: inst, SP: prog, D: dost, ST: stiz, PA: pa } });
   if (has(['zpTablePrev'])) renderServis(d);
@@ -503,7 +506,7 @@ async function init() {
   // profil pojišťovny není záložka shellu: stáří dat se řídí stranou `profil` a datasety, které profil načetl
   const stari = renderStariDat({
     strana: has(['zpProfil']) ? 'profil' : undefined,
-    datasety: { pojistovny: d, prevence: p, aplikace: a, otazky: o, prerozdeleni: pr, hospodareniRady: rady, segmenty: seg, instituce: inst, smluvniProgramy: prog, dostupnost: dost, stiznosti: stiz, porodniAsistence: pa },
+    datasety: { pojistovny: d, prevence: p, aplikace: a, otazky: o, prerozdeleni: pr, hospodareniRady: rady, segmenty: seg, instituce: inst, smluvniProgramy: prog, dostupnost: dost, stiznosti: stiz, porodniAsistence: pa, fondBilance: fondBil },
   }).catch(() => null);
   await Promise.all([shell, stari]);
   refreshZdrojeJson(doc);
