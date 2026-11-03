@@ -1576,11 +1576,12 @@ nikdy 0). Každý soubor nese `version`, `generated_at`, `_doc` a `changelog[]{d
 | Soubor | Obsah | Kdo čte |
 |---|---|---|
 | `pojistovny.json` | `system` (systém v.z.p. 2024), `system_crp` (CRP 2025), `pojistovny[]` po ZP: `crp` (kmen, `pojistenci_trend[]{year, insured}` 2010–2025, `top_kraje`), `hospodareni` (2024), `hospodareni_2025` (jen VZP, VoZP, OZP), `prevence`, `servis`, `mereni_dopadu`, `semafor`; `stavy_semaforu`, `zdroje[]`, `chybi[]` | `src/pojistovny.js`, `pojistovny-semafor.js` |
-| `pojistovny-prevence.json` | `oblasti[]` × `pojistovny[].oblasti{stupen, popis}` (heatmapa 7 × 9), `onko_screening`, `dusevni_sloupce`, `fond_prevence_struktura.polozky[]{nazev, zpp, skutecnost, predchozi_rok, skupina}`, `fond_prevence_skupiny[]`, `odpovedi` (7 otázek z VZ), `dolozene_vysledky[]` | `src/pojistovny-prevence.js` |
+| `pojistovny-prevence.json` | `oblasti[]` × `pojistovny[].oblasti{stupen, popis}` (heatmapa 7 × 9; v buňce počet položek `popis`, barva = stupeň), `pojistovny[].reserse{datum: 'YYYY-MM-DD', url}` (volitelné: den redakční rešerše webu a adresa stránky prevence; ukazuje ho „Proč ten stupeň“ a řádek stáří dat; `validate-pojistovny.js` hlídá datum a url), `onko_screening`, `dusevni_sloupce`, `fond_prevence_struktura.polozky[]{nazev, zpp, skutecnost, predchozi_rok, skupina}`, `fond_prevence_skupiny[]`, `odpovedi` (7 otázek z VZ), `dolozene_vysledky[]` | `src/pojistovny-prevence.js` |
 | `pojistovny-aplikace.json` | `funkce[]` × `aplikace[].funkce{id: true\|false\|'partial'\|null}`, `kriteria_privetivosti` (návrh, prázdná `aplikace[].kriteria{}` do PS), uživatelé, rizikové skupiny | `src/pojistovny-prevence.js` |
 | `pojistovny-otazky.json` | `sady[]{id, nazev, typ, verze, platne_od?, pravni_zaklad, otazky[] \| casti[].otazky[]}` — definice dotazníků (formulář renderuje `src/zp-dotaznik.js`) | `zp-dotaznik.js`, `api/dotaznik.js` |
 | `pojistovny-vek.json` | viz níže | `ingest/transform_pojistovny_crp.js` (výstup), standardizace § 4.1 |
 | `pojistovny-dotaznik-agregaty.json` | viz níže | `src/zp-dotaznik.js` |
+| `pojistovny-kmen-mesicni.json` | viz níže | `ingest/transform_pojistovny_kmen_mesicni.js` (výstup), `src/pojistovny-kmen-mesicni.js` |
 | `zadosti-106.json` | viz níže | `src/pojistovny-zadosti.js` |
 | `pojistovny-verifikace.json` | **plánovaný**, viz níže | — |
 
@@ -1608,6 +1609,43 @@ Standardizované hodnoty se zapisují do `pojistovny.json` jako
 s polem `stav`. Dokud nákladové indexy nejsou doložené, je `stav: "placeholder-bez-vah"`
 (faktor 1, hodnota = nestandardizovaná) a **frontend číslo nezobrazí** — `stdInfo()`
 v `src/pojistovny.js` bere jen `stav: "dolozeno"`, jinak ukáže štítek „nestandardizováno“.
+
+### `data/pojistovny-kmen-mesicni.json` — měsíční kmen z přerozdělení MZ (generovaný, volitelný)
+
+Výstup `ingest/transform_pojistovny_kmen_mesicni.js` (metodika § 4.3). Měsíční počet pojištěnců
+sedmi ZP **odvozený** podílem dvou částek z měsíčního přerozdělení pojistného MZ; MZ počty takto
+přímo nezveřejňuje. Vstupy: `ingest/manual/pojistovny/prerozdeleni-mz-pojistovna.json` (tis. Kč na
+pojišťovnu) a `prerozdeleni-mz.json` (Kč na pojištěnce), oba přepsané z PDF MZ se zdrojem a datem
+ověření. Rozsah leden 2022 až říjen 2026 (58 měsíců). Validátor `validateKmenMesicni()` v
+`ingest/validate-pojistovny.js` (volitelný dataset): 7 ZP, měsíce bez mezer, stejná délka řad,
+kladné počty (`null` = nedohledáno, jen varování), `celkem` ≈ součet ZP ±0,2 %, index a přestupy
+odpovídají počtům, průměr 2024 ≈ `hospodareni.pocet_pojistencu` ±0,5 %. Idempotentní: stejný
+vstup = beze změny souboru. Čte ho jen `pojistovny-kmen.html` (`#zpKmenMesicni`, `#zpKmenPrestupy`).
+
+```json
+{
+  "version": "1.0", "generated_at": "…", "_doc": "…",
+  "zdroj": { "nazev": "…", "url": "https://mzd.gov.cz/prerozdelovani-pojistneho-na-verejne-zdravotni-pojisteni/",
+             "soubory": ["…pojistovna_vysledek_2024_12.pdf", "…pojistovna_vysledek_2026_10.pdf", "…pojistenec_…"],
+             "vstupy": ["ingest/manual/pojistovny/prerozdeleni-mz-pojistovna.json", "…prerozdeleni-mz.json"],
+             "overeno": "2026-11-02", "vzorec": "pocet = castka_na_pojistovnu_tis_kc * 1000 / castka_na_pojistence_kc" },
+  "mesice": ["2022-01", "…", "2026-10"],
+  "pojistovny": [{ "kod": "111", "zkratka": "VZP ČR", "pocty": [5898302, "…"], "index_2022_01": [100, 100.05, "…"] }],
+  "celkem": { "pocty": ["…"], "index_2022_01": ["…"] },        // z řádku „Celkem zdravotní pojišťovny“
+  "prestupy": {
+    "terminy": [{ "termin": "1. 1.", "z_mesic": 12, "na_mesic": 1 }, { "termin": "1. 7.", "z_mesic": 6, "na_mesic": 7 }],
+    "pojistovny": [{ "kod": "111", "zkratka": "VZP ČR", "zmeny": [
+      { "rok": 2025, "termin": "1. 7.", "z": "2025-06", "na": "2025-07", "pred": 6153976, "po": 6164936, "zmena": 10960, "zmena_pct": 0.18 } ] }],
+    "celkem": { "zmeny": ["…"] }
+  }
+}
+```
+
+`pocty[i]` odpovídá `mesice[i]`; `null` = chybí vstup (nic se nedomýšlí). `prestupy` jsou čistá
+změna kmene mezi prosincem a lednem (1. 1.) a mezi červnem a červencem (1. 7.), ne hrubé toky
+(zahrnuje narození, úmrtí, stěhování a opravy registru). Přesnost: částka na pojištěnce je v celých
+Kč (chyba ≈ ±0,02 %); průměr 2024 se od údaje MZ liší do 0,1 %, stav 12/2025 od CRP 2025 do 0,7 %
+u šesti ZP a o 1,06 % u VoZP.
 
 ### `data/pojistovny-dotaznik-agregaty.json` — agregáty dotazníků (generovaný)
 
@@ -1648,6 +1686,27 @@ a dopočítá lhůtu.
 
 Odvozený stav (`zadostStav`): `odeslana` po uplynutí `lhuta_dni` od `odeslano` → `po-lhute`.
 Matice pokrytí: odpovězeno = ✓, čeká = ½, po lhůtě / bez odpovědi = ✕, připravena = „—“.
+
+### `data/pojistovny-sit.json` — síť smluvních odborností per ZP (generovaný prototyp)
+
+Dva generátory, každý píše jen své bloky; kontrola `validateSit()` v
+`ingest/validate-pojistovny.js`, metoda a limity `docs/pojistovny-sit.md`. Čte
+`src/pojistovny-sit.js` (`#zpSit` na `pojistovny-kmen.html`). Jen agregáty po krajích,
+žádné řádky s IČO/jmény (GOVERNANCE § 6 bod 3).
+
+| Blok | Generátor | Obsah |
+|---|---|---|
+| `odbornosti[]{kod, nazev}`, `kraje[]{kod, nazev}` | `ingest/fetchers/pojistovny-sit.js` | 7 kódů číselníku VZP 770 (001, 002, 014, 207, 305, 404, 603), 14 krajů NUTS3 (`CZ010`…) |
+| `matice[zp][odb][kraj]`, `celkem_cr[odb][kraj]`, `kvalita[zp]` | `pojistovny-sit.js` | horní odhad ÚZIS NR-04-64 × NRPZS, stav `ref_datum` 2024-12-31; jednotka = místo poskytování NRPZS na IČO (adrese) smluvního IČZ |
+| `seznamy_pojistoven[zp]` (volitelný) | `ingest/fetchers/pojistovny-sit-seznamy.js` | ze seznamu, který ZP sama zveřejňuje: `stav` `seznam` (VZP, ČPZP) \| `seznam-bez-odbornosti` (VoZP) \| `bez-seznamu` (OZP, ZPŠ, ZP MV ČR, RBP) \| `chyba`; `zdroj{nazev, url, stranka, format, velikost_b, http, stav_k, stav_k_zdroj, soubor_datum, overeno, licence}`, `jednotka`, `kraj_metoda`, `matice[odb][kraj]`, `celkem[odb]`, `bez_kraje[odb]` (jen `seznam`), `icz_celkem`, `icz_kraj[kraj]`, `icz_bez_kraje`, `kvalita{radku, icz, kraj_ciselnik, kraj_prefix, kraj_neurcen, …}`; `bez-seznamu` nese jen `zdroj.stranka` a `poznamka` |
+| `seznamy_pojistoven_zdroj_kraje` | `pojistovny-sit-seznamy.js` | číselník IČZ ÚZIS OIS-12-02 (IČZ → okres → kraj) |
+| `srovnani{metoda, odhad_ref_datum, zp[zp]{stav_k, odbornosti[odb]{seznam, odhad, pomer}}}` (volitelný) | `pojistovny-sit-seznamy.js` | `pomer = seznam / odhad` za ČR; `odbornosti: null` u VoZP (seznam bez odbornosti) |
+
+Jednotka seznamu: smluvní zařízení (IČZ) s nasmlouvanou odborností. Seznamy nenesou
+pracoviště (IČP) ani adresu; kraj se doplňuje z číselníku ÚZIS, jinak z dvojčíslí IČZ
+(≥ 95 % jednomu kraji), jinak `bez_kraje`. Validátor hlídá `součet matice + bez_kraje =
+celkem`, `icz_kraj + icz_bez_kraje = icz_celkem`, že `bez-seznamu` nenese čísla a že
+`srovnani` sedí na obě strany (seznam = `celkem`, odhad = součet `matice`, `pomer`).
 
 ### `data/pojistovny-verifikace.json` — protokol druhého ověření (plánovaný)
 

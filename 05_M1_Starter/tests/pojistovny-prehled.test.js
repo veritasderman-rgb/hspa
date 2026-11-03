@@ -8,7 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
-  ZP_STRANKY, LEGACY_HASH, zpStrankaById, zpTabsHtml, zpShellHtml, zpZdrojeHtml, legacyRedirect,
+  ZP_STRANKY, ZP_SKUPINY, LEGACY_HASH, zpStrankaById, zpStrankyVSkupine, zpTabsHtml, zpShellHtml, zpZdrojeHtml, legacyRedirect,
 } from '../src/pojistovny-shell.js';
 import {
   aplikaceSkore, zpSouhrny, semaforRadekHtml, semaforMiniHtml, ovKartaHtml, ovMiniKartyHtml, temaKartyHtml, buildPrehled,
@@ -41,6 +41,17 @@ test('shell: sedm stránek v pořadí záložek, soubory existují, podstránky 
   assert.equal(zpStrankaById('nic'), null);
 });
 
+test('shell: dvě skupiny záložek — pro pojištěnce (5) a pro redakci a data (2), každá stránka v právě jedné', () => {
+  assert.deepEqual(ZP_SKUPINY.map((g) => g.id), ['pojistenci', 'redakce']);
+  assert.equal(ZP_SKUPINY[1].label, 'Pro redakci a data');
+  assert.deepEqual(zpStrankyVSkupine('pojistenci').map((s) => s.id), ['prehled', 'kmen', 'prevence', 'aplikace', 'gramotnost']);
+  assert.deepEqual(zpStrankyVSkupine('redakce').map((s) => s.id), ['metodika', 'indikatory']);
+  assert.deepEqual(zpStrankyVSkupine('nic'), []);
+  for (const s of ZP_STRANKY) assert.ok(ZP_SKUPINY.some((g) => g.id === s.skupina), `${s.id}: skupina`);
+  // skupiny jdou za sebou: celé pojištěnecké pořadí předchází redakčnímu
+  assert.deepEqual(ZP_STRANKY.map((s) => s.skupina), ['pojistenci', 'pojistenci', 'pojistenci', 'pojistenci', 'pojistenci', 'redakce', 'redakce']);
+});
+
 test('shell: záložky — aktivní s aria-current="page", jinak žádná; pásek a kicker', () => {
   const html = zpTabsHtml('prevence');
   assert.equal(count(html, /<a class="zpc-tab"/g), 7);
@@ -48,6 +59,19 @@ test('shell: záložky — aktivní s aria-current="page", jinak žádná; páse
   assert.match(html, /href="pojistovny-prevence\.html" aria-current="page">Prevence</);
   assert.match(html, /<nav class="zpc-tabs" aria-label="Témata srovnávače">/);
   assert.equal(count(zpTabsHtml('xx'), /aria-current/g), 0);
+  // dva seznamy: pojištěnci (5 záložek) a redakce (2), každý pojmenovaný skrytým popiskem skupiny
+  assert.equal(count(html, /<ul class="zpc-tabs-grp /g), 2);
+  const [grpP, grpR] = html.split(/<span class="zpc-tabs-lbl sr-only"/).slice(1);
+  assert.match(grpP, /id="zpTabsLbl-pojistenci">Pro pojištěnce<\/span><ul class="zpc-tabs-grp zpc-tabs-grp--pojistenci" data-skupina="pojistenci" aria-labelledby="zpTabsLbl-pojistenci">/);
+  assert.match(grpR, /id="zpTabsLbl-redakce">Pro redakci a data<\/span><ul class="zpc-tabs-grp zpc-tabs-grp--redakce" data-skupina="redakce" aria-labelledby="zpTabsLbl-redakce">/);
+  assert.equal(count(grpP, /<a class="zpc-tab"/g), 5);
+  assert.equal(count(grpR, /<a class="zpc-tab"/g), 2);
+  assert.match(grpR, /pojistovny-metodika\.html/);
+  assert.match(grpR, /pojistovny-indikatory\.html/);
+  assert.doesNotMatch(grpP, /pojistovny-(metodika|indikatory)\.html/);
+  // aktivní redakční stránka nese aria-current v druhé skupině
+  const act = zpTabsHtml('indikatory').split('zpc-tabs-grp--redakce')[1];
+  assert.match(act, /href="pojistovny-indikatory\.html" aria-current="page"/);
   const shell = zpShellHtml('kmen');
   assert.match(shell, /class="zpc-strip" role="note"/);
   assert.match(shell, /Srovnávač zdravotních pojišťoven · pracovní verze/);
@@ -129,18 +153,38 @@ test('přehled: buildPrehled — tři dlaždice, čtyři grafy (podíl, rezervy,
   assert.match(out.grafy, /Celé téma<span class="sr-only">: Kmen a hospodaření<\/span>/);
   assert.equal(count(out.grafy, /data-zp="111"/g) > 3, true, 'marky nesou data-zp');
   assert.match(out.semafor, /zatím nehodnoceno/);
-  assert.equal(count(out.temata, /class="zpc-tema-card"/g), 6);
+  // rozcestník: 4 velké karty pro pojištěnce + 2 menší redakční v samostatném řádku
+  assert.equal(count(out.temata, /class="zpc-tema-card"/g), 4);
+  assert.equal(count(out.temataRedakce, /class="zpc-tema-card zpc-tema-card--mini"/g), 2);
+  assert.doesNotMatch(out.temata, /pojistovny-(metodika|indikatory)\.html/);
+  assert.match(out.temataRedakce, /pojistovny-metodika\.html/);
+  assert.match(out.temataRedakce, /pojistovny-indikatory\.html/);
   // bez dat nepadá
   const empty = buildPrehled({ d: null, a: null, p: null });
   assert.equal(empty.grafy, '');
   assert.equal(empty.hero, '');
 });
 
-test('přehled: rozcestník — karty podstránek s kickerem, názvem, větou a „co tam najdu“', () => {
+test('přehled: rozcestník — velké karty podstránek pro pojištěnce s kickerem, názvem, větou a „co tam najdu“', () => {
   const html = temaKartyHtml();
-  for (const s of ZP_STRANKY.filter((x) => x.id !== 'prehled')) assert.match(html, new RegExp(`href="${s.href}"`));
+  assert.equal(html, temaKartyHtml('pojistenci'));
+  for (const s of zpStrankyVSkupine('pojistenci').filter((x) => x.id !== 'prehled')) assert.match(html, new RegExp(`href="${s.href}"`));
   assert.doesNotMatch(html, /href="pojistovny\.html"/);
-  for (const c of ['zpc-tema-kicker', 'zpc-tema-title', 'zpc-tema-veta', 'zpc-tema-co']) assert.equal(count(html, new RegExp(c, 'g')), 6, c);
+  assert.doesNotMatch(html, /pojistovny-(metodika|indikatory)\.html/, 'redakční stránky jdou do samostatného řádku');
+  for (const c of ['zpc-tema-kicker', 'zpc-tema-title', 'zpc-tema-veta', 'zpc-tema-co']) assert.equal(count(html, new RegExp(c, 'g')), 4, c);
+});
+
+test('přehled: rozcestník — redakční stránky jako menší karty bez věty, v HTML pod nadpisem „Pro redakci a data“', () => {
+  const html = temaKartyHtml('redakce');
+  for (const s of zpStrankyVSkupine('redakce')) assert.match(html, new RegExp(`href="${s.href}"`));
+  assert.equal(count(html, /zpc-tema-card--mini/g), 2);
+  assert.equal(count(html, /zpc-tema-title/g), 2);
+  assert.equal(count(html, /zpc-tema-co/g), 2);
+  assert.doesNotMatch(html, /zpc-tema-veta/);
+  assert.equal(temaKartyHtml('nic'), '');
+  const page = fs.readFileSync(path.join(ROOT, 'pojistovny.html'), 'utf8');
+  assert.match(page, /<h3 class="zpc-ov-h3" id="zpOvRedakceH">Pro redakci a data<\/h3>\s*<ul id="zpOvTemataRedakce" class="zpc-tema-grid zpc-tema-grid--mini" aria-labelledby="zpOvRedakceH">/);
+  assert.ok(page.indexOf('id="zpOvTemata"') < page.indexOf('id="zpOvRedakceH"'), 'redakční řádek je pod pojištěneckými kartami');
 });
 
 // ---------------------------------------------------------------- síť odborností
@@ -244,7 +288,8 @@ test('styles.css: P1.6 třídy existují v sekci .zpc- a bez pevných barev, --r
   assert.ok(start > 0 && end > start);
   const sec = css.slice(start, end);
   for (const c of ['.zpc-shell', '.zpc-tabs', '.zpc-tab[aria-current="page"]', '.zpc-overview-grid', '.zpc-ov-tile', '.zpc-ov-karta',
-    '.zpc-ov-mini', '.zpc-tema-card', '.zpc-ov-semline', '.zpc-sit-limit', '.zpc-sit-select']) assert.ok(sec.includes(c), c);
+    '.zpc-ov-mini', '.zpc-tema-card', '.zpc-ov-semline', '.zpc-sit-limit', '.zpc-sit-select',
+    '.zpc-tabs-grp--redakce', '.zpc-tema-card--mini', '.zpc-tema-grid--mini', '.zpc-ov-h3', '.zpc-stari', '.zpc-stari-wrap', '.zpc-stari-warn']) assert.ok(sec.includes(c), c);
   assert.ok(!/#[0-9a-fA-F]{3,6}\b/.test(sec), 'jen tokeny');
   const zp = css.slice(css.indexOf('/* === Srovnávač pojišťoven: stránka'), css.indexOf('/* === Srovnávač pojišťoven: dotazníky'));
   assert.ok(!/var\(--red\)/.test(zp), '--red patří hrotu střelky a stavu bad, ne srovnávači');

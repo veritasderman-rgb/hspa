@@ -5,6 +5,7 @@
 //   data/pojistovny-aplikace.json   matice funkcí aplikací, uživatelé, rizikové skupiny, další zkoumání
 //   data/pojistovny-prevence.json   nabídka podle oblastí, onko screening, duševní zdraví, struktura fondu prevence, odpovědi z VZ
 //   data/pojistovny-otazky.json     sady otázek všech fází (docs/pojistovny-dotazniky.md)
+//   data/pojistovny-kmen-mesicni.json měsíční kmen odvozený z přerozdělení MZ (jen kmen; renderuje src/pojistovny-kmen-mesicni.js)
 // Každý soubor je nepovinný: chybí-li, modul vypíše stav „data zatím nejsou k dispozici“ a zbytek stránky funguje.
 //
 // Tenhle soubor drží hero, modul 3 (kmen a hospodaření; P1.4 + P3.1 + P3.4) a init.
@@ -22,6 +23,7 @@
 // Grafy kreslí primitivy src/zp-viz.js (čisté funkce → HTML string). Příprava
 // vstupů je oddělená od renderu: heroTiles(), buildKmenCharts(), buildFinRows(),
 // sortFinRows() a pickYoyMetric() jsou čisté a testuje je tests/pojistovny.test.js.
+// Stáří dat (věta pod nadpisem a blok nad patičkou) skládá src/pojistovny-stari.js z těchže datasetů.
 // Interakce (Moje pojišťovna, tooltip, animace) dodává src/zp-interact.js —
 // initZpInteract() se volá po vyrenderování všech modulů (idempotentní).
 
@@ -33,6 +35,8 @@ import { statTiles, rankedBars, segmentedBar, indexedLines, dumbbell, isNum, pct
 import { initZpInteract, MOJE_EVENT } from './zp-interact.js';
 import { renderZpShell, legacyRedirect } from './pojistovny-shell.js';
 import { renderPrehled } from './pojistovny-prehled.js';
+import { renderKmenMesicni } from './pojistovny-kmen-mesicni.js';
+import { renderStariDat } from './pojistovny-stari.js';
 
 // Re-export čistých funkcí kvůli tests/pojistovny.test.js.
 export { fmtKc, levelBadge, miniIndexSvg };
@@ -400,6 +404,7 @@ export const POTREBA = {
   prevence: ['zpPrehled', 'zpPrevMatrix', 'zpFpStruktura', 'zpOdpovediMatrix'],
   otazky: ['zpOtazky', 'zpDotaznik'],
   agregaty: ['zpDotaznikAgregace'],
+  kmenMesicni: ['zpKmenMesicni', 'zpKmenPrestupy'],
 };
 
 async function init() {
@@ -411,12 +416,13 @@ async function init() {
   }
   const shell = renderZpShell();
   const skip = Promise.resolve(null);
-  const [d, a, p, o, agg] = await Promise.all([
+  const [d, a, p, o, agg, km] = await Promise.all([
     loadJson('data/pojistovny.json'),
     has(POTREBA.aplikace) ? loadJson('data/pojistovny-aplikace.json') : skip,
     has(POTREBA.prevence) ? loadJson('data/pojistovny-prevence.json') : skip,
     has(POTREBA.otazky) ? loadJson('data/pojistovny-otazky.json') : skip,
     has(POTREBA.agregaty) ? loadJson('data/pojistovny-dotaznik-agregaty.json') : skip,
+    has(POTREBA.kmenMesicni) ? loadJson('data/pojistovny-kmen-mesicni.json') : skip,
   ]);
   if (has(['zpPrehled'])) {
     renderPrehled({ d, a, p, tiles: d ? heroTiles(d, { bezFondu: true }) : null, kmen: d ? buildKmenCharts(d) : null });
@@ -426,11 +432,14 @@ async function init() {
   if (has(['zpAppMatrix', 'zpRizikove', 'zpDalsi'])) renderApps(a);
   if (has(['zpPrevMatrix', 'zpFpStruktura', 'zpMereni'])) renderPrevence(p, d);
   if (has(['zpCards', 'zpChartShare', 'zpTableFin'])) renderKmen(d);
+  if (has(POTREBA.kmenMesicni)) renderKmenMesicni(km);
   if (has(POTREBA.otazky)) { renderOtazky(o); renderDotazniky(o, agg); }
   doc.addEventListener(MOJE_EVENT, (e) => syncCards(e.detail?.kod ?? null));
   await initZpInteract(doc);
   syncCards(doc.querySelector('main')?.getAttribute('data-moje-zp') || null);
-  await shell;
+  // stáří dat: věta pod nadpisem + sbalená tabulka nad patičkou Zdroje, z datasetů, které stránka právě načetla
+  const stari = renderStariDat({ datasety: { pojistovny: d, prevence: p, aplikace: a, otazky: o } }).catch(() => null);
+  await Promise.all([shell, stari]);
 }
 
 if (typeof document !== 'undefined') {

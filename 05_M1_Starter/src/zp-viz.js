@@ -437,10 +437,13 @@ const r1 = (v) => Math.round(v * 10) / 10;
 
 /**
  * @param {Array<{kod?, key?, label, points: Array<{year, value}>}>} series
- * @param {{title?, sub?, base?: 'first'|number, source?, unit?, dec?}} opts
+ * @param {{title?, sub?, base?: 'first'|number, source?, unit?, dec?,
+ *   xFmt?: (x:number)=>string, xHead?: string, xTicks?: Array<{x:number,label:string}>}} opts
+ *   Osa X je číselná (rok); pro měsíční řady lze předat zlomek roku (2022 + (m−1)/12) a
+ *   popisky dodat přes xFmt (tooltip, aria, tabulka), xTicks (značky osy) a xHead (záhlaví tabulky).
  */
 export function indexedLines(series, opts = {}) {
-  const { base = 'first', source = '', unit = '', dec = 0 } = opts;
+  const { base = 'first', source = '', unit = '', dec = 0, xFmt = (x) => String(x), xHead = 'Rok', xTicks = null } = opts;
   const list = (Array.isArray(series) ? series : [])
     .filter((s) => s && typeof s === 'object')
     .map((s) => ({ ...s, ...indexSeries(s.points, base) }))
@@ -453,7 +456,7 @@ export function indexedLines(series, opts = {}) {
   const yLo = ticks[0];
   const yHi = ticks[ticks.length - 1];
   const baseYears = [...new Set(list.map((s) => s.baseYear))];
-  const baseLabel = baseYears.length === 1 ? `${baseYears[0]} = 100` : 'první rok = 100';
+  const baseLabel = baseYears.length === 1 ? `${xFmt(baseYears[0])} = 100` : 'první rok = 100';
 
   const longest = Math.max(...list.map((s) => String(s.label ?? '').length));
   const right = Math.min(120, Math.max(40, Math.round(longest * 7.6) + 18));
@@ -471,9 +474,11 @@ export function indexedLines(series, opts = {}) {
     + `<text class="zpv-tick" x="${x0 - 5}" y="${r1(Y(t) + 4)}" text-anchor="end">${esc(formatNumberCz(t, { maxDecimals: 1 }))}</text>`).join('');
   const span = yMax - yMin;
   const step = span > 12 ? 5 : span > 5 ? 2 : 1;
-  const xYears = years.filter((y) => y === yMin || y === yMax || ((y - yMin) % step === 0 && yMax - y >= step * 0.6));
+  const xYears = Array.isArray(xTicks)
+    ? xTicks.filter((t) => t && isNum(t.x))
+    : years.filter((y) => y === yMin || y === yMax || ((y - yMin) % step === 0 && yMax - y >= step * 0.6)).map((y) => ({ x: y, label: String(y) }));
   const xAxis = `<line class="zpv-axis" x1="${x0}" x2="${x1}" y1="${y1}" y2="${y1}"/>`
-    + xYears.map((y, i) => `<text class="zpv-tick" x="${r1(X(y))}" y="${y1 + 15}" text-anchor="${i === 0 ? 'start' : i === xYears.length - 1 ? 'end' : 'middle'}">${y}</text>`).join('');
+    + xYears.map((t) => `<text class="zpv-tick" x="${r1(X(t.x))}" y="${y1 + 15}" text-anchor="${t.x === yMin ? 'start' : t.x === yMax ? 'end' : 'middle'}">${esc(t.label)}</text>`).join('');
 
   // konce řad a rozestavení popisků
   const ends = list.map((s) => {
@@ -496,9 +501,9 @@ export function indexedLines(series, opts = {}) {
     const ey = r1(Y(e.index));
     const idxText = formatNumberCz(e.index, { minDecimals: 1, maxDecimals: 1 });
     const raw = isNum(e.value) ? ` · ${fmtValue(e.value, dec, unit)}` : '';
-    const tip = s.tip || [`${s.label}: ${e.year} index ${idxText} (${s.baseYear} = 100)${raw}`, s.zdroj ?? source].filter(Boolean).join(' · ');
+    const tip = s.tip || [`${s.label}: ${xFmt(e.year)} index ${idxText} (${xFmt(s.baseYear)} = 100)${raw}`, s.zdroj ?? source].filter(Boolean).join(' · ');
     const id = idAttr(s);
-    return `<g class="zpv-series"${id} tabindex="0" role="img" aria-label="${esc(`${s.label}: ${e.year} index ${idxText}, ${s.baseYear} = 100`)}" data-tip="${esc(tip)}">`
+    return `<g class="zpv-series"${id} tabindex="0" role="img" aria-label="${esc(`${s.label}: ${xFmt(e.year)} index ${idxText}, ${xFmt(s.baseYear)} = 100`)}" data-tip="${esc(tip)}">`
       + `<path class="zpv-hit" d="${d}"/>`
       + `<path class="zpv-line zpv-mark"${id} d="${d}" pathLength="1" data-zpv-anim="line" style="--i:${i}"/>`
       + `<circle class="zpv-dot zpv-mark"${id} cx="${ex}" cy="${ey}" r="4" data-zpv-anim="dot" style="--i:${i}"/></g>`;
@@ -523,11 +528,11 @@ export function indexedLines(series, opts = {}) {
     + `<g class="zpv-labels" aria-hidden="true">${labels}</g></svg>`;
 
   const legend = `<ul class="zpv-legend">${list.map((s) => `<li${idAttr(s)}><i class="zpv-sw zpv-sw--line"${idAttr(s)} aria-hidden="true"></i>${esc(s.label ?? '')}</li>`).join('')}</ul>`;
-  const aria = `${opts.title || 'Vývoj v čase'} (index, ${baseLabel}): ${list.map((s, i) => `${s.label} ${ends[i].year} ${formatNumberCz(ends[i].index, { minDecimals: 1, maxDecimals: 1 })}`).join(', ')}.`;
+  const aria = `${opts.title || 'Vývoj v čase'} (index, ${baseLabel}): ${list.map((s, i) => `${s.label} ${xFmt(ends[i].year)} ${formatNumberCz(ends[i].index, { minDecimals: 1, maxDecimals: 1 })}`).join(', ')}.`;
   const plot = `<div class="zpv-plot zpv-linesplot" role="group" aria-label="${esc(aria)}">${svg}${legend}</div>`;
 
-  const table = tableTwin(opts.title, ['Rok', ...list.map((s) => s.label ?? '')],
-    years.map((y) => [String(y), ...list.map((s) => {
+  const table = tableTwin(opts.title, [xHead, ...list.map((s) => s.label ?? '')],
+    years.map((y) => [esc(xFmt(y)), ...list.map((s) => {
       const p = s.points.find((q) => q.year === y);
       if (!p || !isNum(p.index)) return NA_TEXT;
       const rawv = isNum(p.value) ? ` <span class="zpv-raw">(${esc(fmtValue(p.value, dec, unit))})</span>` : '';
@@ -660,8 +665,10 @@ export const HEAT_LEVELS = ['minimální', 'základní', 'silné', 'nejsilnějš
 /**
  * @param {Array<{kod?, key?, label, sub?}>} rows
  * @param {Array<{key, label}>} cols
- * @param {(row, col) => ({level: 0|1|2|3|null, text?, tip?}|null)} cell
- * @param {{title?, sub?, levels?, source?, sortable?, rowHeader?}} opts
+ * @param {(row, col) => ({level: 0|1|2|3|null, text?, tipText?, tip?}|null)} cell
+ *   level = barva (stupeň), text = co je v buňce (výchozí slovo stupně, může být číslo),
+ *   tipText = co za dvojtečkou v tooltipu (výchozí text), tip = popis za pomlčkou
+ * @param {{title?, sub?, levels?, source?, sortable?, rowHeader?, foot?}} opts  foot = věta pod legendou
  */
 export function heatmap(rows, cols, cell, opts = {}) {
   const { levels = HEAT_LEVELS, sortable = true, rowHeader = '' } = opts;
@@ -680,7 +687,7 @@ export function heatmap(rows, cols, cell, opts = {}) {
       return `<td class="zpv-cell" data-level="na"><span aria-hidden="true">—</span><span class="sr-only">${NA_TEXT}</span></td>`;
     }
     const text = v.text != null ? String(v.text) : (levels[lvl] ?? String(lvl));
-    const tip = [`${r.label} · ${c.label}: ${text}`, v.tip].filter(Boolean).join(' — ');
+    const tip = [`${r.label} · ${c.label}: ${v.tipText != null ? v.tipText : text}`, v.tip].filter(Boolean).join(' — ');
     const sr = v.tip ? `<span class="sr-only"> — ${esc(v.tip)}</span>` : '';
     // Fokus jen tam, kde tooltip přidá popis (v.tip): bez něj by tooltip jen
     // opakoval viditelný text buňky a Tab by procházel 63 zastávek naprázdno.
@@ -691,7 +698,8 @@ export function heatmap(rows, cols, cell, opts = {}) {
   const legend = `<ul class="zpv-legend zpv-legend--ramp" aria-label="Stupně">${levels.slice(0, 4).map((l, i) => `<li><i class="zpv-sw zpv-sw--ramp" data-level="${i}" aria-hidden="true"></i>${esc(l)}</li>`).join('')}</ul>`;
   const table = `<table class="zpv-matrix zpv-heat" aria-label="${esc(opts.title || 'Matice')}"><thead>${head}</thead><tbody>${body}</tbody></table>`;
   const note = sortable ? `<span class="zpv-sortnote" data-zpv-sortnote hidden>${esc(opts.sortNote || HEAT_SORT_NOTE)}</span>` : '';
-  return matrixFigure('heatmap', opts, table, legend, note);
+  const foot = opts.foot ? `<p class="zpv-foot">${esc(opts.foot)}</p>` : '';
+  return matrixFigure('heatmap', opts, table, legend + foot, note);
 }
 
 // ---------------------------------------------------------------------

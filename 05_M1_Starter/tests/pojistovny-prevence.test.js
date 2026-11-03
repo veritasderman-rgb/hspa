@@ -10,11 +10,12 @@ import { fileURLToPath } from 'node:url';
 import {
   buildAppMatrix, buildKriteriaMatrix, buildPrevHeatmap, buildOnkoMatrix, buildDusevniHeatmap,
   buildFondParts, coverageState, buildCoverage, odhadniSkupinu, normSkupina, levelOf,
-  buildPrevProc, prevProcHtml, buildOtazkySady, otazkySadyHtml, SADY_PORADI, sadaCasti, vyhodnoceniHtml,
+  buildPrevProc, prevProcHtml, pocetPolozek, PREV_HEAT_FOOT, buildOtazkySady, otazkySadyHtml, SADY_PORADI, sadaCasti, vyhodnoceniHtml,
   FOND_SKUPINY, VZ_OTAZKY,
 } from '../src/pojistovny-prevence.js';
 import { dotMatrix, heatmap, segmentedBar, coverageMatrix, dumbbell } from '../src/zp-viz.js';
 import { validateAll, loadDatasets } from '../ingest/validate-pojistovny.js';
+import { datumCz } from '../src/pojistovny-shared.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const readJson = (f) => JSON.parse(fs.readFileSync(path.join(ROOT, 'data', f), 'utf8'));
@@ -105,6 +106,107 @@ test('buildPrevHeatmap: 7 × 9, úrovně 0..3, popis v tipu, rok VZ v sub', () =
   assert.match(h.rows.find((r) => r.kod === '209').sub, /VZ 2020/);
   const html = heatmap(h.rows, h.cols, h.cell, { sortable: true });
   assert.equal((html.match(/class="zpv-sort"/g) || []).length, 9);
+});
+
+test('pocetPolozek: položky popisu oddělené čárkou nebo středníkem, prázdný popis = 0', () => {
+  assert.equal(pocetPolozek('screeningy, omezené benefity'), 2);
+  assert.equal(pocetPolozek('glukóza'), 1);
+  assert.equal(pocetPolozek('očkování (HPV, klíšťovka, chřipka)'), 3, 'výčet v závorce se počítá taky');
+  assert.equal(pocetPolozek('UZ/mamo; markery ,  '), 2);
+  for (const v of [null, undefined, '', '  ', ' , ']) assert.equal(pocetPolozek(v), 0, JSON.stringify(v));
+});
+
+test('buildPrevHeatmap: v buňce počet nalezených položek, barva podle stupně, tooltip se stupněm a popisem', () => {
+  const h = buildPrevHeatmap(PREV);
+  const vzp = h.rows.find((r) => r.kod === '111');
+  const onko = h.cols.find((c) => c.key === 'onkologie');
+  const c = h.cell(vzp, onko);
+  assert.equal(c.level, 1, 'barva = stupeň základní');
+  assert.equal(c.text, '2', 'screeningy, omezené benefity = 2 položky');
+  assert.equal(c.tipText, 'stupeň základní');
+  assert.match(c.tip, /popis rešerše má 2 položky: screeningy, omezené benefity/);
+  const mv = h.rows.find((r) => r.kod === '211');
+  assert.equal(h.cell(mv, onko).text, '4');
+  assert.equal(h.cell(mv, onko).level, 3);
+  // jedna položka = „položku“, pět a více = „položek“
+  assert.match(h.cell(vzp, h.cols.find((x) => x.key === 'diabetologie')).tip, /popis rešerše má 1 položku: glukóza/);
+  const p2 = structuredClone(PREV);
+  p2.pojistovny[0].oblasti.onkologie = { stupen: 'silne', popis: 'a, b, c, d, e' };
+  assert.match(buildPrevHeatmap(p2).cell(buildPrevHeatmap(p2).rows[0], onko).tip, /popis rešerše má 5 položek/);
+  // bez popisu: stupeň zůstane (barva), v buňce „—“, tooltip řekne, že rešerše nic nenašla
+  p2.pojistovny[0].oblasti.onkologie = { stupen: 'minimalni', popis: null };
+  const h2 = buildPrevHeatmap(p2);
+  const e = h2.cell(h2.rows[0], onko);
+  assert.deepEqual([e.level, e.text, e.tipText], [0, '—', 'stupeň minimální']);
+  assert.match(e.tip, /nenašla konkrétní program/);
+  // bez stupně = „nedohledáno“ (null), beze změny
+  p2.pojistovny[0].oblasti.onkologie = { stupen: null, popis: 'x' };
+  assert.equal(buildPrevHeatmap(p2).cell(buildPrevHeatmap(p2).rows[0], onko), null);
+});
+
+test('heatmapa nabídky: číslo v buňce, tooltip „stupeň … — našla …“, věta pod maticí, legenda zůstává rampou stupňů', () => {
+  const hm = buildPrevHeatmap(PREV);
+  const html = heatmap(hm.rows, hm.cols, hm.cell, { title: 'Nabídka', sortable: true, foot: PREV_HEAT_FOOT });
+  const cells = [...html.matchAll(/<td class="zpv-cell" data-level="(\d)"[^>]*data-tip="([^"]*)">([^<]*)/g)];
+  assert.equal(cells.length, 63, '7 × 9 buněk');
+  for (const [, , , text] of cells) assert.match(text, /^(\d+|—)$/, 'v buňce jen číslo nebo „—“, ne slovo stupně');
+  assert.doesNotMatch(html, /<td class="zpv-cell"[^>]*>(minimální|základní|silné|nejsilnější)</);
+  assert.match(html, /data-tip="VZP ČR · Onkologie: stupeň základní — popis rešerše má 2 položky: screeningy, omezené benefity"/);
+  // legenda = rampa stupňů (4 slova), pod maticí věta o významu čísla a odstínu
+  assert.equal((html.match(/<i class="zpv-sw zpv-sw--ramp"/g) || []).length, 4);
+  for (const w of ['minimální', 'základní', 'silné', 'nejsilnější']) assert.match(html, new RegExp(`</i>${w}</li>`));
+  assert.match(html, /<p class="zpv-foot">Číslo v buňce = počet položek v textu rešerše [^<]*ne ověřený počet programů[^<]*Odstín = redakční stupeň\.<\/p>/);
+  assert.ok(html.indexOf('zpv-legend') < html.indexOf('zpv-foot'), 'věta je pod legendou');
+  assert.doesNotMatch(heatmap(hm.rows, hm.cols, hm.cell, {}), /zpv-foot/);
+  // řazení dál jede podle data-level (stupeň), ne podle čísla v buňce
+  assert.match(html, /data-level="3"[^>]*data-tip="ZP MV ČR · Onkologie: stupeň nejsilnější/);
+  // věta je i ve vykreslovací funkci modulu
+  const src = fs.readFileSync(path.join(ROOT, 'src', 'pojistovny-prevence.js'), 'utf8');
+  assert.match(src, /foot: PREV_HEAT_FOOT/);
+});
+
+test('rešerše: každá ZP má reserse {datum YYYY-MM-DD, url}, url z pojistovny.json a _doc říká, odkud je datum', () => {
+  const POJ = readJson('pojistovny.json');
+  assert.equal(PREV.pojistovny.length, 7);
+  for (const z of PREV.pojistovny) {
+    assert.match(z.reserse?.datum, /^\d{4}-\d{2}-\d{2}$/, z.zkratka);
+    assert.match(z.reserse?.url, /^https?:\/\//, z.zkratka);
+    const pj = POJ.pojistovny.find((x) => x.kod === z.kod);
+    assert.equal(z.reserse.url, pj.prevence?.zdroj || pj.web, `${z.zkratka}: url stránky prevence z pojistovny.json`);
+  }
+  assert.match(PREV._doc, /reserse/);
+  assert.match(PREV._doc, /první commit|prvního commitu/);
+  assert.ok(PREV.changelog.some((c) => /reserse/.test(c.zmena)), 'změna je v changelogu');
+});
+
+test('validátor: reserse je volitelné; když je, musí mít datum YYYY-MM-DD a url', () => {
+  const ds = loadDatasets();
+  assert.deepEqual(validateAll(ds).errors, []);
+  const noRes = structuredClone(ds);
+  for (const z of noRes.prevence.pojistovny) delete z.reserse;
+  assert.deepEqual(validateAll(noRes).errors, [], 'bez reserse projde');
+  for (const [mut, re] of [
+    [(r) => { r.datum = '14. 10. 2026'; }, /reserse\.datum/],
+    [(r) => { r.datum = '2026-02-30'; }, /reserse\.datum/],
+    [(r) => { delete r.datum; }, /reserse\.datum/],
+    [(r) => { r.url = ''; }, /reserse\.url/],
+    [(r) => { delete r.url; }, /reserse\.url/],
+    [(r) => { r.url = 'www.vzp.cz'; }, /reserse\.url/],
+  ]) {
+    const bad = structuredClone(ds);
+    mut(bad.prevence.pojistovny[0].reserse);
+    assert.match(validateAll(bad).errors.join('\n'), re);
+  }
+  const notObj = structuredClone(ds);
+  notObj.prevence.pojistovny[0].reserse = 'včera';
+  assert.match(validateAll(notObj).errors.join('\n'), /reserse: musí být objekt/);
+});
+
+test('datumCz: ISO datum → „2. 11. 2026“, jiný text beze změny', () => {
+  assert.equal(datumCz('2026-11-02'), '2. 11. 2026');
+  assert.equal(datumCz('2026-10-14T08:00:00Z'), '14. 10. 2026');
+  assert.equal(datumCz('brzy'), 'brzy');
+  assert.equal(datumCz(null), '');
 });
 
 test('buildOnkoMatrix a buildDusevniHeatmap: 7 × 5, nadstandard v sub řádku', () => {
@@ -319,6 +421,17 @@ test('buildPrevProc / prevProcHtml: každý stupeň má viditelný důvod (popis
   const html = prevProcHtml(PREV);
   assert.equal((html.match(/<details class="zpc-acc zpc-proc" data-zp="/g) || []).length, 7);
   assert.match(html, /markery/);
+  // rešerše webu: datum v summary každé pojišťovny a odkaz na stránku prevence uvnitř
+  assert.equal((html.match(/rešerše webu 2\. 11\. 2026<\/span><\/summary>/g) || []).length, 7);
+  assert.equal(mv.reserse.datum, '2026-11-02');
+  assert.match(html, /<p class="zpc-note">Rešerše webu 2\. 11\. 2026: <a href="https:\/\/www\.vozp\.cz\/prispevky-na-prevenci" rel="noopener">stránka prevence VoZP<\/a>\.<\/p>/);
+  // bez reserse se summary i odkaz vynechají
+  const p3 = structuredClone(PREV);
+  delete p3.pojistovny[0].reserse;
+  assert.equal(buildPrevProc(p3)[0].reserse, null);
+  const h3 = prevProcHtml(p3);
+  assert.equal((h3.match(/ · rešerše webu /g) || []).length, 6, 'summary jen u 6 pojišťoven');
+  assert.equal((h3.match(/Rešerše webu /g) || []).length, 6, 'odkaz jen u 6 pojišťoven');
   // bez popisu → „bez uvedeného důvodu“ a počítá se v summary
   const p2 = structuredClone(PREV);
   const base = buildPrevProc(PREV).find((z) => z.kod === p2.pojistovny[0].kod).bezDuvodu;
