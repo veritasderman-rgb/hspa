@@ -2039,6 +2039,21 @@ se týkají čekací listiny k transplantaci, ne čekacích dob na péči.
     "par16": { "stav": "castecne", "co": "…", "url": null, "soubor": "111-2024.txt", "radek": "…", "…": "…" } }, "…"] }
 ```
 
+### `data/pojistovny-fond-pravidla.json` (A6.2)
+
+Pravidla čerpání fondu prevence u sedmi ZP a veřejné kontroly fondu. Inventář, ne hodnocení; validátor `ingest/lib/validate-fond-pravidla.js` (součást `validate:pojistovny`).
+
+| Pole | Význam |
+|---|---|
+| `version`, `generated_at`, `stav_k`, `_doc`, `skala`, `poznamky_autora[]`, `zdroje[]{id,nazev,url}` | obálka a metodika; `skala` popisuje stavy ano / castecne / ne / null |
+| `ramec{zakon[]{predpis,paragraf,obsah,url}, zmena_2026, strop_pct, strop_popis, nenarokovost{text,citace,url,overeno_at}, stanovisko_mz{datum,forma,obsah,citace,url,overeno_at}}` | § 7b/7c zák. 551/1991 Sb., § 18a/18b zák. 280/1992 Sb., strop 3 %, nenárokovost, stanovisko MZ z 11/2025 |
+| `podminky[]{id,nazev,popis}` | 9 podmínek v pevném pořadí: registrace_trva, bez_preregistrace, preventivni_prohlidka, bez_dluhu, lhuta_podani_dni, strop_dospely_kc, strop_dite_kc, jen_aplikace, podminene_prispevky |
+| `pojistovny[]{kod,zkratka,podminky{id:{stav,hodnota?,citace,url,overeno_at,poznamka?}},kontroly[]}` | `stav` ano / castecne / ne / null; null = nenalezeno, vyžaduje `poznamka` (otázka do kola 1); `hodnota` jen u lhůty (dny) a stropů (Kč); citace doslovná, do 450 znaků, `url` https |
+| `kontroly[]{id,organ,cislo,rok_kontroly,obdobi,predmet,zjisteni[],castky_kc?[{popis,kc}],reakce,url,url_dalsi?}` | `organ` NKÚ / MZ / MF / MZ a MF; bez jmen osob (validátor hlídá tituly a oslovení) |
+| `kontroly_plosne[]` | stejný tvar jako `kontroly[]`, kontroly týkající se všech pojišťoven (akvizice pojištěnců) |
+
+Frontend: `src/pojistovny-prevence.js` (`pravidlaHtml`, `renderPravidla`) na stránce Prevence; explainer `fond_prevence` v `data/explainers.json`.
+
 ### Doplňky k existujícím souborům
 
 - **`data/pojistovny-otazky.json`** — sada `dostupnost-prechody` („Dostupnost péče a přestupy pojištěnců – první

@@ -10,7 +10,7 @@
 //   buildAppMatrix, buildKriteriaMatrix, buildPrevHeatmap, buildOnkoMatrix, buildDusevniHeatmap,
 //   buildFondParts, coverageState, buildCoverage, odhadniSkupinu.
 
-import { NA, esc, num, fmtKc, levelBadge, dot, li, set, short, datumCz, LEVELS, LEVEL_LABEL } from './pojistovny-shared.js';
+import { NA, esc, num, fmtKc, levelBadge, dot, li, set, short, datumCz, loadJson, LEVELS, LEVEL_LABEL } from './pojistovny-shared.js';
 import { heatmap, dotMatrix, coverageMatrix, segmentedBar, dumbbell, rankedBars, isNum, kratkyPopisek } from './zp-viz.js';
 import { initZpInteract, MOJE_EVENT } from './zp-interact.js';
 import { ZP_BY_KOD } from './zp-palette.js';
@@ -530,6 +530,7 @@ export function renderPrevence(p, d) {
     fp.p = p;
     bindFond();
     set('zpFpStruktura', fpHtml());
+    renderPravidla().catch(() => {});
 
     // doložené výsledky
     const dol = zps.flatMap((z) => (z.dolozene_vysledky || []).map((v) => `<li><b>${esc(z.zkratka)}</b> · ${esc(v.program)}: ${esc(v.vysledek)}${v.rok ? ` (${esc(v.rok)})` : ''}</li>`));
@@ -553,6 +554,153 @@ export function renderPrevence(p, d) {
     set('zpMereni', zs.map((z) => `<li><b>${esc(z.zkratka)}</b>: ${z.mereni_dopadu?.hodnoceni_ve_vz === true ? '<span class="zpc-yes">ano</span>' : z.mereni_dopadu?.hodnoceni_ve_vz === false ? '<span class="zpc-no">ne</span>' : NA} <span class="zpc-na">${esc(short(z.mereni_dopadu?.citace, 160))}</span></li>`).join(''));
     setN('zpMereniN', `${zs.filter((z) => z.mereni_dopadu?.hodnoceni_ve_vz === true).length} z ${zs.length} ano`);
   }
+}
+
+// ---------------------------------------------------------------- pravidla fondu a kontroly (A6.2)
+// Čte data/pojistovny-fond-pravidla.json (třída C: pojmenované instituce, žádná jména osob).
+// Podmínka není dobrá ani špatná, proto neutrální tón matice; počet kontrol se nesčítá ani neřadí.
+
+export const PRAVIDLA_URL = 'data/pojistovny-fond-pravidla.json';
+/** Podmínky v matici ano / částečně / ne; lhůta a stropy jsou číselné a mají vlastní tabulku. */
+export const PRAVIDLA_MATICE = ['registrace_trva', 'bez_preregistrace', 'preventivni_prohlidka', 'bez_dluhu', 'jen_aplikace', 'podminene_prispevky'];
+const PRAVIDLA_STAV = { ano: 'ano', castecne: 'částečně', ne: 'ne' };
+
+const pravidlaZps = (f) => (Array.isArray(f?.pojistovny) ? f.pojistovny : []);
+const podminkaNazev = (f, id) => (f?.podminky || []).find((p) => p.id === id)?.nazev || id;
+
+/** Matice podmínek: řádky = ZP (7), sloupce = PRAVIDLA_MATICE, buňka = {stav, tip} (null = nedohledáno). */
+export function buildPravidlaMatrix(f) {
+  const rows = pravidlaZps(f).map((z) => ({ kod: z.kod, label: z.zkratka, _z: z }));
+  const cols = PRAVIDLA_MATICE.map((id) => ({ key: id, label: podminkaNazev(f, id) }));
+  const cell = (r, c) => {
+    const b = r._z.podminky?.[c.key];
+    if (!b || !PRAVIDLA_STAV[b.stav]) return null;
+    const tip = [b.poznamka, b.citace ? `„${short(b.citace, 140)}“` : ''].filter(Boolean).join(' · ');
+    return { stav: b.stav, tip };
+  };
+  return { rows, cols, cell };
+}
+
+/** Rozbalovací seznam citací: každá buňka matice s doslovnou citací, odkazem a datem ověření. */
+export function pravidlaCitaceHtml(f) {
+  const ids = [...PRAVIDLA_MATICE, 'lhuta_podani_dni', 'strop_dospely_kc', 'strop_dite_kc'];
+  return pravidlaZps(f).map((z) => {
+    const dl = ids.map((id) => {
+      const b = z.podminky?.[id];
+      const nm = esc(podminkaNazev(f, id));
+      if (!b) return `<dt>${nm}</dt><dd class="zpc-na">nedohledáno</dd>`;
+      if (b.stav == null) return `<dt>${nm}: <span class="zpc-na">nedohledáno</span></dt><dd>${esc(b.poznamka || '')}</dd>`;
+      const cit = `<q>${esc(b.citace)}</q> <a href="${esc(b.url)}" rel="noopener">zdroj</a> <span class="zpc-na">· ověřeno ${esc(datumCz(b.overeno_at))}</span>`;
+      return `<dt>${nm}: ${esc(PRAVIDLA_STAV[b.stav] || b.stav)}${b.hodnota != null ? ` (${esc(fmtKc(b.hodnota, 0))})` : ''}</dt><dd>${cit}${b.poznamka ? `<br><small>${esc(b.poznamka)}</small>` : ''}</dd>`;
+    }).join('');
+    return `<details class="zpc-acc" data-zp="${esc(z.kod)}"><summary>${dot(z.kod)}${esc(z.zkratka)}</summary><div class="zpc-acc-body"><dl>${dl}</dl></div></details>`;
+  }).join('');
+}
+
+const LHUTA_TEXT = (b) => (b?.stav === 'ano' && Number.isFinite(b.hodnota) ? `${fmtKc(b.hodnota, 0)} dní` : null);
+/** Text jedné buňky stropu: částka, „bez souhrnného stropu“, jiný limit, nebo null (nedohledáno). */
+export function stropText(b) {
+  if (!b || b.stav == null) return null;
+  if (b.stav === 'ne') return 'bez souhrnného stropu';
+  if (Number.isFinite(b.hodnota)) return `${fmtKc(b.hodnota, 0)} Kč${b.stav === 'castecne' ? ' (jen část)' : ''}`;
+  return 'jiný limit než v Kč';
+}
+
+/** Řádky tabulky lhůta + stropy (jedna pojišťovna = jeden řádek). */
+export function buildLimity(f) {
+  return pravidlaZps(f).map((z) => ({
+    kod: z.kod, zkratka: z.zkratka,
+    lhuta: LHUTA_TEXT(z.podminky?.lhuta_podani_dni), lhutaPozn: z.podminky?.lhuta_podani_dni?.poznamka || '',
+    dospely: stropText(z.podminky?.strop_dospely_kc), dospelyPozn: z.podminky?.strop_dospely_kc?.poznamka || z.podminky?.strop_dospely_kc?.citace || '',
+    dite: stropText(z.podminky?.strop_dite_kc), ditePozn: z.podminky?.strop_dite_kc?.poznamka || z.podminky?.strop_dite_kc?.citace || '',
+  }));
+}
+
+/** Tabulka lhůt a stropů jako tabulkové dvojče s CSV (stejný vzor jako kontext fondu na Penězích). */
+export function limityHtml(f) {
+  const rows = buildLimity(f);
+  if (!rows.length) return '';
+  const title = 'Lhůta podání žádosti a roční strop příspěvků z fondu prevence (pravidla 2026)';
+  const source = 'pojišťovny · podmínky čerpání z fondu prevence (weby k 3. 11. 2026, citace u každé buňky)';
+  const headers = ['Pojišťovna', 'Lhůta podání od úhrady', 'Roční strop, dospělý', 'Roční strop, dítě'];
+  const td = (v, pozn) => (v ? `<td class="zpc-txt">${esc(v)}${pozn ? `<small>${esc(short(pozn, 130))}</small>` : ''}</td>` : `<td class="zpc-txt">${NA}</td>`);
+  const body = rows.map((r) => `<tr data-zp="${esc(r.kod)}"><th scope="row">${dot(r.kod)}${esc(r.zkratka)}</th>${td(r.lhuta, r.lhutaPozn)}${td(r.dospely, r.dospelyPozn)}${td(r.dite, r.ditePozn)}</tr>`).join('');
+  const head = headers.map((h) => `<th scope="col">${esc(h)}</th>`).join('');
+  return '<div class="zpv zpv-figure zpv-fond-limity">'
+    + `<figcaption class="zpv-cap"><span class="zpv-title">${esc('Lhůta podání a roční strop')}</span>`
+    + `<span class="zpv-sub">${esc('Strop je jen to, co pojišťovna stanoví jako souhrn za rok; bez něj mají limity jednotlivé příspěvky. Výše stropu nevypovídá o štědrosti: pojišťovny mají jiné programy, jiné částky u jednotlivých příspěvků a jiné mechanismy (kredity, počet příspěvků).')}</span></figcaption>`
+    + `<details class="zpv-table" open data-csv-title="${esc(title)}" data-csv-source="${esc(source)}"><summary>Tabulka: lhůta a strop</summary>`
+    + '<button type="button" class="zpv-csv" data-zpv-csv>Stáhnout CSV</button>'
+    + `<div class="zpv-scroll" tabindex="0" role="region" aria-label="${esc(`Tabulka: ${title}`)}"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div></details></div>`;
+}
+
+/** Úvod sekce: zákonný rámec, nenárokovost a stanovisko MZ z dat (čísla a citace nejsou v kódu). */
+export function ramecHtml(f) {
+  const R = f?.ramec;
+  if (!R) return '';
+  const par = (R.zakon || []).map((z) => z.paragraf).filter((x, i, a) => a.indexOf(x) === i);
+  const zdroje = `zdroje fondu: ${R.strop_pct != null ? `až ${esc(String(R.strop_pct))} % pojistného` : 'zákonný strop'} po přerozdělení za předchozí rok, jen při neschodkovém plánu, a pokuty a penále`;
+  return `<p class="zpc-note zpc-fp-ramec">Zákon určuje jen ${zdroje} a obecný účel (${esc(par.join(', '))}). `
+    + `<b>Na příspěvek není právní nárok</b>; ministerstvo to potvrzuje a pravidla pojišťoven neřídí. `
+    + `${R.stanovisko_mz?.obsah ? esc(R.stanovisko_mz.obsah) : ''} `
+    + `Stav pravidel: ${esc(datumCz(f.stav_k))}; pojišťovny je během roku mění.</p>`;
+}
+
+/** Kontroly jako jeden seznam seřazený od nejnovějších; plošné kontroly (všech sedm ZP) nemají kód pojišťovny. */
+export function buildKontroly(f) {
+  const out = [];
+  for (const z of pravidlaZps(f)) for (const k of (z.kontroly || [])) out.push({ ...k, kod: z.kod, zkratka: z.zkratka });
+  for (const k of (f?.kontroly_plosne || [])) out.push({ ...k, kod: null, zkratka: 'všechny pojišťovny' });
+  return out.sort((a, b) => b.rok_kontroly - a.rok_kontroly || String(a.cislo).localeCompare(String(b.cislo), 'cs'));
+}
+
+const fmtKcCelkem = (kc) => `${fmtKc(kc, 0)} Kč`;
+/** Časová osa kontrol: rok, orgán a číslo, pojišťovna, předmět, zjištění (rozbalovací), částky, reakce, odkaz. */
+export function kontrolyHtml(f) {
+  const ks = buildKontroly(f);
+  if (!ks.length) return '<p class="zpc-na">Kontroly zatím nejsou k dispozici.</p>';
+  const items = ks.map((k) => {
+    const who = k.kod ? `${dot(k.kod)}${esc(k.zkratka)}` : esc(k.zkratka);
+    const castky = (k.castky_kc || []).length
+      ? `<ul class="zpc-kr-castky">${k.castky_kc.map((c) => `<li>${esc(fmtKcCelkem(c.kc))} · ${esc(c.popis)}</li>`).join('')}</ul>` : '';
+    const dalsi = k.url_dalsi ? ` · <a href="${esc(k.url_dalsi)}" rel="noopener">zpravodajství</a>` : '';
+    return `<li class="zpc-kr"${k.kod ? ` data-zp="${esc(k.kod)}"` : ''} id="kontrola-${esc(k.id)}">`
+      + `<span class="zpc-kr-rok">${esc(String(k.rok_kontroly))}</span>`
+      + `<div class="zpc-kr-body"><p class="zpc-kr-hlava"><b>${esc(k.organ)} ${esc(k.cislo)}</b> · ${who} <span class="zpc-na">· kontrolované období ${esc(k.obdobi)}</span></p>`
+      + `<p class="zpc-kr-predmet">${esc(k.predmet)}</p>`
+      + `<details class="zpc-acc"><summary>Zjištění<span class="zpc-n"> · ${k.zjisteni.length}</span></summary><div class="zpc-acc-body"><ul>${li(k.zjisteni)}</ul>${castky}</div></details>`
+      + `<p class="zpc-kr-reakce"><b>Reakce:</b> ${esc(k.reakce)}</p>`
+      + `<p class="zpc-kr-zdroj"><a href="${esc(k.url)}" rel="noopener">Zdroj</a>${dalsi}</p></div></li>`;
+  }).join('');
+  return `<ol class="zpc-kontroly" aria-label="Kontroly fondu prevence podle roku, od nejnovějších">${items}</ol>`
+    + '<p class="zpc-cap">Počet kontrol u pojišťovny neřadíme ani nesčítáme: závisí na plánu kontrolního orgánu, ne na kvalitě pojišťovny. U OZP, ZPŠ a RBP jsme zveřejněný kontrolní závěr NKÚ k fondu prevence nenašli, což neznamená, že kontrola neproběhla.</p>';
+}
+
+/** Celá sekce (čistá funkce, HTML); matice a tabulka jdou přes zp-viz. */
+export function pravidlaHtml(f) {
+  if (!f || !pravidlaZps(f).length) return '<p class="zpc-na">Pravidla fondu prevence zatím nejsou k dispozici.</p>';
+  const m = buildPravidlaMatrix(f);
+  const matice = coverageMatrix(m.rows, m.cols, m.cell, {
+    title: 'Podmínky čerpání příspěvků z fondu prevence',
+    sub: 'Podmínka není dobrá ani špatná, je to pravidlo, které si každá pojišťovna určuje sama. Doslovnou citaci najdete po najetí na buňku a v seznamu pod maticí.',
+    source: `pojišťovny · podmínky čerpání fondu prevence · weby k ${datumCz(f.stav_k)}`,
+    rowHeader: 'Pojišťovna', tone: 'neutral', labels: PRAVIDLA_STAV,
+  });
+  return ramecHtml(f) + matice
+    + `<details class="zpc-acc"><summary>Citace a odkazy ke každé buňce<span class="zpc-n"> · ${pravidlaZps(f).length} pojišťoven</span></summary><div class="zpc-acc-body">${pravidlaCitaceHtml(f)}</div></details>`
+    + limityHtml(f)
+    + '<h4 class="zpc-h4">Kdo fond kontroloval a co našel</h4>'
+    + '<p class="zpc-note">Veřejně dostupné kontroly Nejvyššího kontrolního úřadu (NKÚ) a ministerstev zdravotnictví a financí. Jde o popis zjištění z kontrolních závěrů, ne o naše hodnocení; reakce pojišťoven jsou uvedeny, pokud je zveřejnily.</p>'
+    + kontrolyHtml(f);
+}
+
+/** Vykreslí sekci do #zpFpPravidla; data si dočte přes sdílenou cache (stejný fetch použije patička Zdroje). */
+export async function renderPravidla() {
+  const box = typeof document !== 'undefined' ? document.getElementById('zpFpPravidla') : null;
+  if (!box) return;
+  const f = await loadJson(PRAVIDLA_URL);
+  box.innerHTML = pravidlaHtml(f);
+  refreshInteract();
 }
 
 // ---------------------------------------------------------------- modul 4: otázky

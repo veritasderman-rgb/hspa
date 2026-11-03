@@ -40,10 +40,11 @@ export const ZP_DATASETY = {
   smluvniProgramy: 'data/pojistovny-smluvni-programy.json',
   dostupnost: 'data/pojistovny-dostupnost.json',
   porodniAsistence: 'data/pojistovny-porodni-asistence.json',
+  fondPravidla: 'data/pojistovny-fond-pravidla.json',
 };
 
 /** Datasety, které stránka načítá mimo orchestrátor (src/pojistovny.js) vlastním modulem. */
-export const STARI_DOPLNEK = { instituce: ['sit'], aplikace: ['stiznosti', 'opendata'] };
+export const STARI_DOPLNEK = { instituce: ['sit'], aplikace: ['stiznosti', 'opendata'], prevence: ['fondPravidla'] };
 
 /** Pojmenování veličin pro varování (klíč `velicina` v registru). */
 export const STARI_VELICINY = {
@@ -202,6 +203,11 @@ export const STARI_REGISTR = [
       const q = (s) => String(s).replace(/^(\d{4})Q(\d)$/, 'Q$2 $1');
       return { kDatu: `${q(o[0])}–${q(o[o.length - 1])}`, kratce: `ÚZIS 06211 ${q(o[o.length - 1])}`, roky: [], stav: (x.predbezne || []).length ? `${(x.predbezne || []).map(q).join(' a ')} předběžně · ${sestaven(x)}` : sestaven(x) };
     },
+  },
+  {
+    id: 'fondPravidla', dataset: 'fondPravidla', velicina: 'fondPravidla', stranky: ['prevence'],
+    nazev: 'Pravidla čerpání fondu prevence a kontroly', zdroj: 'Weby pojišťoven (podmínky 2026), NKÚ, MZ ČR (Hodnocení kap. 4.4), zákony č. 551/1991 Sb. a č. 280/1992 Sb.',
+    vyber: (d) => (d?.stav_k ? { kDatu: `weby k ${datumCz(d.stav_k)}`, kratce: `pravidla fondu k ${datumCz(d.stav_k)}`, roky: [], stav: 'podmínky platné v roce 2026, pojišťovny je během roku mění' } : null),
   },
   {
     id: 'vek', dataset: 'vek', velicina: 'kmen', stranky: [],
