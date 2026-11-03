@@ -176,8 +176,8 @@ test('přehled: buildPrehled — tři dlaždice KPI, čtyři grafy (podíl, sald
   assert.doesNotMatch(out.hero, /na pojištěnce/);
   assert.equal(count(out.grafy, /<div class="zpc-ov-tile"/g), 4);
   assert.deepEqual([...out.grafy.matchAll(/data-tema="(\w+)"/g)].map((m) => m[1]), ['kmen', 'penize', 'kmen', 'penize']);
-  // Náklady a Rezervy vedou na Peníze s kotvou (hospodaření), ne na Kmen
-  assert.match(out.grafy, /href="pojistovny-penize\.html#hospodareni-rady">Celé téma/);
+  // Rezervy vedou na Peníze s kotvou (hospodaření 2024); Náklady vykázáno → přepočteno žijí na Kmeni (věk kmene)
+  assert.match(out.grafy, /href="pojistovny-kmen\.html#zpChartNzs">Celé téma/);
   assert.match(out.grafy, /href="pojistovny-penize\.html#hospodareni-2024">Celé téma/);
   assert.match(out.grafy, /zpv-segmented/);
   assert.match(out.grafy, /Rezervy na konci roku 2026/);
