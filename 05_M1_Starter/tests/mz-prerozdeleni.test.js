@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import {
   parseVyber, parseOdkazy, nejnovejsi, sloucitParsovane, zkontrolujSoucty, sestavVyberJson, rozdel, KODY,
 } from '../ingest/lib/mz-prerozdeleni.js';
-import { validatePrerozdeleni, TAB1_VYBER_TIS } from '../ingest/lib/validate-prerozdeleni.js';
+import { validatePrerozdeleni } from '../ingest/lib/validate-prerozdeleni.js';
 import { sestavPrerozdeleni, run } from '../ingest/transform_pojistovny_prerozdeleni.js';
 import { stahni, planStazeni } from '../ingest/fetchers/mz-prerozdeleni.js';
 
@@ -18,6 +18,7 @@ const FIX = fs.readFileSync(path.join(ROOT, 'tests', 'fixtures', 'mz-prerozdelen
 const VYBER = read('ingest', 'manual', 'pojistovny', 'prerozdeleni-mz-vyber.json');
 const POJ = read('ingest', 'manual', 'pojistovny', 'prerozdeleni-mz-pojistovna.json');
 const PD = read('data', 'pojistovny-prerozdeleni.json');
+const RADY = fs.existsSync(path.join(ROOT, 'data', 'pojistovny-hospodareni-rady.json')) ? read('data', 'pojistovny-hospodareni-rady.json') : null;
 const copy = (o) => JSON.parse(JSON.stringify(o));
 const ZKR = Object.fromEntries(read('data', 'pojistovny.json').pojistovny.map((z) => [z.kod, z.zkratka]));
 
@@ -174,7 +175,7 @@ test('transform (malý vstup): rozdíl = po − vybráno, roční součty v mld.
   assert.equal(z.rocne['2024'].vybrano_mld, null);
   assert.equal(z.rocne['2024'].rozdil_mld, null);
   assert.equal(d.posledni_rok_rocni, 2023);
-  assert.deepEqual(validatePrerozdeleni(d, { tab1VyberTis: {} }).errors, []);
+  assert.deepEqual(validatePrerozdeleni(d, {  }).errors, []);
 });
 
 test('transform: relativní saldo = po − vybráno × (Σ po / Σ vybráno); Σ přes 7 ZP = 0; měsíční rozdil_relativni', () => {
@@ -241,10 +242,9 @@ test('data/pojistovny-prerozdeleni.json: 2019-01 až poslední zveřejněný mě
   assert.equal(PD.posledni_mesic, '2026-10');
   assert.equal(PD.posledni_rok_rocni, 2025);
   assert.equal(PD.pojistovny.length, 7);
-  const v = validatePrerozdeleni(PD);
+  const v = validatePrerozdeleni(PD, { rady: RADY });
   assert.deepEqual(v.errors, []);
-  // známé varování: výběr 2024 vs Tab. 1 MZ (jiné vymezení, ~0,6 %)
-  for (const w of v.warnings.filter((x) => /^výběr 2024/.test(x))) assert.match(w, /^výběr 2024: Σ 7 ZP 340\.615 mld/);
+  assert.deepEqual(v.warnings, []);
 });
 
 test('data: VZP 2024 – výběr, po přerozdělení a rozdíl; Σ rozdílů 2024 = „vliv přerozdělování“ tab. 1c MZ (155,55 mld)', () => {
@@ -256,9 +256,7 @@ test('data: VZP 2024 – výběr, po přerozdělení a rozdíl; Σ rozdílů 202
   // Tab. 1c Hodnocení MZ 2024 (tis. Kč): VZP 103 378 440, Σ ZP 155 552 676
   assert.ok(Math.abs(vzp.rozdil_mld - 103.37844) < 0.01);
   assert.ok(Math.abs(PD.celkem.rocne['2024'].rozdil_mld - 155.552676) < 0.05);
-  // Σ výběru 2024 ≈ Tab. 1 MZ ±1 % (±0,5 % je cíl; skutečný rozdíl viz varování validátoru)
-  const sum = PD.pojistovny.reduce((a, z) => a + z.rocne['2024'].vybrano_mld, 0);
-  assert.ok(Math.abs(sum * 1e6 / TAB1_VYBER_TIS[2024] - 1) < 0.01);
+  assert.equal(vzp.okno_vyberu, '12/2023–11/2024');
 });
 
 test('data: roční součty = součet měsíců, neúplný rok 2026 má roční null a mesicu 10, celkem = řádek MZ', () => {
@@ -299,6 +297,65 @@ test('validatePrerozdeleni: rozbitá kopie – součet ZP, vybrano ≤ 0, rozdí
   assert.match(chyby((p) => { p.pojistovny[0].rocne['2023'].vybrano_mld += 1; }), /vybrano_mld/);
   assert.match(chyby((p) => { p.pojistovny.pop(); }), /pojistovny: očekáváno/);
   assert.match(chyby((p) => { p.posledni_rok_rocni = 2024; }), /posledni_rok_rocni/);
+});
+
+test('posun měsíců: Σ sloupců 2/Y–1/Y+1 = Tab. 1 MZ „výběr“ (±0,1 %); validátor při odchylce hlásí chybu', { skip: !RADY }, () => {
+  const ref = RADY.cr.rady.pojistne_pred_prerozdelenim_mld;
+  let overeno = 0;
+  for (const rok of Object.keys(ref)) {
+    const od = PD.mesice.indexOf(`${rok}-02`);
+    const dO = PD.mesice.indexOf(`${Number(rok) + 1}-01`);
+    if (od < 0 || dO < 0) continue;
+    const mine = PD.pojistovny.reduce((a, z) => a + z.vybrano.slice(od, dO + 1).reduce((x, y) => x + y, 0), 0) / 1e6;
+    assert.ok(Math.abs(mine / ref[rok].hodnota - 1) < 0.001, `${rok}: ${mine} vs ${ref[rok].hodnota}`);
+    overeno++;
+  }
+  assert.ok(overeno >= 5);
+  const c = copy(PD);
+  for (const z of c.pojistovny) { z.vybrano[30] += 400000; z.rozdil[30] = z.po_prerozdeleni[30] === null ? null : z.po_prerozdeleni[30] - z.vybrano[30]; }
+  assert.match(validatePrerozdeleni(c, { rady: RADY }).errors.join('|'), /mimo ±0,1 %/);
+});
+
+test('složky salda 2024: riziková + plátcová = relativní saldo; hodnoty z revize; Σ rizikových = 0', () => {
+  const ocek = { 111: [10.5, 6.8], 201: [-1.0, -2.6], 205: [-4.8, 5.7], 207: [-2.6, -6.6], 209: [0.04, -2.0], 211: [-0.6, -5.0], 213: [-1.4, 3.7] };
+  let sumR = 0;
+  for (const z of PD.pojistovny) {
+    const r = z.rocne['2024'];
+    assert.ok(Math.abs(r.slozka_rizikova_mld + r.slozka_platcova_mld - r.saldo_relativni_mld) <= 0.001);
+    assert.ok(Math.abs(r.slozka_rizikova_mld - ocek[z.kod][0]) < 0.06, `${z.kod} riz.`);
+    assert.ok(Math.abs(r.slozka_platcova_mld - ocek[z.kod][1]) < 0.06, `${z.kod} plat.`);
+    assert.equal(r.vybrano_na_pojistence_kc, Math.round((r.vybrano_mld * 1e9) / r.pojistenci_prumer));
+    assert.equal(r.po_prerozdeleni_na_pojistence_kc, Math.round((r.po_prerozdeleni_mld * 1e9) / r.pojistenci_prumer));
+    sumR += r.slozka_rizikova_mld;
+  }
+  assert.ok(Math.abs(sumR) <= 0.001);
+  const c = copy(PD); c.pojistovny[0].rocne['2024'].slozka_platcova_mld += 0.01;
+  assert.match(validatePrerozdeleni(c).errors.join('|'), /slozka_rizikova \+ slozka_platcova/);
+});
+
+test('složky salda (malý vstup): identita rizikové a plátcové složky, bez pojištěnců null; okno výběru', () => {
+  const v = malyVstup();
+  const rady = { pojistovny: KODY.map((k, i) => ({ kod: k, rady: { pojistenci_prumer: { 2023: { hodnota: 1000000 * (i + 1) } } } })) };
+  const d = sestavPrerozdeleni({ ...v, zkratky: ZKR, rady });
+  const N = 28e6; const SP = 34.08; const SV = 33.6;
+  const r = d.pojistovny[0].rocne['2023'];
+  assert.equal(r.okno_vyberu, '12/2022–11/2023');
+  assert.ok(Math.abs(r.slozka_rizikova_mld - (1.8 - (1e6 / N) * SP)) < 1e-4);
+  assert.ok(Math.abs(r.slozka_platcova_mld - ((1e6 / N) * SP - 1.2 * (SP / SV))) < 1e-4);
+  assert.equal(d.pojistovny[0].rocne['2024'].okno_vyberu, null);
+  const bez = sestavPrerozdeleni({ ...v, zkratky: ZKR });
+  assert.equal(bez.pojistovny[0].rocne['2023'].slozka_rizikova_mld, null);
+  assert.equal(bez.pojistovny[0].rocne['2023'].okno_vyberu, '12/2022–11/2023');
+});
+
+test('zdroj: stazeno_at doplněno, soubory po přerozdělení bez duplicit; _doc popisuje posun měsíců', () => {
+  assert.match(PD.zdroj.stazeno_at, /^\d{4}-\d{2}-\d{2}$/);
+  const f = PD.zdroj.po_prerozdeleni.soubory;
+  assert.equal(new Set(f).size, f.length);
+  assert.match(PD._doc, /PŘEDCHOZÍ kalendářní měsíc/);
+  assert.match(PD._doc, /okno výběru 12\/\(rok−1\)–11\/rok|12\/\(rok−1\)–11\/rok/);
+  assert.ok(!/nebyl ve zdrojích vysvětlen/.test(PD._doc));
+  assert.match(VYBER._doc, /předchozí kalendářní měsíc/);
 });
 
 // ------------------------------------------------------------------ idempotence

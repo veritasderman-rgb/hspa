@@ -154,7 +154,8 @@ export function zpracujText(opts = {}) {
   const dopl = { roky: {} };
   for (const [rok, r] of Object.entries(vysl.roky)) if (Number(rok) < 2022) dopl.roky[rok] = r;
 
-  const base = { vyber, vysledekDoplnek: Object.keys(dopl.roky).length ? dopl : null, soubory: soubory.vyber, souboryDoplnek: soubory.vysledek };
+  const stazeno_at = manifest.polozky.map((p) => p.stazeno_at).filter(Boolean).sort().pop()?.slice(0, 10) ?? null;
+  const base = { stazeno_at, vyber, vysledekDoplnek: Object.keys(dopl.roky).length ? dopl : null, soubory: soubory.vyber, souboryDoplnek: soubory.vysledek };
   let predchozi = null;
   try { predchozi = JSON.parse(fs.readFileSync(out, 'utf8')); } catch { /* ještě není */ }
   const overenoPrev = predchozi?.zdroj?.overeno;

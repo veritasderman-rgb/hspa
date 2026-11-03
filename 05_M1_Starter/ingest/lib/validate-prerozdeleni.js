@@ -5,19 +5,13 @@
 // Kontroly: 7 ZP se správnými kódy · měsíce souvislé a stejně dlouhé řady · vybrano > 0 (kde není null) ·
 // Σ 7 ZP = řádek „Celkem“ ±2 tis. Kč měsíčně (vybrano i po_prerozdeleni) · rozdil = po − vybrano ·
 // roční součty odpovídají měsíčním a mají 12 měsíců · Σ saldo_relativni_mld za rok = 0 (±0,001 mld. Kč) a
-// Σ měsíčních rozdil_relativni = 0 (±2 tis. Kč) · posledni_rok_rocni = poslední rok s 12 měsíci · rok 2024:
-// Σ výběru ≈ „výběr“ v Tab. 1 MZ Hodnocení (±0,5 %, jinak warning s číslem).
+// Σ měsíčních rozdil_relativni = 0 (±2 tis. Kč) · posledni_rok_rocni = poslední rok s 12 měsíci · Σ složek
+// (riziková + plátcová) = saldo_relativni_mld ±0,001 · okno výběru 12/(Y−1)–11/Y · posunutý součet výběru
+// (sloupce 2/Y až 1/Y+1) = „výběr“ v Tab. 1 MZ Hodnocení (data/pojistovny-hospodareni-rady.json,
+// pojistne_pred_prerozdelenim_mld; předává se v opts.rady) ±0,1 % jako chyba.
 
 export const KODY = ['111', '201', '205', '207', '209', '211', '213'];
 const TOL_TIS = 2;
-
-/**
- * Referenční „výběr“ z Tab. 1 MZ Hodnocení vývoje systému v. z. p. (tis. Kč, řádek „CELKEM ZP činné ZP“,
- * sloupec „výběr … (z odd. B/ZFZP)“, skutečnost). 2024: vz2024_hodnoceni_tab_1-1a-1b-1c-1d-2-4.xlsx, list tab.č.1,
- * shoduje se s textem Hodnocení (kap. 3.1: „příjmy z vlastního výběru 342,59 mld. Kč“).
- * Pozor: Tab. 1 obsahuje o ~0,6 % víc než tabulka 100% výběru (jiné vymezení; viz _doc datasetu).
- */
-export const TAB1_VYBER_TIS = { 2024: 342590642 };
 
 const isNum = (v) => typeof v === 'number' && Number.isFinite(v);
 const sum = (a) => a.reduce((x, y) => x + y, 0);
@@ -27,7 +21,7 @@ export function validatePrerozdeleni(P, opts = {}) {
   const warnings = [];
   const e = (s) => errors.push(s);
   const w = (s) => warnings.push(s);
-  const ref = opts.tab1VyberTis ?? TAB1_VYBER_TIS;
+  const hosp = opts.rady ?? null;
 
   if (!P || typeof P !== 'object') return { errors: ['dataset chybí'], warnings };
   const mesice = P.mesice;
@@ -125,13 +119,38 @@ export function validatePrerozdeleni(P, opts = {}) {
     if (P.posledni_rok_rocni !== exp) e(`posledni_rok_rocni ${P.posledni_rok_rocni} ≠ ${exp}`);
   }
 
-  // 2024: Σ výběru ≈ Tab. 1 MZ
-  for (const [rok, tis] of Object.entries(ref)) {
-    const rs = zp.map((z) => z.rocne?.[rok]?.vybrano_mld);
-    if (!rs.every(isNum)) continue;
-    const mine = sum(rs) * 1e6;
-    const dif = (mine / tis - 1) * 100;
-    if (Math.abs(dif) > 0.5) w(`výběr ${rok}: Σ 7 ZP ${(mine / 1e6).toFixed(3)} mld vs Tab. 1 MZ ${(tis / 1e6).toFixed(3)} mld (${dif.toFixed(2)} %) — mimo ±0,5 %`);
+  // okno výběru a složky salda
+  for (const z of zp) {
+    for (const rok of roky) {
+      const r = z.rocne?.[rok];
+      if (!r) continue;
+      const exp = r.mesicu === 12 ? `12/${Number(rok) - 1}–11/${rok}` : null;
+      if (r.okno_vyberu !== exp) e(`${z.kod}.rocne[${rok}].okno_vyberu ${r.okno_vyberu} ≠ ${exp}`);
+      const a1 = r.slozka_rizikova_mld;
+      const a2 = r.slozka_platcova_mld;
+      if ((a1 === null) !== (a2 === null)) e(`${z.kod}.rocne[${rok}]: složky salda musí být obě nebo žádná`);
+      else if (a1 !== null && Math.abs(a1 + a2 - r.saldo_relativni_mld) > 0.001) e(`${z.kod}.rocne[${rok}]: slozka_rizikova + slozka_platcova ${(a1 + a2).toFixed(4)} ≠ saldo_relativni_mld ${r.saldo_relativni_mld}`);
+    }
+  }
+  for (const rok of roky) {
+    const sl = zp.map((z) => z.rocne?.[rok]?.slozka_rizikova_mld);
+    if (sl.every(isNum)) { const s = sum(sl); if (Math.abs(s) > 0.001) e(`Σ slozka_rizikova_mld ${rok} = ${s.toFixed(4)}, má být 0`); }
+  }
+
+  // posunutý součet výběru (sloupce 2/Y až 1/Y+1 = výběr za kalendářní rok Y) vs. Tab. 1 MZ Hodnocení
+  const tab1 = hosp?.cr?.rady?.pojistne_pred_prerozdelenim_mld;
+  if (tab1) {
+    for (const [rok, o] of Object.entries(tab1)) {
+      const od = mesice.indexOf(`${rok}-02`);
+      const doo = mesice.indexOf(`${Number(rok) + 1}-01`);
+      const ref = o?.hodnota;
+      if (od < 0 || doo < 0 || !isNum(ref)) continue;
+      const v = zp.map((z) => z.vybrano.slice(od, doo + 1));
+      if (v.some((a) => a.some((x) => !isNum(x)))) continue;
+      const mine = sum(v.map(sum)) / 1e6;
+      const dif = (mine / ref - 1) * 100;
+      if (Math.abs(dif) > 0.1) e(`výběr za rok ${rok} (sloupce 2/${rok}–1/${Number(rok) + 1}): Σ 7 ZP ${mine.toFixed(3)} mld vs Tab. 1 MZ ${ref.toFixed(3)} mld (${dif.toFixed(2)} %) — mimo ±0,1 %`);
+    }
   }
   return { errors, warnings };
 }

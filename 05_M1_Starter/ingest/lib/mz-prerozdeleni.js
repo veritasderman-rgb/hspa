@@ -221,15 +221,16 @@ export function orizniRoky(roky) {
   return out;
 }
 
-export function sestavVyberJson({ vyber, vysledekDoplnek = null, soubory, souboryDoplnek = [], overeno }) {
+export function sestavVyberJson({ vyber, vysledekDoplnek = null, soubory, souboryDoplnek = [], overeno, stazeno_at = null }) {
   const roky = orizniRoky(vyber.roky);
   const out = {
-    _doc: 'Částka vybraná na pojistném na veřejné zdravotní pojištění po pojišťovnách (tzv. 100% výběr; tis. Kč, měsíčně) a řádky „Celkem zaměstnanecké zdravotní pojišťovny“ (zamestnanecke) a „Celkem zdravotní pojišťovny“ (celkem). Přepsáno strojově z PDF Ministerstva zdravotnictví (stránka Přerozdělování pojistného na veřejné zdravotní pojištění, soubor prerozdelovani_pojistovna_vyber_<rok>_<měsíc>.pdf; řada 2019–2021 v souboru 2021_12, 2022–2024 v 2024_12, 2024–2026 v nejnovějším souboru; překryv 2024 je shodný) parserem ingest/lib/mz-prerozdeleni.js, spouští ingest/fetchers/mz-prerozdeleni.js. Součet sedmi ZP odpovídá řádku „Celkem“ s odchylkou nejvýše 2 tis. Kč (zaokrouhlení v PDF). Měsíce, které MZ ještě nezveřejnilo, zde nejsou (rok 2026 má jen zveřejněné měsíce). Sekce doplnek_po_prerozdeleni nese výslednou částku po přerozdělení na pojišťovnu (stejná tabulka jako prerozdeleni-mz-pojistovna.json) za roky 2019–2021, které MZ zveřejnilo v souboru prerozdelovani_pojistovna_vysledek_2021_12.pdf; do prerozdeleni-mz-pojistovna.json se nepřidávají, protože měsíční kmen (ingest/transform_pojistovny_kmen_mesicni.js) začíná v lednu 2022. Spojeno v data/pojistovny-prerozdeleni.json (ingest/transform_pojistovny_prerozdeleni.js).',
+    _doc: 'Částka vybraná na pojistném na veřejné zdravotní pojištění po pojišťovnách (tzv. 100% výběr; tis. Kč, měsíčně) a řádky „Celkem zaměstnanecké zdravotní pojišťovny“ (zamestnanecke) a „Celkem zdravotní pojišťovny“ (celkem). Přepsáno strojově z PDF Ministerstva zdravotnictví (stránka Přerozdělování pojistného na veřejné zdravotní pojištění, soubor prerozdelovani_pojistovna_vyber_<rok>_<měsíc>.pdf; řada 2019–2021 v souboru 2021_12, 2022–2024 v 2024_12, 2024–2026 v nejnovějším souboru; překryv 2024 je shodný) parserem ingest/lib/mz-prerozdeleni.js, spouští ingest/fetchers/mz-prerozdeleni.js. Součet sedmi ZP odpovídá řádku „Celkem“ s odchylkou nejvýše 2 tis. Kč (zaokrouhlení v PDF). Měsíce, které MZ ještě nezveřejnilo, zde nejsou (rok 2026 má jen zveřejněné měsíce). Sekce doplnek_po_prerozdeleni nese výslednou částku po přerozdělení na pojišťovnu (stejná tabulka jako prerozdeleni-mz-pojistovna.json) za roky 2019–2021, které MZ zveřejnilo v souboru prerozdelovani_pojistovna_vysledek_2021_12.pdf; do prerozdeleni-mz-pojistovna.json se nepřidávají, protože měsíční kmen (ingest/transform_pojistovny_kmen_mesicni.js) začíná v lednu 2022. Spojeno v data/pojistovny-prerozdeleni.json (ingest/transform_pojistovny_prerozdeleni.js). Časová osa: sloupec „1/2024“ je měsíc přerozdělení a obsahuje výběr za předchozí kalendářní měsíc (§ 21 odst. 1 písm. c) a § 21b odst. 1 zákona č. 592/1992 Sb.); součet sloupců 2/Y až 1/Y+1 odpovídá „výběru“ v Tab. 1 Hodnocení MZ (oddíl B).',
     zdroj: {
       nazev: 'MZ ČR · Přerozdělování pojistného na veřejné zdravotní pojištění · Částka vybraná na pojistném (tzv. 100% výběr) dle pojišťoven',
       url: MZ_STRANKA,
       soubory,
       overeno,
+      ...(stazeno_at ? { stazeno_at } : {}),
       jednotka: 'tis. Kč za měsíc',
     },
     roky,

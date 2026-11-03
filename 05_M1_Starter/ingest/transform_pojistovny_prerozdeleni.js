@@ -63,7 +63,7 @@ function zRady(zpRady, ukazatel, rok) {
  * Roční agregace jedné řady (pojišťovna nebo celkem). `koef` = Σ po přerozdělení / Σ vybráno všech 7 ZP za rok
  * (jen pro pojišťovny; pro celkem null). Relativní saldo = po − vybráno × koef (aritmetická identita, ne odhad).
  */
-function rocneRadu({ mesice, vybrano, po_prerozdeleni: po, rozdil, pojistenci, koef = null }) {
+function rocneRadu({ mesice, vybrano, po_prerozdeleni: po, rozdil, pojistenci, koef = null, slozky = null }) {
   const out = {};
   const roky = [...new Set(mesice.map((m) => m.slice(0, 4)))];
   for (const rok of roky) {
@@ -71,10 +71,15 @@ function rocneRadu({ mesice, vybrano, po_prerozdeleni: po, rozdil, pojistenci, k
     const uplny = idx.length === 12 && idx.every((i) => isNum(vybrano[i]) && isNum(po[i]));
     const r = {
       vybrano_mld: null, po_prerozdeleni_mld: null, rozdil_mld: null,
-      saldo_relativni_mld: null, saldo_relativni_pct_vybraneho: null, pojistenci_prumer: null, pojistenci_zdroj: null,
+      okno_vyberu: null,
+      saldo_relativni_mld: null, saldo_relativni_pct_vybraneho: null,
+      slozka_rizikova_mld: null, slozka_platcova_mld: null,
+      pojistenci_prumer: null, pojistenci_zdroj: null,
+      vybrano_na_pojistence_kc: null, po_prerozdeleni_na_pojistence_kc: null,
       rozdil_na_pojistence_kc: null, saldo_relativni_na_pojistence_kc: null, mesicu: idx.length,
     };
     if (uplny) {
+      r.okno_vyberu = `12/${Number(rok) - 1}–11/${rok}`;
       r.vybrano_mld = round(sum(idx.map((i) => vybrano[i])) / 1e6, 3);
       r.po_prerozdeleni_mld = round(sum(idx.map((i) => po[i])) / 1e6, 3);
       r.rozdil_mld = round(r.po_prerozdeleni_mld - r.vybrano_mld, 3);
@@ -87,9 +92,13 @@ function rocneRadu({ mesice, vybrano, po_prerozdeleni: po, rozdil, pojistenci, k
       if (pj) { r.pojistenci_prumer = pj.hodnota; r.pojistenci_zdroj = pj.zdroj; }
       if (r.pojistenci_prumer) {
         r.rozdil_na_pojistence_kc = Math.round((r.rozdil_mld * 1e9) / r.pojistenci_prumer);
+        r.vybrano_na_pojistence_kc = Math.round((r.vybrano_mld * 1e9) / r.pojistenci_prumer);
+        r.po_prerozdeleni_na_pojistence_kc = Math.round((r.po_prerozdeleni_mld * 1e9) / r.pojistenci_prumer);
         if (r.saldo_relativni_mld !== null) r.saldo_relativni_na_pojistence_kc = Math.round((r.saldo_relativni_mld * 1e9) / r.pojistenci_prumer);
       }
     }
+    const sl = uplny && slozky?.(rok, r);
+    if (sl) { r.slozka_rizikova_mld = sl.rizikova; r.slozka_platcova_mld = sl.platcova; }
     out[rok] = r;
   }
   return out;
@@ -137,6 +146,20 @@ export function sestavPrerozdeleni({ vyber, pojistovna, zkratky, rady = null, km
     const ix = idxRoku(rok);
     return sum(zpRadky.map((z) => sum(ix.map((i) => z.po_prerozdeleni[i])))) / sum(zpRadky.map((z) => sum(ix.map((i) => z.vybrano[i]))));
   };
+  // rozklad relativního salda identitou (jen když mají pojistenci_prumer všechny ZP):
+  //   riziková = po − n/N × ΣP (odchylka od rovného dílu na hlavu), plátcová = n/N × ΣP − vybráno × ΣP/ΣV
+  const slozkyRoku = (kod) => (rok, r) => {
+    const pj = KODY.map((k) => pojistenciFn(k)(rok));
+    if (!pj.every(Boolean)) return null;
+    const ix = idxRoku(rok);
+    const SP = sum(zpRadky.map((z) => sum(ix.map((i) => z.po_prerozdeleni[i])))) / 1e6;
+    const SV = sum(zpRadky.map((z) => sum(ix.map((i) => z.vybrano[i])))) / 1e6;
+    const podil = pj[KODY.indexOf(kod)].hodnota / sum(pj.map((x) => x.hodnota));
+    const z = zpRadky.find((x) => x.kod === kod);
+    const P = sum(ix.map((i) => z.po_prerozdeleni[i])) / 1e6;   // nezaokrouhleně, ať se složky sečtou na saldo
+    const V = sum(ix.map((i) => z.vybrano[i])) / 1e6;
+    return { rizikova: round(P - podil * SP, 4), platcova: round(podil * SP - V * (SP / SV), 4) };
+  };
   // měsíční relativní rozdíl (tis. Kč): po − vybráno × (Σ po / Σ vybráno přes 7 ZP v témže měsíci)
   const koefMesice = mesice.map((_, i) => {
     if (!zpRadky.every((z) => isNum(z.vybrano[i]) && isNum(z.po_prerozdeleni[i]))) return null;
@@ -145,7 +168,7 @@ export function sestavPrerozdeleni({ vyber, pojistovna, zkratky, rady = null, km
   const zp = zpRadky.map((z) => ({
     ...z,
     rozdil_relativni: z.vybrano.map((v, i) => (koefMesice[i] !== null && isNum(v) ? round(z.po_prerozdeleni[i] - v * koefMesice[i], 1) : null)),
-    rocne: rocneRadu({ mesice, ...z, pojistenci: pojistenciFn(z.kod), koef: koefRoku }),
+    rocne: rocneRadu({ mesice, ...z, pojistenci: pojistenciFn(z.kod), koef: koefRoku, slozky: slozkyRoku(z.kod) }),
   }));
 
   // celkem (řádek „Celkem zdravotní pojišťovny“ z MZ)
@@ -166,19 +189,20 @@ export function sestavPrerozdeleni({ vyber, pojistovna, zkratky, rady = null, km
   return {
     version: '1.0',
     _doc: [
-      'Přerozdělení pojistného na veřejné zdravotní pojištění po sedmi zdravotních pojišťovnách: kolik pojišťovna vybrala (tzv. 100% výběr) a kolik jí po přerozdělení MZ připadlo. Měsíčně (tis. Kč) od ledna 2019, po letech (mld. Kč) jen za roky s 12 měsíci.',
+      'Přerozdělení pojistného na veřejné zdravotní pojištění po sedmi zdravotních pojišťovnách: kolik pojišťovna vybrala (tzv. 100% výběr) a kolik jí po přerozdělení MZ připadlo. Měsíčně (tis. Kč) od ledna 2019, po letech (mld. Kč) jen za roky s 12 měsíci.\nČasová osa: mesice[] jsou měsíce přerozdělení tak, jak je označuje MZ (sloupec „1/2024“). Sloupec obsahuje výběr za PŘEDCHOZÍ kalendářní měsíc (pojišťovna podle § 21 odst. 1 písm. c) a § 21b odst. 1 zákona č. 592/1992 Sb. sděluje výši pojistného vybraného za předchozí kalendářní měsíc), a tutéž částku po přerozdělení. Roční řádek rocne[rok] je proto okno výběru 12/(rok−1)–11/rok (pole okno_vyberu). Důkaz: součet sloupců 2/Y až 1/Y+1 odpovídá „výběru“ v Tab. 1 Hodnocení MZ (oddíl B, hotovostní) na desetiny procenta (2024: 342,559 vs 342,591 mld. Kč); validátor to hlídá. Identita salda tím není dotčená, obě strany mají stejný základ.',
       '100% výběr: podle § 20–21a zákona č. 592/1992 Sb. se veškeré pojistné vybrané pojišťovnami (včetně části paušálních záloh připadající na pojistné) spolu s platbou státu za státní pojištěnce (§ 7 zákona č. 48/1997 Sb.) a úroky ze zvláštního účtu shromáždí na zvláštním účtu přerozdělování a MZ ho každý měsíc rozdělí mezi pojišťovny podle počtu pojištěnců, jejich věku a pohlaví (nákladové indexy), farmaceuticko-nákladových skupin (PCG) a samostatně vypořádaných nákladných služeb. Pojistné, které pojišťovna vybere, tedy není její příjem; příjmem je částka po přerozdělení.',
-      'rozdil = po_prerozdeleni − vybrano (hrubý rozdíl). Zahrnuje i to, co do přerozdělování přišlo zvenčí: platbu státu, paušální daň a úroky. Součet rozdílů všech sedmi pojišťoven proto není nula, ale odpovídá těmto vnějším příjmům (2024: zhruba 155,6 mld. Kč; podle Hodnocení MZ platba státu 151,5 mld. a paušální daň 4,1 mld.). Tab. 1c Hodnocení MZ („vliv přerozdělování“) je totéž číslo jako tento rozdíl (VZP 2024: 103,378 mld. v Hodnocení vs. 103,372 mld. zde), ne platba státu.',
+      'rozdil = po_prerozdeleni − vybrano (hrubý rozdíl). Zahrnuje i to, co do přerozdělování přišlo zvenčí: platbu státu, paušální daň a úroky. Součet rozdílů všech sedmi pojišťoven proto není nula, ale odpovídá těmto vnějším příjmům (2024: zhruba 155,6 mld. Kč; podle Hodnocení MZ platba státu 151,5 mld. a paušální daň 4,1 mld.). Tab. 1c Hodnocení MZ („vliv přerozdělování“) je téměř totéž číslo jako tento rozdíl (VZP 2024: 103,378 mld. v Hodnocení vs. 103,373 mld. zde), ne platba státu; 1c odpovídá do ±0,2 % (jiné časové okno, viz posun měsíců).',
       'saldo_relativni_mld = po_prerozdeleni − vybrano × (Σ po_prerozdeleni všech sedmi ZP / Σ vybrano všech sedmi ZP), za rok z ročních součtů; rozdil_relativni[] je totéž po měsících (tis. Kč, podíl se počítá v témže měsíci). Je to aritmetická identita, ne odhad: o kolik pojišťovna dostala víc nebo míň, než kdyby se celý objem po přerozdělení (vybrané pojistné + platba státu + paušální daň + úroky) rozdělil v poměru jejího podílu na vybraném pojistném. Součet přes sedm pojišťoven je z konstrukce nula. saldo_relativni_pct_vybraneho je saldo v % jejího vybraného pojistného; saldo_relativni_na_pojistence_kc je saldo na pojištěnce a rok (jen kde je pojistenci_prumer).',
       'Čisté saldo vůči platbě státu (po − vybrano − platba státu na pojišťovnu) z veřejných dat spočítat nejde: platba státu jde na zvláštní účet přerozdělování, ne na konkrétní pojišťovnu, a MZ ji po pojišťovnách nezveřejňuje. Odhad podle počtu státních pojištěnců se záměrně nepoužívá (byl by to odhad, ne zveřejněný údaj).',
-      'Je to fakt zákonem daného mechanismu (nejde o hodnocení pojišťoven): kladné saldo znamená, že pojišťovna dostala víc, než by odpovídalo jejímu podílu na vybraném pojistném, záporné méně; mechanismus tak vyrovnává rozdíly ve složení kmene (věk, pohlaví, nákladnost). Řazeno podle kódu pojišťovny.',
+      'Je to fakt zákonem daného mechanismu (nejde o hodnocení pojišťoven): kladné saldo znamená, že pojišťovna dostala víc, než by odpovídalo jejímu podílu na vybraném pojistném, záporné méně; mechanismus tak vyrovnává rozdíly ve složení kmene a výši příjmů plátců pojistného. Řazeno podle kódu pojišťovny.',
       'pojistenci_prumer: průměrný počet pojištěnců za rok z Hodnocení MZ (pojistovny-hospodareni-rady.json, pojistenci_zdroj „hospodareni-rady“), jinak průměr 12 měsíců z odvozeného měsíčního kmene (pojistovny-kmen-mesicni.json, „kmen-mesicni“; kmen začíná v lednu 2022), jinak null.',
       'Roky 2019–2021 ve výsledné částce po přerozdělení jsou z prerozdeleni-mz-vyber.json (doplnek_po_prerozdeleni), roky od 2022 z prerozdeleni-mz-pojistovna.json. Neúplný rok (mesicu < 12) má roční hodnoty null; posledni_rok_rocni je poslední rok s 12 měsíci. Mimořádné položky (vyúčtování nákladných služeb v srpnu, předsunutá platba, mimořádné přerozdělování 6/2026 aj.) jsou v měsíčních hodnotách obsaženy, v MZ PDF jsou popsány na druhé straně.',
-      'Tabulka 100% výběru v PDF MZ je o zhruba 0,6 % nižší než „výběr“ v Tab. 1 Hodnocení MZ (2024: 340,615 vs 342,591 mld. Kč); rozdíl vymezení nebyl ve zdrojích vysvětlen. Validátor ho hlásí jako varování.',
+      'Složky relativního salda (jen kde jsou pojistenci_prumer všech sedmi ZP; identita, nic se neodhaduje): slozka_rizikova_mld = po_prerozdeleni − n/N × ΣP (odchylka částky po přerozdělení od rovného dílu na hlavu; n = pojištěnci ZP, N = Σ pojištěnci 7 ZP, ΣP = Σ po přerozdělení) a slozka_platcova_mld = n/N × ΣP − vybrano × ΣP/ΣV (rozdíl mezi rovným dílem na hlavu a dílem podle vybraného pojistného). Součet obou složek je saldo_relativni_mld. Kladné saldo RBP a ČPZP tak nevzniká starším kmenem (částka po přerozdělení na pojištěnce je u nich pod průměrem), ale nižším výběrem na pojištěnce; záporné saldo ZPŠ je téměř celé plátcové (vysoký výběr na pojištěnce). vybrano_na_pojistence_kc a po_prerozdeleni_na_pojistence_kc jsou roční částky na průměrného pojištěnce.',
     ].join('\n'),
     zdroj: {
+      stazeno_at: zdrojV.stazeno_at ?? zdrojV.overeno ?? null,
       vyber: { nazev: zdrojV.nazev ?? null, url: zdrojV.url ?? null, soubory: zdrojV.soubory ?? [], overeno: zdrojV.overeno ?? null },
-      po_prerozdeleni: { nazev: zdrojP.nazev ?? null, url: zdrojP.url ?? null, soubory: [...(vyber.doplnek_po_prerozdeleni?.zdroj?.soubory ?? []), ...(zdrojP.soubory ?? [])], overeno: zdrojP.overeno ?? null },
+      po_prerozdeleni: { nazev: zdrojP.nazev ?? null, url: zdrojP.url ?? null, soubory: [...new Set([...(vyber.doplnek_po_prerozdeleni?.zdroj?.soubory ?? []), ...(zdrojP.soubory ?? [])])], overeno: zdrojP.overeno ?? null },
       pocet_pojistencu: 'data/pojistovny-hospodareni-rady.json (A1.1, MZ Hodnocení), jinak data/pojistovny-kmen-mesicni.json',
       vstupy: ['ingest/manual/pojistovny/prerozdeleni-mz-vyber.json', 'ingest/manual/pojistovny/prerozdeleni-mz-pojistovna.json'],
     },
@@ -212,7 +236,7 @@ export function run({ out = OUT_PATH, zapis = true, vstupy = {} } = {}) {
   const kmen = 'kmen' in vstupy ? vstupy.kmen : cti(KMEN_PATH);
   const zkratky = Object.fromEntries((P?.pojistovny ?? []).map((z) => [String(z.kod), z.zkratka]));
   const data = sestavPrerozdeleni({ vyber, pojistovna, zkratky, rady, kmen });
-  const v = validatePrerozdeleni(data);
+  const v = validatePrerozdeleni(data, { rady });
   if (v.errors.length) throw new Error(`validatePrerozdeleni: ${v.errors.slice(0, 8).join(' | ')}`);
   const predchozi = cti(out);
   const zmeneno = !predchozi || JSON.stringify(bezGenerated(predchozi)) !== JSON.stringify(data);
