@@ -137,7 +137,9 @@ jobs:
             const rok = process.env.ROK;
             const runUrl = `${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId}`;
 
-            // Bez pushnuté větve není co otevírat (typicky: žádná změna oproti main).
+            // Krok PR selhal, a přitom větev na origin není: push neprošel (ruleset, síť, …), výsledky
+            // rutiny nejsou nikde publikované. To není „žádná změna“ (ta krok PR neshodí), takže job
+            // musí skončit chybou, ne tichým úspěchem.
             let branchExists = true;
             try {
               await github.rest.repos.getBranch({ owner, repo, branch });
@@ -145,7 +147,7 @@ jobs:
               if (e.status === 404) branchExists = false; else throw e;
             }
             if (!branchExists) {
-              core.warning(`Větev ${branch} na origin není — rutina nejspíš nic nezměnila; issue se nezakládá.`);
+              core.setFailed(`Krok „Otevřít PR“ selhal a větev ${branch} na origin není: výsledky rutiny se nepodařilo pushnout. Viz log kroku Otevřít PR: ${runUrl}`);
               return;
             }
 
