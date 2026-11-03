@@ -535,3 +535,61 @@ export function parseRok({ rok, listy, pdfText }) {
     chyby,
   };
 }
+
+// ---------------------------------------------------------------------------------- Tabulka č. 3 a 3a: segmenty (A1.4)
+
+/**
+ * Struktura nákladů na zdravotní služby podle segmentů (Tabulka č. 3 v tis. Kč, 3a v Kč na pojištěnce): všechny řádky
+ * s kódem ř. (I., 1, 1.1, 1.2.1 …, bez II. a III.) a pro každou ZP (kód, `zzp`, `cr`) sloupce „Skutečnost“ a „ZPP“ aktuálního
+ * roku. Sloupce se hledají podle hlaviček jako v parseTab3Celkem. Kód ř. je v 2. sloupci (B), popisek ve 3. (C).
+ * @returns {{radky: {kod:string, text:string, radek:number, hodnoty: Record<string,{skut:object|null, zpp:object|null}>}[]}}
+ *   `radek` = číslo řádku listu jako v Excelu; řádek celkem (I.) má kod 'I.'.
+ */
+export function parseTab3Segmenty(rows, { rok }) {
+  const hlav = rows.findIndex((r) => r && r.some((c) => /^\d{3}\s*[–-]\s*\S/.test(norm(c))));
+  if (hlav < 0) throw new Error('Tabulka č. 3: nenalezena hlavička bloků pojišťoven');
+  const rYear = hlav + 1;
+  const rKind = hlav + 2;
+  const starts = [];
+  rows[hlav].forEach((c, j) => {
+    const t = norm(c);
+    let klic = null;
+    const m = /^(\d{3})\s*[–-]/.exec(t);
+    if (m && KODY.includes(m[1])) klic = m[1];
+    else if (/^zam[eě]stnaneck[eé] zdravotn[ií] poj/i.test(t)) klic = 'zzp';
+    else if (/^zdravotn[ií] poj[ií][sš][tť]ovny celkem/i.test(t)) klic = 'cr';
+    if (klic) starts.push({ klic, od: j });
+  });
+  const width = Math.max(...rows.slice(0, hlav + 4).map((r) => r?.length ?? 0));
+  const sloupce = {};
+  starts.forEach((s, i) => {
+    const konec = i + 1 < starts.length ? starts[i + 1].od : width;
+    for (let c = s.od; c < konec; c++) {
+      if (yearIn(cell(rows, rYear, c)) !== rok) continue;
+      const druh = norm(cell(rows, rKind, c));
+      if (/^skute[cč]nost$/i.test(druh) || /^skute[cč]nost/i.test(druh)) sloupce[s.klic] = { ...sloupce[s.klic], skut: sloupce[s.klic]?.skut ?? c };
+      else if (/^zpp$/i.test(druh)) sloupce[s.klic] = { ...sloupce[s.klic], zpp: c };
+    }
+  });
+  const radky = [];
+  for (let r = rKind + 1; r < rows.length; r++) {
+    const row = rows[r];
+    if (!row) continue;
+    const b = row[1];
+    if (b == null || b === '') continue;
+    if (typeof b === 'number' && !Number.isInteger(b)) throw new Error(`Tabulka č. 3: kód ř. na řádku ${r + 1} je neceločíselný (${b}), nelze rozlišit 1.1 a 1.10`);
+    const kod = norm(b);
+    if (/^II/.test(kod)) break;
+    if (!/^(I\.|\d+(\.\d+)*)$/.test(kod)) continue;
+    const hodnoty = {};
+    for (const [klic, s] of Object.entries(sloupce)) {
+      hodnoty[klic] = {
+        skut: s.skut != null && isNum(row[s.skut]) ? ref(r, s.skut, row[s.skut]) : null,
+        zpp: s.zpp != null && isNum(row[s.zpp]) ? ref(r, s.zpp, row[s.zpp]) : null,
+      };
+    }
+    radky.push({ kod, text: norm(row[2]), radek: r + 1, hodnoty });
+  }
+  if (!radky.length || radky[0].kod !== 'I.') throw new Error('Tabulka č. 3: nenalezen řádek I. (Náklady na zdravotní služby celkem)');
+  return { radky };
+}
