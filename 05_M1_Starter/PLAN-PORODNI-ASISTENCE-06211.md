@@ -1,13 +1,14 @@
 # PLAN · Poporodní návštěvy porodní asistentky (výkon 06211) v datech
 
 > **Stav:** návrh schválen vlastníkem 3. 11. 2026. Hotovo: indikátor A
-> (`porodni_asistentka_navstevy_porody`, karta + kontrakt + `indikator-*.html`,
-> mapování na Zdraví 2035 dílčí cíl 2.7.7), krajský dataset C
-> (`porodni_asistentka_navstevy_porody_kraje` v `data/regions.json`, 1. čtvrtletí 2026),
-> díl 1 (`clanek-porodni-asistentka-vyuziti-naroku-2026.html`) a díl 2
-> (`clanek-porodni-asistentka-kraje-2026.html`) jako drafty ve frontě, série
-> `sestinedeli-v-datech` v `series.json`.
-> Zbývá: indikátor B, per-ZP řez D, díly 3–4, doplňující dotaz na ÚZIS (§ 6).
+> (`porodni_asistentka_navstevy_porody`), indikátor B
+> (`porodni_asistentky_vykazujici_icz_921`, monitoring), krajský dataset C
+> (`porodni_asistentka_navstevy_porody_kraje`) a všechny čtyři díly série
+> `sestinedeli-v-datech` jako drafty ve frontě: `clanek-porodni-asistentka-vyuziti-naroku-2026`,
+> `-kraje-2026`, `-pojistovny-2026`, `-pravidla-2026`.
+> Zbývá: per-ZP řez D pro Srovnávač pojišťoven, volitelný explainer pro
+> čtenářky (§ 5.2), doplňující dotaz na ÚZIS (§ 6) a ověření počtu smluv
+> u pojišťoven.
 
 Článek z 27. 8. slíbil čtenářům „třetí test“ reformy: zda se z využití nároku
 stane veřejně sledované číslo. S těmito daty to jde poprvé změřit, a to po
@@ -140,9 +141,11 @@ Data zachycují rok před změnou a první dvě čtvrtletí po ní.
   s ≥150 porody): Středočeský ČPZP 7,1 % × ZPMV 22,8 %; Praha VoZP 9,4 % × OZP
   24,1 %; Plzeňský ČPZP 6,6 % × ZPMV 13,7 %; Pardubický VZP 14,2 % × ZPMV 28,5 %.
   Nejvyšší buňky: Zlínský ZPMV 32,4 %, RBP 31,2 %, VZP 30,2 %.
-  **ZPMV má nejvyšší podíl v 9 z 12 krajů**, kde lze pojišťovny srovnat
-  (aspoň dvě ZP s ≥150 porody). Výjimky: Praha (OZP), Jihomoravský (ČPZP)
-  a Ústecký (VZP).
+  Na sloučeném pololetí (≥150 porodů) vychází ZPMV nejvýš v 9 z 12 srovnatelných
+  krajů, ale **v samotném 1. čtvrtletí se to nepotvrzuje** (nejvýš je v 11
+  srovnatelných krajích VZP 4×, ČPZP 3×, OZP 2×, ZPMV 2×). Sloučené pololetí
+  počítá ženy dvakrát a Q2 má neúplný jmenovatel, proto tvrzení o ZPMV
+  nepoužívat; díl 3 stojí jen na 1. čtvrtletí.
 
 ## 3. Pasti při čtení (povinně do každého textu a karty)
 
@@ -246,7 +249,7 @@ veřejně sledované.
 |---|---|---|---|---|
 | **1** | **Ze tří na patnáct ze sta. První data o tom, jak ženy využívají nárok na porodní asistentku** | Národní obraz: zhruba 5× víc návštěv, ale 13× méně, než nárok dovoluje; 1,5 návštěvy na ženu místo tří; vykazujících poskytovatelů přibylo v obou odbornostech (603: +40, 921: +44), podíl na výkonech podle odbornosti zatím neznámý. Rozhodně uvést, co data neumí (§ 3). | `av-counter` (3,5 % → 15 %; 3 953 z 52 242), `av-bar` kvartály 2025–2026, `av-table` výkony/ženy/IČZ | A (launch), B, `porodni_asistentky_per_100k` |
 | **2** | **Ve Zlínském kraji třetina, v Plzeňském necelá desetina. Mapa poporodní péče** | Kraje: čtyřnásobné rozpětí, Olomoucký průkopník z roku 2025 stagnuje, v Plzni do Q2 žádné vykazující IČZ 921, v Libereckém v Q2 také žádné, Praha má nejmíň poskytovatelů na porod. Bez kauzálních tvrzení (r ≈ 0,27). | `av-table` 14 krajů (2025 / Q1 / IČZ), odkaz na mapu `kraje.html` (dataset C) | C, A, `kojeni_pri_propusteni` |
-| **3** | **Stejný nárok, jiná pojišťovna. U koho se návštěvy rozjely dřív** | U VZP se počet IČZ 921 vykazujících výkon zdvojnásobil až v Q2 (20 → 39), u ČPZP jich bylo 37 hned v Q1; počty smluv ověřit u pojišťoven. ZPMV vede v 9 z 12 srovnatelných krajů. Spor o úhradu dopravy (dopis 10. 8.). Uvnitř kraje až 4× rozdíl podle pojišťovny. Pravidlo nestrannosti: konfrontovat s daty, ne s motivy; dát VZP prostor (odpověď Seidlové z 25. 5. 2026). | `av-table` ZP × Q, „heatmapa“ ZP × kraj jako `av-table` | D (srovnávač), B |
+| **3** | **Stejný nárok, jiná pojišťovna. U koho se návštěvy rozjely dřív** | U VZP se počet IČZ 921 vykazujících výkon zdvojnásobil až v Q2 (20 → 39), u ČPZP jich bylo 37 hned v Q1; počty smluv ověřit u pojišťoven. V samotném Q1 žádná pojišťovna nevede všude (viz § 2.3). Spor o úhradu dopravy (dopis 10. 8.). Uvnitř kraje až 4× rozdíl podle pojišťovny. Pravidlo nestrannosti: konfrontovat s daty, ne s motivy; dát VZP prostor (odpověď VZP z 19. 6. 2026 na dopis UNIPA z 25. 5. 2026). | `av-table` ZP × Q, „heatmapa“ ZP × kraj jako `av-table` | D (srovnávač), B |
 | **4** | **Šedesát, nebo dvacet minut? Kdo rozhoduje o tom, jak bude vypadat šestinedělí** | Politický rámec: návrhy z 19. 2. (60 → 20 min, zrušení automatické indikace), osud v PS SZV (prosinec nepřijato, březen staženo, úkol otevřený), MZ „nedisponuje“ daty o kapacitách, komise bez PA (odkaz, neopakovat). Co sledovat: úhradová vyhláška 2027, cohortová data od ÚZIS. | `av-timeline` (tabulka § 4) | A, B |
 
 **Volitelný 5. kus, služba čtenářkám:** explainer `explainers.json` „Jak využít

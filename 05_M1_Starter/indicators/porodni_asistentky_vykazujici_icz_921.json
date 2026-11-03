@@ -1,0 +1,48 @@
+{
+  "id": "porodni_asistentky_vykazujici_icz_921",
+  "name": "Porodní asistentky s vykázanou návštěvou v těhotenství nebo šestinedělí (IČZ odbornosti 921)",
+  "area": "Struktury",
+  "domain": "Pracovní síla",
+  "subdomain": "Porodní asistence",
+  "definition": "Počet poskytovatelů zdravotních služeb (identifikačních čísel zařízení, IČZ) v odbornosti 921 — porodní asistentka —, kteří v daném čtvrtletí vykázali zdravotní pojišťovně alespoň jeden výkon 06211 NÁVŠTĚVA TĚHOTNÉ NEBO MATKY V ŠESTINEDĚLÍ PORODNÍ ASISTENTKOU. Odbornost 921 nesou typicky samostatné praxe porodních asistentek; návštěvy vykazované porodnicemi a ambulantními gynekology spadají převážně pod odbornost 603 (gynekologie a porodnictví). Indikátor je nejbližší dostupnou proxy toho, zda vedle nemocniční návštěvní služby roste i komunitní síť porodních asistentek, která od 1. 1. 2026 zajišťuje nárok na tři hrazené návštěvy v šestinedělí.",
+  "unit": "IČZ",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_data_request",
+      "endpoint": "https://github.com/veritasderman-rgb/hspa/blob/main/05_M1_Starter/ingest/manual/uzis-06211/uzis-06211-2025q1-2026q2.json",
+      "dataset": "ÚZIS ČR — Národní registr hrazených zdravotních služeb (NRHZS): výkon 06211 podle kraje poskytovatele a zdravotní pojišťovny, 2025 Q1 – 2026 Q2, metrika „Počet poskytovatelů (IČZ) odb. 921“. Odpověď na datový požadavek UZIS/080507/2026 (vyřízeno 30. 10. 2026).",
+      "dimensions": {
+        "obdobi": "čtvrtletí 2025 Q1 – 2026 Q2 (2026 předběžně)",
+        "kraj": "kraj poskytovatele",
+        "pojistovna": "7 zdravotních pojišťoven",
+        "odbornost": "921 (porodní asistentka); srovnávací řada 603 (gynekologie a porodnictví)"
+      },
+      "note": "Celá ČR, všechny pojišťovny: 13 · 16 · 14 · 16 IČZ (2025 Q1–Q4), 53 (2026 Q1), 60 (2026 Q2). Srovnávací řada odbornosti 603: 32 · 30 · 34 · 43 · 83 · 83. Hodnota v kontraktu: 2026 = 60 (2. čtvrtletí, předběžně), 2025 = 16 (nejvyšší čtvrtletní hodnota, 4. čtvrtletí). Počty za čtvrtletí nelze sčítat přes rok — tentýž poskytovatel vykazuje opakovaně."
+    }
+  },
+  "benchmark_source": {
+    "type": "narrative_only",
+    "code": "no_direct_benchmark",
+    "dataset": "Mezinárodní srovnání neexistuje (odbornost 921 a výkon 06211 jsou česká úhradová konstrukce). Indikátor se hodnotí proti vlastní časové řadě a proti srovnávací řadě odbornosti 603.",
+    "value": null,
+    "url": null
+  },
+  "signal_thresholds": {
+    "good": 2,
+    "warn": 5
+  },
+  "frequency": "quarterly",
+  "stewards": [
+    "zdravotní pojišťovny (smluvní politika v odbornosti 921, úhrada dopravy k návštěvám)",
+    "Ministerstvo zdravotnictví ČR (seznam zdravotních výkonů, úhradová vyhláška)",
+    "porodní asistentky a jejich profesní organizace (UNIPA, ČKPA)",
+    "ÚZIS ČR (NRHZS)"
+  ],
+  "method_notes": "Hodnota 2026 = 60 IČZ odbornosti 921 s vykázaným výkonem 06211 ve 2. čtvrtletí 2026 (předběžná data; s dodatečným vykázáním se může zvýšit), v 1. čtvrtletí 53. V roce 2025 to bylo 13 až 16 za čtvrtletí, tedy po zavedení automatické žádanky zhruba čtyřnásobek. Srovnávací odbornost 603 (gynekologie a porodnictví) vzrostla z 30–43 na 83. Podle pojišťoven (2. čtvrtletí 2026): VZP 39, ČPZP 39, ZPMV 38, VoZP 25, OZP 18, RBP 8, ZPŠ 4; tentýž poskytovatel se objeví u více pojišťoven. U VZP přibylo vykazujících IČZ 921 hlavně ve 2. čtvrtletí (20 → 39), u ČPZP už v 1. čtvrtletí (6 → 37). Ověření (3. 11. 2026): hodnoty i řada přepsány přímo ze zdrojových tabulek ÚZIS (ingest/manual/uzis-06211/). Signál neutral: chybí benchmark i cílová hodnota.",
+  "limitations": "1. **Vykazující ≠ smluvní.** Indikátor počítá poskytovatele, kteří výkon v čtvrtletí vykázali; smluvní poskytovatelé bez vykázané návštěvy v něm nejsou a nárůst může znamenat jak nové smlouvy, tak to, že stávající smluvní poskytovatelé začali výkon vykazovat. 2. **IČZ ≠ počet porodních asistentek ani kapacita**: jedno IČZ může být praxe jedné asistentky i pracoviště s více asistentkami. 3. **Odbornost 921 ≠ vždy samostatná praxe** a návštěvy vykázané pod odborností 603 mohou rovněž vykonávat porodní asistentky. 4. **Rok 2026 je předběžný**; dodatečně vykázané výkony mohou počet zvýšit. 5. Čtvrtletní počty nejsou sčitatelné přes rok ani přes kraje (jedno IČZ může vykazovat ve více krajích).",
+  "determinants": "**Smluvní politika pojišťoven.** O tom, s kým pojišťovna uzavře smlouvu na návštěvní službu, rozhoduje pojišťovna; ministerstvo do smluvní politiky nezasahuje. **Úhrada dopravy.** Profesní organizace upozorňují, že VZP hradí dopravu porodnicím do 50 km, samostatným porodním asistentkám s omezením přes tzv. virtuální výjezdní místa; VZP to zdůvodňuje situací v regionech. **Úhrada a časová dotace výkonu.** Výkon má dotaci 60 minut; návrhy na zkrácení se v pracovní skupině k seznamu výkonů projednávaly v prosinci 2025 a v únoru až březnu 2026 a nebyly přijaty. **Kapacita profese.** V Česku praktikuje kolem 4 700 porodních asistentek, převážně v porodnicích.",
+  "importance": "Nárok na tři návštěvy porodní asistentky v šestinedělí mohou zajišťovat porodnice i samostatné porodní asistentky v terénu. Mezinárodní evidence spojuje přínos s kontinuitou péče jedné porodní asistentky a s návštěvou doma v prvním týdnu po porodu (WHO 2022); obojí stojí převážně na komunitní síti. Indikátor ukazuje, zda tato síť po zavedení nároku roste: počet vykazujících poskytovatelů odbornosti 921 se zhruba zčtyřnásobil, z 13–16 za čtvrtletí v roce 2025 na 53 a 60 v roce 2026. Patří do domény pracovní síly a sleduje strukturu, ze které se dostupnost (indikátor Ženy s návštěvou porodní asistentky na 100 porodů) skládá.",
+  "framework": "monitoring",
+  "dimension": "dostupnost"
+}

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-11-03
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-11-03
+    creation_phase: analyza dat UZIS UZIS/080507/2026 (PLAN-PORODNI-ASISTENCE-06211.md, dil 3 - pojistovny)
+    form: analysis
+    primary_sources_count: 5
+    visual_elements_count: 3
+    notes: "Vsechna cisla z normalizovaneho prepisu odpovedi UZIS (ingest/manual/uzis-06211/uzis-06211-2025q1-2026q2.json, Tab. 2 = pojistovna, Tab. 3 = pojistovna x kraj poskytovatele). Zen na 100 porodu = unikatni zeny s vykonem 06211 v kvartalu / porody pojistenek v kvartalu. Q1 2026: VZP 1414/10116 = 14,0; VoZP 108/904 = 11,9; CPZP 387/2243 = 17,3; OZP 212/1191 = 17,8; ZPS 23/194 = 11,9; ZPMV 340/2025 = 16,8; RBP 123/741 = 16,6. VZP = 58,1 % porodu Q1. IC Z 921 vykazujici: VZP 10 (Q4 2025) -> 20 -> 39; CPZP 6 -> 37 -> 39. Kraj x ZP Q1 (bunky >= 100 porodu): Praha VZP 189/2181 = 8,7, OZP 98/502 = 19,5; Stredocesky VZP 113/1094 = 10,3, OZP 30/185 = 16,2; Ustecky CPZP 6/100 = 6,0, VZP 98/748 = 13,1; Zlinsky VZP 165/532 = 31,0; Olomoucky VZP 81/373 = 21,7, CPZP 105/369 = 28,5. Na planu (H1 sloucene) zalozene tvrzeni 'ZPMV vede v 9 z 12 kraju' se v Q1 nepotvrzuje, proto v textu neni. Odpoved VZP UZP-223/OSP-121/2026 z 19. 6. 2026 (sken PDF na unipa.cz) prectena celá. OZP Q2 2026 (452 porodu) = artefakt, neuvadi se."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stejný nárok, jiná pojišťovna. V Praze měla OZP na sto porodů dvakrát víc žen s návštěvou porodní asistentky než VZP · HSPA Monitor</title>
+<meta name="description" content="Data ÚZIS po pojišťovnách: v 1. čtvrtletí 2026 připadlo na 100 porodů od 11,9 (VoZP, ZPŠ) do 17,8 (OZP) žen s návštěvou porodní asistentky. Uvnitř krajů jsou rozdíly větší a žádná pojišťovna nevede všude.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Stejný nárok, jiná pojišťovna. V Praze měla OZP na sto porodů dvakrát víc žen s návštěvou porodní asistentky než VZP">
+<meta property="og:description" content="Po pojišťovnách se využití nároku na porodní asistentku liší méně než po krajích. Uvnitř krajů ale až dvojnásobně a VZP začala pracovat se samostatnými porodními asistentkami ve větším až ve druhém čtvrtletí.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-porodni-asistentka-pojistovny-2026.html">
+<meta property="article:section" content="Perinatální péče">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-porodni-asistentka-pojistovny-2026.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Perinatální péče</span>
+        <span class="article-tag article-tag-muted">Šestinedělí · porodní asistence · zdravotní pojišťovny · data ÚZIS</span>
+      </div>
+      <h1 class="article-title">Stejný nárok, jiná pojišťovna. V Praze měla OZP na sto porodů dvakrát víc žen s návštěvou porodní asistentky než VZP</h1>
+      <p class="article-deck">
+        Nárok na tři návštěvy porodní asistentky po porodu mají pojištěnky všech sedmi pojišťoven stejný. Zajistit ho musí každá pojišťovna sama. Celostátně se v 1. čtvrtletí 2026 lišily méně než kraje, <strong>od 11,9 do 17,8 žen s návštěvou na 100 porodů</strong>. V jednom kraji ale připadlo na sto porodů u jedné pojišťovny i dvakrát víc žen s návštěvou než u jiné.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">3. listopadu 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">7 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Ministerstvo zdravotnictví zavedlo od ledna 2026 automatickou žádanku na tři návštěvy porodní asistentky. Kdo je pak skutečně vykoná, už není věc ministerstva. Podle jeho vlastní odpovědi na žádost o informace je „zcela na uvážení zdravotních pojišťoven“, jestli síť postaví na porodnicích, nebo na porodních asistentkách v terénu. V <a href="clanek-porodni-asistentka-vyuziti-naroku-2026.html">prvním</a> a <a href="clanek-porodni-asistentka-kraje-2026.html">druhém</a> textu série jsme ukázali celostátní a krajská čísla. Tady jsou pojišťovny.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avPaZpBarH">
+        <figcaption class="av-figure-h" id="avPaZpBarH">Ženy s návštěvou porodní asistentky na 100 porodů podle pojišťovny, 1. čtvrtletí 2026</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-unit="" data-max="20">
+          <li class="av-bar-row" data-value="17.8" data-label="OZP (207)"></li>
+          <li class="av-bar-row" data-value="17.3" data-label="ČPZP (205)"></li>
+          <li class="av-bar-row" data-value="16.8" data-label="ZPMV (211)"></li>
+          <li class="av-bar-row" data-value="16.6" data-label="RBP (213)"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="15.0" data-label="Česko"></li>
+          <li class="av-bar-row" data-value="14.0" data-label="VZP (111)"></li>
+          <li class="av-bar-row" data-value="11.9" data-label="VoZP (201)"></li>
+          <li class="av-bar-row" data-value="11.9" data-label="ZPŠ (209)"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS ČR, NRHZS, výkon 06211 podle zdravotní pojišťovny (UZIS/080507/2026, předběžná data). Unikátní pojištěnky s výkonem v čtvrtletí / porody pojištěnek v čtvrtletí. Výpočet redakce.</p>
+      </figure>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Jak číst čísla po pojišťovnách">
+        <p class="article-callout-h">Jak číst čísla po pojišťovnách</p>
+        <p><strong>1. Malé pojišťovny, malá čísla.</strong> U Zaměstnanecké pojišťovny Škoda bylo v 1. čtvrtletí 194 porodů a 23 žen s návštěvou, u Vojenské 904 porodů. Rozdíl několika žen tam hodnotu výrazně pohne.</p>
+        <p><strong>2. Vykázané, ne nasmlouvané.</strong> Počty poskytovatelů (IČZ) v textu jsou ti, kdo návštěvu v daném čtvrtletí pojišťovně vykázali. Smluvní síť je širší a data ÚZIS ji neukazují.</p>
+        <p><strong>3. Druhé čtvrtletí je předběžné.</strong> U OZP chybí v datech za 2. čtvrtletí většina porodů (452 proti 1 191 v prvním), proto její hodnotu za 2. čtvrtletí neuvádíme vůbec.</p>
+        <p><strong>4. Stejně jako v předchozích dílech</strong> jde o ženy s návštěvou na 100 porodů, ne o podíl rodiček, a výkon zahrnuje i návštěvy v těhotenství.</p>
+      </aside>
+
+      <h3>Mezi pojišťovnami menší rozdíl než mezi kraji</h3>
+
+      <p>
+        Celostátně se pojišťovny v 1. čtvrtletí 2026 rozestoupily od 11,9 žen s návštěvou na 100 porodů (Vojenská a Škoda) po 17,8 (Oborová). To je asi jeden a půl násobek, zatímco mezi kraji byl rozdíl čtyřnásobný. Před reformou bylo pořadí jiné: v roce 2025 měla nejvíc žen s návštěvou Česká průmyslová (5,7) a nejméně Oborová (2,1). Oborová tak s automatickou žádankou poskočila nejvíc.
+      </p>
+
+      <h3>Největší pojišťovna pod průměrem</h3>
+
+      <p>
+        Na pojištěnky Všeobecné zdravotní pojišťovny připadlo v 1. čtvrtletí 2026 zhruba 58 % porodů (10 116 ze 17 414). Na sto porodů jejích pojištěnek připadlo 14,0 žen s návštěvou, tedy o něco méně než celostátní průměr, který sama z velké části tvoří. Ostatní velké pojišťovny, Česká průmyslová, Oborová i pojišťovna ministerstva vnitra, byly nad 16.
+      </p>
+
+      <p>
+        Rozdíl je vidět i na tom, kdo návštěvy vykazuje. VZP před reformou oznámila, že návštěvy zajistí 64 z 84 porodnic, 14 samostatných zařízení porodních asistentek a téměř 400 smluvních gynekologických ordinací, a vyčlenila na ně až 80 milionů korun. Poskytovatelů v odbornosti porodní asistentka (921), kteří jí návštěvu vykázali, bylo ve 4. čtvrtletí 2025 deset, v 1. čtvrtletí 2026 dvacet a ve 2. čtvrtletí 39. U České průmyslové jich bylo 37 už v prvním čtvrtletí. Profesní organizace porodních asistentek ve svém srpnovém dopise řediteli VZP píší, že VZP začala smlouvy se samostatnými porodními asistentkami uzavírat „ve větší míře než doposud“ až ve druhém čtvrtletí. Data ÚZIS jsou s tím v souladu, smlouvy samotné ale neukazují.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avPaZpTabH">
+        <figcaption class="av-figure-h" id="avPaZpTabH">Pojišťovny: rok před reformou a první dvě čtvrtletí po ní</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Pojišťovna</th>
+                <th scope="col" class="av-num">Porodů 2025</th>
+                <th scope="col" class="av-num">2025</th>
+                <th scope="col" class="av-num">2026 Q1</th>
+                <th scope="col" class="av-num">2026 Q2*</th>
+                <th scope="col" class="av-num">IČZ 921: Q4 2025 → Q1 → Q2 2026</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">VZP (111)</th><td class="av-num">42&nbsp;744</td><td class="av-num">3,1</td><td class="av-num">14,0</td><td class="av-num">19,4</td><td class="av-num">10 → 20 → 39</td></tr>
+              <tr><th scope="row">ČPZP (205)</th><td class="av-num">10&nbsp;083</td><td class="av-num">5,7</td><td class="av-num">17,3</td><td class="av-num">17,1</td><td class="av-num">6 → 37 → 39</td></tr>
+              <tr><th scope="row">ZPMV (211)</th><td class="av-num">8&nbsp;852</td><td class="av-num">3,8</td><td class="av-num">16,8</td><td class="av-num">25,0</td><td class="av-num">11 → 26 → 38</td></tr>
+              <tr><th scope="row">OZP (207)</th><td class="av-num">5&nbsp;186</td><td class="av-num">2,1</td><td class="av-num">17,8</td><td class="av-num">—</td><td class="av-num">9 → 17 → 18</td></tr>
+              <tr><th scope="row">VoZP (201)</th><td class="av-num">4&nbsp;122</td><td class="av-num">2,9</td><td class="av-num">11,9</td><td class="av-num">20,5</td><td class="av-num">8 → 14 → 25</td></tr>
+              <tr><th scope="row">RBP (213)</th><td class="av-num">3&nbsp;226</td><td class="av-num">5,0</td><td class="av-num">16,6</td><td class="av-num">19,4</td><td class="av-num">0 → 5 → 8</td></tr>
+              <tr><th scope="row">ZPŠ (209)</th><td class="av-num">873</td><td class="av-num">4,7</td><td class="av-num">11,9</td><td class="av-num">11,9</td><td class="av-num">2 → 6 → 4</td></tr>
+              <tr class="av-row-highlight"><th scope="row">Česko</th><td class="av-num">75&nbsp;086</td><td class="av-num">3,5</td><td class="av-num">15,0</td><td class="av-num">20,1</td><td class="av-num">16 → 53 → 60</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS ČR, NRHZS (UZIS/080507/2026). Ženy s návštěvou na 100 porodů; rok 2025 = součet za čtyři čtvrtletí. * předběžné, neúplný počet porodů; OZP za 2. čtvrtletí neuvádíme (v datech chybí většina porodů). IČZ 921 = poskytovatelé odbornosti porodní asistentka, kteří návštěvu pojišťovně v čtvrtletí vykázali; tentýž poskytovatel může vykazovat více pojišťovnám, proto součet pojišťoven neodpovídá Česku.</p>
+      </figure>
+
+      <h3>V jednom kraji, u různých pojišťoven</h3>
+
+      <p>
+        Kde se pojišťovny skutečně rozcházejí, je uvnitř krajů. V Praze připadlo v 1. čtvrtletí na 100 porodů pojištěnek VZP 8,7 žen s návštěvou (189 z 2 181), u Oborové 19,5 (98 z 502). Ve Středočeském kraji 10,3 u VZP a 16,2 u Oborové. V Ústeckém naopak vedla VZP (13,1) a Česká průmyslová měla 6,0. Nejvyšší hodnotu ze všech kombinací kraje a pojišťovny s aspoň stovkou porodů měla VZP ve Zlínském kraji: 31,0. Žádná pojišťovna tedy není nejlepší ani nejhorší všude.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avPaZpKrajH">
+        <figcaption class="av-figure-h" id="avPaZpKrajH">Vybrané kraje: ženy s návštěvou na 100 porodů podle pojišťovny, 1. čtvrtletí 2026</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Kraj poskytovatele</th>
+                <th scope="col" class="av-num">Nejnižší</th>
+                <th scope="col" class="av-num">Nejvyšší</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Praha</th><td class="av-num">VoZP 7,4 · VZP 8,7</td><td class="av-num">OZP 19,5</td></tr>
+              <tr><th scope="row">Středočeský</th><td class="av-num">ZPŠ 5,9 · VZP 10,3</td><td class="av-num">OZP 16,2</td></tr>
+              <tr><th scope="row">Ústecký</th><td class="av-num">ČPZP 6,0</td><td class="av-num">VZP 13,1</td></tr>
+              <tr><th scope="row">Královéhradecký</th><td class="av-num">VZP 17,5</td><td class="av-num">ZPMV 27,6</td></tr>
+              <tr><th scope="row">Olomoucký</th><td class="av-num">VZP 21,7</td><td class="av-num">ZPMV 29,2</td></tr>
+              <tr><th scope="row">Zlínský</th><td class="av-num">ČPZP 25,9</td><td class="av-num">VZP 31,0</td></tr>
+              <tr><th scope="row">Moravskoslezský</th><td class="av-num">VZP 15,2</td><td class="av-num">ČPZP 19,9</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS ČR, NRHZS, tabulka 3 (pojišťovna × kraj poskytovatele), UZIS/080507/2026. Jen kombinace s aspoň 100 porody v 1. čtvrtletí 2026; u menších pojišťoven jde o desítky žen. Výpočet redakce.</p>
+      </figure>
+
+      <h3>Spor o kilometry</h3>
+
+      <p>
+        Proč se síť skládá u každé pojišťovny jinak, data neřeknou. Jeden z důvodů ale vede veřejně spor mezi VZP a profesními organizacemi porodních asistentek. Unie porodních asistentek, Česká komora porodních asistentek a Liga lidských práv v srpnovém otevřeném dopise píší, že porodnice mají u VZP nasmlouvanou dopravu za ženami do 50 kilometrů bez ohledu na hranice okresů a krajů, zatímco samostatné porodní asistentky musejí v sousedních okresech určovat „virtuální výjezdní místa“ a část cest platí ze svého.
+      </p>
+
+      <p>
+        VZP v červnové odpovědi Unii porodních asistentek rozdílné nastavení potvrdila. Kde je návštěvní péče v okrese už zajištěna jiným poskytovatelem, „typicky poskytovatelem lůžkové péče – porodnicí“, pouští VZP dalšího poskytovatele do sítě s úhradou dopravy omezenou na území, kde má péči „fakticky doplňovat“. Podle VZP nejde o nerovné zacházení, ale o „odlišné smluvní nastavení odpovídající konkrétní situaci v regionu“. Plošný limit 50 kilometrů pro samostatné asistentky by podle VZP části z nich území naopak zúžil.
+      </p>
+
+      <p>
+        Ze stejné odpovědi plyne ještě jedna podmínka. Pro smlouvu na výkon 06211 VZP požaduje doložit fetální doppler (přístroj na poslech srdeční akce plodu, v ceně kolem 4 000 Kč) i od porodních asistentek, které chtějí dělat jen návštěvy po porodu, protože výkon zahrnuje i návštěvy v těhotenství.
+      </p>
+
+      <h3>Co z toho plyne</h3>
+
+      <p>
+        Pojišťovny mají ze zákona zajistit svým pojištěncům místní a časovou dostupnost hrazené péče a síť smluvních poskytovatelů tvoří samy. Data za první pololetí ukazují, že stejný nárok vede u různých pojišťoven v témže kraji k velmi rozdílnému výsledku. U VZP, která rozhoduje o síti pro většinu rodiček, se počet poskytovatelů v odbornosti porodní asistentka, kteří návštěvy vykazují, zdvojnásobil až ve druhém čtvrtletí. Jestli se rozdíly zmenší, ukážou až data za další čtvrtletí. Jaká pravidla pro návštěvy vůbec platí a kdo o nich rozhoduje, popíše poslední díl série.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h2 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h2>
+      <ul class="article-databox-list">
+        <li><a href="indikator-porodni_asistentka_navstevy_porody.html"><strong>Ženy s návštěvou porodní asistentky na 100 porodů</strong></a> — 15,0 (1. čtvrtletí 2026, předběžně)</li>
+        <li><a href="indikator-porodni_asistentky_vykazujici_icz_921.html"><strong>Porodní asistentky s vykázanou návštěvou (IČZ odbornosti 921)</strong></a> — 60 (2. čtvrtletí 2026, předběžně), v roce 2025 nejvýš 16 za čtvrtletí</li>
+        <li><a href="indikator-porodni_asistentky_per_100k.html"><strong>Praktikující porodní asistentky / 100 000 obyvatel</strong></a> — kapacita profese v celém Česku</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h2 class="article-sources-h">Kde si data sami ověříte</h2>
+      <div class="sources-group">
+        <h3 class="sources-group-h">Primární data</h3>
+        <ul class="article-sources-list">
+          <li><strong>ÚZIS ČR — Národní registr hrazených zdravotních služeb: výkon 06211 podle zdravotní pojišťovny a kraje poskytovatele, 2025 až 1. pololetí 2026</strong> — odpověď na datový požadavek UZIS/080507/2026 (vyřízeno 30. 10. 2026), tabulky 2 a 3; rok 2026 předběžně. <a href="https://github.com/veritasderman-rgb/hspa/blob/main/05_M1_Starter/ingest/manual/uzis-06211/uzis-06211-2025q1-2026q2.json" target="_blank" rel="noopener">github.com — data ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h3 class="sources-group-h">Pojišťovny a profesní organizace</h3>
+        <ul class="article-sources-list">
+          <li><strong>VZP ČR — Nárok na porodní asistentku bude mít od ledna každá žena po porodu (16. 12. 2025)</strong> — 64 z 84 porodnic, 14 samostatných zařízení, téměř 400 gynekologických ordinací, až 80 mil. Kč. <a href="https://www.vzp.cz/o-nas/aktuality/narok-na-porodni-asistentku-bude-mit-od-ledna-kazda-zena-po-porodu" target="_blank" rel="noopener">vzp.cz ↗</a></li>
+          <li><strong>VZP ČR — odpověď Unii porodních asistentek k podmínkám smluv v odbornosti 921 (19. 6. 2026, č. j. ÚZP-223/OSP-121/2026)</strong> — doprava, vybavení, výkon 34007. Zveřejnila Unie porodních asistentek. <a href="https://unipa.cz/wp-content/uploads/2026/08/vzp-odpoved-preprava.pdf" target="_blank" rel="noopener">unipa.cz — PDF ↗</a></li>
+          <li><strong>UNIPA, ČKPA a Liga lidských práv — otevřený dopis řediteli VZP (10. 8. 2026)</strong> — rozdílné podmínky úhrady dopravy. <a href="https://llp.cz/blog/otevreny-dopis-rediteli-vzp/otevreny-dopis-vzp-cr-nerovny-postup-odbornosti-921/" target="_blank" rel="noopener">llp.cz ↗</a></li>
+          <li><strong>MZ ČR — odpověď na žádost o informace k nastavení tří návštěv (březen 2026)</strong> — volba poskytovatelů je na pojišťovnách; § 40 a § 46 zákona č. 48/1997 Sb. <a href="https://mzd.gov.cz/wp-content/uploads/2026/03/82.pdf" target="_blank" rel="noopener">mzd.gov.cz — PDF ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-note">
+        <strong>Pozn. k údajům:</strong> Všechna čísla redakce spočetla z tabulek 2 a 3 odpovědi ÚZIS. „Žen na 100 porodů“ = unikátní pojištěnky s výkonem 06211 v čtvrtletí / porody pojištěnek v témž čtvrtletí; rok 2025 = součet za čtyři čtvrtletí. Údaje za rok 2026 jsou předběžné.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+  </article>
+</main>
+<footer class="bottom" id="siteFooter"></footer>
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
