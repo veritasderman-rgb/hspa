@@ -203,7 +203,7 @@ test('DOM: věta jde pod .zpc-mod-head (na přehledu do hero), blok před #zpZdr
 test('init: orchestrátor volá renderStariDat s načtenými datasety; CSS tříd je dost', () => {
   const src = fs.readFileSync(path.join(ROOT, 'src', 'pojistovny.js'), 'utf8');
   assert.match(src, /import \{ renderStariDat \} from '\.\/pojistovny-stari\.js'/);
-  assert.match(src, /renderStariDat\(\{\s*strana: has\(\['zpProfil'\]\) \? 'profil' : undefined,\s*datasety: \{ pojistovny: d, prevence: p, aplikace: a, otazky: o, prerozdeleni: pr, hospodareniRady: rady, segmenty: seg, instituce: inst, smluvniProgramy: prog, dostupnost: dost, stiznosti: stiz \},?\s*\}\)/);
+  assert.match(src, /renderStariDat\(\{\s*strana: has\(\['zpProfil'\]\) \? 'profil' : undefined,\s*datasety: \{ pojistovny: d, prevence: p, aplikace: a, otazky: o, prerozdeleni: pr, hospodareniRady: rady, segmenty: seg, instituce: inst, smluvniProgramy: prog, dostupnost: dost, stiznosti: stiz, porodniAsistence: pa \},?\s*\}\)/);
   const css = fs.readFileSync(path.join(ROOT, 'src', 'styles.css'), 'utf8');
   for (const c of ['.zpc-stari{', '.zpc-stari-wrap{', '.zpc-stari-warn{', '.zpc-stari-acc']) assert.ok(css.includes(c), c);
   // všech sedm stránek má kontejner #zpZdroje, před který se blok vkládá

@@ -1,0 +1,1223 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-10-30T00:00:00Z",
+  "stav_k": "2026-10-30",
+  "_doc": "Srovnávač pojišťoven — návštěvy porodní asistentky v těhotenství a šestinedělí (výkon 06211) podle pojišťovny ženy. Sestavuje ingest/build-pojistovny-porodni-asistence.js z normalizované odpovědi ÚZIS (ingest/manual/uzis-06211/). zeny_na_100_porodu = unikátní ženy s výkonem v čtvrtletí / porody v čtvrtletí × 100 (ne podíl rodiček; výkon zahrnuje i těhotenství). icz_921 / icz_603 = poskytovatelé (IČZ), kteří výkon v čtvrtletí pojišťovně vykázali, ne smluvní síť. nespolehliva_obdobi = předběžné čtvrtletí s neúplným počtem porodů (hodnota null). kraje = kraj poskytovatele za hlavni_obdobi, maly_vzorek = méně než 100 porodů. Plán: PLAN-PORODNI-ASISTENCE-06211.md § 5.1 D.",
+  "zdroj": {
+    "nazev": "ÚZIS ČR — Národní registr hrazených zdravotních služeb (NRHZS)",
+    "pozadavek": "UZIS/080507/2026",
+    "vyrizeno": "2026-10-30",
+    "url": "https://github.com/veritasderman-rgb/hspa/blob/main/05_M1_Starter/ingest/manual/uzis-06211/uzis-06211-2025q1-2026q2.json"
+  },
+  "obdobi": [
+    "2025Q1",
+    "2025Q2",
+    "2025Q3",
+    "2025Q4",
+    "2026Q1",
+    "2026Q2"
+  ],
+  "predbezne": [
+    "2026Q1",
+    "2026Q2"
+  ],
+  "hlavni_obdobi": "2026Q1",
+  "limity": [
+    "Data neobsahují pacientky mimo veřejné zdravotní pojištění (část cizinek, přímo placená péče).",
+    "Kraj = kraj poskytovatele (PZS), ne bydliště ženy; jedna žena může mít v kvartálu výkon ve více krajích a jedno IČZ může vykazovat péči napříč kraji.",
+    "Výkon 06211 zahrnuje i návštěvy v těhotenství, nejen v šestinedělí.",
+    "Unikátní ženy se počítají za kvartál — součet přes kvartály ženy, jejichž návštěvy přesáhly hranici kvartálu, počítá dvakrát.",
+    "2026 = předběžná data; v 2026Q2 je zjevně neúplný jmenovatel (porody −21,5 % meziročně proti −3,4 % v Q1), podíly za Q2 jsou proto nadhodnocené (nejvíc OZP: 452 porodů proti ~1 200 v předchozích kvartálech)."
+  ],
+  "cr": {
+    "rok_2025": {
+      "zeny": 2661,
+      "porody": 75086,
+      "zeny_na_100_porodu": 3.5
+    },
+    "rada": {
+      "vykony": [
+        833,
+        937,
+        1055,
+        1156,
+        3953,
+        4399
+      ],
+      "zeny": [
+        548,
+        620,
+        722,
+        771,
+        2607,
+        2960
+      ],
+      "porody": [
+        18033,
+        18732,
+        20437,
+        17884,
+        17414,
+        14707
+      ],
+      "icz_921": [
+        13,
+        16,
+        14,
+        16,
+        53,
+        60
+      ],
+      "icz_603": [
+        32,
+        30,
+        34,
+        43,
+        83,
+        83
+      ],
+      "zeny_na_100_porodu": [
+        3,
+        3.3,
+        3.5,
+        4.3,
+        15,
+        20.1
+      ]
+    }
+  },
+  "pojistovny": [
+    {
+      "kod": "111",
+      "zkratka": "VZP",
+      "nespolehliva_obdobi": [],
+      "rok_2025": {
+        "zeny": 1323,
+        "porody": 42744,
+        "zeny_na_100_porodu": 3.1
+      },
+      "rada": {
+        "vykony": [
+          388,
+          451,
+          563,
+          572,
+          2080,
+          2499
+        ],
+        "zeny": [
+          257,
+          306,
+          387,
+          373,
+          1414,
+          1690
+        ],
+        "porody": [
+          10226,
+          10643,
+          11710,
+          10165,
+          10116,
+          8703
+        ],
+        "icz_921": [
+          7,
+          9,
+          9,
+          10,
+          20,
+          39
+        ],
+        "icz_603": [
+          26,
+          25,
+          28,
+          35,
+          79,
+          73
+        ],
+        "zeny_na_100_porodu": [
+          2.5,
+          2.9,
+          3.3,
+          3.7,
+          14,
+          19.4
+        ]
+      },
+      "kraje": [
+        {
+          "kod": "CZ010",
+          "nazev": "Praha",
+          "porody": 2181,
+          "zeny": 189,
+          "zeny_na_100_porodu": 8.7,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ020",
+          "nazev": "Středočeský",
+          "porody": 1094,
+          "zeny": 113,
+          "zeny_na_100_porodu": 10.3,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ031",
+          "nazev": "Jihočeský",
+          "porody": 660,
+          "zeny": 113,
+          "zeny_na_100_porodu": 17.1,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ032",
+          "nazev": "Plzeňský",
+          "porody": 556,
+          "zeny": 48,
+          "zeny_na_100_porodu": 8.6,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ041",
+          "nazev": "Karlovarský",
+          "porody": 228,
+          "zeny": 38,
+          "zeny_na_100_porodu": 16.7,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ042",
+          "nazev": "Ústecký",
+          "porody": 748,
+          "zeny": 98,
+          "zeny_na_100_porodu": 13.1,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ051",
+          "nazev": "Liberecký",
+          "porody": 473,
+          "zeny": 66,
+          "zeny_na_100_porodu": 14,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ052",
+          "nazev": "Královéhradecký",
+          "porody": 475,
+          "zeny": 83,
+          "zeny_na_100_porodu": 17.5,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ053",
+          "nazev": "Pardubický",
+          "porody": 486,
+          "zeny": 45,
+          "zeny_na_100_porodu": 9.3,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ063",
+          "nazev": "Vysočina",
+          "porody": 593,
+          "zeny": 86,
+          "zeny_na_100_porodu": 14.5,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ064",
+          "nazev": "Jihomoravský",
+          "porody": 1198,
+          "zeny": 213,
+          "zeny_na_100_porodu": 17.8,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ071",
+          "nazev": "Olomoucký",
+          "porody": 373,
+          "zeny": 81,
+          "zeny_na_100_porodu": 21.7,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ072",
+          "nazev": "Zlínský",
+          "porody": 532,
+          "zeny": 165,
+          "zeny_na_100_porodu": 31,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ080",
+          "nazev": "Moravskoslezský",
+          "porody": 519,
+          "zeny": 79,
+          "zeny_na_100_porodu": 15.2,
+          "maly_vzorek": false
+        }
+      ]
+    },
+    {
+      "kod": "201",
+      "zkratka": "VoZP",
+      "nespolehliva_obdobi": [],
+      "rok_2025": {
+        "zeny": 120,
+        "porody": 4122,
+        "zeny_na_100_porodu": 2.9
+      },
+      "rada": {
+        "vykony": [
+          55,
+          53,
+          41,
+          54,
+          153,
+          262
+        ],
+        "zeny": [
+          30,
+          31,
+          25,
+          34,
+          108,
+          159
+        ],
+        "porody": [
+          1007,
+          1033,
+          1086,
+          996,
+          904,
+          776
+        ],
+        "icz_921": [
+          6,
+          5,
+          3,
+          8,
+          14,
+          25
+        ],
+        "icz_603": [
+          7,
+          11,
+          10,
+          10,
+          30,
+          33
+        ],
+        "zeny_na_100_porodu": [
+          3,
+          3,
+          2.3,
+          3.4,
+          11.9,
+          20.5
+        ]
+      },
+      "kraje": [
+        {
+          "kod": "CZ010",
+          "nazev": "Praha",
+          "porody": 121,
+          "zeny": 9,
+          "zeny_na_100_porodu": 7.4,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ020",
+          "nazev": "Středočeský",
+          "porody": 88,
+          "zeny": 7,
+          "zeny_na_100_porodu": 8,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ031",
+          "nazev": "Jihočeský",
+          "porody": 100,
+          "zeny": 13,
+          "zeny_na_100_porodu": 13,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ032",
+          "nazev": "Plzeňský",
+          "porody": 76,
+          "zeny": 4,
+          "zeny_na_100_porodu": 5.3,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ041",
+          "nazev": "Karlovarský",
+          "porody": 29,
+          "zeny": 5,
+          "zeny_na_100_porodu": 17.2,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ042",
+          "nazev": "Ústecký",
+          "porody": 72,
+          "zeny": 2,
+          "zeny_na_100_porodu": 2.8,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ051",
+          "nazev": "Liberecký",
+          "porody": 39,
+          "zeny": 4,
+          "zeny_na_100_porodu": 10.3,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ052",
+          "nazev": "Královéhradecký",
+          "porody": 75,
+          "zeny": 8,
+          "zeny_na_100_porodu": 10.7,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ053",
+          "nazev": "Pardubický",
+          "porody": 35,
+          "zeny": 7,
+          "zeny_na_100_porodu": 20,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ063",
+          "nazev": "Vysočina",
+          "porody": 29,
+          "zeny": 3,
+          "zeny_na_100_porodu": 10.3,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ064",
+          "nazev": "Jihomoravský",
+          "porody": 109,
+          "zeny": 18,
+          "zeny_na_100_porodu": 16.5,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ071",
+          "nazev": "Olomoucký",
+          "porody": 93,
+          "zeny": 17,
+          "zeny_na_100_porodu": 18.3,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ072",
+          "nazev": "Zlínský",
+          "porody": 25,
+          "zeny": 8,
+          "zeny_na_100_porodu": 32,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ080",
+          "nazev": "Moravskoslezský",
+          "porody": 13,
+          "zeny": 3,
+          "zeny_na_100_porodu": 23.1,
+          "maly_vzorek": true
+        }
+      ]
+    },
+    {
+      "kod": "205",
+      "zkratka": "ČPZP",
+      "nespolehliva_obdobi": [],
+      "rok_2025": {
+        "zeny": 570,
+        "porody": 10083,
+        "zeny_na_100_porodu": 5.7
+      },
+      "rada": {
+        "vykony": [
+          173,
+          190,
+          174,
+          226,
+          578,
+          529
+        ],
+        "zeny": [
+          129,
+          142,
+          137,
+          162,
+          387,
+          364
+        ],
+        "porody": [
+          2389,
+          2576,
+          2758,
+          2360,
+          2243,
+          2126
+        ],
+        "icz_921": [
+          6,
+          6,
+          5,
+          6,
+          37,
+          39
+        ],
+        "icz_603": [
+          16,
+          14,
+          19,
+          23,
+          20,
+          26
+        ],
+        "zeny_na_100_porodu": [
+          5.4,
+          5.5,
+          5,
+          6.9,
+          17.3,
+          17.1
+        ]
+      },
+      "kraje": [
+        {
+          "kod": "CZ010",
+          "nazev": "Praha",
+          "porody": 145,
+          "zeny": 11,
+          "zeny_na_100_porodu": 7.6,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ020",
+          "nazev": "Středočeský",
+          "porody": 222,
+          "zeny": 18,
+          "zeny_na_100_porodu": 8.1,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ031",
+          "nazev": "Jihočeský",
+          "porody": 49,
+          "zeny": 10,
+          "zeny_na_100_porodu": 20.4,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ032",
+          "nazev": "Plzeňský",
+          "porody": 90,
+          "zeny": 3,
+          "zeny_na_100_porodu": 3.3,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ041",
+          "nazev": "Karlovarský",
+          "porody": 44,
+          "zeny": 2,
+          "zeny_na_100_porodu": 4.5,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ042",
+          "nazev": "Ústecký",
+          "porody": 100,
+          "zeny": 6,
+          "zeny_na_100_porodu": 6,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ051",
+          "nazev": "Liberecký",
+          "porody": 13,
+          "zeny": 0,
+          "zeny_na_100_porodu": 0,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ052",
+          "nazev": "Královéhradecký",
+          "porody": 40,
+          "zeny": 6,
+          "zeny_na_100_porodu": 15,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ053",
+          "nazev": "Pardubický",
+          "porody": 59,
+          "zeny": 2,
+          "zeny_na_100_porodu": 3.4,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ063",
+          "nazev": "Vysočina",
+          "porody": 100,
+          "zeny": 19,
+          "zeny_na_100_porodu": 19,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ064",
+          "nazev": "Jihomoravský",
+          "porody": 254,
+          "zeny": 46,
+          "zeny_na_100_porodu": 18.1,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ071",
+          "nazev": "Olomoucký",
+          "porody": 369,
+          "zeny": 105,
+          "zeny_na_100_porodu": 28.5,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ072",
+          "nazev": "Zlínský",
+          "porody": 139,
+          "zeny": 36,
+          "zeny_na_100_porodu": 25.9,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ080",
+          "nazev": "Moravskoslezský",
+          "porody": 619,
+          "zeny": 123,
+          "zeny_na_100_porodu": 19.9,
+          "maly_vzorek": false
+        }
+      ]
+    },
+    {
+      "kod": "207",
+      "zkratka": "OZP",
+      "nespolehliva_obdobi": [
+        "2026Q2"
+      ],
+      "rok_2025": {
+        "zeny": 110,
+        "porody": 5186,
+        "zeny_na_100_porodu": 2.1
+      },
+      "rada": {
+        "vykony": [
+          40,
+          32,
+          48,
+          74,
+          356,
+          223
+        ],
+        "zeny": [
+          22,
+          19,
+          24,
+          45,
+          212,
+          151
+        ],
+        "porody": [
+          1256,
+          1252,
+          1402,
+          1276,
+          1191,
+          452
+        ],
+        "icz_921": [
+          7,
+          6,
+          7,
+          9,
+          17,
+          18
+        ],
+        "icz_603": [
+          10,
+          6,
+          10,
+          14,
+          34,
+          34
+        ],
+        "zeny_na_100_porodu": [
+          1.8,
+          1.5,
+          1.7,
+          3.5,
+          17.8,
+          null
+        ]
+      },
+      "kraje": [
+        {
+          "kod": "CZ010",
+          "nazev": "Praha",
+          "porody": 502,
+          "zeny": 98,
+          "zeny_na_100_porodu": 19.5,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ020",
+          "nazev": "Středočeský",
+          "porody": 185,
+          "zeny": 30,
+          "zeny_na_100_porodu": 16.2,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ031",
+          "nazev": "Jihočeský",
+          "porody": 52,
+          "zeny": 10,
+          "zeny_na_100_porodu": 19.2,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ032",
+          "nazev": "Plzeňský",
+          "porody": 54,
+          "zeny": 3,
+          "zeny_na_100_porodu": 5.6,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ041",
+          "nazev": "Karlovarský",
+          "porody": 26,
+          "zeny": 5,
+          "zeny_na_100_porodu": 19.2,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ042",
+          "nazev": "Ústecký",
+          "porody": 62,
+          "zeny": 2,
+          "zeny_na_100_porodu": 3.2,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ051",
+          "nazev": "Liberecký",
+          "porody": 50,
+          "zeny": 7,
+          "zeny_na_100_porodu": 14,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ052",
+          "nazev": "Královéhradecký",
+          "porody": 35,
+          "zeny": 10,
+          "zeny_na_100_porodu": 28.6,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ053",
+          "nazev": "Pardubický",
+          "porody": 30,
+          "zeny": 4,
+          "zeny_na_100_porodu": 13.3,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ063",
+          "nazev": "Vysočina",
+          "porody": 19,
+          "zeny": 4,
+          "zeny_na_100_porodu": 21.1,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ064",
+          "nazev": "Jihomoravský",
+          "porody": 80,
+          "zeny": 17,
+          "zeny_na_100_porodu": 21.3,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ071",
+          "nazev": "Olomoucký",
+          "porody": 33,
+          "zeny": 10,
+          "zeny_na_100_porodu": 30.3,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ072",
+          "nazev": "Zlínský",
+          "porody": 23,
+          "zeny": 9,
+          "zeny_na_100_porodu": 39.1,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ080",
+          "nazev": "Moravskoslezský",
+          "porody": 40,
+          "zeny": 5,
+          "zeny_na_100_porodu": 12.5,
+          "maly_vzorek": true
+        }
+      ]
+    },
+    {
+      "kod": "209",
+      "zkratka": "ZPŠ",
+      "nespolehliva_obdobi": [],
+      "rok_2025": {
+        "zeny": 41,
+        "porody": 873,
+        "zeny_na_100_porodu": 4.7
+      },
+      "rada": {
+        "vykony": [
+          12,
+          24,
+          18,
+          14,
+          39,
+          30
+        ],
+        "zeny": [
+          9,
+          16,
+          9,
+          7,
+          23,
+          21
+        ],
+        "porody": [
+          188,
+          240,
+          240,
+          205,
+          194,
+          176
+        ],
+        "icz_921": [
+          1,
+          3,
+          1,
+          2,
+          6,
+          4
+        ],
+        "icz_603": [
+          2,
+          3,
+          3,
+          1,
+          5,
+          3
+        ],
+        "zeny_na_100_porodu": [
+          4.8,
+          6.7,
+          3.8,
+          3.4,
+          11.9,
+          11.9
+        ]
+      },
+      "kraje": [
+        {
+          "kod": "CZ010",
+          "nazev": "Praha",
+          "porody": 10,
+          "zeny": 1,
+          "zeny_na_100_porodu": 10,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ020",
+          "nazev": "Středočeský",
+          "porody": 118,
+          "zeny": 7,
+          "zeny_na_100_porodu": 5.9,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ042",
+          "nazev": "Ústecký",
+          "porody": 1,
+          "zeny": 0,
+          "zeny_na_100_porodu": 0,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ051",
+          "nazev": "Liberecký",
+          "porody": 25,
+          "zeny": 5,
+          "zeny_na_100_porodu": 20,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ052",
+          "nazev": "Královéhradecký",
+          "porody": 29,
+          "zeny": 10,
+          "zeny_na_100_porodu": 34.5,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ053",
+          "nazev": "Pardubický",
+          "porody": 11,
+          "zeny": 1,
+          "zeny_na_100_porodu": 9.1,
+          "maly_vzorek": true
+        }
+      ]
+    },
+    {
+      "kod": "211",
+      "zkratka": "ZPMV",
+      "nespolehliva_obdobi": [],
+      "rok_2025": {
+        "zeny": 337,
+        "porody": 8852,
+        "zeny_na_100_porodu": 3.8
+      },
+      "rada": {
+        "vykony": [
+          128,
+          152,
+          165,
+          128,
+          575,
+          639
+        ],
+        "zeny": [
+          69,
+          79,
+          99,
+          90,
+          340,
+          421
+        ],
+        "porody": [
+          2152,
+          2187,
+          2381,
+          2132,
+          2025,
+          1682
+        ],
+        "icz_921": [
+          9,
+          11,
+          11,
+          11,
+          26,
+          38
+        ],
+        "icz_603": [
+          11,
+          14,
+          19,
+          16,
+          49,
+          47
+        ],
+        "zeny_na_100_porodu": [
+          3.2,
+          3.6,
+          4.2,
+          4.2,
+          16.8,
+          25
+        ]
+      },
+      "kraje": [
+        {
+          "kod": "CZ010",
+          "nazev": "Praha",
+          "porody": 262,
+          "zeny": 33,
+          "zeny_na_100_porodu": 12.6,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ020",
+          "nazev": "Středočeský",
+          "porody": 212,
+          "zeny": 32,
+          "zeny_na_100_porodu": 15.1,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ031",
+          "nazev": "Jihočeský",
+          "porody": 136,
+          "zeny": 23,
+          "zeny_na_100_porodu": 16.9,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ032",
+          "nazev": "Plzeňský",
+          "porody": 115,
+          "zeny": 8,
+          "zeny_na_100_porodu": 7,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ041",
+          "nazev": "Karlovarský",
+          "porody": 28,
+          "zeny": 4,
+          "zeny_na_100_porodu": 14.3,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ042",
+          "nazev": "Ústecký",
+          "porody": 139,
+          "zeny": 12,
+          "zeny_na_100_porodu": 8.6,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ051",
+          "nazev": "Liberecký",
+          "porody": 75,
+          "zeny": 10,
+          "zeny_na_100_porodu": 13.3,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ052",
+          "nazev": "Královéhradecký",
+          "porody": 105,
+          "zeny": 29,
+          "zeny_na_100_porodu": 27.6,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ053",
+          "nazev": "Pardubický",
+          "porody": 90,
+          "zeny": 20,
+          "zeny_na_100_porodu": 22.2,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ063",
+          "nazev": "Vysočina",
+          "porody": 75,
+          "zeny": 15,
+          "zeny_na_100_porodu": 20,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ064",
+          "nazev": "Jihomoravský",
+          "porody": 412,
+          "zeny": 65,
+          "zeny_na_100_porodu": 15.8,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ071",
+          "nazev": "Olomoucký",
+          "porody": 130,
+          "zeny": 38,
+          "zeny_na_100_porodu": 29.2,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ072",
+          "nazev": "Zlínský",
+          "porody": 114,
+          "zeny": 31,
+          "zeny_na_100_porodu": 27.2,
+          "maly_vzorek": false
+        },
+        {
+          "kod": "CZ080",
+          "nazev": "Moravskoslezský",
+          "porody": 132,
+          "zeny": 21,
+          "zeny_na_100_porodu": 15.9,
+          "maly_vzorek": false
+        }
+      ]
+    },
+    {
+      "kod": "213",
+      "zkratka": "RBP",
+      "nespolehliva_obdobi": [],
+      "rok_2025": {
+        "zeny": 160,
+        "porody": 3226,
+        "zeny_na_100_porodu": 5
+      },
+      "rada": {
+        "vykony": [
+          37,
+          35,
+          46,
+          88,
+          172,
+          217
+        ],
+        "zeny": [
+          32,
+          27,
+          41,
+          60,
+          123,
+          154
+        ],
+        "porody": [
+          815,
+          801,
+          860,
+          750,
+          741,
+          792
+        ],
+        "icz_921": [
+          0,
+          1,
+          0,
+          0,
+          5,
+          8
+        ],
+        "icz_603": [
+          7,
+          7,
+          10,
+          8,
+          19,
+          18
+        ],
+        "zeny_na_100_porodu": [
+          3.9,
+          3.4,
+          4.8,
+          8,
+          16.6,
+          19.4
+        ]
+      },
+      "kraje": [
+        {
+          "kod": "CZ010",
+          "nazev": "Praha",
+          "porody": 8,
+          "zeny": 0,
+          "zeny_na_100_porodu": 0,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ020",
+          "nazev": "Středočeský",
+          "porody": 2,
+          "zeny": 0,
+          "zeny_na_100_porodu": 0,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ031",
+          "nazev": "Jihočeský",
+          "porody": 1,
+          "zeny": 0,
+          "zeny_na_100_porodu": 0,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ032",
+          "nazev": "Plzeňský",
+          "porody": 1,
+          "zeny": 0,
+          "zeny_na_100_porodu": 0,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ041",
+          "nazev": "Karlovarský",
+          "porody": 1,
+          "zeny": 0,
+          "zeny_na_100_porodu": 0,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ042",
+          "nazev": "Ústecký",
+          "porody": 24,
+          "zeny": 0,
+          "zeny_na_100_porodu": 0,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ053",
+          "nazev": "Pardubický",
+          "porody": 4,
+          "zeny": 0,
+          "zeny_na_100_porodu": 0,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ064",
+          "nazev": "Jihomoravský",
+          "porody": 49,
+          "zeny": 12,
+          "zeny_na_100_porodu": 24.5,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ071",
+          "nazev": "Olomoucký",
+          "porody": 25,
+          "zeny": 6,
+          "zeny_na_100_porodu": 24,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ072",
+          "nazev": "Zlínský",
+          "porody": 71,
+          "zeny": 20,
+          "zeny_na_100_porodu": 28.2,
+          "maly_vzorek": true
+        },
+        {
+          "kod": "CZ080",
+          "nazev": "Moravskoslezský",
+          "porody": 555,
+          "zeny": 85,
+          "zeny_na_100_porodu": 15.3,
+          "maly_vzorek": false
+        }
+      ]
+    }
+  ]
+}

@@ -124,6 +124,7 @@ Sedm pojišťoven a jejich kódy ve všech zdrojích: 111 VZP ČR · 201 VoZP ·
 | L | `M1/data/dohodovaci-rizeni.json` (OIS-11-24) | žebříček úhrad podle ZP | 2023, 2024 (pololetní dodávka) | ÚZIS | `npm run data:dohodovaci-rizeni` | `dohodovaci-rizeni.html` |
 | M | `03_Prezentace/Datovy-souhrn-OIS-11-24-naklady-zdravotni-pojistovny-segmenty-2026-01.xlsx` | **ZP × segment × rok** a **ZP × segment × okres zařízení** | 2023, 2024_pol | ÚZIS · NRHZS | ručně uloženo; fetcher stahuje XLSX do cache | podle toho jen systémové součty (`podil_vydaje_*`) |
 | N | `M1/data/regions.json` | **nic per ZP** (45 datasetů kraj × ukazatel; pojišťovny jen jako zdroj v poznámkách) | – | – | – | `kraje.html` |
+| O | `M1/data/pojistovny-porodni-asistence.json` (builder `ingest/build-pojistovny-porodni-asistence.js` z `ingest/manual/uzis-06211/`) | **ZP × čtvrtletí** (ženy s výkonem 06211, porody, výkony, vykazující IČZ 921/603) a **ZP × kraj poskytovatele** za Q1 2026 | Q1 2025 – Q2 2026 (2026 předběžně) | ÚZIS · NRHZS, datový požadavek UZIS/080507/2026 | ručně (nový požadavek, pak builder) | `pojistovna.html?zp=` (Instituce → Návštěvy porodní asistentky po porodu) |
 
 ### 2.2 OIS 11-47 podrobně (surové CSV)
 
@@ -287,6 +288,7 @@ z toho, co už leží v repu.
 | `zp_cizinci_docasna_ochrana` | Počet pojištěnců s dočasnou ochranou | MZ/VZP (v tisku 70 jen u VZP) | ZP | **ne** (jen mimořádné zprávy; draft tisk 70) |
 | `zp_cekaci_doby` | Čekací doby na vybrané výkony | žádosti 106, data VZP | ZP | **ne** (jen `cekaci_doba_kycel` z VZP) |
 | `zp_pokryti_screeningu` | Pokrytí screeningem podle ZP pojištěnce | NRHZS (obsahuje kód ZP) | ZP × kraj | **ne**; zjistit, zda veřejné sady NZIS Open ZP rozlišují |
+| `zp_porodni_asistence_na_100_porodu` | Ženy s návštěvou porodní asistentky (výkon 06211) na 100 porodů pojištěnek | ÚZIS NRHZS (datový požadavek UZIS/080507/2026) | ZP × čtvrtletí, ZP × kraj poskytovatele | **ano** (`data/pojistovny-porodni-asistence.json`, O) |
 | `zp_zamestnanci_na_10k` | Přepočtení zaměstnanci / 10 tis. pojištěnců | VZ | ZP | **ano** (`zamestnanci_prepocteni`) |
 
 Metodické mezery bez nového indikátoru: aktuální stav CRP se do repa nahrává ručně

@@ -6,9 +6,13 @@
 > (`porodni_asistentka_navstevy_porody_kraje`) a všechny čtyři díly série
 > `sestinedeli-v-datech` jako drafty ve frontě: `clanek-porodni-asistentka-vyuziti-naroku-2026`,
 > `-kraje-2026`, `-pojistovny-2026`, `-pravidla-2026`.
-> Zbývá: per-ZP řez D pro Srovnávač pojišťoven, volitelný explainer pro
-> čtenářky (§ 5.2), doplňující dotaz na ÚZIS (§ 6) a ověření počtu smluv
-> u pojišťoven.
+> Per-ZP řez D: `data/pojistovny-porodni-asistence.json` (builder
+> `ingest/build-pojistovny-porodni-asistence.js`, validátor
+> `ingest/lib/validate-porodni-asistence.js`, karta na profilu
+> `pojistovna.html?zp=` v sekci Instituce, řádek ve stáří dat a v inventáři
+> `pojistovny-indikatory`). Explainer pro čtenářky:
+> `jak-funguje.html?id=porodni_asistentka_zadanka`.
+> Zbývá: doplňující dotaz na ÚZIS (§ 6) a ověření počtu smluv u pojišťoven.
 
 Článek z 27. 8. slíbil čtenářům „třetí test“ reformy: zda se z využití nároku
 stane veřejně sledované číslo. S těmito daty to jde poprvé změřit, a to po

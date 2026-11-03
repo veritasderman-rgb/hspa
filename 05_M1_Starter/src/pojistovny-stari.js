@@ -39,6 +39,7 @@ export const ZP_DATASETY = {
   instituce: 'data/pojistovny-instituce.json',
   smluvniProgramy: 'data/pojistovny-smluvni-programy.json',
   dostupnost: 'data/pojistovny-dostupnost.json',
+  porodniAsistence: 'data/pojistovny-porodni-asistence.json',
 };
 
 /** Datasety, které stránka načítá mimo orchestrátor (src/pojistovny.js) vlastním modulem. */
@@ -191,6 +192,16 @@ export const STARI_REGISTR = [
     id: 'dostupnost', dataset: 'dostupnost', velicina: 'dostupnost', stranky: ['instituce', 'profil'],
     nazev: 'Co pojišťovny publikují o dostupnosti', zdroj: 'Výroční zprávy 2023–2025 a weby pojišťoven (inventář)',
     vyber: (d) => (d?.stav_k ? { kDatu: `stav k ${datumCz(d.stav_k)}`, kratce: `dostupnost k ${datumCz(d.stav_k)}`, roky: [], stav: 'nenalezeno neznamená, že údaj pojišťovna nemá' } : null),
+  },
+  {
+    id: 'porodniAsistence', dataset: 'porodniAsistence', velicina: 'porodniAsistence', stranky: ['profil'],
+    nazev: 'Návštěvy porodní asistentky po porodu (výkon 06211)', zdroj: 'ÚZIS ČR · Národní registr hrazených zdravotních služeb (datový požadavek)',
+    vyber: (x) => {
+      const o = Array.isArray(x?.obdobi) ? x.obdobi : [];
+      if (!o.length) return null;
+      const q = (s) => String(s).replace(/^(\d{4})Q(\d)$/, 'Q$2 $1');
+      return { kDatu: `${q(o[0])}–${q(o[o.length - 1])}`, kratce: `ÚZIS 06211 ${q(o[o.length - 1])}`, roky: [], stav: (x.predbezne || []).length ? `${(x.predbezne || []).map(q).join(' a ')} předběžně · ${sestaven(x)}` : sestaven(x) };
+    },
   },
   {
     id: 'vek', dataset: 'vek', velicina: 'kmen', stranky: [],
