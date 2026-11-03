@@ -32,7 +32,7 @@ test('?zp=: platný kód, jinak null; titulek profilu', () => {
   assert.equal(zpZUrl('?zp=999'), null);
   assert.equal(zpZUrl(''), null);
   assert.equal(zpZUrl(undefined), null);
-  assert.equal(profilTitle('111'), 'VZP ČR — profil pojišťovny · Srovnávač pojišťoven');
+  assert.equal(profilTitle('111'), 'VZP ČR — profil pojišťovny · Srovnávač pojišťoven, pracovní verze · HSPA Monitor');
   assert.match(profilTitle(null), /^Profil pojišťovny — Srovnávač pojišťoven/);
 });
 
@@ -91,7 +91,7 @@ test('mini-grafy: řada jedné ZP + ČR, kmen 2010–2025, segmenty, saldo, fond
   assert.match(fondKarta(null, '111'), /nedohledáno|nejsou k dispozici/);
   const app = aplikaceKarta(DATA.A, '111');
   assert.equal(count(app, /<tr data-zp="/g), 1, 'jeden řádek');
-  assert.match(app, /n\/10/);
+  assert.doesNotMatch(app, /n\/10|role="meter"|zpv-scorehead/, 'profil: kolečka bez součtu funkcí');
   assert.match(aplikaceKarta(null, '111'), /nejsou k dispozici/);
   const st = stiznostiKarta(DATA.ST, DATA.P, '111');
   assert.match(st, /Podání k dostupnosti péče/);

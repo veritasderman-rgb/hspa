@@ -46,13 +46,13 @@ export const ZP_SKUPINY = [
 export const ZP_STRANKY = [
   { id: 'prehled', skupina: 'pojistenci', href: 'pojistovny.html', label: 'Přehled' },
   {
-    id: 'kmen', skupina: 'pojistenci', href: 'pojistovny-kmen.html', label: 'Kmen a hospodaření', kicker: 'CRP 2025 · MZ a MF 2024 · ZPP 2026',
+    id: 'kmen', skupina: 'pojistenci', href: 'pojistovny-kmen.html', label: 'Kmen', kicker: 'CRP 2025 · MZ a MF 2024 · ZPP 2026',
     veta: 'Kdo koho pojišťuje, jak starý kmen nese a kolik stojí jeho péče. Hospodaření a rezervy jsou na stránce Peníze.',
     co: 'Karty pojišťoven, vývoj kmene, věk kmene, kraje, měsíční kmen',
   },
   {
     id: 'penize', skupina: 'pojistenci', href: 'pojistovny-penize.html', label: 'Peníze', kicker: 'MZ 2015–2024 · přerozdělení 2019–2026',
-    veta: 'Kdo do přerozdělení přispívá a kdo z něj bere, jak se hospodaření vyvíjelo deset let a za co pojišťovny platí.',
+    veta: 'Jak přerozdělení vyrovnává složení kmene a příjmy plátců, jak se hospodaření vyvíjelo deset let a za co pojišťovny platí.',
     co: 'Relativní saldo přerozdělení, řady 2015–2024, státní pojištěnci, segmenty, fond prevence, provoz, rezervy 2026',
   },
   {

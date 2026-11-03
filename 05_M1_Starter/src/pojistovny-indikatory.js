@@ -86,14 +86,14 @@ function radekIndikatoru(p, sGran) {
 export function kontraktHtml(skupiny) {
   if (!skupiny.length) return '<p class="zpc-na">Inventář se nepodařilo načíst.</p>';
   return skupiny.map((g) => `<h4>${esc(g.nazev)}<span class="zpc-n">${g.polozky.length}</span></h4>`
-    + '<div class="zpc-tbl" role="region" tabindex="0" aria-label="Indikátory kontraktu (tabulka, posuvná)"><table><thead><tr><th class="zpc-txt">Indikátor</th><th class="zpc-txt">Jednotka</th><th>Rok</th><th class="zpc-txt">Zdroj</th><th class="zpc-txt">Za co hodnota je</th><th class="zpc-txt">Ověření</th></tr></thead><tbody>'
+    + '<div class="zpc-tbl" role="region" tabindex="0" aria-label="Indikátory kontraktu (tabulka, posuvná)"><table><thead><tr><th scope="col" class="zpc-txt">Indikátor</th><th scope="col" class="zpc-txt">Jednotka</th><th scope="col">Rok</th><th scope="col" class="zpc-txt">Zdroj</th><th scope="col" class="zpc-txt">Za co hodnota je</th><th scope="col" class="zpc-txt">Ověření</th></tr></thead><tbody>'
     + g.polozky.map((p) => (p.chybi ? `<tr><th scope="row" class="zpc-txt">${esc(p.id)}<small>v kontraktu chybí</small></th><td colspan="5" class="zpc-txt">${esc(p.granularita)}</td></tr>` : radekIndikatoru(p, true))).join('')
     + '</tbody></table></div>').join('');
 }
 
 export function autoHtml(list) {
   if (!list.length) return '<p class="zpc-na">Žádný indikátor neodpovídá dotazu.</p>';
-  return '<div class="zpc-tbl" role="region" tabindex="0" aria-label="Indikátory z dat pojišťoven (tabulka, posuvná)"><table><thead><tr><th class="zpc-txt">Indikátor</th><th class="zpc-txt">Jednotka</th><th>Rok</th><th class="zpc-txt">Zdroj</th><th class="zpc-txt">Ověření</th></tr></thead><tbody>'
+  return '<div class="zpc-tbl" role="region" tabindex="0" aria-label="Indikátory z dat pojišťoven (tabulka, posuvná)"><table><thead><tr><th scope="col" class="zpc-txt">Indikátor</th><th scope="col" class="zpc-txt">Jednotka</th><th scope="col">Rok</th><th scope="col" class="zpc-txt">Zdroj</th><th scope="col" class="zpc-txt">Ověření</th></tr></thead><tbody>'
     + list.map((p) => radekIndikatoru(p, false)).join('') + '</tbody></table></div>';
 }
 
@@ -103,7 +103,7 @@ export function datasetyHtml(inv) {
   const list = inv?.datasety?.polozky || [];
   if (!list.length) return NA;
   const mark = (v) => (v === 'ano' ? '<span class="zpc-yes">ano</span>' : v === 'ne' ? '<span class="zpc-no">ne</span>' : `<span class="zpc-part">${esc(v)}</span>`);
-  return '<div class="zpc-tbl" role="region" tabindex="0" aria-label="Datové sady s rozměrem pojišťovna (tabulka, posuvná)"><table><thead><tr><th>#</th><th class="zpc-txt">Soubor</th><th class="zpc-txt">Dimenze</th><th class="zpc-txt">Roky</th><th class="zpc-txt">Zdroj</th><th class="zpc-txt">Aktualizace</th><th class="zpc-txt">Na webu</th><th>Per ZP</th></tr></thead><tbody>'
+  return '<div class="zpc-tbl" role="region" tabindex="0" aria-label="Datové sady s rozměrem pojišťovna (tabulka, posuvná)"><table><thead><tr><th scope="col">#</th><th scope="col" class="zpc-txt">Soubor</th><th scope="col" class="zpc-txt">Dimenze</th><th scope="col" class="zpc-txt">Roky</th><th scope="col" class="zpc-txt">Zdroj</th><th scope="col" class="zpc-txt">Aktualizace</th><th scope="col" class="zpc-txt">Na webu</th><th scope="col">Per ZP</th></tr></thead><tbody>'
     + list.map((d) => `<tr><th scope="row">${esc(d.k)}</th><td class="zpc-txt"><code>${esc(d.soubor)}</code></td><td class="zpc-txt">${esc(d.dimenze)}</td><td class="zpc-txt">${esc(d.roky)}</td><td class="zpc-txt">${esc(d.zdroj)}</td><td class="zpc-txt">${esc(d.aktualizace)}</td><td class="zpc-txt">${esc(d.web)}</td><td>${mark(d.per_zp)}</td></tr>`).join('')
     + '</tbody></table></div>';
 }
@@ -113,7 +113,7 @@ export function kdoUKohoHtml(inv) {
   const list = k.polozky || [];
   const odp = k.odpovedi || [];
   if (!list.length) return NA;
-  return '<div class="zpc-tbl" role="region" tabindex="0" aria-label="Zdroje o tom, kdo je u koho pojištěn (tabulka, posuvná)"><table><thead><tr><th class="zpc-txt">Zdroj</th><th class="zpc-txt">Co přesně měří</th><th class="zpc-txt">Rozlišení</th><th class="zpc-txt">Časový základ</th><th class="zpc-txt">Kdo a jak často</th><th class="zpc-txt">V repu</th></tr></thead><tbody>'
+  return '<div class="zpc-tbl" role="region" tabindex="0" aria-label="Zdroje o tom, kdo je u koho pojištěn (tabulka, posuvná)"><table><thead><tr><th scope="col" class="zpc-txt">Zdroj</th><th scope="col" class="zpc-txt">Co přesně měří</th><th scope="col" class="zpc-txt">Rozlišení</th><th scope="col" class="zpc-txt">Časový základ</th><th scope="col" class="zpc-txt">Kdo a jak často</th><th scope="col" class="zpc-txt">V repu</th></tr></thead><tbody>'
     + list.map((z) => `<tr><th scope="row" class="zpc-txt">${linkOrText(z.url, z.zdroj)}</th><td class="zpc-txt">${esc(z.meri)}</td><td class="zpc-txt">${esc(z.rozliseni)}</td><td class="zpc-txt">${esc(z.casovy_zaklad)}</td><td class="zpc-txt">${esc(z.kdo)}</td><td class="zpc-txt">${esc(z.v_repu)}</td></tr>`).join('')
     + '</tbody></table></div>'
     + (odp.length ? `<h4>Na co data odpovídají</h4><dl class="zpc-dl">${odp.map((o) => `<dt>${esc(o.otazka)}</dt><dd>${esc(o.odpoved)}</dd>`).join('')}</dl>` : '');
@@ -123,7 +123,7 @@ export function navrhyHtml(inv) {
   const list = inv?.navrhy?.polozky || [];
   if (!list.length) return NA;
   const stav = (v) => (/^ano/.test(v) ? 'zpc-yes' : /^ne\b/.test(v) ? 'zpc-no' : 'zpc-part');
-  return '<div class="zpc-tbl" role="region" tabindex="0" aria-label="Navržené indikátory per pojišťovna (tabulka, posuvná)"><table><thead><tr><th class="zpc-txt">Navržené id</th><th class="zpc-txt">Název</th><th class="zpc-txt">Zdroj</th><th class="zpc-txt">Granularita</th><th class="zpc-txt">Jde spočítat z repa?</th></tr></thead><tbody>'
+  return '<div class="zpc-tbl" role="region" tabindex="0" aria-label="Navržené indikátory per pojišťovna (tabulka, posuvná)"><table><thead><tr><th scope="col" class="zpc-txt">Navržené id</th><th scope="col" class="zpc-txt">Název</th><th scope="col" class="zpc-txt">Zdroj</th><th scope="col" class="zpc-txt">Granularita</th><th scope="col" class="zpc-txt">Jde spočítat z repa?</th></tr></thead><tbody>'
     + list.map((n) => `<tr><th scope="row" class="zpc-txt"><code>${esc(n.id)}</code></th><td class="zpc-txt">${esc(n.nazev)}</td><td class="zpc-txt">${esc(n.zdroj)}</td><td class="zpc-txt">${esc(n.granularita)}</td><td class="zpc-txt"><span class="${stav(n.v_repu)}">${esc(n.v_repu)}</span></td></tr>`).join('')
     + '</tbody></table></div>';
 }
@@ -153,7 +153,7 @@ export function buildOpendataSouhrn(od) {
 export function opendataHtml(od) {
   if (!od || !Array.isArray(od.pojistovny) || !od.pojistovny.length) return '<p class="zpc-note">Audit otevřených dat pojišťoven zatím není k dispozici.</p>';
   const rows = buildOpendataSouhrn(od);
-  const table = '<div class="zpc-tbl" role="region" tabindex="0" aria-label="Otevřená data pojišťoven (tabulka, posuvná)"><table><thead><tr><th class="zpc-txt">Pojišťovna</th><th>Open data na webu</th><th>Sady</th><th>NKOD</th><th>VZ a jiné</th><th class="zpc-txt">Shrnutí</th></tr></thead><tbody>'
+  const table = '<div class="zpc-tbl" role="region" tabindex="0" aria-label="Otevřená data pojišťoven (tabulka, posuvná)"><table><thead><tr><th scope="col" class="zpc-txt">Pojišťovna</th><th scope="col">Open data na webu</th><th scope="col">Sady</th><th scope="col">NKOD</th><th scope="col">VZ a jiné</th><th scope="col" class="zpc-txt">Shrnutí</th></tr></thead><tbody>'
     + rows.map((r) => `<tr data-zp="${esc(r.kod)}"><th scope="row" class="zpc-txt">${dot(r.kod)}${esc(r.zkratka)}</th><td>${r.web_url ? `<a href="${esc(r.web_url)}" rel="noopener">${odStav(r.web)}</a>` : odStav(r.web)}</td><td>${r.sady || NA}</td><td>${r.nkod_url ? `<a href="${esc(r.nkod_url)}" rel="noopener">${odStav(r.nkod)}</a>` : odStav(r.nkod)}${r.nkod_pocet ? ` <small>${r.nkod_pocet} sad</small>` : ''}</td><td>${odStav(r.vz)}</td><td class="zpc-txt">${esc(r.shrnuti)}</td></tr>`).join('')
     + '</tbody></table></div>';
   const detail = rows.map((r) => {
@@ -205,8 +205,8 @@ export function buildStiznosti(st, poj) {
 export function stiznostiHtml(st, poj) {
   if (!st || !Array.isArray(st.pojistovny)) return '<p class="zpc-note">Data o stížnostech zatím nejsou k dispozici.</p>';
   const { roky, rows } = buildStiznosti(st, poj);
-  const head = roky.map((r) => `<th>${r}</th>`).join('');
-  const table = '<div class="zpc-tbl" role="region" tabindex="0" aria-label="Podání pojištěnců k dostupnosti péče podle výročních zpráv (tabulka, posuvná)"><table><thead><tr><th class="zpc-txt">Pojišťovna</th>' + head + '<th>Na 100 tis. pojištěnců</th><th class="zpc-txt">Co pojišťovna počítá</th><th class="zpc-txt">Nejčastěji</th></tr></thead><tbody>'
+  const head = roky.map((r) => `<th scope="col">${r}</th>`).join('');
+  const table = '<div class="zpc-tbl" role="region" tabindex="0" aria-label="Podání pojištěnců k dostupnosti péče podle výročních zpráv (tabulka, posuvná)"><table><thead><tr><th scope="col" class="zpc-txt">Pojišťovna</th>' + head + '<th scope="col">Na 100 tis. pojištěnců</th><th scope="col" class="zpc-txt">Co pojišťovna počítá</th><th scope="col" class="zpc-txt">Nejčastěji</th></tr></thead><tbody>'
     + rows.map((r) => `<tr data-zp="${esc(r.kod)}"><th scope="row" class="zpc-txt">${dot(r.kod)}${esc(r.zkratka)}</th>`
       + roky.map((rok) => { const y = r.byRok[rok]; return `<td>${y ? (y.podani_dostupnost != null ? fmtN(y.podani_dostupnost) : '<span class="zpc-na" title="výroční zpráva počet neuvádí">neuvádí</span>') : NA}</td>`; }).join('')
       + `<td>${r.na100k != null ? `${fmtN(r.na100k)}<small>podání i kmen ${esc(String(poj?.rok_hospodareni ?? ''))}</small>` : '<span class="zpc-na" title="jiná definice, nepřepočítává se">—</span>'}</td>`
@@ -214,15 +214,15 @@ export function stiznostiHtml(st, poj) {
     + '</tbody></table></div>';
   const mv = rows.find((r) => r.kod === '211');
   const mvRadky = mv ? Object.values(mv.byRok).filter((y) => y.podani_celkem != null) : [];
-  const mvHtml = mvRadky.length ? `<p><b>ZP MV ČR</b> jako jediná uvádí i celkový počet podání, kolik z nich bylo oprávněných a jak dlouho vyřízení trvalo: ${mvRadky.map((y) => `${y.rok}: ${fmtN(y.podani_celkem)} podání, ${y.opravnene_stiznosti} oprávněných, průměrně ${String(y.doba_vyrizeni_dni).replace('.', ',')} dne`).join('; ')}.</p>` : '';
-  const s16 = '<div class="zpc-tbl" role="region" tabindex="0" aria-label="Stížnosti podle § 16a zákona 106/1999 Sb. (tabulka, posuvná)"><table><thead><tr><th class="zpc-txt">Pojišťovna</th>' + head + '</tr></thead><tbody>'
+  const mvHtml = mvRadky.length ? `<p class="zpc-note"><b>ZP MV ČR</b> jako jediná uvádí i celkový počet podání, kolik z nich bylo oprávněných a jak dlouho vyřízení trvalo: ${mvRadky.map((y) => `${y.rok}: ${fmtN(y.podani_celkem)} podání, ${y.opravnene_stiznosti} oprávněných, průměrně ${String(y.doba_vyrizeni_dni).replace('.', ',')} dne`).join('; ')}.</p>` : '';
+  const s16 = '<div class="zpc-tbl" role="region" tabindex="0" aria-label="Stížnosti podle § 16a zákona 106/1999 Sb. (tabulka, posuvná)"><table><thead><tr><th scope="col" class="zpc-txt">Pojišťovna</th>' + head + '</tr></thead><tbody>'
     + rows.map((r) => `<tr data-zp="${esc(r.kod)}"><th scope="row" class="zpc-txt">${dot(r.kod)}${esc(r.zkratka)}</th>${r.s16a.map((v) => `<td>${v == null ? NA : v}</td>`).join('')}</tr>`).join('') + '</tbody></table></div>';
   const detail = rows.filter((r) => r._r).map((r) => `<details class="zpc-acc" data-zp="${esc(r.kod)}"><summary>${dot(r.kod)}${esc(r.zkratka)}<span class="zpc-n">${(r._r.roky || []).length} VZ</span></summary><div class="zpc-acc-body"><ul>`
     + (r._r.roky || []).map((y) => `<li><b>${y.rok}</b> · ${esc(y.poznamka || '')} <small class="zpc-na">(${esc(y.soubor)}, ř. ${y.radek})</small></li>`).join('') + '</ul></div></details>').join('');
   return `<p class="zpc-note">Stav k ${esc(st.stav_k || '')}. Hodnoty jsou přepsané z kapitoly 4.6.1 výročních zpráv (místní a časová dostupnost podle § 40 zákona č. 48/1997 Sb.); „neuvádí“ = zpráva má jen slovní popis.</p>`
     + table + mvHtml
     + `<details class="zpc-acc"><summary>Proč se čísla nedají seřadit<span class="zpc-n">${(st.srovnatelnost || []).length}</span></summary><div class="zpc-acc-body"><ul>${li(st.srovnatelnost)}</ul></div></details>`
-    + '<h4>Stížnosti podle § 16a zákona č. 106/1999 Sb. (jediná položka se stejnou definicí u všech)</h4>' + s16
+    + '<h4 class="zpc-inst-h4">Stížnosti podle § 16a zákona č. 106/1999 Sb. (jediná položka se stejnou definicí u všech)</h4>' + s16
     + `<details class="zpc-acc"><summary>Citace a řádky ve výročních zprávách<span class="zpc-n">${rows.filter((r) => r._r).length}</span></summary><div class="zpc-acc-body">${detail}</div></details>`;
 }
 

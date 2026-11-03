@@ -8,11 +8,11 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   sg, rokPrerozdeleni, buildSaldoChart, buildPodilyPredPo, buildSaldoTabulka, saldoTabulkaHtml, buildVyberMesicni, vyberMesicniHtml,
-  UKAZATELE, UKAZATEL_VYCHOZI, rokyUkazatele, crHodnota, buildRadyChart, radyHtml, prepinacRokuHtml, stavZUrl, stavDoUrl,
+  UKAZATELE, UKAZATEL_VYCHOZI, rokyUkazatele, klouzavySoucet12, vyberMesicniTabulka, kratkySegment, crHodnota, buildRadyChart, radyHtml, prepinacRokuHtml, stavZUrl, stavDoUrl,
   buildStatni, statniKarta, buildSegmenty, urovenV, buildFondProvoz, VYBER_REZIMY, buildSlozky, buildNaPojistence, prepinacVyberuHtml,
 } from '../src/pojistovny-penize.js';
 import { statniDd } from '../src/pojistovny.js';
-import { rankedBars, segmentedBar, SORT_NOTE } from '../src/zp-viz.js';
+import { rankedBars, segmentedBar, stackedRows, SORT_NOTE } from '../src/zp-viz.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const json = (f) => JSON.parse(fs.readFileSync(path.join(ROOT, 'data', f), 'utf8'));
@@ -77,11 +77,38 @@ test('tabulka salda: roky 2019–poslední, pevné pořadí podle kódu, data-zp
   assert.match(saldoTabulkaHtml({}), /nedohledáno/);
 });
 
-test('měsíční výběr: 7 sérií, bez VZP 6, značky osy po lednech, index = 100 v prvním měsíci', () => {
+test('klouzavý 12měsíční součet: od 12. měsíce, okno s chybějícím měsícem = null, délka řady se zachovává', () => {
+  const r = klouzavySoucet12([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 3]);
+  assert.equal(r.length, 14);
+  assert.deepEqual(r.slice(0, 11), new Array(11).fill(null));
+  assert.equal(r[11], 12);
+  assert.equal(r[12], 13);
+  assert.equal(r[13], 15);
+  const mezera = klouzavySoucet12([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, null, 3]);
+  assert.equal(mezera[11], 12);
+  assert.equal(mezera[12], null);
+  assert.equal(mezera[13], null);
+  assert.deepEqual(klouzavySoucet12(null), []);
+  assert.deepEqual(klouzavySoucet12([5, 5]), [null, null]);
+});
+
+test('měsíční výběr: klouzavý součet od 12. měsíce, index prvního dostupného = 100, měsíční řada v tabulce', () => {
   const v = buildVyberMesicni(PR, 'vse');
   assert.equal(v.series.length, 7);
-  assert.equal(v.series[0].points.length, PR.mesice.length);
-  assert.equal(v.opts.xTicks[0].label, '2019');
+  assert.equal(v.series[0].points.length, PR.mesice.length - 11, 'bod až od 12. měsíce');
+  const z = PR.pojistovny[0];
+  const soucet12 = z.vybrano.slice(0, 12).reduce((a, b) => a + b, 0);
+  assert.equal(v.series[0].points[0].value, soucet12);
+  assert.equal(v.opts.base, v.series[0].points[0].year, 'index = 100 v prvním dostupném měsíci');
+  assert.match(v.opts.title, /klouzavý 12měsíční součet \(index 12\/2019 = 100\)/);
+  assert.match(v.opts.sub, /Součet posledních 12 měsíců, index 12\/2019 = 100; měsíční řada v tabulce/);
+  const html = vyberMesicniHtml(PR, 'vse');
+  assert.equal(count(html, /<details class="zpv-table"/g), 2, 'dvě dvojčata: klouzavé (index) a měsíční hodnoty');
+  assert.match(html, /Zobrazit měsíční řadu jako tabulku/);
+  assert.match(html, /<th scope="row">1\/2019<\/th>/, 'měsíční tabulka začíná 1/2019');
+  assert.match(html, /<th scope="row">12\/2019<\/th>/);
+  assert.equal(vyberMesicniTabulka({}, 'vse'), '');
+  assert.equal(v.opts.xTicks[0].label, '2020', 'značky osy jen uvnitř řady (první leden po 12/2019)');
   assert.ok(v.opts.xTicks.every((t) => /^\d{4}$/.test(t.label)));
   assert.equal(buildVyberMesicni(PR, 'bez-vzp').series.length, 6);
   assert.ok(!buildVyberMesicni(PR, 'bez-vzp').series.some((s) => s.kod === '111'));
@@ -300,4 +327,62 @@ test('stránka Peníze: text o salda mluví o složení kmene a příjmech plát
 test('tooltip salda nese obě složky v mld Kč', () => {
   const ch = buildSaldoChart(PR);
   assert.match(ch.items[0].tip, /z toho riziková \(složení kmene\) \+10,8\smld\sKč, plátcová \(příjmy plátců\) \+6,4\smld\sKč/);
+});
+
+test('ukazatele v mld Kč bez reference ČR (jen poměry a hodnoty na pojištěnce mají čáru ČR)', () => {
+  for (const u of UKAZATELE.filter((x) => /^mld/.test(x.unit))) {
+    const ch = buildRadyChart(R, u.id, null);
+    if (ch.typ === 'bary') {
+      assert.equal(ch.opts.ref, null, `${u.id}: bez ČR`);
+      assert.doesNotMatch(radyHtml(R, { ukazatel: u.id, rok: null }), /zpv-ref--line|zpv-refkey/, u.id);
+    } else {
+      assert.ok(!ch.series.some((s) => s.key === 'cr'), `${u.id}: bez řady ČR`);
+    }
+  }
+  // poměry s ČR zůstávají: státní pojištěnci (%) mají čáru
+  assert.ok(buildRadyChart(R, 'statni_pojistenci_pct', 2024).opts.ref);
+  assert.ok(buildRadyChart(R, 'naklady_na_pojistence_kc', null).series.some((s) => s.key === 'cr'));
+  assert.equal(buildRadyChart(R, 'zustatek_bu_zfzp_mld', 2024).opts.ref, null);
+  assert.equal(buildRadyChart(R, 'hospodarsky_vysledek_mld', 2024).opts.ref, null);
+});
+
+test('segmenty jako jeden obrázek: stackedRows 7 řádků × 4 skupiny, jedna legenda, dumbbell se zkrácenými popisky a plným názvem v tooltipu', () => {
+  const ch = buildSegmenty(S, R, { kod: '111', segment: null });
+  assert.equal(ch.stacked.rows.length, 7);
+  assert.deepEqual(ch.stacked.parts.map((p) => p.key), ['ambulantni', 'luzkova', 'leky', 'ostatni']);
+  const fig = stackedRows(ch.stacked.rows, ch.stacked.parts, ch.stacked.cell, ch.stacked.opts);
+  assert.equal(count(fig, /<figure /g), 1);
+  assert.equal(count(fig, /<ul class="zpv-legend zpv-legend--stack">/g), 1);
+  assert.equal(count(fig, /<div class="zpv-srow" data-zp=/g), 7);
+  assert.equal(count(fig, /class="zpv-seg zpv-mark" data-zp=/g), 28);
+  assert.match(fig, /Náklady na zdravotní služby podle segmentů 2024/);
+  // součet podílů v řádku = 100 % (kontrola na tabulkovém dvojčeti, jedna pojišťovna)
+  const radek = fig.match(/<tr><th scope="row">VZP ČR<\/th>(.*?)<\/tr>/)[1];
+  const sum = [...radek.matchAll(/>([\d,]+)\s*%</g)].reduce((a, m) => a + Number(m[1].replace(',', '.')), 0);
+  assert.ok(Math.abs(sum - 100) < 0.3, `součet ${sum}`);
+  // pojišťovny zůstávají v pevném pořadí podle kódu (žádné řazení = žádná poznámka o řazení)
+  assert.deepEqual(ch.stacked.rows.map((r) => r.kod), ['111', '201', '205', '207', '209', '211', '213']);
+  assert.doesNotMatch(fig, /Řazeno podle/);
+  // dumbbell: popisky ≤ 22 znaků, tooltip nese plný název
+  assert.ok(ch.dumbbell.items.every((i) => i.label.length <= 22), ch.dumbbell.items.map((i) => i.label).join(' | '));
+  assert.ok(ch.dumbbell.items.every((i) => /skutečnost [\d,]+ mld Kč/.test(i.tip)));
+  assert.equal(kratkySegment('Zdravotnické prostředky na poukazy celkem'), 'Zdravotnické…');
+  // stránka: segmenty se skládají přes stackedRows, ne přes sedm segmentedBar
+  const js = fs.readFileSync(path.join(ROOT, 'src', 'pojistovny-penize.js'), 'utf8');
+  assert.match(js, /stackedRows\(ch\.stacked\.rows/);
+  assert.doesNotMatch(js, /ch\.bary\.map\(\(b, i\) => segmentedBar/);
+});
+
+test('Peníze: texty o přerozdělení jsou v rozbalovátku „Jak číst přerozdělení · 4“, pod grafy jedna věta; lead bez „přispívá a bere“', () => {
+  assert.match(html, /<details class="zpc-acc">\s*<summary>Jak číst přerozdělení · 4<\/summary>/);
+  const det = html.match(/<summary>Jak číst přerozdělení · 4<\/summary>([\s\S]*?)<\/details>/)[1];
+  assert.equal(count(det, /<p class="zpc-note">/g), 4);
+  for (const t of ['Co graf říká', 'není nula', 'Čisté saldo vůči platbě státu', 'Dvě složky salda']) assert.ok(det.includes(t), t);
+  const pred = html.slice(html.indexOf('id="zpPrerozdeleni"'), html.indexOf('<summary>Jak číst přerozdělení'));
+  assert.equal(count(pred, /<p /g), 1, 'pod grafem jedna věta');
+  assert.match(html, /Jak přerozdělení vyrovnává složení kmene a příjmy plátců, jak se hospodaření vyvíjelo deset let a za co pojišťovny platí\./);
+  assert.doesNotMatch(html, /přispívá|z něj bere/);
+  const shell = fs.readFileSync(path.join(ROOT, 'src', 'pojistovny-shell.js'), 'utf8');
+  assert.doesNotMatch(shell, /přispívá|z něj bere/);
+  assert.match(shell, /veta: 'Jak přerozdělení vyrovnává složení kmene a příjmy plátců/);
 });

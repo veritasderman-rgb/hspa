@@ -22650,7 +22650,7 @@ select.zpc-note{color:var(--ink);background:var(--paper);border:1px solid var(--
 .zpc-sit .zpv-cell{min-width:64px}
 .zpc-sit-acc{margin-top:12px}
 .zpc-sit-lbl{display:inline-flex;flex-wrap:wrap;gap:8px;align-items:center;font-family:var(--sans);font-size:13.5px;margin:4px 0 10px}
-.zpc-sit-select{color:var(--ink);background:var(--paper);border:1px solid var(--rule2);border-radius:4px;padding:4px 8px;font:inherit;min-height:32px;max-width:100%}
+.zpc-sit-select{color:var(--ink);background:var(--paper);border:1px solid var(--rule2);border-radius:4px;padding:4px 8px;font:inherit;font-family:var(--sans);font-size:13.5px;min-height:32px;max-width:100%}
 /* stránka Peníze (A1.6): box „Jak systém funguje“, ovladače grafů, překreslení bez skoku */
 .zpc-jak{border-left:3px solid var(--ink);padding:6px 0 6px 14px;margin:0 0 22px;max-width:80ch;font-family:var(--sans);font-size:14px;line-height:1.55;color:var(--ink)}
 .zpc-jak p{margin:0 0 6px}
@@ -22685,6 +22685,8 @@ select.zpc-note{color:var(--ink);background:var(--paper);border:1px solid var(--
 .zpc-inst-cit{margin:0;padding-left:1.1em;font-family:var(--sans);font-size:13px}
 .zpc-inst-cit li{margin:0 0 6px}
 .zpc-inst-cit q{color:var(--ink-mut)}
+/* dlouhé URL a citace v rozbalených blocích nesmí roztáhnout stránku (390 px) */
+.zpc-inst-cit,.zpc-inst-cit li,.zpc-inst-cit a,.zpc-inst-cit q,.zpc-acc-body,.zpc-acc-body p,.zpc-acc-body li,.zpc-acc-body a{overflow-wrap:anywhere}
 .zpc-ov-more-wrap{margin:6px 0 18px}
 .zpc-prog-list,.zpc-dost-list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
 .zpc-acc .zpc-acc-body .zpc-prog-list,.zpc-acc .zpc-acc-body .zpc-dost-list{padding-left:0}
@@ -22848,11 +22850,14 @@ a.zpc-ov-mini{text-decoration:none;box-sizing:border-box}
 .zpv-area > .zpv-na { position: absolute; left: 0; top: 50%; transform: translateY(-50%); white-space: nowrap; }
 .zpv-bar { position: absolute; left: 0; top: calc(50% - 10px); width: var(--w); height: 20px; border-radius: 0 4px 4px 0; background: var(--zpv-mark-color, var(--ink)); }
 .zpv-val { position: absolute; left: calc(var(--w) + 6px); top: 50%; transform: translateY(-50%); white-space: nowrap; font-weight: 600; line-height: 1.2; }
-.zpv-has-refline .zpv-val { padding: 0 3px; margin-left: -3px; background: var(--zpv-surface); }
-.zpv-ref { position: absolute; top: 0; bottom: 0; pointer-events: none; }
+.zpv-ref { position: absolute; top: 0; bottom: 0; z-index: 0; pointer-events: none; }
+/* popisek hodnoty vždy nad referenční čárou, na papírovém pozadí (čára pod popisky) */
+.zpv-has-refline .zpv-val { z-index: 2; padding: 0 3px; margin-left: -3px; background: var(--paper); }
 .zpv-ref--below { left: 0; width: var(--w); background: color-mix(in srgb, var(--ink) 8%, transparent); }
 .zpv-ref--above { left: var(--w); right: 0; background: color-mix(in srgb, var(--ink) 8%, transparent); }
 .zpv-ref--line { left: var(--w); width: 0; border-left: 1px solid var(--ink-mut); }
+/* pás mezi dvěma hodnotami (ref.kind 'zone-band'): --x začátek, --w šířka */
+.zpv-ref--band { left: var(--x); width: var(--w); background: color-mix(in srgb, var(--ink) 12%, transparent); }
 /* rankedBars allowNegative: nulová osa --x, záporné bary doleva, hodnota vlevo od špičky */
 .zpv-has-neg .zpv-bar { left: var(--x); }
 .zpv-bar--neg { border-radius: 4px 0 0 4px; }
@@ -22861,6 +22866,14 @@ a.zpc-ov-mini{text-decoration:none;box-sizing:border-box}
 .zpv-has-neg.zpv-vw-s .zpv-area { margin-left: 4.5em; }
 .zpv-has-neg.zpv-vw-m .zpv-area { margin-left: 6.5em; }
 .zpv-has-neg.zpv-vw-l .zpv-area { margin-left: 8.5em; }
+/* úzký displej: popisek a hodnota nahoře v jednom řádku, bar pod nimi na plnou šířku
+   (rozbíhavé bary jinak zůstanou s ≈ 40 % šířky) */
+@media (max-width: 640px) {
+  .zpv-has-neg .zpv-row { position: relative; grid-template-columns: minmax(0, 1fr); row-gap: 0; padding: 4px 0; }
+  .zpv-has-neg.zpv-vw-s .zpv-area, .zpv-has-neg.zpv-vw-m .zpv-area, .zpv-has-neg.zpv-vw-l .zpv-area { margin: 2px 0 0; min-height: 22px; }
+  .zpv-has-neg .zpv-val, .zpv-has-neg .zpv-val--neg { top: auto; bottom: 100%; left: auto; right: 0; transform: none; margin: 0 0 3px; }
+  .zpv-has-neg .zpv-label { padding-right: 6.5em; }
+}
 
 /* dumbbell */
 .zpv-dbplot { --zpv-labw: 11em; }
@@ -22879,6 +22892,24 @@ a.zpc-ov-mini{text-decoration:none;box-sizing:border-box}
 @container (max-width: 719px) {
   .zpv-seg-lab--s { display: none; }
 }
+
+/* stackedRows: řádek = pojišťovna, v řádku 100% pruh se segmenty; jedna legenda nahoře.
+   Barvu segmentu nese data-slot (část celku), ne pojišťovna → „Moje pojišťovna“ a „Porovnat“
+   zvýrazní řádek, segmenty se nepřebarvují ani nedimují. */
+.zpv-stackplot { display: flex; flex-direction: column; gap: 6px; container-type: inline-size; }
+.zpv-stackplot .zpv-legend { margin: 0 0 4px; }
+.zpv-srow { display: grid; grid-template-columns: var(--zpv-labw, 6.5em) minmax(0, 1fr); column-gap: 10px; align-items: center; min-height: 30px; }
+.zpv-srow .zpv-segbar { height: 24px; }
+main .zpv-stacked .zpv-seg.zpv-mark[data-zp],
+main[data-moje-zp] .zpv-stacked .zpv-seg.zpv-mark[data-zp],
+main[data-porovnat-zp] .zpv-stacked .zpv-seg.zpv-mark[data-zp],
+main[class*="zpi-hover-"] .zpv-stacked .zpv-seg.zpv-mark[data-zp] { --zpv-mark-color: var(--zpv-zp); opacity: 1; }
+main .zpv-stacked .zpv-seg.zpv-mark.is-porovnat[data-zp],
+main[data-porovnat-zp] .zpv-stacked .zpv-seg.zpv-mark.is-porovnat[data-zp] { background: var(--zpv-zp); box-shadow: none; color: var(--zpv-on, var(--paper)); }
+.zpv-stacked .zpv-srow.is-moje .zpv-label, .zpv-stacked .zpv-srow.is-porovnat .zpv-label { font-weight: 700; }
+main[data-moje-zp] .zpv-stacked .zpv-srow:not(.is-moje) { opacity: .55; }
+main[data-porovnat-zp] .zpv-stacked .zpv-srow:not(.is-moje):not(.is-porovnat) { opacity: .55; }
+@media (prefers-reduced-motion: reduce) { main .zpv-stacked .zpv-srow { transition: none; } }
 
 /* legenda (pořadí = pořadí marků; čísla neopakuje) */
 .zpv-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 10px 0 0; padding: 0; list-style: none; font-size: 12.5px; line-height: 1.5; }
@@ -22984,6 +23015,15 @@ a.zpc-ov-mini{text-decoration:none;box-sizing:border-box}
 .zpv-tone-good { color: var(--good); }
 .zpv-tone-warn { color: var(--warn); }
 .zpv-tone-bad { color: var(--bad); }
+/* neutrální inventář (coverageMatrix tone 'neutral'): žádné stavové barvy, ikony i podklad v inkoustu */
+.zpv-covtable[data-tone="neutral"] .zpv-cov[data-state] { background: transparent; }
+.zpv-covtable[data-tone="neutral"] .zpv-cov[data-state="ne"] { color: var(--ink-mut); }
+.zpv-covtable[data-tone="neutral"] .zpv-cov-ic, .zpv-legend[data-tone="neutral"] .zpv-cov-ic { color: var(--ink); font-weight: 400; }
+.zpv-covtable[data-tone="neutral"] .zpv-cov-ic[class*="--"], .zpv-legend[data-tone="neutral"] .zpv-cov-ic[class*="--"] { font-size: 0; width: 12px; margin-right: 6px; vertical-align: middle; }
+.zpv-cov-ic--full::before, .zpv-cov-ic--part::before, .zpv-cov-ic--none::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--ink); }
+.zpv-cov-ic--full::before { background: var(--ink); }
+.zpv-cov-ic--part::before { background: linear-gradient(90deg, var(--ink) 50%, transparent 50%); }
+.zpv-covtable[data-tone="neutral"] .zpv-cov[data-state="na"] .zpv-cov-ic { color: var(--ink-mut); }
 
 @media (max-width: 480px) {
   .zpv-barlist { --zpv-labw: 5.5em; }

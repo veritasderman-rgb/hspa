@@ -41,6 +41,7 @@ test('shell: devět stránek v pořadí záložek, soubory existují, podstránk
   assert.equal(zpStrankaById('aplikace').label, 'Aplikace a servis');
   assert.match(zpStrankaById('aplikace').veta, /klientský servis, stížnosti na dostupnost/);
   assert.equal(zpStrankaById('kmen').href, 'pojistovny-kmen.html');
+  assert.equal(zpStrankaById('kmen').label, 'Kmen', 'záložka se jmenuje Kmen (hospodaření je na Penězích)');
   assert.equal(zpStrankaById('penize').href, 'pojistovny-penize.html');
   assert.equal(zpStrankaById('penize').label, 'Peníze');
   assert.equal(zpStrankaById('nic'), null);
@@ -174,7 +175,10 @@ test('přehled: buildPrehled — tři dlaždice KPI, čtyři grafy (podíl, sald
   assert.equal(count(out.hero, /class="zpv-tile"/g), 3);
   assert.doesNotMatch(out.hero, /na pojištěnce/);
   assert.equal(count(out.grafy, /<div class="zpc-ov-tile"/g), 4);
-  assert.deepEqual([...out.grafy.matchAll(/data-tema="(\w+)"/g)].map((m) => m[1]), ['kmen', 'penize', 'kmen', 'kmen']);
+  assert.deepEqual([...out.grafy.matchAll(/data-tema="(\w+)"/g)].map((m) => m[1]), ['kmen', 'penize', 'kmen', 'penize']);
+  // Náklady a Rezervy vedou na Peníze s kotvou (hospodaření), ne na Kmen
+  assert.match(out.grafy, /href="pojistovny-penize\.html#hospodareni-rady">Celé téma/);
+  assert.match(out.grafy, /href="pojistovny-penize\.html#hospodareni-2024">Celé téma/);
   assert.match(out.grafy, /zpv-segmented/);
   assert.match(out.grafy, /Rezervy na konci roku 2026/);
   assert.match(out.grafy, /Náklady na zdravotní služby na pojištěnce/);
@@ -189,7 +193,7 @@ test('přehled: buildPrehled — tři dlaždice KPI, čtyři grafy (podíl, sald
   assert.doesNotMatch(out.grafy, /zpv-heat|zpv-lines/, 'žádná heatmapa ani index kmene na přehledu');
   assert.doesNotMatch(out.grafy, /<table class="zpv-matrix zpv-heat/);
   assert.equal(count(out.grafy, /class="zpc-ov-more"/g), 4);
-  assert.match(out.grafy, /Celé téma<span class="sr-only">: Kmen a hospodaření<\/span>/);
+  assert.match(out.grafy, /Celé téma<span class="sr-only">: Kmen<\/span>/);
   assert.equal(count(out.grafy, /data-zp="111"/g) > 3, true, 'marky nesou data-zp');
   assert.match(out.semafor, /zatím nehodnoceno/);
   // rozcestník: 6 velkých karet pro pojištěnce + 2 menší redakční v samostatném řádku
@@ -356,9 +360,12 @@ test('přehled: karta s „Porovnat s“ — dvě dl vedle sebe a rozdíl, bez p
   assert.match(rozdil, /<dt>Pojištěnců \(CRP 2025\)<\/dt><dd><span class="zpc-ov-diff-v">[+−][\d,]+ mil\./);
   assert.match(h, /href="pojistovna\.html\?zp=111&amp;porovnat=205"/);
   assert.doesNotMatch(h, /undefined|NaN|\[object/);
-  // nečíselný řádek (chybí aplikace) → pomlčka, ne vymyšlené číslo
-  const bezApp = ovKartaHtml({ ...moje, app: null }, por);
-  assert.match(bezApp.match(/<dl class="zpc-ov-diff">.*?<\/dl>/)[0], /<dt>Funkce aplikace<\/dt><dd><span class="zpc-na" title="rozdíl nelze spočítat">—<\/span>/);
+  // součet funkcí aplikace v kartě není: „kdo umí víc“ nic neříká
+  assert.doesNotMatch(h, /Funkce aplikace|funkcí<|\+\d+ funkc/);
+  assert.doesNotMatch(jedna, /Funkce aplikace/);
+  // nečíselný řádek (chybí rezerva) → pomlčka, ne vymyšlené číslo
+  const bezRez = ovKartaHtml({ ...moje, rezerva: null }, por);
+  assert.match(bezRez.match(/<dl class="zpc-ov-diff">.*?<\/dl>/)[0], /<dt>Rezerva konec 2026<\/dt><dd><span class="zpc-na" title="rozdíl nelze spočítat">—<\/span>/);
 });
 
 test('přehled: paintKarta reaguje na obě události (Moje i Porovnat s)', () => {

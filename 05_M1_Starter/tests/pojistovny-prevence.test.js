@@ -54,7 +54,11 @@ test('buildFunkceSouhrn: kolik pojišťoven funkci má (ano = 1, částečně = 
   const a = { funkce: [{ id: 'x', label: 'X' }], aplikace: [{ kod: '111', zp: 'VZP', funkce: { x: true } }, { kod: '201', zp: 'VoZP', funkce: { x: 'partial' } }, { kod: '209', zp: 'ZPŠ', funkce: { x: null } }] };
   assert.equal(buildFunkceSouhrn(a).items[0].value, 1.5);
   assert.equal(buildFunkceSouhrn(a).max, 2);
-  assert.deepEqual(buildFunkceSouhrn(null), { items: [], max: 0 });
+  assert.deepEqual(buildFunkceSouhrn(null), { items: [], max: 0, bez: [] });
+  assert.deepEqual(f.bez, ['ZPŠ'], 'aplikace bez známých funkcí (do sub grafu)');
+  // popisky funkcí nejdou přes bary: ≤ 22 znaků (nazev_kratky z dat, jinak ořez), plný název v tooltipu
+  assert.ok(f.items.every((i) => i.label.length <= 22), f.items.map((i) => i.label).join(' | '));
+  assert.match(f.items.find((i) => i.key === 'komunikace_s_pojistovnou').tip, /^Komunikace s pojišťovnou: /);
   const html = rankedBars(f.items, { title: 'Kolik pojišťoven funkci má', maxv: f.max, dec: 1 });
   assert.match(html.slice(html.lastIndexOf('<div class="zpv-row"')), /eDoklady|eRecept/, 'dole jsou funkce, které chybějí nejčastěji');
 });
@@ -522,4 +526,16 @@ test('validátor: vyhodnoceni — neznámá oblast, prázdná pravidla, chyběj�
   assert.ok(validateAll(b).errors.some((e) => /vyhodnoceni\.pravidla/.test(e)));
   const c = structuredClone(ds); delete c.otazky.sady[0].vyhodnoceni.vstup;
   assert.ok(validateAll(c).errors.some((e) => /vyhodnoceni\.vstup/.test(e)));
+});
+
+test('renderApps: matice funkcí a kritérií bez součtu (score: false), sub grafu „kolik pojišťoven“ říká, které aplikace nemají známé funkce', () => {
+  const js = fs.readFileSync(path.join(ROOT, 'src', 'pojistovny-prevence.js'), 'utf8');
+  const apps = js.slice(js.indexOf('export function renderApps'), js.indexOf('// ---------------------------------------------------------------- modul 4 (část)'));
+  assert.equal((apps.match(/score: false/g) || []).length, 2, 'matice funkcí i kritérií');
+  assert.doesNotMatch(apps, /scoreLabel/);
+  assert.match(apps, /Součet za aplikace se známými funkcemi/);
+  assert.equal(buildFunkceSouhrn(APP).bez.join(), 'ZPŠ');
+  const m = buildAppMatrix(APP);
+  const html = dotMatrix(m.rows, m.cols, m.cell, { title: 'Funkce', score: false });
+  assert.doesNotMatch(html, /role="meter"|zpv-scorehead/);
 });

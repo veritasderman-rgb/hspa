@@ -264,7 +264,7 @@ export function buildProgramyMatrix(SP) {
   return { rows, cols, cell, opts: {
     title: 'Má pojišťovna program pro poskytovatele s kritériem…',
     sub: 'Ano = aspoň jeden bonifikační nebo kvalitativní program na webu či ve výroční zprávě sleduje dané kritérium. Počet programů se nesčítá do pořadí a existence programu není jeho účinek.',
-    scoreLabel: 'kritérií', scoreWord: 'kritérií', source: SRC_PROG, rowHeader: 'Pojišťovna',
+    score: false, source: SRC_PROG, rowHeader: 'Pojišťovna',
   } };
 }
 
@@ -325,7 +325,7 @@ export function buildDostupnostMatrix(D, { kod = null } = {}) {
   return { rows, cols, cell, opts: {
     title: 'Co pojišťovny veřejně publikují o dostupnosti péče',
     sub: 'Inventář, ne hodnocení dostupnosti: ano = konkrétní údaj se zdrojem, částečně = neúplný nebo neaktuální, nenalezeno = při uvedeném hledání nic. Stav ano u různých pojišťoven neříká totéž.',
-    labels: STAV_DOSTUPNOST, source: SRC_DOST, rowHeader: 'Pojišťovna',
+    labels: STAV_DOSTUPNOST, tone: 'neutral', source: SRC_DOST, rowHeader: 'Pojišťovna',
   } };
 }
 

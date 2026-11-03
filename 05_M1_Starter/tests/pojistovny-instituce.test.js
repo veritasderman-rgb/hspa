@@ -116,7 +116,7 @@ test('aparát bez dat: nic nepadá, věta „nedohledáno“', () => {
   assert.doesNotThrow(() => aparatHtml(prazdne));
 });
 
-test('smluvní programy: dotMatrix ZP × kritéria, ano = aspoň jeden program, bez dat „—“, scoreLabel „kritérií“', () => {
+test('smluvní programy: dotMatrix ZP × kritéria, ano = aspoň jeden program, bez dat „—“, bez součtu kritérií', () => {
   const m = buildProgramyMatrix(SP);
   assert.deepEqual(m.cols.map((c) => c.key), ['kvalita', 'dostupnost', 'e-health', 'prevence', 'ekonomika']);
   assert.equal(m.rows.length, 7);
@@ -124,11 +124,10 @@ test('smluvní programy: dotMatrix ZP × kritéria, ano = aspoň jeden program, 
   assert.equal(m.cell(vzp, { key: 'dostupnost' }), true);
   assert.equal(m.cell(vzp, { key: 'e-health' }), false, 'e-health nemá žádná ZP');
   for (const r of m.rows) assert.equal(m.cell(r, { key: 'e-health' }), false, r.label);
-  assert.equal(m.opts.scoreLabel, 'kritérií');
+  assert.equal(m.opts.score, false, 'počet kritérií se nesčítá do skóre');
   const html = dotMatrix(m.rows, m.cols, m.cell, m.opts);
   assert.equal(count(html, /<tr data-zp="/g), 7);
-  assert.match(html, /scorehead">kritérií</);
-  assert.match(html, /z 5 kritérií/);
+  assert.doesNotMatch(html, /scorehead|zpv-scorecell|role="meter"/);
   // ZP bez programů a s „nenalezeno“ = „—“, ne „ne“
   const SP2 = JSON.parse(JSON.stringify(SP));
   SP2.pojistovny[2].programy = [];
@@ -170,6 +169,12 @@ test('dostupnost: coverageMatrix 7 × 5, tooltip = co, nenalezeno místo „neuv
   assert.match(html, /data-tip="VZP ČR · Čekací doby: nenalezeno — Čekací doby na péči VZP nepublikuje/);
   assert.equal(STAV_DOSTUPNOST.ne, 'nenalezeno');
   assert.doesNotMatch(html, /zpv-cov-tx">neuvádí</);
+  // neutrální inventář: žádné stavové barvy ani ✕, jen ● ◐ ○ v inkoustu
+  assert.equal(m.opts.tone, 'neutral');
+  assert.doesNotMatch(html, /zpv-tone-(good|warn|bad)|✕|✓/);
+  assert.match(html, /<table class="zpv-matrix zpv-covtable" data-tone="neutral"/);
+  assert.ok(count(html, /zpv-cov-ic zpv-cov-ic--(?:full|part|none)" aria-hidden="true">[●◐○]</g) >= 35, 'každá buňka má neutrální ikonu');
+  assert.doesNotMatch(dostupnostKarta(D, '205'), /zpv-tone-(good|warn|bad)|✕/, 'profil také');
   const one = buildDostupnostMatrix(D, { kod: '205' });
   assert.equal(one.rows.length, 1);
   const rozpis = dostupnostZpHtml(D.pojistovny[0], D.sloupce);

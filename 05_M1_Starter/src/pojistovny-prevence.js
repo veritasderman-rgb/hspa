@@ -11,7 +11,7 @@
 //   buildFondParts, coverageState, buildCoverage, odhadniSkupinu.
 
 import { NA, esc, num, fmtKc, levelBadge, dot, li, set, short, datumCz, LEVELS, LEVEL_LABEL } from './pojistovny-shared.js';
-import { heatmap, dotMatrix, coverageMatrix, segmentedBar, dumbbell, rankedBars, isNum } from './zp-viz.js';
+import { heatmap, dotMatrix, coverageMatrix, segmentedBar, dumbbell, rankedBars, isNum, kratkyPopisek } from './zp-viz.js';
 import { initZpInteract, MOJE_EVENT } from './zp-interact.js';
 import { ZP_BY_KOD } from './zp-palette.js';
 
@@ -67,9 +67,11 @@ export function buildFunkceSouhrn(a) {
     const chybi = apps.filter((x) => x.funkce?.[f.id] === false).map((x) => zkratka(x.kod));
     const tip = `${f.label}: ${fmtKc(value, value % 1 ? 1 : 0)} z ${apps.length} pojišťoven`
       + (chybi.length ? ` · chybí: ${chybi.join(', ')}` : '');
-    return { key: f.id, label: f.label, value, tip };
+    // popisek zkrácený na ≤ 22 znaků (nazev_kratky z dat, jinak ořez), plný název v tooltipu
+    return { key: f.id, label: f.nazev_kratky || kratkyPopisek(f.label, 22), value, tip };
   });
-  return { items, max: apps.length };
+  const bez = (a?.aplikace || []).filter((x) => !apps.includes(x)).map((x) => zkratka(x.kod));
+  return { items, max: apps.length, bez };
 }
 
 const STUPEN_DOT = { 0: false, 1: 'partial', 2: true };
@@ -96,16 +98,16 @@ export function renderApps(a) {
   const source = (a.zdroje || []).map((z) => z.nazev).join('; ');
   set('zpAppMatrix', dotMatrix(m.rows, m.cols, m.cell, {
     title: 'Funkce aplikací pojišťoven',
-    sub: 'Plné kolečko = funkce je dostupná. Sloupec vpravo ukazuje, kolik z deseti funkcí aplikace má.',
-    scoreLabel: 'n/10',
+    sub: 'Plné kolečko = funkce je dostupná, poloviční = částečně. Součet za aplikaci se nepočítá: kolik funkcí aplikace má, neříká nic o tom, jak se používá.',
+    score: false,
     source,
     rowHeader: 'Pojišťovna · aplikace',
   }));
   const fs = buildFunkceSouhrn(a);
   set('zpAppFunkce', rankedBars(fs.items, {
     title: 'Kolik pojišťoven funkci má',
-    sub: 'Součet za sedm aplikací (částečně = ½); dole jsou funkce, které chybějí nejčastěji.',
-    unit: '', dec: 1, maxv: fs.max, source,
+    sub: `Součet za aplikace se známými funkcemi${fs.bez.length ? ` (${fs.bez.join(', ')} nedohledáno)` : ''}, částečně = ½; dole jsou funkce, které chybějí nejčastěji.`,
+    unit: '', dec: 1, maxv: fs.max, labw: 13, source,
     sortNote: 'Řazeno podle počtu pojišťoven, nejde o hodnocení.',
   }));
   set('zpAppCap', 'Počty uživatelů uvádějí ve výročních zprávách jen VZP a OZP; u ostatních je nutný dotaz. U ZPŠ nejsou funkce známy.');
@@ -118,7 +120,7 @@ export function renderApps(a) {
       `<p class="zpc-note">Návrh ${km.cols.length} kritérií (zdroj: ${esc(a.kriteria_privetivosti.zdroj || '')}), stav: ${esc(km.stav || 'návrh')}. Škála: ${skala}. ${km.hodnoceno ? '' : 'Zatím nehodnoceno, hodnoty doplní IT expert po schválení kritérií.'}</p>`
       + dotMatrix(km.rows, km.cols, km.cell, {
         title: 'Přívětivost aplikací (návrh kritérií, zatím nehodnoceno)',
-        scoreLabel: `n/${km.cols.length}`,
+        score: false,
         source: a.kriteria_privetivosti.zdroj || '',
         rowHeader: 'Pojišťovna',
       }));

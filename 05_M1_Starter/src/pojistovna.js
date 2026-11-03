@@ -45,7 +45,7 @@ export function zpZUrl(search) {
 /** Titulek stránky: „VZP ČR — profil pojišťovny · Srovnávač pojišťoven“. */
 export function profilTitle(kod) {
   const z = ZP_BY_KOD[kod];
-  return z ? `${z.zkratka} — profil pojišťovny · Srovnávač pojišťoven` : 'Profil pojišťovny — Srovnávač pojišťoven, pracovní verze · HSPA Monitor';
+  return z ? `${z.zkratka} — profil pojišťovny · Srovnávač pojišťoven, pracovní verze · HSPA Monitor` : 'Profil pojišťovny — Srovnávač pojišťoven, pracovní verze · HSPA Monitor';
 }
 
 // ---------------------------------------------------------------- klíčová čísla
@@ -150,8 +150,8 @@ export function aplikaceKarta(A, kod) {
   const rows = m.rows.filter((r) => String(r.kod) === String(kod));
   if (!rows.length) return NEDOHLEDANO('Aplikace této pojišťovny není v datech.');
   return dotMatrix(rows, m.cols, m.cell, {
-    title: 'Funkce aplikace', sub: 'Plné kolečko = funkce je dostupná. Sloupec vpravo ukazuje, kolik z deseti funkcí aplikace má.',
-    scoreLabel: 'n/10', source: (A.zdroje || []).map((x) => x.nazev).join('; '), rowHeader: 'Pojišťovna · aplikace',
+    title: 'Funkce aplikace', sub: 'Plné kolečko = funkce je dostupná, poloviční = částečně.',
+    score: false, source: (A.zdroje || []).map((x) => x.nazev).join('; '), rowHeader: 'Pojišťovna · aplikace',
   });
 }
 
