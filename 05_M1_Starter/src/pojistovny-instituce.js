@@ -124,13 +124,13 @@ export function organyTableHtml(I) {
       ? `${esc(r.reditel.funkce)}<small>jmenuje ${esc(r.reditel.jmenuje || 'nedohledáno')}${r.reditel.obdobi ? `, na ${esc(r.reditel.obdobi)} roky` : ''}</small>`
       : NA;
     return `<tr data-zp="${esc(r.kod)}"><th scope="row" class="zpc-txt">${dot(r.kod)}${esc(r.zkratka)}</th>`
-      + `<td class="zpc-txt">${r.zakon ? esc(r.zakon) : NA}</td>`
-      + `<td class="zpc-txt">${vznik}</td>`
-      + `<td class="zpc-txt">${orgCell(r.spravniRada)}</td>`
-      + `<td class="zpc-txt">${orgCell(r.dozorciRada)}</td>`
-      + `<td class="zpc-txt">${rd}</td>`
-      + `<td class="zpc-txt">${r.dohled ? esc(r.dohled) : NA}</td>`
-      + `<td class="zpc-txt">${r.clenstvi.length ? esc(r.clenstvi.join(', ')) : NA}</td></tr>`;
+      + `<td class="zpc-txt" data-label="Zákon">${r.zakon ? esc(r.zakon) : NA}</td>`
+      + `<td class="zpc-txt" data-label="Vznik">${vznik}</td>`
+      + `<td class="zpc-txt" data-label="Správní rada">${orgCell(r.spravniRada)}</td>`
+      + `<td class="zpc-txt" data-label="Dozorčí rada">${orgCell(r.dozorciRada)}</td>`
+      + `<td class="zpc-txt" data-label="Ředitel">${rd}</td>`
+      + `<td class="zpc-txt" data-label="Dohled">${r.dohled ? esc(r.dohled) : NA}</td>`
+      + `<td class="zpc-txt" data-label="Členství">${r.clenstvi.length ? esc(r.clenstvi.join(', ')) : NA}</td></tr>`;
   }).join('');
   return '<div class="zpc-tbl zpc-inst-tbl" role="region" tabindex="0" aria-label="Zákon, vznik a orgány sedmi pojišťoven (tabulka, posuvná)">'
     + `<table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;

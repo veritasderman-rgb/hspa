@@ -181,23 +181,23 @@ export function opendataHtml(od) {
 const fmtN = (v) => (v == null ? null : new Intl.NumberFormat('cs-CZ').format(Math.round(v)));
 
 /**
- * Řádky tabulky stížností: pojišťovna × roky; na 100 tis. pojištěnců jen tam, kde definice
- * pokrývá všechna podání k dostupnosti (VZP ČR, ČPZP) a kde je známý průměrný kmen (MZ 2024).
+ * Řádky tabulky stížností: pojišťovna × roky. Podání k dostupnosti se nepřepočítávají (každá ZP
+ * počítá něco jiného); na 100 tis. pojištěnců je jen § 16a zák. 106/1999 Sb. (stejná definice u všech)
+ * za rok kmene MZ (rok_hospodareni) a jen tam, kde je počet i kmen známý.
  */
 export function buildStiznosti(st, poj) {
   const kmen = new Map((poj?.pojistovny || []).map((z) => [z.kod, z.hospodareni?.pocet_pojistencu?.hodnota ?? null]));
   const roky = [...new Set((st?.pojistovny || []).flatMap((z) => (z.roky || []).map((r) => r.rok)))].sort();
-  const plne = new Set(['111', '205']);
   const rows = ZP.map((z) => {
     const r = (st?.pojistovny || []).find((x) => String(x.kod) === z.kod);
     const byRok = Object.fromEntries((r?.roky || []).map((y) => [y.rok, y]));
     const posledni = (r?.roky || []).filter((y) => y.podani_dostupnost != null).at(-1) || null;
     // přepočet na kmen ze stejného roku, jako je kmen MZ (rok_hospodareni); jinak nic
     const rokKmen = poj?.rok_hospodareni ?? null;
-    const proKmen = rokKmen != null && byRok[rokKmen]?.podani_dostupnost != null ? byRok[rokKmen] : null;
+    const v16 = rokKmen != null ? byRok[rokKmen]?.stiznosti_16a : null;
     const n = kmen.get(z.kod);
-    const na100k = proKmen && plne.has(z.kod) && n ? Math.round(proKmen.podani_dostupnost / n * 100000) : null;
-    return { kod: z.kod, zkratka: z.zkratka, definice: r?.definice || '', byRok, posledni, na100k, s16a: roky.map((rok) => byRok[rok]?.stiznosti_16a ?? null), _r: r || null };
+    const s16a100k = v16 != null && n ? v16 / n * 100000 : null;
+    return { kod: z.kod, zkratka: z.zkratka, definice: r?.definice || '', byRok, posledni, s16a100k, s16a: roky.map((rok) => byRok[rok]?.stiznosti_16a ?? null), _r: r || null };
   });
   return { roky, rows };
 }
@@ -206,23 +206,23 @@ export function stiznostiHtml(st, poj) {
   if (!st || !Array.isArray(st.pojistovny)) return '<p class="zpc-note">Data o stížnostech zatím nejsou k dispozici.</p>';
   const { roky, rows } = buildStiznosti(st, poj);
   const head = roky.map((r) => `<th scope="col">${r}</th>`).join('');
-  const table = '<div class="zpc-tbl" role="region" tabindex="0" aria-label="Podání pojištěnců k dostupnosti péče podle výročních zpráv (tabulka, posuvná)"><table><thead><tr><th scope="col" class="zpc-txt">Pojišťovna</th>' + head + '<th scope="col">Na 100 tis. pojištěnců</th><th scope="col" class="zpc-txt">Co pojišťovna počítá</th><th scope="col" class="zpc-txt">Nejčastěji</th></tr></thead><tbody>'
+  const table = '<div class="zpc-tbl" role="region" tabindex="0" aria-label="Podání pojištěnců k dostupnosti péče podle výročních zpráv (tabulka, posuvná)"><table><thead><tr><th scope="col" class="zpc-txt">Pojišťovna</th>' + head + '<th scope="col" class="zpc-txt">Co pojišťovna počítá</th><th scope="col" class="zpc-txt">Nejčastěji</th></tr></thead><tbody>'
     + rows.map((r) => `<tr data-zp="${esc(r.kod)}"><th scope="row" class="zpc-txt">${dot(r.kod)}${esc(r.zkratka)}</th>`
       + roky.map((rok) => { const y = r.byRok[rok]; return `<td>${y ? (y.podani_dostupnost != null ? fmtN(y.podani_dostupnost) : '<span class="zpc-na" title="výroční zpráva počet neuvádí">neuvádí</span>') : NA}</td>`; }).join('')
-      + `<td>${r.na100k != null ? `${fmtN(r.na100k)}<small>podání i kmen ${esc(String(poj?.rok_hospodareni ?? ''))}</small>` : '<span class="zpc-na" title="jiná definice, nepřepočítává se">—</span>'}</td>`
       + `<td class="zpc-txt">${esc(r.definice)}</td><td class="zpc-txt">${esc((r.posledni?.nejcastejsi || r._r?.roky?.at(-1)?.nejcastejsi || []).join(', '))}</td></tr>`).join('')
     + '</tbody></table></div>';
   const mv = rows.find((r) => r.kod === '211');
   const mvRadky = mv ? Object.values(mv.byRok).filter((y) => y.podani_celkem != null) : [];
   const mvHtml = mvRadky.length ? `<p class="zpc-note"><b>ZP MV ČR</b> jako jediná uvádí i celkový počet podání, kolik z nich bylo oprávněných a jak dlouho vyřízení trvalo: ${mvRadky.map((y) => `${y.rok}: ${fmtN(y.podani_celkem)} podání, ${y.opravnene_stiznosti} oprávněných, průměrně ${String(y.doba_vyrizeni_dni).replace('.', ',')} dne`).join('; ')}.</p>` : '';
-  const s16 = '<div class="zpc-tbl" role="region" tabindex="0" aria-label="Stížnosti podle § 16a zákona 106/1999 Sb. (tabulka, posuvná)"><table><thead><tr><th scope="col" class="zpc-txt">Pojišťovna</th>' + head + '</tr></thead><tbody>'
-    + rows.map((r) => `<tr data-zp="${esc(r.kod)}"><th scope="row" class="zpc-txt">${dot(r.kod)}${esc(r.zkratka)}</th>${r.s16a.map((v) => `<td>${v == null ? NA : v}</td>`).join('')}</tr>`).join('') + '</tbody></table></div>';
+  const s16 = '<div class="zpc-tbl" role="region" tabindex="0" aria-label="Stížnosti podle § 16a zákona 106/1999 Sb. (tabulka, posuvná)"><table><thead><tr><th scope="col" class="zpc-txt">Pojišťovna</th>' + head + `<th scope="col">Na 100 tis. pojištěnců, ${esc(String(poj?.rok_hospodareni ?? ''))}</th></tr></thead><tbody>`
+    + rows.map((r) => `<tr data-zp="${esc(r.kod)}"><th scope="row" class="zpc-txt">${dot(r.kod)}${esc(r.zkratka)}</th>${r.s16a.map((v) => `<td>${v == null ? NA : v}</td>`).join('')}<td>${r.s16a100k != null ? esc(new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 }).format(r.s16a100k)) : NA}</td></tr>`).join('') + '</tbody></table></div>';
   const detail = rows.filter((r) => r._r).map((r) => `<details class="zpc-acc" data-zp="${esc(r.kod)}"><summary>${dot(r.kod)}${esc(r.zkratka)}<span class="zpc-n">${(r._r.roky || []).length} VZ</span></summary><div class="zpc-acc-body"><ul>`
     + (r._r.roky || []).map((y) => `<li><b>${y.rok}</b> · ${esc(y.poznamka || '')} <small class="zpc-na">(${esc(y.soubor)}, ř. ${y.radek})</small></li>`).join('') + '</ul></div></details>').join('');
   return `<p class="zpc-note">Stav k ${esc(st.stav_k || '')}. Hodnoty jsou přepsané z kapitoly 4.6.1 výročních zpráv (místní a časová dostupnost podle § 40 zákona č. 48/1997 Sb.); „neuvádí“ = zpráva má jen slovní popis.</p>`
     + table + mvHtml
     + `<details class="zpc-acc"><summary>Proč se čísla nedají seřadit<span class="zpc-n">${(st.srovnatelnost || []).length}</span></summary><div class="zpc-acc-body"><ul>${li(st.srovnatelnost)}</ul></div></details>`
-    + '<h4 class="zpc-inst-h4">Stížnosti podle § 16a zákona č. 106/1999 Sb. (jediná položka se stejnou definicí u všech)</h4>' + s16
+    + '<h4 class="zpc-inst-h4">Stížnosti podle § 16a zákona č. 106/1999 Sb. (jediná položka se stejnou definicí u všech)</h4>'
+    + '<p class="zpc-note">Jen tady dává přepočet na 100 tisíc pojištěnců smysl: definice je u všech sedmi stejná a kmen je průměrný počet pojištěnců podle Hodnocení MZ. Při jednotkách stížností je výsledek hodně náhodný, proto ho nečtěte jako hodnocení.</p>' + s16
     + `<details class="zpc-acc"><summary>Citace a řádky ve výročních zprávách<span class="zpc-n">${rows.filter((r) => r._r).length}</span></summary><div class="zpc-acc-body">${detail}</div></details>`;
 }
 
