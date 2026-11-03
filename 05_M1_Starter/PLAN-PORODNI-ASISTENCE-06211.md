@@ -1,7 +1,11 @@
 # PLAN · Poporodní návštěvy porodní asistentky (výkon 06211) v datech
 
-> **Stav:** analýza hotová, návrh čeká na schválení vlastníkem. Nic z níže
-> navrženého zatím není ve webu.
+> **Stav:** návrh schválen vlastníkem 3. 11. 2026. Hotovo: indikátor A
+> (`porodni_asistentka_navstevy_porody`, karta + kontrakt + `indikator-*.html`,
+> mapování na Zdraví 2035 dílčí cíl 2.7.7) a díl 1 série jako draft ve frontě
+> (`clanek-porodni-asistentka-vyuziti-naroku-2026.html`, 4 tvrzení v `claims.json`).
+> Zbývá: indikátor B, krajský dataset C, per-ZP řez D, díly 2–4, série
+> v `series.json` (až budou aspoň dva díly), doplňující dotaz na ÚZIS (§ 6).
 > **Vstupní data:** odpověď ÚZIS **UZIS/080507/2026** (vyřízeno 30. 10. 2026),
 > normalizovaná v [`ingest/manual/uzis-06211/`](ingest/manual/uzis-06211/README.md).
 > **Navazuje na:** [`clanek-porodni-asistentky-sestinedeli.html`](clanek-porodni-asistentky-sestinedeli.html)
