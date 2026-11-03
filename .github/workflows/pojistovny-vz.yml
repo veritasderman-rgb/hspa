@@ -12,11 +12,17 @@ name: Pojišťovny — výroční zprávy
 # Výsledek jde jako PR (větev chore/pojistovny-vz-<rok>), nikdy přímo do main. Co není ve VZ nalezeno, se v PR
 # jen ukáže; opravu čísel dělá redakce (třída B) po porovnání s PDF.
 #
-# TŘÍDA C (GOVERNANCE.md § 3): nový workflow v .github/workflows/ smí zavést jen vydavatel. Před prvním
-# během proto: (1) schválit tento soubor, (2) v Settings → Actions → General zapnout „Allow GitHub Actions
-# to create and approve pull requests". PR otevřený výchozím GITHUB_TOKENem nespouští další workflow
-# (CI, pr-gate); chce-li vydavatel kontroly na tomto PR, musí je pustit ručně nebo workflow přepnout na
-# token aplikace/PAT.
+# TŘÍDA C (GOVERNANCE.md § 3): nový workflow v .github/workflows/ smí zavést jen vydavatel.
+#
+# Otevření PR má dvě cesty:
+#   a) výchozí GITHUB_TOKEN otevře PR sám — jen když je v Settings → Actions → General zapnuto
+#      „Allow GitHub Actions to create and approve pull requests". Takový PR nespouští další workflow
+#      (CI, pr-gate); kontroly na něm musí vydavatel pustit ručně.
+#   b) když to nastavení zapnuté není (první běh 2. 11. 2026 skončil chybou „GitHub Actions is not
+#      permitted to create or approve pull requests"), větev chore/pojistovny-vz-<rok> je přesto
+#      pushnutá a job místo PR otevře (nebo doplní) issue se štítkem `pojistovny-vz` a odkazem
+#      „Compare & pull request". PR pak otevře vydavatel jedním kliknutím; takový PR CI spouští normálně.
+#   Issues: write stačí i bez toho nastavení (stejně jako u refresh.yml a nightly-scan.yml).
 
 on:
   schedule:
@@ -26,6 +32,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write      # záložní cesta b): issue s odkazem na PR, když PR nejde otevřít
 
 concurrency:
   group: pojistovny-vz
@@ -82,6 +89,10 @@ jobs:
         run: echo "rok=$(date -u +%Y)" >> "$GITHUB_OUTPUT"
 
       - name: Otevřít PR
+        id: pr
+        # Selhání (nastavení repozitáře nedovoluje PR z GITHUB_TOKENu) job neshodí:
+        # větev je v tu chvíli už pushnutá a následující krok otevře issue s odkazem na PR.
+        continue-on-error: true
         uses: peter-evans/create-pull-request@v7
         with:
           branch: chore/pojistovny-vz-${{ steps.rok.outputs.rok }}
@@ -112,3 +123,75 @@ jobs:
             - [ ] Pokud pojišťovna VZ za nový rok vydala, doplnit ji do `ingest/mapping/pojistovny_vz.json` (`rucni_pdf`) a rutinu pustit znovu
 
             🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+      - name: Záložní cesta — issue s odkazem na PR, když PR nejde otevřít
+        if: steps.pr.outcome == 'failure'
+        uses: actions/github-script@v7
+        env:
+          BRANCH: chore/pojistovny-vz-${{ steps.rok.outputs.rok }}
+          ROK: ${{ steps.rok.outputs.rok }}
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const branch = process.env.BRANCH;
+            const rok = process.env.ROK;
+            const runUrl = `${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId}`;
+
+            // Krok PR selhal, a přitom větev na origin není: push neprošel (ruleset, síť, …), výsledky
+            // rutiny nejsou nikde publikované. To není „žádná změna“ (ta krok PR neshodí), takže job
+            // musí skončit chybou, ne tichým úspěchem.
+            let branchExists = true;
+            try {
+              await github.rest.repos.getBranch({ owner, repo, branch });
+            } catch (e) {
+              if (e.status === 404) branchExists = false; else throw e;
+            }
+            if (!branchExists) {
+              core.setFailed(`Krok „Otevřít PR“ selhal a větev ${branch} na origin není: výsledky rutiny se nepodařilo pushnout. Viz log kroku Otevřít PR: ${runUrl}`);
+              return;
+            }
+
+            // Už existující PR z té větve → jen upozornit, nic nezakládat.
+            const { data: prs } = await github.rest.pulls.list({ owner, repo, state: 'open', head: `${owner}:${branch}` });
+            if (prs.length) {
+              core.notice(`PR z větve ${branch} už existuje: ${prs[0].html_url}`);
+              return;
+            }
+
+            const compare = `${context.serverUrl}/${owner}/${repo}/compare/main...${encodeURIComponent(branch)}?expand=1`;
+            const title = `Výroční zprávy ${rok}: otevřít PR z větve ${branch}`;
+            const body = [
+              `Roční rutina \`pojistovny-vz.yml\` doběhla a pushla větev \`${branch}\`, ale PR z výchozího GITHUB_TOKENu`,
+              'otevřít nemohla (v Settings → Actions → General není zapnuto „Allow GitHub Actions to create and approve pull requests").',
+              '',
+              `**Otevřít PR jedním kliknutím:** ${compare}`,
+              '',
+              `Run: ${runUrl}`,
+              `Datum: ${new Date().toISOString()}`,
+              '',
+              '## Co je ve větvi',
+              '- `ingest/manual/pojistovny/vz-manifest.json` — co se stáhlo (URL, sha256, stav `ok` / `nenalezeno` / `chyba` / `bez-textu`)',
+              '- `ingest/manual/pojistovny/vz-text/<kod>-<rok>.txt` — normalizovaný text VZ',
+              '- `data/pojistovny-verifikace.json` — výsledek ověření každého čísla',
+              '',
+              '## Co s tím',
+              '1. Otevřít PR odkazem výše (PR otevřený člověkem spouští CI a pr-gate normálně).',
+              '2. Chcete-li, aby příště PR otevřela rutina sama, zapněte uvedené nastavení repozitáře.',
+              '',
+              '---',
+              '_Generated by [Claude Code](https://claude.ai/code)_',
+            ].join('\n');
+
+            const label = 'pojistovny-vz';
+            const { data: issues } = await github.rest.issues.listForRepo({ owner, repo, state: 'open', labels: label });
+            if (issues.length) {
+              await github.rest.issues.createComment({
+                owner, repo, issue_number: issues[0].number,
+                body: `Další běh rutiny (${new Date().toISOString()}): větev \`${branch}\` je aktualizovaná, PR otevřete zde: ${compare} · run: ${runUrl}\n\n---\n_Generated by [Claude Code](https://claude.ai/code)_`,
+              });
+              core.notice(`Doplněn komentář do issue #${issues[0].number}.`);
+            } else {
+              const { data: issue } = await github.rest.issues.create({ owner, repo, title, body, labels: [label] });
+              core.notice(`Založena issue #${issue.number}: ${issue.html_url}`);
+            }
+            core.warning('PR se z GITHUB_TOKENu otevřít nepodařilo; odkaz na otevření PR je v issue.');

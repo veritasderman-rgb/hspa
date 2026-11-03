@@ -293,7 +293,10 @@ správně přiřazeno**: číslo mohlo v dokumentu stát u jiné položky. Rutin
 **Kdy se spouští.** Jednou ročně po vydání VZ a ručně (`workflow_dispatch`), když pojišťovna zveřejní VZ
 později. Pokud pojišťovna VZ vydá a rutina ji nenajde, doplní se její URL do `rucni_pdf` v mapování.
 Výsledek přichází jako PR (větev `chore/pojistovny-vz-<rok>`); texty VZ a verifikaci commituje jen tato
-rutina, PDF zůstávají v cache.
+rutina, PDF zůstávají v cache. PR otevře výchozí token workflow jen tehdy, když je v nastavení repozitáře
+zapnuto „Allow GitHub Actions to create and approve pull requests“; jinak (první běh 2. 11. 2026) je větev
+přesto pushnutá a rutina otevře issue se štítkem `pojistovny-vz` a odkazem „Compare & pull request“, PR pak
+jedním kliknutím otevře vydavatel (a takový PR normálně spouští CI).
 
 ## 6. Role a třídy změn
 
