@@ -8,7 +8,7 @@ import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { parseTab3Segmenty } from '../ingest/lib/mz-hodnoceni.js';
 import { validateSegmenty, urovenV } from '../ingest/lib/validate-segmenty.js';
-import { run, priradId, normText, nazevRadku, slug, skupinaId, CACHE_DIR } from '../ingest/transform_pojistovny_segmenty.js';
+import { run, priradId, normText, nazevRadku, slug, skupinaId, CACHE_DIR, bezCasu } from '../ingest/transform_pojistovny_segmenty.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const FX = path.join(here, 'fixtures', 'mz-hodnoceni');
@@ -176,8 +176,8 @@ test('transform: výstup z cache je shodný s commitnutým souborem a běh je id
     assert.equal(b.zmeneno, false);
     assert.equal(b.data.generated_at, zapsano.generated_at);
     assert.equal(fs.readFileSync(out, 'utf8').includes(zapsano.generated_at), true);
-    const bez = (o) => { const x = structuredClone(o); delete x.generated_at; return x; };
-    assert.deepEqual(bez(zapsano), bez(real()));
+    // shoda s commitnutým souborem bez časových razítek: v CI je cache čerstvě stažená, takže stazeno_at se liší
+    assert.deepEqual(bezCasu(zapsano), bezCasu(real()));
   } finally {
     fs.rmSync(tmp, { recursive: true, force: true });
   }
