@@ -25,6 +25,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { validateHospodareniRady } from './lib/validate-hospodareni-rady.js';
+import { validatePrerozdeleni } from './lib/validate-prerozdeleni.js';
+import { validateInstituce } from './lib/validate-instituce.js';
+import { validateSmluvniProgramy } from './lib/validate-smluvni-programy.js';
+import { validateDostupnost } from './lib/validate-dostupnost.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -43,6 +48,12 @@ export const OPTIONAL_FILES = {
   verifikace: 'pojistovny-verifikace.json', // výstup scripts/pojistovny-verify.js (ověření čísel proti VZ)
   sit: 'pojistovny-sit.json',
   kmenMesicni: 'pojistovny-kmen-mesicni.json', // měsíční kmen odvozený z přerozdělení MZ (§ 4.3)
+  // PLAN-SROVNAVAC-ANALYTIK.md (A1–A3): řady z Hodnocení MZ, přerozdělení, instituce, smluvní programy, dostupnost
+  hospodareniRady: 'pojistovny-hospodareni-rady.json',
+  prerozdeleni: 'pojistovny-prerozdeleni.json',
+  instituce: 'pojistovny-instituce.json',
+  smluvniProgramy: 'pojistovny-smluvni-programy.json',
+  dostupnost: 'pojistovny-dostupnost.json',
 };
 export const STD_STAVY = ['dolozeno', 'placeholder-bez-vah', 'index-prerozdeleni'];
 
@@ -552,6 +563,22 @@ export function validateAll(datasets) {
     errors.push(...kr.errors);
     warnings.push(...kr.warnings);
     checks += kr.checks;
+  }
+
+  // Datasety analytického rozšíření (PLAN-SROVNAVAC-ANALYTIK.md): každý má vlastní validátor v ingest/lib/.
+  const dalsi = [
+    ['hospodareniRady', (d) => validateHospodareniRady(d, { pojistovny: P })],
+    ['prerozdeleni', (d) => validatePrerozdeleni(d)],
+    ['instituce', (d) => validateInstituce(d)],
+    ['smluvniProgramy', (d) => validateSmluvniProgramy(d)],
+    ['dostupnost', (d) => validateDostupnost(d)],
+  ];
+  for (const [key, fn] of dalsi) {
+    if (datasets?.[key] == null) continue;
+    const r = fn(datasets[key]) || {};
+    errors.push(...(r.errors || []));
+    warnings.push(...(r.warnings || []));
+    checks += Number.isFinite(r.checks) ? r.checks : 1;
   }
 
   return { errors, warnings, checks };
