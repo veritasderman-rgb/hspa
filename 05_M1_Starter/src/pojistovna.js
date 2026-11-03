@@ -11,12 +11,15 @@
 // (renderProfil) jako ostatní stránky. Výběr „Moje pojišťovna“ profil za čtenáře nenastavuje, jen
 // nabízí tlačítko, které klikne na chip.
 //
-// Čisté funkce (testované bez DOM): zpZUrl, profilTiles, buildKmenKarta, aplikaceKarta, stiznostiKarta,
+// „Porovnat s“ (A4.2): `?zp=111&porovnat=205` (nebo výběr z localStorage) přidá klíčovým číslům řádek
+// „ČPZP: … · rozdíl …“ (porovnatZUrl, porovnejDlazdice); změna chipu překreslí jen dlaždice.
+//
+// Čisté funkce (testované bez DOM): zpZUrl, profilTiles, porovnejDlazdice, buildKmenKarta, aplikaceKarta, stiznostiKarta,
 // fondKarta, profilHtml, rozcestnikHtml, profilTitle. DOM část: renderProfil.
 
 import { esc, fmtKc, dot, set, NA } from './pojistovny-shared.js';
-import { statTiles, indexedLines, segmentedBar, dotMatrix, isNum } from './zp-viz.js';
-import { MOJE_EVENT } from './zp-interact.js';
+import { statTiles, indexedLines, segmentedBar, dotMatrix, isNum, fmtRozdil, fmtValue } from './zp-viz.js';
+import { MOJE_EVENT, POROVNAT_EVENT, porovnatZUrl, readPorovnat } from './zp-interact.js';
 import { ZP_BY_KOD, zpColor } from './zp-palette.js';
 import {
   buildRadyKarta, buildSegmentyKarta, buildSaldoKarta, statniKarta, crHodnota,
@@ -55,7 +58,7 @@ const STD_SLOVO = { 'index-prerozdeleni': 'přepočteno na index přerozdělení
  * @param {string} kod
  * @param {{P: object, PR?: object|null, R?: object|null}} data
  */
-export function profilTiles(kod, { P, PR = null, R = null } = {}) {
+export function profilTiles(kod, { P, PR = null, R = null } = {}, porovnat = null) {
   const zps = zpList(P);
   const z = zps.find((x) => String(x.kod) === String(kod));
   if (!z) return [];
@@ -96,7 +99,30 @@ export function profilTiles(kod, { P, PR = null, R = null } = {}) {
   const rez = val(hs.zustatek_2026_pct_vydaju);
   tiles.push({ value: isNum(rez) ? rez : null, decimals: 1, unit: '%', label: 'rezerva na konci roku 2026, % výdajů',
     meta: `průměr sedmi pojišťoven: ${pm(avg(zps.map((x) => val(x.hospodareni?.zustatek_2026_pct_vydaju))), 1, '%')}; kritické pásmo 3–4 %` });
+  if (porovnat && String(porovnat) !== String(kod) && ZP_BY_KOD[porovnat]) {
+    return porovnejDlazdice(tiles, profilTiles(porovnat, { P, PR, R }), porovnat);
+  }
   return tiles;
+}
+
+/**
+ * K dlaždicím jedné pojišťovny přidá řádek `cmp` s hodnotou druhé a rozdílem (pojišťovna − druhá) ve stejné
+ * jednotce; rozdíl jen tam, kde jsou obě hodnoty čísla (procentní řady = procentní body).
+ * @param {Array} tiles  dlaždice profilu
+ * @param {Array} other  dlaždice druhé pojišťovny (stejné pořadí)
+ * @param {string} kodOther
+ */
+export function porovnejDlazdice(tiles, other, kodOther) {
+  const zkr = ZP_BY_KOD[kodOther]?.zkratka || String(kodOther);
+  return tiles.map((t, i) => {
+    const o = other[i];
+    if (!o) return t;
+    const dec = Number.isInteger(t.decimals) ? t.decimals : 0;
+    const unit = t.unit || '';
+    const text = isNum(o.value) ? `${fmtValue(o.value, dec)}${unit ? ` ${unit}` : ''}` : 'nedohledáno';
+    const diffUnit = unit === '%' ? 'p. b.' : unit;
+    return { ...t, cmp: { kod: kodOther, label: zkr, text, diff: fmtRozdil(t.value, o.value, dec, diffUnit) } };
+  });
 }
 
 // ---------------------------------------------------------------- mini-grafy a části témat
@@ -194,16 +220,25 @@ export function hlavickaHtml(kod, { P = null, I = null } = {}) {
     + `<p class="zpc-prof-akce"><button type="button" class="zpc-chip zpc-prof-moje" data-prof-moje="${esc(kod)}">Nastavit jako moji pojišťovnu</button></p></header>`;
 }
 
+/** Klíčová čísla profilu v obalu, který při změně „Porovnat s“ překreslíme samostatně. */
+export function tilesHtml(kod, data = {}, porovnat = null) {
+  const zp = ZP_BY_KOD[kod];
+  const { P, PR = null, R = null } = data;
+  if (!zp || !P) return '';
+  const cmp = porovnat && String(porovnat) !== String(kod) && ZP_BY_KOD[porovnat] ? porovnat : null;
+  return `<div data-prof-tiles${cmp ? ` data-porovnat="${esc(cmp)}"` : ''}>${statTiles(profilTiles(kod, { P, PR, R }, cmp), { title: `Klíčová čísla: ${zp.zkratka}${cmp ? ` a ${ZP_BY_KOD[cmp].zkratka}` : ''}` })}</div>`;
+}
+
 /**
  * Celé tělo profilu jedné pojišťovny jako HTML (bez DOM).
  * @param {string} kod
  * @param {{P, A?, PV?, PR?, R?, S?, I?, SP?, D?, ST?}} data  P = data/pojistovny.json (povinné); ostatní nepovinné
  */
-export function profilHtml(kod, data = {}) {
+export function profilHtml(kod, data = {}, porovnat = null) {
   const { P, A = null, PV = null, PR = null, R = null, S = null, I = null, SP = null, D = null, ST = null } = data;
   const zp = ZP_BY_KOD[kod];
   if (!zp || !P) return NEDOHLEDANO('Základní dataset srovnávače se nepodařilo načíst.');
-  const tiles = statTiles(profilTiles(kod, { P, PR, R }), { title: `Klíčová čísla: ${zp.zkratka}` });
+  const tiles = tilesHtml(kod, data, porovnat);
 
   const kmen = buildKmenKarta(P, kod);
   const kmenS = sekce('prof-kmen', 'Kmen', tiles + (kmen ? wrapFig(indexedLines(kmen.series, kmen.opts)) : NEDOHLEDANO('Vývoj kmene nedohledán.')),
@@ -257,6 +292,15 @@ function syncTlacitko(doc, kod) {
 }
 
 /**
+ * Pojišťovna „Porovnat s“ pro profil: `?porovnat=` v URL má přednost, pak stav stránky (main[data-porovnat-zp]),
+ * pak localStorage. Totožná s profilovanou pojišťovnou nebo neplatná = null.
+ */
+export function porovnatProProfil(kod, { search = '', attr = null, storage } = {}) {
+  const kandidat = porovnatZUrl(search) || (attr && ZP_BY_KOD[attr] ? attr : null) || (storage !== undefined ? readPorovnat(storage) : null);
+  return kandidat && kandidat !== kod ? kandidat : null;
+}
+
+/**
  * Vykreslí profil (nebo rozcestník) do #zpProfil, nastaví nadpis a titulek stránky.
  * @param {{kod?: string|null, data: object}} x  kod z `zpZUrl(location.search)`
  */
@@ -266,7 +310,14 @@ export function renderProfil({ kod = null, data = {} } = {}, doc = globalThis.do
   const h1 = doc.getElementById('zpProfilHead');
   if (h1) h1.textContent = platny ? `${ZP_BY_KOD[platny].zkratka} — profil pojišťovny` : 'Profil pojišťovny';
   try { doc.title = profilTitle(platny); } catch (_) { /* titulek je vylepšení */ }
-  set('zpProfil', platny ? profilHtml(platny, data) : rozcestnikHtml(data.P, data.A));
+  let storage;
+  try { storage = globalThis.localStorage || null; } catch (_) { storage = null; }
+  const stavPorovnat = () => porovnatProProfil(platny, {
+    search: globalThis.location ? globalThis.location.search : '',
+    attr: doc.querySelector?.('main')?.getAttribute?.('data-porovnat-zp') || null,
+    storage,
+  });
+  set('zpProfil', platny ? profilHtml(platny, data, stavPorovnat()) : rozcestnikHtml(data.P, data.A));
   if (!platny) return;
   syncTlacitko(doc, platny);
   const host = doc.getElementById('zpProfil');
@@ -279,5 +330,14 @@ export function renderProfil({ kod = null, data = {} } = {}, doc = globalThis.do
       doc.querySelector(`#zpMojeZp .zpi-chip[data-zp="${b.getAttribute('data-prof-moje')}"]`)?.click();
     });
     doc.addEventListener(MOJE_EVENT, () => syncTlacitko(doc, platny));
+    // Změna „Porovnat s“ překreslí jen klíčová čísla (rozbalené bloky zůstanou)
+    doc.addEventListener(POROVNAT_EVENT, (e) => {
+      const box = host.querySelector('[data-prof-tiles]');
+      if (!box) return;
+      const por = e.detail && e.detail.kod && e.detail.kod !== platny ? e.detail.kod : null;
+      const novy = tilesHtml(platny, data, por);
+      if (!novy) return;
+      box.outerHTML = novy;
+    });
   }
 }

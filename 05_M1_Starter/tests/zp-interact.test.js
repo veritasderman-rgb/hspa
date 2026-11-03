@@ -13,6 +13,8 @@ import {
   readMojeZp, writeMojeZp, normalizeZpList, renderMojeZpChips,
   ZP_FALLBACK, ZP_KODY, STORAGE_KEY, MOJE_EVENT, HOVER_PREFIX,
   TIP_SELECTOR, fmtCount,
+  POROVNAT_KEY, POROVNAT_EVENT, SWITCH_EVENT, readPorovnat, writePorovnat, porovnatZUrl, searchWith, nextSwitchIndex,
+  porovnatChipsHtml, renderPorovnatChips,
 } from '../src/zp-interact.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -296,4 +298,90 @@ test('CSV: delegovaný click na [data-zpv-csv], BOM + text/csv, bez sledování'
   assert.ok(!/fetch\(|sendBeacon|XMLHttpRequest/.test(SRC.split('function downloadCsv')[1].split('function sortHeat')[0]));
   assert.match(CSS, /\.zpv-csv \{[^}]*min-height: 24px[^}]*font-size: 12\.5px/);
   assert.match(CSS, /@media print \{[\s\S]*?\.zpv-csv \{ display: none; \}/);
+});
+
+// --- A4.2 „Porovnat s“ ---------------------------------------------------------------
+test('Porovnat s: klíč úložiště a názvy událostí jsou zafixované kontraktem', () => {
+  assert.equal(POROVNAT_KEY, 'hspa-porovnat-zp');
+  assert.equal(POROVNAT_EVENT, 'zp:porovnat-change');
+  assert.equal(SWITCH_EVENT, 'zp:switch');
+});
+
+test('readPorovnat / writePorovnat: round-trip, neplatná hodnota, smazání, výjimka', () => {
+  const s = memStorage();
+  assert.equal(readPorovnat(s), null);
+  assert.equal(writePorovnat('205', s), true);
+  assert.equal(s._m.get('hspa-porovnat-zp'), '205');
+  assert.equal(readPorovnat(s), '205');
+  assert.equal(readMojeZp(s), null, 'nezasahuje do klíče Moje pojišťovna');
+  s.setItem('hspa-porovnat-zp', '999');
+  assert.equal(readPorovnat(s), null);
+  writePorovnat('207', s);
+  writePorovnat(null, s);
+  assert.equal(readPorovnat(s), null);
+  const bad = { getItem() { throw new Error('x'); }, setItem() { throw new Error('x'); }, removeItem() { throw new Error('x'); } };
+  assert.equal(readPorovnat(bad), null);
+  assert.equal(writePorovnat('205', bad), false);
+  assert.equal(readPorovnat(null), null);
+});
+
+test('porovnatZUrl a searchWith: platný kód z ?porovnat=, ostatní parametry zůstanou, výchozí smaže parametr', () => {
+  assert.equal(porovnatZUrl('?zp=111&porovnat=205'), '205');
+  assert.equal(porovnatZUrl('?porovnat=999'), null);
+  assert.equal(porovnatZUrl(''), null);
+  assert.equal(searchWith('?zp=111', 'porovnat', '205'), '?zp=111&porovnat=205');
+  assert.equal(searchWith('?zp=111&porovnat=205', 'porovnat', null), '?zp=111');
+  assert.equal(searchWith('?kmen=bez-vzp', 'kmen', 'vse', 'vse'), '');
+  assert.equal(searchWith('', 'rok', 2022), '?rok=2022');
+});
+
+test('nextSwitchIndex: šipky cyklicky, jiná klávesa -1', () => {
+  assert.equal(nextSwitchIndex(3, 0, 'ArrowRight'), 1);
+  assert.equal(nextSwitchIndex(3, 2, 'ArrowRight'), 0);
+  assert.equal(nextSwitchIndex(3, 0, 'ArrowLeft'), 2);
+  assert.equal(nextSwitchIndex(3, 1, 'ArrowDown'), 2);
+  assert.equal(nextSwitchIndex(3, 1, 'Enter'), -1);
+  assert.equal(nextSwitchIndex(0, 0, 'ArrowRight'), -1);
+});
+
+test('porovnatChipsHtml: popisek, sedm chipů, vybraný aria-pressed, „Moje“ disabled, Zrušit disabled bez výběru', () => {
+  const h = porovnatChipsHtml(ZP_FALLBACK, '111', '205');
+  assert.match(h, /^<div class="zpi-chips zpi-chips--porovnat" role="group" aria-label="Porovnat s">/);
+  assert.match(h, /<span class="zpi-chips-lbl">Porovnat s<\/span>/);
+  assert.equal((h.match(/class="zpi-chip zpi-chip--porovnat" data-zp=/g) || []).length, 7);
+  assert.match(h, /data-zp="205" aria-pressed="true"/);
+  assert.equal((h.match(/aria-pressed="true"/g) || []).length, 1);
+  assert.match(h, /data-zp="111" aria-pressed="false" title="[^"]*\(je vaše pojišťovna\)" disabled/);
+  assert.equal((h.match(/ disabled/g) || []).length, 1, 'jen „Moje“; Zrušit je aktivní, protože porovnat je vybraný');
+  const none = porovnatChipsHtml(ZP_FALLBACK, null, null);
+  assert.match(none, /data-zp-clear-porovnat disabled>Zrušit/);
+  assert.equal((none.match(/aria-pressed="true"/g) || []).length, 0);
+  // escapování a neznámý seznam = záloha
+  assert.doesNotMatch(porovnatChipsHtml([{ kod: '111', zkratka: '<b>x</b>', nazev: '"n"' }]), /<b>x/);
+  assert.equal((porovnatChipsHtml(null).match(/zpi-chip--porovnat" data-zp=/g) || []).length, 7);
+});
+
+test('renderPorovnatChips: bez kontejneru nic, s kontejnerem vloží řádek', () => {
+  assert.equal(renderPorovnatChips(null, ZP_FALLBACK), null);
+  let vlozeno = null;
+  const c = { replaceChildren() { vlozeno = ''; }, insertAdjacentHTML(_p, h) { vlozeno = h; }, firstElementChild: { cls: 'row' } };
+  assert.deepEqual(renderPorovnatChips(c, ZP_FALLBACK, '111', null), { cls: 'row' });
+  assert.match(vlozeno, /zpi-chips--porovnat/);
+});
+
+test('CSS: .is-porovnat = obrys bez výplně, u čar čárkovaně, řádky tabulky data-porovnat, barvy ZP přes tokeny', () => {
+  assert.match(CSS, /\.zpv-bar\.is-porovnat, \.zpv-seg\.is-porovnat \{ background: transparent; box-shadow: inset 0 0 0 2px var\(--zpv-mark-color/);
+  assert.match(CSS, /\.zpv-line\.is-porovnat \{ stroke-dasharray/);
+  assert.match(CSS, /main tr\[data-zp\]\[data-porovnat="true"\] \{ background: color-mix\(in srgb, var\(--paper2\)/);
+  for (const k of ZP_KODY) assert.ok(CSS.includes(`main[data-porovnat-zp="${k}"] .zpv-mark[data-zp="${k}"] { opacity: 1; --zpv-mark-color: var(--zp-${k}); }`), k);
+  assert.doesNotMatch(CSS.slice(CSS.indexOf('„Porovnat s“ (A4.2)'), CSS.indexOf('„Porovnat s“ (A4.2)') + 4000), /transition|animation/);
+});
+
+test('zp-interact.js: Porovnat s a přepínače — kontrakt se stránkou', () => {
+  for (const s of ['zpPorovnatZp', 'data-porovnat-zp', 'is-porovnat', "'data-porovnat', 'true'", "'aria-current', 'false'", 'zpi-chip--porovnat',
+    'SWITCH_EVENT', 'select[data-switch]', '.zpc-switch[data-switch] button[role="radio"]', 'history.replaceState', 'nextSwitchIndex', 'data-zp-clear-porovnat']) {
+    assert.ok(SRC.includes(s), s);
+  }
+  // chipy „Moje“ a „Porovnat s“ se nepřepisují navzájem
+  assert.ok(SRC.includes(".zpi-chip[data-zp]:not(.zpi-chip--porovnat)"));
 });

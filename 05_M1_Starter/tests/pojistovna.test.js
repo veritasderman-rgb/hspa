@@ -7,7 +7,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
-  zpZUrl, profilTitle, profilTiles, buildKmenKarta, aplikaceKarta, stiznostiKarta, fondKarta, hlavickaHtml, profilHtml, rozcestnikHtml, renderProfil,
+  zpZUrl, profilTitle, profilTiles, porovnejDlazdice, porovnatProProfil, tilesHtml, buildKmenKarta, aplikaceKarta, stiznostiKarta, fondKarta, hlavickaHtml, profilHtml, rozcestnikHtml, renderProfil,
 } from '../src/pojistovna.js';
 import { ovKartaHtml, ovMiniKartyHtml, zpSouhrny } from '../src/pojistovny-prehled.js';
 import { buildRadyKarta, buildSegmentyKarta, buildSaldoKarta } from '../src/pojistovny-penize.js';
@@ -191,4 +191,55 @@ test('sitemap, middleware, e2e a axe: profil je noindex, za heslem a v seznamech
   assert.match(read('tests/e2e/visual.spec.js'), /pojistovny-instituce\.html/);
   assert.match(read('tests/a11y/axe-scan.mjs'), /'pojistovna\.html\?zp=111'/);
   assert.match(read('tests/a11y/axe-scan.mjs'), /'pojistovny-instituce\.html'/);
+});
+
+test('profil s ?porovnat=: dlaždice dostanou řádek druhé ZP a rozdíl, bez porovnání beze změny', () => {
+  const bez = profilTiles('111', DATA);
+  assert.ok(bez.every((t) => !t.cmp));
+  const s = profilTiles('111', DATA, '205');
+  assert.equal(s.length, bez.length);
+  const pocet = s[0];
+  assert.equal(pocet.cmp.kod, '205');
+  assert.equal(pocet.cmp.label, 'ČPZP');
+  assert.match(pocet.cmp.diff, /^[+−][\d,]+ mil\.$/);
+  assert.match(s[1].cmp.diff, /p\. b\.$/, 'podíl na trhu: rozdíl v procentních bodech');
+  // rozdíl = hodnota − hodnota druhé ZP
+  const druha = profilTiles('205', DATA)[0].value;
+  assert.ok(Math.abs((pocet.value - druha) - Number(pocet.cmp.diff.replace('−', '-').replace(',', '.').replace(' mil.', ''))) < 0.006);
+  // sama se sebou ani neznámý kód nic nepřidá
+  assert.ok(profilTiles('111', DATA, '111').every((t) => !t.cmp));
+  assert.ok(profilTiles('111', DATA, '999').every((t) => !t.cmp));
+  // chybějící hodnota druhé ZP: text „nedohledáno“ a bez rozdílu
+  const jedna = porovnejDlazdice([{ value: 5, decimals: 1, unit: '%', label: 'a' }], [{ value: null, decimals: 1, unit: '%' }], '205');
+  assert.equal(jedna[0].cmp.text, 'nedohledáno');
+  assert.equal(jedna[0].cmp.diff, null);
+});
+
+test('profil: porovnatProProfil — URL má přednost před atributem i úložištěm, sama sebe ignoruje', () => {
+  const st = { getItem: () => '213' };
+  assert.equal(porovnatProProfil('111', { search: '?zp=111&porovnat=205', attr: '207', storage: st }), '205');
+  assert.equal(porovnatProProfil('111', { search: '?zp=111', attr: '207', storage: st }), '207');
+  assert.equal(porovnatProProfil('111', { search: '?zp=111', storage: st }), '213');
+  assert.equal(porovnatProProfil('111', { search: '?zp=111&porovnat=111' }), null);
+  assert.equal(porovnatProProfil('111', { search: '?zp=111' }), null);
+  assert.equal(porovnatProProfil('111', { search: '?porovnat=999' }), null);
+});
+
+test('profilHtml(kod, data, porovnat): obal dlaždic data-prof-tiles, počet dlaždic stejný, řádek druhé ZP', () => {
+  const bez = profilHtml('111', DATA);
+  assert.equal(count(bez, /data-prof-tiles/g), 1);
+  assert.doesNotMatch(bez, /zpv-tile-cmp/);
+  const s = profilHtml('111', DATA, '205');
+  assert.equal(count(s, /class="zpv-tile"/g), count(bez, /class="zpv-tile"/g));
+  assert.equal(count(s, /class="zpv-tile-cmp" data-zp="205"/g), 9);
+  assert.match(s, /data-prof-tiles data-porovnat="205"/);
+  assert.match(s, /aria-label="Klíčová čísla: VZP ČR a ČPZP"/);
+  assert.match(tilesHtml('111', DATA, '205'), /^<div data-prof-tiles/);
+  assert.equal(tilesHtml('999', DATA, '205'), '');
+});
+
+test('profil: renderProfil poslouchá zp:porovnat-change a překreslí jen dlaždice', () => {
+  const src = read('src/pojistovna.js');
+  assert.match(src, /addEventListener\(POROVNAT_EVENT/);
+  assert.match(src, /\[data-prof-tiles\]/);
 });

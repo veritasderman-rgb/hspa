@@ -22,8 +22,8 @@
 // semaforMiniHtml, ovKartaHtml, ovMiniKartyHtml, temaKartyHtml, buildPrehled.
 
 import { esc, fmtKc, dot, set } from './pojistovny-shared.js';
-import { statTiles, rankedBars, segmentedBar, dumbbell, dotScore, isNum } from './zp-viz.js';
-import { MOJE_EVENT } from './zp-interact.js';
+import { statTiles, rankedBars, segmentedBar, dumbbell, dotScore, isNum, fmtRozdil } from './zp-viz.js';
+import { MOJE_EVENT, POROVNAT_EVENT } from './zp-interact.js';
 import { ZP_BY_KOD } from './zp-palette.js';
 import { semaforCell, iconHtml, semaforSummary, EMPTY_SENTENCE } from './pojistovny-semafor.js';
 import { ZP_STRANKY, zpStrankaById } from './pojistovny-shell.js';
@@ -75,22 +75,52 @@ const v1 = (v, dec, unit) => (isNum(v) ? `${fmtKc(v, dec)}${unit ? ` ${unit}` :
 const signed = (v) => (isNum(v) ? `${v > 0 ? '+' : v < 0 ? '−' : ''}${fmtKc(Math.abs(v), 1)} %` : NA_SPAN);
 const mil = (n) => (isNum(n) ? `${fmtKc(n / 1e6, 2)} mil.` : NA_SPAN);
 
-/** Karta vybrané pojišťovny. */
-export function ovKartaHtml(s) {
+/** Řádky karty: popisek, formátovaná hodnota a rozdíl (moje − porovnat) v jednotce řádku; rozdíl jen u čísel. */
+const KARTA_RADKY = [
+  { dt: 'Pojištěnců (CRP 2025)', dd: (s) => mil(s.pojistenci), diff: (a, b) => (isNum(a.pojistenci) && isNum(b.pojistenci) ? fmtRozdil(a.pojistenci / 1e6, b.pojistenci / 1e6, 2, 'mil.') : null) },
+  { dt: 'Podíl na trhu', dd: (s) => v1(s.podil, 1, '%'), diff: (a, b) => fmtRozdil(a.podil, b.podil, 1, 'p. b.') },
+  { dt: 'Senioři 65+', dd: (s) => v1(s.senior, 1, '%'), diff: (a, b) => fmtRozdil(a.senior, b.senior, 1, 'p. b.') },
+  { dt: 'Kmen 2015 → 2025', dd: (s) => signed(s.rust), diff: (a, b) => fmtRozdil(a.rust, b.rust, 1, 'p. b.') },
+  { dt: 'Rezerva konec 2026', dd: (s) => (isNum(s.rezerva) ? `${fmtKc(s.rezerva, 1)} % výdajů` : NA_SPAN), diff: (a, b) => fmtRozdil(a.rezerva, b.rezerva, 1, 'p. b.') },
+  { dt: 'Funkce aplikace', dd: (s) => (isNum(s.app) ? `${fmtKc(s.app, s.app % 1 ? 1 : 0)} z ${s.appMax}` : NA_SPAN), diff: (a, b) => fmtRozdil(a.app, b.app, 1, 'funkcí') },
+];
+
+const kartaRow = (dt, dd) => `<div><dt>${dt}</dt><dd>${dd}</dd></div>`;
+
+/**
+ * Karta vybrané pojišťovny. S druhým argumentem (A4.2 „Porovnat s“) dvě `<dl>` vedle sebe
+ * (moje · porovnat) a třetí sloupec s rozdílem „moje − porovnat“ u číselných řádků.
+ * @param {object|null} s   souhrn „moje“ pojišťovny (zpSouhrny)
+ * @param {object|null} [s2] souhrn pojišťovny „Porovnat s“; stejná jako s = bez porovnání
+ */
+export function ovKartaHtml(s, s2 = null) {
   if (!s) return '';
-  const row = (dt, dd) => `<div><dt>${dt}</dt><dd>${dd}</dd></div>`;
+  if (s2 && String(s2.kod) !== String(s.kod)) return ovKartaPorovnaniHtml(s, s2);
   return `<article class="zpc-ov-karta" data-zp="${esc(s.kod)}" aria-labelledby="zpOvKartaH">`
     + `<header>${dot(s.kod)}`
     + `<h2 id="zpOvKartaH">${esc(s.zkratka)}</h2><span class="zpc-full">${esc(s.nazev || '')} · kód ${esc(s.kod)}</span></header>`
     + '<dl>'
-    + row('Pojištěnců (CRP 2025)', mil(s.pojistenci))
-    + row('Podíl na trhu', v1(s.podil, 1, '%'))
-    + row('Senioři 65+', v1(s.senior, 1, '%'))
-    + row('Kmen 2015 → 2025', signed(s.rust))
-    + row('Rezerva konec 2026', isNum(s.rezerva) ? `${fmtKc(s.rezerva, 1)} % výdajů` : NA_SPAN)
-    + row('Funkce aplikace', isNum(s.app) ? `${fmtKc(s.app, s.app % 1 ? 1 : 0)} z ${s.appMax}` : NA_SPAN)
+    + KARTA_RADKY.map((r) => kartaRow(r.dt, r.dd(s))).join('')
     + '</dl>'
     + `<p class="zpc-ov-karta-more"><a href="pojistovna.html?zp=${esc(s.kod)}">Profil ${esc(s.zkratka)} →</a> · `
+    + `<a href="pojistovny-kmen.html#zp-${esc(s.kod)}">Karta v tématu Kmen a hospodaření →</a></p>`
+    + '</article>';
+}
+
+function ovKartaPorovnaniHtml(s, s2) {
+  const col = (x, nadpis) => `<div class="zpc-ov-col"><h3 class="zpc-ov-col-h">${dot(x.kod)}${esc(x.zkratka)}<span class="zpc-ov-col-role"> · ${nadpis}</span></h3>`
+    + `<dl data-zp="${esc(x.kod)}">${KARTA_RADKY.map((r) => kartaRow(r.dt, r.dd(x))).join('')}</dl></div>`;
+  const diffCol = '<div class="zpc-ov-col zpc-ov-col--diff"><h3 class="zpc-ov-col-h">Rozdíl<span class="zpc-ov-col-role"> · moje − porovnat</span></h3>'
+    + `<dl class="zpc-ov-diff">${KARTA_RADKY.map((r) => {
+      const d = r.diff(s, s2);
+      return kartaRow(r.dt, d ? `<span class="zpc-ov-diff-v">${esc(d)}</span>` : '<span class="zpc-na" title="rozdíl nelze spočítat">—</span>');
+    }).join('')}</dl></div>`;
+  return `<article class="zpc-ov-karta zpc-ov-karta--cmp" data-zp="${esc(s.kod)}" data-zp-porovnat="${esc(s2.kod)}" aria-labelledby="zpOvKartaH">`
+    + `<header>${dot(s.kod)}<h2 id="zpOvKartaH">${esc(s.zkratka)} <span class="zpc-vs">vs.</span> ${esc(s2.zkratka)}</h2>`
+    + '<span class="zpc-full">Moje pojišťovna a pojišťovna, se kterou ji porovnáváte</span></header>'
+    + `<div class="zpc-ov-cmp">${col(s, 'moje')}${col(s2, 'porovnat s')}${diffCol}</div>`
+    + `<p class="zpc-ov-karta-more"><a href="pojistovna.html?zp=${esc(s.kod)}&amp;porovnat=${esc(s2.kod)}">Profil ${esc(s.zkratka)} s porovnáním →</a> · `
+    + `<a href="pojistovna.html?zp=${esc(s2.kod)}">Profil ${esc(s2.zkratka)} →</a> · `
     + `<a href="pojistovny-kmen.html#zp-${esc(s.kod)}">Karta v tématu Kmen a hospodaření →</a></p>`
     + '</article>';
 }
@@ -210,12 +240,19 @@ function mojeKod(doc) {
   return k && ZP_BY_KOD[k] ? k : null;
 }
 
+function porovnatKod(doc) {
+  const k = doc.querySelector('main')?.getAttribute('data-porovnat-zp');
+  return k && ZP_BY_KOD[k] ? k : null;
+}
+
 function paintKarta(doc, souhrny) {
   const host = doc.getElementById('zpOvKarta');
   if (!host) return;
   const kod = mojeKod(doc);
   const s = kod ? souhrny.find((x) => x.kod === kod) : null;
-  host.innerHTML = s ? ovKartaHtml(s) : ovMiniKartyHtml(souhrny);
+  const por = porovnatKod(doc);
+  const s2 = s && por && por !== kod ? souhrny.find((x) => x.kod === por) : null;
+  host.innerHTML = s ? ovKartaHtml(s, s2) : ovMiniKartyHtml(souhrny);
   host.classList.toggle('is-vybrano', !!s);
 }
 
@@ -238,6 +275,7 @@ export function renderPrehled({ d, a, p, tiles, kmen, prerozdeleni }, doc = glob
   if (host.dataset.ovInit === '1') return;
   host.dataset.ovInit = '1';
   doc.addEventListener(MOJE_EVENT, () => paintKarta(doc, out.souhrny));
+  doc.addEventListener(POROVNAT_EVENT, () => paintKarta(doc, out.souhrny));
   host.addEventListener('click', (e) => {
     const b = e.target.closest ? e.target.closest('button[data-ov-zp]') : null;
     if (!b) return;

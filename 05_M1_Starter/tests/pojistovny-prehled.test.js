@@ -333,3 +333,37 @@ test('styles.css: P1.6 třídy existují v sekci .zpc- a bez pevných barev, --r
   const zp = css.slice(css.indexOf('/* === Srovnávač pojišťoven: stránka'), css.indexOf('/* === Srovnávač pojišťoven: dotazníky'));
   assert.ok(!/var\(--red\)/.test(zp), '--red patří hrotu střelky a stavu bad, ne srovnávači');
 });
+
+test('přehled: karta s „Porovnat s“ — dvě dl vedle sebe a rozdíl, bez porovnání beze změny', () => {
+  const sou = zpSouhrny(D, A);
+  const moje = sou.find((x) => x.kod === '111');
+  const por = sou.find((x) => x.kod === '205');
+  const jedna = ovKartaHtml(moje);
+  assert.equal(ovKartaHtml(moje, null), jedna, 'bez druhé ZP je výstup stejný');
+  assert.equal(ovKartaHtml(moje, moje), jedna, 'stejná pojišťovna = bez porovnání');
+  const h = ovKartaHtml(moje, por);
+  assert.match(h, /class="zpc-ov-karta zpc-ov-karta--cmp" data-zp="111" data-zp-porovnat="205"/);
+  assert.match(h, /<h2 id="zpOvKartaH">VZP ČR <span class="zpc-vs">vs\.<\/span> ČPZP<\/h2>/);
+  assert.equal(count(h, /<dl\b/g), 3, 'moje · porovnat · rozdíl');
+  assert.match(h, /<dl data-zp="111">/);
+  assert.match(h, /<dl data-zp="205">/);
+  assert.match(h, /<dl class="zpc-ov-diff">/);
+  assert.equal(count(h, /<dt>Podíl na trhu<\/dt>/g), 3);
+  // rozdíl podílu na trhu = moje − porovnat v procentních bodech (nebo ±0 / nedohledáno)
+  const rozdil = h.match(/<dl class="zpc-ov-diff">.*?<\/dl>/)[0];
+  const podil = (moje.podil - por.podil);
+  assert.match(rozdil, new RegExp(`<dt>Podíl na trhu</dt><dd><span class="zpc-ov-diff-v">${podil > 0 ? '\\+' : '−'}[\\d,]+ p\\. b\\.</span>`));
+  assert.match(rozdil, /<dt>Pojištěnců \(CRP 2025\)<\/dt><dd><span class="zpc-ov-diff-v">[+−][\d,]+ mil\./);
+  assert.match(h, /href="pojistovna\.html\?zp=111&amp;porovnat=205"/);
+  assert.doesNotMatch(h, /undefined|NaN|\[object/);
+  // nečíselný řádek (chybí aplikace) → pomlčka, ne vymyšlené číslo
+  const bezApp = ovKartaHtml({ ...moje, app: null }, por);
+  assert.match(bezApp.match(/<dl class="zpc-ov-diff">.*?<\/dl>/)[0], /<dt>Funkce aplikace<\/dt><dd><span class="zpc-na" title="rozdíl nelze spočítat">—<\/span>/);
+});
+
+test('přehled: paintKarta reaguje na obě události (Moje i Porovnat s)', () => {
+  const src = fs.readFileSync(path.join(ROOT, 'src', 'pojistovny-prehled.js'), 'utf8');
+  assert.match(src, /addEventListener\(MOJE_EVENT, \(\) => paintKarta/);
+  assert.match(src, /addEventListener\(POROVNAT_EVENT, \(\) => paintKarta/);
+  assert.match(src, /data-porovnat-zp/);
+});

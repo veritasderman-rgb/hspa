@@ -11,7 +11,7 @@ import {
   rankedBars, segmentedBar, statTiles, meter, indexedLines, dumbbell,
   heatmap, dotMatrix, coverageMatrix,
   foldParts, indexSeries, dodgeLabels, niceTicks, meterSignal, dotScore, diffPct, sortDesc, pct,
-  NA_TEXT, ZP_KODY, tableToCsv, csvFilename, stripHtml, csvCell,
+  NA_TEXT, ZP_KODY, tableToCsv, csvFilename, stripHtml, csvCell, figureSwitch, readSwitchFromUrl, fmtRozdil,
 } from '../src/zp-viz.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -523,4 +523,64 @@ test('tabulková dvojčata všech primitiv nesou tlačítko CSV, název a zdroj'
   assert.ok(!rankedBars(ZP, { title: EVIL }).includes('<script>'));
   // každý tableTwin ve zdroji dostává source
   assert.equal(count(SRC, /tableTwin\(/g) - 1, count(SRC, /, 1, source\);/g));
+});
+
+// --- A4.3 figureSwitch a A4.2 pomocné funkce ----------------------------------------
+const OPT3 = [{ value: 'vse', label: 'Všech 7' }, { value: 'bez-vzp', label: 'Bez VZP ČR' }, { value: 'od-2023', label: 'Od 1/2023' }];
+
+test('figureSwitch (radio): radiogroup, aria-label, výchozí hodnota, roving tabindex', () => {
+  const h = figureSwitch({ id: 'kmen', label: 'Rozsah grafu', options: OPT3, selected: 'bez-vzp', defaultValue: 'vse' });
+  assert.match(h, /^<div class="zpc-switch" role="radiogroup" aria-label="Rozsah grafu" data-switch="kmen" data-default="vse">/);
+  assert.equal((h.match(/role="radio"/g) || []).length, 3);
+  assert.equal((h.match(/aria-checked="true"/g) || []).length, 1);
+  assert.match(h, /aria-checked="true" tabindex="0" data-value="bez-vzp">Bez VZP ČR</);
+  assert.equal((h.match(/tabindex="-1"/g) || []).length, 2);
+  // bez vybrané / neznámé hodnoty je zaškrtnutá první
+  assert.match(figureSwitch({ id: 'x', label: 'X', options: OPT3 }), /aria-checked="true" tabindex="0" data-value="vse"/);
+  assert.match(figureSwitch({ id: 'x', label: 'X', options: OPT3, selected: 'hm' }), /aria-checked="true" tabindex="0" data-value="vse"/);
+  // čísla jako hodnoty (rok)
+  assert.match(figureSwitch({ id: 'rok', label: 'Rok', options: [{ value: 2023, label: '2023' }, { value: 2024, label: '2024' }], selected: 2024 }), /aria-checked="true" tabindex="0" data-value="2024"/);
+  assert.doesNotMatch(figureSwitch({ id: 'x', label: 'X', options: OPT3 }), /data-default/);
+});
+
+test('figureSwitch (select): label + select s data-switch, vybraná option, escapování', () => {
+  const h = figureSwitch({ id: 'ukazatel', label: 'Ukazatel', kind: 'select', options: [{ value: 'a', label: 'A' }, { value: 'b', label: EVIL }], selected: 'b' });
+  assert.match(h, /^<label class="zpc-ctl zpc-ctl--select"><span class="zpc-ctl-lbl">Ukazatel<\/span><select class="zpc-sit-select zpc-ctl-select" data-switch="ukazatel">/);
+  assert.match(h, /<option value="b" selected>/);
+  assert.doesNotMatch(h, /<script>/);
+  assert.match(h, /&lt;script&gt;/);
+  assert.equal(figureSwitch({ id: 'x', label: 'X', options: [] }).includes('role="radio"'), false);
+});
+
+test('readSwitchFromUrl: hodnota z URL, neznámá hodnota a chybějící parametr = fallback', () => {
+  const allowed = OPT3.map((o) => o.value);
+  assert.equal(readSwitchFromUrl('kmen', allowed, 'vse', '?kmen=bez-vzp'), 'bez-vzp');
+  assert.equal(readSwitchFromUrl('kmen', allowed, 'vse', '?a=1&kmen=od-2023'), 'od-2023');
+  assert.equal(readSwitchFromUrl('kmen', allowed, 'vse', '?kmen=hmm'), 'vse');
+  assert.equal(readSwitchFromUrl('kmen', allowed, 'vse', ''), 'vse');
+  assert.equal(readSwitchFromUrl('kmen', allowed, 'vse', undefined), 'vse', 'bez location.search = fallback');
+  assert.equal(readSwitchFromUrl('rok', [2023, 2024], 2024, '?rok=2023'), 2023, 'vrací hodnotu z allowed (číslo)');
+});
+
+test('fmtRozdil: znaménko, typografické minus, ±0 po zaokrouhlení, null při chybějící hodnotě', () => {
+  assert.equal(fmtRozdil(12.34, 10, 1, 'p. b.'), '+2,3\u00a0p. b.'.replace('\u00a0', ' '));
+  assert.match(fmtRozdil(1, 4.5, 1), /^−3,5$/);
+  assert.equal(fmtRozdil(2.001, 2, 1), '±0');
+  assert.equal(fmtRozdil(null, 2, 1), null);
+  assert.equal(fmtRozdil(2, undefined, 1), null);
+});
+
+test('statTiles: volitelný řádek cmp pod hodnotou (druhá pojišťovna a rozdíl), bez cmp beze změny', () => {
+  const h = statTiles([{ value: 5, label: 'L', decimals: 1, unit: '%', cmp: { kod: '205', label: 'ČPZP', text: '4,0 %', diff: '+1,0 p. b.' } }, { value: 1, label: 'M' }]);
+  assert.match(h, /<span class="zpv-tile-cmp" data-zp="205">ČPZP: 4,0 % · rozdíl \+1,0 p\. b\.<\/span>/);
+  assert.equal((h.match(/zpv-tile-cmp/g) || []).length, 1);
+  assert.match(statTiles([{ value: 5, label: 'L', cmp: { label: 'X', text: EVIL } }]), /&lt;script&gt;/);
+});
+
+test('rankedBars: minv + maxv dají dvěma grafům stejnou osu', () => {
+  const a = rankedBars([{ label: 'A', value: -2 }, { label: 'B', value: 4 }], { allowNegative: true, maxv: 10, minv: -10 });
+  const b = rankedBars([{ label: 'A', value: -2 }, { label: 'B', value: 1 }], { allowNegative: true, maxv: 10, minv: -10 });
+  const nula = (h) => h.match(/--x:([\d.]+)%" aria-hidden/)?.[1];
+  assert.equal(nula(a), '50');
+  assert.equal(nula(a), nula(b));
 });

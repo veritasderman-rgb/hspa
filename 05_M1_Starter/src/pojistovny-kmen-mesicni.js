@@ -10,16 +10,18 @@
 // Načítá a volá ho orchestrátor src/pojistovny.js (jen na stránce, která má kontejner).
 //
 // Nad grafem je přepínač rozsahu (A0.6): „Všech 7“ / „Bez VZP ČR“ / „Od 1/2023“ — VZP kmenem
-// a skokem z uprchlické registrace roztahuje osu, ostatní pojišťovny se pak slévají. Stav je v URL
-// (?kmen=bez-vzp|od-2023), výchozí „Všech 7“ se do URL nezapisuje.
+// a skokem z uprchlické registrace roztahuje osu, ostatní pojišťovny se pak slévají. Přepínač je
+// společná komponenta figureSwitch (src/zp-viz.js, A4.3): klik, šipky a zápis do URL
+// (?kmen=bez-vzp|od-2023, výchozí „Všech 7“ se nezapisuje) řeší src/zp-interact.js, tenhle modul
+// jen poslouchá událost `zp:switch` (id „kmen“) a překreslí graf.
 //
 // Čisté funkce (testované bez DOM): mesicLabel, mesicX, buildMesicniSeries, mesicniVyber,
 // rezimZUrl, prepinacHtml, prestupyTabulka, prestupyHtml, veta. Žádné pořadí ani hodnocení: řádky jsou v pevném pořadí podle kódu pojišťovny.
 
 import { escapeHtml, formatNumberCz } from './page-shared.js';
-import { indexedLines, isNum } from './zp-viz.js';
+import { indexedLines, isNum, figureSwitch, readSwitchFromUrl } from './zp-viz.js';
 import { dot, set } from './pojistovny-shared.js';
-import { initZpInteract } from './zp-interact.js';
+import { initZpInteract, SWITCH_EVENT } from './zp-interact.js';
 
 const esc = escapeHtml;
 
@@ -81,9 +83,7 @@ const OD_2023 = '2023-01';
 
 /** Hodnota parametru ?kmen= → režim; neznámé nebo chybějící = 'vse'. */
 export function rezimZUrl(search) {
-  let v = null;
-  try { v = new URLSearchParams(String(search ?? '')).get('kmen'); } catch (_) { /* bez URLSearchParams = výchozí */ }
-  return MESICNI_REZIMY.some((r) => r.id === v) ? v : 'vse';
+  return readSwitchFromUrl('kmen', MESICNI_REZIMY.map((r) => r.id), 'vse', String(search ?? ''));
 }
 
 /**
@@ -106,13 +106,12 @@ export function mesicniVyber(K, rezim) {
   };
 }
 
-/** Přepínač rozsahu: radiogroup ze tří tlačítek (roving tabindex), vybraný má aria-checked="true". */
+/** Přepínač rozsahu: figureSwitch (radiogroup ze tří tlačítek, roving tabindex), id/parametr `kmen`. */
 export function prepinacHtml(rezim) {
-  const btn = (r) => {
-    const on = r.id === rezim;
-    return `<button type="button" role="radio" aria-checked="${on}" tabindex="${on ? 0 : -1}" data-rezim="${esc(r.id)}">${esc(r.label)}</button>`;
-  };
-  return `<div class="zpc-switch" role="radiogroup" aria-label="Rozsah grafu">${MESICNI_REZIMY.map(btn).join('')}</div>`;
+  return figureSwitch({
+    id: 'kmen', label: 'Rozsah grafu', kind: 'radio', selected: rezim, defaultValue: 'vse',
+    options: MESICNI_REZIMY.map((r) => ({ value: r.id, label: r.label })),
+  });
 }
 
 /** Graf pro zvolený rozsah (jen figura, bez přepínače a poznámky). */
@@ -181,24 +180,20 @@ export function veta(K) {
   return `Počty pojištěnců jsou odvozené podílem dvou částek z měsíčního přerozdělení MZ (částka po přerozdělení na pojišťovnu děleno částkou na jednoho pojištěnce), MZ je takto přímo nezveřejňuje; průměr roku 2024 se od ročního průměru podle MZ liší o méně než 0,1 %. Skoky mezi prosincem a lednem a mezi červnem a červencem odpovídají přestupním termínům 1. 1. a 1. 7.; změny mimo ně zdroj MZ nevysvětluje. Skok VZP ČR v dubnu 2022 časově odpovídá registraci uprchlíků z Ukrajiny s dočasnou ochranou, kteří jsou podle zákona č. 65/2022 Sb. (účinnost 21. 3. 2022) pojištěnci vedenými u VZP ČR (do února 2023 jich VZP registrovala téměř 367,5 tisíce); pokles v dubnu 2023 časově odpovídá konci dočasné ochrany u osob, které si ji do konce března 2023 neprodloužily. Počet osob v těchto skocích zdroje neuvádějí. Období ${od} až ${do_}. Řazeno podle kódu pojišťovny, nejde o hodnocení.`;
 }
 
-/** Překreslí jen figuru a stav tlačítek podle režimu (bez DOM metod, které by test neměl: vše přes guardy). */
+/** Překreslí jen figuru podle režimu (přepínač drží stav sám); předchozí render zbledne na 60 % (is-busy), bez skoku výšky. */
 function prekresliGraf(host, K, rezim) {
   const fig = host.querySelector ? host.querySelector('[data-kmen-fig]') : null;
-  if (fig) fig.innerHTML = grafMesicni(K, rezim);
-  host.querySelectorAll?.('button[data-rezim]').forEach((b) => {
-    const on = b.getAttribute('data-rezim') === rezim;
-    b.setAttribute('aria-checked', String(on));
-    b.setAttribute('tabindex', on ? '0' : '-1');
-  });
-  try { const r = initZpInteract(); if (r && typeof r.catch === 'function') r.catch(() => {}); } catch (_) { /* bez interakce graf funguje */ }
-}
-
-function zapisRezimDoUrl(rezim) {
-  try {
-    const u = new URL(globalThis.location.href);
-    if (rezim === 'vse') u.searchParams.delete('kmen'); else u.searchParams.set('kmen', rezim);
-    globalThis.history.replaceState(null, '', u);
-  } catch (_) { /* bez history API se stav jen nezapíše */ }
+  if (!fig) return;
+  const h = fig.offsetHeight;
+  if (h) fig.style.minHeight = `${h}px`;
+  fig.classList.add('is-busy');
+  const swap = () => {
+    fig.innerHTML = grafMesicni(K, rezim);
+    try { const r = initZpInteract(); if (r && typeof r.catch === 'function') r.catch(() => {}); } catch (_) { /* bez interakce graf funguje */ }
+    const done = () => { fig.classList.remove('is-busy'); fig.style.minHeight = ''; };
+    if (typeof requestAnimationFrame === 'function') requestAnimationFrame(done); else done();
+  };
+  if (typeof requestAnimationFrame === 'function') requestAnimationFrame(swap); else swap();
 }
 
 /** Vykreslí obě kontejnery (chybí-li dataset, ukáže stav „nedohledáno“). */
@@ -214,19 +209,9 @@ export function renderKmenMesicni(K, rezimVstup) {
   const host = globalThis.document?.getElementById('zpKmenMesicni');
   if (!host || !host.addEventListener || host.dataset?.rezimInit === '1') return;
   host.dataset.rezimInit = '1';
-  const vyber = (id) => { prekresliGraf(host, K, id); zapisRezimDoUrl(id); };
-  host.addEventListener('click', (e) => {
-    const b = e.target.closest ? e.target.closest('button[data-rezim]') : null;
-    if (b) vyber(b.getAttribute('data-rezim'));
-  });
-  host.addEventListener('keydown', (e) => {
-    const b = e.target.closest ? e.target.closest('button[data-rezim]') : null;
-    const krok = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
-    if (!b || !krok) return;
-    e.preventDefault();
-    const i = MESICNI_REZIMY.findIndex((r) => r.id === b.getAttribute('data-rezim'));
-    const next = MESICNI_REZIMY[(i + krok + MESICNI_REZIMY.length) % MESICNI_REZIMY.length].id;
-    vyber(next);
-    host.querySelector(`button[data-rezim="${next}"]`)?.focus();
+  globalThis.document.addEventListener(SWITCH_EVENT, (e) => {
+    if (e.detail?.id !== 'kmen') return;
+    const id = MESICNI_REZIMY.some((r) => r.id === e.detail.value) ? e.detail.value : 'vse';
+    prekresliGraf(host, K, id);
   });
 }

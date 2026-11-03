@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 import {
   sg, rokPrerozdeleni, buildSaldoChart, buildPodilyPredPo, buildSaldoTabulka, saldoTabulkaHtml, buildVyberMesicni, vyberMesicniHtml,
   UKAZATELE, UKAZATEL_VYCHOZI, rokyUkazatele, crHodnota, buildRadyChart, radyHtml, prepinacRokuHtml, stavZUrl, stavDoUrl,
-  buildStatni, statniKarta, buildSegmenty, urovenV, buildFondProvoz, VYBER_REZIMY,
+  buildStatni, statniKarta, buildSegmenty, urovenV, buildFondProvoz, VYBER_REZIMY, buildSlozky, buildNaPojistence, prepinacVyberuHtml,
 } from '../src/pojistovny-penize.js';
 import { statniDd } from '../src/pojistovny.js';
 import { rankedBars, segmentedBar, SORT_NOTE } from '../src/zp-viz.js';
@@ -105,8 +105,8 @@ test('ukazatele: typy, výchozí, index vs. bary, ČR jen u ukazatelů na pojiš
   assert.equal(buildRadyChart(R, 'prijmy_celkem_mld', null).series.length, 7, 'součty bez ČR');
   const fig = radyHtml(R, { ukazatel: 'naklady_na_pojistence_kc', rok: null });
   assert.match(fig, /zpv-lines/);
-  assert.match(fig, /<select class="zpc-sit-select" id="zpRadySel" data-rady-sel>/);
-  assert.doesNotMatch(fig, /data-rok=/, 'u indexu bez přepínače roku');
+  assert.match(fig, /<select class="zpc-sit-select zpc-ctl-select" data-switch="ukazatel" data-default="naklady_na_pojistence_kc">/);
+  assert.doesNotMatch(fig, /data-switch="rok"/, 'u indexu bez přepínače roku');
   const bar = buildRadyChart(R, 'provozni_naklady_pct', 2023);
   assert.equal(bar.typ, 'bary');
   assert.equal(bar.rok, 2023);
@@ -116,13 +116,13 @@ test('ukazatele: typy, výchozí, index vs. bary, ČR jen u ukazatelů na pojiš
   assert.equal(sal.opts.allowNegative, true);
   assert.equal(sal.opts.signed, true);
   const html2 = radyHtml(R, { ukazatel: 'hospodarsky_vysledek_mld', rok: 2022 });
-  assert.match(html2, /data-rok="2022"/);
-  assert.match(html2, /aria-checked="true"[^>]*data-rok="2022"|data-rok="2022"[^>]*>/);
+  assert.match(html2, /data-switch="rok"/);
+  assert.match(html2, /aria-checked="true" tabindex="0" data-value="2022"/);
   assert.ok(html2.includes(SORT_NOTE));
   assert.equal(buildRadyChart(R, 'nesmysl', null).ukazatel.id, UKAZATEL_VYCHOZI);
   assert.equal(buildRadyChart(null, 'naklady_na_pojistence_kc', null).series.length, 0);
   assert.match(radyHtml(null, { ukazatel: 'x', rok: null }), /nedohledáno|Údaje nejsou/);
-  assert.match(prepinacRokuHtml([2023, 2024], 2024), /role="radiogroup" aria-label="Rok"/);
+  assert.match(prepinacRokuHtml([2023, 2024], 2024), /role="radiogroup" aria-label="Rok" data-switch="rok"/);
   assert.deepEqual(rokyUkazatele(R, 'statni_pojistenci_pct'), [2018, 2019, 2020, 2021, 2022, 2023, 2024]);
 });
 
@@ -221,4 +221,83 @@ test('přesun z Kmene: Hospodaření 2024, rezervy, provoz a výroční zprávy 
   assert.match(js, /function renderHospodareni\(d\)/);
   assert.match(js, /if \(has\(\['zpCards', 'zpChartShare'\]\)\) renderKmen\(d, rady\)/);
   assert.match(js, /has\(\['zpTableFin', 'zpChartZust', 'zpChartProvoz', 'zpChartYoy'\]\)\) renderHospodareni\(d\)/);
+});
+
+// ---------------------------------------------------------------- A4.3 společná komponenta přepínače
+
+test('přepínače Peněz jsou figureSwitch: id = parametr URL, výchozí hodnota se nezapisuje, listener na zp:switch', () => {
+  const vyber = prepinacVyberuHtml('bez-vzp');
+  assert.match(vyber, /role="radiogroup" aria-label="Rozsah grafu" data-switch="vyber" data-default="vse"/);
+  assert.match(vyber, /aria-checked="true" tabindex="0" data-value="bez-vzp"/);
+  assert.equal(count(vyber, /role="radio"/g), VYBER_REZIMY.length);
+  const src = fs.readFileSync(path.join(ROOT, 'src', 'pojistovny-penize.js'), 'utf8');
+  assert.match(src, /SWITCH_EVENT/);
+  assert.doesNotMatch(src, /data-rady-sel|data-seg-sel|data-vyber=|data-rok=/, 'staré ad-hoc atributy jsou pryč');
+  assert.deepEqual(stavZUrl('?ukazatel=hospodarsky_vysledek_mld&rok=2021&vyber=bez-vzp'), { ukazatel: 'hospodarsky_vysledek_mld', rok: 2021, segment: null, vyber: 'bez-vzp' });
+});
+
+// ---------------------------------------------------------------- složky salda
+
+test('složky salda: součet rizikové a plátcové složky = saldo, společná osa, bez slova „věk“ v kontextu salda', () => {
+  const sl = buildSlozky(PR);
+  const rok = PR.posledni_rok_rocni;
+  assert.equal(sl.rok, rok);
+  assert.match(sl.riz.opts.title, new RegExp(`^Složka riziková \\(složení kmene\\) ${rok}$`));
+  assert.match(sl.plat.opts.title, new RegExp(`^Složka plátcová \\(příjmy plátců\\) ${rok}$`));
+  for (const k of ['riz', 'plat']) {
+    assert.equal(sl[k].opts.allowNegative, true);
+    assert.equal(sl[k].opts.signed, true);
+    assert.equal(sl[k].opts.maxv, sl.maxAbs);
+    assert.equal(sl[k].opts.minv, -sl.maxAbs, 'stejná osa v obou grafech');
+    assert.equal(sl[k].items.length, 7);
+  }
+  assert.match(sl.okno, /^12\/\d{4}–11\/\d{4}$/);
+  for (let i = 0; i < 7; i++) {
+    const z = PR.pojistovny[i];
+    const r = z.rocne[rok];
+    assert.ok(Math.abs(sl.riz.items[i].value + sl.plat.items[i].value - r.saldo_relativni_mld) < 0.01, z.zkratka);
+  }
+  const maxAbs = Math.max(...[...sl.riz.items, ...sl.plat.items].map((i) => Math.abs(i.value)));
+  assert.equal(sl.maxAbs, maxAbs);
+  assert.equal(buildSlozky({ pojistovny: [] }), null);
+  // žádný popisek v kontextu salda nevysvětluje saldo „věkem kmene“
+  const txt = JSON.stringify([sl.riz.opts, sl.plat.opts, buildSaldoChart(PR).opts]);
+  assert.doesNotMatch(txt, /věk/i);
+});
+
+test('tabulka salda: sloupce saldo / riziková / plátcová za poslední rok, v HTML součet složek = saldo', () => {
+  const t = buildSaldoTabulka(PR);
+  assert.ok(t.radky.every((r) => r.slozky.rok === PR.posledni_rok_rocni));
+  const h = saldoTabulkaHtml(PR);
+  assert.match(h, /z toho riziková \(složení kmene\), mld Kč/);
+  assert.match(h, /z toho plátcová \(příjmy plátců\), mld Kč/);
+  const cislo = (x) => Number(x.replace(/<[^>]+>/g, '').replace(/\s/g, '').replace('−', '-').replace('+', '').replace(',', '.'));
+  for (const row of h.match(/<tr data-zp="\d+">.*?<\/tr>/g)) {
+    const cells = [...row.matchAll(/<td class="zpc-num[^"]*"[^>]*>(.*?)<\/td>/g)].map((m) => m[1]);
+    const [saldo, riz, plat] = cells.slice(-3).map(cislo);
+    assert.ok(Math.abs(riz + plat - saldo) <= 0.11, `${row.slice(0, 40)}: ${riz} + ${plat} ≠ ${saldo}`);
+  }
+  assert.doesNotMatch(h, /věk/i);
+});
+
+test('částky na pojištěnce: vybráno vs. po přerozdělení, stejná osa, rok z dat', () => {
+  const np = buildNaPojistence(PR);
+  assert.equal(np.rok, PR.posledni_rok_rocni);
+  assert.match(np.vybrano.opts.title, new RegExp(`^Vybráno na pojištěnce ${np.rok}$`));
+  assert.match(np.po.opts.title, new RegExp(`^Připadlo na pojištěnce po přerozdělení ${np.rok}$`));
+  assert.equal(np.vybrano.opts.maxv, np.po.opts.maxv);
+  assert.equal(np.vybrano.opts.unit, 'Kč');
+  assert.equal(np.vybrano.items.length, 7);
+  assert.equal(buildNaPojistence({ pojistovny: [] }), null);
+});
+
+test('stránka Peníze: text o salda mluví o složení kmene a příjmech plátců, ne o věku kmene', () => {
+  assert.match(html, /vyrovnává rozdíly ve složení kmene a výši příjmů plátců/);
+  assert.doesNotMatch(html, /věku kmene|dané věkem|věkem kmene/);
+  assert.match(html, /Kladné saldo RBP a ČPZP je plátcové/);
+});
+
+test('tooltip salda nese obě složky v mld Kč', () => {
+  const ch = buildSaldoChart(PR);
+  assert.match(ch.items[0].tip, /z toho riziková \(složení kmene\) \+10,8\smld\sKč, plátcová \(příjmy plátců\) \+6,4\smld\sKč/);
 });

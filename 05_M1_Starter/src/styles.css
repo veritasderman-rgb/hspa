@@ -23087,6 +23087,55 @@ button.zpv-sort:hover { text-decoration: underline; }
 table.zpv-heat th[aria-sort="descending"] button.zpv-sort::after { content: " \2193"; }
 table.zpv-heat th[aria-sort="ascending"] button.zpv-sort::after { content: " \2191"; }
 
+/* „Porovnat s“ (A4.2): druhá pojišťovna. Moje = výplň, porovnat = obrys 2px v barvě ZP (bez výplně), u čar čárkovaně.
+   Stav: main[data-porovnat-zp="<kód>"], .is-porovnat na .zpv-mark a tr, tr[data-porovnat="true"] + aria-current="false".
+   Žádné přechody: obrys se jen objeví, takže při prefers-reduced-motion není co vypínat. */
+.zpc-porovnat { margin-top: -6px; }
+.zpi-chips-lbl { font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-right: 2px; }
+.zpi-chip--porovnat[aria-pressed="true"] { background: transparent; border-style: dashed; border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); font-weight: 600; }
+main[data-porovnat-zp] .zpv-mark { opacity: .45; }
+main[data-porovnat-zp="111"] .zpv-mark[data-zp="111"] { opacity: 1; --zpv-mark-color: var(--zp-111); }
+main[data-porovnat-zp="201"] .zpv-mark[data-zp="201"] { opacity: 1; --zpv-mark-color: var(--zp-201); }
+main[data-porovnat-zp="205"] .zpv-mark[data-zp="205"] { opacity: 1; --zpv-mark-color: var(--zp-205); }
+main[data-porovnat-zp="207"] .zpv-mark[data-zp="207"] { opacity: 1; --zpv-mark-color: var(--zp-207); }
+main[data-porovnat-zp="209"] .zpv-mark[data-zp="209"] { opacity: 1; --zpv-mark-color: var(--zp-209); }
+main[data-porovnat-zp="211"] .zpv-mark[data-zp="211"] { opacity: 1; --zpv-mark-color: var(--zp-211); }
+main[data-porovnat-zp="213"] .zpv-mark[data-zp="213"] { opacity: 1; --zpv-mark-color: var(--zp-213); }
+.zpv-bar.is-porovnat, .zpv-seg.is-porovnat { background: transparent; box-shadow: inset 0 0 0 2px var(--zpv-mark-color, var(--ink)); }
+.zpv-seg.is-porovnat { color: var(--ink); }
+.zpv-db-to.is-porovnat { background: var(--paper); box-shadow: inset 0 0 0 2px var(--zpv-mark-color, var(--ink)), 0 0 0 2px var(--zpv-surface); }
+.zpv-pip--yes.is-porovnat { background: transparent; box-shadow: inset 0 0 0 2px var(--zpv-mark-color, var(--ink)); }
+/* čáry mají pathLength="1", proto jsou čárky v normalizovaných jednotkách (≈ 8 px čárka, 5 px mezera) */
+.zpv-line.is-porovnat { stroke-dasharray: .02 .013; stroke-width: 3; }
+.zpv-dot.is-porovnat { fill: var(--paper); stroke: var(--zpv-mark-color, var(--ink)); stroke-width: 2.5; }
+main[data-porovnat-zp] .zpv-figure.is-colored .zpv-mark.is-porovnat:not(.is-moje) { opacity: 1; }
+main[data-porovnat-zp] .zpv-figure.is-colored .zpv-seg.is-porovnat:not(.is-moje) { background: transparent; --zpv-on: var(--ink); color: var(--ink); position: relative; z-index: 1; box-shadow: inset 0 0 0 2px var(--zpv-mark-color, var(--ink)); }
+main tr[data-zp][data-porovnat="true"] { background: color-mix(in srgb, var(--paper2) 55%, var(--paper)); }
+main tr[data-zp][data-porovnat="true"] > :first-child { box-shadow: inset 3px 0 0 var(--ink-mut); }
+/* karta na přehledu: moje · porovnat · rozdíl; klíčové číslo na profilu s řádkem druhé ZP */
+.zpc-ov-cmp { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 24px; font-family: var(--sans); }
+.zpc-ov-karta--cmp dl { grid-template-columns: 1fr; gap: 10px; }
+.zpc-ov-col-h { font-size: 13px; font-weight: 600; margin: 0 0 8px; }
+.zpc-ov-col-role { font-weight: 400; color: var(--ink-mut); }
+.zpc-ov-col--diff { border-left: 1px solid var(--rule2); padding-left: 24px; }
+.zpc-ov-col dt { min-height: 1.4em; }
+@media (min-width: 701px) and (max-width: 1000px) { .zpc-ov-col dt { min-height: 2.8em; } }
+.zpc-ov-diff-v { font-variant-numeric: tabular-nums; }
+.zpc-vs { font-family: var(--sans); font-size: 14px; font-weight: 400; color: var(--ink-mut); }
+@media (max-width: 700px) { .zpc-ov-cmp { grid-template-columns: 1fr; } .zpc-ov-col--diff { border-left: 0; padding-left: 0; border-top: 1px solid var(--rule2); padding-top: 12px; } .zpc-ov-col dt { min-height: 0; } }
+.zpv-tile-cmp { display: block; font-size: 12.5px; line-height: 1.35; font-variant-numeric: tabular-nums; padding-left: 8px; border-left: 3px solid var(--zpv-cmp-c, var(--ink-mut)); }
+.zpv-tile-cmp[data-zp="111"] { --zpv-cmp-c: var(--zp-111); }
+.zpv-tile-cmp[data-zp="201"] { --zpv-cmp-c: var(--zp-201); }
+.zpv-tile-cmp[data-zp="205"] { --zpv-cmp-c: var(--zp-205); }
+.zpv-tile-cmp[data-zp="207"] { --zpv-cmp-c: var(--zp-207); }
+.zpv-tile-cmp[data-zp="209"] { --zpv-cmp-c: var(--zp-209); }
+.zpv-tile-cmp[data-zp="211"] { --zpv-cmp-c: var(--zp-211); }
+.zpv-tile-cmp[data-zp="213"] { --zpv-cmp-c: var(--zp-213); }
+/* společný přepínač u grafu (figureSwitch, A4.3): select má štítek ve stejném řádku, vnořený .zpc-ctl bez dalšího odsazení */
+.zpc-ctl--select { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+.zpc-ctl .zpc-ctl--select { margin: 0; }
+.zpc-num-sep { border-left: 1px solid var(--rule2); }
+
 @media (prefers-reduced-motion: reduce) {
   .zpi-chip, .zpi-expand-all { transition: none; }
   main[data-moje-zp] .zpv-mark, main[class*="zpi-hover-"] .zpv-mark { transition: none; }
@@ -23147,8 +23196,8 @@ table.zpv-heat th[aria-sort="ascending"] button.zpv-sort::after { content: " \21
    Barvy jen přes tokeny; text zůstává v inkoustu, identitu ZP nese tečka nebo mark.
    V těchto sekcích se marky nedimují podle „Moje pojišťovna“ (main[data-moje-zp] .zpv-mark { opacity: .45 }):
    výběr tu řeší vybraná pojišťovna a zvýraznění řádku tabulky. */
-main .zpk .zpv-mark, main[data-moje-zp] .zpk .zpv-mark, main[class*="zpi-hover-"] .zpk .zpv-mark,
-main .zps .zpv-mark, main[data-moje-zp] .zps .zpv-mark, main[class*="zpi-hover-"] .zps .zpv-mark { opacity: 1; }
+main .zpk .zpv-mark, main[data-moje-zp] .zpk .zpv-mark, main[data-porovnat-zp] .zpk .zpv-mark, main[class*="zpi-hover-"] .zpk .zpv-mark,
+main .zps .zpv-mark, main[data-moje-zp] .zps .zpv-mark, main[data-porovnat-zp] .zps .zpv-mark, main[class*="zpi-hover-"] .zps .zpv-mark { opacity: 1; }
 .zpk-sr, .zps-sr, .zpz-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 
 /* --- kraj × ZP (#zpKraje) --- */

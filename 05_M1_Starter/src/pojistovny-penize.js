@@ -12,11 +12,15 @@
 // Čisté funkce (testované bez DOM): buildSaldoChart, buildPodilyPredPo, buildSaldoTabulka,
 // saldoTabulkaHtml, buildVyberMesicni, vyberMesicniHtml, UKAZATELE, rokyUkazatele,
 // buildRadyChart, buildStatni, statniKarta, buildSegmenty, buildFondProvoz, stavZUrl,
-// stavDoUrl, prepinacRokuHtml, radyHtml. DOM část: renderPenize.
+// stavDoUrl, prepinacRokuHtml, radyHtml, buildSlozky, buildNaPojistence. DOM část: renderPenize.
+//
+// Přepínače (ukazatel, rok, segment, výběr) jsou společná komponenta figureSwitch (src/zp-viz.js, A4.3);
+// klik, šipky a zápis ?ukazatel=&rok=&segment=&vyber= do URL řeší src/zp-interact.js, tenhle modul
+// jen poslouchá událost `zp:switch` a překreslí příslušný kontejner.
 
 import { esc, fmtKc, dot, set } from './pojistovny-shared.js';
-import { rankedBars, segmentedBar, indexedLines, dumbbell, isNum } from './zp-viz.js';
-import { initZpInteract, MOJE_EVENT } from './zp-interact.js';
+import { rankedBars, segmentedBar, indexedLines, dumbbell, isNum, figureSwitch, readSwitchFromUrl } from './zp-viz.js';
+import { initZpInteract, MOJE_EVENT, SWITCH_EVENT } from './zp-interact.js';
 import { ZP_BY_KOD } from './zp-palette.js';
 import { mesicX, mesicLabel, xLabel } from './pojistovny-kmen-mesicni.js';
 
@@ -51,9 +55,11 @@ export function buildSaldoChart(PR) {
   const items = zpList(PR).map((z) => {
     const r = z.rocne?.[rok] || {};
     const v = isNum(r.saldo_relativni_mld) ? r.saldo_relativni_mld : null;
+    const sl = isNum(r.slozka_rizikova_mld) && isNum(r.slozka_platcova_mld)
+      ? ` · z toho riziková (složení kmene) ${sg(r.slozka_rizikova_mld, 1, 'mld Kč')}, plátcová (příjmy plátců) ${sg(r.slozka_platcova_mld, 1, 'mld Kč')}` : '';
     const tip = v == null ? `${z.zkratka}: nedohledáno`
       : `${z.zkratka}: ${sg(v, 1, 'mld Kč')} · ${sg(r.saldo_relativni_pct_vybraneho, 1, '%')} vybraného pojistného`
-        + `${isNum(r.saldo_relativni_na_pojistence_kc) ? ` · ${sg(r.saldo_relativni_na_pojistence_kc, 0, 'Kč')} na pojištěnce` : ''} · ${rok}`;
+        + `${isNum(r.saldo_relativni_na_pojistence_kc) ? ` · ${sg(r.saldo_relativni_na_pojistence_kc, 0, 'Kč')} na pojištěnce` : ''}${sl} · ${rok}`;
     return { ...base(z), value: v, rok, tip };
   });
   return {
@@ -94,19 +100,74 @@ export function buildSaldoTabulka(PR) {
       return { rok: y, pct: isNum(r.saldo_relativni_pct_vybraneho) ? r.saldo_relativni_pct_vybraneho : null, mld: isNum(r.saldo_relativni_mld) ? r.saldo_relativni_mld : null };
     }),
   }));
+  // poslední celý rok: saldo a jeho dvě složky (součet složek = saldo)
+  for (const rd of radky) {
+    const r = zpList(PR).find((z) => z.kod === rd.kod)?.rocne?.[posl] || {};
+    rd.slozky = {
+      rok: posl,
+      saldo: isNum(r.saldo_relativni_mld) ? r.saldo_relativni_mld : null,
+      riz: isNum(r.slozka_rizikova_mld) ? r.slozka_rizikova_mld : null,
+      plat: isNum(r.slozka_platcova_mld) ? r.slozka_platcova_mld : null,
+    };
+  }
   return { roky, radky };
+}
+
+/** Složky relativního salda za poslední celý rok: dvě diverging rankedBars na společné ose (mld Kč). */
+export function buildSlozky(PR) {
+  const rok = rokPrerozdeleni(PR);
+  const mk = (klic) => zpList(PR).map((z) => {
+    const r = z.rocne?.[rok] || {};
+    return { ...base(z), value: isNum(r[klic]) ? r[klic] : null, rok };
+  });
+  const riz = mk('slozka_rizikova_mld');
+  const plat = mk('slozka_platcova_mld');
+  const all = [...riz, ...plat].map((i) => i.value).filter(isNum);
+  if (!all.length) return null;
+  const maxAbs = Math.max(...all.map(Math.abs));
+  const okno = zpList(PR).map((z) => z.rocne?.[rok]?.okno_vyberu).find(Boolean) || null;
+  const common = { unit: 'mld Kč', dec: 1, allowNegative: true, signed: true, maxv: maxAbs, minv: -maxAbs, source: SRC_PRER };
+  const tip = (i, jmeno) => ({ ...i, tip: i.value == null ? `${i.label}: nedohledáno` : `${i.label}: ${sg(i.value, 1, 'mld Kč')} · ${jmeno} · ${rok}` });
+  return {
+    rok, okno, maxAbs,
+    riz: { items: riz.map((i) => tip(i, 'složka riziková')), opts: { ...common, title: `Složka riziková (složení kmene) ${rok ?? ''}`.trim(), sub: 'Odchylka částky po přerozdělení od rovného dílu na hlavu. Kladná = pojišťovna dostala na pojištěnce víc, než činí průměr sedmi pojišťoven; mechanismus tak vyrovnává rozdíly ve složení a nákladnosti kmene.' } },
+    plat: { items: plat.map((i) => tip(i, 'složka plátcová')), opts: { ...common, title: `Složka plátcová (příjmy plátců) ${rok ?? ''}`.trim(), sub: 'Rozdíl mezi rovným dílem na hlavu a dílem podle vybraného pojistného. Kladná = pojišťovna vybrala na pojištěnce méně než průměr, záporná = víc. Obě složky mají stejnou osu a dávají dohromady celé saldo.' } },
+  };
+}
+
+/** Částky na průměrného pojištěnce za poslední celý rok: vybráno vs. po přerozdělení (Kč), společná osa. */
+export function buildNaPojistence(PR) {
+  const rok = rokPrerozdeleni(PR);
+  const mk = (klic, jmeno) => zpList(PR).map((z) => {
+    const v = z.rocne?.[rok]?.[klic];
+    return { ...base(z), value: isNum(v) ? v : null, rok, tip: isNum(v) ? `${z.zkratka}: ${fmtKc(v, 0)} Kč na pojištěnce · ${jmeno} · ${rok}` : `${z.zkratka}: nedohledáno` };
+  });
+  const vyb = mk('vybrano_na_pojistence_kc', 'vybrané pojistné');
+  const po = mk('po_prerozdeleni_na_pojistence_kc', 'po přerozdělení');
+  const all = [...vyb, ...po].map((i) => i.value).filter(isNum);
+  if (!all.length) return null;
+  const common = { unit: 'Kč', dec: 0, maxv: Math.max(...all), source: SRC_PRER };
+  return {
+    rok,
+    vybrano: { items: vyb, opts: { ...common, title: `Vybráno na pojištěnce ${rok ?? ''}`.trim(), sub: 'Kč za rok na průměrného pojištěnce. Vybrané pojistné není příjem pojišťovny.' } },
+    po: { items: po, opts: { ...common, title: `Připadlo na pojištěnce po přerozdělení ${rok ?? ''}`.trim(), sub: 'Kč za rok na průměrného pojištěnce; to je příjem pojišťovny. Obě osy jsou stejné.' } },
+  };
 }
 
 export function saldoTabulkaHtml(PR) {
   const t = buildSaldoTabulka(PR);
   if (!t.roky.length || !t.radky.length) return '<p class="zpc-na">Roční saldo zatím není k dispozici (nedohledáno).</p>';
-  const head = `<tr><th scope="col">Pojišťovna</th>${t.roky.map((y) => `<th scope="col">${y}</th>`).join('')}</tr>`;
+  const rokS = t.radky[0]?.slozky?.rok ?? t.roky[t.roky.length - 1];
+  const head = `<tr><th scope="col">Pojišťovna</th>${t.roky.map((y) => `<th scope="col">${y}</th>`).join('')}`
+    + `<th scope="col" class="zpc-num-sep">Saldo ${rokS}, mld Kč</th><th scope="col">z toho riziková (složení kmene), mld Kč</th><th scope="col">z toho plátcová (příjmy plátců), mld Kč</th></tr>`;
+  const cell = (v) => (isNum(v) ? `<td class="zpc-num">${esc(sg(v, 1))}</td>` : '<td class="zpc-num"><span class="zpc-na">—</span></td>');
   const body = t.radky.map((r) => `<tr data-zp="${esc(r.kod)}"><th scope="row">${dot(r.kod)}${esc(r.zkratka)}</th>${r.bunky.map((b) => (b.pct == null
     ? '<td class="zpc-num"><span class="zpc-na">—</span></td>'
-    : `<td class="zpc-num" title="${esc(`${r.zkratka} ${b.rok}: ${sg(b.mld, 1, 'mld Kč')}`)}">${esc(sg(b.pct, 1))}</td>`)).join('')}</tr>`).join('');
-  return '<div class="zpc-tbl" role="region" tabindex="0" aria-label="Relativní saldo přerozdělení v procentech vybraného pojistného podle let (tabulka, posuvná)">'
+    : `<td class="zpc-num" title="${esc(`${r.zkratka} ${b.rok}: ${sg(b.mld, 1, 'mld Kč')}`)}">${esc(sg(b.pct, 1))}</td>`)).join('')}`
+    + `${cell(r.slozky?.saldo).replace('<td class="zpc-num">', '<td class="zpc-num zpc-num-sep">')}${cell(r.slozky?.riz)}${cell(r.slozky?.plat)}</tr>`).join('');
+  return '<div class="zpc-tbl" role="region" tabindex="0" aria-label="Relativní saldo přerozdělení v procentech vybraného pojistného podle let a rozklad salda za poslední rok (tabulka, posuvná)">'
     + `<table><caption class="sr-only">Relativní saldo přerozdělení v % vybraného pojistného, ${t.roky[0]}–${t.roky[t.roky.length - 1]}</caption><thead>${head}</thead><tbody>${body}</tbody></table></div>`
-    + `<p class="zpc-cap">Saldo v % vybraného pojistného dané pojišťovny, ${t.roky[0]}–${t.roky[t.roky.length - 1]} (roky s dvanácti měsíci). Pevné pořadí podle kódu pojišťovny, nejde o hodnocení. Najetím na buňku uvidíte saldo v mld Kč. ${esc(SRC_PRER)}.</p>`;
+    + `<p class="zpc-cap">Saldo v % vybraného pojistného dané pojišťovny, ${t.roky[0]}–${t.roky[t.roky.length - 1]} (roky s dvanácti měsíci). Poslední tři sloupce rozkládají saldo za ${rokS} v mld Kč na složku rizikovou (složení kmene) a plátcovou (příjmy plátců); dohromady dávají saldo. Pevné pořadí podle kódu pojišťovny, nejde o hodnocení. Najetím na buňku uvidíte saldo v mld Kč. ${esc(SRC_PRER)}.</p>`;
 }
 
 /** Režimy přepínače měsíčního výběru. */
@@ -148,22 +209,14 @@ export function vyberMesicniHtml(PR, rezim = 'vse') {
 
 // ---------------------------------------------------------------- přepínače
 
-/** Radiogroup z tlačítek (roving tabindex); `attr` je název data-atributu s id volby. */
-export function radioHtml(label, moznosti, aktualni, attr) {
-  const btn = (m) => {
-    const on = String(m.id) === String(aktualni);
-    return `<button type="button" role="radio" aria-checked="${on}" tabindex="${on ? 0 : -1}" ${attr}="${esc(m.id)}">${esc(m.label)}</button>`;
-  };
-  return `<div class="zpc-switch" role="radiogroup" aria-label="${esc(label)}">${(moznosti || []).map(btn).join('')}</div>`;
-}
-
-/** Přepínač roku (A4.3 ho později zobecní). */
+/** Přepínač roku (figureSwitch, id/parametr `rok`). */
 export function prepinacRokuHtml(roky, rok) {
-  return radioHtml('Rok', (roky || []).map((y) => ({ id: y, label: String(y) })), rok, 'data-rok');
+  return figureSwitch({ id: 'rok', label: 'Rok', kind: 'radio', selected: rok, options: (roky || []).map((y) => ({ value: y, label: String(y) })) });
 }
 
+/** Přepínač rozsahu měsíčního výběru (figureSwitch, id/parametr `vyber`, výchozí `vse`). */
 export function prepinacVyberuHtml(rezim) {
-  return radioHtml('Rozsah grafu', VYBER_REZIMY, rezim, 'data-vyber');
+  return figureSwitch({ id: 'vyber', label: 'Rozsah grafu', kind: 'radio', selected: rezim, defaultValue: 'vse', options: VYBER_REZIMY.map((r) => ({ value: r.id, label: r.label })) });
 }
 
 // ---------------------------------------------------------------- A1.1 řady hospodaření
@@ -266,14 +319,13 @@ export function buildRadyChart(R, ukazatel, rok) {
 export function stavZUrl(search) {
   let p;
   try { p = new URLSearchParams(String(search ?? '')); } catch (_) { p = new URLSearchParams(''); }
-  const u = p.get('ukazatel');
+  const q = `?${p.toString()}`;
   const rok = Number(p.get('rok'));
-  const v = p.get('vyber');
   return {
-    ukazatel: ukazatelById(u) ? u : UKAZATEL_VYCHOZI,
+    ukazatel: readSwitchFromUrl('ukazatel', UKAZATELE.map((u) => u.id), UKAZATEL_VYCHOZI, q),
     rok: Number.isInteger(rok) && rok > 1990 ? rok : null,
     segment: p.get('segment') || null,
-    vyber: VYBER_REZIMY.some((r) => r.id === v) ? v : 'vse',
+    vyber: readSwitchFromUrl('vyber', VYBER_REZIMY.map((r) => r.id), 'vse', q),
   };
 }
 
@@ -293,8 +345,7 @@ export function stavDoUrl(stav, search = '') {
 /** Select ukazatele + (u typu bary) přepínač roku + graf. */
 export function radyHtml(R, stav) {
   const ch = buildRadyChart(R, stav.ukazatel, stav.rok);
-  const opts = UKAZATELE.map((u) => `<option value="${esc(u.id)}"${u.id === ch.ukazatel.id ? ' selected' : ''}>${esc(u.label)}</option>`).join('');
-  const select = `<label class="zpc-ctl-lbl" for="zpRadySel">Ukazatel</label><select class="zpc-sit-select" id="zpRadySel" data-rady-sel>${opts}</select>`;
+  const select = figureSwitch({ id: 'ukazatel', label: 'Ukazatel', kind: 'select', selected: ch.ukazatel.id, defaultValue: UKAZATEL_VYCHOZI, options: UKAZATELE.map((u) => ({ value: u.id, label: u.label })) });
   const rokSw = ch.typ === 'bary' && ch.roky.length > 1 ? `<div class="zpc-ctl-rok"><span class="zpc-ctl-lbl" id="zpRadyRokLbl">Rok</span>${prepinacRokuHtml(ch.roky, ch.rok)}</div>` : '';
   const fig = ch.typ === 'index' ? indexedLines(ch.series, ch.opts) : rankedBars(ch.items, ch.opts);
   const odv = ch.typ === 'bary' && ch.cr?.odvozeno ? `<p class="zpc-cap">${esc(`Pásmo „${ch.cr.label}“ je podíl součtu státních pojištěnců na součtu pojištěnců sedmi pojišťoven, MZ ČR jako celek nezveřejňuje.`)}</p>` : '';
@@ -535,10 +586,25 @@ const NEDOHLEDANO = (txt) => `<p class="zpc-na">${esc(txt)}</p>`;
 function prerozdeleniHtml(PR, rezim) {
   const saldo = buildSaldoChart(PR);
   const pp = buildPodilyPredPo(PR);
+  const sl = buildSlozky(PR);
+  const np = buildNaPojistence(PR);
+  const slozkyHtml = sl
+    ? '<div class="zpc-charts zpc-slozky">'
+      + `<div class="zpc-chart">${rankedBars(sl.riz.items, sl.riz.opts)}</div>`
+      + `<div class="zpc-chart">${rankedBars(sl.plat.items, sl.plat.opts)}</div></div>`
+      + `<p class="zpc-cap">${esc(`Roční hodnoty za ${sl.rok} počítají výběr za období${sl.okno ? ` ${sl.okno}` : ''} (okno výběru): sloupec měsíce v PDF Ministerstva zdravotnictví je měsíc přerozdělení a rozděluje se v něm pojistné vybrané za předchozí měsíc. Složka riziková a plátcová se sčítají na saldo; kladné saldo RBP a ČPZP je proto plátcové (nižší výběr na pojištěnce), ne dané starším kmenem.`)}</p>`
+    : '';
+  const naPojHtml = np
+    ? '<div class="zpc-charts">'
+      + `<div class="zpc-chart">${rankedBars(np.vybrano.items, np.vybrano.opts)}</div>`
+      + `<div class="zpc-chart">${rankedBars(np.po.items, np.po.opts)}</div></div>`
+    : '';
   return rankedBars(saldo.items, saldo.opts)
+    + slozkyHtml
     + '<div class="zpc-charts">'
     + `<div class="zpc-chart">${segmentedBar(pp.pred.parts, pp.pred.opts)}</div>`
     + `<div class="zpc-chart">${segmentedBar(pp.po.parts, pp.po.opts)}</div></div>`
+    + naPojHtml
     + `<h3 class="section-title"><span>Relativní saldo v % vybraného pojistného ${buildSaldoTabulka(PR).roky[0] ?? ''}–${saldo.rok ?? ''}</span></h3>`
     + saldoTabulkaHtml(PR)
     + '<h3 class="section-title"><span>Výběr pojistného měsíc po měsíci</span></h3>'
@@ -553,11 +619,10 @@ function segmentyHtml(S, R, kod) {
   const who = moje
     ? `Zobrazeno: ${dot(ch.dumbbell.kod)}<b>${esc(ch.dumbbell.zkratka)}</b> (vaše pojišťovna). Jinou zvolíte v řádku „Moje pojišťovna“ nahoře.`
     : `Zobrazeno: ${dot(ch.dumbbell.kod)}<b>${esc(ch.dumbbell.zkratka)}</b> (výchozí). Vyberte svou pojišťovnu nahoře.`;
-  const opts = ch.moznosti.map((m) => `<option value="${esc(m.id)}"${m.id === ch.perPojistence.segmentId ? ' selected' : ''}>${esc(m.label)}</option>`).join('');
   const bars = ch.bary.map((b, i) => segmentedBar(b.parts, { ...b.opts, sub: i === 0 ? `Podíl segmentů na nákladech na zdravotní služby ${ch.rok}; 100 % = náklady celkem. Čtyři skupiny: ambulantní a lůžková péče, léky na recepty a ostatní.` : undefined })).join('');
   return `<div class="zpc-seg-bary">${bars}</div>`
     + `<p class="zpc-note zpc-fp-who">${who}</p>${dumbbell(ch.dumbbell.items, ch.dumbbell.opts)}`
-    + `<div class="zpc-ctl"><label class="zpc-ctl-lbl" for="zpSegSel">Segment</label><select class="zpc-sit-select" id="zpSegSel" data-seg-sel>${opts}</select></div>`
+    + figureSwitch({ id: 'segment', label: 'Segment', kind: 'select', selected: ch.perPojistence.segmentId, options: ch.moznosti.map((m) => ({ value: m.id, label: m.label })) })
     + rankedBars(ch.perPojistence.items, ch.perPojistence.opts)
     + '<p class="zpc-cap">Členění listu MZ se mezi ročníky mění: od roku 2023 jsou ozdravovny podřádkem lázní (dříve samostatný řádek), proto řada Lázně 2022 → 2023 není přesně srovnatelná. Zobrazený rok má jednotné členění.</p>'
     + (ch.perPojistence.cr?.odvozeno ? '<p class="zpc-cap">Pásmo je součet nákladů sedmi pojišťoven dělený součtem jejich pojištěnců, MZ ČR jako celek nezveřejňuje.</p>' : '');
@@ -597,64 +662,29 @@ function vazbaUdalosti(doc) {
   if (!doc?.getElementById || vazbaUdalosti.done) return;
   vazbaUdalosti.done = true;
   const pr = doc.getElementById('zpPrerozdeleni');
-  pr?.addEventListener('click', (e) => {
-    const b = e.target.closest ? e.target.closest('button[data-vyber]') : null;
-    if (!b) return;
-    stav.vyber = b.getAttribute('data-vyber');
-    pr.querySelectorAll('button[data-vyber]').forEach((x) => {
-      const on = x.getAttribute('data-vyber') === stav.vyber;
-      x.setAttribute('aria-checked', String(on));
-      x.setAttribute('tabindex', on ? '0' : '-1');
-    });
-    const fig = pr.querySelector('[data-vyber-fig]');
-    if (fig) prekresli(fig, vyberMesicniHtml(dataRef.PR, stav.vyber));
-    zapisUrl();
-  });
   const rady = doc.getElementById('zpRady');
-  rady?.addEventListener('change', (e) => {
-    const sel = e.target.closest ? e.target.closest('select[data-rady-sel]') : null;
-    if (!sel) return;
-    stav.ukazatel = sel.value;
-    stav.rok = null;
-    prekresli(rady, radyHtml(dataRef.R, stav), 'select[data-rady-sel]');
-    zapisUrl();
-  });
-  rady?.addEventListener('click', (e) => {
-    const b = e.target.closest ? e.target.closest('button[data-rok]') : null;
-    if (!b) return;
-    stav.rok = Number(b.getAttribute('data-rok'));
-    prekresli(rady, radyHtml(dataRef.R, stav), `button[data-rok="${stav.rok}"]`);
-    zapisUrl();
-  });
-  rady?.addEventListener('keydown', (e) => {
-    const b = e.target.closest ? e.target.closest('button[role="radio"]') : null;
-    const krok = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
-    if (!b || !krok) return;
-    e.preventDefault();
-    const all = [...b.parentElement.querySelectorAll('button[role="radio"]')];
-    const next = all[(all.indexOf(b) + krok + all.length) % all.length];
-    next?.click();
-  });
-  pr?.addEventListener('keydown', (e) => {
-    const b = e.target.closest ? e.target.closest('button[data-vyber]') : null;
-    const krok = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
-    if (!b || !krok) return;
-    e.preventDefault();
-    const all = [...b.parentElement.querySelectorAll('button[data-vyber]')];
-    const next = all[(all.indexOf(b) + krok + all.length) % all.length];
-    next?.click();
-    next?.focus();
-  });
   const seg = doc.getElementById('zpSegmenty');
-  seg?.addEventListener('change', (e) => {
-    const sel = e.target.closest ? e.target.closest('select[data-seg-sel]') : null;
-    if (!sel) return;
-    stav.segment = sel.value;
-    prekresli(seg, segmentyHtml(dataRef.S, dataRef.R, mojeKod() || KOD_VZP), 'select[data-seg-sel]');
-    zapisUrl();
+  // Přepínače jsou figureSwitch; klik, šipky a zápis do URL udělal zp-interact, tady jen překreslení.
+  doc.addEventListener(SWITCH_EVENT, (e) => {
+    const { id, value } = e.detail || {};
+    if (id === 'vyber') {
+      stav.vyber = VYBER_REZIMY.some((r) => r.id === value) ? value : 'vse';
+      const fig = pr?.querySelector('[data-vyber-fig]');
+      if (fig && dataRef.PR) prekresli(fig, vyberMesicniHtml(dataRef.PR, stav.vyber));
+    } else if (id === 'ukazatel' && rady && dataRef.R) {
+      stav.ukazatel = ukazatelById(value) ? value : UKAZATEL_VYCHOZI;
+      stav.rok = null;
+      prekresli(rady, radyHtml(dataRef.R, stav), 'select[data-switch="ukazatel"]');
+    } else if (id === 'rok' && rady && dataRef.R) {
+      stav.rok = Number(value);
+      prekresli(rady, radyHtml(dataRef.R, stav), `.zpc-switch[data-switch="rok"] button[data-value="${stav.rok}"]`);
+    } else if (id === 'segment' && seg && dataRef.S) {
+      stav.segment = value || null;
+      prekresli(seg, segmentyHtml(dataRef.S, dataRef.R, mojeKod() || KOD_VZP), 'select[data-switch="segment"]');
+    } else return;
+    zapisUrl(); // sjednotí URL se stavem (např. změna ukazatele maže rok)
   });
   doc.addEventListener(MOJE_EVENT, () => {
     if (seg && dataRef.S) prekresli(seg, segmentyHtml(dataRef.S, dataRef.R, mojeKod() || KOD_VZP));
   });
 }
-

@@ -361,15 +361,18 @@ test('přepínač rozsahu: radiogroup, výchozí vse, stav z URL, graf pro reži
   assert.equal(rezimZUrl('?kmen=hmm'), 'vse');
   assert.equal(rezimZUrl(undefined), 'vse');
   const html = prepinacHtml('vse');
-  assert.match(html, /<div class="zpc-switch" role="radiogroup" aria-label="Rozsah grafu">/);
+  assert.match(html, /<div class="zpc-switch" role="radiogroup" aria-label="Rozsah grafu" data-switch="kmen" data-default="vse">/);
   assert.equal((html.match(/role="radio"/g) || []).length, 3);
-  assert.match(html, /aria-checked="true" tabindex="0" data-rezim="vse"/);
+  assert.match(html, /aria-checked="true" tabindex="0" data-value="vse"/);
   assert.equal((html.match(/aria-checked="false"/g) || []).length, 2);
-  assert.match(prepinacHtml('bez-vzp'), /aria-checked="true"[^>]*data-rezim="bez-vzp"/);
+  assert.match(prepinacHtml('bez-vzp'), /aria-checked="true"[^>]*data-value="bez-vzp"/);
+  assert.equal(prepinacHtml('nesmysl').match(/aria-checked="true"/g).length, 1, 'neznámá volba = první');
   assert.equal((grafMesicni(K, 'bez-vzp').match(/data-zp="111"/g) || []).length, 0, 'VZP v grafu není');
   assert.ok((grafMesicni(K, 'vse').match(/data-zp="111"/g) || []).length > 0);
   const src = readTxt('src', 'pojistovny-kmen-mesicni.js');
-  assert.match(src, /history\.replaceState/);
+  assert.match(src, /figureSwitch/, 'společná komponenta (A4.3)');
+  assert.match(src, /SWITCH_EVENT/, 'poslouchá zp:switch');
+  assert.doesNotMatch(src, /history\.replaceState/, 'URL zapisuje zp-interact');
   assert.match(src, /initZpInteract/);
 });
 

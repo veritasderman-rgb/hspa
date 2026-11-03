@@ -6,7 +6,7 @@
 //
 //   rankedBars      seřazené vodorovné bary (HTML/CSS), referenční zóna/linka
 //   segmentedBar    tall segmented bar (part-to-whole), fold do „Ostatní“
-//   statTiles       KPI řada stat dlaždic (count-up hook, fallback = konečná hodnota)
+//   statTiles       KPI řada stat dlaždic (count-up hook, fallback = konečná hodnota; volitelně řádek `cmp` s druhou pojišťovnou)
 //   meter           meter s trackem ve světlejším kroku téže barvy (role="meter")
 //   indexedLines    SVG, index základní rok = 100, jedna osa, direct labels + legenda
 //   dumbbell        plán → skutečnost (HTML/CSS), rozdíl v % v tooltipu
@@ -205,12 +205,14 @@ function valWidthClass(texts) {
 /**
  * @param {Array<{kod?, key?, label, value, rok?, zdroj?, note?, tip?}>} items
  * @param {{title?, sub?, unit?, dec?, ref?: {value, label, kind?: 'line'|'zone-below'|'zone-above'},
- *          sort?: 'desc'|'none', maxv?, source?, sortNote?: string|false,
+ *          sort?: 'desc'|'none', maxv?, minv?, source?, sortNote?: string|false,
  *          allowNegative?: boolean, signed?: boolean}} opts
  *
  * allowNegative: záporné hodnoty se kreslí doleva od nulové osy (diverging bar,
  * jedna barva; směr nese poloha a znaménko, ne barva). Bez záporných hodnot je
  * výstup stejný jako bez volby. signed: kladné hodnoty dostanou „+“.
+ * minv (jen s allowNegative, záporné číslo): pevný dolní okraj osy, aby dva grafy vedle sebe
+ * měly stejnou osu (spolu s maxv).
  */
 export function rankedBars(items, opts = {}) {
   const { unit = '', dec = 0, ref = null, sort = 'desc', maxv, source = '', allowNegative = false, signed = false } = opts;
@@ -220,7 +222,7 @@ export function rankedBars(items, opts = {}) {
   const refOk = ref && isNum(ref.value);
   const vals = rows.map((r) => r.value).filter(isNum);
   const hasNeg = allowNegative && vals.some((v) => v < 0);
-  const lo = hasNeg ? Math.min(0, ...vals, refOk ? ref.value : 0) : 0;
+  const lo = hasNeg ? Math.min(0, isNum(opts.minv) ? opts.minv : 0, ...vals, refOk ? ref.value : 0) : 0;
   let max = isNum(maxv) && maxv > 0 ? maxv : Math.max(0, ...vals, refOk ? ref.value : 0);
   if (!(max > 0)) max = 1;
   const span = max - lo;
@@ -377,7 +379,12 @@ export function statTiles(tiles, opts = {}) {
     }
     const unit = t.unit && isNum(t.value) ? `<span class="zpv-tile-unit">${esc(t.unit)}</span>` : '';
     const meta = t.meta ? `<span class="zpv-tile-meta">${esc(t.meta)}</span>` : '';
-    return `<li class="zpv-tile"${idAttr(t)}><span class="zpv-tile-val">${val}${unit}</span>`
+    // A4.2: volitelné porovnání s druhou pojišťovnou pod hodnotou: „ČPZP: 1,2 mil. · rozdíl +0,3 mil.“
+    const cmp = t.cmp && typeof t.cmp === 'object' && t.cmp.label
+      ? `<span class="zpv-tile-cmp"${t.cmp.kod ? ` data-zp="${esc(t.cmp.kod)}"` : ''}>${esc(t.cmp.label)}: ${esc(t.cmp.text ?? NA_TEXT)}`
+        + `${t.cmp.diff ? ` · rozdíl ${esc(t.cmp.diff)}` : ''}</span>`
+      : '';
+    return `<li class="zpv-tile"${idAttr(t)}><span class="zpv-tile-val">${val}${unit}</span>${cmp}`
       + `<span class="zpv-tile-label">${esc(t.label ?? '')}</span>${meta}</li>`;
   }).join('');
   const aria = opts.title ? ` aria-label="${esc(opts.title)}"` : '';
@@ -862,4 +869,61 @@ export function coverageMatrix(rows, cols, cell, opts = {}) {
   }).join('')}<li><span class="zpv-cov-ic" aria-hidden="true">—</span>${NA_TEXT}</li></ul>`;
   const table = `<table class="zpv-matrix zpv-covtable" aria-label="${esc(opts.title || 'Matice pokrytí')}"><thead>${head}</thead><tbody>${body}</tbody></table>`;
   return matrixFigure('coverage', opts, table, legend);
+}
+
+// ---------------------------------------------------------------------
+//  Přepínač u grafu (A4.3) a rozdíl dvou hodnot (A4.2)
+// ---------------------------------------------------------------------
+
+/**
+ * Společný přepínač u grafu. Čistá funkce, vrací HTML; chování (klik, šipky, URL, událost `zp:switch`)
+ * dodává jeden delegovaný handler v src/zp-interact.js.
+ *   kind 'radio'  → <div class="zpc-switch" role="radiogroup" data-switch="<id>"> s button[role=radio][data-value]
+ *   kind 'select' → <label class="zpc-ctl"> … <select class="zpc-ctl-select" data-switch="<id>">
+ * `defaultValue` (volitelné) se nezapisuje do URL (parametr se při návratu na výchozí smaže).
+ * @param {{id: string, label: string, options: Array<{value, label}>, selected?: any, kind?: 'radio'|'select', defaultValue?: any}} o
+ */
+export function figureSwitch({ id, label, options, selected, kind = 'radio', defaultValue } = {}) {
+  const opts = (Array.isArray(options) ? options : []).filter((o) => o && o.value != null);
+  const hasSel = opts.some((o) => String(o.value) === String(selected));
+  const sel = hasSel ? String(selected) : (opts.length ? String(opts[0].value) : '');
+  const def = defaultValue != null ? ` data-default="${esc(defaultValue)}"` : '';
+  if (kind === 'select') {
+    const o = opts.map((x) => `<option value="${esc(x.value)}"${String(x.value) === sel ? ' selected' : ''}>${esc(x.label ?? x.value)}</option>`).join('');
+    return `<label class="zpc-ctl zpc-ctl--select"><span class="zpc-ctl-lbl">${esc(label)}</span>`
+      + `<select class="zpc-sit-select zpc-ctl-select" data-switch="${esc(id)}"${def}>${o}</select></label>`;
+  }
+  const btn = (x) => {
+    const on = String(x.value) === sel;
+    return `<button type="button" role="radio" aria-checked="${on}" tabindex="${on ? 0 : -1}" data-value="${esc(x.value)}">${esc(x.label ?? x.value)}</button>`;
+  };
+  return `<div class="zpc-switch" role="radiogroup" aria-label="${esc(label)}" data-switch="${esc(id)}"${def}>${opts.map(btn).join('')}</div>`;
+}
+
+/**
+ * Hodnota přepínače z URL (`?<id>=…`); hodnota mimo `allowed` nebo chybějící parametr = `fallback`.
+ * @param {string} id  název parametru (= id přepínače)
+ * @param {Array<string|number>} allowed
+ * @param {*} fallback
+ * @param {string} [search]  query string; výchozí location.search
+ */
+export function readSwitchFromUrl(id, allowed, fallback, search) {
+  let v = null;
+  try {
+    const q = search !== undefined ? search : (globalThis.location ? globalThis.location.search : '');
+    v = new URLSearchParams(String(q ?? '')).get(id);
+  } catch (_) { v = null; }
+  if (v == null) return fallback;
+  const hit = (Array.isArray(allowed) ? allowed : []).find((a) => String(a) === v);
+  return hit !== undefined ? hit : fallback;
+}
+
+/** Rozdíl „+1,2 p. b.“ / „−3“ / „±0“ (typografické minus; po zaokrouhlení na `dec` míst nula = „±0“). */
+export function fmtRozdil(a, b, dec = 1, unit = '') {
+  if (!isNum(a) || !isNum(b)) return null;
+  const k = 10 ** dec;
+  const d = Math.round((a - b) * k) / k;
+  if (d === 0) return '±0';
+  const body = formatNumberCz(Math.abs(d), { minDecimals: dec, maxDecimals: dec });
+  return `${d > 0 ? '+' : '−'}${body}${unit ? ` ${unit}` : ''}`;
 }
