@@ -516,7 +516,7 @@ export function renderPrevence(p, d) {
     }));
     // onko
     const on = buildOnkoMatrix(p);
-    set('zpPrevOnko', dotMatrix(on.rows, on.cols, on.cell, { title: 'Onkologický screening', sub: 'Plné kolečko = pojišťovna screening podporuje.', scoreLabel: 'n/5', source: srcWeb, rowHeader: 'Pojišťovna' }));
+    set('zpPrevOnko', dotMatrix(on.rows, on.cols, on.cell, { title: 'Onkologický screening', sub: 'Plné kolečko = pojišťovna screening podporuje.', score: false, source: srcWeb, rowHeader: 'Pojišťovna' })); // bez Σ n/5 (plán A § 1: nabídka se nehodnotí)
     set('zpPrevNadstandard', zps.map((z) => { const n = z.onko_screening?.nadstandard; return `<li><b>${esc(z.zkratka)}</b> · ${levelBadge(n?.stupen)} ${esc(n?.popis || '')}</li>`; }).join('') || '<li class="zpc-na">—</li>');
     setN('zpPrevNadstandardN', zps.length);
     // duševní

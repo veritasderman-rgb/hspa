@@ -246,7 +246,7 @@ Commity jsou v historii větve `claude/focused-hopper-ley6gn`. Odchylky od plán
 | A4.3 | hotovo | 64eb832 · `src/zp-viz.js`, `src/zp-interact.js` | `figureSwitch` (radio/select, `zp:switch`, URL parametry `?kmen=`, `?ukazatel=`, `?rok=`, `?segment=`, `?vyber=`); měsíční kmen i Peníze přepnuté na komponentu; složky salda a částky na pojištěnce na Penězích |
 | A5.1 | hotovo | 428901a · `PROMPT_ROUTINE.md` | blok „Data MZ po pojišťovnách“ |
 
-Nezávislá revize datové vrstvy (Opus, 3. 11. 2026) a její opravy: commity dda3df4 a 59e9a01.
+Nezávislá revize datové vrstvy (Opus, 3. 11. 2026) a její opravy: commity dda3df4 a 59e9a01. Revize UI (Opus, 3. 11. 2026) a její opravy: commit c8e0aa9. PR #1363 zmergován 3. 11. 2026; vizuální baseline e2e pro stránky srovnávače přegenerována na CI runneru (9bef173) a doplněna navazujícím PR spolu s onkologickou maticí bez Σ n/5.
 
 ---
 
