@@ -54,8 +54,8 @@ test('řádky: roky a data se čtou z datasetů (žádné natvrdo), stav obsahuj
   assert.equal(radek('aplikace', 'aplikace').kDatu, '2024–2026');
   assert.equal(radek('gramotnost', 'otazky').kDatu, '2. 11. 2026');
   assert.match(radek('gramotnost', 'otazky').stav, /^verze /);
-  assert.match(radek('indikatory', 'stiznosti').kDatu, /^stav k 2\. 11\. 2026 \(VZ 20\d\d–20\d\d\)$/);
-  assert.equal(radek('indikatory', 'opendata').kDatu, 'stav k 2. 11. 2026');
+  assert.match(radek('aplikace', 'stiznosti').kDatu, /^stav k 2\. 11\. 2026 \(VZ 20\d\d–20\d\d\)$/);
+  assert.equal(radek('aplikace', 'opendata').kDatu, 'stav k 2. 11. 2026');
   // změna v datech = změna v řádku
   const d2 = copy(DS);
   d2.pojistovny.rok_crp = 2026;
@@ -78,10 +78,10 @@ test('řádky: stránka dostane jen řádky svých datasetů; co stránka nenač
   assert.deepEqual(ids('prehled'), ['crp', 'hosp', 'zpp', 'prevence', 'aplikace']);
   assert.deepEqual(ids('kmen'), ['crp', 'hosp', 'hosp25', 'zpp', 'sit']);
   assert.deepEqual(ids('prevence'), ['prevence']);
-  assert.deepEqual(ids('aplikace'), ['aplikace']);
+  assert.deepEqual(ids('aplikace'), ['aplikace', 'stiznosti', 'opendata']);
   assert.deepEqual(ids('gramotnost'), ['aplikace', 'otazky']);
   assert.deepEqual(ids('metodika'), ['otazky']);
-  assert.deepEqual(ids('indikatory'), ['stiznosti', 'opendata']);
+  assert.deepEqual(ids('indikatory'), []);
   // dataset nenačten (null/undefined) → řádek mizí
   assert.deepEqual(ids('kmen', { pojistovny: DS.pojistovny }), ['crp', 'hosp', 'hosp25', 'zpp']);
   assert.deepEqual(ids('prehled', { pojistovny: DS.pojistovny, prevence: null }), ['crp', 'hosp', 'zpp']);
@@ -100,9 +100,10 @@ test('věta „Data: …“ pod nadpisem: zkratka + rok z téhož registru', () 
   assert.match(stariVeta(stariRadky(DS, 'prehled')), /^Data: CRP 2025 · MZ 2024 · ZPP 2026 · VZ 2024 /);
   assert.equal(stariVeta([]), '');
   assert.equal(stariVetaHtml([]), '');
-  assert.equal(stariVetaHtml(stariRadky(DS, 'aplikace')), '<p class="zpc-stari">Data: aplikace 2024–2026</p>');
-  // každá podstránka má větu
-  for (const s of ZP_STRANKY) assert.match(stariVeta(stariRadky(DS, s.id)), /^Data: \S/, s.id);
+  assert.equal(stariVetaHtml(stariRadky(DS, 'aplikace')), '<p class="zpc-stari">Data: aplikace 2024–2026 · stížnosti k 2. 11. 2026 · open data k 2. 11. 2026</p>');
+  // každá podstránka má větu, kromě Indikátorů (inventář bez vlastních dat, A0.5)
+  for (const s of ZP_STRANKY.filter((x) => x.id !== 'indikatory')) assert.match(stariVeta(stariRadky(DS, s.id)), /^Data: \S/, s.id);
+  assert.equal(stariVeta(stariRadky(DS, 'indikatory')), '');
 });
 
 test('varování: míchají se dva roky téže veličiny (náklady 2024 a 2025; VZ o prevenci 2020/2024/2025)', () => {
@@ -137,7 +138,7 @@ test('blok: sbalený <details> s tabulkou dataset · k datu/rok · zdroj · stav
   assert.match(html, /<tr data-stari="sit"><th scope="row" class="zpc-txt">Síť smluvních odborností<\/th><td class="zpc-txt">31\. 12\. 2024<\/td>/);
   // stránka bez míchání roků: bez varování i bez poznámky v summary
   const apl = stariDatHtml(DS, { strana: 'aplikace' });
-  assert.match(apl, /<span class="zpc-n"> · 1<\/span>/);
+  assert.match(apl, /<span class="zpc-n"> · 3<\/span>/);
   assert.doesNotMatch(apl, /zpc-stari-warn|míchají/);
   // bez řádků nic
   assert.equal(stariDatHtml({}, { strana: 'kmen' }), '');

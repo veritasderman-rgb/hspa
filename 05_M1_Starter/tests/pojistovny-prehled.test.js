@@ -37,6 +37,8 @@ test('shell: sedm stránek v pořadí záložek, soubory existují, podstránky 
     assert.ok(fs.existsSync(path.join(ROOT, s.href)), s.href);
     if (s.id !== 'prehled') assert.ok(s.veta && s.co && s.kicker, s.id);
   }
+  assert.equal(zpStrankaById('aplikace').label, 'Aplikace a servis');
+  assert.match(zpStrankaById('aplikace').veta, /klientský servis, stížnosti na dostupnost/);
   assert.equal(zpStrankaById('kmen').href, 'pojistovny-kmen.html');
   assert.equal(zpStrankaById('nic'), null);
 });
@@ -139,14 +141,18 @@ test('přehled: semafor — bez verdiktů jeden řádek s odkazem na metodiku, s
   assert.match(semaforMiniHtml({}), /nepodařilo/);
 });
 
-test('přehled: buildPrehled — tři dlaždice, čtyři grafy (podíl, rezervy, pokrytí VZ, aplikace), bez žebříčku prevence a bez indexu kmene', () => {
+test('přehled: buildPrehled — tři dlaždice KPI, čtyři grafy z kmene (podíl, rezervy, náklady, provoz), bez matice VZ, aplikací a indexu kmene', () => {
   const out = buildPrehled({ d: D, a: A, p: P, tiles: heroTiles(D, { bezFondu: true }), kmen: buildKmenCharts(D) });
   assert.equal(count(out.hero, /class="zpv-tile"/g), 3);
   assert.doesNotMatch(out.hero, /na pojištěnce/);
   assert.equal(count(out.grafy, /<div class="zpc-ov-tile"/g), 4);
-  assert.deepEqual([...out.grafy.matchAll(/data-tema="(\w+)"/g)].map((m) => m[1]), ['kmen', 'kmen', 'prevence', 'aplikace']);
+  assert.deepEqual([...out.grafy.matchAll(/data-tema="(\w+)"/g)].map((m) => m[1]), ['kmen', 'kmen', 'kmen', 'kmen']);
   assert.match(out.grafy, /zpv-segmented/);
-  assert.match(out.grafy, /zpv-covtable/, 'prevence = matice pokrytí, ne heatmapa');
+  assert.match(out.grafy, /Rezervy na konci roku 2026/);
+  assert.match(out.grafy, /Náklady na zdravotní služby na pojištěnce/);
+  assert.match(out.grafy, /Provoz v % příjmů/);
+  assert.doesNotMatch(out.grafy, /zpv-covtable/, 'matice pokrytí VZ z přehledu odešla (A0.1)');
+  assert.doesNotMatch(out.grafy, /Co umí aplikace|Co výroční zprávy/, 'ani n/10 aplikací');
   assert.doesNotMatch(out.grafy, /zpv-heat|zpv-lines/, 'žádná heatmapa ani index kmene na přehledu');
   assert.doesNotMatch(out.grafy, /<table class="zpv-matrix zpv-heat/);
   assert.equal(count(out.grafy, /class="zpc-ov-more"/g), 4);

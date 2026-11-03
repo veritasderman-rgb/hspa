@@ -46,7 +46,7 @@ const SRC_MZ = 'MZ ČR + MF · hodnocení systému v.z.p. · 2024';
 const SRC_ZPP = 'PS ČR · zdravotně pojistné plány (tisk 280) · 2026';
 export const STD_PENDING = 'standardizace čeká na nákladové indexy';
 /** Popis metody standardizace podle stavu obálky *_std_kc. */
-export const STD_METODA = { dolozeno: 'na věk a pohlaví', 'index-prerozdeleni': 'indexem nákladovosti kmene (přerozdělení MZ)' };
+export const STD_METODA = { dolozeno: 'na věk a pohlaví', 'index-prerozdeleni': 'na index přerozdělení' };
 
 // ---------------------------------------------------------------- čisté funkce
 
@@ -84,10 +84,13 @@ export function heroTiles(d, { bezFondu = false } = {}) {
   return tiles;
 }
 
-/** Stav standardizace nákladů na pojištěnce: {dolozeno, hodnota, poznamka, metoda}. */
+/** Sloveso přepočtu: index přerozdělení = „přepočteno“ (není to věková standardizace), jinak „standardizováno“ (A0.4). */
+const stdSlovo = (st) => (st?.stav === 'index-prerozdeleni' ? 'přepočteno' : 'standardizováno');
+
+/** Stav standardizace nákladů na pojištěnce: {dolozeno, stav, hodnota, poznamka, metoda}. */
 export function stdInfo(hosp) {
   const std = hosp?.naklady_na_pojistence_std_kc;
-  if (std && STD_METODA[std.stav] && isNum(std.hodnota)) return { dolozeno: true, hodnota: std.hodnota, poznamka: std.poznamka || '', metoda: STD_METODA[std.stav] };
+  if (std && STD_METODA[std.stav] && isNum(std.hodnota)) return { dolozeno: true, stav: std.stav, hodnota: std.hodnota, poznamka: std.poznamka || '', metoda: STD_METODA[std.stav] };
   return { dolozeno: false, hodnota: null, poznamka: STD_PENDING, metoda: null };
 }
 
@@ -129,7 +132,7 @@ export function buildKmenCharts(d) {
   const nzs = {
     items: zps.map((z) => {
       const st = stdInfo(z.hospodareni);
-      const note = st.dolozeno ? `standardizováno ${st.metoda} ${fmtKc(st.hodnota)} Kč` : `nestandardizováno, ${STD_PENDING}`;
+      const note = st.dolozeno ? `${stdSlovo(st)} ${st.metoda} ${fmtKc(st.hodnota)} Kč` : `nestandardizováno, ${STD_PENDING}`;
       return { ...base(z), value: h(z.hospodareni?.naklady_na_pojistence_kc), rok: 2024, note };
     }),
     opts: { title: 'Náklady na zdravotní služby na pojištěnce', sub: 'Kč za rok 2024, nestandardizováno na věk. Náklady (akruálně), ne hotovostní výdaje.', unit: 'Kč', dec: 0,
@@ -140,12 +143,16 @@ export function buildKmenCharts(d) {
   // je vidět, jak se rozdíly po přepočtu na stejný kmen zmenší (VZP dolů, ČPZP a OZP nahoru).
   const stdAll = zps.length > 0 && zps.every((z) => stdInfo(z.hospodareni).dolozeno);
   const metoda = stdAll ? stdInfo(zps[0].hospodareni).metoda : null;
+  const stdPrerozdeleni = stdAll && zps.every((z) => stdInfo(z.hospodareni).stav === 'index-prerozdeleni');
+  const toLabel = stdPrerozdeleni ? 'přepočteno' : 'standardizováno';
   nzs.std = stdAll;
   nzs.dbItems = stdAll ? zps.map((z) => ({ ...base(z), from: h(z.hospodareni?.naklady_na_pojistence_kc), to: stdInfo(z.hospodareni).hodnota })) : [];
   nzs.dbOpts = {
-    title: 'Náklady na zdravotní služby na pojištěnce: vykázáno → standardizováno',
-    sub: `Kč za rok 2024. Plný bod = přepočet ${metoda || ''} na stejný kmen pro všechny pojišťovny (metodika § 4.2); prázdný = vykázané náklady (akruálně). Čím blíž si plné body jsou, tím menší část rozdílu vysvětluje pojišťovna sama.`,
-    unit: 'Kč', dec: 0, fromLabel: 'vykázáno', toLabel: 'standardizováno', source: SRC_MZ,
+    title: `Náklady na zdravotní služby na pojištěnce: vykázáno → ${toLabel}`,
+    sub: stdPrerozdeleni
+      ? 'Kč za rok 2024. Plný bod = přepočet na index přerozdělení MZ (stejný kmen pro všechny pojišťovny, metodika § 4.2); prázdný = vykázané náklady (akruálně). Index zahrnuje věk, pohlaví a farmaceuticko-nákladové skupiny, není to věková standardizace — ta čeká na váhy ÚZIS.'
+      : `Kč za rok 2024. Plný bod = přepočet ${metoda || ''} na stejný kmen pro všechny pojišťovny (metodika § 4.2); prázdný = vykázané náklady (akruálně). Čím blíž si plné body jsou, tím menší část rozdílu vysvětluje pojišťovna sama.`,
+    unit: 'Kč', dec: 0, fromLabel: 'vykázáno', toLabel, source: SRC_MZ,
   };
 
   const zust = {
@@ -156,7 +163,7 @@ export function buildKmenCharts(d) {
       return { ...base(z), value: v, tip };
     }),
     opts: { title: 'Rezervy na konci roku 2026', sub: 'Zůstatek na účtech v % ročních výdajů. Pod 3–4 % vznikají dluhy po splatnosti.', unit: '%', dec: 1, source: SRC_ZPP,
-      ref: { value: 3.5, label: 'kritická hranice 3–4 %', kind: 'zone-below' } },
+      ref: { value: 3.5, label: 'kritické pásmo 3–4 % výdajů', text: 'kritické pásmo 3–4 % výdajů', kind: 'zone-below' } },
   };
 
   const provoz = {
@@ -282,7 +289,7 @@ function cardHtml(z) {
         ${row('Senioři 65+', `${fmtKc(c.podil_65plus_pct, 1)} %`)}
         ${row('Kmen 2015 → 2025', isNum(g) ? `${g > 0 ? '+' : g < 0 ? '−' : ''}${fmtKc(Math.abs(g), 1)} %` : NA)}
         ${row('Náklady na pojištěnce 2024', nppDd)}
-        ${st.dolozeno ? row(`Náklady na pojištěnce (standardizováno ${esc(st.metoda)})`, `${fmtKc(st.hodnota)} Kč`) : ''}
+        ${st.dolozeno ? row(`Náklady na pojištěnce (${stdSlovo(st)} ${esc(st.metoda)})`, `${fmtKc(st.hodnota)} Kč`) : ''}
         ${row('Rezerva konec 2026', `${num(h(hs.zustatek_2026_pct_vydaju), 1)} % výdajů`)}
       </dl>
       <details class="zpc-card-more"><summary>Další údaje</summary><dl>
@@ -332,6 +339,13 @@ function renderFin(d) {
   });
 }
 
+/** Klientský servis (aplikace, pobočky, online přepážka, bonusy); od A0.5 na stránce „Aplikace a servis“. */
+function renderServis(d) {
+  const zps = d?.pojistovny || [];
+  set('zpTablePrev', `<table><thead><tr><th>Pojišťovna</th><th class="zpc-txt">Aplikace</th><th>Pobočky</th><th>Online přepážka</th><th class="zpc-txt">Bonusový program</th><th class="zpc-txt">Pro zaměstnavatele</th></tr></thead><tbody>` +
+    zps.map((z) => { const s = z.servis || {}, p = z.prevence || {}; const b = p.bonusovy_program || {}, e = p.programy_pro_zamestnavatele || {}; return `<tr data-zp="${esc(z.kod)}"><th scope="row">${dot(z.kod)}${esc(z.zkratka)}</th><td class="zpc-txt">${esc(s.mobilni_aplikace || '') || NA}</td><td>${num(s.pocet_pobocek)}${s.pocet_pobocek_poznamka ? `<small>${esc(short(s.pocet_pobocek_poznamka, 90))}</small>` : ''}</td><td>${boolMark(s.online_prepazka)}</td><td class="zpc-txt">${b.nazev ? esc(short(b.nazev, 110)) : b.existuje === null ? '<span class="zpc-na">nenalezen</span>' : NA}</td><td class="zpc-txt">${e.nazev ? esc(short(e.nazev, 90)) : e.existuje === null ? '<span class="zpc-na">nenalezen</span>' : NA}</td></tr>`; }).join('') + '</tbody></table>');
+}
+
 function renderKmen(d) {
   if (!d) { set('zpCards', '<p class="zpc-na">Základní dataset chybí.</p>'); return; }
   const zps = d.pojistovny || [];
@@ -346,8 +360,6 @@ function renderKmen(d) {
   set('zpChartZust', rankedBars(ch.zust.items, ch.zust.opts));
   set('zpChartProvoz', rankedBars(ch.provoz.items, ch.provoz.opts));
   set('zpChartYoy', ch.yoy.metric ? dumbbell(ch.yoy.items, ch.yoy.opts) : `<p class="zpc-note">${esc(ch.yoy.veta)}</p>`);
-  set('zpTablePrev', `<table><thead><tr><th>Pojišťovna</th><th class="zpc-txt">Aplikace</th><th>Pobočky</th><th>Online přepážka</th><th class="zpc-txt">Bonusový program</th><th class="zpc-txt">Pro zaměstnavatele</th></tr></thead><tbody>` +
-    zps.map((z) => { const s = z.servis || {}, p = z.prevence || {}; const b = p.bonusovy_program || {}, e = p.programy_pro_zamestnavatele || {}; return `<tr data-zp="${esc(z.kod)}"><th scope="row">${dot(z.kod)}${esc(z.zkratka)}</th><td class="zpc-txt">${esc(s.mobilni_aplikace || '') || NA}</td><td>${num(s.pocet_pobocek)}${s.pocet_pobocek_poznamka ? `<small>${esc(short(s.pocet_pobocek_poznamka, 90))}</small>` : ''}</td><td>${boolMark(s.online_prepazka)}</td><td class="zpc-txt">${b.nazev ? esc(short(b.nazev, 110)) : b.existuje === null ? '<span class="zpc-na">nenalezen</span>' : NA}</td><td class="zpc-txt">${e.nazev ? esc(short(e.nazev, 90)) : e.existuje === null ? '<span class="zpc-na">nenalezen</span>' : NA}</td></tr>`; }).join('') + '</tbody></table>');
   const notes = zps.flatMap((z) => (z.poznamky || []).map((n) => `<li><b>${esc(z.zkratka)}</b> — ${esc(n)}</li>`));
   set('zpNotes', notes.join('') || '<li class="zpc-na">—</li>');
   set('zpNotesN', String(notes.length));
@@ -432,6 +444,7 @@ async function init() {
   if (has(['zpAppMatrix', 'zpRizikove', 'zpDalsi'])) renderApps(a);
   if (has(['zpPrevMatrix', 'zpFpStruktura', 'zpMereni'])) renderPrevence(p, d);
   if (has(['zpCards', 'zpChartShare', 'zpTableFin'])) renderKmen(d);
+  if (has(['zpTablePrev'])) renderServis(d);
   if (has(POTREBA.kmenMesicni)) renderKmenMesicni(km);
   if (has(POTREBA.otazky)) { renderOtazky(o); renderDotazniky(o, agg); }
   doc.addEventListener(MOJE_EVENT, (e) => syncCards(e.detail?.kod ?? null));

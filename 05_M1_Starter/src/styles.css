@@ -22608,12 +22608,18 @@ select.zpc-note{color:var(--ink);background:var(--paper);border:1px solid var(--
 .zpc-ov-karta-more{margin:12px 0 0;font-family:var(--sans);font-size:13.5px}
 .zpc-ov{margin:0 0 28px}
 .zpc-ov-h2{font-family:var(--serif);font-size:clamp(22px,3vw,28px);line-height:1.2;margin:0 0 4px;padding-top:22px;border-top:1px solid var(--rule)}
-.zpc-ov-swipe{display:none;font-family:var(--sans);font-size:12.5px;color:var(--ink-mut);margin:0 0 8px}
-.zpc-overview-grid:focus-visible{outline:2px solid var(--ink);outline-offset:4px}
 .zpc-overview-grid{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 44px}
 .zpc-ov-tile{min-width:0;display:flex;flex-direction:column}
 .zpc-ov-tile .zpv-figure{margin:0}
 .zpc-ov-more{align-self:flex-start;display:inline-block;min-height:24px;line-height:24px;margin-top:6px;font-family:var(--sans);font-size:13.5px;font-weight:600;color:var(--ink);text-underline-offset:3px}
+/* Přepínač rozsahu grafu (A0.6): segmentovaný radiogroup, jen tokeny */
+.zpc-switch{display:inline-flex;flex-wrap:wrap;gap:0;margin:0 0 10px;border:1px solid var(--rule2);border-radius:4px;overflow:hidden;font-family:var(--sans)}
+.zpc-switch button{min-height:32px;padding:4px 14px;border:0;border-left:1px solid var(--rule2);background:var(--paper);color:var(--ink);font:inherit;font-size:13.5px;cursor:pointer}
+.zpc-switch button:first-child{border-left:0}
+.zpc-switch button[aria-checked="true"]{background:var(--ink);color:var(--paper);font-weight:600}
+.zpc-switch button:focus-visible{outline:2px solid var(--ink);outline-offset:-4px}
+@media (prefers-reduced-motion: no-preference){.zpc-switch button{transition:background-color .12s ease,color .12s ease}}
+@media (max-width: 760px){.zpc-switch{display:flex}.zpc-switch button{flex:1 1 0;padding:4px 8px}}
 .zpc-ov-sem-wrap{margin:22px 0 0}
 .zpc-ov-semline{display:flex;gap:8px;align-items:baseline;margin:0;padding:10px 14px;border:1px dashed var(--rule2);font-family:var(--sans);font-size:14px;color:var(--ink)}
 .zpc-ov-semline>span:first-child{flex:none}
@@ -22655,10 +22661,9 @@ select.zpc-note{color:var(--ink);background:var(--paper);border:1px solid var(--
 .zpc-sit-tbl th.zpc-sit-sez small{display:block;font-weight:400;color:var(--ink-mut);font-size:11px}
 .zpc-sit-tbl tfoot th,.zpc-sit-tbl tfoot td{border-top:2px solid var(--rule2);font-weight:600}
 @media (max-width: 760px) {
-  /* mobil: jeden graf na šířku, další vedle (posuvné, snap) — přehled tak zůstane do tří obrazovek */
-  .zpc-overview-grid{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:88%;gap:14px;align-items:stretch;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
-  .zpc-ov-tile{scroll-snap-align:start;border:1px solid var(--rule);padding:12px 12px 8px;background:var(--paper)}
-  .zpc-ov-swipe{display:block}
+  /* mobil: čtyři grafy přehledu pod sebe, bez vodorovného posuvného pásu (A0.2) */
+  .zpc-overview-grid{grid-template-columns:minmax(0,1fr);gap:18px}
+  .zpc-ov-tile{border:1px solid var(--rule);padding:12px 12px 8px;background:var(--paper)}
   .zpc-ov-hero{gap:18px}
   .zpc-tema-grid{grid-template-columns:minmax(0,1fr);gap:8px}
   .zpc-tema-card{padding:10px 14px;gap:2px}
@@ -22671,7 +22676,7 @@ select.zpc-note{color:var(--ink);background:var(--paper);border:1px solid var(--
   .zpc-ov-hero .zpv-stats{gap:10px 18px;margin-bottom:0}
 }
 @media print {
-  .zpc-tabs, .zpc-ov-more, .zpc-ov-minis, .zpc-ov-swipe { display: none; }
+  .zpc-tabs, .zpc-ov-more, .zpc-ov-minis { display: none; }
   .zpc-overview-grid { display: block; overflow: visible; }
   .zpc-tema-card { border-color: var(--ink-mut); }
 }

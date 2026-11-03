@@ -126,6 +126,16 @@ test('rankedBars: referenční zóna/linka v tracku + popisek v záhlaví', () =
   assert.ok(above.includes('zpv-ref--above'));
 });
 
+test('rankedBars: ref.text nahradí „label: hodnota“ v popisku zóny i v aria', () => {
+  const items = [{ kod: '111', label: 'VZP', value: 4.1 }, { kod: '201', label: 'VoZP', value: 2.5 }];
+  const ref = { value: 3.5, label: 'kritické pásmo 3–4 % výdajů', text: 'kritické pásmo 3–4 % výdajů', kind: 'zone-below' };
+  const withText = rankedBars(items, { unit: '%', dec: 1, ref });
+  assert.match(withText, /<span class="zpv-refkey">[\s\S]*kritické pásmo 3–4 % výdajů<\/span>/);
+  assert.doesNotMatch(withText, /kritické pásmo 3–4 % výdajů: 3,5/, 'číslo 3,5 v popisku není');
+  const bez = rankedBars(items, { unit: '%', dec: 1, ref: { ...ref, text: undefined } });
+  assert.match(bez, /kritické pásmo 3–4 % výdajů: 3,5\s%/, 'bez text zůstává „label: hodnota“');
+});
+
 test('rankedBars allowNegative: nulová osa, záporné bary doleva, znaménko, styly', () => {
   const items = [
     { kod: '205', label: 'ČPZP', value: 8.05 },

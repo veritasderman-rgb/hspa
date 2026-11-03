@@ -56,9 +56,9 @@ export const ZP_STRANKY = [
     co: 'Nabídka 7 × 9, onkologie a duševní zdraví, struktura fondu, odpovědi z VZ',
   },
   {
-    id: 'aplikace', skupina: 'pojistenci', href: 'pojistovny-aplikace.html', label: 'Aplikace', kicker: 'První výstup PS',
-    veta: 'Deset funkcí aplikací sedmi pojišťoven a návrh kritérií přívětivosti.',
-    co: 'Matice funkcí, kritéria přívětivosti, rozpory a chybějící data',
+    id: 'aplikace', skupina: 'pojistenci', href: 'pojistovny-aplikace.html', label: 'Aplikace a servis', kicker: 'První výstup PS',
+    veta: 'Deset funkcí aplikací, klientský servis, stížnosti na dostupnost a co pojišťovny publikují jako otevřená data.',
+    co: 'Matice funkcí, kritéria přívětivosti, pobočky a bonusy, stížnosti a § 16a, audit open dat',
   },
   {
     id: 'gramotnost', skupina: 'pojistenci', href: 'pojistovny-gramotnost.html', label: 'Zdravotní gramotnost', kicker: 'V přípravě · druhé téma PS',

@@ -100,11 +100,11 @@ test('data/pojistovny.json: stav index-prerozdeleni u všech 7, validátor OK; v
   assert.ok(validateAll(c).errors.some((e) => /index 0,5–2/.test(e)));
 });
 
-test('frontend stdInfo: index-prerozdeleni je standardizováno s metodou „přerozdělení MZ“', () => {
+test('frontend stdInfo: index-prerozdeleni je doloženo s metodou „na index přerozdělení“', () => {
   const st = stdInfo(P.pojistovny[0].hospodareni);
   assert.equal(st.dolozeno, true);
   assert.equal(st.metoda, STD_METODA['index-prerozdeleni']);
-  assert.match(st.metoda, /přerozdělení MZ/);
+  assert.match(st.metoda, /na index přerozdělení/);
 });
 
 test('refresh pipeline: placeholder věkových vah nepřepíše obálky z indexu přerozdělení; doložené váhy ano; npm skript spouští index transform', () => {

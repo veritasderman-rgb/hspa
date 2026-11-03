@@ -12,7 +12,7 @@ import {
 } from '../ingest/transform_pojistovny_kmen_mesicni.js';
 import { validateAll, validateKmenMesicni, loadDatasets, OPTIONAL_FILES } from '../ingest/validate-pojistovny.js';
 import {
-  mesicLabel, mesicX, xLabel, buildMesicniSeries, prestupyTabulka, prestupyHtml, veta, fmtZmena, fmtZmenaPct, renderKmenMesicni,
+  mesicLabel, mesicX, xLabel, buildMesicniSeries, mesicniVyber, rezimZUrl, prepinacHtml, grafMesicni, prestupyTabulka, prestupyHtml, veta, fmtZmena, fmtZmenaPct, renderKmenMesicni,
 } from '../src/pojistovny-kmen-mesicni.js';
 import { indexedLines } from '../src/zp-viz.js';
 
@@ -325,6 +325,60 @@ test('věta pod grafem: odvozeno podílem dvou částek MZ, přestupní termíny
   assert.match(v, /65\/2022 Sb\./, 'skok VZP v dubnu 2022 má uvedený důvod (lex Ukrajina)');
   assert.match(v, /neprodloužily/, 'pokles v dubnu 2023 má uvedený důvod');
   assert.doesNotMatch(v, /undefined/);
+});
+
+test('mesicniVyber: bez VZP = 6 pojišťoven, od 2023 začíná 2023-01 a pocty jsou ořezané, vse i neznámý režim vrací vstup', () => {
+  assert.equal(mesicniVyber(K, 'vse'), K);
+  assert.equal(mesicniVyber(K, 'nesmysl'), K);
+  assert.equal(mesicniVyber(K, undefined), K);
+  const bez = mesicniVyber(K, 'bez-vzp');
+  assert.equal(bez.pojistovny.length, 6);
+  assert.ok(bez.pojistovny.every((z) => z.kod !== '111'));
+  assert.equal(bez.mesice.length, K.mesice.length, 'měsíce zůstávají');
+  assert.equal(K.pojistovny.length, 7, 'vstup se nemění');
+  const od = mesicniVyber(K, 'od-2023');
+  assert.equal(od.mesice[0], '2023-01');
+  assert.equal(od.mesice.at(-1), K.mesice.at(-1));
+  assert.equal(od.pojistovny.length, 7);
+  assert.ok(od.pojistovny.every((z) => z.pocty.length === od.mesice.length));
+  const v = od.pojistovny.find((z) => z.kod === '111');
+  assert.equal(v.pocty[0], K.pojistovny.find((z) => z.kod === '111').pocty[K.mesice.indexOf('2023-01')]);
+  // index se přepočítá na první zobrazený měsíc (= 100)
+  const ch = buildMesicniSeries(od);
+  assert.ok(ch.series.every((s) => s.points.length === od.mesice.length));
+  assert.match(ch.opts.sub, /1\/2023 \(= 100\)/);
+  const graf = indexedLines(ch.series, ch.opts);
+  assert.match(graf, /100/);
+  // bez dat nepadá
+  assert.equal(mesicniVyber(null, 'bez-vzp'), null);
+  assert.equal(mesicniVyber({ mesice: ['2022-01'], pojistovny: [{ kod: '201', pocty: [5] }] }, 'od-2023').mesice.length, 0);
+});
+
+test('přepínač rozsahu: radiogroup, výchozí vse, stav z URL, graf pro režim', () => {
+  assert.equal(rezimZUrl(''), 'vse');
+  assert.equal(rezimZUrl('?kmen=bez-vzp'), 'bez-vzp');
+  assert.equal(rezimZUrl('?kmen=od-2023&x=1'), 'od-2023');
+  assert.equal(rezimZUrl('?kmen=hmm'), 'vse');
+  assert.equal(rezimZUrl(undefined), 'vse');
+  const html = prepinacHtml('vse');
+  assert.match(html, /<div class="zpc-switch" role="radiogroup" aria-label="Rozsah grafu">/);
+  assert.equal((html.match(/role="radio"/g) || []).length, 3);
+  assert.match(html, /aria-checked="true" tabindex="0" data-rezim="vse"/);
+  assert.equal((html.match(/aria-checked="false"/g) || []).length, 2);
+  assert.match(prepinacHtml('bez-vzp'), /aria-checked="true"[^>]*data-rezim="bez-vzp"/);
+  assert.equal((grafMesicni(K, 'bez-vzp').match(/data-zp="111"/g) || []).length, 0, 'VZP v grafu není');
+  assert.ok((grafMesicni(K, 'vse').match(/data-zp="111"/g) || []).length > 0);
+  const src = readTxt('src', 'pojistovny-kmen-mesicni.js');
+  assert.match(src, /history\.replaceState/);
+  assert.match(src, /initZpInteract/);
+});
+
+test('CSS: .zpc-switch má vybraný stav, min. výšku 32 px a nic neanimuje při prefers-reduced-motion', () => {
+  const css = readTxt('src', 'styles.css');
+  assert.match(css, /\.zpc-switch button\[aria-checked="true"\]/);
+  assert.match(css, /\.zpc-switch button\{min-height:32px/);
+  const m = css.match(/@media \(prefers-reduced-motion: no-preference\)\{\.zpc-switch button\{transition[^}]*\}\}/);
+  assert.ok(m, 'transition jen v no-preference');
 });
 
 test('renderKmenMesicni: bez DOM nespadne; s fake DOM vyplní oba kontejnery, chybějící dataset = nedohledáno', () => {

@@ -208,7 +208,8 @@ export function rankedBars(items, opts = {}) {
       + `<span class="zpv-track"><span class="zpv-area">${refEl}${inner}</span></span></div>`;
   }).join('');
 
-  const refText = refOk ? `${ref.label ?? 'Reference'}: ${fmtValue(ref.value, dec, unit)}` : '';
+  // ref.text (volitelný) nahradí „label: hodnota“ — pro zónu bez jednoho čísla (např. „kritické pásmo 3–4 % výdajů“)
+  const refText = refOk ? (ref.text ? String(ref.text) : `${ref.label ?? 'Reference'}: ${fmtValue(ref.value, dec, unit)}`) : '';
   let extra = '';
   if (refOk) {
     extra += `<span class="zpv-refkey"><i class="zpv-refkey-sw zpv-refkey-sw--${kind === 'line' ? 'line' : 'zone'}" aria-hidden="true"></i>${esc(refText)}</span>`;

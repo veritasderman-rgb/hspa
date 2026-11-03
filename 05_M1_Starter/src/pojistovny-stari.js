@@ -33,7 +33,7 @@ export const ZP_DATASETY = {
 };
 
 /** Datasety, které stránka načítá mimo orchestrátor (src/pojistovny.js) vlastním modulem. */
-export const STARI_DOPLNEK = { kmen: ['sit'], indikatory: ['stiznosti', 'opendata'] };
+export const STARI_DOPLNEK = { kmen: ['sit'], aplikace: ['stiznosti', 'opendata'] };
 
 /** Pojmenování veličin pro varování (klíč `velicina` v registru). */
 export const STARI_VELICINY = {
@@ -128,7 +128,7 @@ export const STARI_REGISTR = [
     },
   },
   {
-    id: 'stiznosti', dataset: 'stiznosti', velicina: 'stiznosti', stranky: ['indikatory'],
+    id: 'stiznosti', dataset: 'stiznosti', velicina: 'stiznosti', stranky: ['aplikace'],
     nazev: 'Stížnosti a podněty na dostupnost', zdroj: 'Výroční zprávy pojišťoven (§ 16a zákona 106/1999 Sb., § 40 zákona 48/1997 Sb.)',
     vyber: (s) => {
       if (!s?.stav_k) return null;
@@ -137,7 +137,7 @@ export const STARI_REGISTR = [
     },
   },
   {
-    id: 'opendata', dataset: 'opendata', velicina: 'opendata', stranky: ['indikatory'],
+    id: 'opendata', dataset: 'opendata', velicina: 'opendata', stranky: ['aplikace'],
     nazev: 'Otevřená data pojišťoven (audit)', zdroj: 'Weby pojišťoven, NKOD (data.gov.cz), výroční zprávy',
     vyber: (o) => (o?.stav_k ? { kDatu: `stav k ${datumCz(o.stav_k)}`, kratce: `open data k ${datumCz(o.stav_k)}`, roky: [], stav: o.version ? `verze ${o.version}` : '' } : null),
   },

@@ -10,23 +10,21 @@
 // Orchestruje src/pojistovny.js (renderPrehled). Vstupy z modulu 3 (heroTiles,
 // buildKmenCharts) dostává jako argument, aby moduly neměly cyklický import.
 //
-// Výběr grafů (revize P1.5/P1.6): Kmen = segmentovaný pruh tržního podílu,
-// Hospodaření = rezervy 2026 se zónou 3–4 %, Prevence = matice pokrytí „co VZ
-// odpovídají na sedm otázek“ (ukazuje mezery, nehodnotí — žádná heatmapa ani Σ
-// stupňů, to by byl žebříček, plán § 1.1), Aplikace = funkce n/10, Semafor = do
-// prvních verdiktů jeden řádek „zatím nehodnoceno“. Index kmene 2010 = 100 je jen
-// na podstránce Kmen.
+// Výběr grafů (revize A0.1): tržní podíl (segmentovaný pruh), rezervy 2026 se zónou
+// 3–4 %, náklady na pojištěnce (vykázáno → přepočteno) a provoz v % příjmů, vše z buildKmenCharts.
+// Matice pokrytí VZ (48× ano) a funkce aplikací n/10 z přehledu odešly, nenesly informaci.
+// Semafor = do prvních verdiktů jeden řádek „zatím nehodnoceno“. Index kmene 2010 = 100
+// je jen na podstránce Kmen.
 //
 // Čisté funkce (testované bez DOM): aplikaceSkore, zpSouhrny, semaforRadekHtml,
 // semaforMiniHtml, ovKartaHtml, ovMiniKartyHtml, temaKartyHtml, buildPrehled.
 
 import { esc, fmtKc, dot, set } from './pojistovny-shared.js';
-import { statTiles, rankedBars, segmentedBar, coverageMatrix, dotScore, isNum } from './zp-viz.js';
+import { statTiles, rankedBars, segmentedBar, dumbbell, dotScore, isNum } from './zp-viz.js';
 import { MOJE_EVENT } from './zp-interact.js';
 import { ZP_BY_KOD } from './zp-palette.js';
 import { semaforCell, iconHtml, semaforSummary, EMPTY_SENTENCE } from './pojistovny-semafor.js';
 import { ZP_STRANKY, zpStrankaById } from './pojistovny-shell.js';
-import { buildCoverage } from './pojistovny-prevence.js';
 
 const zkratkaOf = (kod, fallback) => ZP_BY_KOD[String(kod)]?.zkratka || fallback || String(kod);
 
@@ -166,30 +164,19 @@ function tile(figureHtml, temaId) {
  * @returns {{hero: string, grafy: string, semafor: string, temata: string, temataRedakce: string, souhrny: Array}}
  */
 export function buildPrehled({ d, a, p, tiles, kmen }) {
-  // Mřížka 2 × 2: podíl | rezervy, prevence | aplikace (na mobilu stejné pořadí v posuvném pásu).
+  // Mřížka 2 × 2: podíl | rezervy, náklady | provoz (na mobilu pod sebe). Všechny čtyři grafy
+  // nesou informaci s rozptylem; matice pokrytí VZ a funkce aplikací n/10 byly vyměněny (A0.1)
+  // a žijí na podstránkách Prevence a Aplikace a servis.
   // Semafor jde mimo mřížku (#zpOvSemafor), do prvních verdiktů je to jeden řádek.
   const grafy = [];
   if (kmen?.share) {
     grafy.push(tile(segmentedBar(kmen.share.parts, { ...kmen.share.opts, sub: 'Podíl na všech pojištěncích ČR.' }), 'kmen'));
   }
   if (kmen?.zust) grafy.push(tile(rankedBars(kmen.zust.items, kmen.zust.opts), 'kmen'));
-  if (p) {
-    const cv = buildCoverage(p);
-    grafy.push(tile(coverageMatrix(cv.rows, cv.cols, cv.cell, {
-      title: 'Co výroční zprávy říkají o prevenci',
-      sub: 'Sedm otázek; prázdné místo = na to se pojišťovny zeptáme. Nejde o hodnocení.',
-      source: 'pojišťovny · výroční zprávy · 2024 (ZPŠ 2020, OZP 2025)', rowHeader: 'Pojišťovna',
-    }), 'prevence'));
+  if (kmen?.nzs) {
+    grafy.push(tile(kmen.nzs.std ? dumbbell(kmen.nzs.dbItems, kmen.nzs.dbOpts) : rankedBars(kmen.nzs.items, kmen.nzs.opts), 'kmen'));
   }
-  if (a) {
-    const as = aplikaceSkore(a);
-    grafy.push(tile(rankedBars(as.items, {
-      title: 'Co umí aplikace pojišťoven',
-      sub: `Dostupné funkce z ${as.max} sledovaných (částečně = ½), ne kvalita aplikace.`,
-      maxv: as.max, dec: 0, sortNote: 'Řazeno podle počtu funkcí, nejde o hodnocení.',
-      source: 'pojišťovny · analýza digitalizace a výroční zprávy · 2024–2026',
-    }), 'aplikace'));
-  }
+  if (kmen?.provoz) grafy.push(tile(rankedBars(kmen.provoz.items, kmen.provoz.opts), 'kmen'));
   return {
     hero: tiles ? statTiles(tiles, { title: 'Klíčová čísla systému' }) : '',
     grafy: grafy.join(''),
