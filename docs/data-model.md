@@ -1742,6 +1742,7 @@ mimo uvedené podíly.
 | `pojistovny-instituce.json` | ruční | `ingest/lib/validate-instituce.js` | `src/pojistovny-instituce.js` (vzniká) |
 | `pojistovny-smluvni-programy.json` | ruční | `ingest/lib/validate-smluvni-programy.js` | `src/pojistovny-instituce.js` (vzniká) |
 | `pojistovny-dostupnost.json` | ruční | `ingest/lib/validate-dostupnost.js` | `src/pojistovny-instituce.js` (vzniká) |
+| `pojistovny-fond-bilance.json` | generovaný z ručně pořízených přepisů VZ | `ingest/lib/validate-fond-bilance.js` | `src/pojistovny-penize.js`, `src/pojistovny-prevence.js` (A7) |
 
 Validátory jsou čisté funkce. Pět z nich (hospodareni-rady, prerozdeleni, instituce, smluvni-programy,
 dostupnost) importuje `ingest/validate-pojistovny.js` (`npm run validate:pojistovny`, součást `validate:all`).
@@ -1805,6 +1806,16 @@ Ukazatele (31) a jednotky:
 | `fond_prevence_celkem_t17_mil` | mil. Kč | PDF Tab. 17, „Celkové náklady“ (shoda s `fond_prevence_mil` ±1 mil. Kč) |
 | `fond_prevence_programy_na_pojistence_kc` | Kč | zdravotní programy / `pojistenci_prumer`; MZ zaokrouhluje na mil. Kč (u ZPŠ chyba zaokrouhlení kolem 3 %) |
 | `fond_prevence_ostatni_podil_pct` | % | ostatní činnosti / celkové náklady Tab. 17 × 100 |
+| `fond_prevence_zpp_mil` | mil. Kč | Tabulka č. 3c, sloupec „Rok N ZPP“ = plán fondu prevence z ZPP pojišťovny (2015–2024 bez `null` u 7 ZP, `cr` i `zamestnanecke`; A7.1) |
+| `fond_prevence_plneni_zpp_pct` | % | skutečnost Tab. 3c / `fond_prevence_zpp_mil` × 100 na 4 desetinná místa (MZ tiskne totéž ve sloupci „ZPP (v %)“; 2024: VZP 129,9, VoZP 98,1, ČPZP 106,9, OZP 100,5, ZPŠ 91,6, ZP MV 137,6, RBP 90,2, ČR 120,7) |
+| `fond_prevence_podil_pojistneho_pct` | % | `fond_prevence_mil`(rok) / (`pojistne_po_prerozdeleni_mld`(rok − 1) × 1 000) × 100; strop 3 % (§ 7c zák. 551/1991, § 18b zák. 280/1992) se počítá z pojistného po přerozdělení za PŘEDCHOZÍ rok. 2015 = `null` (chybí 2014) a je v `chybi[]`; u VZP 2015–2022 nese buňka `poznamka` „před 2023 jiný režim zdrojů fondu u VZP“. Obálka ukazuje na řádek Tab. 3c (`list` popisuje obě složky) |
+
+**Plán, plnění a podíl na pojistném (A7.1 a, b).** `parseTab3c` vrací kromě `celkem` a `na_pojistence` i `zpp_celkem` a
+`zpp_na_pojistence` (sloupec s rokem a podhlavičkou „ZPP“, ve všech ročnících 2015–2024 těsně vlevo od skutečnosti).
+Podíl na pojistném je jediná řada, která bere hodnotu z jiného ročníku (`sestavRady` předává výpočtu předchozí ročník).
+Validátor: plnění ZPP 0–300 % a plán ≥ 0 jsou chyby; podíl na pojistném mimo 0–3,5 % je chyba, nad 3 % WARN s hodnotou
+(nad strop se do fondu smí dostat i pokuty, penále a převod z provozního fondu, proto to není automaticky porušení);
+plnění vs. skutečnost / plán (±1 p. b.) je WARN. Testy: `tests/mz-hodnoceni.test.js` (fixtury `tab3c-2015.json`, `tab3c-2024.json`).
 
 **Řady fondu prevence z Tab. 17 (A6.1).** U ZP jen ročníky 2018–2024; v PDF 2015–2017 tabulka po pojišťovnách není,
 tyto roky jsou `null` a v `chybi[]` je důvod „Tab. 17 v Hodnocení za rok … není“. V `cr.rady` jsou stejné řady
@@ -2053,6 +2064,38 @@ Pravidla čerpání fondu prevence u sedmi ZP a veřejné kontroly fondu. Invent
 | `kontroly_plosne[]` | stejný tvar jako `kontroly[]`, kontroly týkající se všech pojišťoven (akvizice pojištěnců) |
 
 Frontend: `src/pojistovny-prevence.js` (`pravidlaHtml`, `renderPravidla`) na stránce Prevence; explainer `fond_prevence` v `data/explainers.json`.
+
+### `data/pojistovny-fond-bilance.json` (A7.1 c, A7.2)
+
+Bilance fondu prevence (Fprev) sedmi ZP za roky 2022–2025 z výročních zpráv (VZ). Zdroj: přepisy PDF
+`ingest/manual/pojistovny/vz-text/<kod>-<rokVZ>.txt` (k dispozici VZ 2023–2025, u RBP 2023 a 2025, u ZPŠ 2023 a 2024; ZPŠ 2020
+v repu je, ale mimo rozsah). Oddíl „Fond prevence“ má podle šablony MZ (příloha č. 7) tabulku A (tvorba a čerpání, účetně)
+a B (příjmy a výdaje bankovního účtu fondu), vždy se sloupcem „Skutečnost“. Generuje ho
+`node ingest/transform_pojistovny_fond_bilance.js` (`npm run data:pojistovny-fond-bilance`), idempotentně (druhý běh nemění
+soubor ani `generated_at`); validátor `ingest/lib/validate-fond-bilance.js` je součást `validate:pojistovny`. Částky jsou
+v tis. Kč, počty v kusech. Dataset je účetní evidence, nic nehodnotí.
+
+| Pole | Význam |
+|---|---|
+| `version`, `generated_at`, `stav_k`, `_doc`, `zdroj{nazev,adresar,soubory[]{soubor,sha256}}`, `roky[]` | obálka a metodika; `roky` = `[2022, 2023, 2024, 2025]` |
+| `pojistovny[]{kod,zkratka,roky{<rok>},poznamky_autora[]}` | `kod` je řetězec (`"111"` … `"213"`), pořadí jako ve zbytku srovnávače |
+| `roky[rok].tvorba{ze_zf,pokuty_penale,ostatni,z_pf,celkem}` | `ze_zf` = řádek 1.2.1 (převod ze ZFZP z pojistného), `pokuty_penale` = 1.2.2, `z_pf` = 1.2.3 (převod z provozního fondu; informativní, součást `ostatni`), `celkem` = II. Tvorba celkem. `ostatni` je jediná **odvozená** hodnota (`odvozeno: true`): celkem − ze_zf − pokuty_penale (prázdný řádek 1.2.1 nebo 1.2.2 = 0) |
+| `roky[rok].cerpani_celkem`, `cerpani_programy` | III. Čerpání celkem (obsahuje i odpisy penále, snížení fondu a tvorbu opravných položek) a III.1 Preventivní programy (shoduje se s Tab. 3c MZ; u VoZP se Tab. 3c liší o „jiné zdroje“) |
+| `roky[rok].zustatek_pocatecni`, `zustatek_konecny` | A.I a A.IV; chybí-li VZ roku, doplní se z konce předchozí / počátku následující VZ (`poznamka` v obálce) |
+| `roky[rok].bu_zustatek_pocatecni`, `bu_zustatek_konecny` | B.I a B.IV, zůstatky bankovního účtu fondu |
+| `roky[rok].vyuziti{pocet_prispevku,pocet_zadosti,pocet_osob,definice}` | počty za fond jako celek, jen kde je VZ uvádí (ZPŠ 2023: 76 393 a 2024: 85 266 příspěvků); `definice` je povinná, má-li některý počet hodnotu; příspěvky, žádosti a osoby nejsou totéž |
+| `roky[rok].poznamky{<pole>: text}` | důvod u každého `null` (klíč je cesta pole, např. `tvorba.ze_zf`, `zustatek_konecny`, `vyuziti`); VZ, která v repu není, je řečeno výslovně |
+
+Každá hodnota je obálka `{hodnota, soubor, radek, citace, poznamka?, odvozeno?}` nebo `null`: `soubor` je přepis VZ
+(`^\d{3}-\d{4}\.txt$`), `radek` číslo řádku přepisu, kde je číslo vytištěno, `citace` text toho řádku se zhuštěnými mezerami
+(do 220 znaků). Test `tests/pojistovny-fond-bilance.test.js` strojově ověřuje, že řádek `radek` obsahuje číslo z `hodnota`
+(kromě odvozených).
+
+Validátor: obálky a typy; `soubor` existuje v `vz-text` a `radek` leží v souboru; konečný zůstatek = počáteční + tvorba.celkem −
+cerpani_celkem ±1 tis. Kč tam, kde jsou všechny čtyři (jinak WARN „neúplná bilance“ u roku, který má alespoň tvorbu nebo
+čerpání); ze_zf + pokuty_penale + ostatni = celkem; cerpani_programy ≤ cerpani_celkem; konečný zůstatek roku = počáteční
+zůstatek následujícího (WARN); čerpání programů proti `fond_prevence_mil` v `pojistovny-hospodareni-rady.json` ±2 % (WARN;
+VoZP 2023 a 2024 se liší o jiné zdroje, −10,6 % a −9,4 %); každé `null` má důvod v `poznamky`; bez jmen osob.
 
 ### Doplňky k existujícím souborům
 

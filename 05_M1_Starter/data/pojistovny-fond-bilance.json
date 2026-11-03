@@ -1,0 +1,534 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-11-03T13:07:45Z",
+  "stav_k": "2026-11-03",
+  "_doc": "Bilance fondu prevence (Fprev) sedmi zdravotních pojišťoven za roky 2022–2025 z výročních zpráv (VZ). Každá VZ za rok N obsahuje v příloze č. 7 tabulku A („Tvorba a čerpání“, účetně) a B („Příjmy a výdaje“, bankovní účet fondu) ve sloupci „Skutečnost“; zůstatky roku N−1 plynou z počátečního zůstatku VZ za rok N. Všechny částky jsou v tis. Kč, počty v kusech. Každá hodnota je obálka {hodnota, soubor, radek, citace, poznamka?}: `soubor` = přepis VZ v ingest/manual/pojistovny/vz-text/, `radek` = číslo řádku přepisu, kde je číslo vytištěno, `citace` = text toho řádku (mezery zhuštěné). Co VZ neuvádí nebo co v repu nemáme, je null a důvod je v `roky[rok].poznamky[pole]`. tvorba.ze_zf = řádek 1.2.1 (převod ze ZFZP – prostředky z pojistného), tvorba.pokuty_penale = řádek 1.2.2 (pokuty, přirážky k pojistnému a penále), tvorba.z_pf = řádek 1.2.3 (převod z provozního fondu; informativně, je obsažen v ostatni), tvorba.celkem = II. Tvorba celkem. tvorba.ostatni je jediná odvozená hodnota (odvozeno: true): celkem − ze_zf − pokuty_penale; u ZP, jejichž tabulka řádek 1.2.1 nevyplňuje, se prázdný řádek bere jako 0. Obsahuje převod z PF, úroky, dary a u ČPZP zrušení opravných položek. cerpani_celkem = III. Čerpání celkem (účetně; obsahuje i odpisy penále a pokut a tvorbu opravných položek, které s péčí pro pojištěnce nesouvisí), cerpani_programy = III.1 Preventivní programy (shoduje se s Tabulkou č. 3c Hodnocení MZ, u VoZP se Tab. 3c liší o jiné zdroje). Rovnice bilance: zustatek_konecny = zustatek_pocatecni + tvorba.celkem − cerpani_celkem (±1 tis. Kč). bu_zustatek_* jsou zůstatky bankovního účtu fondu (tabulka B), který se od účetního zůstatku liší mj. o závazky vůči pojištěncům, pohledávky za ZFZP a (u OZP podle VZ) neuhrazené pohledávky za plátci pojistného. vyuziti = počty vyplacených příspěvků / žádostí / osob za fond jako celek, jen tam, kde je VZ uvádí (ZPŠ 2023 a 2024: příspěvky). `definice` říká, co se počítá; příspěvky, žádosti a osoby nejsou totéž a nelze je mezi ZP porovnávat ani vydělit počtem pojištěnců bez té poznámky. Nic v datasetu nehodnotí pojišťovny: je to účetní evidence toho, kolik se do fondu dostalo, kolik se z něj vyčerpalo a kolik zůstalo.",
+  "zdroj": {
+    "nazev": "Výroční zprávy zdravotních pojišťoven za roky 2023–2025, oddíl „Fond prevence“ a tabulková příloha č. 7 (šablona MZ podle vyhlášky 362/2010 Sb.); přepisy PDF v ingest/manual/pojistovny/vz-text/",
+    "adresar": "ingest/manual/pojistovny/vz-text",
+    "soubory": [
+      {"soubor": "111-2023.txt", "sha256": "60f8c7a2f10c29c089fcf3e85f4c955dbc24e3b47698e644db60ae9e22c8f437"},
+      {"soubor": "111-2024.txt", "sha256": "2780a824490f437b5d5b639adbdf6f89745df5c29da9202d7d2a29b2b6363404"},
+      {"soubor": "111-2025.txt", "sha256": "f6cac16d34fd008d00aaec326b29d70d379bcb9e19d2a5c029ff890463c94b5c"},
+      {"soubor": "201-2023.txt", "sha256": "811fbde617c6074840bb7c1f78284ba38ef09bf29c443cea5a40e34b964853c2"},
+      {"soubor": "201-2024.txt", "sha256": "6a47a159f8f98509b8a576f353ad228abc227cd084b32aa8efed956217d91965"},
+      {"soubor": "201-2025.txt", "sha256": "1ade4bdf7c6f9606ab9430f50a3537190a7e994307d9f03a9811f2351dcfbd07"},
+      {"soubor": "205-2023.txt", "sha256": "3fbe2b20550ceeff83df4f7fa4ce4717ce695c7b4a02c69a3b2e4f12348c50a3"},
+      {"soubor": "205-2024.txt", "sha256": "c820449bcc4a2902ab0857427acf726be6912a760711c5edca2575947811a264"},
+      {"soubor": "205-2025.txt", "sha256": "543b6ae9f9a9b7ec80b625ec4825764ce95041ed845fe6562aa40a07db498016"},
+      {"soubor": "207-2023.txt", "sha256": "081bbf0693b8648fd696922b2242747702c7791c5d3b3ec659a5a3efc2a14a9c"},
+      {"soubor": "207-2024.txt", "sha256": "92dabd77ffa62c4b2cbf0697cdca1a3f44b3d1377d70389b78f4bae3a7d032d7"},
+      {"soubor": "207-2025.txt", "sha256": "de68ac067014d9e901d242a806044e4bc6001862edc4557910c21e7a39e928af"},
+      {"soubor": "209-2020.txt", "sha256": "398892ada9b39122e70979734258dc7f2c51b2bddd2511cb626fba64f95b5acf"},
+      {"soubor": "209-2023.txt", "sha256": "f148a20904f0547b4442d43a5b65e11bff8c1a913043f35bfc5f46fb97adaee7"},
+      {"soubor": "209-2024.txt", "sha256": "a1789c0689195555a8c8a6315a1dc248f541b2584b184d1c542ee8f7db5dce6f"},
+      {"soubor": "211-2023.txt", "sha256": "3c59d7910b7057562e4529ea305bd83295483f86f1f00b996aa1130eed2290b6"},
+      {"soubor": "211-2024.txt", "sha256": "990f91f2b7b7041244134a39aa54a9c2b3f41effcf95bc47a94dd08d5296b6c9"},
+      {"soubor": "211-2025.txt", "sha256": "622cedff785dc5b1b405d8a775da9101740fcbf8c1ee9eb6e279d84f7a966cc6"},
+      {"soubor": "213-2023.txt", "sha256": "68721f8c9a061574142f4ab8264c8c16348d21c47c72d042695d85d3ef34c20a"},
+      {"soubor": "213-2025.txt", "sha256": "8cb6664a63f708352fba523f8e9a46fc0a27101fab0129cb707449fd14a823fa"}
+    ]
+  },
+  "roky": [
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "pojistovny": [
+    {
+      "kod": "111",
+      "zkratka": "VZP",
+      "roky": {
+        "2022": {
+          "tvorba": {"ze_zf": null, "pokuty_penale": null, "ostatni": null, "z_pf": null, "celkem": null},
+          "cerpani_celkem": null,
+          "cerpani_programy": null,
+          "zustatek_pocatecni": null,
+          "zustatek_konecny": {"hodnota": 787061, "soubor": "111-2023.txt", "radek": 4045, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 802 408 787 061 98,1", "poznamka": "Počáteční zůstatek k 1. 1. 2023 z VZ za 2023."},
+          "bu_zustatek_pocatecni": null,
+          "bu_zustatek_konecny": {"hodnota": 807804, "soubor": "111-2023.txt", "radek": 4106, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 810 602 807 804 99,7", "poznamka": "Počáteční zůstatek BÚ k 1. 1. 2023 z VZ za 2023."},
+          "vyuziti": {"pocet_prispevku": null, "pocet_zadosti": null, "pocet_osob": null, "definice": null},
+          "poznamky": {"tvorba.celkem": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (111-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.ze_zf": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (111-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.pokuty_penale": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (111-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.ostatni": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (111-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.z_pf": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (111-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "cerpani_celkem": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (111-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "cerpani_programy": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (111-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "zustatek_pocatecni": "Zůstatek nelze zjistit: VZ za rok 2022 ani sousední VZ nemáme k dispozici.", "bu_zustatek_pocatecni": "Zůstatek nelze zjistit: VZ za rok 2022 ani sousední VZ nemáme k dispozici.", "vyuziti": "VZ VZP v oddílu o fondu prevence ani v příloze č. 13 (sloupec „Počet účastníků“ je prázdný) neuvádí počet příspěvků, žádostí ani osob."}
+        },
+        "2023": {
+          "tvorba": {
+            "ze_zf": null,
+            "pokuty_penale": {"hodnota": 768910, "soubor": "111-2023.txt", "radek": 4059, "citace": "1.2.2 prostředky pocházející z pokut, přirážek k pojistnému a penále 855 000 768 910 89,9"},
+            "ostatni": {"hodnota": 112, "soubor": "111-2023.txt", "radek": 4047, "odvozeno": true, "poznamka": "Tvorba celkem − převod ze ZFZP − pokuty a penále; zahrnuje převod z provozního fondu, úroky, dary a u některých ZP zrušení opravných položek (viz z_pf a poznamky_autora)."},
+            "z_pf": null,
+            "celkem": {"hodnota": 769022, "soubor": "111-2023.txt", "radek": 4047, "citace": "II. Tvorba celkem = zdroje 855 000 769 022 89,9"}
+          },
+          "cerpani_celkem": {"hodnota": 955197, "soubor": "111-2023.txt", "radek": 4075, "citace": "III. Čerpání celkem = snížení zdrojů 981 300 955 197 97,3"},
+          "cerpani_programy": {"hodnota": 954958, "soubor": "111-2023.txt", "radek": 4077, "citace": "1 Preventivní programy 981 000 954 958 97,3"},
+          "zustatek_pocatecni": {"hodnota": 787061, "soubor": "111-2023.txt", "radek": 4045, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 802 408 787 061 98,1"},
+          "zustatek_konecny": {"hodnota": 600886, "soubor": "111-2023.txt", "radek": 4096, "citace": "IV. Konečný zůstatek k poslednímu dni sledovaného období = I + II – III 676 108 600 886 88,9"},
+          "bu_zustatek_pocatecni": {"hodnota": 807804, "soubor": "111-2023.txt", "radek": 4106, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 810 602 807 804 99,7"},
+          "bu_zustatek_konecny": {"hodnota": 618340, "soubor": "111-2023.txt", "radek": 4151, "citace": "IV. Konečný zůstatek k poslednímu dni sledovaného období = I + II – III 684 302 618 340 90,4"},
+          "vyuziti": {"pocet_prispevku": null, "pocet_zadosti": null, "pocet_osob": null, "definice": null},
+          "poznamky": {"tvorba.ze_zf": "Řádek 1.2.1 (převod ze ZFZP z pojistného) je v tabulce VZ prázdný.", "tvorba.z_pf": "Řádek 1.2.3 (převod z provozního fondu) je v tabulce VZ prázdný.", "vyuziti": "VZ VZP v oddílu o fondu prevence ani v příloze č. 13 (sloupec „Počet účastníků“ je prázdný) neuvádí počet příspěvků, žádostí ani osob."}
+        },
+        "2024": {
+          "tvorba": {
+            "ze_zf": null,
+            "pokuty_penale": {"hodnota": 883015, "soubor": "111-2024.txt", "radek": 4183, "citace": "1.2.2 prostředky pocházející z pokut, přirážek k pojistnému a penále 710 000 883 015 124,4"},
+            "ostatni": {"hodnota": 800000, "soubor": "111-2024.txt", "radek": 4171, "odvozeno": true, "poznamka": "Tvorba celkem − převod ze ZFZP − pokuty a penále; zahrnuje převod z provozního fondu, úroky, dary a u některých ZP zrušení opravných položek (viz z_pf a poznamky_autora)."},
+            "z_pf": {"hodnota": 800000, "soubor": "111-2024.txt", "radek": 4185, "citace": "1.2.3 převod z PF 500 000 800 000 160,0"},
+            "celkem": {"hodnota": 1683015, "soubor": "111-2024.txt", "radek": 4171, "citace": "II. Tvorba celkem = zdroje 1 210 000 1 683 015 139,1"}
+          },
+          "cerpani_celkem": {"hodnota": 2079370, "soubor": "111-2024.txt", "radek": 4199, "citace": "III. Čerpání celkem = snížení zdrojů 1 600 300 2 079 370 129,9"},
+          "cerpani_programy": {"hodnota": 2079022, "soubor": "111-2024.txt", "radek": 4201, "citace": "1 Preventivní programy 1 600 000 2 079 022 129,9"},
+          "zustatek_pocatecni": {"hodnota": 600886, "soubor": "111-2024.txt", "radek": 4169, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 572 261 600 886 105,0"},
+          "zustatek_konecny": {"hodnota": 204531, "soubor": "111-2024.txt", "radek": 4220, "citace": "IV. Konečný zůstatek k poslednímu dni sledovaného období = I + II – III 181 961 204 531 112,4"},
+          "bu_zustatek_pocatecni": {"hodnota": 618340, "soubor": "111-2024.txt", "radek": 4230, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 543 062 618 340 113,9"},
+          "bu_zustatek_konecny": {"hodnota": 284297, "soubor": "111-2024.txt", "radek": 4275, "citace": "IV. Konečný zůstatek k poslednímu dni sledovaného období = I + II – III 152 762 284 297 186,1"},
+          "vyuziti": {"pocet_prispevku": null, "pocet_zadosti": null, "pocet_osob": null, "definice": null},
+          "poznamky": {"tvorba.ze_zf": "Řádek 1.2.1 (převod ze ZFZP z pojistného) je v tabulce VZ prázdný.", "vyuziti": "VZ VZP v oddílu o fondu prevence ani v příloze č. 13 (sloupec „Počet účastníků“ je prázdný) neuvádí počet příspěvků, žádostí ani osob."}
+        },
+        "2025": {
+          "tvorba": {
+            "ze_zf": null,
+            "pokuty_penale": {"hodnota": 915047, "soubor": "111-2025.txt", "radek": 4609, "citace": "1.2.2 prostředky pocházející z pokut, přirážek k pojistnému a penále 835 000 915 047 109,6"},
+            "ostatni": {"hodnota": 900000, "soubor": "111-2025.txt", "radek": 4597, "odvozeno": true, "poznamka": "Tvorba celkem − převod ze ZFZP − pokuty a penále; zahrnuje převod z provozního fondu, úroky, dary a u některých ZP zrušení opravných položek (viz z_pf a poznamky_autora)."},
+            "z_pf": {"hodnota": 900000, "soubor": "111-2025.txt", "radek": 4611, "citace": "1.2.3 převod z PF 1 200 000 900 000 75,0"},
+            "celkem": {"hodnota": 1815047, "soubor": "111-2025.txt", "radek": 4597, "citace": "II. Tvorba celkem = zdroje 2 035 200 1 815 047 89,2"}
+          },
+          "cerpani_celkem": {"hodnota": 1833529, "soubor": "111-2025.txt", "radek": 4625, "citace": "III. Čerpání celkem = snížení zdrojů 2 130 300 1 833 529 86,1"},
+          "cerpani_programy": {"hodnota": 1833187, "soubor": "111-2025.txt", "radek": 4627, "citace": "1 Preventivní programy 2 130 000 1 833 187 86,1"},
+          "zustatek_pocatecni": {"hodnota": 204531, "soubor": "111-2025.txt", "radek": 4595, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 308 286 204 531 66,3"},
+          "zustatek_konecny": {"hodnota": 186049, "soubor": "111-2025.txt", "radek": 4646, "citace": "IV. Konečný zůstatek k poslednímu dni sledovaného období = I + II – III 213 186 186 049 87,3"},
+          "bu_zustatek_pocatecni": {"hodnota": 284297, "soubor": "111-2025.txt", "radek": 4656, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 330 740 284 297 86,0"},
+          "bu_zustatek_konecny": {"hodnota": 260088, "soubor": "111-2025.txt", "radek": 4702, "citace": "IV. Konečný zůstatek k poslednímu dni sledovaného období = I + II – III 210 640 260 088 123,5"},
+          "vyuziti": {"pocet_prispevku": null, "pocet_zadosti": null, "pocet_osob": null, "definice": null},
+          "poznamky": {"tvorba.ze_zf": "Řádek 1.2.1 (převod ze ZFZP z pojistného) je v tabulce VZ prázdný.", "vyuziti": "VZ VZP v oddílu o fondu prevence ani v příloze č. 13 (sloupec „Počet účastníků“ je prázdný) neuvádí počet příspěvků, žádostí ani osob."}
+        }
+      },
+      "poznamky_autora": [
+        "Od 1. 1. 2023 má VZP stejné zdroje fondu jako ostatní ZP (§ 7c zák. 551/1991 Sb.); struktura tvorby před touto změnou a po ní není srovnatelná. V letech 2024 a 2025 tvoří velkou část tvorby převod z provozního fondu (tvorba.z_pf) a řádek 1.2.1 (převod ze ZFZP z pojistného) je v tabulce VZP prázdný."
+      ]
+    },
+    {
+      "kod": "201",
+      "zkratka": "VoZP",
+      "roky": {
+        "2022": {
+          "tvorba": {"ze_zf": null, "pokuty_penale": null, "ostatni": null, "z_pf": null, "celkem": null},
+          "cerpani_celkem": null,
+          "cerpani_programy": null,
+          "zustatek_pocatecni": null,
+          "zustatek_konecny": {"hodnota": 54696, "soubor": "201-2023.txt", "radek": 2671, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 68 169 54 696 80,2", "poznamka": "Počáteční zůstatek k 1. 1. 2023 z VZ za 2023."},
+          "bu_zustatek_pocatecni": null,
+          "bu_zustatek_konecny": {"hodnota": 8573, "soubor": "201-2023.txt", "radek": 2719, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 68 169 8 573 12,6", "poznamka": "Počáteční zůstatek BÚ k 1. 1. 2023 z VZ za 2023."},
+          "vyuziti": {"pocet_prispevku": null, "pocet_zadosti": null, "pocet_osob": null, "definice": null},
+          "poznamky": {"tvorba.celkem": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (201-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.ze_zf": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (201-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.pokuty_penale": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (201-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.ostatni": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (201-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.z_pf": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (201-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "cerpani_celkem": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (201-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "cerpani_programy": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (201-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "zustatek_pocatecni": "Zůstatek nelze zjistit: VZ za rok 2022 ani sousední VZ nemáme k dispozici.", "bu_zustatek_pocatecni": "Zůstatek nelze zjistit: VZ za rok 2022 ani sousední VZ nemáme k dispozici.", "vyuziti": "VZ VoZP uvádí u fondu jen náklady po programech, ne počet příspěvků, žádostí ani osob."}
+        },
+        "2023": {
+          "tvorba": {
+            "ze_zf": {"hodnota": 20000, "soubor": "201-2023.txt", "radek": 2677, "citace": "1.2.1 20 000 20 000 100,0"},
+            "pokuty_penale": {"hodnota": 120000, "soubor": "201-2023.txt", "radek": 2679, "citace": "1.2.2 prostředky pocházející z pokut, přirážek k pojistnému a penále 120 000 120 000 100,0"},
+            "ostatni": {"hodnota": 54, "soubor": "201-2023.txt", "radek": 2672, "odvozeno": true, "poznamka": "Tvorba celkem − převod ze ZFZP − pokuty a penále; zahrnuje převod z provozního fondu, úroky, dary a u některých ZP zrušení opravných položek (viz z_pf a poznamky_autora)."},
+            "z_pf": {"hodnota": 0, "soubor": "201-2023.txt", "radek": 2680, "citace": "1.2.3 převod z PF 0 0 –"},
+            "celkem": {"hodnota": 140054, "soubor": "201-2023.txt", "radek": 2672, "citace": "II. Tvorba celkem = zdroje 140 000 140 054 100,0"}
+          },
+          "cerpani_celkem": {"hodnota": 189295, "soubor": "201-2023.txt", "radek": 2688, "citace": "III. Čerpání celkem = snížení zdrojů: 192 765 189 295 98,2"},
+          "cerpani_programy": {"hodnota": 189032, "soubor": "201-2023.txt", "radek": 2689, "citace": "1 Preventivní programy 192 285 189 032 98,3"},
+          "zustatek_pocatecni": {"hodnota": 54696, "soubor": "201-2023.txt", "radek": 2671, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 68 169 54 696 80,2"},
+          "zustatek_konecny": {"hodnota": 5455, "soubor": "201-2023.txt", "radek": 2711, "citace": "IV. 15 404 5 455 35,4"},
+          "bu_zustatek_pocatecni": {"hodnota": 8573, "soubor": "201-2023.txt", "radek": 2719, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 68 169 8 573 12,6"},
+          "bu_zustatek_konecny": {"hodnota": 20918, "soubor": "201-2023.txt", "radek": 2746, "citace": "IV. 15 404 20 918 135,8"},
+          "vyuziti": {"pocet_prispevku": null, "pocet_zadosti": null, "pocet_osob": null, "definice": null},
+          "poznamky": {"vyuziti": "VZ VoZP uvádí u fondu jen náklady po programech, ne počet příspěvků, žádostí ani osob."}
+        },
+        "2024": {
+          "tvorba": {
+            "ze_zf": {"hodnota": 51000, "soubor": "201-2024.txt", "radek": 2693, "citace": "1.2.1 55 000 51 000 92,7"},
+            "pokuty_penale": {"hodnota": 129000, "soubor": "201-2024.txt", "radek": 2695, "citace": "1.2.2 prostředky pocházející z pokut, přirážek k pojistnému a penále 125 000 129 000 103,2"},
+            "ostatni": {"hodnota": 62, "soubor": "201-2024.txt", "radek": 2688, "odvozeno": true, "poznamka": "Tvorba celkem − převod ze ZFZP − pokuty a penále; zahrnuje převod z provozního fondu, úroky, dary a u některých ZP zrušení opravných položek (viz z_pf a poznamky_autora)."},
+            "z_pf": {"hodnota": 0, "soubor": "201-2024.txt", "radek": 2696, "citace": "1.2.3 převod z PF 0 0 –"},
+            "celkem": {"hodnota": 180062, "soubor": "201-2024.txt", "radek": 2688, "citace": "II. Tvorba celkem = zdroje 180 000 180 062 100,0"}
+          },
+          "cerpani_celkem": {"hodnota": 181365, "soubor": "201-2024.txt", "radek": 2704, "citace": "III. Čerpání celkem = snížení zdrojů: 180 500 181 365 100,5"},
+          "cerpani_programy": {"hodnota": 181184, "soubor": "201-2024.txt", "radek": 2705, "citace": "1 Preventivní programy 180 000 181 184 100,7"},
+          "zustatek_pocatecni": {"hodnota": 5455, "soubor": "201-2024.txt", "radek": 2687, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 2 673 5 455 204,1"},
+          "zustatek_konecny": {"hodnota": 4152, "soubor": "201-2024.txt", "radek": 2717, "citace": "IV. 2 173 4 152 191,1"},
+          "bu_zustatek_pocatecni": {"hodnota": 20918, "soubor": "201-2024.txt", "radek": 2727, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 2 673 20 918 782,6"},
+          "bu_zustatek_konecny": {"hodnota": 10673, "soubor": "201-2024.txt", "radek": 2754, "citace": "IV. 2 173 10 673 491,2"},
+          "vyuziti": {"pocet_prispevku": null, "pocet_zadosti": null, "pocet_osob": null, "definice": null},
+          "poznamky": {"vyuziti": "VZ VoZP uvádí u fondu jen náklady po programech, ne počet příspěvků, žádostí ani osob."}
+        },
+        "2025": {
+          "tvorba": {
+            "ze_zf": {"hodnota": 70000, "soubor": "201-2025.txt", "radek": 2661, "citace": "1.2.1 70 000 70 000 100,0"},
+            "pokuty_penale": {"hodnota": 130000, "soubor": "201-2025.txt", "radek": 2663, "citace": "1.2.2 prostředky pocházející z pokut, přirážek k pojistnému a penále 130 000 130 000 100,0"},
+            "ostatni": {"hodnota": 46, "soubor": "201-2025.txt", "radek": 2656, "odvozeno": true, "poznamka": "Tvorba celkem − převod ze ZFZP − pokuty a penále; zahrnuje převod z provozního fondu, úroky, dary a u některých ZP zrušení opravných položek (viz z_pf a poznamky_autora)."},
+            "z_pf": {"hodnota": 0, "soubor": "201-2025.txt", "radek": 2664, "citace": "1.2.3 převod z PF 0 0 –"},
+            "celkem": {"hodnota": 200046, "soubor": "201-2025.txt", "radek": 2656, "citace": "II. Tvorba celkem = zdroje 200 000 200 046 100,0"}
+          },
+          "cerpani_celkem": {"hodnota": 190587, "soubor": "201-2025.txt", "radek": 2672, "citace": "III. Čerpání celkem = snížení zdrojů: 200 500 190 587 95,1"},
+          "cerpani_programy": {"hodnota": 190462, "soubor": "201-2025.txt", "radek": 2673, "citace": "1 Preventivní programy 200 000 190 462 95,2"},
+          "zustatek_pocatecni": {"hodnota": 4152, "soubor": "201-2025.txt", "radek": 2655, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 5 008 4 152 82,9"},
+          "zustatek_konecny": {"hodnota": 13611, "soubor": "201-2025.txt", "radek": 2685, "citace": "IV. 4 508 13 611 301,9"},
+          "bu_zustatek_pocatecni": {"hodnota": 10673, "soubor": "201-2025.txt", "radek": 2695, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 5 008 10 673 213,1"},
+          "bu_zustatek_konecny": {"hodnota": 10784, "soubor": "201-2025.txt", "radek": 2722, "citace": "IV. 4 508 10 784 239,2"},
+          "vyuziti": {"pocet_prispevku": null, "pocet_zadosti": null, "pocet_osob": null, "definice": null},
+          "poznamky": {"vyuziti": "VZ VoZP uvádí u fondu jen náklady po programech, ne počet příspěvků, žádostí ani osob."}
+        }
+      },
+      "poznamky_autora": [
+        "U VoZP se Tab. 3c Hodnocení MZ (fond_prevence_mil) liší od čerpání programů v tabulce A, protože MZ v Tab. 3c počítá i výdaje z jiných zdrojů (specifické fondy VoZP)."
+      ]
+    },
+    {
+      "kod": "205",
+      "zkratka": "ČPZP",
+      "roky": {
+        "2022": {
+          "tvorba": {"ze_zf": null, "pokuty_penale": null, "ostatni": null, "z_pf": null, "celkem": null},
+          "cerpani_celkem": null,
+          "cerpani_programy": null,
+          "zustatek_pocatecni": null,
+          "zustatek_konecny": {"hodnota": 1505909, "soubor": "205-2023.txt", "radek": 3054, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 1 337 733 1 505 909 112,6", "poznamka": "Počáteční zůstatek k 1. 1. 2023 z VZ za 2023."},
+          "bu_zustatek_pocatecni": null,
+          "bu_zustatek_konecny": {"hodnota": 321082, "soubor": "205-2023.txt", "radek": 3087, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 321 408 321 082 99,9", "poznamka": "Počáteční zůstatek BÚ k 1. 1. 2023 z VZ za 2023."},
+          "vyuziti": {"pocet_prispevku": null, "pocet_zadosti": null, "pocet_osob": null, "definice": null},
+          "poznamky": {"tvorba.celkem": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (205-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.ze_zf": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (205-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.pokuty_penale": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (205-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.ostatni": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (205-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.z_pf": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (205-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "cerpani_celkem": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (205-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "cerpani_programy": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (205-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "zustatek_pocatecni": "Zůstatek nelze zjistit: VZ za rok 2022 ani sousední VZ nemáme k dispozici.", "bu_zustatek_pocatecni": "Zůstatek nelze zjistit: VZ za rok 2022 ani sousední VZ nemáme k dispozici.", "vyuziti": "VZ ČPZP uvádí u fondu jen náklady po skupinách programů (příloha č. 13), ne počet příspěvků, žádostí ani osob; sloupec „Počet účastníků“ je vyplněn jen u ozdravných pobytů (152 v roce 2024)."}
+        },
+        "2023": {
+          "tvorba": {
+            "ze_zf": {"hodnota": 115721, "soubor": "205-2023.txt", "radek": 3060, "citace": "1.2.1 v tom: převod ze ZFZP – prostředky pocházející z pojistného na veřejné zdravotní pojištění 115 552 115 721 100,1"},
+            "pokuty_penale": {"hodnota": 760186, "soubor": "205-2023.txt", "radek": 3061, "citace": "1.2.2 prostředky pocházející z pokut, přirážek k pojistnému a penále 643 690 760 186 118,1"},
+            "ostatni": {"hodnota": 443065, "soubor": "205-2023.txt", "radek": 3056, "odvozeno": true, "poznamka": "Tvorba celkem − převod ze ZFZP − pokuty a penále; zahrnuje převod z provozního fondu, úroky, dary a u některých ZP zrušení opravných položek (viz z_pf a poznamky_autora)."},
+            "z_pf": {"hodnota": 160000, "soubor": "205-2023.txt", "radek": 3062, "citace": "1.2.3 převod z PF 160 000 160 000 100,0"},
+            "celkem": {"hodnota": 1318972, "soubor": "205-2023.txt", "radek": 3056, "citace": "II. Tvorba celkem = zdroje 1 160 513 1 318 972 113,7"}
+          },
+          "cerpani_celkem": {"hodnota": 1113430, "soubor": "205-2023.txt", "radek": 3070, "citace": "III. Čerpání celkem = snížení zdrojů 1 121 690 1 113 430 99,3"},
+          "cerpani_programy": {"hodnota": 370726, "soubor": "205-2023.txt", "radek": 3071, "citace": "1 Preventivní programy 340 000 370 726 109,0"},
+          "zustatek_pocatecni": {"hodnota": 1505909, "soubor": "205-2023.txt", "radek": 3054, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 1 337 733 1 505 909 112,6"},
+          "zustatek_konecny": {"hodnota": 1711451, "soubor": "205-2023.txt", "radek": 3082, "citace": "IV. Konečný zůstatek k poslednímu dni sledovaného období = I + II – III 1 376 556 1 711 451 124,3"},
+          "bu_zustatek_pocatecni": {"hodnota": 321082, "soubor": "205-2023.txt", "radek": 3087, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 321 408 321 082 99,9"},
+          "bu_zustatek_konecny": {"hodnota": 396440, "soubor": "205-2023.txt", "radek": 3112, "citace": "IV. Konečný zůstatek k poslednímu dni sledovaného období = I + II – III 408 955 396 440 96,9"},
+          "vyuziti": {"pocet_prispevku": null, "pocet_zadosti": null, "pocet_osob": null, "definice": null},
+          "poznamky": {"vyuziti": "VZ ČPZP uvádí u fondu jen náklady po skupinách programů (příloha č. 13), ne počet příspěvků, žádostí ani osob; sloupec „Počet účastníků“ je vyplněn jen u ozdravných pobytů (152 v roce 2024)."}
+        },
+        "2024": {
+          "tvorba": {
+            "ze_zf": null,
+            "pokuty_penale": {"hodnota": 708182, "soubor": "205-2024.txt", "radek": 3156, "citace": "1.2.2 prostředky pocházející z pokut, přirážek k pojistnému a penále 733 316 708 182 96,6"},
+            "ostatni": {"hodnota": 396649, "soubor": "205-2024.txt", "radek": 3151, "odvozeno": true, "poznamka": "Tvorba celkem − převod ze ZFZP − pokuty a penále; zahrnuje převod z provozního fondu, úroky, dary a u některých ZP zrušení opravných položek (viz z_pf a poznamky_autora)."},
+            "z_pf": null,
+            "celkem": {"hodnota": 1104831, "soubor": "205-2024.txt", "radek": 3151, "citace": "II. Tvorba celkem = zdroje 1 078 316 1 104 831 102,5"}
+          },
+          "cerpani_celkem": {"hodnota": 1363557, "soubor": "205-2024.txt", "radek": 3165, "citace": "III. Čerpání celkem = snížení zdrojů 1 198 633 1 363 557 113,8"},
+          "cerpani_programy": {"hodnota": 403895, "soubor": "205-2024.txt", "radek": 3166, "citace": "1 Preventivní programy 378 000 403 895 106,9"},
+          "zustatek_pocatecni": {"hodnota": 1711451, "soubor": "205-2024.txt", "radek": 3149, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 1 635 456 1 711 451 104,6"},
+          "zustatek_konecny": {"hodnota": 1452725, "soubor": "205-2024.txt", "radek": 3177, "citace": "IV. Konečný zůstatek k poslednímu dni sledovaného období = I + II – III 1 515 139 1 452 725 95,9"},
+          "bu_zustatek_pocatecni": {"hodnota": 396440, "soubor": "205-2024.txt", "radek": 3182, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 392 284 396 440 101,1"},
+          "bu_zustatek_konecny": {"hodnota": 190182, "soubor": "205-2024.txt", "radek": 3207, "citace": "IV. Konečný zůstatek k poslednímu dni sledovaného období = I + II – III 173 368 190 182 109,7"},
+          "vyuziti": {"pocet_prispevku": null, "pocet_zadosti": null, "pocet_osob": null, "definice": null},
+          "poznamky": {"tvorba.ze_zf": "Řádek 1.2.1 (převod ze ZFZP z pojistného) je v tabulce VZ prázdný.", "tvorba.z_pf": "Řádek 1.2.3 (převod z provozního fondu) je v tabulce VZ prázdný.", "vyuziti": "VZ ČPZP uvádí u fondu jen náklady po skupinách programů (příloha č. 13), ne počet příspěvků, žádostí ani osob; sloupec „Počet účastníků“ je vyplněn jen u ozdravných pobytů (152 v roce 2024)."}
+        },
+        "2025": {
+          "tvorba": {
+            "ze_zf": null,
+            "pokuty_penale": {"hodnota": 933451, "soubor": "205-2025.txt", "radek": 3337, "citace": "1.2.2 prostředky pocházející z pokut, přirážek k pojistnému a penále 780 655 933 451 119,6"},
+            "ostatni": {"hodnota": 572001, "soubor": "205-2025.txt", "radek": 3332, "odvozeno": true, "poznamka": "Tvorba celkem − převod ze ZFZP − pokuty a penále; zahrnuje převod z provozního fondu, úroky, dary a u některých ZP zrušení opravných položek (viz z_pf a poznamky_autora)."},
+            "z_pf": {"hodnota": 140000, "soubor": "205-2025.txt", "radek": 3338, "citace": "1.2.3 převod z PF 140 000 140 000 100,0"},
+            "celkem": {"hodnota": 1505452, "soubor": "205-2025.txt", "radek": 3332, "citace": "II. Tvorba celkem = zdroje 1 332 655 1 505 452 113,0"}
+          },
+          "cerpani_celkem": {"hodnota": 2058615, "soubor": "205-2025.txt", "radek": 3346, "citace": "III. Čerpání celkem = snížení zdrojů 1 359 660 2 058 615 151,4"},
+          "cerpani_programy": {"hodnota": 434320, "soubor": "205-2025.txt", "radek": 3347, "citace": "1 Preventivní programy 450 000 434 320 96,5"},
+          "zustatek_pocatecni": {"hodnota": 1452725, "soubor": "205-2025.txt", "radek": 3330, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 1 567 490 1 452 725 92,7"},
+          "zustatek_konecny": {"hodnota": 899562, "soubor": "205-2025.txt", "radek": 3358, "citace": "IV. Konečný zůstatek k poslednímu dni sledovaného období = I + II – III 1 540 485 899 562 58,4"},
+          "bu_zustatek_pocatecni": {"hodnota": 190182, "soubor": "205-2025.txt", "radek": 3363, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 158 474 190 182 120,0"},
+          "bu_zustatek_konecny": {"hodnota": 113045, "soubor": "205-2025.txt", "radek": 3388, "citace": "IV. Konečný zůstatek k poslednímu dni sledovaného období = I + II – III 20 339 113 045 555,8"},
+          "vyuziti": {"pocet_prispevku": null, "pocet_zadosti": null, "pocet_osob": null, "definice": null},
+          "poznamky": {"tvorba.ze_zf": "Řádek 1.2.1 (převod ze ZFZP z pojistného) je v tabulce VZ prázdný.", "vyuziti": "VZ ČPZP uvádí u fondu jen náklady po skupinách programů (příloha č. 13), ne počet příspěvků, žádostí ani osob; sloupec „Počet účastníků“ je vyplněn jen u ozdravných pobytů (152 v roce 2024)."}
+        }
+      },
+      "poznamky_autora": [
+        "U ČPZP obsahuje tvorba celkem zrušení opravných položek k pokutám a penále a čerpání celkem obsahuje odpis penále a pokut a tvorbu opravných položek (2024: 383 844 a 555 470 tis. Kč); cerpani_celkem tak výrazně převyšuje cerpani_programy a nevypovídá o péči pro pojištěnce."
+      ]
+    },
+    {
+      "kod": "207",
+      "zkratka": "OZP",
+      "roky": {
+        "2022": {
+          "tvorba": {"ze_zf": null, "pokuty_penale": null, "ostatni": null, "z_pf": null, "celkem": null},
+          "cerpani_celkem": null,
+          "cerpani_programy": null,
+          "zustatek_pocatecni": null,
+          "zustatek_konecny": {"hodnota": 978234, "soubor": "207-2023.txt", "radek": 3111, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 1 033 719 978 234 94,6", "poznamka": "Počáteční zůstatek k 1. 1. 2023 z VZ za 2023."},
+          "bu_zustatek_pocatecni": null,
+          "bu_zustatek_konecny": {"hodnota": 560510, "soubor": "207-2023.txt", "radek": 3179, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 546 583 560 510 102,5", "poznamka": "Počáteční zůstatek BÚ k 1. 1. 2023 z VZ za 2023."},
+          "vyuziti": {"pocet_prispevku": null, "pocet_zadosti": null, "pocet_osob": null, "definice": null},
+          "poznamky": {"tvorba.celkem": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (207-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.ze_zf": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (207-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.pokuty_penale": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (207-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.ostatni": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (207-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.z_pf": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (207-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "cerpani_celkem": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (207-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "cerpani_programy": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (207-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "zustatek_pocatecni": "Zůstatek nelze zjistit: VZ za rok 2022 ani sousední VZ nemáme k dispozici.", "bu_zustatek_pocatecni": "Zůstatek nelze zjistit: VZ za rok 2022 ani sousední VZ nemáme k dispozici.", "vyuziti": "VZ OZP uvádí u fondu jen náklady po programech, ne počet příspěvků, žádostí ani osob; „Počet účastníků“ je vyplněn jen u ozdravných pobytů (143 v roce 2024). Počet 50 579 pojištěnců ve VZ 2024 se týká programu hodnocení kvality lékaře, ne fondu prevence."}
+        },
+        "2023": {
+          "tvorba": {
+            "ze_zf": {"hodnota": 136377, "soubor": "207-2023.txt", "radek": 3121, "citace": "1.2.1 135 904 136 377 100,3"},
+            "pokuty_penale": {"hodnota": 150962, "soubor": "207-2023.txt", "radek": 3125, "citace": "1.2.2 160 000 150 962 94,4"},
+            "ostatni": {"hodnota": 123565, "soubor": "207-2023.txt", "radek": 3113, "odvozeno": true, "poznamka": "Tvorba celkem − převod ze ZFZP − pokuty a penále; zahrnuje převod z provozního fondu, úroky, dary a u některých ZP zrušení opravných položek (viz z_pf a poznamky_autora)."},
+            "z_pf": {"hodnota": 120000, "soubor": "207-2023.txt", "radek": 3128, "citace": "1.2.3 převod z PF 120 000 120 000 100,0"},
+            "celkem": {"hodnota": 410904, "soubor": "207-2023.txt", "radek": 3113, "citace": "II. Tvorba celkem = zdroje 419 704 410 904 97,9"}
+          },
+          "cerpani_celkem": {"hodnota": 349608, "soubor": "207-2023.txt", "radek": 3144, "citace": "III. Čerpání celkem = snížení zdrojů: 407 825 349 608 85,7"},
+          "cerpani_programy": {"hodnota": 216913, "soubor": "207-2023.txt", "radek": 3145, "citace": "1 Preventivní programy 243 800 216 913 89,0"},
+          "zustatek_pocatecni": {"hodnota": 978234, "soubor": "207-2023.txt", "radek": 3111, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 1 033 719 978 234 94,6"},
+          "zustatek_konecny": {"hodnota": 1039530, "soubor": "207-2023.txt", "radek": 3168, "citace": "IV. 1 045 598 1 039 530 99,4"},
+          "bu_zustatek_pocatecni": {"hodnota": 560510, "soubor": "207-2023.txt", "radek": 3179, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 546 583 560 510 102,5"},
+          "bu_zustatek_konecny": {"hodnota": 656302, "soubor": "207-2023.txt", "radek": 3226, "citace": "IV. 613 462 656 302 107,0"},
+          "vyuziti": {"pocet_prispevku": null, "pocet_zadosti": null, "pocet_osob": null, "definice": null},
+          "poznamky": {"vyuziti": "VZ OZP uvádí u fondu jen náklady po programech, ne počet příspěvků, žádostí ani osob; „Počet účastníků“ je vyplněn jen u ozdravných pobytů (143 v roce 2024). Počet 50 579 pojištěnců ve VZ 2024 se týká programu hodnocení kvality lékaře, ne fondu prevence."}
+        },
+        "2024": {
+          "tvorba": {
+            "ze_zf": {"hodnota": 0, "soubor": "207-2024.txt", "radek": 3090, "citace": "1.2.1 0 0 –"},
+            "pokuty_penale": {"hodnota": 265431, "soubor": "207-2024.txt", "radek": 3094, "citace": "1.2.2 80 000 265 431 331,8"},
+            "ostatni": {"hodnota": 0, "soubor": "207-2024.txt", "radek": 3082, "odvozeno": true, "poznamka": "Tvorba celkem − převod ze ZFZP − pokuty a penále; zahrnuje převod z provozního fondu, úroky, dary a u některých ZP zrušení opravných položek (viz z_pf a poznamky_autora)."},
+            "z_pf": {"hodnota": 0, "soubor": "207-2024.txt", "radek": 3097, "citace": "1.2.3 převod z PF 0 0 –"},
+            "celkem": {"hodnota": 265431, "soubor": "207-2024.txt", "radek": 3082, "citace": "II. Tvorba celkem = zdroje 80 000 265 431 331,8"}
+          },
+          "cerpani_celkem": {"hodnota": 411292, "soubor": "207-2024.txt", "radek": 3113, "citace": "III. Čerpání celkem = snížení zdrojů: 321 025 411 292 128,1"},
+          "cerpani_programy": {"hodnota": 241272, "soubor": "207-2024.txt", "radek": 3114, "citace": "1 Preventivní programy 240 000 241 272 100,5"},
+          "zustatek_pocatecni": {"hodnota": 1039530, "soubor": "207-2024.txt", "radek": 3080, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 991 205 1 039 530 104,9"},
+          "zustatek_konecny": {"hodnota": 893669, "soubor": "207-2024.txt", "radek": 3137, "citace": "IV. 750 180 893 669 119,1"},
+          "bu_zustatek_pocatecni": {"hodnota": 656302, "soubor": "207-2024.txt", "radek": 3148, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 646 250 656 302 101,6"},
+          "bu_zustatek_konecny": {"hodnota": 485990, "soubor": "207-2024.txt", "radek": 3195, "citace": "IV. 467 225 485 990 104,0"},
+          "vyuziti": {"pocet_prispevku": null, "pocet_zadosti": null, "pocet_osob": null, "definice": null},
+          "poznamky": {"vyuziti": "VZ OZP uvádí u fondu jen náklady po programech, ne počet příspěvků, žádostí ani osob; „Počet účastníků“ je vyplněn jen u ozdravných pobytů (143 v roce 2024). Počet 50 579 pojištěnců ve VZ 2024 se týká programu hodnocení kvality lékaře, ne fondu prevence."}
+        },
+        "2025": {
+          "tvorba": {
+            "ze_zf": null,
+            "pokuty_penale": {"hodnota": 339023, "soubor": "207-2025.txt", "radek": 2442, "citace": "\u0007 rostředky pocházející z pokut, přirážek k pojistnému 131 000 339 023 258,8"},
+            "ostatni": {"hodnota": 0, "soubor": "207-2025.txt", "radek": 2435, "odvozeno": true, "poznamka": "Tvorba celkem − převod ze ZFZP − pokuty a penále; zahrnuje převod z provozního fondu, úroky, dary a u některých ZP zrušení opravných položek (viz z_pf a poznamky_autora)."},
+            "z_pf": null,
+            "celkem": {"hodnota": 339023, "soubor": "207-2025.txt", "radek": 2435, "citace": "II. Tvorba celkem = zdroje 131 000 339 023 258,8"}
+          },
+          "cerpani_celkem": {"hodnota": 421893, "soubor": "207-2025.txt", "radek": 2453, "citace": "III. Čerpání celkem = snížení zdrojů: 381 035 421 893 110,7"},
+          "cerpani_programy": {"hodnota": 266195, "soubor": "207-2025.txt", "radek": 2454, "citace": "1 Preventivní programy 250 000 266 195 106,5"},
+          "zustatek_pocatecni": {"hodnota": 893669, "soubor": "207-2025.txt", "radek": 2433, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 805 998 893 669 110,9"},
+          "zustatek_konecny": {"hodnota": 810799, "soubor": "207-2025.txt", "radek": 2467, "citace": "IV. Konečný zůstatek k poslednímu dni sledovaného období 555 963 810 799 145,8"},
+          "bu_zustatek_pocatecni": {"hodnota": 485990, "soubor": "207-2025.txt", "radek": 2476, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 488 857 485 990 99,4"},
+          "bu_zustatek_konecny": {"hodnota": 305116, "soubor": "207-2025.txt", "radek": 2507, "citace": "IV. Konečný zůstatek k poslednímu dni sledovaného období 315 822 305 116 96,6"},
+          "vyuziti": {"pocet_prispevku": null, "pocet_zadosti": null, "pocet_osob": null, "definice": null},
+          "poznamky": {"tvorba.ze_zf": "Řádek 1.2.1 (převod ze ZFZP z pojistného) je v tabulce VZ prázdný.", "tvorba.z_pf": "Řádek 1.2.3 (převod z provozního fondu) je v tabulce VZ prázdný.", "vyuziti": "VZ OZP uvádí u fondu jen náklady po programech, ne počet příspěvků, žádostí ani osob; „Počet účastníků“ je vyplněn jen u ozdravných pobytů (143 v roce 2024). Počet 50 579 pojištěnců ve VZ 2024 se týká programu hodnocení kvality lékaře, ne fondu prevence."}
+        }
+      },
+      "poznamky_autora": [
+        "U OZP tvoří zdroj fondu jen pokuty a penále včetně dohadných položek (VZ 2024, oddíl 5.6); účetní zůstatek fondu (tabulka A) je z velké části tvořen neuhrazenými pohledávkami za plátci, proto se od zůstatku bankovního účtu (tabulka B) liší."
+      ]
+    },
+    {
+      "kod": "209",
+      "zkratka": "ZPŠ",
+      "roky": {
+        "2022": {
+          "tvorba": {"ze_zf": null, "pokuty_penale": null, "ostatni": null, "z_pf": null, "celkem": null},
+          "cerpani_celkem": null,
+          "cerpani_programy": null,
+          "zustatek_pocatecni": null,
+          "zustatek_konecny": {"hodnota": 108587, "soubor": "209-2023.txt", "radek": 2642, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 103 163 108 587 105,3", "poznamka": "Počáteční zůstatek k 1. 1. 2023 z VZ za 2023."},
+          "bu_zustatek_pocatecni": null,
+          "bu_zustatek_konecny": {"hodnota": 67461, "soubor": "209-2023.txt", "radek": 2687, "citace": "I. Počáteční zůstatek k 1.1. ve sledovaném období 67 296 67 461 100,2", "poznamka": "Počáteční zůstatek BÚ k 1. 1. 2023 z VZ za 2023."},
+          "vyuziti": {"pocet_prispevku": null, "pocet_zadosti": null, "pocet_osob": null, "definice": null},
+          "poznamky": {"tvorba.celkem": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (209-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.ze_zf": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (209-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.pokuty_penale": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (209-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.ostatni": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (209-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.z_pf": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (209-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "cerpani_celkem": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (209-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "cerpani_programy": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (209-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "zustatek_pocatecni": "Zůstatek nelze zjistit: VZ za rok 2022 ani sousední VZ nemáme k dispozici.", "bu_zustatek_pocatecni": "Zůstatek nelze zjistit: VZ za rok 2022 ani sousední VZ nemáme k dispozici.", "vyuziti": "VZ ZPŠ za rok 2025 není k dispozici; VZ 2022 nemáme (uvádí se jen počet z VZ 2023 a 2024)."}
+        },
+        "2023": {
+          "tvorba": {
+            "ze_zf": {"hodnota": 28012, "soubor": "209-2023.txt", "radek": 2650, "citace": "1.2.1 z pojistného na veřejné zdravotní pojištění 27 450 28 012 102,0"},
+            "pokuty_penale": {"hodnota": 43913, "soubor": "209-2023.txt", "radek": 2652, "citace": "1.2.2 k pojistnému a penále 31 000 43 913 141,7"},
+            "ostatni": {"hodnota": 17000, "soubor": "209-2023.txt", "radek": 2643, "odvozeno": true, "poznamka": "Tvorba celkem − převod ze ZFZP − pokuty a penále; zahrnuje převod z provozního fondu, úroky, dary a u některých ZP zrušení opravných položek (viz z_pf a poznamky_autora)."},
+            "z_pf": {"hodnota": 17000, "soubor": "209-2023.txt", "radek": 2653, "citace": "1.2.3 převod z PF 17 000 17 000 100,0"},
+            "celkem": {"hodnota": 88925, "soubor": "209-2023.txt", "radek": 2643, "citace": "II. Tvorba celkem = zdroje 75 450 88 925 117,9"}
+          },
+          "cerpani_celkem": {"hodnota": 85524, "soubor": "209-2023.txt", "radek": 2661, "citace": "III. Čerpání celkem = snížení zdrojů: 75 002 85 524 114,0"},
+          "cerpani_programy": {"hodnota": 45552, "soubor": "209-2023.txt", "radek": 2662, "citace": "1 Preventivní programy 55 000 45 552 82,8"},
+          "zustatek_pocatecni": {"hodnota": 108587, "soubor": "209-2023.txt", "radek": 2642, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 103 163 108 587 105,3"},
+          "zustatek_konecny": {"hodnota": 111988, "soubor": "209-2023.txt", "radek": 2677, "citace": "IV. = I + II – III 103 611 111 988 108,1"},
+          "bu_zustatek_pocatecni": {"hodnota": 67461, "soubor": "209-2023.txt", "radek": 2687, "citace": "I. Počáteční zůstatek k 1.1. ve sledovaném období 67 296 67 461 100,2"},
+          "bu_zustatek_konecny": {"hodnota": 83321, "soubor": "209-2023.txt", "radek": 2717, "citace": "IV. = I + II - III 67 544 83 321 123,4"},
+          "vyuziti": {
+            "pocet_prispevku": {"hodnota": 76393, "soubor": "209-2023.txt", "radek": 1073, "citace": "celkem 45 552 tis. Kč a vyplaceno bylo celkem 76 393 příspěvků."},
+            "pocet_zadosti": null,
+            "pocet_osob": null,
+            "definice": "Počet vyplacených příspěvků z fondu prevence za rok podle výroční zprávy ZPŠ (39 programů a aktivit). Není to počet žádostí ani počet osob: jeden pojištěnec může za rok dostat více příspěvků."
+          },
+          "poznamky": {}
+        },
+        "2024": {
+          "tvorba": {
+            "ze_zf": {"hodnota": 0, "soubor": "209-2024.txt", "radek": 2580, "citace": "1.2.1 z pojistného na veřejné zdravotní pojištění 0 0 –"},
+            "pokuty_penale": {"hodnota": 28620, "soubor": "209-2024.txt", "radek": 2582, "citace": "1.2.2 k pojistnému a penále 34 700 28 620 82,5"},
+            "ostatni": {"hodnota": 20000, "soubor": "209-2024.txt", "radek": 2573, "odvozeno": true, "poznamka": "Tvorba celkem − převod ze ZFZP − pokuty a penále; zahrnuje převod z provozního fondu, úroky, dary a u některých ZP zrušení opravných položek (viz z_pf a poznamky_autora)."},
+            "z_pf": {"hodnota": 20000, "soubor": "209-2024.txt", "radek": 2583, "citace": "1.2.3 převod z PF 20 000 20 000 100,0"},
+            "celkem": {"hodnota": 48620, "soubor": "209-2024.txt", "radek": 2573, "citace": "Tvorba celkem = zdroje 54 700 48 620 88,9"}
+          },
+          "cerpani_celkem": {"hodnota": 101465, "soubor": "209-2024.txt", "radek": 2591, "citace": "III. Čerpání celkem = snížení zdrojů: 101 701 101 465 99,8"},
+          "cerpani_programy": {"hodnota": 57697, "soubor": "209-2024.txt", "radek": 2592, "citace": "1 Preventivní programy 63 000 57 697 91,6"},
+          "zustatek_pocatecni": {"hodnota": 111988, "soubor": "209-2024.txt", "radek": 2571, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 112 473 111 988 99,6"},
+          "zustatek_konecny": {"hodnota": 59143, "soubor": "209-2024.txt", "radek": 2607, "citace": "IV. = I + II – III 65 472 59 143 90,3"},
+          "bu_zustatek_pocatecni": {"hodnota": 83321, "soubor": "209-2024.txt", "radek": 2617, "citace": "I. Počáteční zůstatek k 1.1. ve sledovaném období 83 252 83 321 100,1"},
+          "bu_zustatek_konecny": {"hodnota": 61289, "soubor": "209-2024.txt", "radek": 2647, "citace": "IV. = I + II - III 58 361 61 289 105,0"},
+          "vyuziti": {
+            "pocet_prispevku": {"hodnota": 85266, "soubor": "209-2024.txt", "radek": 1016, "citace": "celkem 57 697 tis. Kč a vyplaceno bylo celkem 85 266 příspěvků."},
+            "pocet_zadosti": null,
+            "pocet_osob": null,
+            "definice": "Počet vyplacených příspěvků z fondu prevence za rok podle výroční zprávy ZPŠ (39 programů a aktivit). Není to počet žádostí ani počet osob: jeden pojištěnec může za rok dostat více příspěvků."
+          },
+          "poznamky": {}
+        },
+        "2025": {
+          "tvorba": {"ze_zf": null, "pokuty_penale": null, "ostatni": null, "z_pf": null, "celkem": null},
+          "cerpani_celkem": null,
+          "cerpani_programy": null,
+          "zustatek_pocatecni": {"hodnota": 59143, "soubor": "209-2024.txt", "radek": 2607, "citace": "IV. = I + II – III 65 472 59 143 90,3", "poznamka": "Konečný zůstatek k 31. 12. 2024 z VZ za 2024."},
+          "zustatek_konecny": null,
+          "bu_zustatek_pocatecni": {"hodnota": 61289, "soubor": "209-2024.txt", "radek": 2647, "citace": "IV. = I + II - III 58 361 61 289 105,0", "poznamka": "Konečný zůstatek BÚ k 31. 12. 2024 z VZ za 2024."},
+          "bu_zustatek_konecny": null,
+          "vyuziti": {"pocet_prispevku": null, "pocet_zadosti": null, "pocet_osob": null, "definice": null},
+          "poznamky": {"tvorba.celkem": "VZ za rok 2025 není v ingest/manual/pojistovny/vz-text (209-2025.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.ze_zf": "VZ za rok 2025 není v ingest/manual/pojistovny/vz-text (209-2025.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.pokuty_penale": "VZ za rok 2025 není v ingest/manual/pojistovny/vz-text (209-2025.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.ostatni": "VZ za rok 2025 není v ingest/manual/pojistovny/vz-text (209-2025.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.z_pf": "VZ za rok 2025 není v ingest/manual/pojistovny/vz-text (209-2025.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "cerpani_celkem": "VZ za rok 2025 není v ingest/manual/pojistovny/vz-text (209-2025.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "cerpani_programy": "VZ za rok 2025 není v ingest/manual/pojistovny/vz-text (209-2025.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "zustatek_konecny": "Zůstatek nelze zjistit: VZ za rok 2025 ani sousední VZ nemáme k dispozici.", "bu_zustatek_konecny": "Zůstatek nelze zjistit: VZ za rok 2025 ani sousední VZ nemáme k dispozici.", "vyuziti": "VZ ZPŠ za rok 2025 není k dispozici; VZ 2022 nemáme (uvádí se jen počet z VZ 2023 a 2024)."}
+        }
+      },
+      "poznamky_autora": [
+        "U ZPŠ obsahuje čerpání celkem také odpis penále a pokut a snížení fondu na základě odstranění tvrdosti. Počty příspěvků (76 393 v roce 2023, 85 266 v roce 2024) jsou v odstavci 4.7.1 VZ."
+      ]
+    },
+    {
+      "kod": "211",
+      "zkratka": "ZP MV",
+      "roky": {
+        "2022": {
+          "tvorba": {"ze_zf": null, "pokuty_penale": null, "ostatni": null, "z_pf": null, "celkem": null},
+          "cerpani_celkem": null,
+          "cerpani_programy": null,
+          "zustatek_pocatecni": null,
+          "zustatek_konecny": {"hodnota": 638461, "soubor": "211-2023.txt", "radek": 2935, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 679 926 638 461 93,9", "poznamka": "Počáteční zůstatek k 1. 1. 2023 z VZ za 2023."},
+          "bu_zustatek_pocatecni": null,
+          "bu_zustatek_konecny": {"hodnota": 653376, "soubor": "211-2023.txt", "radek": 2981, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 709 544 653 376 92,1", "poznamka": "Počáteční zůstatek BÚ k 1. 1. 2023 z VZ za 2023."},
+          "vyuziti": {"pocet_prispevku": null, "pocet_zadosti": null, "pocet_osob": null, "definice": null},
+          "poznamky": {"tvorba.celkem": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (211-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.ze_zf": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (211-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.pokuty_penale": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (211-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.ostatni": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (211-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.z_pf": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (211-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "cerpani_celkem": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (211-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "cerpani_programy": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (211-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "zustatek_pocatecni": "Zůstatek nelze zjistit: VZ za rok 2022 ani sousední VZ nemáme k dispozici.", "bu_zustatek_pocatecni": "Zůstatek nelze zjistit: VZ za rok 2022 ani sousední VZ nemáme k dispozici.", "vyuziti": "VZ ZP MV uvádí u fondu jen vyplacené částky po programech, ne počet příspěvků ani žádostí; „Počet účastníků“ je vyplněn jen u ozdravných pobytů. Počty žádostí ve VZ se týkají žádostí o úhradu péče a o odstranění tvrdosti, ne fondu prevence."}
+        },
+        "2023": {
+          "tvorba": {
+            "ze_zf": {"hodnota": 217000, "soubor": "211-2023.txt", "radek": 2944, "citace": "1.2.1 194 000 217 000 111,9"},
+            "pokuty_penale": {"hodnota": 103000, "soubor": "211-2023.txt", "radek": 2947, "citace": "1.2.2 126 000 103 000 81,7"},
+            "ostatni": {"hodnota": 0, "soubor": "211-2023.txt", "radek": 2937, "odvozeno": true, "poznamka": "Tvorba celkem − převod ze ZFZP − pokuty a penále; zahrnuje převod z provozního fondu, úroky, dary a u některých ZP zrušení opravných položek (viz z_pf a poznamky_autora)."},
+            "z_pf": {"hodnota": 0, "soubor": "211-2023.txt", "radek": 2949, "citace": "1.2.3 převod z PF 0 0 –"},
+            "celkem": {"hodnota": 320000, "soubor": "211-2023.txt", "radek": 2937, "citace": "II. Tvorba celkem = zdroje 320 000 320 000 100,0"}
+          },
+          "cerpani_celkem": {"hodnota": 387465, "soubor": "211-2023.txt", "radek": 2957, "citace": "III. Čerpání celkem = snížení zdrojů 320 100 387 465 121,0"},
+          "cerpani_programy": {"hodnota": 387431, "soubor": "211-2023.txt", "radek": 2958, "citace": "1 Preventivní programy 320 000 387 431 121,1"},
+          "zustatek_pocatecni": {"hodnota": 638461, "soubor": "211-2023.txt", "radek": 2935, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 679 926 638 461 93,9"},
+          "zustatek_konecny": {"hodnota": 570996, "soubor": "211-2023.txt", "radek": 2970, "citace": "IV. Konečný zůstatek k poslednímu dni sledovaného období = I + II – III 679 826 570 996 84,0"},
+          "bu_zustatek_pocatecni": {"hodnota": 653376, "soubor": "211-2023.txt", "radek": 2981, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 709 544 653 376 92,1"},
+          "bu_zustatek_konecny": {"hodnota": 587838, "soubor": "211-2023.txt", "radek": 3014, "citace": "IV. Konečný zůstatek k poslednímu dni sledovaného období = I + II – III 709 444 587 838 82,9"},
+          "vyuziti": {"pocet_prispevku": null, "pocet_zadosti": null, "pocet_osob": null, "definice": null},
+          "poznamky": {"vyuziti": "VZ ZP MV uvádí u fondu jen vyplacené částky po programech, ne počet příspěvků ani žádostí; „Počet účastníků“ je vyplněn jen u ozdravných pobytů. Počty žádostí ve VZ se týkají žádostí o úhradu péče a o odstranění tvrdosti, ne fondu prevence."}
+        },
+        "2024": {
+          "tvorba": {
+            "ze_zf": {"hodnota": 215000, "soubor": "211-2024.txt", "radek": 2908, "citace": "1.2.1 215 000 215 000 100,0"},
+            "pokuty_penale": {"hodnota": 115000, "soubor": "211-2024.txt", "radek": 2911, "citace": "1.2.2 115 000 115 000 100,0"},
+            "ostatni": {"hodnota": 0, "soubor": "211-2024.txt", "radek": 2901, "odvozeno": true, "poznamka": "Tvorba celkem − převod ze ZFZP − pokuty a penále; zahrnuje převod z provozního fondu, úroky, dary a u některých ZP zrušení opravných položek (viz z_pf a poznamky_autora)."},
+            "z_pf": {"hodnota": 0, "soubor": "211-2024.txt", "radek": 2913, "citace": "1.2.3 převod z PF 0 0 –"},
+            "celkem": {"hodnota": 330000, "soubor": "211-2024.txt", "radek": 2901, "citace": "II. Tvorba celkem = zdroje 330 000 330 000 100,0"}
+          },
+          "cerpani_celkem": {"hodnota": 453987, "soubor": "211-2024.txt", "radek": 2921, "citace": "III. Čerpání celkem = snížení zdrojů 330 000 453 987 137,6"},
+          "cerpani_programy": {"hodnota": 453987, "soubor": "211-2024.txt", "radek": 2922, "citace": "1 Preventivní programy 330 000 453 987 137,6"},
+          "zustatek_pocatecni": {"hodnota": 570996, "soubor": "211-2024.txt", "radek": 2899, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 618 421 570 996 92,3"},
+          "zustatek_konecny": {"hodnota": 447009, "soubor": "211-2024.txt", "radek": 2934, "citace": "IV. Konečný zůstatek k poslednímu dni sledovaného období = I + II – III 618 421 447 009 72,3"},
+          "bu_zustatek_pocatecni": {"hodnota": 587838, "soubor": "211-2024.txt", "radek": 2947, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 636 443 587 838 92,4"},
+          "bu_zustatek_konecny": {"hodnota": 487706, "soubor": "211-2024.txt", "radek": 2980, "citace": "IV. Konečný zůstatek k poslednímu dni sledovaného období = I + II – III 636 443 487 706 76,6"},
+          "vyuziti": {"pocet_prispevku": null, "pocet_zadosti": null, "pocet_osob": null, "definice": null},
+          "poznamky": {"vyuziti": "VZ ZP MV uvádí u fondu jen vyplacené částky po programech, ne počet příspěvků ani žádostí; „Počet účastníků“ je vyplněn jen u ozdravných pobytů. Počty žádostí ve VZ se týkají žádostí o úhradu péče a o odstranění tvrdosti, ne fondu prevence."}
+        },
+        "2025": {
+          "tvorba": {
+            "ze_zf": {"hodnota": 0, "soubor": "211-2025.txt", "radek": 2904, "citace": "1.2.1 0 0 –"},
+            "pokuty_penale": {"hodnota": 157821, "soubor": "211-2025.txt", "radek": 2907, "citace": "1.2.2 131 000 157 821 120,5"},
+            "ostatni": {"hodnota": 0, "soubor": "211-2025.txt", "radek": 2897, "odvozeno": true, "poznamka": "Tvorba celkem − převod ze ZFZP − pokuty a penále; zahrnuje převod z provozního fondu, úroky, dary a u některých ZP zrušení opravných položek (viz z_pf a poznamky_autora)."},
+            "z_pf": {"hodnota": 0, "soubor": "211-2025.txt", "radek": 2909, "citace": "1.2.3 převod z PF 0 0 –"},
+            "celkem": {"hodnota": 157821, "soubor": "211-2025.txt", "radek": 2897, "citace": "II. Tvorba celkem = zdroje 131 000 157 821 120,5"}
+          },
+          "cerpani_celkem": {"hodnota": 347964, "soubor": "211-2025.txt", "radek": 2917, "citace": "III. Čerpání celkem = snížení zdrojů 340 000 347 964 102,3"},
+          "cerpani_programy": {"hodnota": 347896, "soubor": "211-2025.txt", "radek": 2918, "citace": "1 Preventivní programy 340 000 347 896 102,3"},
+          "zustatek_pocatecni": {"hodnota": 447009, "soubor": "211-2025.txt", "radek": 2895, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 450 996 447 009 99,1"},
+          "zustatek_konecny": {"hodnota": 256866, "soubor": "211-2025.txt", "radek": 2930, "citace": "IV. Konečný zůstatek k poslednímu dni sledovaného období = I + II – III 241 996 256 866 106,1"},
+          "bu_zustatek_pocatecni": {"hodnota": 487706, "soubor": "211-2025.txt", "radek": 2941, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 467 829 487 706 104,2"},
+          "bu_zustatek_konecny": {"hodnota": 260415, "soubor": "211-2025.txt", "radek": 2974, "citace": "IV. Konečný zůstatek k poslednímu dni sledovaného období = I + II – III 258 829 260 415 100,6"},
+          "vyuziti": {"pocet_prispevku": null, "pocet_zadosti": null, "pocet_osob": null, "definice": null},
+          "poznamky": {"vyuziti": "VZ ZP MV uvádí u fondu jen vyplacené částky po programech, ne počet příspěvků ani žádostí; „Počet účastníků“ je vyplněn jen u ozdravných pobytů. Počty žádostí ve VZ se týkají žádostí o úhradu péče a o odstranění tvrdosti, ne fondu prevence."}
+        }
+      },
+      "poznamky_autora": []
+    },
+    {
+      "kod": "213",
+      "zkratka": "RBP",
+      "roky": {
+        "2022": {
+          "tvorba": {"ze_zf": null, "pokuty_penale": null, "ostatni": null, "z_pf": null, "celkem": null},
+          "cerpani_celkem": null,
+          "cerpani_programy": null,
+          "zustatek_pocatecni": null,
+          "zustatek_konecny": {"hodnota": 83167, "soubor": "213-2023.txt", "radek": 3361, "citace": "I. Počáteční zůstatek k 1. 1. v e sledov aném období 82 730 83 167 100,5", "poznamka": "Počáteční zůstatek k 1. 1. 2023 z VZ za 2023."},
+          "bu_zustatek_pocatecni": null,
+          "bu_zustatek_konecny": {"hodnota": 69368, "soubor": "213-2023.txt", "radek": 3398, "citace": "I. Počáteční zůstatek k 1. 1. v e sledov aném období 74 122 69 368 93,6", "poznamka": "Počáteční zůstatek BÚ k 1. 1. 2023 z VZ za 2023."},
+          "vyuziti": {"pocet_prispevku": null, "pocet_zadosti": null, "pocet_osob": null, "definice": null},
+          "poznamky": {"tvorba.celkem": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (213-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.ze_zf": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (213-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.pokuty_penale": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (213-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.ostatni": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (213-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.z_pf": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (213-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "cerpani_celkem": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (213-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "cerpani_programy": "VZ za rok 2022 není v ingest/manual/pojistovny/vz-text (213-2022.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "zustatek_pocatecni": "Zůstatek nelze zjistit: VZ za rok 2022 ani sousední VZ nemáme k dispozici.", "bu_zustatek_pocatecni": "Zůstatek nelze zjistit: VZ za rok 2022 ani sousední VZ nemáme k dispozici.", "vyuziti": "VZ RBP uvádí počty osob jen po jednotlivých programech (např. vitamíny, očkování, ortodoncie), ne za fond jako celek; programy se překrývají, takže se nesčítají. Viz poznamky_autora."}
+        },
+        "2023": {
+          "tvorba": {
+            "ze_zf": {"hodnota": 82191, "soubor": "213-2023.txt", "radek": 3367, "citace": "1.2.1 v tom: převod ze ZFZP – prostředky pocházející z pojistného na veřejné zdravotní pojištění 82 100 82 191 100,1"},
+            "pokuty_penale": {"hodnota": 36502, "soubor": "213-2023.txt", "radek": 3368, "citace": "1.2.2 prostředky pocházející z pokut, přirážek k pojistnému a penále 40 000 36 502 91,3"},
+            "ostatni": {"hodnota": 45046, "soubor": "213-2023.txt", "radek": 3363, "odvozeno": true, "poznamka": "Tvorba celkem − převod ze ZFZP − pokuty a penále; zahrnuje převod z provozního fondu, úroky, dary a u některých ZP zrušení opravných položek (viz z_pf a poznamky_autora)."},
+            "z_pf": {"hodnota": 45000, "soubor": "213-2023.txt", "radek": 3369, "citace": "1.2.3 převod z PF 45 000 45 000 100,0"},
+            "celkem": {"hodnota": 163739, "soubor": "213-2023.txt", "radek": 3363, "citace": "II. Tv orba celkem = zdroje 167 170 163 739 97,9"}
+          },
+          "cerpani_celkem": {"hodnota": 103197, "soubor": "213-2023.txt", "radek": 3377, "citace": "III. Čerpání celkem = snížení zdrojů 110 035 103 197 93,8"},
+          "cerpani_programy": {"hodnota": 103152, "soubor": "213-2023.txt", "radek": 3378, "citace": "1 Preventivní programy 110 000 103 152 93,8"},
+          "zustatek_pocatecni": {"hodnota": 83167, "soubor": "213-2023.txt", "radek": 3361, "citace": "I. Počáteční zůstatek k 1. 1. v e sledov aném období 82 730 83 167 100,5"},
+          "zustatek_konecny": {"hodnota": 143709, "soubor": "213-2023.txt", "radek": 3390, "citace": "IV. Konečný zůstatek k poslednímu dni sledov aného období = I + II – III 139 865 143 709 102,7"},
+          "bu_zustatek_pocatecni": {"hodnota": 69368, "soubor": "213-2023.txt", "radek": 3398, "citace": "I. Počáteční zůstatek k 1. 1. v e sledov aném období 74 122 69 368 93,6"},
+          "bu_zustatek_konecny": {"hodnota": 129827, "soubor": "213-2023.txt", "radek": 3433, "citace": "IV. Konečný zůstatek k poslednímu dni sledov aného období = I + II – III 131 257 129 827 98,9"},
+          "vyuziti": {"pocet_prispevku": null, "pocet_zadosti": null, "pocet_osob": null, "definice": null},
+          "poznamky": {"vyuziti": "VZ RBP uvádí počty osob jen po jednotlivých programech (např. vitamíny, očkování, ortodoncie), ne za fond jako celek; programy se překrývají, takže se nesčítají. Viz poznamky_autora."}
+        },
+        "2024": {
+          "tvorba": {"ze_zf": null, "pokuty_penale": null, "ostatni": null, "z_pf": null, "celkem": null},
+          "cerpani_celkem": null,
+          "cerpani_programy": null,
+          "zustatek_pocatecni": {"hodnota": 143709, "soubor": "213-2023.txt", "radek": 3390, "citace": "IV. Konečný zůstatek k poslednímu dni sledov aného období = I + II – III 139 865 143 709 102,7", "poznamka": "Konečný zůstatek k 31. 12. 2023 z VZ za 2023."},
+          "zustatek_konecny": {"hodnota": 157525, "soubor": "213-2025.txt", "radek": 3561, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 159 924 157 525 98,5", "poznamka": "Počáteční zůstatek k 1. 1. 2025 z VZ za 2025."},
+          "bu_zustatek_pocatecni": {"hodnota": 129827, "soubor": "213-2023.txt", "radek": 3433, "citace": "IV. Konečný zůstatek k poslednímu dni sledov aného období = I + II – III 131 257 129 827 98,9", "poznamka": "Konečný zůstatek BÚ k 31. 12. 2023 z VZ za 2023."},
+          "bu_zustatek_konecny": {"hodnota": 144999, "soubor": "213-2025.txt", "radek": 3598, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 146 042 144 999 99,3", "poznamka": "Počáteční zůstatek BÚ k 1. 1. 2025 z VZ za 2025."},
+          "vyuziti": {"pocet_prispevku": null, "pocet_zadosti": null, "pocet_osob": null, "definice": null},
+          "poznamky": {"tvorba.celkem": "VZ za rok 2024 není v ingest/manual/pojistovny/vz-text (213-2024.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.ze_zf": "VZ za rok 2024 není v ingest/manual/pojistovny/vz-text (213-2024.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.pokuty_penale": "VZ za rok 2024 není v ingest/manual/pojistovny/vz-text (213-2024.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.ostatni": "VZ za rok 2024 není v ingest/manual/pojistovny/vz-text (213-2024.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "tvorba.z_pf": "VZ za rok 2024 není v ingest/manual/pojistovny/vz-text (213-2024.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "cerpani_celkem": "VZ za rok 2024 není v ingest/manual/pojistovny/vz-text (213-2024.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "cerpani_programy": "VZ za rok 2024 není v ingest/manual/pojistovny/vz-text (213-2024.txt); tvorba a čerpání se z jiných VZ nedají zjistit.", "vyuziti": "VZ RBP uvádí počty osob jen po jednotlivých programech (např. vitamíny, očkování, ortodoncie), ne za fond jako celek; programy se překrývají, takže se nesčítají. Viz poznamky_autora."}
+        },
+        "2025": {
+          "tvorba": {
+            "ze_zf": {"hodnota": 0, "soubor": "213-2025.txt", "radek": 3567, "citace": "1.2.1 v tom: převod ze ZFZP – prostředky pocházející z pojistného na veřejné zdravotní pojištění 0 0"},
+            "pokuty_penale": {"hodnota": 40860, "soubor": "213-2025.txt", "radek": 3568, "citace": "1.2.2 prostředky pocházející z pokut, přirážek k pojistnému a penále 46 000 40 860 88,8"},
+            "ostatni": {"hodnota": 50108, "soubor": "213-2025.txt", "radek": 3563, "odvozeno": true, "poznamka": "Tvorba celkem − převod ze ZFZP − pokuty a penále; zahrnuje převod z provozního fondu, úroky, dary a u některých ZP zrušení opravných položek (viz z_pf a poznamky_autora)."},
+            "z_pf": {"hodnota": 50000, "soubor": "213-2025.txt", "radek": 3569, "citace": "1.2.3 převod z PF 50 000 50 000 100,0"},
+            "celkem": {"hodnota": 90968, "soubor": "213-2025.txt", "radek": 3563, "citace": "II. Tvorba celkem = zdroje 96 100 90 968 94,7"}
+          },
+          "cerpani_celkem": {"hodnota": 144492, "soubor": "213-2025.txt", "radek": 3577, "citace": "III. Čerpání celkem = snížení zdrojů 140 060 144 492 103,2"},
+          "cerpani_programy": {"hodnota": 144438, "soubor": "213-2025.txt", "radek": 3578, "citace": "1 Preventivní programy 140 000 144 438 103,2"},
+          "zustatek_pocatecni": {"hodnota": 157525, "soubor": "213-2025.txt", "radek": 3561, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 159 924 157 525 98,5"},
+          "zustatek_konecny": {"hodnota": 104001, "soubor": "213-2025.txt", "radek": 3590, "citace": "IV. Konečný zůstatek k poslednímu dni sledovaného období = I + II – III 115 964 104 001 89,7"},
+          "bu_zustatek_pocatecni": {"hodnota": 144999, "soubor": "213-2025.txt", "radek": 3598, "citace": "I. Počáteční zůstatek k 1. 1. ve sledovaném období 146 042 144 999 99,3"},
+          "bu_zustatek_konecny": {"hodnota": 87675, "soubor": "213-2025.txt", "radek": 3633, "citace": "IV. Konečný zůstatek k poslednímu dni sledovaného období = I + II – III 102 082 87 675 85,9"},
+          "vyuziti": {"pocet_prispevku": null, "pocet_zadosti": null, "pocet_osob": null, "definice": null},
+          "poznamky": {"vyuziti": "VZ RBP uvádí počty osob jen po jednotlivých programech (např. vitamíny, očkování, ortodoncie), ne za fond jako celek; programy se překrývají, takže se nesčítají. Viz poznamky_autora."}
+        }
+      },
+      "poznamky_autora": [
+        "RBP uvádí počty využití po programech: 2023 vitaminy 7 300 pojištěnců (213-2023.txt ř. 1540), očkovací programy 14 095 pojištěnců (ř. 1581); 2025 vitaminy 13 650 pojištěnců (213-2025.txt ř. 1742), očkovací programy 14 357 pojištěnců (ř. 1783), příspěvek na duševní pohodu 4 395 pojištěnců (ř. 1809). Jde o osoby v jednotlivých programech, které se mohou překrývat, proto je souhrnný pocet_osob null.",
+        "VZ RBP za rok 2024 v repu není: pro 2024 je jen počáteční zůstatek (z konce 2023) a konečný zůstatek (z počátku 2025)."
+      ]
+    }
+  ]
+}

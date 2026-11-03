@@ -281,7 +281,8 @@ export function parseTab3Celkem(rows, { rok }) {
 
 /**
  * Fond prevence (náklady na preventivní zdravotní péči): { celkem: {kod|cr|zzp → hodnota tis. Kč},
- * na_pojistence: {kod|cr|zzp → hodnota Kč} }. Řádky ZP mají v 2. sloupci kód.
+ * na_pojistence: {kod|cr|zzp → hodnota Kč}, zpp_celkem / zpp_na_pojistence: totéž ze sloupce „Rok <rok> ZPP“ (plán, A7.1) }.
+ * Řádky ZP mají v 2. sloupci kód. Sloupec ZPP je ten s rokem a podhlavičkou „ZPP“ (ve všech ročnících 2015–2024 těsně vlevo od skutečnosti).
  */
 export function parseTab3c(rows, { rok }) {
   const hlav = rows.findIndex((r) => r && norm(r[1]) === 'ř.' && /ukazatel/i.test(norm(r[2])));
@@ -292,7 +293,11 @@ export function parseTab3c(rows, { rok }) {
     if (yearIn(cell(rows, hlav, j)) === rok && /^rok/i.test(norm(cell(rows, hlav, j))) && /^skute[cč]nost$/i.test(norm(cell(rows, hlav + 1, j)))) { c = j; break; }
   }
   if (c == null) throw new Error(`Tabulka č. 3c: nenalezen sloupec „Rok ${rok} Skutečnost“`);
-  const out = { celkem: {}, na_pojistence: {} };
+  let cz = null;
+  for (let j = 0; j < maxw; j++) {
+    if (yearIn(cell(rows, hlav, j)) === rok && /^rok/i.test(norm(cell(rows, hlav, j))) && /^zpp$/i.test(norm(cell(rows, hlav + 1, j)))) { cz = j; break; }
+  }
+  const out = { celkem: {}, na_pojistence: {}, zpp_celkem: {}, zpp_na_pojistence: {} };
   let sekce = null;
   for (let r = hlav + 2; r < rows.length; r++) {
     const row = rows[r];
@@ -310,6 +315,7 @@ export function parseTab3c(rows, { rok }) {
     else if (/zam[eě]stnaneck[eé] zdravotn[ií] poj/i.test(norm(row[3])) || /zam[eě]stnaneck[eé] zdravotn[ií] poj/i.test(lab)) klic = 'zzp';
     if (!klic || out[sekce][klic]) continue;
     out[sekce][klic] = isNum(row[c]) ? ref(r, c, row[c]) : null;
+    if (cz != null) out[`zpp_${sekce}`][klic] = isNum(row[cz]) ? ref(r, cz, row[cz]) : null;
   }
   delete out.celkem.__videno;
   delete out.na_pojistence.__videno;

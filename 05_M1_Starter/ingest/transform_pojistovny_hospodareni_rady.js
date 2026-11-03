@@ -126,6 +126,26 @@ export const UKAZATELE = {
     zdroj: 'xlsx-3', list: 'Tabulka č. 3c', jednotka: 'Kč',
     f: refConv((b, k) => (b.tab3c?.na_pojistence?.[k] ? { ref: b.tab3c.na_pojistence[k], hodnota: b.tab3c.na_pojistence[k].hodnota } : null), (v) => round(v, 2)),
   },
+  // A7.1: fond jako peněženka — plán (ZPP) téhož roku, plnění plánu a podíl na pojistném po přerozdělení předchozího roku.
+  fond_prevence_zpp_mil: {
+    zdroj: 'xlsx-3', list: 'Tabulka č. 3c; sloupec „Rok ZPP“ (plán pojišťovny)', jednotka: 'mil. Kč',
+    f: refConv((b, k) => (b.tab3c?.zpp_celkem?.[k] ? { ref: b.tab3c.zpp_celkem[k], hodnota: b.tab3c.zpp_celkem[k].hodnota } : null), mil),
+  },
+  fond_prevence_plneni_zpp_pct: {
+    zdroj: 'xlsx-3', list: 'Tabulka č. 3c; skutečnost / sloupec „Rok ZPP“ × 100', jednotka: '%',
+    f: (b, k) => {
+      const s = b.tab3c?.celkem?.[k]; const z = b.tab3c?.zpp_celkem?.[k];
+      return s && z && z.hodnota > 0 ? { ref: s, hodnota: round((s.hodnota / z.hodnota) * 100, 4) } : null;
+    },
+  },
+  fond_prevence_podil_pojistneho_pct: {
+    zdroj: 'xlsx-3', list: 'Tabulka č. 3c (fond prevence celkem, tis. Kč) / tab.č.1 předchozího roku (pojistné po přerozdělení, tis. Kč) × 100', jednotka: '%',
+    f: (b, k, prev) => {
+      const s = b.tab3c?.celkem?.[k]; const p = prev?.tab1?.pojistne_po_prerozdeleni?.[k];
+      if (!s || !p || !(p.hodnota > 0)) return null;
+      return { ref: s, hodnota: round((s.hodnota / p.hodnota) * 100, 3), ...(k === '111' && b.rok < 2023 ? { poznamka: 'před 2023 jiný režim zdrojů fondu u VZP (§ 7c zák. 551/1991 platí pro VZP od 1. 1. 2023)' } : {}) };
+    },
+  },
   // A6.1: kam fond prevence teče (Tab. 17; ČR z Tab. 16). Celkový fond (výše) sčítá zdravotní programy, ozdravné pobyty a „ostatní činnosti“.
   fond_prevence_programy_mil: fondDef('programy'),
   fond_prevence_pobyty_mil: fondDef('pobyty'),
@@ -155,6 +175,7 @@ const DUVODY = (id, rok) => {
     if (rok < 2018) return `Tab. 17 v Hodnocení za rok ${rok} není (PDF má jen celkové řady fondu prevence za ČR, bez rozpisu po ZP; ČR viz cr.rady)`;
     if (id === 'fond_prevence_jine_zdroje_mil') return `Tab. 17 v Hodnocení za rok ${rok} uvádí „Z jiných zdrojů“ jen u VoZP ČR (specifické fondy); u ostatních ZP je řádek pomlčka`;
   }
+  if (id === 'fond_prevence_podil_pojistneho_pct' && rok === 2015) return 'Strop fondu se počítá z pojistného po přerozdělení předchozího roku; ročník Hodnocení 2014 v datasetu není (řady začínají 2015), podíl pro 2015 nelze spočítat';
   if (['statni_pojistenci', 'statni_pojistenci_pct', 'pojistencu_na_zamestnance'].includes(id)) {
     return `Hodnocení MZ za rok ${rok} nemá v PDF tabulku „Pojištěnci a zaměstnanci … dle zdravotních pojišťoven“ (Tab. 7) s čísly po ZP, jen graf; nedopočítáváno`;
   }
@@ -171,7 +192,7 @@ export function sestavRady({ bundles, soubory, zkratky, stazeno_at = null, neakt
   const roky = bundles.map((b) => b.rok).sort((a, b) => a - b);
   const byRok = new Map(bundles.map((b) => [b.rok, b]));
   const bunka = (id, def, b, k) => {
-    const r = def.f(b, k);
+    const r = def.f(b, k, byRok.get(b.rok - 1));
     if (!r) return null;
     const url = soubory[b.rok]?.[def.zdroj]?.url;
     return { hodnota: r.hodnota, rok: b.rok, zdroj: url ?? null, list: r.list ?? def.list, radek: r.ref.radek ?? null, sloupec: r.ref.sloupec ?? null, ...(r.poznamka ? { poznamka: r.poznamka } : {}) };
@@ -211,6 +232,7 @@ export function sestavRady({ bundles, soubory, zkratky, stazeno_at = null, neakt
       'vliv_prerozdeleni_mld je list tab.č.1c Hodnocení MZ („Vliv přerozdělování“ / v PDF „Výstupy z přerozdělování platby státu“): částka po přerozdělení minus pojistné vybrané před přerozdělením (VZP 2024: 103,378 mld.); součet za všechny ZP odpovídá platbě státu a paušální dani přerozdělené do systému. NENÍ to platba státu na jednotlivou pojišťovnu (tu MZ po ZP nezveřejňuje), a proto čisté saldo přerozdělení z těchto dat nevzniká. pojistne_pred_prerozdelenim_mld a pojistne_po_prerozdeleni_mld jsou sloupce „Příjmy z pojistného – výběr“ a „vč. vlivu přerozdělování“ v tab.č.1; platí vliv_prerozdeleni = po − před (validátor to kontroluje).',
       'naklady_zs_mld a naklady_na_pojistence_kc: ř. I. „Náklady na zdravotní služby celkem čerpané z oddílu A“ v Tabulce č. 3 a 3a (akruální náklady ZFZP, shoda s pojistovny.json pro 2024). hospodarsky_vysledek_mld: tab.č.1 „Saldo příjmů a výdajů celkem vč. zdaňovaných“. zustatek_bu_zfzp_mld: tab.č.1b „KZ na bankovním účtu ZFZP k 31. 12.“; rezervni_fond_mld: tab. č. 1d „Skutečné naplnění rezervního fondu“. pohledavky_po_lhute_mil: pohledávky za plátci pojistného po lhůtě splatnosti; zavazky_po_lhute_mil: závazky vůči poskytovatelům po lhůtě splatnosti (tab.č.1; shoda s PDF Tab. 5 a tab.č.1b).',
       'Fond prevence (balíček A6.1): fond_prevence_mil / fond_prevence_na_pojistence_kc (Tabulka č. 3c) jsou celkové náklady fondu včetně ozdravných pobytů a „ostatních činností“ (v letech 2021–2022 hlavně antigenní testování na covid, které MZ vykazuje v „ostatních činnostech“). Rozpis po ZP je z PDF Tab. 17 (mil. Kč, ročníky 2018–2024; dříve v PDF není): fond_prevence_programy_mil (zdravotní programy), fond_prevence_pobyty_mil (ozdravné pobyty), fond_prevence_ostatni_mil (ostatní činnosti), fond_prevence_jine_zdroje_mil (jen VoZP ČR, specifické fondy; u ostatních ZP null), fond_prevence_celkem_t17_mil (řádek Celkové náklady). Pomlčka „–“ v Tab. 17 je uložena jako 0 s poznámkou. U `cr` jsou stejné řady z Tab. 16 (u 2015–2017 Tab. 8 v tis. Kč přepočtená na mil. Kč) ze sloupce roku v PDF téhož roku; v PDF 2018 jsou sloupce „2018“ a „2018 ZPP“ zaměněny, proto je u 2018 použit sloupec, který sedí na Tab. 17 (poznámka v buňce). fond_prevence_programy_na_pojistence_kc = zdravotní programy / průměrný počet pojištěnců (tab.č.1) v Kč (MZ zaokrouhluje na mil. Kč, u ZPŠ je chyba zaokrouhlení kolem 3 %); fond_prevence_ostatni_podil_pct = ostatní činnosti / celkové náklady Tab. 17 × 100. Co MZ počítá do „ostatních činností“, Hodnocení nedefinuje. Od 1. 1. 2023 má VZP stejné zdroje fondu jako zaměstnanecké ZP (§ 7c zák. 551/1991), proto skok VZP 2023 → 2024 není srovnatelný s předchozími roky.',
+      'Fond prevence (balíček A7.1): fond_prevence_zpp_mil = plán fondu prevence (sloupec „Rok ZPP“ Tabulky č. 3c, tj. plán pojišťovny schválený v zdravotně pojistném plánu; mil. Kč); fond_prevence_plneni_zpp_pct = skutečnost Tab. 3c / plán ZPP × 100 (MZ tiskne totéž ve sloupci „ZPP (v %)“; hodnoty se mohou lišit o zaokrouhlení skutečnosti); fond_prevence_podil_pojistneho_pct = fond_prevence_mil roku / (pojistne_po_prerozdeleni_mld předchozího roku × 1 000) × 100, tedy poměr k základně, ze které zákon strop 3 % počítá (§ 7c zák. 551/1991, § 18b zák. 280/1992: až 3 % pojistného po přerozdělení za předchozí rok ze ZF při neschodkovém ZPP; nad strop se ale do fondu smí dostat i pokuty, penále, přirážky a provozní fond, takže podíl nad 3 % není automaticky porušení). Rok 2015 je null (chybí 2014). U VZP před rokem 2023 platil jiný režim zdrojů fondu (poznámka v buňce), podíl se s pozdějšími roky nesrovnává.',
       'statni_pojistenci, pojistencu_na_zamestnance: PDF Tab. 7 (jen ročníky 2018–2024, dříve jen graf). statni_pojistenci_pct = statni_pojistenci / průměrný počet pojištěnců z téže PDF tabulky × 100 na 2 desetinná místa (MZ tiskne zaokrouhleno, v roce 2018 na celá procenta). provozni_naklady_mil = „výdaje na vlastní činnost“ a provozni_naklady_pct = jejich „podíl na výdajích celkem“, jak je tiskne MZ v PDF Tab. 4 (2018–2024): výdaje na vlastní činnost (výdajový ukazatel MF vč. fondů, zahrnuje jinou činnost) / výdaje celkem. Tento podíl se liší od zákonného limitu nákladů na činnost.',
       'provozni_limit_pct je pro všechny roky null: MZ uvádí limit (§ 7 vyhl. 418/2003 Sb.) jen v tis. Kč; z tab.č.1a jsou proto provozni_limit_pridelu_mil, provozni_pridel_mil a provozni_vyuziti_limitu_pct (= příděl / maximální limit přídělu × 100).',
       '`cr` = řádek CELKEM ZP (sedm činných ZP), `zamestnanecke` = CELKEM zaměstnanecké ZP (bez VZP). `historicke[]` je prázdné: v letech 2015–2024 se kódy sedmi ZP nezměnily, sloučené/likvidované ZP v Hodnocení čísla nemají (ingest/mapping/pojistovny_kody.json, `neaktivni_zp`).',

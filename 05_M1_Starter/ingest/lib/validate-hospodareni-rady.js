@@ -99,6 +99,26 @@ export function validateHospodareniRady(R, { pojistovny } = {}) {
       if (casti.some(isNum) && Math.abs(s - cr) > Math.max(3, Math.abs(cr) * 0.005)) warnings.push(`součet ${id}[${rok}]: Σ ZP (Tab. 17) = ${s} vs cr (Tab. 16) = ${cr}`);
     }
   }
+  // A7.1: plnění plánu ZPP 0–300 %, podíl fondu na pojistném po přerozdělení 0–3,5 % (nad 3 % WARN s hodnotou), ZPP ≥ 0
+  const zpp = (kde, rady) => {
+    for (const rok of roky) {
+      const g = (id) => rady?.[id]?.[String(rok)]?.hodnota;
+      const pl = g('fond_prevence_plneni_zpp_pct');
+      if (isNum(pl) && (pl < 0 || pl > 300)) err(`${kde}.fond_prevence_plneni_zpp_pct[${rok}] = ${pl} mimo 0–300`);
+      const z = g('fond_prevence_zpp_mil');
+      if (isNum(z) && z < 0) err(`${kde}.fond_prevence_zpp_mil[${rok}] = ${z} < 0`);
+      const sk = g('fond_prevence_mil');
+      if (isNum(pl) && isNum(z) && isNum(sk) && z > 0 && Math.abs(pl - (sk / z) * 100) > 1) warnings.push(`${kde}.fond_prevence_plneni_zpp_pct[${rok}] = ${pl} neodpovídá skutečnost / plán (${((sk / z) * 100).toFixed(2)})`);
+      const po = g('fond_prevence_podil_pojistneho_pct');
+      if (isNum(po)) {
+        if (po < 0 || po > 3.5) err(`${kde}.fond_prevence_podil_pojistneho_pct[${rok}] = ${po} mimo 0–3,5`);
+        else if (po > 3) warnings.push(`${kde}.fond_prevence_podil_pojistneho_pct[${rok}] = ${po} % nad zákonným stropem 3 % (§ 7c zák. 551/1991; zkontrolovat zdroje fondu: pokuty, penále, provozní fond)`);
+      }
+    }
+  };
+  for (const p of R.pojistovny ?? []) zpp(`ZP ${p.kod}`, p.rady);
+  zpp('cr', R.cr?.rady);
+  zpp('zamestnanecke', R.zamestnanecke?.rady);
   kontrolaRady('cr', R.cr?.rady);
   kontrolaRady('zamestnanecke', R.zamestnanecke?.rady);
 
