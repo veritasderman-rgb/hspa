@@ -242,11 +242,11 @@ Commity jsou v historii větve `claude/focused-hopper-ley6gn`. Odchylky od plán
 | A3.2 | hotovo | 53a6d77 · `data/pojistovny-smluvni-programy.json` | každý program s citací a datem ověření |
 | A3.3 | hotovo | 4e5ea61 · `data/pojistovny-dostupnost.json` (sloupec § 16) | počty jen tam, kde je zdroj |
 | A4.1 | hotovo | e4f2ae8 · `src/zp-viz.js` (`tableToCsv`), `src/zp-interact.js` | CSV u tabulkových dvojčat, odkazy na JSON v patičce „Zdroje“ |
-| A4.2 | probíhá | `src/zp-interact.js`, `src/pojistovna.js` | „Porovnat s“ (`hspa-porovnat-zp`) je rozpracované v pracovním stromu, bez commitu; dělá frontendový agent |
-| A4.3 | probíhá | `src/zp-viz.js` | `figureSwitch` je rozpracovaný v pracovním stromu, bez commitu; dělá frontendový agent |
+| A4.2 | hotovo | 64eb832 · `src/zp-interact.js`, `src/pojistovny-prehled.js`, `src/pojistovna.js` | druhý výběr „Porovnat s“ (`hspa-porovnat-zp`): obrys marků, karta se třemi sloupci na přehledu, profil `?porovnat=`; výběr přežívá přechod mezi stránkami |
+| A4.3 | hotovo | 64eb832 · `src/zp-viz.js`, `src/zp-interact.js` | `figureSwitch` (radio/select, `zp:switch`, URL parametry `?kmen=`, `?ukazatel=`, `?rok=`, `?segment=`, `?vyber=`); měsíční kmen i Peníze přepnuté na komponentu; složky salda a částky na pojištěnce na Penězích |
 | A5.1 | hotovo | 428901a · `PROMPT_ROUTINE.md` | blok „Data MZ po pojišťovnách“ |
 
-Po dokončení A4.2 a A4.3 se jejich řádky přepíšou na „hotovo“ s commitem.
+Nezávislá revize datové vrstvy (Opus, 3. 11. 2026) a její opravy: commity dda3df4 a 59e9a01.
 
 ---
 
