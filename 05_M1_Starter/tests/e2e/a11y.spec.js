@@ -21,6 +21,7 @@ const PAGES = [
   { path: '/barometr.html',        name: 'barometr' },
   { path: '/pojistovny.html',      name: 'insurers' },
   { path: '/pojistovny-kmen.html',       name: 'insurers-kmen' },
+  { path: '/pojistovny-penize.html',     name: 'insurers-penize' },
   { path: '/pojistovny-prevence.html',   name: 'insurers-prevence' },
   { path: '/pojistovny-aplikace.html',   name: 'insurers-aplikace' },
   { path: '/pojistovny-gramotnost.html', name: 'insurers-gramotnost' },

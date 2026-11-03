@@ -25,6 +25,13 @@ const DS = {
   opendata: json('pojistovny-opendata.json'),
   vek: json('pojistovny-vek.json'),
 };
+// stránka Peníze (A1.6): tři nové datasety
+const DS_PENIZE = {
+  ...DS,
+  prerozdeleni: json('pojistovny-prerozdeleni.json'),
+  hospodareniRady: json('pojistovny-hospodareni-rady.json'),
+  segmenty: json('pojistovny-segmenty.json'),
+};
 const copy = (o) => JSON.parse(JSON.stringify(o));
 const count = (s, re) => (s.match(re) || []).length;
 const radek = (strana, id, ds = DS) => stariRadky(ds, strana).find((r) => r.id === id);
@@ -102,7 +109,7 @@ test('věta „Data: …“ pod nadpisem: zkratka + rok z téhož registru', () 
   assert.equal(stariVetaHtml([]), '');
   assert.equal(stariVetaHtml(stariRadky(DS, 'aplikace')), '<p class="zpc-stari">Data: aplikace 2024–2026 · stížnosti k 2. 11. 2026 · open data k 2. 11. 2026</p>');
   // každá podstránka má větu, kromě Indikátorů (inventář bez vlastních dat, A0.5)
-  for (const s of ZP_STRANKY.filter((x) => x.id !== 'indikatory')) assert.match(stariVeta(stariRadky(DS, s.id)), /^Data: \S/, s.id);
+  for (const s of ZP_STRANKY.filter((x) => x.id !== 'indikatory')) assert.match(stariVeta(stariRadky(DS_PENIZE, s.id)), /^Data: \S/, s.id);
   assert.equal(stariVeta(stariRadky(DS, 'indikatory')), '');
 });
 
@@ -187,7 +194,7 @@ test('DOM: věta jde pod .zpc-mod-head (na přehledu do hero), blok před #zpZdr
 test('init: orchestrátor volá renderStariDat s načtenými datasety; CSS tříd je dost', () => {
   const src = fs.readFileSync(path.join(ROOT, 'src', 'pojistovny.js'), 'utf8');
   assert.match(src, /import \{ renderStariDat \} from '\.\/pojistovny-stari\.js'/);
-  assert.match(src, /renderStariDat\(\{ datasety: \{ pojistovny: d, prevence: p, aplikace: a, otazky: o \} \}\)/);
+  assert.match(src, /renderStariDat\(\{ datasety: \{ pojistovny: d, prevence: p, aplikace: a, otazky: o, prerozdeleni: pr, hospodareniRady: rady, segmenty: seg \} \}\)/);
   const css = fs.readFileSync(path.join(ROOT, 'src', 'styles.css'), 'utf8');
   for (const c of ['.zpc-stari{', '.zpc-stari-wrap{', '.zpc-stari-warn{', '.zpc-stari-acc']) assert.ok(css.includes(c), c);
   // všech sedm stránek má kontejner #zpZdroje, před který se blok vkládá
@@ -195,4 +202,21 @@ test('init: orchestrátor volá renderStariDat s načtenými datasety; CSS tří
     const html = fs.readFileSync(path.join(ROOT, s.href), 'utf8');
     assert.match(html, /id="zpZdroje"/, s.href);
   }
+});
+
+test('Peníze (A1.6): řádky hospodareniRady, prerozdeleni a segmenty se čtou z datasetů; přerozdělení i na přehledu', () => {
+  const pen = stariRadky(DS_PENIZE, 'penize');
+  assert.deepEqual(pen.map((r) => r.id), ['hospodareniRady', 'prerozdeleni', 'segmenty']);
+  assert.equal(pen[0].kDatu, '2015–2024');
+  assert.equal(pen[0].kratce, 'MZ 2015–2024');
+  assert.match(pen[1].kDatu, /^1\/2019–\d{1,2}\/20\d\d$/);
+  assert.match(pen[1].stav, /roční saldo za 20\d\d/);
+  assert.equal(pen[2].kDatu, '2015–2024');
+  assert.ok(radek('prehled', 'prerozdeleni', DS_PENIZE));
+  assert.ok(radek('kmen', 'hospodareniRady', DS_PENIZE), 'státní pojištěnci v kartě Kmene');
+  // bez datasetu se řádek vynechá; roky řad se nemíchají s hospodařením 2024 (bez varování)
+  assert.equal(stariRadky(DS, 'penize').length, 0);
+  assert.deepEqual(stariVarovani(stariRadky(DS_PENIZE, 'penize')), []);
+  assert.equal(stariRadky({ ...DS_PENIZE, segmenty: null }, 'penize').length, 2);
+  for (const n of ['hospodareniRady', 'prerozdeleni', 'segmenty']) assert.ok(fs.existsSync(path.join(ROOT, ZP_DATASETY[n])), n);
 });

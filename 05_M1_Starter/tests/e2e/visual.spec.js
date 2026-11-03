@@ -20,6 +20,7 @@ const PAGES = [
   { path: '/pojistovny.html',             name: 'insurers' },
   // Podstránky srovnávače (P1.6, PLAN-SROVNAVAC-POJISTOVEN.md § 2.8)
   { path: '/pojistovny-kmen.html',        name: 'insurers-kmen' },
+  { path: '/pojistovny-penize.html',      name: 'insurers-penize' },
   { path: '/pojistovny-prevence.html',    name: 'insurers-prevence' },
   { path: '/pojistovny-aplikace.html',    name: 'insurers-aplikace' },
   { path: '/pojistovny-gramotnost.html',  name: 'insurers-gramotnost' },

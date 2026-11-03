@@ -13,7 +13,7 @@
 // přežije přechod mezi stránkami přes localStorage (src/zp-interact.js,
 // klíč hspa-moje-zp).
 //
-// Záložky jsou ve dvou skupinách (ZP_SKUPINY): „pro pojištěnce“ (Přehled, Kmen, Prevence,
+// Záložky jsou ve dvou skupinách (ZP_SKUPINY): „pro pojištěnce“ (Přehled, Kmen, Peníze, Prevence,
 // Aplikace, Zdravotní gramotnost) vlevo a „pro redakci a data“ (Metodika, Indikátory) vpravo,
 // světlejším písmem a za svislým oddělovačem. Stáří dat pod nimi řeší src/pojistovny-stari.js.
 //
@@ -47,8 +47,13 @@ export const ZP_STRANKY = [
   { id: 'prehled', skupina: 'pojistenci', href: 'pojistovny.html', label: 'Přehled' },
   {
     id: 'kmen', skupina: 'pojistenci', href: 'pojistovny-kmen.html', label: 'Kmen a hospodaření', kicker: 'CRP 2025 · MZ a MF 2024 · ZPP 2026',
-    veta: 'Kdo koho pojišťuje, jak starý kmen nese, kolik stojí jeho péče a s jakou rezervou vstupuje do roku 2026.',
-    co: 'Karty pojišťoven, vývoj kmene, hospodaření, kraje, síť odborností',
+    veta: 'Kdo koho pojišťuje, jak starý kmen nese a kolik stojí jeho péče. Hospodaření a rezervy jsou na stránce Peníze.',
+    co: 'Karty pojišťoven, vývoj kmene, věk kmene, kraje, síť odborností',
+  },
+  {
+    id: 'penize', skupina: 'pojistenci', href: 'pojistovny-penize.html', label: 'Peníze', kicker: 'MZ 2015–2024 · přerozdělení 2019–2026',
+    veta: 'Kdo do přerozdělení přispívá a kdo z něj bere, jak se hospodaření vyvíjelo deset let a za co pojišťovny platí.',
+    co: 'Relativní saldo přerozdělení, řady 2015–2024, státní pojištěnci, segmenty, fond prevence, provoz, rezervy 2026',
   },
   {
     id: 'prevence', skupina: 'pojistenci', href: 'pojistovny-prevence.html', label: 'Prevence', kicker: 'Kolo 1 · weby a výroční zprávy',

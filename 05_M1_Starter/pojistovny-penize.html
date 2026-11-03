@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Peníze — Srovnávač pojišťoven, pracovní verze · HSPA Monitor</title>
+<meta name="description" content="Peníze sedmi zdravotních pojišťoven: relativní saldo přerozdělení pojistného, hospodaření 2015–2024, státní pojištěnci, náklady podle segmentů, fond prevence a provoz. Pracovní verze.">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Peníze — Srovnávač zdravotních pojišťoven">
+<meta property="og:locale" content="cs_CZ">
+<link rel="stylesheet" href="src/styles.min.css">
+<!--
+  audit:
+    status: draft
+    pristup: heslo (middleware.js, POJISTOVNY_HESLO, matcher /pojistovny-:path*) + noindex
+    trida: C (nová stránka, hodnocení pojmenovaných institucí)
+    stranka: penize (A1.6, PLAN-SROVNAVAC-ANALYTIK.md § 3)
+    zdroje: data/pojistovny-prerozdeleni.json (MZ přerozdělování 1/2019–, relativní saldo je aritmetická identita, ne odhad),
+            data/pojistovny-hospodareni-rady.json (MZ Hodnocení 2015–2024), data/pojistovny-segmenty.json (MZ tab. 3 a 3a)
+    hranice: fakta se řadí, nabídka se nehodnotí; čisté saldo vůči platbě státu z veřejných dat nejde (platba státu jde na zvláštní účet, MZ ji po ZP nezveřejňuje)
+    presun: z Kmene sem přešla tabulka Hospodaření 2024, rezervy 2026, provoz a výroční zprávy 2025
+-->
+</head>
+<body>
+<a class="skip-link" href="#content">Přeskočit na hlavní obsah</a>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Srovnávač pojišťoven</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+  <div id="zpShell" class="zpc-shell" data-aktivni="penize"></div>
+
+  <section class="zpc-mod zpc-mod--page" id="modul-penize" aria-labelledby="zpPenizeHead">
+    <div class="zpc-mod-head"><h1 id="zpPenizeHead">Peníze</h1><span class="zpc-stav">MZ 2015–2024 · přerozdělení 2019–2026</span></div>
+    <p class="zpc-lead">Kdo do přerozdělení přispívá a kdo z něj bere, jak se hospodaření vyvíjelo deset let a za co pojišťovny platí.</p>
+    <div class="zpc-moje-wrap">
+      <p class="zpc-moje-lbl" id="zpMojeLbl">Moje pojišťovna: vyberte ji a zvýrazní se ve všech grafech a tabulkách, i na ostatních stránkách srovnávače.</p>
+      <div id="zpMojeZp" class="zpc-moje" aria-describedby="zpMojeLbl"></div>
+    </div>
+    <aside class="zpc-jak" aria-label="Jak systém funguje">
+      <p class="zpc-jak-h">Jak systém funguje</p>
+      <p>Sedm pojišťoven vybírá jedno zákonné pojistné; stát platí za děti, důchodce a další „státní pojištěnce“. Všechno vybrané pojistné i platba státu jdou do společného přerozdělení podle věku, pohlaví a nákladnosti pojištěnců, takže pojišťovna s mladším kmenem část vybraného odvádí a pojišťovna se starším kmenem dostává. Rozsah hrazené péče je pro všechny stejný; dohled vykonávají Ministerstvo zdravotnictví a Ministerstvo financí. Podrobně v explaineru <a href="jak-funguje.html?id=prerozdeleni_pojistneho">Přerozdělení pojistného</a>.</p>
+    </aside>
+
+    <h3 class="section-title zpc-h3" id="prerozdeleni"><span>Přerozdělení pojistného</span></h3>
+    <div id="zpPrerozdeleni" class="zpc-prer"></div>
+    <p class="zpc-note"><b>Co graf říká.</b> Podle zákona č. 592/1992 Sb. se veškeré vybrané pojistné (tzv. 100% výběr) spolu s platbou státu za státní pojištěnce, paušální daní a úroky shromáždí na zvláštním účtu a Ministerstvo zdravotnictví ho každý měsíc rozdělí podle počtu pojištěnců, jejich věku a pohlaví, nákladnosti (farmaceuticko-nákladové skupiny) a samostatně vypořádaných nákladných služeb. Pojistné, které pojišťovna vybere, tedy není její příjem; příjmem je částka po přerozdělení.</p>
+    <p class="zpc-note">Součet rozdílů „po přerozdělení − vybráno“ za sedm pojišťoven není nula, protože do přerozdělení přišla i platba státu, paušální daň a úroky. Proto graf ukazuje <b>relativní</b> saldo: o kolik pojišťovna dostala víc nebo míň, než kdyby se celý objem rozdělil v poměru jejího podílu na vybraném pojistném. To je aritmetická identita se součtem nula, ne odhad a ne hodnocení pojišťovny.</p>
+    <p class="zpc-note"><b>Čisté saldo vůči platbě státu z veřejných dat spočítat nejde.</b> Platba státu jde na zvláštní účet přerozdělování, ne na konkrétní pojišťovnu, a Ministerstvo zdravotnictví ji po pojišťovnách nezveřejňuje. Odhad podle počtu státních pojištěnců záměrně nepoužíváme. Saldo není „dotace“ ani „ztráta“, vyrovnává rozdíly ve složení kmene.</p>
+
+    <h3 class="section-title zpc-h3" id="hospodareni-rady"><span>Hospodaření 2015–2024</span></h3>
+    <p class="zpc-note">Vyberte ukazatel. Veličiny v čase jsou jako index (2015 = 100), podíly a salda jako sloupce za zvolený rok. Zvolený ukazatel a rok zůstávají v adrese stránky.</p>
+    <div id="zpRady" class="zpc-rady"></div>
+
+    <h3 class="section-title zpc-h3" id="statni-pojistenci"><span>Státní pojištěnci</span></h3>
+    <div id="zpStatni" class="zpc-chart"></div>
+
+    <h3 class="section-title zpc-h3" id="segmenty"><span>Náklady podle segmentů</span></h3>
+    <p class="zpc-note">Za co pojišťovny platí: podíl ambulantní a lůžkové péče, léků a dalších segmentů na nákladech na zdravotní služby. Segmenty jsou z tabulek MZ (náklady ZFZP, akruálně); rozdíly v podílech vyplývají i ze složení kmene, nejsou hodnocením.</p>
+    <div id="zpSegmenty" class="zpc-seg"></div>
+
+    <h3 class="section-title zpc-h3" id="fond-provoz"><span>Fond prevence a provoz</span></h3>
+    <div id="zpFondProvoz"></div>
+
+    <h3 class="section-title zpc-h3" id="hospodareni-2024"><span>Hospodaření 2024</span></h3>
+    <div id="zpTableFin"></div>
+    <p class="zpc-cap">MZ ČR + MF · Hodnocení vývoje systému v.z.p. 2024 · výroční zprávy 2024 · sněmovní tisk 280/0 · řazení kliknutím na záhlaví</p>
+    <div class="zpc-charts">
+      <div class="zpc-chart" id="zpChartZust"></div>
+      <div class="zpc-chart" id="zpChartProvoz"></div>
+    </div>
+    <h3 class="section-title zpc-h3"><span>Co ukazují výroční zprávy 2025</span></h3>
+    <div class="zpc-chart" id="zpChartYoy"></div>
+
+    <div class="zpc-accs">
+      <details class="zpc-acc">
+        <summary>Jak číst stránku a odkud jsou data · 5</summary>
+        <div class="zpc-acc-body"><ul>
+          <li><b>Přerozdělení.</b> Měsíční PDF Ministerstva zdravotnictví: částka vybraná na pojistném (100% výběr) a výsledná částka po přerozdělení na pojišťovnu. Roční hodnoty jsou jen za roky s dvanácti měsíci. Tabulka 100% výběru je asi o 0,6 % nižší než „výběr“ v Hodnocení MZ; rozdíl vymezení zdroje nevysvětlují.</li>
+          <li><b>Hospodaření 2015–2024.</b> Hodnocení vývoje systému v. z. p. (MZ ČR + MF), tabulková příloha a PDF. Každá hodnota nese list a řádek zdroje. Co v některém ročníku není (státní pojištěnci a provoz před rokem 2018), je „nedohledáno“ a nedopočítává se.</li>
+          <li><b>Hospodaření 2024 a rezervy 2026.</b> Tabulka vychází z Hodnocení MZ 2024 a výročních zpráv 2024; rezervy 2026 ze zdravotně pojistných plánů (sněmovní tisk 280/0). Příjmy, náklady a saldo v mld Kč, fond prevence a zůstatky v mil. Kč.</li>
+          <li><b>Provoz.</b> Výdaje na vlastní činnost v % příjmů a využití zákonného limitu přídělu na provoz (vyhláška 418/2003 Sb.). Jde o dvě různé veličiny.</li>
+          <li><b>Řazení.</b> Seřazené grafy jsou seřazené podle hodnoty, nejde o hodnocení pojišťoven. Barvu pojišťovny uvidíte po výběru „Moje pojišťovna“ nebo při najetí myší.</li>
+        </ul></div>
+      </details>
+    </div>
+  </section>
+
+  <div id="zpZdroje" class="zpc-zdroje-wrap"></div>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/pojistovny.js"></script>
+</body>
+</html>

@@ -55,6 +55,7 @@ const PAGES = [
   'barometr.html',
   'pojistovny.html',
   'pojistovny-kmen.html',
+  'pojistovny-penize.html',
   'pojistovny-prevence.html',
   'pojistovny-aplikace.html',
   'pojistovny-gramotnost.html',

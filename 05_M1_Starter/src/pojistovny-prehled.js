@@ -10,8 +10,10 @@
 // Orchestruje src/pojistovny.js (renderPrehled). Vstupy z modulu 3 (heroTiles,
 // buildKmenCharts) dostává jako argument, aby moduly neměly cyklický import.
 //
-// Výběr grafů (revize A0.1): tržní podíl (segmentovaný pruh), rezervy 2026 se zónou
-// 3–4 %, náklady na pojištěnce (vykázáno → přepočteno) a provoz v % příjmů, vše z buildKmenCharts.
+// Výběr grafů (revize A0.1, druhá verze A1.2): tržní podíl (segmentovaný pruh), relativní saldo
+// přerozdělení (stránka Peníze), náklady na pojištěnce (vykázáno → přepočteno) a rezervy 2026
+// se zónou 3–4 %; kmenové grafy z buildKmenCharts, saldo z data/pojistovny-prerozdeleni.json.
+// Provoz v % příjmů z přehledu odešel (rozptyl hodnot je malý), žije na stránce Peníze.
 // Matice pokrytí VZ (48× ano) a funkce aplikací n/10 z přehledu odešly, nenesly informaci.
 // Semafor = do prvních verdiktů jeden řádek „zatím nehodnoceno“. Index kmene 2010 = 100
 // je jen na podstránce Kmen.
@@ -25,6 +27,7 @@ import { MOJE_EVENT } from './zp-interact.js';
 import { ZP_BY_KOD } from './zp-palette.js';
 import { semaforCell, iconHtml, semaforSummary, EMPTY_SENTENCE } from './pojistovny-semafor.js';
 import { ZP_STRANKY, zpStrankaById } from './pojistovny-shell.js';
+import { buildSaldoChart } from './pojistovny-penize.js';
 
 const zkratkaOf = (kod, fallback) => ZP_BY_KOD[String(kod)]?.zkratka || fallback || String(kod);
 
@@ -160,11 +163,12 @@ function tile(figureHtml, temaId) {
 
 /**
  * Vstupy přehledu → HTML jednotlivých kontejnerů (bez DOM).
- * @param {{d, a, p, tiles?: Array, kmen?: object}} x  kmen = buildKmenCharts(d), tiles = heroTiles(d)
+ * @param {{d, a, p, tiles?: Array, kmen?: object, prerozdeleni?: object}} x  kmen = buildKmenCharts(d), tiles = heroTiles(d),
+ *   prerozdeleni = data/pojistovny-prerozdeleni.json (bez něj se graf salda vynechá)
  * @returns {{hero: string, grafy: string, semafor: string, temata: string, temataRedakce: string, souhrny: Array}}
  */
-export function buildPrehled({ d, a, p, tiles, kmen }) {
-  // Mřížka 2 × 2: podíl | rezervy, náklady | provoz (na mobilu pod sebe). Všechny čtyři grafy
+export function buildPrehled({ d, a, p, tiles, kmen, prerozdeleni }) {
+  // Mřížka 2 × 2: podíl | saldo přerozdělení, náklady | rezervy (na mobilu pod sebe). Všechny čtyři grafy
   // nesou informaci s rozptylem; matice pokrytí VZ a funkce aplikací n/10 byly vyměněny (A0.1)
   // a žijí na podstránkách Prevence a Aplikace a servis.
   // Semafor jde mimo mřížku (#zpOvSemafor), do prvních verdiktů je to jeden řádek.
@@ -172,11 +176,14 @@ export function buildPrehled({ d, a, p, tiles, kmen }) {
   if (kmen?.share) {
     grafy.push(tile(segmentedBar(kmen.share.parts, { ...kmen.share.opts, sub: 'Podíl na všech pojištěncích ČR.' }), 'kmen'));
   }
-  if (kmen?.zust) grafy.push(tile(rankedBars(kmen.zust.items, kmen.zust.opts), 'kmen'));
+  if (prerozdeleni) {
+    const saldo = buildSaldoChart(prerozdeleni);
+    grafy.push(tile(rankedBars(saldo.items, saldo.opts), 'penize'));
+  }
   if (kmen?.nzs) {
     grafy.push(tile(kmen.nzs.std ? dumbbell(kmen.nzs.dbItems, kmen.nzs.dbOpts) : rankedBars(kmen.nzs.items, kmen.nzs.opts), 'kmen'));
   }
-  if (kmen?.provoz) grafy.push(tile(rankedBars(kmen.provoz.items, kmen.provoz.opts), 'kmen'));
+  if (kmen?.zust) grafy.push(tile(rankedBars(kmen.zust.items, kmen.zust.opts), 'kmen'));
   return {
     hero: tiles ? statTiles(tiles, { title: 'Klíčová čísla systému' }) : '',
     grafy: grafy.join(''),
@@ -208,9 +215,9 @@ function paintKarta(doc, souhrny) {
  * a #zpOvTemataRedakce.
  * Kartu překresluje při změně „Moje pojišťovna“.
  */
-export function renderPrehled({ d, a, p, tiles, kmen }, doc = globalThis.document) {
+export function renderPrehled({ d, a, p, tiles, kmen, prerozdeleni }, doc = globalThis.document) {
   if (!doc) return;
-  const out = buildPrehled({ d, a, p, tiles, kmen });
+  const out = buildPrehled({ d, a, p, tiles, kmen, prerozdeleni });
   set('zpHeroStats', out.hero);
   set('zpOvGrafy', out.grafy || '<p class="zpc-na">Data srovnávače se nepodařilo načíst.</p>');
   set('zpOvSemafor', out.semafor);

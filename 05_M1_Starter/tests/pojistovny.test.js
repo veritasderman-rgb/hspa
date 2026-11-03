@@ -54,7 +54,8 @@ test('pojistovny.json: semafor obsahuje všech 6 oblastí a jen povolené stavy'
 const STRANKY = {
   'pojistovny.html': ['zpHeroStats', 'zpMojeZp', 'zpOvKarta', 'zpPrehled', 'zpOvGrafy', 'zpOvSemafor', 'zpOvTemata'],
   'pojistovny-kmen.html': ['zpHeroStats', 'zpChartShare', 'zpCards', 'zpKraje', 'zpChartTrend', 'zpChartGrowth', 'zpKmenMesicni', 'zpKmenPrestupy', 'zpChart65', 'zpChartNzs',
-    'zpTableFin', 'zpChartZust', 'zpChartProvoz', 'zpChartYoy', 'zpSit', 'zpNotes', 'zpChybi'],
+    'zpSit', 'zpNotes', 'zpChybi'],
+  'pojistovny-penize.html': ['zpPrerozdeleni', 'zpRady', 'zpStatni', 'zpSegmenty', 'zpFondProvoz', 'zpTableFin', 'zpChartZust', 'zpChartProvoz', 'zpChartYoy'],
   'pojistovny-prevence.html': ['zpPrevMatrix', 'zpPrevProc', 'zpPrevOnko', 'zpPrevDusevni', 'zpFpStruktura', 'zpDolozene', 'zpMereni', 'zpOdpovediMatrix', 'zpOdpovedi'],
   'pojistovny-aplikace.html': ['zpAppMatrix', 'zpAppFunkce', 'zpAppKriteria', 'zpAppSummary', 'zpAppNotes', 'zpTablePrev', 'zpStiznosti', 'zpOpendata'],
   'pojistovny-gramotnost.html': ['zpRizikove', 'zpOtazky', 'zpDalsi', 'zpDotaznik', 'zpDotaznikAgregace'],
@@ -139,7 +140,7 @@ test('middleware.js: matcher pokrývá přehled, všech pět podstránek a data,
   // path-to-regexp v jednoduchosti, jak ho Vercel používá: ':path*' = zbytek cesty, ukotveno na obou koncích
   const re = config.matcher.map((m) => new RegExp(`^${m.replace(/[.]/g, '\\.').replace(/:path\*/, '.*')}$`));
   const hit = (u) => re.some((r) => r.test(u));
-  for (const u of ['/pojistovny', '/pojistovny.html', '/pojistovny-kmen.html', '/pojistovny-prevence.html', '/pojistovny-aplikace.html',
+  for (const u of ['/pojistovny', '/pojistovny.html', '/pojistovny-kmen.html', '/pojistovny-penize.html', '/pojistovny-prevence.html', '/pojistovny-aplikace.html',
     '/pojistovny-gramotnost.html', '/pojistovny-metodika.html', '/pojistovny-indikatory.html', '/pojistovny-kmen', '/data/pojistovny.json', '/data/pojistovny-sit.json', '/data/pojistovny-indikatory.json']) {
     assert.ok(hit(u), `${u} musí být za heslem`);
   }
@@ -514,6 +515,8 @@ test('validate-pojistovny: prevence — neznámé id oblasti, stupen "super", du
 test('validate-pojistovny: fond prevence — nesoulad součtu je WARN, ne FAIL', () => {
   const s = realSets();
   delete s.verifikace; // WARN „nenalezeno ve VZ“ patří jinému testu (tests/pojistovny-vz.test.js)
+  // analytické datasety (PLAN-SROVNAVAC-ANALYTIK.md) mají vlastní validátory i vlastní WARN (např. výběr 2024 vs. Tab. 1 MZ)
+  for (const k of ['hospodareniRady', 'prerozdeleni', 'instituce', 'smluvniProgramy', 'dostupnost', 'segmenty']) delete s[k];
   s.prevence.pojistovny[0].fond_prevence_struktura.celkem.skutecnost += 100000;
   const { errors, warnings } = validateAll(s);
   assert.deepEqual(errors, []);
@@ -522,6 +525,7 @@ test('validate-pojistovny: fond prevence — nesoulad součtu je WARN, ne FAIL',
   // v toleranci ±1 % bez varování
   const t = realSets();
   delete t.verifikace;
+  for (const k of ['hospodareniRady', 'prerozdeleni', 'instituce', 'smluvniProgramy', 'dostupnost', 'segmenty']) delete t[k];
   t.prevence.pojistovny[0].fond_prevence_struktura.celkem.skutecnost += 1000;
   assert.deepEqual(validateAll(t).warnings, []);
 });
