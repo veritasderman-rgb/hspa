@@ -94,6 +94,14 @@ GitHub Actions crony zůstávají beze změny (`publish-articles`, `refresh`, `n
 kvartálně, `awareness-weekly`, `newsletter-weekly`, `regenerate-artifacts`, `ga4-stats`) —
 rutina na ně navazuje.
 
+**`pojistovny-mz.yml`** (srovnávač pojišťoven, GitHub Actions, ne Routine): běží 1× ročně 20. 6.
+03:00 UTC (Hodnocení vývoje systému v.z.p.) a 1× měsíčně 10. den 04:00 UTC (přerozdělení); lze
+spustit ručně (`workflow_dispatch`). Vyrábí `data/pojistovny-hospodareni-rady.json`,
+`data/pojistovny-prerozdeleni.json`, `data/pojistovny-segmenty.json` a PR
+`chore/pojistovny-mz-RRRR-MM`. Třída PR **B** (data): kontrola a doplnění `changelog` podle
+[`PROMPT_ROUTINE.md`](../PROMPT_ROUTINE.md) § 7.4, merge dělá editor. Předpoklad: v Settings →
+Actions → General zapnuté „Allow GitHub Actions to create and approve pull requests“.
+
 ---
 
 ## 3. Jak ověřit, že rutina běží

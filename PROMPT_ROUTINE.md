@@ -397,6 +397,14 @@ pole jinak beze změny. Pak `npm run validate:legislation`.
 
 Commit: `data(legislativa): RRRR-MM-DD — {co se posunulo}` / `data(barometr): …`.
 
+### 7.4 Data MZ po pojišťovnách (srovnávač)
+
+- Přepis dat dělá workflow `pojistovny-mz.yml` sám (1× ročně 20. 6. Hodnocení v.z.p.; 1× měsíčně 10. den přerozdělení) a otevře PR `chore/pojistovny-mz-RRRR-MM`. Rutina jen kontroluje tento PR, když existuje; jinak nic nedělá.
+- Kontrola: nový ročník Hodnocení (červen) nebo nový měsíc přerozdělení je v datech; `chybi[]` v `data/pojistovny.json` a varování `ingest/validate-pojistovny.js` v logu jobu nesmí přibýt bez vysvětlení v těle PR.
+- Třída B: rutina do větve doplní řádek `changelog` v `data/pojistovny.json` (datum, co se změnilo, zdroj = stránka MZ). Merge provádí editor (`PROMPT_EDITOR.md`), ne rutina.
+- Ročně v červnu, po vydání výročních zpráv pojišťoven: ruční aktualizace `data/pojistovny-instituce.json` (složení orgánů, funkce ředitele, limit nákladů na činnost; soubor **neobsahuje jména osob**) je třída B; kdyby měla přibýt jména členů orgánů, je to samostatný soubor a **třída C** (osoby, GOVERNANCE § 3) — PR s labelem `brana-clovek`, merge vydavatel. Drift-check URL v `data/pojistovny-smluvni-programy.json` a `data/pojistovny-dostupnost.json`: odkaz, který už nevrací stránku s citací, se zapíše do `chybi[]`, záznam se nemaže.
+- Co MZ ani pojišťovna nezveřejnila, zůstává `null`. Nic se neodhaduje.
+
 ---
 
 ## 8. Blok E — Obsah dne (max 1 nový článek)
