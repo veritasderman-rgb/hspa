@@ -250,7 +250,8 @@ test('pojistovny.js: buildKmenCharts — vstupy pro všechny grafy modulu 3', ()
   assert.deepEqual(ch.senior.opts.ref, { value: DATA.system_crp.podil_65plus_pct, label: 'průměr ČR', kind: 'line' });
   assert.equal(ch.nzs.opts.ref.value, DATA.system.naklady_zs_na_pojistence_kc);
   assert.match(ch.nzs.opts.sub, /akruálně/);
-  assert.deepEqual(ch.zust.opts.ref, { value: 3.5, label: 'kritické pásmo 3–4 % výdajů', text: 'kritické pásmo 3–4 % výdajů', kind: 'zone-below' });
+  assert.deepEqual(ch.zust.opts.ref, { from: 3, to: 4, value: 3.5, label: 'kritické pásmo 3–4 % výdajů', text: 'kritické pásmo 3–4 % výdajů', kind: 'zone-band' });
+  assert.equal(ch.trend.opts.title, 'Vývoj kmene, index 2010 = 100');
   assert.ok(ch.zust.items.every((i) => /závazky po splatnosti/.test(i.tip)));
   // provoz: limit v tipu, null limit → „limit nedohledán“
   assert.match(ch.provoz.items.find((i) => i.kod === '201').tip, /limit nedohledán/);
@@ -553,4 +554,22 @@ test('validate-pojistovny: otázky — oba tvary sad, duplicitní id, neznámý 
   const g = realSets();
   g.otazky.sady[0].typ = 'dotaznik'; // otevřená sada se nesmí tvářit jako dotazník (nemá casti[])
   fails(g, /typ dotaznik vyžaduje neprázdné casti/);
+});
+
+test('data/pojistovny*.json: poznámky bez jmen osob (jen funkce); jména z revize UI jsou pryč', () => {
+  const jmena = /Kabátek|Kabátk|Duškov|Matta|Mattu|Šmehlík|Vojtěch|Diessl|Kostka|Kostk|Felix|Klimša|Janalík|Zdeněk Kab|Ivan Duš/;
+  for (const f of fs.readdirSync(path.join(ROOT, 'data')).filter((x) => /^pojistovny.*\.json$/.test(x))) {
+    const txt = fs.readFileSync(path.join(ROOT, 'data', f), 'utf8');
+    assert.doesNotMatch(txt, jmena, f);
+  }
+  const vzp = DATA.pojistovny.find((z) => z.kod === '111').poznamky.find((n) => /Změna vedení/.test(n));
+  assert.match(vzp, /odvolala ředitele \(13 let ve funkci\), od 24\. 2\. 2026 ředitelem dosavadní náměstek/);
+  for (const z of DATA.pojistovny) for (const n of z.poznamky || []) assert.doesNotMatch(n, /https?:\/\//, `${z.zkratka}: URL v textu poznámky`);
+});
+
+test('CSS: citace na Instituci se zalamují (overflow-wrap), pole přepínače jsou v bezpatkovém písmu', () => {
+  const css = fs.readFileSync(path.join(ROOT, 'src', 'styles.css'), 'utf8');
+  assert.match(css, /\.zpc-inst-cit a[^{]*\{overflow-wrap:anywhere\}/);
+  assert.match(css, /\.zpc-sit-select\{[^}]*font-family:var\(--sans\)/);
+  assert.match(css, /\.zpi-chip, \.zpi-expand-all \{[^}]*font-family: var\(--sans\)/);
 });

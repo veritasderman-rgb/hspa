@@ -19,7 +19,7 @@
 // jen poslouchá událost `zp:switch` a překreslí příslušný kontejner.
 
 import { esc, fmtKc, dot, set } from './pojistovny-shared.js';
-import { rankedBars, segmentedBar, indexedLines, dumbbell, isNum, figureSwitch, readSwitchFromUrl } from './zp-viz.js';
+import { rankedBars, segmentedBar, stackedRows, indexedLines, dumbbell, isNum, figureSwitch, readSwitchFromUrl, tableTwin, kratkyPopisek } from './zp-viz.js';
 import { initZpInteract, MOJE_EVENT, SWITCH_EVENT } from './zp-interact.js';
 import { ZP_BY_KOD } from './zp-palette.js';
 import { mesicX, mesicLabel, xLabel } from './pojistovny-kmen-mesicni.js';
@@ -176,25 +176,47 @@ export const VYBER_REZIMY = [
   { id: 'bez-vzp', label: 'Bez VZP ČR' },
 ];
 
-/** Měsíční výběr pojistného: 7 (nebo 6) sérií, index prvního měsíce = 100, značky osy po lednech. */
+/**
+ * Klouzavý součet za 12 měsíců: prvek i = součet měsíců i−11 … i; prvních 11 prvků a okno
+ * s chybějícím měsícem je null (délka řady se zachovává, ať indexy sedí na pole `mesice`).
+ * Roční součet odstraňuje sezónní kolísání výběru, které měsíční řadu činí nečitelnou.
+ */
+export function klouzavySoucet12(pocty) {
+  const a = Array.isArray(pocty) ? pocty : [];
+  return a.map((_, i) => {
+    if (i < 11) return null;
+    let sum = 0;
+    for (let k = i - 11; k <= i; k++) {
+      if (!isNum(a[k])) return null;
+      sum += a[k];
+    }
+    return sum;
+  });
+}
+
+/** Měsíční výběr pojistného jako klouzavý 12měsíční součet: 7 (nebo 6) sérií od 12. měsíce, index prvního dostupného = 100. */
 export function buildVyberMesicni(PR, rezim = 'vse') {
   const mesice = Array.isArray(PR?.mesice) ? PR.mesice : [];
   const zps = zpList(PR).filter((z) => rezim !== 'bez-vzp' || String(z.kod) !== KOD_VZP);
-  const series = zps.map((z) => ({
-    ...base(z),
-    points: mesice.map((m, i) => ({ year: mesicX(m), value: isNum(z.vybrano?.[i]) ? z.vybrano[i] : null })),
-  }));
-  const prvniRok = mesice.length ? Number(mesice[0].slice(0, 4)) : 0;
-  const ticks = mesice.filter((m) => m.endsWith('-01') && (Number(m.slice(0, 4)) - prvniRok) % 2 === 0).map((m) => ({ x: mesicX(m), label: m.slice(0, 4) }));
-  const prvni = mesice[0];
+  const od = mesice.length > 11 ? 11 : 0; // první měsíc s úplným dvanáctiměsíčním oknem
+  const series = zps.map((z) => {
+    const ks = klouzavySoucet12(z.vybrano);
+    return { ...base(z), points: mesice.slice(od).map((m, j) => ({ year: mesicX(m), value: isNum(ks[od + j]) ? ks[od + j] : null })) };
+  });
+  const prvni = mesice[od];
   const posledni = mesice[mesice.length - 1];
+  const x0 = prvni ? mesicX(prvni) : 0;
+  // značky osy: každý druhý leden od prvního ledna uvnitř řady, popsané jen rokem
+  const ticks = mesice.filter((m) => m.endsWith('-01') && mesicX(m) >= x0).filter((_, i) => i % 2 === 0)
+    .map((m) => ({ x: mesicX(m), label: m.slice(0, 4) }));
   return {
     series,
+    mesice: mesice.slice(od),
     opts: {
-      title: 'Výběr pojistného měsíc po měsíci (index 1/2019 = 100)',
-      sub: `Pojistné vybrané každou pojišťovnou (tzv. 100% výběr) vůči ${prvni ? mesicLabel(prvni) : 'prvnímu měsíci'} (= 100), ${prvni ? mesicLabel(prvni) : ''} až ${posledni ? mesicLabel(posledni) : ''}. Měsíční výkyvy jsou velké (výběr kolísá během roku), sledujte spíš směr řady.`
+      title: `Výběr pojistného: klouzavý 12měsíční součet (index ${prvni ? mesicLabel(prvni) : '12/2019'} = 100)`,
+      sub: `Součet posledních 12 měsíců, index ${prvni ? mesicLabel(prvni) : '12/2019'} = 100; měsíční řada v tabulce. Pojistné vybrané každou pojišťovnou (tzv. 100% výběr), ${prvni ? mesicLabel(prvni) : ''} až ${posledni ? mesicLabel(posledni) : ''}.`
         + `${rezim === 'bez-vzp' ? ' Bez VZP ČR; osa je proto jemnější.' : ''}`,
-      base: mesice.length ? mesicX(mesice[0]) : 'first',
+      base: prvni ? mesicX(prvni) : 'first',
       unit: 'tis. Kč', dec: 0,
       xFmt: xLabel, xHead: 'Měsíc', xTicks: ticks,
       source: SRC_PRER,
@@ -202,9 +224,19 @@ export function buildVyberMesicni(PR, rezim = 'vse') {
   };
 }
 
+/** Tabulka měsíčních hodnot výběru (měsíc × pojišťovna, tis. Kč): druhé dvojče grafu klouzavého součtu. */
+export function vyberMesicniTabulka(PR, rezim = 'vse') {
+  const mesice = Array.isArray(PR?.mesice) ? PR.mesice : [];
+  const zps = zpList(PR).filter((z) => rezim !== 'bez-vzp' || String(z.kod) !== KOD_VZP);
+  if (!mesice.length || !zps.length) return '';
+  return tableTwin('Výběr pojistného po měsících, tis. Kč', ['Měsíc', ...zps.map((z) => z.zkratka)],
+    mesice.map((m, i) => [esc(mesicLabel(m)), ...zps.map((z) => esc(isNum(z.vybrano?.[i]) ? fmtKc(z.vybrano[i], 0) : 'nedohledáno'))]),
+    1, SRC_PRER, 'Zobrazit měsíční řadu jako tabulku');
+}
+
 export function vyberMesicniHtml(PR, rezim = 'vse') {
   const ch = buildVyberMesicni(PR, rezim);
-  return indexedLines(ch.series, ch.opts);
+  return indexedLines(ch.series, ch.opts) + vyberMesicniTabulka(PR, rezim);
 }
 
 // ---------------------------------------------------------------- přepínače
@@ -302,7 +334,9 @@ export function buildRadyChart(R, ukazatel, rok) {
   }
   const r = roky.includes(Number(rok)) ? Number(rok) : roky[roky.length - 1];
   const items = zpList(R).map((z) => ({ ...base(z), value: isNum(val(z.rady?.[u.id]?.[r])) ? val(z.rady[u.id][r]) : null, rok: r }));
-  const cr = crHodnota(R, u.id, r);
+  // Reference ČR jen u poměrů a hodnot na pojištěnce: součet za celou ČR (mld Kč) nelze srovnávat
+  // s jednou pojišťovnou, čára ČR by u absolutních hodnot jen zavádělo.
+  const cr = /^mld/.test(u.unit) ? null : crHodnota(R, u.id, r);
   const hasNeg = items.some((i) => isNum(i.value) && i.value < 0);
   return {
     typ: 'bary', ukazatel: u, roky, rok: r, items, cr,
@@ -392,6 +426,12 @@ export const SEGMENT_SKUPINY = [
   { id: 'leky', label: 'Léky na recepty' },
   { id: 'ostatni', label: 'Ostatní (lázně, doprava, záchranná služba, zdravotnické prostředky…)' },
 ];
+/** Krátký popisek skupiny pro legendu a tabulku jednoho obrázku (vysvětlení „Ostatní“ nese podtitulek). */
+const SKUPINA_KRATKY = { ambulantni: 'Ambulantní péče', luzkova: 'Lůžková péče', leky: 'Léky na recepty', ostatni: 'Ostatní' };
+
+/** Zkrácený popisek segmentu (≤ max znaků); plný název nese tooltip. */
+export const kratkySegment = kratkyPopisek;
+
 const segNazev = (s) => s?.nazev_kratky || s?.nazev || '';
 /** Úroveň segmentu v daném roce: `uroven_podle_roku?.[rok] ?? uroven` (členění listu se mezi ročníky mění). */
 export const urovenV = (seg, rok) => seg?.uroven_podle_roku?.[rok] ?? seg?.uroven;
@@ -416,6 +456,21 @@ export function buildSegmenty(S, R, { kod = KOD_VZP, segment = null } = {}) {
   if (!rok || !zpList(S).length) return null;
   const lv1 = segmentyUrovne(S, 1, rok);
   const vsechny = (Array.isArray(S.segmenty) ? S.segmenty : []).filter((s) => s);
+  const stackRows = zpList(S).map((z) => ({ kod: z.kod, label: z.zkratka || ZP_BY_KOD[String(z.kod)]?.zkratka || z.kod }));
+  const stackParts = SEGMENT_SKUPINY.map((g) => ({ key: g.id, label: SKUPINA_KRATKY[g.id] || g.label }));
+  const stackVal = (r, p) => {
+    const z = zpList(S).find((x) => String(x.kod) === String(r.kod));
+    const radky = lv1.filter((x) => x.skupina === p.key).map((x) => z?.rady?.[rok]?.[x.id]?.tis_kc);
+    return radky.length > 0 && radky.every(isNum) ? radky.reduce((a, b) => a + b, 0) / 1e6 : null;
+  };
+  const stacked = {
+    rows: stackRows, parts: stackParts, cell: stackVal,
+    opts: {
+      title: `Náklady na zdravotní služby podle segmentů ${rok}`,
+      sub: `Podíl čtyř skupin na nákladech na zdravotní služby, 100 % = náklady celkem. „Ostatní“ jsou lázně, doprava, záchranná služba, zdravotnické prostředky a další. Složení ovlivňuje i věk kmene, nejde o hodnocení.`,
+      unit: 'mld Kč', dec: 1, source: `${SRC_SEG} · ${rok}`,
+    },
+  };
   const bary = zpList(S).map((z) => ({
     kod: z.kod, zkratka: z.zkratka || ZP_BY_KOD[String(z.kod)]?.zkratka || z.kod,
     parts: SEGMENT_SKUPINY.map((g) => {
@@ -434,7 +489,7 @@ export function buildSegmenty(S, R, { kod = KOD_VZP, segment = null } = {}) {
     .filter((x) => isNum(x.v?.tis_kc)).sort((a, b) => b.v.tis_kc - a.v.tis_kc).slice(0, 6);
   const db = {
     kod: zpSel?.kod, zkratka: zkr,
-    items: velke.map((x) => ({ key: x.s.id, label: segNazev(x.s), from: isNum(x.v.zpp_tis_kc) ? x.v.zpp_tis_kc / 1e6 : null, to: x.v.tis_kc / 1e6 })),
+    items: velke.map((x) => ({ key: x.s.id, label: kratkySegment(segNazev(x.s)), tip: `${segNazev(x.s)}: skutečnost ${fmtKc(x.v.tis_kc / 1e6, 1)} mld Kč${isNum(x.v.zpp_tis_kc) ? ` · plán ${fmtKc(x.v.zpp_tis_kc / 1e6, 1)} mld Kč` : ''} · ${rok}`, from: isNum(x.v.zpp_tis_kc) ? x.v.zpp_tis_kc / 1e6 : null, to: x.v.tis_kc / 1e6 })),
     opts: { title: `${zkr}: plán → skutečnost ${rok}, šest největších segmentů`, sub: 'Zdravotně pojistný plán (ZPP) a skutečnost, mld Kč. Vybraná pojišťovna podle „Moje pojišťovna“, jinak VZP ČR.',
       unit: 'mld Kč', dec: 1, fromLabel: 'plán', toLabel: 'skutečnost', sortNote: 'Řazeno podle skutečnosti.', source: `${SRC_SEG} · ${rok}` },
   };
@@ -466,7 +521,7 @@ export function buildSegmenty(S, R, { kod = KOD_VZP, segment = null } = {}) {
       ref: isNum(crv) ? { value: crv, label: crOdv ? 'průměr sedmi pojišťoven' : 'ČR', kind: 'line' } : null,
     },
   };
-  return { rok, bary, dumbbell: db, perPojistence, moznosti: vsechny.map((s) => ({ id: s.id, label: `${'– '.repeat(Math.max(0, (urovenV(s, rok) || 1) - 1))}${segNazev(s)}` })) };
+  return { rok, bary, stacked, dumbbell: db, perPojistence, moznosti: vsechny.map((s) => ({ id: s.id, label: `${'– '.repeat(Math.max(0, (urovenV(s, rok) || 1) - 1))}${segNazev(s)}` })) };
 }
 
 // ---------------------------------------------------------------- A1.5 fond prevence a provoz
@@ -619,8 +674,7 @@ function segmentyHtml(S, R, kod) {
   const who = moje
     ? `Zobrazeno: ${dot(ch.dumbbell.kod)}<b>${esc(ch.dumbbell.zkratka)}</b> (vaše pojišťovna). Jinou zvolíte v řádku „Moje pojišťovna“ nahoře.`
     : `Zobrazeno: ${dot(ch.dumbbell.kod)}<b>${esc(ch.dumbbell.zkratka)}</b> (výchozí). Vyberte svou pojišťovnu nahoře.`;
-  const bars = ch.bary.map((b, i) => segmentedBar(b.parts, { ...b.opts, sub: i === 0 ? `Podíl segmentů na nákladech na zdravotní služby ${ch.rok}; 100 % = náklady celkem. Čtyři skupiny: ambulantní a lůžková péče, léky na recepty a ostatní.` : undefined })).join('');
-  return `<div class="zpc-seg-bary">${bars}</div>`
+  return `<div class="zpc-seg-bary">${stackedRows(ch.stacked.rows, ch.stacked.parts, ch.stacked.cell, ch.stacked.opts)}</div>`
     + `<p class="zpc-note zpc-fp-who">${who}</p>${dumbbell(ch.dumbbell.items, ch.dumbbell.opts)}`
     + figureSwitch({ id: 'segment', label: 'Segment', kind: 'select', selected: ch.perPojistence.segmentId, options: ch.moznosti.map((m) => ({ value: m.id, label: m.label })) })
     + rankedBars(ch.perPojistence.items, ch.perPojistence.opts)

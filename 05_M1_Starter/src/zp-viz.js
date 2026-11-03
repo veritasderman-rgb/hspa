@@ -6,6 +6,7 @@
 //
 //   rankedBars      seřazené vodorovné bary (HTML/CSS), referenční zóna/linka
 //   segmentedBar    tall segmented bar (part-to-whole), fold do „Ostatní“
+//   stackedRows     řádky 100% pruhů (pojišťovna × části) jako jedna figura, jedna legenda
 //   statTiles       KPI řada stat dlaždic (count-up hook, fallback = konečná hodnota; volitelně řádek `cmp` s druhou pojišťovnou)
 //   meter           meter s trackem ve světlejším kroku téže barvy (role="meter")
 //   indexedLines    SVG, index základní rok = 100, jedna osa, direct labels + legenda
@@ -145,14 +146,14 @@ export function csvFilename(title, date = new Date()) {
 }
 
 /** Tabulkové dvojče: headers = [text], rows = [[html…]] (první buňka = th); source jde do CSV. */
-function tableTwin(title, headers, rows, numFrom = 1, source = '') {
+export function tableTwin(title, headers, rows, numFrom = 1, source = '', summary = 'Zobrazit jako tabulku') {
   const head = headers.map((h, i) =>
     `<th scope="col"${i >= numFrom ? ' class="zpv-num"' : ''}>${esc(h)}</th>`).join('');
   const body = rows.map((r) => `<tr>${r.map((c, i) => (i === 0
     ? `<th scope="row">${c}</th>`
     : `<td${i >= numFrom ? ' class="zpv-num"' : ''}>${c}</td>`)).join('')}</tr>`).join('');
   return `<details class="zpv-table" data-csv-title="${esc(title || 'data grafu')}" data-csv-source="${esc(source || '')}">`
-    + `<summary>Zobrazit jako tabulku</summary>`
+    + `<summary>${esc(summary)}</summary>`
     + `<button type="button" class="zpv-csv" data-zpv-csv>Stáhnout CSV</button>`
     + `<div class="zpv-scroll" tabindex="0" role="region" aria-label="${esc('Tabulka: ' + (title || 'data grafu'))}">`
     + `<table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div></details>`;
@@ -190,6 +191,19 @@ export function sortDesc(list, key = 'value') {
     .map((x) => x.it);
 }
 
+/**
+ * Zkrácený popisek (≤ max znaků): bez závorek a slova „celkem“, jinak ořez na hranici slova s „…“.
+ * Plný text patří do tooltipu; zkrácení brání zalamování popisku přes bary.
+ */
+export function kratkyPopisek(text, max = 22) {
+  let t = String(text ?? '').replace(/\s*\([^)]*\)/g, '').replace(/\s+celkem\b/i, '').replace(/\s+/g, ' ').trim();
+  if (t.length <= max) return t;
+  const cut = t.slice(0, max - 1);
+  const sp = cut.lastIndexOf(' ');
+  t = (sp >= Math.floor(max / 2) ? cut.slice(0, sp) : cut).replace(/[\s,;:–/-]+$/, '');
+  return `${t}…`;
+}
+
 /** Šířková třída pro rezervu hodnoty na špičce baru (počet znaků). */
 function valWidthClass(texts) {
   const n = Math.max(0, ...texts.map((t) => String(t).length));
@@ -204,9 +218,12 @@ function valWidthClass(texts) {
 
 /**
  * @param {Array<{kod?, key?, label, value, rok?, zdroj?, note?, tip?}>} items
- * @param {{title?, sub?, unit?, dec?, ref?: {value, label, kind?: 'line'|'zone-below'|'zone-above'},
+ * @param {{title?, sub?, unit?, dec?, ref?: {value, label, kind?: 'line'|'zone-below'|'zone-above'|'zone-band', from?, to?},
  *          sort?: 'desc'|'none', maxv?, minv?, source?, sortNote?: string|false,
- *          allowNegative?: boolean, signed?: boolean}} opts
+ *          allowNegative?: boolean, signed?: boolean, labw?: number}} opts
+ *
+ * ref.kind 'zone-band': podbarvený pás mezi `ref.from` a `ref.to` (např. kritické pásmo 3–4 %);
+ * `ref.value` = střed pásu, slouží jen k popisu pro čtečky a k ověření reference.
  *
  * allowNegative: záporné hodnoty se kreslí doleva od nulové osy (diverging bar,
  * jedna barva; směr nese poloha a znaménko, ne barva). Bez záporných hodnot je
@@ -222,16 +239,21 @@ export function rankedBars(items, opts = {}) {
   const refOk = ref && isNum(ref.value);
   const vals = rows.map((r) => r.value).filter(isNum);
   const hasNeg = allowNegative && vals.some((v) => v < 0);
-  const lo = hasNeg ? Math.min(0, isNum(opts.minv) ? opts.minv : 0, ...vals, refOk ? ref.value : 0) : 0;
-  let max = isNum(maxv) && maxv > 0 ? maxv : Math.max(0, ...vals, refOk ? ref.value : 0);
+  const band = refOk && ref.kind === 'zone-band' && isNum(ref.from) && isNum(ref.to) && ref.to > ref.from;
+  const refTop = refOk ? Math.max(ref.value, band ? ref.to : ref.value) : 0;
+  const refBot = refOk ? Math.min(ref.value, band ? ref.from : ref.value) : 0;
+  const lo = hasNeg ? Math.min(0, isNum(opts.minv) ? opts.minv : 0, ...vals, refBot) : 0;
+  let max = isNum(maxv) && maxv > 0 ? maxv : Math.max(0, ...vals, refTop);
   if (!(max > 0)) max = 1;
   const span = max - lo;
   const at = (v) => pct(v - lo, span); // poloha hodnoty na ose (bez záporných = pct(v, max))
   const zero = at(0);
 
-  const kind = refOk ? (ref.kind || 'zone-below') : null;
+  // zone-band bez platných hranic spadne na čáru ve středu (ref.value), ať se reference neztratí
+  const kind = refOk ? (ref.kind === 'zone-band' && !band ? 'line' : (ref.kind || 'zone-below')) : null;
   let refEl = '';
-  if (kind === 'line') refEl = `<span class="zpv-ref zpv-ref--line" style="--w:${at(ref.value)}" aria-hidden="true"></span>`;
+  if (kind === 'zone-band') refEl = `<span class="zpv-ref zpv-ref--band" style="--x:${at(ref.from)};--w:${pct(ref.to - ref.from, span)}" aria-hidden="true"></span>`;
+  else if (kind === 'line') refEl = `<span class="zpv-ref zpv-ref--line" style="--w:${at(ref.value)}" aria-hidden="true"></span>`;
   else if (kind === 'zone-above') refEl = `<span class="zpv-ref zpv-ref--above" style="--w:${at(ref.value)}" aria-hidden="true"></span>`;
   else if (kind) refEl = `<span class="zpv-ref zpv-ref--below" style="--w:${at(ref.value)}" aria-hidden="true"></span>`;
   if (hasNeg) refEl += `<span class="zpv-zero" style="--x:${zero}" aria-hidden="true"></span>`;
@@ -276,7 +298,9 @@ export function rankedBars(items, opts = {}) {
 
   const aria = `${opts.title || 'Graf'}: ${rows.map((r, i) => `${r.label ?? ''} ${texts[i]}`).join(', ')}`
     + `${refOk ? `. ${refText}` : ''}.`;
-  const plot = `<div class="zpv-plot zpv-barlist ${valWidthClass(texts)}${kind === 'line' ? ' zpv-has-refline' : ''}${hasNeg ? ' zpv-has-neg' : ''}" role="group" aria-label="${esc(aria)}">${rowsHtml}</div>`;
+  // labw (číslo, em): širší sloupec popisků pro delší názvy; na úzkém displeji nejvýš 42 % šířky
+  const labStyle = isNum(opts.labw) && opts.labw > 0 ? ` style="--zpv-labw:min(${opts.labw}em,42%)"` : '';
+  const plot = `<div class="zpv-plot zpv-barlist ${valWidthClass(texts)}${kind === 'line' ? ' zpv-has-refline' : ''}${hasNeg ? ' zpv-has-neg' : ''}"${labStyle} role="group" aria-label="${esc(aria)}">${rowsHtml}</div>`;
   const table = tableTwin(opts.title, ['Položka', unit ? `Hodnota (${unit})` : 'Hodnota'],
     rows.map((r, i) => [esc(r.label ?? ''), esc(texts[i])]), 1, source);
   return figure('bars', opts, plot + table, { extraCap: extra });
@@ -353,6 +377,56 @@ export function segmentedBar(parts, opts = {}) {
       esc(isNum(p.value) && tTotal > 0 ? `${formatNumberCz((p.value / tTotal) * 100, { minDecimals: 1, maxDecimals: 1 })} %` : NA_TEXT),
     ]), 1, source);
   return figure('segmented', opts, plot + table, { colored: true });
+}
+
+/**
+ * stackedRows — řádky 100% pruhů pod sebou (jedna figura místo N samostatných segmentedBar).
+ * Řádek = pojišťovna (`data-zp`), segment = část celku (`data-key` + `data-slot` pro barvu).
+ * Jedna legenda nahoře, jedno tabulkové dvojče (řádky × části, podíl v %).
+ *
+ * @param {Array<{kod?, key?, label, sub?}>} rows
+ * @param {Array<{key, label}>} parts
+ * @param {(row, part) => number|null} cell  hodnota části (podíl se počítá z řádkového součtu)
+ * @param {{title?, sub?, source?, unit?, dec?, labMin?: number}} opts  labMin = od kolika % je v segmentu popisek (výchozí 14)
+ */
+export function stackedRows(rows, parts, cell, opts = {}) {
+  const { unit = '', dec = 0, source = '', labMin = 14 } = opts;
+  const R = (Array.isArray(rows) ? rows : []).filter(Boolean);
+  const P = (Array.isArray(parts) ? parts : []).filter(Boolean);
+  if (!R.length || !P.length) return emptyFigure('stacked', opts);
+  const slotOf = (p, j) => (p.isOther || j >= 5 ? 'other' : String(j));
+  const shareTxt = (v) => `${formatNumberCz(v, { minDecimals: 1, maxDecimals: 1 })} %`;
+
+  // data[i][j] = {v, sh}; sh = podíl na součtu řádku v % (null, když část chybí)
+  const data = R.map((r) => {
+    const vals = P.map((p) => { try { const v = typeof cell === 'function' ? cell(r, p) : null; return isNum(v) && v > 0 ? v : null; } catch { return null; } });
+    const total = vals.reduce((a, v) => a + (v ?? 0), 0);
+    return vals.map((v) => ({ v, sh: v != null && total > 0 ? (v / total) * 100 : null }));
+  });
+
+  const rowsHtml = R.map((r, i) => {
+    const id = idAttr(r);
+    const segs = P.map((p, j) => {
+      const d = data[i][j];
+      if (d.sh == null) return '';
+      const vt = fmtValue(d.v, dec, unit);
+      const st = shareTxt(d.sh);
+      const tip = esc(`${r.label} · ${p.label}: ${st}${unit ? ` (${vt})` : ''}${source ? ` · ${source}` : ''}`);
+      const lab = d.sh >= labMin ? `<span class="zpv-seg-lab" aria-hidden="true">${esc(`${Math.round(d.sh)} %`)}</span>` : '';
+      return `<span class="zpv-seg zpv-mark"${id} data-key="${esc(p.key)}" data-slot="${slotOf(p, j)}" data-zpv-anim="seg" `
+        + `style="width:${pct(d.sh, 100)};--i:${i}" tabindex="0" role="img" aria-label="${esc(`${r.label}, ${p.label}: ${st}`)}" data-tip="${tip}">${lab}</span>`;
+    }).join('');
+    const body = segs || `<span class="zpv-na">${NA_TEXT}</span>`;
+    return `<div class="zpv-srow"${id}><span class="zpv-label">${esc(r.label ?? '')}</span><span class="zpv-segbar">${body}</span></div>`;
+  }).join('');
+
+  const legend = `<ul class="zpv-legend zpv-legend--stack">${P.map((p, j) => `<li><i class="zpv-sw" data-slot="${slotOf(p, j)}" aria-hidden="true"></i>${esc(p.label)}</li>`).join('')}</ul>`;
+  const aria = `${opts.title || 'Rozdělení celku'}: ${R.map((r, i) => `${r.label}: ${P.map((p, j) => (data[i][j].sh != null ? `${p.label} ${shareTxt(data[i][j].sh)}` : null)).filter(Boolean).join(', ') || NA_TEXT}`).join('; ')}.`;
+  const plot = `<div class="zpv-plot zpv-stackplot" role="group" aria-label="${esc(aria)}">${legend}${rowsHtml}</div>`;
+  const table = tableTwin(opts.title, [opts.rowHeader || 'Pojišťovna', ...P.map((p) => p.label)],
+    R.map((r, i) => [esc(r.label ?? ''), ...P.map((p, j) => esc(data[i][j].sh != null ? shareTxt(data[i][j].sh) : NA_TEXT))]), 1, source);
+  // colored: false — barvu segmentu nese data-slot (část), ne pojišťovna; „Moje pojišťovna“ zvýrazní řádek
+  return figure('stacked', opts, plot + table);
 }
 
 // ---------------------------------------------------------------------
@@ -789,16 +863,19 @@ export function dotScore(values) {
  * @param {Array<{kod?, key?, label, sub?}>} rows
  * @param {Array<{key, label}>} cols
  * @param {(row, col) => true|false|null|'partial'} cell
- * @param {{title?, sub?, scoreLabel?, source?, rowHeader?}} opts
+ * @param {{title?, sub?, scoreLabel?, source?, rowHeader?, score?: boolean}} opts
+ *   score: false vynechá sloupec se součtem (hlavičku i buňky) — u inventáře nabídky
+ *   součet „kdo umí víc“ nic neříká, rozdíly mají být vidět v samotných kolečkách.
  */
 export function dotMatrix(rows, cols, cell, opts = {}) {
   const { scoreLabel = 'n/10', scoreWord = 'funkcí', rowHeader = '' } = opts;
+  const withScore = opts.score !== false;
   const R = (Array.isArray(rows) ? rows : []).filter(Boolean);
   const C = (Array.isArray(cols) ? cols : []).filter(Boolean);
   if (!R.length || !C.length) return emptyFigure('dots', opts);
 
   const head = `<tr>${corner(rowHeader)}${C.map((c) => `<th scope="col">${esc(c.label)}</th>`).join('')}`
-    + `<th scope="col" class="zpv-scorehead">${esc(scoreLabel)}</th></tr>`;
+    + `${withScore ? `<th scope="col" class="zpv-scorehead">${esc(scoreLabel)}</th>` : ''}</tr>`;
   const body = R.map((r) => {
     const vals = C.map((c) => safeCell(cell, r, c));
     const sc = dotScore(vals);
@@ -816,7 +893,7 @@ export function dotMatrix(rows, cols, cell, opts = {}) {
       ? meter(sc.yes, { max: sc.known, label: `${r.label}: ${sc.yes} z ${sc.known} ${scoreWord}`, text: scoreText })
       : meter(null);
     const note = unknown && sc.known ? `<span class="zpv-scorenote">${unknown}× ${NA_TEXT}</span>` : '';
-    return `<tr${id}>${rowHead(r)}${cells}<td class="zpv-scorecell">${m}${note}</td></tr>`;
+    return `<tr${id}>${rowHead(r)}${cells}${withScore ? `<td class="zpv-scorecell">${m}${note}</td>` : ''}</tr>`;
   }).join('');
 
   const legend = `<ul class="zpv-legend zpv-legend--dots">`
@@ -832,6 +909,10 @@ export function dotMatrix(rows, cols, cell, opts = {}) {
 //  9. coverageMatrix — stavová paleta, vždy ikona + text (SC 1.4.1)
 // ---------------------------------------------------------------------
 
+/** Ikony neutrálního inventáře (tone: 'neutral'): plné / poloviční / prázdné kolečko. */
+const NEUTRAL_SHAPE = { ano: 'full', castecne: 'part', ne: 'none' };
+export const COVERAGE_NEUTRAL_ICONS = { ano: '●', castecne: '◐', ne: '○' };
+
 export const COVERAGE_STATES = {
   ano: { cls: 'good', icon: '✓', text: 'ano' },
   castecne: { cls: 'warn', icon: '½', text: 'částečně' },
@@ -842,10 +923,16 @@ export const COVERAGE_STATES = {
  * @param {Array<{kod?, key?, label, sub?}>} rows
  * @param {Array<{key, label}>} cols
  * @param {(row, col) => 'ano'|'castecne'|'ne'|null|{stav, tip?}} cell
- * @param {{title?, sub?, source?, labels?: {ano?, castecne?, ne?}, rowHeader?}} opts
+ * @param {{title?, sub?, source?, labels?: {ano?, castecne?, ne?}, rowHeader?, tone?: 'status'|'neutral'}} opts
+ *   tone 'neutral': inventář bez hodnocení — ikony ● ◐ ○ v inkoustu, bez stavových barev
+ *   a bez ✕ (nenalezení informace na webu není selhání pojišťovny); text ve buňce zůstává.
  */
 export function coverageMatrix(rows, cols, cell, opts = {}) {
   const { labels = {}, rowHeader = '' } = opts;
+  const neutral = opts.tone === 'neutral';
+  const icon = (k) => (neutral ? COVERAGE_NEUTRAL_ICONS[k] : COVERAGE_STATES[k].icon);
+  // neutrální ikony kreslí CSS (znaky ◐ ● ○ mají v fontech nestejnou velikost); znak zůstává pro kopírování a CSV
+  const toneCls = (k) => (neutral ? ` zpv-cov-ic--${NEUTRAL_SHAPE[k]}` : ` zpv-tone-${COVERAGE_STATES[k].cls}`);
   const R = (Array.isArray(rows) ? rows : []).filter(Boolean);
   const C = (Array.isArray(cols) ? cols : []).filter(Boolean);
   if (!R.length || !C.length) return emptyFigure('coverage', opts);
@@ -860,14 +947,13 @@ export function coverageMatrix(rows, cols, cell, opts = {}) {
     if (!st) return `<td class="zpv-cov" data-state="na"><span class="zpv-cov-ic" aria-hidden="true">—</span><span class="zpv-cov-tx">${NA_TEXT}</span></td>`;
     const tip = [`${r.label} · ${c.label}: ${stText(k)}`, extraTip].filter(Boolean).join(' — ');
     return `<td class="zpv-cov" data-state="${esc(k)}" data-tip="${esc(tip)}">`
-      + `<span class="zpv-cov-ic zpv-tone-${st.cls}" aria-hidden="true">${st.icon}</span><span class="zpv-cov-tx">${esc(stText(k))}</span></td>`;
+      + `<span class="zpv-cov-ic${toneCls(k)}" aria-hidden="true">${icon(k)}</span><span class="zpv-cov-tx">${esc(stText(k))}</span></td>`;
   }).join('')}</tr>`).join('');
 
-  const legend = `<ul class="zpv-legend zpv-legend--cov">${Object.keys(COVERAGE_STATES).map((k) => {
-    const st = COVERAGE_STATES[k];
-    return `<li><span class="zpv-cov-ic zpv-tone-${st.cls}" aria-hidden="true">${st.icon}</span>${esc(stText(k))}</li>`;
-  }).join('')}<li><span class="zpv-cov-ic" aria-hidden="true">—</span>${NA_TEXT}</li></ul>`;
-  const table = `<table class="zpv-matrix zpv-covtable" aria-label="${esc(opts.title || 'Matice pokrytí')}"><thead>${head}</thead><tbody>${body}</tbody></table>`;
+  const legend = `<ul class="zpv-legend zpv-legend--cov"${neutral ? ' data-tone="neutral"' : ''}>${Object.keys(COVERAGE_STATES).map((k) => (
+    `<li><span class="zpv-cov-ic${toneCls(k)}" aria-hidden="true">${icon(k)}</span>${esc(stText(k))}</li>`
+  )).join('')}<li><span class="zpv-cov-ic" aria-hidden="true">—</span>${NA_TEXT}</li></ul>`;
+  const table = `<table class="zpv-matrix zpv-covtable"${neutral ? ' data-tone="neutral"' : ''} aria-label="${esc(opts.title || 'Matice pokrytí')}"><thead>${head}</thead><tbody>${body}</tbody></table>`;
   return matrixFigure('coverage', opts, table, legend);
 }
 

@@ -14,7 +14,8 @@
 //   5. Řazení heatmap (button.zpv-sort[data-col]) a „Rozbalit vše“.
 //   6. „Porovnat s“ (A4.2) — druhý řádek chipů v #zpPorovnatZp (vytvoří se pod #zpMojeZp),
 //      výběr v localStorage (hspa-porovnat-zp), main[data-porovnat-zp], event `zp:porovnat-change`;
-//      marky druhé ZP dostanou .is-porovnat (obrys), řádky tabulek data-porovnat="true".
+//      marky druhé ZP dostanou .is-porovnat (obrys), řádky tabulek data-porovnat="true";
+//      řádky skládaného grafu (.zpv-srow[data-zp], stackedRows) dostávají .is-moje/.is-porovnat jako řádky tabulek.
 //      Parametr ?porovnat=<kód> v URL má při načtení přednost před localStorage.
 //   7. Přepínače u grafů (A4.3) — figureSwitch() ze zp-viz.js: jeden delegovaný handler (klik,
 //      šipky, change), zápis `?<id>=…` do URL (replaceState) a event `zp:switch` {id, value}.
@@ -367,7 +368,7 @@ export function initZpInteract(root = globalThis.document) {
       else if (tr.getAttribute('data-porovnat') === 'true') tr.setAttribute('aria-current', 'false'); // řádek druhé ZP
       else tr.removeAttribute('aria-current');
     });
-    main.querySelectorAll('.zpv-mark[data-zp], tr[data-zp]').forEach((el) => {
+    main.querySelectorAll('.zpv-mark[data-zp], tr[data-zp], .zpv-srow[data-zp]').forEach((el) => {
       el.classList.toggle('is-moje', !!kod && el.getAttribute('data-zp') === kod);
     });
     // chipy „Moje“ (řádek „Porovnat s“ má vlastní modifikátor a vlastní stav)
@@ -382,7 +383,7 @@ export function initZpInteract(root = globalThis.document) {
   const syncPorovnat = (kod) => {
     if (kod) main.setAttribute('data-porovnat-zp', kod);
     else main.removeAttribute('data-porovnat-zp');
-    main.querySelectorAll('.zpv-mark[data-zp], tr[data-zp]').forEach((el) => {
+    main.querySelectorAll('.zpv-mark[data-zp], tr[data-zp], .zpv-srow[data-zp]').forEach((el) => {
       const on = !!kod && el.getAttribute('data-zp') === kod;
       el.classList.toggle('is-porovnat', on);
       if (el.tagName !== 'TR') return;

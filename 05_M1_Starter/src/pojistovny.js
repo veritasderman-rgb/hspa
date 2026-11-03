@@ -171,7 +171,7 @@ export function buildKmenCharts(d) {
       return { ...base(z), value: v, tip };
     }),
     opts: { title: 'Rezervy na konci roku 2026', sub: 'Zůstatek na účtech v % ročních výdajů. Pod 3–4 % vznikají dluhy po splatnosti.', unit: '%', dec: 1, source: SRC_ZPP,
-      ref: { value: 3.5, label: 'kritické pásmo 3–4 % výdajů', text: 'kritické pásmo 3–4 % výdajů', kind: 'zone-below' } },
+      ref: { from: 3, to: 4, value: 3.5, label: 'kritické pásmo 3–4 % výdajů', text: 'kritické pásmo 3–4 % výdajů', kind: 'zone-band' } },
   };
 
   const provoz = {
@@ -186,7 +186,7 @@ export function buildKmenCharts(d) {
 
   const trend = {
     series: zps.map((z) => ({ ...base(z), points: (z.crp?.pojistenci_trend || []).map((p) => ({ year: p.year, value: p.insured })) })),
-    opts: { title: 'Kdo roste a kdo ztrácí — index 2010 = 100', sub: 'Počet pojištěnců každé pojišťovny vůči roku 2010. Skok VZP v roce 2023 = registrace ukrajinských uprchlíků.',
+    opts: { title: 'Vývoj kmene, index 2010 = 100', sub: 'Počet pojištěnců každé pojišťovny vůči roku 2010. Skok VZP v roce 2023 = registrace ukrajinských uprchlíků.',
       base: 2010, source: 'ÚZIS · CRP (OIS 11-47) · 2010–2025' },
   };
 
@@ -358,7 +358,7 @@ function renderFin(d) {
 /** Klientský servis (aplikace, pobočky, online přepážka, bonusy); od A0.5 na stránce „Aplikace a servis“. */
 function renderServis(d) {
   const zps = d?.pojistovny || [];
-  set('zpTablePrev', `<table><thead><tr><th>Pojišťovna</th><th class="zpc-txt">Aplikace</th><th>Pobočky</th><th>Online přepážka</th><th class="zpc-txt">Bonusový program</th><th class="zpc-txt">Pro zaměstnavatele</th></tr></thead><tbody>` +
+  set('zpTablePrev', `<table><thead><tr><th scope="col">Pojišťovna</th><th scope="col" class="zpc-txt">Aplikace</th><th scope="col">Pobočky</th><th scope="col">Online přepážka</th><th scope="col" class="zpc-txt">Bonusový program</th><th scope="col" class="zpc-txt">Pro zaměstnavatele</th></tr></thead><tbody>` +
     zps.map((z) => { const s = z.servis || {}, p = z.prevence || {}; const b = p.bonusovy_program || {}, e = p.programy_pro_zamestnavatele || {}; return `<tr data-zp="${esc(z.kod)}"><th scope="row">${dot(z.kod)}${esc(z.zkratka)}</th><td class="zpc-txt">${esc(s.mobilni_aplikace || '') || NA}</td><td>${num(s.pocet_pobocek)}${s.pocet_pobocek_poznamka ? `<small>${esc(short(s.pocet_pobocek_poznamka, 90))}</small>` : ''}</td><td>${boolMark(s.online_prepazka)}</td><td class="zpc-txt">${b.nazev ? esc(short(b.nazev, 110)) : b.existuje === null ? '<span class="zpc-na">nenalezen</span>' : NA}</td><td class="zpc-txt">${e.nazev ? esc(short(e.nazev, 90)) : e.existuje === null ? '<span class="zpc-na">nenalezen</span>' : NA}</td></tr>`; }).join('') + '</tbody></table>');
 }
 
@@ -495,7 +495,11 @@ async function init() {
   await initZpInteract(doc);
   syncCards(doc.querySelector('main')?.getAttribute('data-moje-zp') || null);
   // stáří dat: věta pod nadpisem + sbalená tabulka nad patičkou Zdroje, z datasetů, které stránka právě načetla
-  const stari = renderStariDat({ datasety: { pojistovny: d, prevence: p, aplikace: a, otazky: o, prerozdeleni: pr, hospodareniRady: rady, segmenty: seg, instituce: inst, smluvniProgramy: prog, dostupnost: dost } }).catch(() => null);
+  // profil pojišťovny není záložka shellu: stáří dat se řídí stranou `profil` a datasety, které profil načetl
+  const stari = renderStariDat({
+    strana: has(['zpProfil']) ? 'profil' : undefined,
+    datasety: { pojistovny: d, prevence: p, aplikace: a, otazky: o, prerozdeleni: pr, hospodareniRady: rady, segmenty: seg, instituce: inst, smluvniProgramy: prog, dostupnost: dost, stiznosti: stiz },
+  }).catch(() => null);
   await Promise.all([shell, stari]);
   refreshZdrojeJson(doc);
 }

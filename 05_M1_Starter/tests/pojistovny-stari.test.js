@@ -42,7 +42,8 @@ const radek = (strana, id, ds = DS) => stariRadky(ds, strana).find((r) => r.id =
 test('registr: každý dataset má URL, každý řádek stránku z ZP_STRANKY, shell funkci re-exportuje', () => {
   for (const r of STARI_REGISTR) {
     assert.ok(ZP_DATASETY[r.dataset], r.id);
-    assert.ok(r.stranky.every((s) => ZP_STRANKY.some((x) => x.id === s)), `${r.id}: stranky`);
+    // `profil` = pojistovna.html, která není záložka shellu (A2.3), ale stáří dat ukazuje taky
+    assert.ok(r.stranky.every((s) => s === 'profil' || ZP_STRANKY.some((x) => x.id === s)), `${r.id}: stranky`);
     assert.ok(fs.existsSync(path.join(ROOT, ZP_DATASETY[r.dataset])), ZP_DATASETY[r.dataset]);
   }
   assert.equal(stariZShellu, stariDatHtml);
@@ -202,7 +203,7 @@ test('DOM: věta jde pod .zpc-mod-head (na přehledu do hero), blok před #zpZdr
 test('init: orchestrátor volá renderStariDat s načtenými datasety; CSS tříd je dost', () => {
   const src = fs.readFileSync(path.join(ROOT, 'src', 'pojistovny.js'), 'utf8');
   assert.match(src, /import \{ renderStariDat \} from '\.\/pojistovny-stari\.js'/);
-  assert.match(src, /renderStariDat\(\{ datasety: \{ pojistovny: d, prevence: p, aplikace: a, otazky: o, prerozdeleni: pr, hospodareniRady: rady, segmenty: seg, instituce: inst, smluvniProgramy: prog, dostupnost: dost \} \}\)/);
+  assert.match(src, /renderStariDat\(\{\s*strana: has\(\['zpProfil'\]\) \? 'profil' : undefined,\s*datasety: \{ pojistovny: d, prevence: p, aplikace: a, otazky: o, prerozdeleni: pr, hospodareniRady: rady, segmenty: seg, instituce: inst, smluvniProgramy: prog, dostupnost: dost, stiznosti: stiz \},?\s*\}\)/);
   const css = fs.readFileSync(path.join(ROOT, 'src', 'styles.css'), 'utf8');
   for (const c of ['.zpc-stari{', '.zpc-stari-wrap{', '.zpc-stari-warn{', '.zpc-stari-acc']) assert.ok(css.includes(c), c);
   // všech sedm stránek má kontejner #zpZdroje, před který se blok vkládá
@@ -214,17 +215,33 @@ test('init: orchestrátor volá renderStariDat s načtenými datasety; CSS tří
 
 test('Peníze (A1.6): řádky hospodareniRady, prerozdeleni a segmenty se čtou z datasetů; přerozdělení i na přehledu', () => {
   const pen = stariRadky(DS_PENIZE, 'penize');
-  assert.deepEqual(pen.map((r) => r.id), ['hospodareniRady', 'prerozdeleni', 'segmenty']);
-  assert.equal(pen[0].kDatu, '2015–2024');
-  assert.equal(pen[0].kratce, 'MZ 2015–2024');
-  assert.match(pen[1].kDatu, /^1\/2019–\d{1,2}\/20\d\d$/);
-  assert.match(pen[1].stav, /roční saldo za 20\d\d/);
+  assert.deepEqual(pen.map((r) => r.id), ['hosp', 'zpp', 'hospodareniRady', 'prerozdeleni', 'segmenty']);
+  assert.equal(pen[0].kratce, `MZ ${DS.pojistovny.rok_hospodareni}`, 'hospodaření 2024 (rezervy a tabulka na Penězích)');
+  assert.equal(pen[1].kratce, 'ZPP 2026');
   assert.equal(pen[2].kDatu, '2015–2024');
+  assert.equal(pen[2].kratce, 'MZ 2015–2024');
+  assert.match(pen[3].kDatu, /^1\/2019–\d{1,2}\/20\d\d$/);
+  assert.match(pen[3].stav, /roční saldo za 20\d\d/);
+  assert.equal(pen[4].kDatu, '2015–2024', 'segmenty');
   assert.ok(radek('prehled', 'prerozdeleni', DS_PENIZE));
   assert.ok(radek('kmen', 'hospodareniRady', DS_PENIZE), 'státní pojištěnci v kartě Kmene');
   // bez datasetu se řádek vynechá; roky řad se nemíchají s hospodařením 2024 (bez varování)
-  assert.equal(stariRadky(DS, 'penize').length, 0);
+  assert.deepEqual(stariRadky(DS, 'penize').map((r) => r.id), ['hosp', 'zpp'], 'bez datasetů Peněz zůstává jen hospodaření 2024 a ZPP 2026');
   assert.deepEqual(stariVarovani(stariRadky(DS_PENIZE, 'penize')), []);
-  assert.equal(stariRadky({ ...DS_PENIZE, segmenty: null }, 'penize').length, 2);
+  assert.equal(stariRadky({ ...DS_PENIZE, segmenty: null }, 'penize').length, 4);
   for (const n of ['hospodareniRady', 'prerozdeleni', 'segmenty']) assert.ok(fs.existsSync(path.join(ROOT, ZP_DATASETY[n])), n);
+});
+
+test('profil pojišťovny: stáří dat ze všech datasetů, které profil načítá (strana `profil`), bez věku a bez sítě', () => {
+  const DS_PROFIL = { ...DS_PENIZE };
+  const ids = stariRadky(DS_PROFIL, 'profil').map((r) => r.id);
+  for (const id of ['crp', 'hosp', 'zpp', 'prevence', 'aplikace', 'stiznosti', 'hospodareniRady', 'prerozdeleni', 'segmenty', 'instituce', 'smluvniProgramy', 'dostupnost']) {
+    assert.ok(ids.includes(id), `profil ukazuje ${id}`);
+  }
+  for (const id of ['hosp25', 'otazky', 'sit', 'opendata', 'vek']) assert.ok(!ids.includes(id), `profil neukazuje ${id}`);
+  // věta pod nadpisem i blok nad patičkou vznikají z téhož registru
+  assert.match(stariVeta(stariRadky(DS_PROFIL, 'profil')), /^Data: CRP 2025 · MZ 2024 · ZPP 2026 · /);
+  assert.match(stariDatHtml(DS_PROFIL, { strana: 'profil' }), /Stáří dat na této stránce/);
+  // profil, který nenačetl dataset, řádek vynechá
+  assert.ok(!stariRadky({ pojistovny: DS.pojistovny }, 'profil').some((r) => r.id === 'prevence'));
 });

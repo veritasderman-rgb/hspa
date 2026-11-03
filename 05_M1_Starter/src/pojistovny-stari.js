@@ -64,18 +64,18 @@ const roky = (text) => [...String(text ?? '').matchAll(/\b(20\d{2})\b/g)].map((m
 
 /**
  * Registr řádků. `vyber(dataset)` vrací {kDatu, kratce, roky, stav, zdroj?} nebo null, když
- * dataset daný údaj nemá. `stranky` = na kterých stránkách se údaj ukazuje (id ze ZP_STRANKY;
- * prázdné = žádná, řádek vznikne jen při volání bez `strana`). `velicina` seskupuje řádky pro
+ * dataset daný údaj nemá. `stranky` = na kterých stránkách se údaj ukazuje (id ze ZP_STRANKY nebo `profil`
+ * = pojistovna.html, která není záložka; prázdné = žádná, řádek vznikne jen při volání bez `strana`). `velicina` seskupuje řádky pro
  * detekci míchání roků: varování vzniká, když řádky jedné veličiny nesou aspoň dva různé roky.
  */
 export const STARI_REGISTR = [
   {
-    id: 'crp', dataset: 'pojistovny', velicina: 'kmen', stranky: ['prehled', 'kmen'],
+    id: 'crp', dataset: 'pojistovny', velicina: 'kmen', stranky: ['prehled', 'kmen', 'profil'],
     nazev: 'Kmen pojištěnců', zdroj: 'ÚZIS ČR · Centrální registr pojištěnců (OIS 11-47)',
     vyber: (d) => (isNum(d?.rok_crp) ? { kDatu: String(d.rok_crp), kratce: `CRP ${d.rok_crp}`, roky: [d.rok_crp], stav: stavPoj(d) } : null),
   },
   {
-    id: 'hosp', dataset: 'pojistovny', velicina: 'hospodareni', stranky: ['prehled', 'kmen'],
+    id: 'hosp', dataset: 'pojistovny', velicina: 'hospodareni', stranky: ['prehled', 'kmen', 'penize', 'profil'],
     nazev: 'Hospodaření pojišťoven', zdroj: 'MZ ČR + MF · Hodnocení vývoje systému v.z.p.',
     vyber: (d) => (isNum(d?.rok_hospodareni) ? { kDatu: String(d.rok_hospodareni), kratce: `MZ ${d.rok_hospodareni}`, roky: [d.rok_hospodareni], stav: stavPoj(d) } : null),
   },
@@ -92,12 +92,12 @@ export const STARI_REGISTR = [
     },
   },
   {
-    id: 'zpp', dataset: 'pojistovny', velicina: 'plan2026', stranky: ['prehled', 'kmen'],
+    id: 'zpp', dataset: 'pojistovny', velicina: 'plan2026', stranky: ['prehled', 'kmen', 'penize', 'profil'],
     nazev: 'Zdravotně pojistné plány 2026', zdroj: 'Poslanecká sněmovna · sněmovní tisk 280',
     vyber: (d) => (isNum(d?.system?.plan_2026_vydaje_mld) ? { kDatu: '2026 (plán)', kratce: 'ZPP 2026', roky: [2026], stav: stavPoj(d) } : null),
   },
   {
-    id: 'prevence', dataset: 'prevence', velicina: 'vzPrevence', stranky: ['prehled', 'prevence'],
+    id: 'prevence', dataset: 'prevence', velicina: 'vzPrevence', stranky: ['prehled', 'prevence', 'profil'],
     nazev: 'Prevence: odpovědi z výročních zpráv a fond prevence', zdroj: 'Výroční zprávy pojišťoven; nabídka z webů pojišťoven (redakční rešerše)',
     vyber: (p) => {
       const zps = (p?.pojistovny || []).filter((z) => isNum(z?.rok_vz));
@@ -113,7 +113,7 @@ export const STARI_REGISTR = [
     },
   },
   {
-    id: 'aplikace', dataset: 'aplikace', velicina: 'aplikace', stranky: ['prehled', 'aplikace', 'gramotnost'],
+    id: 'aplikace', dataset: 'aplikace', velicina: 'aplikace', stranky: ['prehled', 'aplikace', 'gramotnost', 'profil'],
     nazev: 'Aplikace pojišťoven a rizikové skupiny', zdroj: 'Analýza digitalizace (interní) a výroční zprávy pojišťoven',
     vyber: (a) => {
       const r = uniq([...(a?.zdroje || []).flatMap((z) => roky(z?.nazev)), ...(a?.aplikace || []).map((x) => x?.uzivatele?.rok)]);
@@ -137,7 +137,7 @@ export const STARI_REGISTR = [
     },
   },
   {
-    id: 'stiznosti', dataset: 'stiznosti', velicina: 'stiznosti', stranky: ['aplikace'],
+    id: 'stiznosti', dataset: 'stiznosti', velicina: 'stiznosti', stranky: ['aplikace', 'profil'],
     nazev: 'Stížnosti a podněty na dostupnost', zdroj: 'Výroční zprávy pojišťoven (§ 16a zákona 106/1999 Sb., § 40 zákona 48/1997 Sb.)',
     vyber: (s) => {
       if (!s?.stav_k) return null;
@@ -151,7 +151,7 @@ export const STARI_REGISTR = [
     vyber: (o) => (o?.stav_k ? { kDatu: `stav k ${datumCz(o.stav_k)}`, kratce: `open data k ${datumCz(o.stav_k)}`, roky: [], stav: o.version ? `verze ${o.version}` : '' } : null),
   },
   {
-    id: 'hospodareniRady', dataset: 'hospodareniRady', velicina: 'hospodareniRady', stranky: ['penize', 'kmen', 'instituce'],
+    id: 'hospodareniRady', dataset: 'hospodareniRady', velicina: 'hospodareniRady', stranky: ['penize', 'kmen', 'instituce', 'profil'],
     nazev: 'Řady hospodaření 2015–2024', zdroj: 'MZ ČR + MF · Hodnocení vývoje systému v.z.p. (tabulková příloha a PDF)',
     vyber: (r) => {
       const r2 = uniq(r?.roky || []);
@@ -159,7 +159,7 @@ export const STARI_REGISTR = [
     },
   },
   {
-    id: 'prerozdeleni', dataset: 'prerozdeleni', velicina: 'prerozdeleni', stranky: ['penize', 'prehled'],
+    id: 'prerozdeleni', dataset: 'prerozdeleni', velicina: 'prerozdeleni', stranky: ['penize', 'prehled', 'profil'],
     nazev: 'Přerozdělení pojistného', zdroj: 'MZ ČR · Přerozdělování pojistného na v.z.p. (měsíční PDF)',
     vyber: (p) => {
       const m = Array.isArray(p?.mesice) ? p.mesice : [];
@@ -170,7 +170,7 @@ export const STARI_REGISTR = [
     },
   },
   {
-    id: 'segmenty', dataset: 'segmenty', velicina: 'segmenty', stranky: ['penize'],
+    id: 'segmenty', dataset: 'segmenty', velicina: 'segmenty', stranky: ['penize', 'profil'],
     nazev: 'Náklady podle segmentů', zdroj: 'MZ ČR + MF · Hodnocení vývoje systému v.z.p., tab. č. 3 a 3a',
     vyber: (x) => {
       const r2 = uniq((Array.isArray(x?.roky) ? x.roky : []).map(Number));
@@ -178,17 +178,17 @@ export const STARI_REGISTR = [
     },
   },
   {
-    id: 'instituce', dataset: 'instituce', velicina: 'instituce', stranky: ['instituce'],
+    id: 'instituce', dataset: 'instituce', velicina: 'instituce', stranky: ['instituce', 'profil'],
     nazev: 'Zákon, vznik a orgány pojišťoven', zdroj: 'Zákony č. 551/1991 Sb. a č. 280/1992 Sb., výroční zprávy pojišťoven 2023–2025',
     vyber: (d) => (d?.stav_k ? { kDatu: `stav k ${datumCz(d.stav_k)}`, kratce: `instituce k ${datumCz(d.stav_k)}`, roky: [], stav: sestaven(d) } : null),
   },
   {
-    id: 'smluvniProgramy', dataset: 'smluvniProgramy', velicina: 'smluvniProgramy', stranky: ['instituce'],
+    id: 'smluvniProgramy', dataset: 'smluvniProgramy', velicina: 'smluvniProgramy', stranky: ['instituce', 'profil'],
     nazev: 'Smluvní programy pro poskytovatele', zdroj: 'Weby pojišťoven (sekce pro poskytovatele), výroční zprávy 2025',
     vyber: (d) => (d?.stav_k ? { kDatu: `weby k ${datumCz(d.stav_k)}`, kratce: `programy k ${datumCz(d.stav_k)}`, roky: [], stav: 'existence programu není jeho účinek' } : null),
   },
   {
-    id: 'dostupnost', dataset: 'dostupnost', velicina: 'dostupnost', stranky: ['instituce'],
+    id: 'dostupnost', dataset: 'dostupnost', velicina: 'dostupnost', stranky: ['instituce', 'profil'],
     nazev: 'Co pojišťovny publikují o dostupnosti', zdroj: 'Výroční zprávy 2023–2025 a weby pojišťoven (inventář)',
     vyber: (d) => (d?.stav_k ? { kDatu: `stav k ${datumCz(d.stav_k)}`, kratce: `dostupnost k ${datumCz(d.stav_k)}`, roky: [], stav: 'nenalezeno neznamená, že údaj pojišťovna nemá' } : null),
   },

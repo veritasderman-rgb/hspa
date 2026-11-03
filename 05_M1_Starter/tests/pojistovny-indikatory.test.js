@@ -190,3 +190,22 @@ test('buildStiznosti / stiznostiHtml: 7 řádků, roky z dat, na 100 tis. jen u 
   assert.match(stiznostiHtml(null, poj), /zatím nejsou/);
   assert.ok(!html.includes('undefined'));
 });
+
+test('stránka Aplikace a servis: žádná tabulka bez scope (zpTablePrev, stížnosti, open data), ZP MV ČR a § 16a v bezpatkovém stylu poznámek', () => {
+  const st = read('data', 'pojistovny-stiznosti.json');
+  const poj = read('data', 'pojistovny.json');
+  const bezScope = (h) => (h.match(/<th(?![a-z])(?![^>]*\bscope=)[^>]*>/g) || []);
+  const html = stiznostiHtml(st, poj);
+  assert.deepEqual(bezScope(html), [], 'stiznostiHtml');
+  assert.deepEqual(bezScope(opendataHtml(read('data', 'pojistovny-opendata.json'))), [], 'opendataHtml');
+  // odstavec o ZP MV ČR a nadpis § 16a mají třídu jako okolní poznámky, ne výchozí patkové písmo
+  assert.match(html, /<p class="zpc-note"><b>ZP MV ČR<\/b> jako jediná/);
+  assert.match(html, /<h4 class="zpc-inst-h4">Stížnosti podle § 16a/);
+  // tabulka servisu (renderServis v pojistovny.js) má scope u všech záhlaví
+  const js = fs.readFileSync(path.join(ROOT, 'src', 'pojistovny.js'), 'utf8');
+  const servis = js.slice(js.indexOf('function renderServis'), js.indexOf('function renderKmen'));
+  assert.deepEqual(bezScope(servis), [], 'zpTablePrev');
+  // celý zdroj modulu: každé <th v šablonách má scope
+  const src = fs.readFileSync(path.join(ROOT, 'src', 'pojistovny-indikatory.js'), 'utf8');
+  assert.deepEqual(bezScope(src), [], 'pojistovny-indikatory.js');
+});

@@ -259,6 +259,8 @@ test('CSS sekce: každá animace/transition má reduced-motion výjimku', () => 
 });
 
 test('zp-interact.js: kontrakt s grafy (třídy, atributy, parametry IO)', () => {
+  // řádky skládaného grafu (stackedRows) dostávají výběrové třídy stejně jako tr[data-zp] (nález Codex, PR #1363)
+  assert.equal((SRC.match(/\.zpv-srow\[data-zp\]/g) || []).length >= 2, true, 'syncMoje i syncPorovnat zahrnují .zpv-srow[data-zp]');
   for (const s of [
     'zpv-anim-ready', "'is-in'", 'data-zpv-anim', '.zpv-count[data-value]', 'data-zpi-init',
     'button.zpv-sort', 'table.zpv-heat', 'aria-sort', 'zpi-tip', "'role', 'status'", "'aria-live', 'polite'",

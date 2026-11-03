@@ -8,8 +8,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
-  rankedBars, segmentedBar, statTiles, meter, indexedLines, dumbbell,
-  heatmap, dotMatrix, coverageMatrix,
+  rankedBars, segmentedBar, stackedRows, statTiles, meter, indexedLines, dumbbell,
+  heatmap, dotMatrix, coverageMatrix, kratkyPopisek,
   foldParts, indexSeries, dodgeLabels, niceTicks, meterSignal, dotScore, diffPct, sortDesc, pct,
   NA_TEXT, ZP_KODY, tableToCsv, csvFilename, stripHtml, csvCell, figureSwitch, readSwitchFromUrl, fmtRozdil,
 } from '../src/zp-viz.js';
@@ -583,4 +583,104 @@ test('rankedBars: minv + maxv dají dvěma grafům stejnou osu', () => {
   const nula = (h) => h.match(/--x:([\d.]+)%" aria-hidden/)?.[1];
   assert.equal(nula(a), '50');
   assert.equal(nula(a), nula(b));
+});
+
+// --- revize UI: pásmo, matice bez součtu, neutrální inventář, stackedRows ----------------
+
+test('rankedBars: ref.kind zone-band — podbarvený pás mezi from a to, střed jen pro aria, osa pojme celé pásmo', () => {
+  const items = [{ kod: '111', label: 'VZP', value: 2.0 }, { kod: '201', label: 'VoZP', value: 6.5 }];
+  const ref = { from: 3, to: 4, value: 3.5, label: 'kritické pásmo 3–4 % výdajů', text: 'kritické pásmo 3–4 % výdajů', kind: 'zone-band' };
+  const h = rankedBars(items, { unit: '%', dec: 1, ref });
+  assert.equal(count(h, /class="zpv-ref zpv-ref--band"/g), 4 - 2, 'pás v každém z dvou řádků');
+  // max osy = 6,5: pás začíná na 3/6,5 = 46,15 % a je široký 1/6,5 = 15,38 %
+  assert.match(h, /zpv-ref--band" style="--x:46\.15%;--w:15\.38%"/);
+  assert.match(h, /<i class="zpv-refkey-sw zpv-refkey-sw--zone"/);
+  assert.match(h, /kritické pásmo 3–4 % výdajů<\/span>/);
+  assert.match(h, /\. kritické pásmo 3–4 % výdajů\./, 'aria zná pásmo');
+  assertOnlyAllowedStyles(h);
+  // pásmo nad nejvyšší hodnotou rozšíří osu
+  const nad = rankedBars([{ kod: '111', label: 'VZP', value: 2 }], { ref });
+  assert.match(nad, /zpv-ref--band" style="--x:75%;--w:25%"/, 'osa končí na to = 4');
+  // bez platných hranic spadne na čáru ve středu
+  const spadne = rankedBars(items, { ref: { value: 3.5, label: 'x', kind: 'zone-band' } });
+  assert.ok(!spadne.includes('zpv-ref--band') && spadne.includes('zpv-ref--line'));
+});
+
+test('rankedBars: labw rozšíří sloupec popisků, na úzkém displeji nejvýš 42 %', () => {
+  assert.match(rankedBars(ZP, { labw: 11 }), /class="zpv-plot zpv-barlist [^"]*" style="--zpv-labw:min\(11em,42%\)"/);
+  assert.ok(!rankedBars(ZP, {}).includes('--zpv-labw'));
+  assertOnlyAllowedStyles(rankedBars(ZP, {}));
+});
+
+test('kratkyPopisek: bez závorek a „celkem“, ořez na hranici slova do max znaků', () => {
+  assert.equal(kratkyPopisek('Lázně (lázeňská léčebně rehabilitační péče)'), 'Lázně');
+  assert.equal(kratkyPopisek('Ambulantní péče celkem'), 'Ambulantní péče');
+  assert.equal(kratkyPopisek('Zdravotnické prostředky na poukazy celkem', 22), 'Zdravotnické…');
+  assert.equal(kratkyPopisek('BankID'), 'BankID');
+  for (const t of ['Ošetřovatelská a rehabilitační péče v zařízeních', 'Nemocnice: léky na specializovaných pracovištích']) assert.ok(kratkyPopisek(t, 22).length <= 22, t);
+  assert.equal(kratkyPopisek(null), '');
+});
+
+test('dotMatrix score:false — bez sloupce se skóre (hlavička i buňky), kolečka zůstávají', () => {
+  const vals = { onko: true, kardio: 'partial', x: false };
+  const h = dotMatrix(ROWS, COLS, (r, c) => vals[c.key], { title: 'Nabídka', score: false });
+  assert.doesNotMatch(h, /zpv-scorehead|zpv-scorecell|role="meter"|zpv-meter/);
+  assert.equal(count(h, /<th scope="col"/g), 3, 'jen sloupce ze zadání (rohová buňka je td)');
+  assert.equal(count(h, /class="zpv-pip zpv-pip--yes zpv-mark"/g), 2);
+  // výchozí chování se skóre se nemění
+  assert.match(dotMatrix(ROWS, COLS, (r, c) => vals[c.key], { scoreLabel: 'n/3' }), /zpv-scorehead">n\/3</);
+});
+
+test('coverageMatrix tone neutral — ikony ● ◐ ○ bez stavových barev a bez ✕, text i legenda zůstávají', () => {
+  const st = { onko: 'ano', kardio: 'castecne', x: 'ne' };
+  const h = coverageMatrix(ROWS, COLS, (r, c) => st[c.key], { title: 'Inventář', tone: 'neutral', labels: { ne: 'nenalezeno' } });
+  assert.doesNotMatch(h, /zpv-tone-(good|warn|bad)/);
+  assert.ok(!h.includes('✕') && !h.includes('✓') && !h.includes('½'));
+  assert.equal(count(h, /zpv-cov-ic zpv-cov-ic--full" aria-hidden="true">●<\/span><span class="zpv-cov-tx">ano</g), 2);
+  assert.equal(count(h, /zpv-cov-ic zpv-cov-ic--part" aria-hidden="true">◐<\/span><span class="zpv-cov-tx">částečně</g), 2);
+  assert.equal(count(h, /zpv-cov-ic zpv-cov-ic--none" aria-hidden="true">○<\/span><span class="zpv-cov-tx">nenalezeno</g), 2);
+  assert.match(h, /<table class="zpv-matrix zpv-covtable" data-tone="neutral"/);
+  assert.match(h, /<ul class="zpv-legend zpv-legend--cov" data-tone="neutral">/);
+  // legenda: tři neutrální ikony + nedohledáno
+  assert.match(h.slice(h.indexOf('zpv-legend--cov')), /●<\/span>ano[\s\S]*◐<\/span>částečně[\s\S]*○<\/span>nenalezeno/);
+  // výchozí tón (status) se nemění
+  assert.match(coverageMatrix(ROWS, COLS, (r, c) => st[c.key]), /zpv-tone-good/);
+});
+
+test('stackedRows: jedna figura — řádek = ZP, 100% pruh se segmenty, jedna legenda, jedno dvojče', () => {
+  const rows = [{ kod: '111', label: 'VZP ČR' }, { kod: '201', label: 'VoZP' }, { kod: '209', label: 'ZPŠ' }];
+  const parts = [{ key: 'amb', label: 'Ambulantní' }, { key: 'luz', label: 'Lůžková' }, { key: 'leky', label: 'Léky' }];
+  const val = { 111: { amb: 40, luz: 50, leky: 10 }, 201: { amb: 30, luz: 60, leky: 10 }, 209: {} };
+  const h = stackedRows(rows, parts, (r, p) => val[r.kod][p.key] ?? null, { title: 'Segmenty 2024', unit: 'mld Kč', dec: 1, source: 'MZ' });
+  assert.equal(count(h, /<figure /g), 1);
+  assert.equal(count(h, /<ul class="zpv-legend zpv-legend--stack">/g), 1, 'jedna legenda nahoře');
+  assert.equal(count(h, /<i class="zpv-sw" data-slot="\d"/g), 3);
+  assert.equal(count(h, /<div class="zpv-srow" data-zp="\d+">/g), 3);
+  assert.equal(count(h, /class="zpv-seg zpv-mark" data-zp="\d+" data-key="(amb|luz|leky)" data-slot="\d"/g), 6, 'segmenty nesou data-zp řádku i data-key části');
+  assert.match(h, /data-key="luz" data-slot="1" data-zpv-anim="seg" style="width:50%;--i:0"/);
+  assert.ok(h.includes('>50 %<') && h.includes('>40 %<'), 'popisek podílu v segmentech ≥ 14 %');
+  assert.ok(!h.includes('>10 %<'), 'segment pod 14 % bez popisku');
+  assert.match(h, /<span class="zpv-na">nedohledáno<\/span>/, 'ZPŠ bez dat');
+  assert.equal(twinRows(h), 3);
+  assert.match(h, /<details class="zpv-table" data-csv-title="Segmenty 2024" data-csv-source="MZ">/);
+  assert.match(h, /<th scope="col" class="zpv-num">Ambulantní<\/th>/);
+  assert.match(h, /<th scope="row">VZP ČR<\/th><td class="zpv-num">40,0 %<\/td><td class="zpv-num">50,0 %<\/td>/);
+  assert.match(h, /role="group" aria-label="Segmenty 2024: VZP ČR: Ambulantní 40,0 %/);
+  assert.doesNotMatch(h, /is-colored/, 'barvu nese část, ne pojišťovna');
+  assertFocusableMarks(h);
+  assertOnlyAllowedStyles(h);
+  assert.ok(stackedRows([], parts, () => 1, {}).includes(NA_TEXT));
+  assert.ok(stackedRows(rows, [], () => 1, {}).includes(NA_TEXT));
+  assertEscaped(stackedRows([{ kod: '111', label: EVIL }], [{ key: 'a', label: EVIL }], () => 1, { title: EVIL }));
+});
+
+test('CSS: pás reference, čára pod popisky, rozbíhavé bary na mobilu, stackedRows a neutrální inventář', () => {
+  assert.match(CSS, /\.zpv-ref--band \{ left: var\(--x\); width: var\(--w\);/);
+  assert.match(CSS, /\.zpv-ref \{[^}]*z-index: 0;/);
+  assert.match(CSS, /\.zpv-has-refline \.zpv-val \{ z-index: 2; padding: 0 3px; margin-left: -3px; background: var\(--paper\); \}/);
+  const mob = /@media \(max-width: 640px\) \{\s*\.zpv-has-neg \.zpv-row \{[^}]*grid-template-columns: minmax\(0, 1fr\)[\s\S]*?\.zpv-has-neg \.zpv-val, \.zpv-has-neg \.zpv-val--neg \{[^}]*bottom: 100%/;
+  assert.match(CSS, mob, 'hodnota nad barem, bar na plnou šířku');
+  assert.match(CSS, /\.zpv-srow \{ display: grid;/);
+  assert.match(CSS, /main\[data-moje-zp\] \.zpv-stacked \.zpv-srow:not\(\.is-moje\)/);
+  assert.match(CSS, /\.zpv-covtable\[data-tone="neutral"\] \.zpv-cov\[data-state\] \{ background: transparent; \}/);
 });

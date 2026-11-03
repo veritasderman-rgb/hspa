@@ -75,14 +75,13 @@ const v1 = (v, dec, unit) => (isNum(v) ? `${fmtKc(v, dec)}${unit ? ` ${unit}` :
 const signed = (v) => (isNum(v) ? `${v > 0 ? '+' : v < 0 ? '−' : ''}${fmtKc(Math.abs(v), 1)} %` : NA_SPAN);
 const mil = (n) => (isNum(n) ? `${fmtKc(n / 1e6, 2)} mil.` : NA_SPAN);
 
-/** Řádky karty: popisek, formátovaná hodnota a rozdíl (moje − porovnat) v jednotce řádku; rozdíl jen u čísel. */
+/** Řádky karty (bez součtu funkcí aplikace: součet „kdo umí víc“ nic neříká): popisek, formátovaná hodnota a rozdíl (moje − porovnat) v jednotce řádku; rozdíl jen u čísel. */
 const KARTA_RADKY = [
   { dt: 'Pojištěnců (CRP 2025)', dd: (s) => mil(s.pojistenci), diff: (a, b) => (isNum(a.pojistenci) && isNum(b.pojistenci) ? fmtRozdil(a.pojistenci / 1e6, b.pojistenci / 1e6, 2, 'mil.') : null) },
   { dt: 'Podíl na trhu', dd: (s) => v1(s.podil, 1, '%'), diff: (a, b) => fmtRozdil(a.podil, b.podil, 1, 'p. b.') },
   { dt: 'Senioři 65+', dd: (s) => v1(s.senior, 1, '%'), diff: (a, b) => fmtRozdil(a.senior, b.senior, 1, 'p. b.') },
   { dt: 'Kmen 2015 → 2025', dd: (s) => signed(s.rust), diff: (a, b) => fmtRozdil(a.rust, b.rust, 1, 'p. b.') },
   { dt: 'Rezerva konec 2026', dd: (s) => (isNum(s.rezerva) ? `${fmtKc(s.rezerva, 1)} % výdajů` : NA_SPAN), diff: (a, b) => fmtRozdil(a.rezerva, b.rezerva, 1, 'p. b.') },
-  { dt: 'Funkce aplikace', dd: (s) => (isNum(s.app) ? `${fmtKc(s.app, s.app % 1 ? 1 : 0)} z ${s.appMax}` : NA_SPAN), diff: (a, b) => fmtRozdil(a.app, b.app, 1, 'funkcí') },
 ];
 
 const kartaRow = (dt, dd) => `<div><dt>${dt}</dt><dd>${dd}</dd></div>`;
@@ -194,9 +193,9 @@ export function temaKartyHtml(skupina = 'pojistenci', stranky = ZP_STRANKY) {
     + `<span class="zpc-tema-co">${esc(s.co || '')}</span></a></li>`).join('');
 }
 
-function tile(figureHtml, temaId) {
+function tile(figureHtml, temaId, kotva = '') {
   const s = zpStrankaById(temaId);
-  const more = s ? `<a class="zpc-ov-more" href="${esc(s.href)}">Celé téma<span class="sr-only">: ${esc(s.label)}</span><span aria-hidden="true"> →</span></a>` : '';
+  const more = s ? `<a class="zpc-ov-more" href="${esc(s.href)}${kotva ? `#${esc(kotva)}` : ''}">Celé téma<span class="sr-only">: ${esc(s.label)}</span><span aria-hidden="true"> →</span></a>` : '';
   return `<div class="zpc-ov-tile" data-tema="${esc(temaId)}">${figureHtml}${more}</div>`;
 }
 
@@ -220,9 +219,9 @@ export function buildPrehled({ d, a, p, tiles, kmen, prerozdeleni }) {
     grafy.push(tile(rankedBars(saldo.items, saldo.opts), 'penize'));
   }
   if (kmen?.nzs) {
-    grafy.push(tile(kmen.nzs.std ? dumbbell(kmen.nzs.dbItems, kmen.nzs.dbOpts) : rankedBars(kmen.nzs.items, kmen.nzs.opts), 'kmen'));
+    grafy.push(tile(kmen.nzs.std ? dumbbell(kmen.nzs.dbItems, kmen.nzs.dbOpts) : rankedBars(kmen.nzs.items, kmen.nzs.opts), 'kmen', 'zpChartNzs'));
   }
-  if (kmen?.zust) grafy.push(tile(rankedBars(kmen.zust.items, kmen.zust.opts), 'kmen'));
+  if (kmen?.zust) grafy.push(tile(rankedBars(kmen.zust.items, kmen.zust.opts), 'penize', 'hospodareni-2024'));
   return {
     hero: tiles ? statTiles(tiles, { title: 'Klíčová čísla systému' }) : '',
     grafy: grafy.join(''),
