@@ -60,6 +60,8 @@ const PAGES = [
   'pojistovny-aplikace.html',
   'pojistovny-gramotnost.html',
   'pojistovny-metodika.html',
+  'pojistovny-instituce.html',
+  'pojistovna.html?zp=111',
   'indikator-nadeje_doziti_total.html',
   'indicator.html?id=nadeje_doziti_total',
   'clanek-vydaje-prevence.html',

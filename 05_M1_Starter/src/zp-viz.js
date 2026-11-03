@@ -785,7 +785,7 @@ export function dotScore(values) {
  * @param {{title?, sub?, scoreLabel?, source?, rowHeader?}} opts
  */
 export function dotMatrix(rows, cols, cell, opts = {}) {
-  const { scoreLabel = 'n/10', rowHeader = '' } = opts;
+  const { scoreLabel = 'n/10', scoreWord = 'funkcí', rowHeader = '' } = opts;
   const R = (Array.isArray(rows) ? rows : []).filter(Boolean);
   const C = (Array.isArray(cols) ? cols : []).filter(Boolean);
   if (!R.length || !C.length) return emptyFigure('dots', opts);
@@ -806,7 +806,7 @@ export function dotMatrix(rows, cols, cell, opts = {}) {
     const scoreText = sc.known ? `${formatNumberCz(sc.yes, { maxDecimals: 1 })}/${sc.known}` : NA_TEXT;
     const unknown = sc.total - sc.known;
     const m = sc.known
-      ? meter(sc.yes, { max: sc.known, label: `${r.label}: ${sc.yes} z ${sc.known} funkcí`, text: scoreText })
+      ? meter(sc.yes, { max: sc.known, label: `${r.label}: ${sc.yes} z ${sc.known} ${scoreWord}`, text: scoreText })
       : meter(null);
     const note = unknown && sc.known ? `<span class="zpv-scorenote">${unknown}× ${NA_TEXT}</span>` : '';
     return `<tr${id}>${rowHead(r)}${cells}<td class="zpv-scorecell">${m}${note}</td></tr>`;

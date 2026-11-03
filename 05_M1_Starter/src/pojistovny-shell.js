@@ -14,7 +14,7 @@
 // klíč hspa-moje-zp).
 //
 // Záložky jsou ve dvou skupinách (ZP_SKUPINY): „pro pojištěnce“ (Přehled, Kmen, Peníze, Prevence,
-// Aplikace, Zdravotní gramotnost) vlevo a „pro redakci a data“ (Metodika, Indikátory) vpravo,
+// Aplikace, Zdravotní gramotnost, Instituce) vlevo a „pro redakci a data“ (Metodika, Indikátory) vpravo,
 // světlejším písmem a za svislým oddělovačem. Stáří dat pod nimi řeší src/pojistovny-stari.js.
 //
 // Čisté funkce (testované bez DOM): zpStrankaById, zpStrankyVSkupine, zpShellHtml,
@@ -48,7 +48,7 @@ export const ZP_STRANKY = [
   {
     id: 'kmen', skupina: 'pojistenci', href: 'pojistovny-kmen.html', label: 'Kmen a hospodaření', kicker: 'CRP 2025 · MZ a MF 2024 · ZPP 2026',
     veta: 'Kdo koho pojišťuje, jak starý kmen nese a kolik stojí jeho péče. Hospodaření a rezervy jsou na stránce Peníze.',
-    co: 'Karty pojišťoven, vývoj kmene, věk kmene, kraje, síť odborností',
+    co: 'Karty pojišťoven, vývoj kmene, věk kmene, kraje, měsíční kmen',
   },
   {
     id: 'penize', skupina: 'pojistenci', href: 'pojistovny-penize.html', label: 'Peníze', kicker: 'MZ 2015–2024 · přerozdělení 2019–2026',
@@ -69,6 +69,11 @@ export const ZP_STRANKY = [
     id: 'gramotnost', skupina: 'pojistenci', href: 'pojistovny-gramotnost.html', label: 'Zdravotní gramotnost', kicker: 'V přípravě · druhé téma PS',
     veta: 'Jak pojišťovny hledají rizikové pojištěnce a podporují zdravotní gramotnost.',
     co: 'Rizikové skupiny, návrh dotazníků, souhrnné odpovědi',
+  },
+  {
+    id: 'instituce', skupina: 'pojistenci', href: 'pojistovny-instituce.html', label: 'Instituce', kicker: 'Zákony · VZ 2024–2025 · weby 2026',
+    veta: 'Kdo pojišťovnu řídí, kdo ji kontroluje, jak velký aparát má a co nabízí poskytovatelům; co publikuje o dostupnosti péče.',
+    co: 'Zákon a orgány, zaměstnanci, limit provozu, smluvní programy, dostupnost a § 16, síť odborností',
   },
   {
     id: 'metodika', skupina: 'redakce', href: 'pojistovny-metodika.html', label: 'Metodika a semafor', kicker: 'Derivát metodiky Barometru',

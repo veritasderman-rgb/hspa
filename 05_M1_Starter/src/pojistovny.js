@@ -9,6 +9,8 @@
 //   data/pojistovny-prerozdeleni.json  výběr a částka po přerozdělení po ZP (A1.2; stránka Peníze a graf salda na přehledu)
 //   data/pojistovny-hospodareni-rady.json řady hospodaření MZ 2015–2024 (A1.1; stránka Peníze, státní pojištěnci v kartě ZP)
 //   data/pojistovny-segmenty.json      náklady podle segmentů (A1.4; stránka Peníze)
+//   data/pojistovny-instituce.json, -smluvni-programy.json, -dostupnost.json  (A2.1, A3.1, A3.2; stránka Instituce, renderuje src/pojistovny-instituce.js)
+//   pojistovna.html?zp=<kód>          profil jedné pojišťovny (A2.3; skládá src/pojistovna.js ze všech datasetů)
 // Každý soubor je nepovinný: chybí-li, modul vypíše stav „data zatím nejsou k dispozici“ a zbytek stránky funguje.
 //
 // Tenhle soubor drží hero, modul 3 (kmen a hospodaření; P1.4 + P3.1 + P3.4) a init.
@@ -41,6 +43,8 @@ import { renderPrehled } from './pojistovny-prehled.js';
 import { renderKmenMesicni } from './pojistovny-kmen-mesicni.js';
 import { renderStariDat } from './pojistovny-stari.js';
 import { renderPenize, statniKarta } from './pojistovny-penize.js';
+import { renderInstituce } from './pojistovny-instituce.js';
+import { renderProfil, zpZUrl } from './pojistovna.js';
 
 // Re-export čistých funkcí kvůli tests/pojistovny.test.js.
 export { fmtKc, levelBadge, miniIndexSvg };
@@ -286,7 +290,7 @@ function cardHtml(z, R = null) {
     + (st.dolozeno ? '' : ` <small class="zpc-std" title="Standardizace (metodika § 4.1 a § 4.2): ${STD_PENDING}.">nestandardizováno</small>`);
   const mini = miniIndexSvg((c.pojistenci_trend || []).map((t) => ({ year: t.year, value: t.insured })), { label: z.zkratka });
   return `<article class="zpc-card" id="zp-${esc(z.kod)}" data-zp="${esc(z.kod)}" style="--c:var(--zp-${esc(z.kod)})">
-      <header><span class="zpc-kod">${esc(z.kod)}</span><h3>${esc(z.zkratka)}</h3><span class="zpc-full">${esc(z.nazev)}</span></header>
+      <header><span class="zpc-kod">${esc(z.kod)}</span><h3>${esc(z.zkratka)}</h3><a class="zpc-card-prof" href="pojistovna.html?zp=${esc(z.kod)}" aria-label="Profil ${esc(z.zkratka)}" title="Profil ${esc(z.zkratka)}: všechny hodnoty na jedné stránce">Profil →</a><span class="zpc-full">${esc(z.nazev)}</span></header>
       <div class="zpc-kpi"><b>${fmtKc(c.pojistenci / 1e6, 2)} mil.</b><span>pojištěnců ${esc(c.rok ?? 2025)} · ${fmtKc(c.podil_trhu_pct, 1)} % trhu</span>
         <div class="zpc-mini-wrap">${mini}<span class="zpc-mini-cap">kmen, 2010 = 100</span></div></div>
       <dl>
@@ -430,16 +434,22 @@ function renderDotazniky(otazky, agregaty) {
 
 /** Které datasety stránka potřebuje — podle kontejnerů, které na ní jsou. */
 export const POTREBA = {
-  aplikace: ['zpPrehled', 'zpAppMatrix', 'zpRizikove', 'zpDalsi'],
-  prevence: ['zpPrehled', 'zpPrevMatrix', 'zpFpStruktura', 'zpOdpovediMatrix'],
+  aplikace: ['zpPrehled', 'zpAppMatrix', 'zpRizikove', 'zpDalsi', 'zpProfil'],
+  prevence: ['zpPrehled', 'zpPrevMatrix', 'zpFpStruktura', 'zpOdpovediMatrix', 'zpProfil'],
   otazky: ['zpOtazky', 'zpDotaznik'],
   agregaty: ['zpDotaznikAgregace'],
   kmenMesicni: ['zpKmenMesicni', 'zpKmenPrestupy'],
   /** Přerozdělení (A1.2): stránka Peníze a graf salda na přehledu. */
-  prerozdeleni: ['zpPrerozdeleni', 'zpOvGrafy'],
+  prerozdeleni: ['zpPrerozdeleni', 'zpOvGrafy', 'zpProfil'],
   /** Řady hospodaření MZ (A1.1): Peníze, státní pojištěnci v kartách ZP na Kmeni. */
-  rady: ['zpRady', 'zpStatni', 'zpFondProvoz', 'zpSegmenty', 'zpCards'],
-  segmenty: ['zpSegmenty'],
+  rady: ['zpRady', 'zpStatni', 'zpFondProvoz', 'zpSegmenty', 'zpCards', 'zpInstAparat', 'zpProfil'],
+  segmenty: ['zpSegmenty', 'zpProfil'],
+  /** Instituce (A2.1, A3.1, A3.2): orgány, smluvní programy, dostupnost; profil čte všechny tři. */
+  instituce: ['zpInstOrgany', 'zpProfil'],
+  smluvniProgramy: ['zpInstProgramy', 'zpProfil'],
+  dostupnost: ['zpInstDostupnost', 'zpProfil'],
+  /** Profil pojišťovny (A2.3): stížnosti navíc k ostatním datasetům. */
+  profil: ['zpProfil'],
 };
 
 async function init() {
@@ -451,7 +461,7 @@ async function init() {
   }
   const shell = renderZpShell();
   const skip = Promise.resolve(null);
-  const [d, a, p, o, agg, km, pr, rady, seg] = await Promise.all([
+  const [d, a, p, o, agg, km, pr, rady, seg, inst, prog, dost, stiz] = await Promise.all([
     loadJson('data/pojistovny.json'),
     has(POTREBA.aplikace) ? loadJson('data/pojistovny-aplikace.json') : skip,
     has(POTREBA.prevence) ? loadJson('data/pojistovny-prevence.json') : skip,
@@ -461,6 +471,10 @@ async function init() {
     has(POTREBA.prerozdeleni) ? loadJson('data/pojistovny-prerozdeleni.json') : skip,
     has(POTREBA.rady) ? loadJson('data/pojistovny-hospodareni-rady.json') : skip,
     has(POTREBA.segmenty) ? loadJson('data/pojistovny-segmenty.json') : skip,
+    has(POTREBA.instituce) ? loadJson('data/pojistovny-instituce.json') : skip,
+    has(POTREBA.smluvniProgramy) ? loadJson('data/pojistovny-smluvni-programy.json') : skip,
+    has(POTREBA.dostupnost) ? loadJson('data/pojistovny-dostupnost.json') : skip,
+    has(POTREBA.profil) ? loadJson('data/pojistovny-stiznosti.json') : skip,
   ]);
   if (has(['zpPrehled'])) {
     renderPrehled({ d, a, p, tiles: d ? heroTiles(d, { bezFondu: true }) : null, kmen: d ? buildKmenCharts(d) : null, prerozdeleni: pr });
@@ -472,6 +486,8 @@ async function init() {
   if (has(['zpCards', 'zpChartShare'])) renderKmen(d, rady);
   if (has(['zpTableFin', 'zpChartZust', 'zpChartProvoz', 'zpChartYoy'])) renderHospodareni(d);
   if (has(['zpPrerozdeleni', 'zpRady', 'zpStatni', 'zpSegmenty', 'zpFondProvoz'])) renderPenize({ PR: pr, R: rady, S: seg });
+  if (has(['zpInstOrgany', 'zpInstAparat', 'zpInstProgramy', 'zpInstDostupnost'])) renderInstituce({ I: inst, SP: prog, D: dost, R: rady });
+  if (has(['zpProfil'])) renderProfil({ kod: zpZUrl(location.search), data: { P: d, A: a, PV: p, PR: pr, R: rady, S: seg, I: inst, SP: prog, D: dost, ST: stiz } });
   if (has(['zpTablePrev'])) renderServis(d);
   if (has(POTREBA.kmenMesicni)) renderKmenMesicni(km);
   if (has(POTREBA.otazky)) { renderOtazky(o); renderDotazniky(o, agg); }
@@ -479,7 +495,7 @@ async function init() {
   await initZpInteract(doc);
   syncCards(doc.querySelector('main')?.getAttribute('data-moje-zp') || null);
   // stáří dat: věta pod nadpisem + sbalená tabulka nad patičkou Zdroje, z datasetů, které stránka právě načetla
-  const stari = renderStariDat({ datasety: { pojistovny: d, prevence: p, aplikace: a, otazky: o, prerozdeleni: pr, hospodareniRady: rady, segmenty: seg } }).catch(() => null);
+  const stari = renderStariDat({ datasety: { pojistovny: d, prevence: p, aplikace: a, otazky: o, prerozdeleni: pr, hospodareniRady: rady, segmenty: seg, instituce: inst, smluvniProgramy: prog, dostupnost: dost } }).catch(() => null);
   await Promise.all([shell, stari]);
   refreshZdrojeJson(doc);
 }

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kmen a hospodaření — Srovnávač pojišťoven, pracovní verze · HSPA Monitor</title>
-<meta name="description" content="Kmen sedmi zdravotních pojišťoven: tržní podíl, vývoj kmene od roku 2010, věk kmene, náklady na pojištěnce, kraje a síť smluvních odborností (prototyp). Pracovní verze.">
+<meta name="description" content="Kmen sedmi zdravotních pojišťoven: tržní podíl, vývoj kmene od roku 2010, věk kmene, náklady na pojištěnce, kraje a měsíční kmen. Pracovní verze.">
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Kmen a hospodaření — Srovnávač zdravotních pojišťoven">
@@ -17,8 +17,7 @@
     trida: C (nová stránka, hodnocení pojmenovaných institucí)
     stranka: kmen (P1.6, PLAN-SROVNAVAC-POJISTOVEN.md § 2.8)
     zdroje: data/pojistovny*.json — každá hodnota má zdroj a rok
-    sit: data/pojistovny-sit.json — prototyp (docs/pojistovny-sit.md), horní odhad, stav 31. 12. 2024; věta o omezení metody nad grafem povinná
-    sit-seznamy: blok seznamy_pojistoven + srovnani (ingest/fetchers/pojistovny-sit-seznamy.js) — seznamy VZP ČR a ČPZP s odborností, VoZP bez odborností, ostatní ZP „bez seznamu“; docs/pojistovny-sit.md kap. 8
+    sit: síť odborností (prototyp) se od A2.3 přesunula na pojistovny-instituce.html
 -->
 </head>
 <body>
@@ -66,10 +65,6 @@
       <div class="zpc-chart" id="zpChart65"></div>
       <div class="zpc-chart" id="zpChartNzs"></div>
     </div>
-    <h3 class="section-title zpc-h3" id="sit-odbornosti"><span>Síť smluvních odborností (prototyp)</span></h3>
-    <p class="zpc-note zpc-sit-limit"><b>Omezení metody.</b> Jde o horní odhad smluvních pracovišť, stav k 31. 12. 2024; u poliklinik a nemocnic je nadhodnocený. Smlouva se uzavírá na pracoviště a odbornost (IČP), číselník ÚZIS ale nese jen zařízení (IČZ). Pět velkých pojišťoven (VZP ČR, VoZP, ČPZP, OZP, ZP MV ČR) má prakticky stejně širokou síť: rozdíly mezi nimi jsou menší než chyba metody, pořadí velkých pojišťoven z těchto čísel nevyvozujte. U VZP ČR a ČPZP je vedle odhadu i číslo z jejich vlastního seznamu smluvních poskytovatelů (datum seznamu je u tabulky „Podle seznamu pojišťovny“).</p>
-    <p class="zpc-note"><b>Pobočky.</b> „Počet poboček“ dnes není srovnatelné číslo: VoZP, OZP a ZP MV ČR počítají v jednom čísle různé kategorie, od regionálního ředitelství po poštovního partnera. Srovnávat je lze až po sjednocení definice a ručním spočtení.</p>
-    <div id="zpSit" class="zpc-sit"></div>
     <div class="zpc-accs">
       <details class="zpc-acc">
         <summary>Jak číst modul a odkud jsou data · 4</summary>
@@ -100,6 +95,5 @@
 
 <script type="module" src="src/pojistovny.js"></script>
 <script type="module" src="src/pojistovny-kraje.js"></script>
-<script type="module" src="src/pojistovny-sit.js"></script>
 </body>
 </html>

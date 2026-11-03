@@ -90,16 +90,25 @@ export function ovKartaHtml(s) {
     + row('Rezerva konec 2026', isNum(s.rezerva) ? `${fmtKc(s.rezerva, 1)} % výdajů` : NA_SPAN)
     + row('Funkce aplikace', isNum(s.app) ? `${fmtKc(s.app, s.app % 1 ? 1 : 0)} z ${s.appMax}` : NA_SPAN)
     + '</dl>'
-    + `<p class="zpc-ov-karta-more"><a href="pojistovny-kmen.html#zp-${esc(s.kod)}">Karta ${esc(s.zkratka)} v tématu Kmen a hospodaření →</a></p>`
+    + `<p class="zpc-ov-karta-more"><a href="pojistovna.html?zp=${esc(s.kod)}">Profil ${esc(s.zkratka)} →</a> · `
+    + `<a href="pojistovny-kmen.html#zp-${esc(s.kod)}">Karta v tématu Kmen a hospodaření →</a></p>`
     + '</article>';
 }
 
-/** Sedm malých karet (bez výběru): tlačítka, klepnutí = výběr „Moje pojišťovna“. */
-export function ovMiniKartyHtml(list) {
-  const items = (list || []).map((s) => `<li><button type="button" class="zpc-ov-mini" data-ov-zp="${esc(s.kod)}" title="Vybrat ${esc(s.zkratka)} jako moji pojišťovnu">`
-    + `<span class="zpc-ov-mini-h">${dot(s.kod)}<b>${esc(s.zkratka)}</b></span>`
-    + `<span class="zpc-ov-mini-v">${mil(s.pojistenci)} · ${v1(s.podil, 1, '%')}</span></button></li>`).join('');
-  return `<ul class="zpc-ov-minis" aria-label="Sedm pojišťoven: kmen a podíl na trhu (klepnutím vyberete svou)">${items}</ul>`;
+/**
+ * Sedm malých karet (bez výběru): tlačítka, klepnutí = výběr „Moje pojišťovna“. S `href` (funkce kód → adresa)
+ * jsou to odkazy (rozcestník profilů pojistovna.html).
+ */
+export function ovMiniKartyHtml(list, { href = null } = {}) {
+  const items = (list || []).map((s) => {
+    const inner = `<span class="zpc-ov-mini-h">${dot(s.kod)}<b>${esc(s.zkratka)}</b></span>`
+      + `<span class="zpc-ov-mini-v">${mil(s.pojistenci)} · ${v1(s.podil, 1, '%')}</span>`;
+    return typeof href === 'function'
+      ? `<li><a class="zpc-ov-mini" href="${esc(href(s.kod))}" title="Profil ${esc(s.zkratka)}">${inner}</a></li>`
+      : `<li><button type="button" class="zpc-ov-mini" data-ov-zp="${esc(s.kod)}" title="Vybrat ${esc(s.zkratka)} jako moji pojišťovnu">${inner}</button></li>`;
+  }).join('');
+  const aria = typeof href === 'function' ? 'Sedm pojišťoven: profil (odkaz)' : 'Sedm pojišťoven: kmen a podíl na trhu (klepnutím vyberete svou)';
+  return `<ul class="zpc-ov-minis" aria-label="${aria}">${items}</ul>`;
 }
 
 const OBLAST_KRATKE = {

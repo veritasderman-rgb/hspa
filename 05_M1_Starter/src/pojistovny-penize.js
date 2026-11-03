@@ -452,6 +452,43 @@ export function buildFondProvoz(R) {
   };
 }
 
+// ---------------------------------------------------------------- profil pojišťovny (A2.3)
+
+/** Řada jedné pojišťovny a ČR (indexedLines) pro profil; ukazatel bez indexového typu nebo bez dat pojišťovny = null. */
+export function buildRadyKarta(R, ukazatel, kod) {
+  const ch = buildRadyChart(R, ukazatel, null);
+  if (ch.typ !== 'index') return null;
+  const mine = ch.series.filter((s) => String(s.kod) === String(kod));
+  if (!mine.length || !mine[0].points.some((p) => isNum(p.value))) return null;
+  const zkr = mine[0].label;
+  return {
+    ukazatel: ch.ukazatel, roky: ch.roky,
+    series: [...mine, ...ch.series.filter((s) => s.key === 'cr')],
+    opts: { ...ch.opts, title: `${ch.ukazatel.label}: ${zkr}${ch.series.some((s) => s.key === 'cr') ? ' a ČR' : ''} ${ch.roky[0] ?? ''}–${ch.roky[ch.roky.length - 1] ?? ''}`.replace(/\s+/g, ' ').trim() },
+  };
+}
+
+/** Pruh segmentů jedné pojišťovny (část buildSegmenty); bez dat null. */
+export function buildSegmentyKarta(S, kod) {
+  const ch = buildSegmenty(S, null, { kod });
+  const b = ch?.bary.find((x) => String(x.kod) === String(kod));
+  if (!b || !b.parts.some((p) => isNum(p.value))) return null;
+  return { rok: ch.rok, zkratka: b.zkratka, parts: b.parts, opts: { ...b.opts, title: `Náklady na zdravotní služby podle segmentů ${ch.rok}: ${b.zkratka}`, sub: 'Podíl segmentů na nákladech na zdravotní služby; 100 % = náklady celkem. Složení ovlivňuje i věk kmene, nejde o hodnocení.' } };
+}
+
+/** Relativní saldo přerozdělení jedné pojišťovny za poslední celý rok; bez dat null. */
+export function buildSaldoKarta(PR, kod) {
+  const rok = rokPrerozdeleni(PR);
+  const z = zpList(PR).find((x) => String(x.kod) === String(kod));
+  const r = z?.rocne?.[rok];
+  if (!r || !isNum(r.saldo_relativni_mld)) return null;
+  return {
+    rok, zkratka: z.zkratka, mld: r.saldo_relativni_mld,
+    pct: isNum(r.saldo_relativni_pct_vybraneho) ? r.saldo_relativni_pct_vybraneho : null,
+    naPojistence: isNum(r.saldo_relativni_na_pojistence_kc) ? r.saldo_relativni_na_pojistence_kc : null,
+  };
+}
+
 // ---------------------------------------------------------------- DOM
 
 const stav = { ukazatel: UKAZATEL_VYCHOZI, rok: null, segment: null, vyber: 'vse' };

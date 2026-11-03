@@ -54,11 +54,12 @@ test('pojistovny.json: semafor obsahuje všech 6 oblastí a jen povolené stavy'
 const STRANKY = {
   'pojistovny.html': ['zpHeroStats', 'zpMojeZp', 'zpOvKarta', 'zpPrehled', 'zpOvGrafy', 'zpOvSemafor', 'zpOvTemata'],
   'pojistovny-kmen.html': ['zpHeroStats', 'zpChartShare', 'zpCards', 'zpKraje', 'zpChartTrend', 'zpChartGrowth', 'zpKmenMesicni', 'zpKmenPrestupy', 'zpChart65', 'zpChartNzs',
-    'zpSit', 'zpNotes', 'zpChybi'],
+    'zpNotes', 'zpChybi'],
   'pojistovny-penize.html': ['zpPrerozdeleni', 'zpRady', 'zpStatni', 'zpSegmenty', 'zpFondProvoz', 'zpTableFin', 'zpChartZust', 'zpChartProvoz', 'zpChartYoy'],
   'pojistovny-prevence.html': ['zpPrevMatrix', 'zpPrevProc', 'zpPrevOnko', 'zpPrevDusevni', 'zpFpStruktura', 'zpDolozene', 'zpMereni', 'zpOdpovediMatrix', 'zpOdpovedi'],
   'pojistovny-aplikace.html': ['zpAppMatrix', 'zpAppFunkce', 'zpAppKriteria', 'zpAppSummary', 'zpAppNotes', 'zpTablePrev', 'zpStiznosti', 'zpOpendata'],
   'pojistovny-gramotnost.html': ['zpRizikove', 'zpOtazky', 'zpDalsi', 'zpDotaznik', 'zpDotaznikAgregace'],
+  'pojistovny-instituce.html': ['zpInstOrgany', 'zpInstAparat', 'zpInstProgramy', 'zpInstDostupnost', 'zpSit'],
   'pojistovny-metodika.html': ['zpSemafor', 'zpOtazky', 'zpZadosti', 'zpVerifikace'],
   'pojistovny-indikatory.html': ['zpIndStrucne', 'zpIndKdo', 'zpIndKontrakt', 'zpIndAuto', 'zpIndDatasety', 'zpIndNavrhy', 'zpIndMezery'],
 };
@@ -116,7 +117,7 @@ test('P1.6: přehled je general view — žádné tabulky ani dlouhé akordeony,
 });
 
 test('P1.6: síť odborností — povinné věty o omezení metody a o pobočkách nad grafem', () => {
-  const html = readPage('pojistovny-kmen.html');
+  const html = readPage('pojistovny-instituce.html');
   const at = html.indexOf('id="zpSit"');
   const before = html.slice(html.indexOf('id="sit-odbornosti"'), at);
   assert.match(before, /horní odhad smluvních pracovišť, stav k 31\. 12\. 2024/);
@@ -141,7 +142,7 @@ test('middleware.js: matcher pokrývá přehled, všech pět podstránek a data,
   const re = config.matcher.map((m) => new RegExp(`^${m.replace(/[.]/g, '\\.').replace(/:path\*/, '.*')}$`));
   const hit = (u) => re.some((r) => r.test(u));
   for (const u of ['/pojistovny', '/pojistovny.html', '/pojistovny-kmen.html', '/pojistovny-penize.html', '/pojistovny-prevence.html', '/pojistovny-aplikace.html',
-    '/pojistovny-gramotnost.html', '/pojistovny-metodika.html', '/pojistovny-indikatory.html', '/pojistovny-kmen', '/data/pojistovny.json', '/data/pojistovny-sit.json', '/data/pojistovny-indikatory.json']) {
+    '/pojistovny-gramotnost.html', '/pojistovny-metodika.html', '/pojistovny-indikatory.html', '/pojistovny-instituce.html', '/pojistovna.html', '/pojistovna', '/pojistovny-kmen', '/data/pojistovny.json', '/data/pojistovny-sit.json', '/data/pojistovny-indikatory.json']) {
     assert.ok(hit(u), `${u} musí být za heslem`);
   }
   for (const u of ['/pojistenci.html', '/index.html', '/data/pojistenci-d5-zp.json', '/src/pojistovny.js', '/clanek-pojistne-plany-2026.html']) {

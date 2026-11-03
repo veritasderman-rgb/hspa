@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instituce — Srovnávač pojišťoven, pracovní verze · HSPA Monitor</title>
+<meta name="description" content="Instituce sedmi zdravotních pojišťoven: zákon a vznik, složení správní a dozorčí rady, ředitel, dohled, zaměstnanci a limit provozu, smluvní programy pro poskytovatele, co pojišťovny publikují o dostupnosti péče a síť odborností. Pracovní verze.">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Instituce — Srovnávač zdravotních pojišťoven">
+<meta property="og:locale" content="cs_CZ">
+<link rel="stylesheet" href="src/styles.min.css">
+<!--
+  audit:
+    status: draft
+    pristup: heslo (middleware.js, POJISTOVNY_HESLO, matcher /pojistovny-:path*) + noindex
+    trida: C (nová stránka, popis pojmenovaných institucí)
+    stranka: instituce (A2.1, A3.1, A3.2, A3.3, PLAN-SROVNAVAC-ANALYTIK.md § 3)
+    zdroje: data/pojistovny-instituce.json (zákony č. 551/1991 a 280/1992 Sb., vyhláška 418/2003 Sb., výroční zprávy; bez jmen osob),
+            data/pojistovny-smluvni-programy.json (weby pojišťoven a výroční zprávy 2025), data/pojistovny-dostupnost.json (inventář VZ 2023–2025 a webů),
+            data/pojistovny-hospodareni-rady.json (zaměstnanci, MZ), data/pojistovny-sit.json (prototyp sítě odborností, docs/pojistovny-sit.md)
+    hranice: fakta se řadí, nabídka se nehodnotí; existence programu není jeho účinek; „nenalezeno“ neznamená, že údaj pojišťovna nemá; jména členů orgánů se nezapisují (třída C)
+    presun: síť odborností (prototyp) se sem přesunula z pojistovny-kmen.html; věta o omezení metody nad grafem je povinná
+-->
+</head>
+<body>
+<a class="skip-link" href="#content">Přeskočit na hlavní obsah</a>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Srovnávač pojišťoven</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+  <div id="zpShell" class="zpc-shell" data-aktivni="instituce"></div>
+
+  <section class="zpc-mod zpc-mod--page" id="modul-instituce" aria-labelledby="zpInstHead">
+    <div class="zpc-mod-head"><h1 id="zpInstHead">Instituce</h1><span class="zpc-stav">Zákony · VZ 2024–2025 · weby 2026</span></div>
+    <p class="zpc-lead">Kdo pojišťovnu řídí, kdo ji kontroluje, jak velký aparát má a co nabízí poskytovatelům; co o dostupnosti péče veřejně publikuje.</p>
+    <div class="zpc-moje-wrap">
+      <p class="zpc-moje-lbl" id="zpMojeLbl">Moje pojišťovna: vyberte ji a zvýrazní se ve všech grafech a tabulkách, i na ostatních stránkách srovnávače.</p>
+      <div id="zpMojeZp" class="zpc-moje" aria-describedby="zpMojeLbl"></div>
+    </div>
+
+    <h3 class="section-title zpc-h3" id="organy"><span>Kdo pojišťovnu řídí</span></h3>
+    <p class="zpc-note">Sedm pojišťoven se řídí dvěma zákony: Všeobecnou zdravotní pojišťovnu upravuje zákon č. 551/1991 Sb., šest zaměstnaneckých zákon č. 280/1992 Sb. Správní radu VZP jmenuje z jedné třetiny vláda a ze dvou třetin ji volí Poslanecká sněmovna; u zaměstnaneckých pojišťoven po třetině jmenuje vláda a volí zaměstnavatelé s OSVČ a zaměstnanci. Ředitele jmenuje a odvolává správní rada. Dohled vykonávají Ministerstvo zdravotnictví a Ministerstvo financí. Jména členů orgánů tu nejsou, srovnávač popisuje strukturu, ne osoby.</p>
+    <div id="zpInstOrgany" class="zpc-inst"></div>
+
+    <h3 class="section-title zpc-h3" id="aparat"><span>Aparát a provoz</span></h3>
+    <p class="zpc-note">Kolik zaměstnanců pojišťovna má a jak vyčerpává zákonný limit na provoz. Velikost aparátu souvisí s velikostí kmene, grafy nejsou hodnocením.</p>
+    <div id="zpInstAparat" class="zpc-inst-aparat"></div>
+
+    <h3 class="section-title zpc-h3" id="programy"><span>Smluvní programy pro poskytovatele</span></h3>
+    <p class="zpc-note">Bonifikační a kvalitativní programy, které pojišťovny nabízejí lékařům a zařízením (VZP PLUS a další). Úhradová vyhláška platí pro všechny stejně a program pojišťovny není.</p>
+    <div id="zpInstProgramy" class="zpc-inst-programy"></div>
+
+    <h3 class="section-title zpc-h3" id="dostupnost"><span>Co pojišťovny publikují o dostupnosti péče a § 16</span></h3>
+    <p class="zpc-note">Pět otázek: čekací doby, nedostatkové oblasti, zajištění péče na žádost, plnění nařízení vlády 307/2012 Sb. a žádosti podle § 16 zákona 48/1997 Sb. Inventář neříká, jak dostupná péče je.</p>
+    <div id="zpInstDostupnost" class="zpc-inst-dostupnost"></div>
+
+    <h3 class="section-title zpc-h3" id="sit-odbornosti"><span>Síť smluvních odborností (prototyp)</span></h3>
+    <p class="zpc-note zpc-sit-limit"><b>Omezení metody.</b> Jde o horní odhad smluvních pracovišť, stav k 31. 12. 2024; u poliklinik a nemocnic je nadhodnocený. Smlouva se uzavírá na pracoviště a odbornost (IČP), číselník ÚZIS ale nese jen zařízení (IČZ). Pět velkých pojišťoven (VZP ČR, VoZP, ČPZP, OZP, ZP MV ČR) má prakticky stejně širokou síť: rozdíly mezi nimi jsou menší než chyba metody, pořadí velkých pojišťoven z těchto čísel nevyvozujte. U VZP ČR a ČPZP je vedle odhadu i číslo z jejich vlastního seznamu smluvních poskytovatelů (datum seznamu je u tabulky „Podle seznamu pojišťovny“).</p>
+    <p class="zpc-note"><b>Pobočky.</b> „Počet poboček“ dnes není srovnatelné číslo: VoZP, OZP a ZP MV ČR počítají v jednom čísle různé kategorie, od regionálního ředitelství po poštovního partnera. Srovnávat je lze až po sjednocení definice a ručním spočtení.</p>
+    <div id="zpSit" class="zpc-sit"></div>
+
+    <div class="zpc-accs">
+      <details class="zpc-acc">
+        <summary>Jak číst stránku a odkud jsou data · 5</summary>
+        <div class="zpc-acc-body"><ul>
+          <li><b>Zákon a orgány.</b> Znění zákonů č. 551/1991 Sb. a č. 280/1992 Sb. (e-Sbírka) a kapitola „Orgány“ výročních zpráv 2023–2025. Každé pole má citaci a paragraf, rozbalíte je pod tabulkou. Co se nepodařilo ověřit, je „nedohledáno“.</li>
+          <li><b>Aparát.</b> Zaměstnanci a pojištěnci na zaměstnance z Hodnocení vývoje systému v. z. p. (MZ ČR); využití limitu přídělu na provoz podle vyhlášky č. 418/2003 Sb. Pásmo je podíl součtu pojištěnců na součtu zaměstnanců sedmi pojišťoven.</li>
+          <li><b>Smluvní programy.</b> Ruční průchod webů 3. 11. 2026, u programů bez veřejné stránky doslovná citace z výroční zprávy. Bonifikace daná přímo úhradovou vyhláškou (týmové praxe) není program pojišťovny a není zařazena.</li>
+          <li><b>Dostupnost.</b> Výroční zprávy 2023–2025 (soubor a řádek) a weby pojišťoven, jejichž sitemapy byly prohledány. Komory a ministerstvo nejsou zdrojem po pojišťovnách.</li>
+          <li><b>Řazení.</b> Seřazené grafy jsou seřazené podle hodnoty, nejde o hodnocení pojišťoven. Barvu pojišťovny uvidíte po výběru „Moje pojišťovna“ nebo při najetí myší.</li>
+        </ul></div>
+      </details>
+    </div>
+  </section>
+
+  <div id="zpZdroje" class="zpc-zdroje-wrap"></div>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/pojistovny.js"></script>
+<script type="module" src="src/pojistovny-sit.js"></script>
+</body>
+</html>

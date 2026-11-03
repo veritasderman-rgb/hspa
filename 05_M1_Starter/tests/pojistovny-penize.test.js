@@ -214,7 +214,8 @@ test('přesun z Kmene: Hospodaření 2024, rezervy, provoz a výroční zprávy 
     assert.doesNotMatch(kmen, new RegExp(`id="${id}"`), `${id} z Kmene odešlo`);
     assert.match(html, new RegExp(`id="${id}"`));
   }
-  for (const id of ['zpCards', 'zpChart65', 'zpChartNzs', 'zpKmenMesicni', 'zpSit']) assert.match(kmen, new RegExp(`id="${id}"`), id);
+  for (const id of ['zpCards', 'zpChart65', 'zpChartNzs', 'zpKmenMesicni']) assert.match(kmen, new RegExp(`id="${id}"`), id);
+  assert.doesNotMatch(kmen, /id="zpSit"/, 'síť odborností odešla na Instituce (A2.3)');
   assert.match(kmen, /href="pojistovny-penize\.html"/);
   const js = fs.readFileSync(path.join(ROOT, 'src', 'pojistovny.js'), 'utf8');
   assert.match(js, /function renderHospodareni\(d\)/);

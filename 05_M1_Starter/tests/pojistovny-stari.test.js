@@ -24,6 +24,9 @@ const DS = {
   stiznosti: json('pojistovny-stiznosti.json'),
   opendata: json('pojistovny-opendata.json'),
   vek: json('pojistovny-vek.json'),
+  instituce: json('pojistovny-instituce.json'),
+  smluvniProgramy: json('pojistovny-smluvni-programy.json'),
+  dostupnost: json('pojistovny-dostupnost.json'),
 };
 // stránka Peníze (A1.6): tři nové datasety
 const DS_PENIZE = {
@@ -54,7 +57,7 @@ test('řádky: roky a data se čtou z datasetů (žádné natvrdo), stav obsahuj
   assert.equal(radek('kmen', 'hosp').kDatu, String(DS.pojistovny.rok_hospodareni));
   assert.match(radek('kmen', 'crp').stav, /pracovní návrh · soubor sestaven 2\. 11\. 2026/);
   assert.match(radek('kmen', 'hosp25').stav, /u 3 ze 7 pojišťoven \(VZP ČR, VoZP, OZP\)/);
-  assert.equal(radek('kmen', 'sit').kDatu, '31. 12. 2024', 'ref_datum jako české datum');
+  assert.equal(radek('instituce', 'sit').kDatu, '31. 12. 2024', 'ref_datum jako české datum');
   assert.equal(radek('kmen', 'zpp').kDatu, '2026 (plán)');
   assert.equal(radek('prevence', 'prevence').kDatu, '2024 (OZP 2025, ZPŠ 2020)');
   assert.match(radek('prevence', 'prevence').stav, /rešerše webů 2\. 11\. 2026/);
@@ -76,14 +79,15 @@ test('řádky: roky a data se čtou z datasetů (žádné natvrdo), stav obsahuj
   assert.match(radek('prevence', 'prevence', d2).stav, /rešerše webů 14\. 10\. 2026 až 20\. 10\. 2026/);
   d2.sit.ref_datum = '2025-06-30';
   d2.sit.rok = 2025;
-  assert.equal(radek('kmen', 'sit', d2).kDatu, '30. 6. 2025');
-  assert.equal(radek('kmen', 'sit', d2).kratce, 'NRPZS 2025');
+  assert.equal(radek('instituce', 'sit', d2).kDatu, '30. 6. 2025');
+  assert.equal(radek('instituce', 'sit', d2).kratce, 'NRPZS 2025');
 });
 
 test('řádky: stránka dostane jen řádky svých datasetů; co stránka nenačítá, se vynechá', () => {
   const ids = (s, ds = DS) => stariRadky(ds, s).map((r) => r.id);
   assert.deepEqual(ids('prehled'), ['crp', 'hosp', 'zpp', 'prevence', 'aplikace']);
-  assert.deepEqual(ids('kmen'), ['crp', 'hosp', 'hosp25', 'zpp', 'sit']);
+  assert.deepEqual(ids('kmen'), ['crp', 'hosp', 'hosp25', 'zpp']);
+  assert.deepEqual(ids('instituce'), ['sit', 'instituce', 'smluvniProgramy', 'dostupnost']);
   assert.deepEqual(ids('prevence'), ['prevence']);
   assert.deepEqual(ids('aplikace'), ['aplikace', 'stiznosti', 'opendata']);
   assert.deepEqual(ids('gramotnost'), ['aplikace', 'otazky']);
@@ -91,6 +95,7 @@ test('řádky: stránka dostane jen řádky svých datasetů; co stránka nenač
   assert.deepEqual(ids('indikatory'), []);
   // dataset nenačten (null/undefined) → řádek mizí
   assert.deepEqual(ids('kmen', { pojistovny: DS.pojistovny }), ['crp', 'hosp', 'hosp25', 'zpp']);
+  assert.deepEqual(ids('instituce', { pojistovny: DS.pojistovny, instituce: DS.instituce }), ['instituce']);
   assert.deepEqual(ids('prehled', { pojistovny: DS.pojistovny, prevence: null }), ['crp', 'hosp', 'zpp']);
   assert.deepEqual(ids('prevence', {}), []);
   // věkovou strukturu zatím nenačítá žádná stránka; bez `strana` ale funkce řádek umí
@@ -102,8 +107,9 @@ test('řádky: stránka dostane jen řádky svých datasetů; co stránka nenač
 });
 
 test('věta „Data: …“ pod nadpisem: zkratka + rok z téhož registru', () => {
-  assert.equal(stariVeta(stariRadky(DS, 'kmen')), 'Data: CRP 2025 · MZ 2024 · VZ 2025 · ZPP 2026 · NRPZS 2024');
+  assert.equal(stariVeta(stariRadky(DS, 'kmen')), 'Data: CRP 2025 · MZ 2024 · VZ 2025 · ZPP 2026');
   assert.equal(stariVeta(stariRadky(DS, 'prevence')), 'Data: VZ 2024 (OZP 2025, ZPŠ 2020)');
+  assert.match(stariVeta(stariRadky(DS, 'instituce')), /^Data: NRPZS 2024 · instituce k 3\. 11\. 2026 · programy k 3\. 11\. 2026 · dostupnost k 3\. 11\. 2026$/);
   assert.match(stariVeta(stariRadky(DS, 'prehled')), /^Data: CRP 2025 · MZ 2024 · ZPP 2026 · VZ 2024 /);
   assert.equal(stariVeta([]), '');
   assert.equal(stariVetaHtml([]), '');
@@ -136,13 +142,15 @@ test('varování: míchají se dva roky téže veličiny (náklady 2024 a 2025; 
 
 test('blok: sbalený <details> s tabulkou dataset · k datu/rok · zdroj · stav a varováním', () => {
   const html = stariDatHtml(DS, { strana: 'kmen' });
-  assert.match(html, /^<details class="zpc-acc zpc-stari-acc"><summary>Stáří dat na této stránce<span class="zpc-n"> · 5 · míchají se roky<\/span><\/summary>/);
+  assert.match(html, /^<details class="zpc-acc zpc-stari-acc"><summary>Stáří dat na této stránce<span class="zpc-n"> · 4 · míchají se roky<\/span><\/summary>/);
   assert.doesNotMatch(html, /<details[^>]* open/);
-  assert.equal(count(html, /<tr data-stari="/g), 5);
+  assert.equal(count(html, /<tr data-stari="/g), 4);
   for (const h of ['Dataset', 'K datu / rok', 'Zdroj', 'Stav']) assert.match(html, new RegExp(`<th scope="col" class="zpc-txt">${h}</th>`));
   assert.match(html, /<p class="zpc-stari-warn" role="note"><b>Pozor, míchají se roky\.<\/b> Příjmy, náklady/);
   assert.match(html, /role="region" tabindex="0" aria-label="Stáří dat na této stránce \(tabulka, posuvná\)"/);
-  assert.match(html, /<tr data-stari="sit"><th scope="row" class="zpc-txt">Síť smluvních odborností<\/th><td class="zpc-txt">31\. 12\. 2024<\/td>/);
+  const inst = stariDatHtml(DS, { strana: 'instituce' });
+  assert.match(inst, /<tr data-stari="sit"><th scope="row" class="zpc-txt">Síť smluvních odborností<\/th><td class="zpc-txt">31\. 12\. 2024<\/td>/);
+  assert.match(inst, /<tr data-stari="smluvniProgramy"><th scope="row" class="zpc-txt">Smluvní programy pro poskytovatele<\/th>/);
   // stránka bez míchání roků: bez varování i bez poznámky v summary
   const apl = stariDatHtml(DS, { strana: 'aplikace' });
   assert.match(apl, /<span class="zpc-n"> · 3<\/span>/);
@@ -194,7 +202,7 @@ test('DOM: věta jde pod .zpc-mod-head (na přehledu do hero), blok před #zpZdr
 test('init: orchestrátor volá renderStariDat s načtenými datasety; CSS tříd je dost', () => {
   const src = fs.readFileSync(path.join(ROOT, 'src', 'pojistovny.js'), 'utf8');
   assert.match(src, /import \{ renderStariDat \} from '\.\/pojistovny-stari\.js'/);
-  assert.match(src, /renderStariDat\(\{ datasety: \{ pojistovny: d, prevence: p, aplikace: a, otazky: o, prerozdeleni: pr, hospodareniRady: rady, segmenty: seg \} \}\)/);
+  assert.match(src, /renderStariDat\(\{ datasety: \{ pojistovny: d, prevence: p, aplikace: a, otazky: o, prerozdeleni: pr, hospodareniRady: rady, segmenty: seg, instituce: inst, smluvniProgramy: prog, dostupnost: dost \} \}\)/);
   const css = fs.readFileSync(path.join(ROOT, 'src', 'styles.css'), 'utf8');
   for (const c of ['.zpc-stari{', '.zpc-stari-wrap{', '.zpc-stari-warn{', '.zpc-stari-acc']) assert.ok(css.includes(c), c);
   // všech sedm stránek má kontejner #zpZdroje, před který se blok vkládá
