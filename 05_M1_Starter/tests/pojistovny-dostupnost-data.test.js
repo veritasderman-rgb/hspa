@@ -39,6 +39,7 @@ test('dostupnost: rozbité kopie validátor odmítne', () => {
   fails((d) => { d.pojistovny[0].sit_nedostatkove.url = 'http://vzp.cz'; }, /https/);
   fails((d) => { d.pojistovny[1].kod = '111'; }, /duplicitní/);
   fails((d) => { d.sloupce.pop(); }, /sloupce/);
+  fails((d) => { d.pojistovny[0].lhuty_307.citace_typ = 'foto'; }, /citace_typ/);
 });
 
 test('dostupnost: stav ne a null nevyžadují zdroj, null je jen varování', () => {
@@ -90,4 +91,13 @@ test('dostupnost: otázky o § 16, zajištění péče, čekacích dobách a př
   for (const id of ['par16', 'zajisteni-pece', 'cekaci-doby', 'prechody']) assert.ok(ids.includes(id), `chybí otázka ${id}`);
   assert.match(sada.otazky.find((q) => q.id === 'par16').text, /§ 16 zákona č\. 48\/1997 Sb\./);
   assert.match(sada.otazky.find((q) => q.id === 'prechody').text, /1\. 1\. a k 1\. 7\./);
+});
+
+test('dostupnost: přepis z obrázku (VZP mapa) je označený citace_typ a _doc to říká', () => {
+  const c = D.pojistovny.find((p) => p.kod === '111').lhuty_307;
+  assert.equal(c.citace_typ, 'prepis-z-obrazku');
+  assert.match(D._doc, /přepis z obrázku se strojově neověřuje/);
+  for (const p of D.pojistovny) for (const col of SLOUPCE) {
+    if (p[col].citace_typ === 'prepis-z-obrazku') assert.ok(p[col].url && !p[col].soubor);
+  }
 });

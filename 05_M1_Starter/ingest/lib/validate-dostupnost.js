@@ -6,6 +6,7 @@ export const KODY_ZP = ['111', '201', '205', '207', '209', '211', '213'];
 export const SLOUPCE = ['cekaci_doby', 'sit_nedostatkove', 'zajisteni_pece', 'lhuty_307', 'par16'];
 export const STAVY = ['ano', 'castecne', 'ne'];
 export const MAX_CITACE = 200;
+export const CITACE_TYPY = ['text', 'prepis-z-obrazku'];
 
 const isObj = (v) => v != null && typeof v === 'object' && !Array.isArray(v);
 const isStr = (v) => typeof v === 'string' && v.trim().length > 0;
@@ -55,6 +56,8 @@ export function validateDostupnost(D) {
       if (c.citace != null) {
         ok(isStr(c.citace) && c.citace.length <= MAX_CITACE, `${ct}.citace: neprázdný string do ${MAX_CITACE} znaků`);
       }
+      if (c.citace_typ != null) ok(CITACE_TYPY.includes(c.citace_typ), `${ct}.citace_typ: ${CITACE_TYPY.join(' | ')} (výchozí text)`);
+      if (c.citace_typ === 'prepis-z-obrazku') ok(hasUrl && !hasFile, `${ct}: přepis z obrázku patří k url, ne k souboru VZ`);
       if (c.stav === 'ano' || c.stav === 'castecne') {
         ok(hasUrl || (isStr(c.soubor) && Number.isInteger(c.radek)), `${ct}: stav ${c.stav} vyžaduje url nebo soubor + radek`);
         ok(isStr(c.citace), `${ct}: stav ${c.stav} vyžaduje citaci`);

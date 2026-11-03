@@ -7,6 +7,7 @@
 
 export const KODY = ['111', '201', '205', '207', '209', '211', '213'];
 export const PUVODY = ['statni', 'resortni', 'podnikova', 'oborova'];
+export const DATUM_TYPY = ['zapis_or', 'zrizovaci_listina', 'rozhodnuti_mpsv', 'zakon'];
 export const ZAKONY = ['551/1991 Sb.', '280/1992 Sb.'];
 export const ZAKAZANE_KLICE = ['jmeno', 'prijmeni', 'osoby', 'osoba', 'clenove', 'predseda', 'mistopredseda'];
 
@@ -94,6 +95,10 @@ export function validateInstituce(I) {
     if (!PUVODY.includes(v.puvod)) err(`${pfx}.vznik.puvod musí být ${PUVODY.join(' | ')}`);
     if (P.kod === '111' && v.puvod !== 'statni') err(`${pfx}: VZP má původ statni`);
     if (v.datum != null && !RE_DATUM.test(v.datum)) err(`${pfx}.vznik.datum není datum`);
+    if (!('datum_typ' in v)) err(`${pfx}.vznik.datum_typ musí být uveden (nebo null)`);
+    else if (v.datum_typ !== null && !DATUM_TYPY.includes(v.datum_typ)) err(`${pfx}.vznik.datum_typ musí být ${DATUM_TYPY.join(' | ')} nebo null`);
+    if (v.datum_typ == null && v.datum != null) warn(`${pfx}.vznik.datum_typ je null (musí být v chybi[])`);
+    if (v.datum_zapisu_or != null && !RE_DATUM.test(v.datum_zapisu_or)) err(`${pfx}.vznik.datum_zapisu_or není datum`);
     if (!isStr(v.poznamka)) err(`${pfx}.vznik.poznamka chybí`);
     if (!Array.isArray(v.sloucene)) err(`${pfx}.vznik.sloucene musí být pole`);
     for (const [i, s] of (v.sloucene || []).entries()) {

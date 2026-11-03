@@ -91,3 +91,10 @@ test('instituce: limit provozu je u všech sedmi vyplněn a v rozumném rozmezí
     assert.ok(p.provozni_limit_pct.hodnota >= 2.9 && p.provozni_limit_pct.hodnota <= 3.1, p.kod);
   }
 });
+
+test('instituce: vznik.datum_typ je z enumu a validátor špatný typ odmítne', () => {
+  for (const p of I.pojistovny) assert.ok([null, 'zapis_or', 'zrizovaci_listina', 'rozhodnuti_mpsv', 'zakon'].includes(p.vznik.datum_typ), p.kod);
+  const X = clone();
+  X.pojistovny[2].vznik.datum_typ = 'jiny';
+  assert.ok(validateInstituce(X).errors.some((e) => /datum_typ/.test(e)));
+});
