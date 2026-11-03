@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-11-03
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-11-03
+    creation_phase: rutina+article-write
+    form: article
+    primary_sources_count: 3
+    evidence_sources_count: 5
+    visual_elements_count: 5
+    notes: "Vytvořeno z discovery 2026-11-03: nová studie PubMed Piler P, Jarkovský J, Thon V. Excess mortality related to the COVID-19 pandemic by age, sex, and cause of death in the Czech Republic. BMC Public Health 2026;26(1). DOI 10.1186/s12889-026-29300-1, PMID 42963572, PMC13721334 (open access, plný text přečten přes PubMed get_full_text_article 3. 11. 2026; typ Journal Article, publikováno 10. 9. 2026). Forma: standardní článek (8.2a) — chybí doložená scéna na úvod.
+      KPI (studie, abstrakt + Tabulka 1): celková nadúmrtnost 15 % / 27 % / 6 % (2020/2021/2022, RR 1,15 / 1,27 / 1,06 proti průměru 2015–2019); bez úmrtí s covidem 6 % / 4 % / 1 % (RR 1,06 / 1,04 / 1,01); hrubá úmrtnost 1 208 / 1 330 / 1 110 na 100 000 proti 1 047. Muži vs ženy 2021: 31 % vs 23 % (RR 1,31 / 1,23); covid úmrtnost mužů RR 1,40 (2021; Tabulka 2: 283 vs 202 na 100 000). Věk 25–49 bez covidu +3 % / +8 % / +3 % (Results); 75–84 let 24 % / 39 % / 19 %, 50–64 let +16 % jen 2021 (Discussion). Srdeční selhání +36 % / +35 % / +46 %; diabetes až +30 %; Parkinson +38 % / +49 % / +46 %; oběhová soustava +4 % v 2020; ICHS 218 → 208 → 183, cévní mozkové 80 (2015–19) → 71 → 68 → 64 na 100 000 (Results). Úmrtí doma +26 % / +36 % / +24 %, v nemocnici +10 % / +24 % / +1 % (Tabulka 3). 42 029 úmrtí s covidem 2020–2022, 394 na 100 000; UK 270 (Discussion). UK nadúmrtnost 19 % / 9 % / 6 % (Discussion). Zhruba čtvrtina nadúmrtnosti z jiných příčin než covid (Conclusions). Limity: bez modelu trendu a sezónnosti, migrace z Ukrajiny 2022 (přes 330 000), ekologický design, obtížná certifikace příčin smrti (Strengths and limitations).
+      CONSENSUS (1 dotaz): kontrola tvrzení o absenci kardiovaskulární nadúmrtnosti — ČÁSTEČNĚ NESOUHLASÍ. Pizzato M et al. Int J Epidemiol 2024;54(1), DOI 10.1093/ije/dyaf006, PMID 39947655 (plný text PMC12373308, Tabulka 1, ČR): kardiovaskulární nadúmrtnost 11,7 % (10,7–12,6) 2020 a 7,0 % (5,8–8,1) 2021, nádory 1,6 % / −1,6 %, diabetes 4,9 % / 1,2 % (−1,6–4,0), vše celkem 15,8 % / 25,7 %; model s lineárním trendem kalendářního roku. U nádorů SOUHLASÍ. Nilsson A et al. Eur J Epidemiol 2024;39(9):1037–1050, DOI 10.1007/s10654-024-01154-0, PMID 39285102: severské země 11 610 nadúmrtí na kardiovaskulární nemoci, podúmrtnost na demence 8 721. Ověřeno v PubMed 3. 11. 2026.
+      DALŠÍ EVIDENCE (PubMed): Hansen CL, Viboud C, Simonsen L. eLife 2024;13, DOI 10.7554/eLife.93758, PMID 39190600 (multiple cause: diabetes +37 %, Alzheimer +19 %, nádory +3 %, USA 2020). Li Y, Li H, Adair T. Eur J Epidemiol 2025;40(4):463–474, DOI 10.1007/s10654-025-01214-z, PMID 40106115 (podíl covidu na nadúmrtnosti doma pod 16 %, covid pravděpodobně podhlášen u úmrtí doma).
+      ČESKÁ DATA (data/indicators.json, stav 3. 11. 2026): mortalita_kardiovaskularni 2019 529,55 → 2020 557,77 → 2023 463,75, EU 312,95 (live verified); umrtnost_diabetes 2019 45,56 → 2020 52,46 → 2023 49,37, EU 23,53 (origin seed, verification_status verified; hodnota 2023 ověřena živě Eurostat API hlth_cd_asdr2 3. 11. 2026); mortalita_onkologicka 2023 250,43, EU 233,13; nadumrtnost 2021 26,3, 2022 9,7, 2025 3,5 (preliminary), EU 3,6 (demo_mexrt 03/2021 = 64,4 ověřeno živě 3. 11. 2026); nadeje_doziti_total 2021 77,2, 2024 80,1, EU 81,5. Výpočty redakce: +5,3 % (557,77/529,55) a +15,1 % (52,46/45,56), standardizované míry, srovnání jen s rokem 2019.
+      VĚDOMĚ NEUVEDENO: hypotéza mitochondriální dysfunkce jako fakt (jen jako hypotéza autorů); kvantifikace chybného kódování covidu u diabetu/demence v ČR (nikdo ji nepublikoval; uvedeno jako otevřená otázka). PubMed dotazů 7, Consensus 1. Čeká na schválení redakce."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V roce 2021 zemřelo o 27 % lidí víc než obvykle. Česká studie příčin smrti systém chválí, ne všechna data souhlasí · HSPA Monitor</title>
+<meta name="description" content="Nová studie v BMC Public Health rozebrala česká úmrtí z let 2015–2022 podle příčin: celková nadúmrtnost byla 15 % v roce 2020, 27 % v roce 2021 a 6 % v roce 2022, po odečtení úmrtí s covidem jen 6 %, 4 % a 1 %. Úmrtnost na nemoci oběhové soustavy, nádory a nemoci dýchací soustavy podle autorů výrazně nevzrostla, což čtou jako doklad, že systém zvládl péči o chronicky nemocné. O 20–40 % ale přibylo úmrtí na srdeční selhání, diabetes a neurodegenerativní nemoci. Mezinárodní analýza s trendovým modelem přitom pro Česko odhadla kardiovaskulární nadúmrtnost 11,7 % v roce 2020, takže závěr o zvládnuté péči závisí na zvolené metodě.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="V roce 2021 zemřelo o 27 % lidí víc než obvykle. Česká studie příčin smrti systém chválí, ne všechna data souhlasí">
+<meta property="og:description" content="Covid vysvětluje většinu české pandemické nadúmrtnosti. Infarkty, mrtvice a rakovina podle nové studie nepřibyly, srdeční selhání, diabetes a Parkinsonova nemoc o 20–40 % ano. Jiná metoda ale kardiovaskulární nadúmrtnost našla.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-nadumrtnost-pricin-smrti-covid-studie-2026.html">
+<meta property="article:published_time" content="2026-11-04">
+<meta property="article:section" content="Odolnost systému">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-nadumrtnost-pricin-smrti-covid-studie-2026.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "V roce 2021 zemřelo o 27 % lidí víc než obvykle. Česká studie příčin smrti systém chválí, ne všechna data souhlasí",
+  "description": "Nová studie v BMC Public Health rozebrala česká úmrtí z let 2015–2022 podle příčin: celková nadúmrtnost byla 15 % v roce 2020, 27 % v roce 2021 a 6 % v roce 2022, po odečtení úmrtí s covidem jen 6 %, 4 % a 1 %. Úmrtnost na nemoci oběhové soustavy, nádory a nemoci dýchací soustavy podle autorů výrazně nevzrostla, což čtou jako doklad, že systém zvládl péči o chronicky nemocné. O 20–40 % ale přibylo úmrtí na srdeční selhání, diabetes a neurodegenerativní nemoci. Mezinárodní analýza s trendovým modelem přitom pro Česko odhadla kardiovaskulární nadúmrtnost 11,7 % v roce 2020, takže závěr o zvládnuté péči závisí na zvolené metodě.",
+  "datePublished": "2026-11-04T06:00:00+01:00",
+  "dateModified": "2026-11-03",
+  "inLanguage": "cs",
+  "articleSection": "Odolnost systému",
+  "author": { "@type": "Organization", "name": "Redakce HSPA Monitoru" },
+  "publisher": { "@type": "Organization", "name": "HSPA Monitor · Skóre zdravotnictví", "url": "https://skorezdravotnictvi.cz" },
+  "mainEntityOfPage": "https://skorezdravotnictvi.cz/clanek-nadumrtnost-pricin-smrti-covid-studie-2026.html"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Odolnost systému</span>
+        <span class="article-tag article-tag-muted">Nadúmrtnost · Příčiny smrti · Covid-19 · Chronické nemoci · Kódování úmrtí</span>
+      </div>
+      <h1 class="article-title">V roce 2021 zemřelo o 27&nbsp;% lidí víc než obvykle. Česká studie příčin smrti systém chválí, ne všechna data souhlasí</h1>
+      <p class="article-deck">
+        Tým z Masarykovy univerzity a ÚZIS rozebral v <em>BMC Public Health</em> všechna česká úmrtí z let 2015–2022 podle příčin. Celková nadúmrtnost byla <strong>15&nbsp;%</strong> v roce 2020, <strong>27&nbsp;%</strong> v roce 2021 a <strong>6&nbsp;%</strong> v roce 2022; po odečtení úmrtí s covidem zbylo <strong>6&nbsp;%, 4&nbsp;% a 1&nbsp;%</strong>. Úmrtnost na nemoci oběhové soustavy, nádory a nemoci dýchací soustavy podle autorů výrazně nevzrostla, což čtou jako doklad, že zdravotnictví zvládlo péči o chronicky nemocné. O 20–40&nbsp;% ale přibylo úmrtí na srdeční selhání, diabetes a neurodegenerativní nemoci. Mezinárodní analýza s trendovým modelem přitom pro Česko odhadla kardiovaskulární nadúmrtnost <strong>11,7&nbsp;%</strong> v roce 2020, takže verdikt o zvládnuté péči závisí na metodě.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">4. listopadu 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">10 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Kolik lidí v Česku během pandemie zemřelo navíc, víme už dlouho: rok 2021 patřil k nejhorším v Evropě a portál ho popsal v článku o <a href="clanek-nadumrtnost-cesko.html">nadúmrtnosti jako ukazateli odolnosti systému</a>. Méně jasné bylo, <em>na co</em> lidé umírali. Pokud by kromě covidu přibylo i infarktů, mrtvic a pozdě zachycených nádorů, znamenalo by to, že přetížené zdravotnictví přestalo stíhat běžnou péči. Nová česká studie tvrdí, že se to nestalo. Je to dobrá zpráva, ale opírá se o metodu, se kterou jiná práce nad stejnými českými daty nesouhlasí. Obě čísla proto patří vedle sebe.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avPricHeroH">
+        <figcaption class="av-figure-h" id="avPricHeroH">Česká pandemická nadúmrtnost ze všech příčin proti průměru 2015–2019 (Piler, Jarkovský, Thon, BMC Public Health 2026; data Národní databáze zemřelých 2015–2022)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="15" data-decimals="0" data-suffix=" %">15&nbsp;%</span>
+            <span class="av-counter-label">nadúmrtnost v roce 2020</span>
+            <span class="av-counter-foot">bez úmrtí s covidem 6&nbsp;%</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="27" data-decimals="0" data-suffix=" %">27&nbsp;%</span>
+            <span class="av-counter-label">nadúmrtnost v roce 2021</span>
+            <span class="av-counter-foot">bez úmrtí s covidem 4&nbsp;%</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="6" data-decimals="0" data-suffix=" %">6&nbsp;%</span>
+            <span class="av-counter-label">nadúmrtnost v roce 2022</span>
+            <span class="av-counter-foot">bez úmrtí s covidem 1&nbsp;%</span>
+          </div>
+          <div class="av-counter-block">
+            <span class="av-counter" data-value="42029" data-decimals="0">42&nbsp;029</span>
+            <span class="av-counter-label">úmrtí vykázaných jako covidová v letech 2020–2022</span>
+            <span class="av-counter-foot">394 na 100&nbsp;000 obyvatel</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Piler P, Jarkovský J, Thon V, <em>BMC Public Health</em> 2026, abstrakt, Tabulka 1 a diskuse. Nadúmrtnost = relativní riziko úmrtí proti průměrné hrubé úmrtnosti let 2015–2019.</p>
+      </figure>
+
+      <h3>Co studie zjistila</h3>
+
+      <p>
+        Pavel Piler, Jiří Jarkovský a Vojtěch Thon (RECETOX a Institut biostatistiky a analýz Masarykovy univerzity, Jarkovský působí také v ÚZIS) použili týdenní data Národní databáze zemřelých za roky 2015 až 2022. Pro každé pandemické období porovnali hrubou úmrtnost s průměrem let 2015–2019. Ten průměr činil <strong>1&nbsp;047 úmrtí na 100&nbsp;000 obyvatel</strong>; v roce 2020 zemřelo 1&nbsp;208, v roce 2021 1&nbsp;330 a v roce 2022 1&nbsp;110 lidí na 100&nbsp;000. Odtud plynou relativní rizika 1,15, 1,27 a 1,06, tedy nadúmrtnost 15, 27 a 6&nbsp;%.
+      </p>
+
+      <p>
+        Klíčový krok je druhý: autoři z dat vyňali všechna úmrtí kódovaná jako covid-19. Nadúmrtnost pak klesla na <strong>6&nbsp;% v roce 2020, 4&nbsp;% v roce 2021 a 1&nbsp;% v roce 2022</strong>. Covid tedy vysvětluje velkou většinu nárůstu. Podle závěru studie zhruba čtvrtina celkové nadúmrtnosti připadla na jiné příčiny. Pro srovnání autoři uvádějí Spojené království, které podle stejné metodiky mělo nadúmrtnost 19, 9 a 6&nbsp;%, ale po odečtení covidu žádnou.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avPricTabH">
+        <figcaption class="av-figure-h" id="avPricTabH">Hrubá úmrtnost v Česku na 100&nbsp;000 obyvatel a relativní riziko proti průměru 2015–2019, se započtením a bez započtení úmrtí s covidem (Piler et al., BMC Public Health 2026, Tabulka 1 a 2)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Rok</th>
+                <th scope="col" class="av-num">Úmrtnost, všechny příčiny</th>
+                <th scope="col" class="av-num">Relativní riziko</th>
+                <th scope="col" class="av-num">Úmrtnost bez covidu</th>
+                <th scope="col" class="av-num">Relativní riziko bez covidu</th>
+                <th scope="col" class="av-num">Úmrtnost na covid</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Průměr 2015–2019</th>
+                <td class="av-num">1&nbsp;047</td>
+                <td class="av-num">1,00</td>
+                <td class="av-num">1&nbsp;047</td>
+                <td class="av-num">1,00</td>
+                <td class="av-num">—</td>
+              </tr>
+              <tr>
+                <th scope="row">2020</th>
+                <td class="av-num">1&nbsp;208</td>
+                <td class="av-num av-bad">1,15</td>
+                <td class="av-num">1&nbsp;110</td>
+                <td class="av-num">1,06</td>
+                <td class="av-num">98</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">2021</th>
+                <td class="av-num">1&nbsp;330</td>
+                <td class="av-num av-bad">1,27</td>
+                <td class="av-num">1&nbsp;088</td>
+                <td class="av-num">1,04</td>
+                <td class="av-num">242</td>
+              </tr>
+              <tr>
+                <th scope="row">2022</th>
+                <td class="av-num">1&nbsp;110</td>
+                <td class="av-num">1,06</td>
+                <td class="av-num">1&nbsp;055</td>
+                <td class="av-num">1,01</td>
+                <td class="av-num">56</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Piler P, Jarkovský J, Thon V, <em>BMC Public Health</em> 2026, Tabulka 1 (úmrtnost a relativní rizika) a Tabulka 2 (úmrtnost na covid-19); hrubé míry, jmenovatel podle odhadu počtu obyvatel ČSÚ.</p>
+      </figure>
+
+      <h3>Kdo umíral navíc a kde</h3>
+
+      <p>
+        Pandemie dopadla tvrději na muže. V roce 2021 byla jejich nadúmrtnost ze všech příčin <strong>31&nbsp;%</strong> proti <strong>23&nbsp;%</strong> u žen a riziko úmrtí na covid bylo u mužů 1,40krát vyšší (283 proti 202 úmrtím na 100&nbsp;000). U dětí a dospívajících žádná nadúmrtnost nebyla. Varovný je ale věk 25–49 let: i po vynětí covidových úmrtí v něm zemřelo o 3&nbsp;% víc lidí v roce 2020, o 8&nbsp;% víc v roce 2021 a o 3&nbsp;% víc v roce 2022. U lidí nad 50 let se úmrtnost bez covidu naopak vrátila zhruba na předpandemickou úroveň. Nejsilněji zasaženou skupinou byli lidé ve věku 75–84 let s nadúmrtností 24, 39 a 19&nbsp;%.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-warn">
+          <span class="av-counter" data-value="36" data-decimals="0" data-prefix="+" data-suffix=" %">+36&nbsp;%</span>
+          <span class="av-counter-label">víc úmrtí doma v roce 2021 než v průměru let 2015–2019</span>
+          <span class="av-counter-foot">Piler et al. 2026, Tabulka 3 · v roce 2022 stále +24&nbsp;%, v nemocnicích už jen +1&nbsp;%</span>
+        </div>
+      </aside>
+
+      <p>
+        Druhý nápadný údaj se týká místa úmrtí. Doma zemřelo o 26&nbsp;% lidí víc v roce 2020, o 36&nbsp;% víc v roce 2021 a o 24&nbsp;% víc v roce 2022. V nemocnicích nárůst v roce 2022 prakticky zmizel (+1&nbsp;%). Autoři důvod neznají a nabízejí hypotézu, že se lidé báli nemocnic jako místa nákazy. Pro hodnocení systému je to zjištění podstatnější, než se zdá: úmrtí doma mají jinou cestu k diagnóze příčiny smrti než úmrtí na nemocničním lůžku, k tomu se vrátíme níže.
+      </p>
+
+      <div class="av-aside-clear"></div>
+
+      <h3>Hlavní skupiny nemocí: proč autoři mluví o zvládnuté péči</h3>
+
+      <p>
+        Pro hodnocení výkonnosti zdravotního systému je nejzajímavější rozklad podle příčin. Autoři nenašli výraznou nadúmrtnost ve třech skupinách, které tvoří jádro české úmrtnosti. U nemocí oběhové soustavy byla úmrtnost o 4&nbsp;% vyšší jen v prvním pandemickém roce a v letech 2021 a 2022 klesla pod předpandemickou úroveň. U zhoubných nádorů rozdíl proti předpandemickému období nebyl. U nemocí dýchací soustavy bez covidu zřetelný nárůst také nebyl; úmrtnost na chronickou obstrukční plicní nemoc klesla, na zápal plic stoupla.
+      </p>
+
+      <p>
+        Ischemická choroba srdeční klesla z 218 úmrtí na 100&nbsp;000 obyvatel v roce 2020 na 208 v roce 2021 a 183 v roce 2022. Cévní mozkové nemoci klesly z průměrných 80 na 100&nbsp;000 v letech 2015–2019 na 71, 68 a 64. Autoři pokles mrtvic spojují s rozvojem trombolýzy a mechanické trombektomie a uvádějí, že Česko od roku 2016 vede Evropu v počtu trombektomií na tisíc ischemických mrtvic. Z toho vyvozují hlavní politický závěr studie: <em>absence nadúmrtnosti u hlavních chronických nemocí naznačuje, že zdravotní systém tyto nemoci zvládl</em>, tedy dokázal souběžně léčit covid i poskytovat běžnou péči.
+      </p>
+
+      <p>
+        V jazyce rámce HSPA by to byl doklad odolnosti: šok, který systém absorboval bez trvalé ztráty ve výsledcích péče. Tak silné tvrzení si ale zaslouží kontrolu jinou metodou.
+      </p>
+
+      <h3>Mezinárodní srovnání: jiná metoda, jiný výsledek</h3>
+
+      <p>
+        Kontrolní rešerše našla práci, která počítala nadúmrtnost podle příčin pro šestnáct zemí včetně Česka (Pizzato et al., <em>International Journal of Epidemiology</em> 2024). Nepoužívá prostý průměr let před pandemií, ale model, který počítá s dlouhodobým trendem a referenčním obdobím od roku 2011. Pro Česko vychází kardiovaskulární nadúmrtnost <strong>11,7&nbsp;%</strong> (95% interval 10,7–12,6) v roce 2020 a <strong>7,0&nbsp;%</strong> (5,8–8,1) v roce 2021. Celková nadúmrtnost je přitom téměř stejná jako u Pilera a kolegů: 15,8 a 25,7&nbsp;%. U nádorů se obě práce shodují. Pizzato a kolegové pro Česko odhadli +1,6&nbsp;% v roce 2020 a −1,6&nbsp;% v roce 2021 a v žádné ze šestnácti zemí nenašli nadúmrtnost na nádory nad 5&nbsp;%.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avPricBarH">
+        <figcaption class="av-figure-h" id="avPricBarH">Česká nadúmrtnost na nemoci oběhové soustavy podle dvou metod, % nad očekávanou úrovní (Piler et al., BMC Public Health 2026; Pizzato et al., Int J Epidemiol 2024)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="15" data-unit=" %">
+          <li class="av-bar-row" data-value="4" data-label="2020 · průměr 2015–2019" data-note="Piler et al. — oběhová soustava I00–I99"></li>
+          <li class="av-bar-row av-bar-row-bad" data-value="11.7" data-label="2020 · model s trendem" data-note="Pizzato et al. — I00–I99, 95% interval 10,7–12,6"></li>
+          <li class="av-bar-row av-bar-row-bad" data-value="7.0" data-label="2021 · model s trendem" data-note="Pizzato et al. — 95% interval 5,8–8,1; Piler et al. pro 2021 uvádějí pokles pod předpandemickou úroveň"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroje:</strong> Piler P et al., <em>BMC Public Health</em> 2026 (výsledky, obr. 2); Pizzato M et al., <em>Int J Epidemiol</em> 2024, Tabulka 1, řádek CZE. Metody nejsou totožné: první práce srovnává s prostým průměrem let 2015–2019, druhá s modelem, který zohledňuje dlouhodobý trend.</p>
+      </figure>
+
+      <p>
+        Proč se výsledky rozcházejí? Úmrtnost na nemoci srdce a cév v Česku dlouhodobě klesá. Kdo za očekávanou hodnotu vezme prostý průměr předchozích pěti let, odhadne „normální“ rok 2020 výš, než by odpovídalo pokračujícímu poklesu, a nadúmrtnost mu vyjde menší. Piler a kolegové tento limit sami uvádějí: jejich model nezahrnuje časové trendy ani sezónnost. Ukazuje to i portálový indikátor <a href="indicator.html?id=mortalita_kardiovaskularni">standardizované kardiovaskulární úmrtnosti</a> z Eurostatu: z 529,55 na 100&nbsp;000 v roce 2019 stoupl na 557,77 v roce 2020, tedy asi o 5,3&nbsp;% (výpočet redakce, srovnání jen s jedním předchozím rokem). Pak klesl, v roce 2023 je na 463,75, ale pořád vysoko nad průměrem EU (312,95).
+      </p>
+
+      <p>
+        Česko v tom není samo. V severských zemích našla studie za roky 2020–2022 (Nilsson et al., <em>European Journal of Epidemiology</em> 2024) dohromady 11&nbsp;610 nadúmrtí na kardiovaskulární nemoci. Závěr o zvládnuté péči tedy není vyvrácený, ale jeho kardiovaskulární část platí jen při jedné ze dvou rozumných metod.
+      </p>
+
+      <h3>Srdeční selhání, diabetes, Parkinson: nárůst, který potřebuje vysvětlení</h3>
+
+      <p>
+        Druhá polovina studie je méně uklidňující. U několika konkrétních diagnóz byla úmrtnost ve všech třech pandemických letech o víc než pětinu vyšší. Na srdeční selhání zemřelo o 36&nbsp;% víc lidí v roce 2020, o 35&nbsp;% víc v roce 2021 a o 46&nbsp;% víc v roce 2022. U diabetu byla nadúmrtnost až 30&nbsp;%. U Parkinsonovy nemoci 38, 49 a 46&nbsp;%.
+      </p>
+
+      <p>
+        Autoři si všímají, že všechny tři nemoci bývají spojovány s poruchou funkce mitochondrií, a domnívají se, že nárůst může souviset s účinky viru SARS-CoV-2 mimo dýchací ústrojí. Tuto možnost výslovně formulují jako otázku, která „zaslouží další zkoumání“. Mitochondrie ve studii neměřili a nevědí ani, zda zemřelí byli nakažení. Jde tedy o hypotézu autorů, ne o zjištění.
+      </p>
+
+      <p>
+        Existuje i jiné, prozaičtější vysvětlení, které autoři zmiňují mezi limity: určit příčinu smrti bylo během pandemie pro lékaře ještě těžší než dřív. Nebylo možné testovat každého, lékaři byli přetížení a mezi nákazou a smrtí často uplynulo hodně času. Pizzato a kolegové upozorňují, že srdeční selhání patří ve statistice příčin smrti mezi „špatně definované“ diagnózy, které se mezi zeměmi a lékaři vykazují velmi různě. Práce z USA, která místo jedné základní příčiny sledovala všechny diagnózy uvedené na listu o úmrtí, a tím odstínila změny v kódování, našla v roce 2020 nárůst o 37&nbsp;% u diabetu a o 19&nbsp;% u Alzheimerovy nemoci (Hansen et al., <em>eLife</em> 2024). Jiná americká analýza ukázala, že u úmrtí doma připadala na covid méně než šestina nadúmrtnosti, a autoři z toho usuzují, že covid byl u úmrtí doma podhlášen (Li et al., <em>European Journal of Epidemiology</em> 2025).
+      </p>
+
+      <p>
+        Pro Česko z toho plyne otevřená otázka, nikoli odpověď. Úmrtí doma přibylo o víc než třetinu a právě tam se covid bez testu diagnostikuje nejhůř. Jak velká část nárůstu u srdečního selhání, diabetu a Parkinsonovy nemoci je skutečná nemoc, jak velká jde na vrub nerozpoznanému covidu a jak velká na odložené kontroly, z publikovaných českých dat rozhodnout nelze. Studie, která by to rozlišila, zatím nevyšla.
+      </p>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Limity dat">
+        <p class="article-callout-h">Caveat — co tato čísla neumějí</p>
+        <p><strong>1. Prostý průměr místo modelu.</strong> Očekávaná úmrtnost je průměr let 2015–2019 bez trendu, sezónnosti, vln veder a chřipkových epidemií. U příčin s klesajícím trendem (srdce a cévy) to nadúmrtnost podhodnocuje, u rostoucích ji nadhodnocuje.</p>
+        <p><strong>2. Hrubé, ne standardizované míry.</strong> Autoři se opírají o zjištění, že rozdíl proti věkově standardizovaným mírám je malý, stárnutí populace ale model nezohledňuje.</p>
+        <p><strong>3. Kódování příčiny smrti.</strong> Studie pracuje se základní příčinou smrti. U srdečního selhání, diabetu a demencí je volba základní příčiny citlivá na praxi lékařů a pravidla kódování; v Česku se navíc v roce 2013 změnil List o prohlídce zemřelého a řada úmrtnosti na diabetes se tehdy skokově zvedla.</p>
+        <p><strong>4. Migrace v roce 2022.</strong> Do Česka přišlo přes 330&nbsp;000 lidí z Ukrajiny, což podle autorů mohlo ovlivnit počty i klasifikaci úmrtí v roce 2022.</p>
+        <p><strong>5. Ekologický design.</strong> Studie popisuje populační úhrny. Kauzální vztah mezi covidem a konkrétní příčinou smrti z ní plynout nemůže; nemá ani údaj, zda zemřelí byli nakažení.</p>
+      </aside>
+
+      <h3>Co vývoj přináší a co sledovat</h3>
+
+      <p>
+        Data HSPA Monitoru dávají studii kontext v čase. <a href="indicator.html?id=nadumrtnost">Nadúmrtnost podle Eurostatu</a>, která počítá s jinou referencí (průměr stejných měsíců 2016–2019), činila 26,3&nbsp;% v roce 2021 a 9,7&nbsp;% v roce 2022. Pro rok 2022 je to víc než 6&nbsp;% ve studii, což dobře ukazuje, jak silně výsledek závisí na volbě srovnávacího období. Za rok 2025 indikátor ukazuje předběžných 3,5&nbsp;% při průměru EU 3,6&nbsp;%. <a href="indicator.html?id=nadeje_doziti_total">Naděje dožití</a> spadla v roce 2021 na 77,2 roku a v roce 2024 je na 80,1 (EU 81,5).
+      </p>
+
+      <p>
+        <a href="indicator.html?id=umrtnost_diabetes">Standardizovaná úmrtnost na diabetes</a> stoupla z 45,56 na 100&nbsp;000 v roce 2019 na 52,46 v roce 2020, asi o 15,1&nbsp;% (výpočet redakce). V roce 2023 je na 49,37, víc než dvojnásobek průměru EU (23,53). Ani nový pokles tedy neznamená návrat do evropského normálu. U diabetu se obě citované studie navíc rozcházejí opačně než u srdce: Pizzato a kolegové odhadli pro Česko jen 4,9&nbsp;% v roce 2020 a statisticky neprůkazných 1,2&nbsp;% v roce 2021. Jejich referenční období ale zahrnuje skok v české řadě z roku 2013, který časově odpovídá změně listu o úmrtí. Kde leží skutečnost, z publikovaných dat rozhodnout nelze.
+      </p>
+
+      <h3>Co s tím</h3>
+
+      <p>
+        <strong>Za prvé, číst verdikt o odolnosti jako podmíněný.</strong> Studie Pilera a kolegů je cenná tím, že rozkládá celé české pandemické období podle příčin, pohlaví, věku a místa úmrtí. Její hlavní závěr, že systém zvládl chronickou péči, platí pro nádory přesvědčivě. U nemocí srdce a cév jen při metodě prostého průměru; model s trendem nachází nadúmrtnost 7 až 12&nbsp;%. Do hodnocení systému proto patří obě čísla.
+      </p>
+
+      <p>
+        <strong>Za druhé, analyzovat všechny diagnózy na listu o úmrtí.</strong> List o prohlídce zemřelého má od roku 2013 v části o příčinách smrti čtyři řádky. Analýza přes všechny uvedené příčiny smrti, ne jen přes jednu základní, by oddělila skutečný nárůst srdečního selhání a diabetu od přesunů v kódování. Mezinárodní literatura ukazuje, že to jde a že se tím obraz mění.
+      </p>
+
+      <p>
+        <strong>Za třetí, sledovat úmrtí doma jako samostatný signál.</strong> Nárůst o 36&nbsp;% v roce 2021 a stále o 24&nbsp;% v roce 2022, kdy se nemocnice vrátily k normálu, je jedno z nejméně vysvětlených zjištění studie. Může jít o změnu preferencí, strach z nemocnic, nedostupnost péče i o nerozpoznaný covid. Rozlišit to lze jen propojením dat o úmrtích s daty o kontaktu se zdravotní péčí v posledních týdnech života.
+      </p>
+
+      <p>
+        <strong>Za čtvrté, brát hypotézy jako hypotézy.</strong> Mitochondriální vysvětlení nárůstu u srdečního selhání, diabetu a Parkinsonovy nemoci je otázka pro další výzkum, ne závěr. Totéž platí pro opačné vysvětlení chybným kódováním. Obě by šla otestovat na existujících českých datech. Ze studie pro příští krizi plyne hlavně jedna věc: příčiny smrti by měly být k dispozici dostatečně rychle a podrobně na to, aby se dalo rozpoznat, kdy systém přestává stíhat.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-labelledby="databox-h">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h" id="databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=nadumrtnost"><strong>Nadúmrtnost (excess mortality)</strong></a> — 3,5&nbsp;% (2025, předběžně), průměr EU 3,6&nbsp;%; 2021 26,3&nbsp;%, 2022 9,7&nbsp;%, Eurostat</li>
+        <li><a href="indicator.html?id=mortalita_kardiovaskularni"><strong>Mortalita na kardiovaskulární nemoci (standardizovaná)</strong></a> — 463,75 na 100&nbsp;000 obyvatel (2023), průměr EU 312,95; 2019 529,55, 2020 557,77, Eurostat</li>
+        <li><a href="indicator.html?id=umrtnost_diabetes"><strong>Úmrtnost na diabetes mellitus (standardizovaná)</strong></a> — 49,37 na 100&nbsp;000 obyvatel (2023), průměr EU 23,53; 2019 45,56, 2020 52,46, Eurostat</li>
+        <li><a href="indicator.html?id=mortalita_onkologicka"><strong>Mortalita na zhoubné novotvary (standardizovaná)</strong></a> — 250,43 na 100&nbsp;000 obyvatel (2023), průměr EU 233,13, Eurostat</li>
+        <li><a href="indicator.html?id=nadeje_doziti_total"><strong>Naděje dožití při narození</strong></a> — 80,1 roku (2024), průměr EU 81,5; 2021 77,2, Eurostat</li>
+      </ul>
+    </aside>
+
+    <section class="article-related" aria-labelledby="related-h">
+      <h4 id="related-h">Související obsah</h4>
+      <ul class="article-related-list">
+        <li><a href="clanek-nadumrtnost-cesko.html">→ Nadúmrtnost: Česko patřilo k nejhůře zasaženým zemím světa, dnes je pod průměrem EU</a></li>
+        <li><a href="clanek-duvera-nadumrtnost-covid-studie.html">→ Vládě věří 18,6&nbsp;% Čechů, nejméně ze třiceti zemí OECD. Studie navrhuje důvěru měřit jako varovný signál</a></li>
+        <li><a href="indicator.html?id=umrtnost_diabetes">→ Detail ukazatele Úmrtnost na diabetes mellitus</a></li>
+      </ul>
+    </section>
+
+    <section class="article-sources" aria-labelledby="sources-h">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h" id="sources-h">Kde si data sami ověříte</h4>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Recenzovaná literatura</h5>
+        <ul class="article-sources-list">
+          <li><strong>Piler P, Jarkovský J, Thon V. Excess mortality related to the COVID-19 pandemic by age, sex, and cause of death in the Czech Republic. <em>BMC Public Health</em>. 2026;26(1). DOI 10.1186/s12889-026-29300-1. PMID 42963572.</strong> Národní databáze zemřelých 2015–2022, srovnání s průměrem 2015–2019; celková nadúmrtnost 15 / 27 / 6&nbsp;%, bez covidu 6 / 4 / 1&nbsp;%; muži 31&nbsp;% vs ženy 23&nbsp;% (2021); srdeční selhání, diabetes a Parkinsonova nemoc +20 až +49&nbsp;%; místo úmrtí (Tabulka 3). Plný text v otevřeném přístupu (PMC13721334). Ověřeno v PubMed 3. 11. 2026. <a href="https://doi.org/10.1186/s12889-026-29300-1" target="_blank" rel="noopener">doi.org ↗</a> · <a href="https://pubmed.ncbi.nlm.nih.gov/42963572/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+          <li><strong>Pizzato M, Santucci C, Islam N, La Vecchia C, Alicandro G. Relationship between COVID-19 cases and monthly mortality from all causes, cancer, cardiovascular diseases and diabetes in 16 countries, 2020–21. <em>Int J Epidemiol</em>. 2024;54(1). DOI 10.1093/ije/dyaf006. PMID 39947655.</strong> Model s lineárním trendem kalendářního roku; Česko: všechny příčiny 15,8&nbsp;% (2020) a 25,7&nbsp;% (2021), kardiovaskulární nemoci 11,7&nbsp;% (10,7–12,6) a 7,0&nbsp;% (5,8–8,1), nádory 1,6&nbsp;% a −1,6&nbsp;%, diabetes 4,9&nbsp;% a 1,2&nbsp;% (−1,6–4,0). Ověřeno v PubMed 3. 11. 2026. <a href="https://doi.org/10.1093/ije/dyaf006" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Nilsson A, Emilsson L, Kepp KP et al. Cause-specific excess mortality in Denmark, Finland, Norway, and Sweden during the COVID-19 pandemic 2020–2022: a study using nationwide population data. <em>Eur J Epidemiol</em>. 2024;39(9):1037–1050. DOI 10.1007/s10654-024-01154-0. PMID 39285102.</strong> Kromě úmrtí na covid 11&nbsp;610 nadúmrtí na kardiovaskulární nemoci, podúmrtnost na demence (8&nbsp;721) a jiné nemoci dýchací soustavy. Ověřeno v PubMed 3. 11. 2026. <a href="https://doi.org/10.1007/s10654-024-01154-0" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Hansen CL, Viboud C, Simonsen L. Disentangling the relationship between cancer mortality and COVID-19 in the US. <em>eLife</em>. 2024;13. DOI 10.7554/eLife.93758. PMID 39190600.</strong> Analýza všech diagnóz na listu o úmrtí (multiple cause), která odstiňuje změny v kódování: USA 2020 diabetes +37&nbsp;%, Alzheimerova nemoc +19&nbsp;%, nádory +3&nbsp;%. Ověřeno v PubMed 3. 11. 2026. <a href="https://doi.org/10.7554/eLife.93758" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Li Y, Li H, Adair T. The impact of the pandemic on non-COVID-19 causes of death in the United States: a multiple cause of death analysis. <em>Eur J Epidemiol</em>. 2025;40(4):463–474. DOI 10.1007/s10654-025-01214-z. PMID 40106115.</strong> Podíl covidu na nadúmrtnosti byl u úmrtí doma pod 16&nbsp;%, v nemocnicích přes 90&nbsp;%; autoři usuzují na podhlášení covidu u úmrtí doma. Ověřeno v PubMed 3. 11. 2026. <a href="https://doi.org/10.1007/s10654-025-01214-z" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární data</h5>
+        <ul class="article-sources-list">
+          <li><strong>Eurostat — Excess mortality by month (<code>demo_mexrt</code>)</strong> — procentní odchylka počtu zemřelých od průměru téhož měsíce 2016–2019; roční hodnoty indikátoru nadúmrtnosti jsou průměrem dvanácti měsíců. Dostupnost sady ověřena 3. 11. 2026. <a href="https://ec.europa.eu/eurostat/databrowser/view/demo_mexrt/default/table" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a></li>
+          <li><strong>Eurostat — Causes of death, standardised death rate (<code>hlth_cd_asdr2</code>)</strong> — standardizovaná úmrtnost podle příčin (ESP 2013), zdroj indikátorů kardiovaskulární, onkologické a diabetické úmrtnosti; hodnota ČR 2023 pro diabetes (49,37) ověřena živě 3. 11. 2026. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_asdr2/default/table" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a></li>
+          <li><strong>HSPA Monitor — datový kontrakt <code>data/indicators.json</code></strong> — hodnoty indikátorů v textu a v databoxu, stav k 3. 11. 2026. <a href="hspa-prehled.html">Přehled indikátorů HSPA</a></li>
+        </ul>
+      </div>
+
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Čísla ze studie Piler et al. 2026 pocházejí z abstraktu, Tabulek 1–3 a textu výsledků a diskuse plného textu. Nadúmrtnost ve studii je relativní riziko hrubé úmrtnosti proti průměru let 2015–2019; Eurostat počítá s průměrem stejných měsíců 2016–2019 a Pizzato et al. s regresním modelem s trendem, takže hodnoty tří zdrojů nelze sčítat ani přímo odečítat. Nárůsty o 5,3&nbsp;% u kardiovaskulární a o 15,1&nbsp;% u diabetické úmrtnosti mezi lety 2019 a 2020 jsou výpočty redakce ze standardizovaných měr Eurostatu a srovnávají jen dva roky. Časová shoda skoku v řadě úmrtnosti na diabetes s novým Listem o prohlídce zemřelého v roce 2013 je převzata z metodické karty indikátoru; příčinnou souvislost ČSÚ ani Eurostat nekvantifikují. Hypotéza mitochondriální dysfunkce je hypotéza autorů studie, ne její výsledek.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
