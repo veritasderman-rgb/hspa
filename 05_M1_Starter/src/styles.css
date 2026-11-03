@@ -22681,6 +22681,19 @@ select.zpc-note{color:var(--ink);background:var(--paper);border:1px solid var(--
 .zpc-inst-tbl td.zpc-txt:nth-child(4),.zpc-inst-tbl td.zpc-txt:nth-child(5){min-width:170px}
 .zpc-inst-tbl td small{max-width:260px}
 .zpc-inst-tbl td b{font-weight:700}
+/* mobil: tabulka orgánů jako karty (jedna na pojišťovnu); zůstává <table>, čtečky ji čtou dál */
+@media (max-width:640px){
+  .zpc-inst-tbl{overflow:visible;border:0}
+  .zpc-inst-tbl table{min-width:0;display:block}
+  .zpc-inst-tbl thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .zpc-inst-tbl tbody{display:block}
+  .zpc-inst-tbl tr{display:block;border:1px solid var(--rule2);background:var(--paper);margin:0 0 12px}
+  .zpc-inst-tbl tbody th{display:block;text-align:left;background:var(--paper2);color:var(--ink);border-bottom:1px solid var(--rule2);font-size:14px}
+  .zpc-inst-tbl td.zpc-txt{display:block;position:relative;padding-left:108px;min-width:0;max-width:none;white-space:normal;overflow-wrap:anywhere}
+  .zpc-inst-tbl td.zpc-txt::before{content:attr(data-label);position:absolute;left:10px;top:8px;width:90px;color:var(--ink-mut);font-size:11.5px;font-weight:600;letter-spacing:.03em}
+  .zpc-inst-tbl td.zpc-txt:nth-child(4),.zpc-inst-tbl td.zpc-txt:nth-child(5){min-width:0}
+  .zpc-inst-tbl td small{max-width:none}
+}
 .zpc-inst-h4{font-family:var(--sans);font-size:14px;font-weight:600;margin:18px 0 6px}
 .zpc-inst-cit{margin:0;padding-left:1.1em;font-family:var(--sans);font-size:13px}
 .zpc-inst-cit li{margin:0 0 6px}

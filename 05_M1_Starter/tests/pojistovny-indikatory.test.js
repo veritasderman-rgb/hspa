@@ -169,15 +169,16 @@ test('stížnosti: dataset odkazuje na existující přepisy VZ a řádek s čí
   assert.equal(mv.roky.find((y) => y.rok === 2024).opravnene_stiznosti, 14);
 });
 
-test('buildStiznosti / stiznostiHtml: 7 řádků, roky z dat, na 100 tis. jen u plné definice, bez pořadí', () => {
+test('buildStiznosti / stiznostiHtml: 7 řádků, roky z dat, na 100 tis. jen u § 16a, bez pořadí', () => {
   const st = read('data', 'pojistovny-stiznosti.json');
   const poj = read('data', 'pojistovny.json');
   const { roky, rows } = buildStiznosti(st, poj);
   assert.deepEqual(roky, [2023, 2024, 2025]);
   assert.equal(rows.length, 7);
-  const vzp = rows.find((r) => r.kod === '111');
-  assert.ok(vzp.na100k > 500 && vzp.na100k < 1000, `VZP na 100 tis. = ${vzp.na100k}`);
-  assert.equal(rows.find((r) => r.kod === '211').na100k, null, 'jiná definice se nepřepočítává');
+  assert.equal(rows.find((r) => r.kod === '111').s16a100k, null, 'VZP § 16a za 2024 není uvedeno');
+  const mvr = rows.find((r) => r.kod === '211');
+  assert.ok(mvr.s16a100k > 0 && mvr.s16a100k < 1, `ZP MV ČR § 16a na 100 tis. = ${mvr.s16a100k}`);
+  assert.ok(rows.every((r) => !('na100k' in r)), 'podání k dostupnosti se nepřepočítávají');
   assert.equal(rows.find((r) => r.kod === '201').posledni, null);
   const html = stiznostiHtml(st, poj);
   assert.equal((html.match(/<tr data-zp="/g) || []).length, 14, '7 řádků v tabulce podání + 7 v tabulce § 16a');
@@ -185,6 +186,9 @@ test('buildStiznosti / stiznostiHtml: 7 řádků, roky z dat, na 100 tis. jen u 
   assert.match(html, /neuvádí/);
   assert.match(html, /917 podání, 14 oprávněných/);
   assert.match(html, /§ 16a/);
+  const prvni = html.slice(0, html.indexOf('<h4 class="zpc-inst-h4">'));
+  assert.doesNotMatch(prvni, /Na 100 tis\./, 'nesrovnatelná tabulka podání je bez přepočtu');
+  assert.match(html.slice(html.indexOf('<h4 class="zpc-inst-h4">')), /Na 100 tis\. pojištěnců, 2024/);
   assert.match(html, /111-2024\.txt/);
   assert.doesNotMatch(html, /pořadí|žebříček/);
   assert.match(stiznostiHtml(null, poj), /zatím nejsou/);
