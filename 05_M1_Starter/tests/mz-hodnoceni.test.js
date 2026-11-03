@@ -238,9 +238,8 @@ test('transform je idempotentní (stejný vstup = soubor beze změny, generated_
   const r2 = run({ out });
   assert.equal(r2.zmeneno, false);
   assert.equal(fs.readFileSync(out, 'utf8'), a);
-  // a shoduje se s commitnutým souborem (kromě generated_at)
-  const c = real(); const n = JSON.parse(a); delete c.generated_at; delete n.generated_at;
-  assert.deepEqual(n, c);
+  // a shoduje se s commitnutým souborem bez časových razítek (v CI je cache čerstvě stažená, stazeno_at se liší)
+  assert.deepEqual(bezCasu(JSON.parse(a)), bezCasu(real()));
   assert.equal(serializuj(JSON.parse(a)), a);
 });
 
