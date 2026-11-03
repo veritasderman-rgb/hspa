@@ -2,16 +2,12 @@
 
 > **Stav:** návrh schválen vlastníkem 3. 11. 2026. Hotovo: indikátor A
 > (`porodni_asistentka_navstevy_porody`, karta + kontrakt + `indikator-*.html`,
-> mapování na Zdraví 2035 dílčí cíl 2.7.7) a díl 1 série jako draft ve frontě
-> (`clanek-porodni-asistentka-vyuziti-naroku-2026.html`, 4 tvrzení v `claims.json`).
-> Zbývá: indikátor B, krajský dataset C, per-ZP řez D, díly 2–4, série
-> v `series.json` (až budou aspoň dva díly), doplňující dotaz na ÚZIS (§ 6).
-> **Vstupní data:** odpověď ÚZIS **UZIS/080507/2026** (vyřízeno 30. 10. 2026),
-> normalizovaná v [`ingest/manual/uzis-06211/`](ingest/manual/uzis-06211/README.md).
-> **Navazuje na:** [`clanek-porodni-asistentky-sestinedeli.html`](clanek-porodni-asistentky-sestinedeli.html)
-> (27. 8. 2026, zatím uvádí „~2 % žen“ a nárok od 1. 1. 2026),
-> [`clanek-komise-porodnictvi.html`](clanek-komise-porodnictvi.html) a indikátor
-> [`porodni_asistentky_per_100k`](indicators/porodni_asistentky_per_100k.json).
+> mapování na Zdraví 2035 dílčí cíl 2.7.7), krajský dataset C
+> (`porodni_asistentka_navstevy_porody_kraje` v `data/regions.json`, 1. čtvrtletí 2026),
+> díl 1 (`clanek-porodni-asistentka-vyuziti-naroku-2026.html`) a díl 2
+> (`clanek-porodni-asistentka-kraje-2026.html`) jako drafty ve frontě, série
+> `sestinedeli-v-datech` v `series.json`.
+> Zbývá: indikátor B, per-ZP řez D, díly 3–4, doplňující dotaz na ÚZIS (§ 6).
 
 Článek z 27. 8. slíbil čtenářům „třetí test“ reformy: zda se z využití nároku
 stane veřejně sledované číslo. S těmito daty to jde poprvé změřit, a to po
