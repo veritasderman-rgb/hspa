@@ -15,7 +15,7 @@
 // „ČPZP: … · rozdíl …“ (porovnatZUrl, porovnejDlazdice); změna chipu překreslí jen dlaždice.
 //
 // Čisté funkce (testované bez DOM): zpZUrl, profilTiles, porovnejDlazdice, buildKmenKarta, aplikaceKarta, stiznostiKarta,
-// fondKarta, profilHtml, rozcestnikHtml, profilTitle. DOM část: renderProfil.
+// fondKarta, porodniAsistenceKarta, profilHtml, rozcestnikHtml, profilTitle. DOM část: renderProfil.
 
 import { esc, fmtKc, dot, set, NA } from './pojistovny-shared.js';
 import { statTiles, indexedLines, segmentedBar, dotMatrix, isNum, fmtRozdil, fmtValue } from './zp-viz.js';
@@ -183,6 +183,44 @@ export function fondKarta(PV, kod) {
   }) + (d.notes.length ? `<p class="zpc-cap">${esc(d.notes.join(' '))}</p>` : '');
 }
 
+/** „1. čtvrtletí 2026“ z „2026Q1“. */
+const qLabel = (q) => String(q ?? '').replace(/^(\d{4})Q(\d)$/, '$2. čtvrtletí $1');
+const fmt1 = (v) => (isNum(v) ? v.toLocaleString('cs-CZ', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) : null);
+
+/**
+ * Návštěvy porodní asistentky v těhotenství a šestinedělí (výkon 06211) u jedné pojišťovny:
+ * věta za hlavní období, tabulka po čtvrtletích (pojišťovna, Česko, vykazující IČZ) a sbalený krajský řez.
+ * Data: data/pojistovny-porodni-asistence.json (PLAN-PORODNI-ASISTENCE-06211.md § 5.1 D).
+ */
+export function porodniAsistenceKarta(PA, kod) {
+  const z = zpList(PA).find((x) => String(x.kod) === String(kod));
+  if (!z || !PA?.cr?.rada || !Array.isArray(PA.obdobi)) return NEDOHLEDANO('Data o návštěvách porodní asistentky zatím nejsou k dispozici.');
+  const zk = ZP_BY_KOD[kod]?.zkratka || z.zkratka;
+  const ob = PA.obdobi;
+  const pred = PA.predbezne || [];
+  const nesp = z.nespolehliva_obdobi || [];
+  const iH = ob.indexOf(PA.hlavni_obdobi);
+  const hodnota = (v, q) => (nesp.includes(q) ? '<span class="zpc-na" title="v předběžných datech chybí většina porodů">neúplné</span>' : (fmt1(v) ?? NA));
+  const veta = `<p class="zpc-note">V ${esc(qLabel(PA.hlavni_obdobi))} připadlo u ${esc(zk)} na 100 porodů ${esc(fmt1(z.rada.zeny_na_100_porodu[iH]) ?? '—')} žen s návštěvou porodní asistentky (Česko ${esc(fmt1(PA.cr.rada.zeny_na_100_porodu[iH]) ?? '—')}). V roce 2025 to bylo ${esc(fmt1(z.rok_2025?.zeny_na_100_porodu) ?? '—')} (Česko ${esc(fmt1(PA.cr.rok_2025?.zeny_na_100_porodu) ?? '—')}). Od ledna 2026 dostává každá rodička žádanku na tři hrazené návštěvy.</p>`;
+  const radky = ob.map((q, i) => `<tr><th scope="row" class="zpc-txt">${esc(qLabel(q))}${pred.includes(q) ? '*' : ''}</th>`
+    + `<td>${hodnota(z.rada.zeny_na_100_porodu[i], q)}</td><td>${fmt1(PA.cr.rada.zeny_na_100_porodu[i]) ?? NA}</td>`
+    + `<td>${esc(z.rada.icz_921[i])}</td><td>${esc(z.rada.icz_603[i])}</td></tr>`).join('');
+  const tab = `<div class="zpc-tbl" role="region" tabindex="0" aria-label="Návštěvy porodní asistentky po čtvrtletích (tabulka, posuvná)"><table>`
+    + `<thead><tr><th scope="col" class="zpc-txt">Čtvrtletí</th><th scope="col">Žen s návštěvou na 100 porodů: ${esc(zk)}</th><th scope="col">Česko</th>`
+    + `<th scope="col">IČZ porodní asistentka (921)</th><th scope="col">IČZ gynekologie (603)</th></tr></thead><tbody>${radky}</tbody></table></div>`;
+  const kraje = (z.kraje || []).slice().sort((a, b) => b.zeny_na_100_porodu - a.zeny_na_100_porodu);
+  const krajeHtml = kraje.length
+    ? `<details class="zpc-acc"><summary>Podle kraje poskytovatele, ${esc(qLabel(PA.hlavni_obdobi))}<span class="zpc-n"> · ${kraje.length}</span></summary><div class="zpc-acc-body">`
+      + '<div class="zpc-tbl" role="region" tabindex="0" aria-label="Návštěvy porodní asistentky podle kraje (tabulka, posuvná)"><table>'
+      + '<thead><tr><th scope="col" class="zpc-txt">Kraj</th><th scope="col">Žen na 100 porodů</th><th scope="col">Žen s návštěvou</th><th scope="col">Porodů</th></tr></thead><tbody>'
+      + kraje.map((k) => `<tr><th scope="row" class="zpc-txt">${esc(k.nazev)}${k.maly_vzorek ? ' <span class="zpc-na" title="méně než 100 porodů">malý vzorek</span>' : ''}</th>`
+        + `<td>${fmt1(k.zeny_na_100_porodu) ?? NA}</td><td>${fmtN(k.zeny) ?? NA}</td><td>${fmtN(k.porody) ?? NA}</td></tr>`).join('')
+      + '</tbody></table></div></div></details>'
+    : '';
+  return veta + tab + krajeHtml
+    + `<p class="zpc-note">* předběžná data ÚZIS. Ženy s aspoň jednou návštěvou v čtvrtletí na 100 porodů pojištěnek téhož čtvrtletí, ne podíl rodiček; výkon zahrnuje i návštěvy v těhotenství. IČZ = poskytovatelé, kteří návštěvu pojišťovně vykázali, ne smluvní síť. Zdroj: ${esc(PA.zdroj?.nazev || 'ÚZIS ČR')}, ${esc(PA.zdroj?.pozadavek || '')}. Celostátní ukazatel: <a href="indikator-porodni_asistentka_navstevy_porody.html">Ženy s návštěvou porodní asistentky na 100 porodů</a>.</p>`;
+}
+
 // ---------------------------------------------------------------- stránka
 
 const wrapFig = (html) => (html ? `<div class="zpc-chart">${html}</div>` : '');
@@ -232,10 +270,11 @@ export function tilesHtml(kod, data = {}, porovnat = null) {
 /**
  * Celé tělo profilu jedné pojišťovny jako HTML (bez DOM).
  * @param {string} kod
- * @param {{P, A?, PV?, PR?, R?, S?, I?, SP?, D?, ST?}} data  P = data/pojistovny.json (povinné); ostatní nepovinné
+ * @param {{P, A?, PV?, PR?, R?, S?, I?, SP?, D?, ST?, PA?}} data  P = data/pojistovny.json (povinné); ostatní nepovinné
+ *   (PA = data/pojistovny-porodni-asistence.json)
  */
 export function profilHtml(kod, data = {}, porovnat = null) {
-  const { P, A = null, PV = null, PR = null, R = null, S = null, I = null, SP = null, D = null, ST = null } = data;
+  const { P, A = null, PV = null, PR = null, R = null, S = null, I = null, SP = null, D = null, ST = null, PA = null } = data;
   const zp = ZP_BY_KOD[kod];
   if (!zp || !P) return NEDOHLEDANO('Základní dataset srovnávače se nepodařilo načíst.');
   const tiles = tilesHtml(kod, data, porovnat);
@@ -261,6 +300,7 @@ export function profilHtml(kod, data = {}, porovnat = null) {
     `<h4 class="zpc-inst-h4">Orgány a dohled</h4>${organyKarta(I, kod)}`
     + `<h4 class="zpc-inst-h4">Smluvní programy pro poskytovatele</h4>${programyBlok(SP, kod)}`
     + `<h4 class="zpc-inst-h4">Dostupnost péče</h4>${dostupnostKarta(D, kod)}`
+    + `<h4 class="zpc-inst-h4">Návštěvy porodní asistentky po porodu</h4>${porodniAsistenceKarta(PA, kod)}`
     + `<h4 class="zpc-inst-h4">Síť smluvních odborností</h4><p class="zpc-note">Podíl evidovaných míst poskytování, na nichž má ${esc(zp.zkratka)} smluvní zařízení, je jen horní odhad; srovnání sedmi pojišťoven a omezení metody jsou na stránce Instituce.</p>`,
     [{ href: 'pojistovny-instituce.html', label: 'Celé téma: Instituce' }, { href: 'pojistovny-instituce.html#sit-odbornosti', label: 'Síť odborností' }]);
 

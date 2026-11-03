@@ -31,6 +31,7 @@ import { validateInstituce } from './lib/validate-instituce.js';
 import { validateSmluvniProgramy } from './lib/validate-smluvni-programy.js';
 import { validateDostupnost } from './lib/validate-dostupnost.js';
 import { validateSegmenty } from './lib/validate-segmenty.js';
+import { validatePorodniAsistence } from './lib/validate-porodni-asistence.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -56,6 +57,7 @@ export const OPTIONAL_FILES = {
   smluvniProgramy: 'pojistovny-smluvni-programy.json',
   dostupnost: 'pojistovny-dostupnost.json',
   segmenty: 'pojistovny-segmenty.json',
+  porodniAsistence: 'pojistovny-porodni-asistence.json', // výkon 06211 po pojišťovnách (PLAN-PORODNI-ASISTENCE-06211.md § 5.1 D)
 };
 export const STD_STAVY = ['dolozeno', 'placeholder-bez-vah', 'index-prerozdeleni'];
 
@@ -575,6 +577,7 @@ export function validateAll(datasets) {
     ['smluvniProgramy', (d) => validateSmluvniProgramy(d)],
     ['dostupnost', (d) => validateDostupnost(d)],
     ['segmenty', (d) => validateSegmenty(d, { hospodareniRady: datasets?.hospodareniRady })],
+    ['porodniAsistence', (d) => validatePorodniAsistence(d)],
   ];
   for (const [key, fn] of dalsi) {
     if (datasets?.[key] == null) continue;
