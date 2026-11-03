@@ -9,10 +9,10 @@ import { fileURLToPath } from 'node:url';
 import {
   sg, rokPrerozdeleni, buildSaldoChart, buildPodilyPredPo, buildSaldoTabulka, saldoTabulkaHtml, buildVyberMesicni, vyberMesicniHtml,
   UKAZATELE, UKAZATEL_VYCHOZI, rokyUkazatele, klouzavySoucet12, vyberMesicniTabulka, kratkySegment, crHodnota, buildRadyChart, radyHtml, prepinacRokuHtml, stavZUrl, stavDoUrl,
-  buildStatni, statniKarta, buildSegmenty, urovenV, buildFondProvoz, buildFond, buildFondKontext, fondKontextHtml, fondHtml, fondRoky, fondRokZUrl, fondPrepinacHtml, FOND_ROK_ID, VYBER_REZIMY, buildSlozky, buildNaPojistence, prepinacVyberuHtml,
+  buildStatni, statniKarta, buildSegmenty, urovenV, buildFondProvoz, buildFond, buildFondKontext, fondKontextHtml, fondHtml, buildFondPodil, buildFondPlan, buildFondZustatek, FOND_STROP_PCT, fondRoky, fondRokZUrl, fondPrepinacHtml, FOND_ROK_ID, VYBER_REZIMY, buildSlozky, buildNaPojistence, prepinacVyberuHtml,
 } from '../src/pojistovny-penize.js';
 import { statniDd } from '../src/pojistovny.js';
-import { rankedBars, segmentedBar, stackedRows, SORT_NOTE } from '../src/zp-viz.js';
+import { rankedBars, segmentedBar, stackedRows, dumbbell, SORT_NOTE } from '../src/zp-viz.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const json = (f) => JSON.parse(fs.readFileSync(path.join(ROOT, 'data', f), 'utf8'));
@@ -498,9 +498,113 @@ test('A6.1 zapojení: Peníze načítají měsíční kmen jen pro kontext fondu
   const js = fs.readFileSync(path.join(ROOT, 'src', 'pojistovny.js'), 'utf8');
   assert.match(js, /fondKmen: \['zpFondProvoz'\]/);
   assert.match(js, /has\(POTREBA\.fondKmen\) \? loadJson\('data\/pojistovny-kmen-mesicni\.json'\)/);
-  assert.match(js, /renderPenize\(\{ PR: pr, R: rady, S: seg, K: kmFond \}\)/);
+  assert.match(js, /renderPenize\(\{ PR: pr, R: rady, S: seg, K: kmFond, FB: fondBil \}\)/);
   assert.match(js, /zahrnuje|včetně ozdravných pobytů a „ostatních činností“/, 'tabulka Hospodaření 2024 varuje, že fond je celkem');
   assert.match(html, /id="fond-provoz"[\s\S]*ostatní činnosti[\s\S]*antigenní testování na covid[\s\S]*id="zpFondProvoz"/);
   assert.match(html, /<b>Fond prevence\.<\/b> Tabulky 16 a 17 Hodnocení MZ/);
   assert.doesNotMatch(html, /žebříček/i);
+});
+
+// ---------------------------------------------------------------- A7.1 d: fond jako peněženka systému
+
+const B = json('pojistovny-fond-bilance.json');
+const hodnoty = (items, k = 'value') => Object.fromEntries(items.map((i) => [i.label, i[k]]));
+
+test('A7.1 d: podíl fondu na pojistném 2024 sedí na řadě z dat a strop je 3 % s čárou a osou do 3', () => {
+  const a = buildFondPodil(R, 2024);
+  assert.equal(a.rok, 2024);
+  const v = hodnoty(a.items);
+  assert.equal(Object.keys(v).length, 7);
+  assert.equal(v['VZP ČR'], 0.764);
+  assert.equal(v['ZPŠ'], 0.959);
+  assert.equal(v.RBP, 0.676);
+  assert.ok(Object.values(v).every((x) => x > 0 && x < FOND_STROP_PCT));
+  assert.deepEqual(a.opts.ref, { value: 3, label: 'zákonný strop 3 %', kind: 'line' });
+  assert.equal(a.opts.maxv, 3);
+  const html = rankedBars(a.items, a.opts);
+  assert.match(html, /zpv-ref--line/);
+  assert.match(html, /zákonný strop 3 %/);
+  assert.match(html, /data-zp="111"/);
+});
+
+test('A7.1 d: rok mimo přepínač = poslední rok; u VZP před 2023 nese tooltip poznámku o jiném režimu', () => {
+  assert.equal(buildFondPodil(R, 1999).rok, 2024);
+  const stary = buildFondPodil(R, 2022);
+  assert.equal(stary.vzpPred2023, true);
+  const vzp = stary.items.find((i) => i.kod === '111');
+  assert.match(vzp.tip, /před 2023 jiný režim zdrojů fondu u VZP/);
+  const jine = stary.items.find((i) => i.kod === '205');
+  assert.doesNotMatch(jine.tip, /jiný režim/);
+  assert.equal(buildFondPodil(R, 2024).vzpPred2023, false);
+});
+
+test('A7.1 d: dumbbell plán (ZPP) → skutečnost 2024 má plán i skutečnost a plnění sedí na Tab. 3c', () => {
+  const p = buildFondPlan(R, 2024);
+  const from = hodnoty(p.items, 'from');
+  const to = hodnoty(p.items, 'to');
+  assert.equal(from['VZP ČR'], 1600);
+  assert.equal(to['VZP ČR'], 2079.022);
+  assert.equal(from['ZPŠ'], 63);
+  assert.ok(p.items.every((i) => i.from != null && i.to != null));
+  assert.match(p.opts.sub, /VZP ČR 129,9 %/);
+  assert.match(p.opts.sub, /ZP MV ČR 137,6 %/);
+  assert.match(p.opts.sub, /ZPŠ 91,6 %/);
+  assert.equal(p.opts.fromLabel, 'plán (ZPP)');
+  const html = dumbbell(p.items, p.opts);
+  assert.match(html, /plán \(ZPP\)/);
+  assert.match(html, /data-zp="213"/);
+  assert.match(p.items.find((i) => i.kod === '111').tip, /plnění 129,9 %/);
+});
+
+test('A7.1 d: zůstatek fondu na pojištěnce = konečný zůstatek / průměrný počet pojištěnců téhož roku (2024), tooltip s absolutní částkou a násobkem čerpání', () => {
+  const z = buildFondZustatek(R, B);
+  assert.equal(z.rok, 2024);
+  const v = hodnoty(z.items);
+  assert.equal(Math.round(v['ČPZP']), 1109);
+  assert.equal(Math.round(v.OZP), 1178);
+  assert.equal(Math.round(v['VZP ČR']), 33);
+  assert.equal(Math.round(v.VoZP), 6);
+  assert.equal(Math.round(v['ZPŠ']), 412);
+  assert.equal(Math.round(v['ZP MV ČR']), 330);
+  assert.equal(Math.round(v.RBP), 371);
+  // přesný výpočet z dat, ne zaokrouhlené konstanty
+  const cpzp = R.pojistovny.find((x) => x.kod === '205');
+  const zus = B.pojistovny.find((x) => x.kod === '205').roky['2024'].zustatek_konecny.hodnota;
+  assert.ok(Math.abs(v['ČPZP'] - (zus * 1000) / cpzp.rady.pojistenci_prumer['2024'].hodnota) < 1e-9);
+  const cp = z.items.find((i) => i.kod === '205').tip;
+  assert.match(cp, /1\s453 mil\. Kč/);
+  assert.match(cp, /3,6 × roční čerpání zdravotních programů/);
+  // RBP nemá VZ 2024: čerpání programů jde z Tab. 17 MZ a tooltip to říká
+  assert.match(z.items.find((i) => i.kod === '213').tip, /Tab\. 17 MZ/);
+});
+
+test('A7.1 d: zůstatek hledá poslední rok s oběma hodnotami u všech sedmi (2025 nemá kmen v řadách → 2024); bez bilance nic', () => {
+  assert.ok(B.roky.includes(2025), 'bilance má 2025');
+  assert.equal(buildFondZustatek(R, B).rok, 2024);
+  const z = buildFondZustatek(R, null);
+  assert.equal(z.rok, null);
+  assert.ok(z.items.every((i) => i.value == null));
+});
+
+test('A7.1 d: sekce Fond obsahuje tři nové grafy, data-zp marky, tabulková dvojčata a větu o účetním zůstatku s NKÚ 20/24; bez hodnocení', () => {
+  const h = fondHtml(R, null, 2024, B);
+  assert.match(h, /Fond prevence jako % pojistného po přerozdělení předchozího roku, 2024/);
+  assert.match(h, /Plán \(ZPP\) → skutečnost, fond prevence 2024/);
+  assert.match(h, /Zůstatek fondu prevence na pojištěnce k 31\. 12\. 2024/);
+  assert.match(h, /data-fond-fig2/);
+  assert.match(h, /účetní zůstatek fondu podle výročních zpráv, ne o „nevyužité peníze“/);
+  assert.match(h, /20\/24[\s\S]*536 mil\. Kč/);
+  assert.ok(count(h, /class="zpv-table"/g) >= 5, 'každý graf má tabulkové dvojče');
+  assert.doesNotMatch(h, /štědr|žebříček/i);
+  // bez bilance se zůstatek nehroutí, ukáže se „nedohledáno“
+  assert.match(fondHtml(R, null, 2024, null), /Bilance fondu prevence z výročních zpráv zatím není k dispozici/);
+  // rok 2022: poznámka o VZP je vidět i pod grafem
+  assert.match(fondHtml(R, null, 2022, B), /U VZP nejsou roky před 2023 srovnatelné/);
+});
+
+test('A7.1 d: zapojení — načtení bilance, registr stáří dat a bod „Bilance fondu“ ve vysvětlivkách stránky', () => {
+  const js = fs.readFileSync(path.join(ROOT, 'src', 'pojistovny.js'), 'utf8');
+  assert.match(js, /fondBilance: \['zpFondProvoz'\]/);
+  assert.match(js, /has\(POTREBA\.fondBilance\) \? loadJson\('data\/pojistovny-fond-bilance\.json'\)/);
+  assert.match(html, /<b>Bilance fondu\.<\/b>[\s\S]*výročních zpráv/);
 });

@@ -295,8 +295,8 @@ Commity jsou v historii větve `claude/focused-hopper-ley6gn`. Odchylky od plán
 | A5.1 | hotovo | 428901a · `PROMPT_ROUTINE.md` | blok „Data MZ po pojišťovnách“ |
 | A6.1 | hotovo | ae41b285 · `ingest/lib/mz-hodnoceni.js` (`parseTab16/17`), `src/pojistovny-penize.js` | složky fondu z Tab. 16/17 (ZP 2018–2024, ČR 2015–2024), indexovaný graf stažen; v Hodnocení 2018 má MZ zaměněné sloupce 2018/2018 ZPP, parser to řeší součtem Tab. 17 |
 | A6.2 | hotovo (třída C) | `data/pojistovny-fond-pravidla.json`, `src/pojistovny-prevence.js`, explainer `fond_prevence` | 9 podmínek × 7 ZP s citacemi, 11 kontrol NKÚ/MZ/MF 2014–2025; nedohledáno (null = otázka do kola 1): registrace trvá u OZP a ZPŠ, vazba na screening u ČPZP/OZP/ZPŠ/RBP, roční strop ZPŠ a dětský OZP, kontrolní závěr NKÚ u OZP/ZPŠ/RBP |
-| A7.1 | v práci (3. 11. 2026) | `ingest/lib/mz-hodnoceni.js` (ZPP v Tab. 3c), `data/pojistovny-fond-bilance.json`, `src/pojistovny-penize.js` | fond vs strop 3 %, plán vs skutečnost, nevyužitý zůstatek |
-| A7.2 | v práci (3. 11. 2026) | `src/pojistovny-prevence.js` | nárok vs. čerpání |
+| A7.1 | hotovo (3. 11. 2026) | `ingest/lib/mz-hodnoceni.js` (ZPP v Tab. 3c), `data/pojistovny-fond-bilance.json`, `src/pojistovny-penize.js` | fond vs strop 3 %, plán vs skutečnost, zůstatek fondu na pojištěnce (UI: Peníze, sekce Fond) |
+| A7.2 | hotovo (3. 11. 2026) | `src/pojistovny-prevence.js`, `pojistovny-prevence.html`, `data/explainers.json`, `tests/pojistovny-fond-vyuziti.test.js` | nárok vs. čerpání |
 
 Nezávislá revize datové vrstvy (Opus, 3. 11. 2026) a její opravy: commity dda3df4 a 59e9a01. Revize UI (Opus, 3. 11. 2026) a její opravy: commit c8e0aa9. PR #1363 zmergován 3. 11. 2026; vizuální baseline e2e pro stránky srovnávače přegenerována na CI runneru (9bef173) a doplněna navazujícím PR. Zbývá z revize UI (PR třídy B s vlastní regenerací baselinu): onkologická matice bez Σ n/5, sloupec „na 100 tis.“ u stížností, karta Instituce na mobilu jako karty.
 

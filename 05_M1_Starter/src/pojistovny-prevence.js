@@ -13,6 +13,7 @@
 import { NA, esc, num, fmtKc, levelBadge, dot, li, set, short, datumCz, loadJson, LEVELS, LEVEL_LABEL } from './pojistovny-shared.js';
 import { heatmap, dotMatrix, coverageMatrix, segmentedBar, dumbbell, rankedBars, isNum, kratkyPopisek } from './zp-viz.js';
 import { initZpInteract, MOJE_EVENT } from './zp-interact.js';
+import { rokyUkazatele, buildFondZustatek } from './pojistovny-penize.js';
 import { ZP_BY_KOD } from './zp-palette.js';
 
 const zkratka = (kod) => ZP_BY_KOD[String(kod)]?.zkratka || String(kod);
@@ -531,6 +532,7 @@ export function renderPrevence(p, d) {
     bindFond();
     set('zpFpStruktura', fpHtml());
     renderPravidla().catch(() => {});
+    renderVyuziti().catch(() => {});
 
     // doložené výsledky
     const dol = zps.flatMap((z) => (z.dolozene_vysledky || []).map((v) => `<li><b>${esc(z.zkratka)}</b> · ${esc(v.program)}: ${esc(v.vysledek)}${v.rok ? ` (${esc(v.rok)})` : ''}</li>`));
@@ -707,6 +709,78 @@ export async function renderPravidla() {
   if (!box) return;
   const f = await loadJson(PRAVIDLA_URL);
   box.innerHTML = pravidlaHtml(f);
+  refreshInteract();
+}
+
+// ---------------------------------------------------------------- nárok vs. čerpání (A7.2)
+// Strop příspěvků z pravidel (A6.2) vedle toho, kolik z fondu připadá na průměrného pojištěnce (A6.1, A7.1) a kolik
+// příspěvků pojišťovna vyplatila (jen kde to uvádí výroční zpráva). Tabulka je v pevném pořadí podle kódu, bez řazení a bez hodnocení.
+
+export const VYUZITI_RADY_URL = 'data/pojistovny-hospodareni-rady.json';
+export const VYUZITI_BILANCE_URL = 'data/pojistovny-fond-bilance.json';
+const rVal = (env) => (env && typeof env === 'object' && 'hodnota' in env ? env.hodnota : env);
+
+/**
+ * Řádky tabulky „Kolik z fondu doopravdy dostanete“: jeden řádek na pojišťovnu v pořadí kódů z pravidel.
+ * Rok = poslední rok s programy na pojištěnce u všech sedmi (z Tab. 17 MZ). Příspěvky na 100 pojištěnců se počítají
+ * jen tam, kde bilance nese `pocet_prispevku` (jde o příspěvky, ne osoby).
+ * @returns {{rok:number|null, radky:object[]}}
+ */
+export function buildVyuziti(F, R, B) {
+  const rz = new Map((Array.isArray(R?.pojistovny) ? R.pojistovny : []).map((z) => [String(z.kod), z]));
+  const bz = new Map((Array.isArray(B?.pojistovny) ? B.pojistovny : []).map((z) => [String(z.kod), z]));
+  const roky = rokyUkazatele(R, 'fond_prevence_programy_na_pojistence_kc');
+  const rok = roky.slice().reverse().find((y) => pravidlaZps(F).every((z) => Number.isFinite(rVal(rz.get(String(z.kod))?.rady?.fond_prevence_programy_na_pojistence_kc?.[y])))) ?? null;
+  const zus = buildFondZustatek(R, B);
+  const zusPo = new Map(zus.items.map((i) => [String(i.kod), i.value]));
+  const radky = pravidlaZps(F).map((z) => {
+    const r = rz.get(String(z.kod));
+    const rad = (id) => rVal(r?.rady?.[id]?.[rok]);
+    const poj = rad('pojistenci_prumer');
+    const pocet = rVal(bz.get(String(z.kod))?.roky?.[rok]?.vyuziti?.pocet_prispevku);
+    return {
+      kod: z.kod, zkratka: z.zkratka,
+      dospely: stropText(z.podminky?.strop_dospely_kc), dite: stropText(z.podminky?.strop_dite_kc),
+      programy: Number.isFinite(rad('fond_prevence_programy_na_pojistence_kc')) ? rad('fond_prevence_programy_na_pojistence_kc') : null,
+      plneni: Number.isFinite(rad('fond_prevence_plneni_zpp_pct')) ? rad('fond_prevence_plneni_zpp_pct') : null,
+      prispevku100: Number.isFinite(pocet) && Number.isFinite(poj) && poj > 0 ? (pocet / poj) * 100 : null,
+      zustatek: zus.rok != null && Number.isFinite(zusPo.get(String(z.kod))) ? zusPo.get(String(z.kod)) : null,
+    };
+  });
+  return { rok, zustatekRok: zus.rok, radky };
+}
+
+/** Sekce „Kolik z fondu doopravdy dostanete“ jako tabulkové dvojče s CSV; bez řazení a bez pořadí. */
+export function vyuzitiHtml(F, R, B) {
+  const t = buildVyuziti(F, R, B);
+  if (!t.radky.length || t.rok == null) return '<p class="zpc-na">Srovnání stropu a průměrného čerpání zatím není k dispozici.</p>';
+  const na = '<span class="zpc-na">neuvádí</span>';
+  const title = `Strop příspěvků z fondu prevence vedle průměrného čerpání, ${t.rok}`;
+  const source = `pojišťovny · podmínky čerpání (weby k ${datumCz(F.stav_k)}); MZ ČR · Hodnocení vývoje systému v.z.p. ${t.rok} (tab. č. 3c a 17); výroční zprávy pojišťoven (bilance fondu)`;
+  const headers = ['Pojišťovna', 'Strop, dospělý', 'Strop, dítě', `Programy na pojištěnce ${t.rok}, Kč`, `Plnění plánu ${t.rok}`, `Příspěvků na 100 pojištěnců ${t.rok}`, `Zůstatek na pojištěnce 31. 12. ${t.zustatekRok ?? t.rok}, Kč`];
+  const txt = (v) => (v ? `<td class="zpc-txt">${esc(v)}</td>` : `<td class="zpc-txt">${NA}</td>`);
+  const cislo = (v, dec, suf = '') => `<td class="zpv-num">${Number.isFinite(v) ? esc(`${fmtKc(v, dec)}${suf}`) : NA}</td>`;
+  const body = t.radky.map((r) => `<tr data-zp="${esc(r.kod)}"><th scope="row">${dot(r.kod)}${esc(r.zkratka)}</th>${txt(r.dospely)}${txt(r.dite)}${cislo(r.programy, 0)}${cislo(r.plneni, 1, ' %')}`
+    + (r.prispevku100 != null ? `<td class="zpv-num">${esc(fmtKc(r.prispevku100, 0))}<small>příspěvky, ne osoby</small></td>` : `<td class="zpv-num">${na}</td>`)
+    + `${cislo(r.zustatek, 0)}</tr>`).join('');
+  const head = headers.map((h, i) => `<th scope="col"${i >= 3 ? ' class="zpv-num"' : ''}>${esc(h)}</th>`).join('');
+  return '<p class="zpc-note">Roční strop je horní mez pro jednoho pojištěnce. Číslo „zdravotní programy na pojištěnce“ je průměr přes všechny pojištěnce pojišťovny včetně těch, kteří z fondu nečerpají, proto je řádově nižší než strop a neříká, kolik dostane ten, kdo žádá. Tabulka není seřazena a nejde o hodnocení pojišťoven: pojišťovny mají jiné programy, jiné částky a jiné podmínky. '
+    + 'Počet vyplacených příspěvků uvádí ve výroční zprávě jen ZPŠ; jinde ho nelze dopočítat. '
+    + 'Podrobně v explaineru <a href="jak-funguje.html?id=fond_prevence">Fond prevence zdravotních pojišťoven</a>.</p>'
+    + '<div class="zpv zpv-figure zpv-fond-limity zpv-fond-vyuziti">'
+    + `<figcaption class="zpv-cap"><span class="zpv-title">${esc('Strop vs. průměrné čerpání')}</span>`
+    + `<span class="zpv-sub">${esc('Zůstatek fondu je účetní stav k 31. 12., ne „nevyužité peníze“. Zdravotní programy jsou bez ozdravných pobytů a „ostatních činností“.')}</span></figcaption>`
+    + `<details class="zpv-table" open data-csv-title="${esc(title)}" data-csv-source="${esc(source)}"><summary>Tabulka: strop a průměrné čerpání</summary>`
+    + '<button type="button" class="zpv-csv" data-zpv-csv>Stáhnout CSV</button>'
+    + `<div class="zpv-scroll" tabindex="0" role="region" aria-label="${esc(`Tabulka: ${title}`)}"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div></details></div>`;
+}
+
+/** Vykreslí sekci do #zpFpVyuziti; data si dočte přes sdílenou cache (stejný fetch použije patička Zdroje). */
+export async function renderVyuziti() {
+  const box = typeof document !== 'undefined' ? document.getElementById('zpFpVyuziti') : null;
+  if (!box) return;
+  const [F, R, B] = await Promise.all([loadJson(PRAVIDLA_URL), loadJson(VYUZITI_RADY_URL), loadJson(VYUZITI_BILANCE_URL)]);
+  box.innerHTML = F && R ? vyuzitiHtml(F, R, B) : '<p class="zpc-na">Srovnání stropu a průměrného čerpání zatím není k dispozici.</p>';
   refreshInteract();
 }
 
