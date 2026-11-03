@@ -597,7 +597,14 @@ export function pravidlaCitaceHtml(f) {
   }).join('');
 }
 
-const LHUTA_TEXT = (b) => (b?.stav === 'ano' && Number.isFinite(b.hodnota) ? `${fmtKc(b.hodnota, 0)} dní` : null);
+/** Lhůta podání v jednotce, kterou pojišťovna uvádí: „3 měsíce“ zůstávají měsíce (kalendářní), ne 90 dní. */
+export function lhutaText(b) {
+  if (!(b?.stav === 'ano' && Number.isFinite(b.hodnota))) return null;
+  const n = b.hodnota;
+  if (b.jednotka === 'mesice') return `${fmtKc(n, 0)} ${n === 1 ? 'měsíc' : n >= 2 && n <= 4 ? 'měsíce' : 'měsíců'}`;
+  return `${fmtKc(n, 0)} ${n === 1 ? 'den' : n >= 2 && n <= 4 ? 'dny' : 'dní'}`;
+}
+const LHUTA_TEXT = lhutaText;
 /** Text jedné buňky stropu: částka, „bez souhrnného stropu“, jiný limit, nebo null (nedohledáno). */
 export function stropText(b) {
   if (!b || b.stav == null) return null;

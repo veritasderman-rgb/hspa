@@ -10,6 +10,8 @@ export const STAVY = ['ano', 'castecne', 'ne'];
 export const ORGANY = ['NKÚ', 'MZ', 'MF', 'MZ a MF'];
 /** Podmínky s číselnou hodnotou (hodnota je u nich povolená; u ostatních je chyba). */
 export const CISELNE = ['lhuta_podani_dni', 'strop_dospely_kc', 'strop_dite_kc'];
+/** Jednotka lhůty podání: tak, jak ji pojišťovna uvádí (kalendářní měsíce se nepřepočítávají na dny). */
+export const JEDNOTKY_LHUTY = ['dni', 'mesice'];
 export const MAX_CITACE = 450;
 /** Tituly, jména a oslovení, která by prozrazovala osobu v textu zjištění a reakcí. */
 export const OSOBA_RE = /\b(Ing\.|MUDr\.|Mgr\.|JUDr\.|RNDr\.|Bc\.|PhDr\.|doc\.|prof\.|paní|pan[ae]?)\s/;
@@ -124,7 +126,11 @@ export function validateFondPravidla(D) {
         ok(Number.isFinite(c.hodnota) && c.hodnota >= 0, `${ct}.hodnota: nezáporné číslo`);
         ok(c.stav !== 'ne', `${ct}: stav ne nemá hodnotu`);
       }
-      if (id === 'lhuta_podani_dni') ok(c.stav !== 'ano' || Number.isFinite(c.hodnota), `${ct}: stav ano vyžaduje hodnotu ve dnech`);
+      if (id === 'lhuta_podani_dni') {
+        ok(c.stav !== 'ano' || Number.isFinite(c.hodnota), `${ct}: stav ano vyžaduje hodnotu lhůty`);
+        // Jednotka se zachovává, jak ji pojišťovna uvádí: „3 měsíce“ nejsou 90 dní (revize Codex, PR #1372).
+        if (c.hodnota != null) ok(JEDNOTKY_LHUTY.includes(c.jednotka), `${ct}.jednotka: ${JEDNOTKY_LHUTY.join(' | ')} (je '${c.jednotka}')`);
+      } else if (c.jednotka != null) ok(false, `${ct}.jednotka: uvádí se jen u lhůty podání`);
       if (id.startsWith('strop_') && c.stav === 'ano') ok(Number.isFinite(c.hodnota), `${ct}: stav ano vyžaduje hodnotu v Kč`);
       if (c.poznamka != null) ok(isStr(c.poznamka), `${ct}.poznamka: neprázdný string`);
       checkText(c.poznamka, `${ct}.poznamka`);

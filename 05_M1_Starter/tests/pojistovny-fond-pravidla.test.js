@@ -6,7 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validateFondPravidla, PODMINKY, KODY_ZP } from '../ingest/lib/validate-fond-pravidla.js';
 import { validateAll, loadDatasets } from '../ingest/validate-pojistovny.js';
-import { buildPravidlaMatrix, pravidlaHtml, buildKontroly, buildLimity, stropText, PRAVIDLA_MATICE } from '../src/pojistovny-prevence.js';
+import { buildPravidlaMatrix, pravidlaHtml, buildKontroly, buildLimity, limityHtml, stropText, PRAVIDLA_MATICE, lhutaText } from '../src/pojistovny-prevence.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const real = () => JSON.parse(fs.readFileSync(path.join(ROOT, 'data/pojistovny-fond-pravidla.json'), 'utf8'));
@@ -105,4 +105,31 @@ test('stránka Prevence odkazuje na explainer fond_prevence a ten existuje', () 
   assert.match(html, /href="jak-funguje\.html\?id=fond_prevence"/);
   const ex = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/explainers.json'), 'utf8')).explainers;
   assert.ok(ex.some((e) => e.id === 'fond_prevence'));
+});
+
+test('lhůta podání drží jednotku pojišťovny: měsíce zůstávají měsíce, dny dny (Codex, PR #1372)', () => {
+  const f = real();
+  const lhuty = Object.fromEntries(f.pojistovny.map((z) => [z.zkratka, z.podminky.lhuta_podani_dni]));
+  assert.equal(lhutaText(lhuty['VoZP']), '90 dní', 'VoZP uvádí 90 dnů');
+  assert.equal(lhutaText(lhuty['VZP ČR']), '3 měsíce', 'VZP uvádí 3 měsíce, ne 90 dní');
+  for (const z of f.pojistovny) {
+    const c = z.podminky.lhuta_podani_dni;
+    assert.ok(['dni', 'mesice'].includes(c.jednotka), `${z.zkratka}: jednotka`);
+    assert.doesNotMatch(c.poznamka || '', /zapsáno jako 90 dní/, `${z.zkratka}: žádný přepočet měsíců na dny`);
+    if (/měsíc/.test(c.citace)) assert.equal(c.jednotka, 'mesice', `${z.zkratka}: citace mluví o měsících`);
+  }
+  assert.equal(lhutaText({ stav: 'ano', hodnota: 1, jednotka: 'mesice' }), '1 měsíc');
+  assert.equal(lhutaText({ stav: 'ano', hodnota: 6, jednotka: 'mesice' }), '6 měsíců');
+  assert.equal(lhutaText({ stav: 'ano', hodnota: 30, jednotka: 'dni' }), '30 dní');
+  assert.equal(lhutaText({ stav: null }), null);
+  const html = limityHtml(f);
+  assert.match(html, /3 měsíce/);
+  assert.match(html, /90 dní/);
+  // validátor: neznámá jednotka a jednotka mimo lhůtu jsou chyby
+  const kopie = structuredClone(f);
+  kopie.pojistovny[0].podminky.lhuta_podani_dni.jednotka = 'tydny';
+  kopie.pojistovny[1].podminky.strop_dospely_kc.jednotka = 'dni';
+  const v = validateFondPravidla(kopie);
+  assert.ok(v.errors.some((e) => /jednotka: dni \| mesice/.test(e)), v.errors.join('\n'));
+  assert.ok(v.errors.some((e) => /jednotka: uvádí se jen u lhůty/.test(e)), v.errors.join('\n'));
 });

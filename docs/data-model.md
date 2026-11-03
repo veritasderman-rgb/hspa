@@ -2048,7 +2048,7 @@ Pravidla čerpání fondu prevence u sedmi ZP a veřejné kontroly fondu. Invent
 | `version`, `generated_at`, `stav_k`, `_doc`, `skala`, `poznamky_autora[]`, `zdroje[]{id,nazev,url}` | obálka a metodika; `skala` popisuje stavy ano / castecne / ne / null |
 | `ramec{zakon[]{predpis,paragraf,obsah,url}, zmena_2026, strop_pct, strop_popis, nenarokovost{text,citace,url,overeno_at}, stanovisko_mz{datum,forma,obsah,citace,url,overeno_at}}` | § 7b/7c zák. 551/1991 Sb., § 18a/18b zák. 280/1992 Sb., strop 3 %, nenárokovost, stanovisko MZ z 11/2025 |
 | `podminky[]{id,nazev,popis}` | 9 podmínek v pevném pořadí: registrace_trva, bez_preregistrace, preventivni_prohlidka, bez_dluhu, lhuta_podani_dni, strop_dospely_kc, strop_dite_kc, jen_aplikace, podminene_prispevky |
-| `pojistovny[]{kod,zkratka,podminky{id:{stav,hodnota?,citace,url,overeno_at,poznamka?}},kontroly[]}` | `stav` ano / castecne / ne / null; null = nenalezeno, vyžaduje `poznamka` (otázka do kola 1); `hodnota` jen u lhůty (dny) a stropů (Kč); citace doslovná, do 450 znaků, `url` https |
+| `pojistovny[]{kod,zkratka,podminky{id:{stav,hodnota?,citace,url,overeno_at,poznamka?}},kontroly[]}` | `stav` ano / castecne / ne / null; null = nenalezeno, vyžaduje `poznamka` (otázka do kola 1); `hodnota` jen u lhůty a stropů (Kč); u lhůty navíc `jednotka` dni / mesice tak, jak ji pojišťovna uvádí (kalendářní měsíce se nepřepočítávají na dny); citace doslovná, do 450 znaků, `url` https |
 | `kontroly[]{id,organ,cislo,rok_kontroly,obdobi,predmet,zjisteni[],castky_kc?[{popis,kc}],reakce,url,url_dalsi?}` | `organ` NKÚ / MZ / MF / MZ a MF; bez jmen osob (validátor hlídá tituly a oslovení) |
 | `kontroly_plosne[]` | stejný tvar jako `kontroly[]`, kontroly týkající se všech pojišťoven (akvizice pojištěnců) |
 
