@@ -5,7 +5,9 @@ Navazuje na `09_Srovnavac_pojistoven_plan.md` (moduly, harmonogram pracovní sku
 a `docs/metodika-srovnavac-pojistoven.md` (šest oblastí, semafor, pravidla férovosti).
 Tenhle dokument řeší, **co s tím udělat v repu**: jak stránku dostavět, jak jí dát
 čitelné grafy a kdo (který agent, který člověk) co udělá. Vstupní bod pro každou
-další session nad srovnávačem._
+další session nad srovnávačem. Analytické rozšíření (peníze z dat MZ 2015–2024,
+přerozdělení, instituce, profil pojišťovny, export, srovnání dvou ZP) má vlastní plán
+[`PLAN-SROVNAVAC-ANALYTIK.md`](PLAN-SROVNAVAC-ANALYTIK.md) (balíčky A0–A5, 3. 11. 2026)._
 
 > **Shrnutí.** Data jsou z větší části hotová (CRP 2025, hospodaření 2024, ZPP 2026,
 > prevence, aplikace), ale stránka je ukazuje jako sedm náhodně obarvených sloupců,
