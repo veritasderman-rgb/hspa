@@ -7,7 +7,7 @@ import path from 'node:path';
 import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 import {
-  parseLinks, parseTab1, parseTab1a, parseTab1c, parseTab3Celkem, parseTab3c, parseTabZpRadek, parseTab7, parseTab4Vydaje,
+  parseLinks, parseTab1, parseTab1a, parseTab1c, parseTab3Celkem, parseTab3c, parseTabZpRadek, parseTab7, parseTab4Vydaje, parseTab17, parseTab16, vyberTab16,
   rozdelCisla, findSheet, colLetter,
 } from '../ingest/lib/mz-hodnoceni.js';
 import { validateHospodareniRady } from '../ingest/lib/validate-hospodareni-rady.js';
@@ -155,6 +155,117 @@ test('parseTab4Vydaje: výdaje na vlastní činnost a podíl (2018 zalomený pop
   assert.equal(parseTab4Vydaje(txt('pdf-bez-tabulek-2016.txt')), null);
 });
 
+const poradi = (o) => ['111', '201', '205', '207', '209', '211', '213'].map((k) => o[k]);
+
+test('parseTab17 2024: kontrolní hodnoty (zdravotní programy VZP 1 782, ostatní, jiné zdroje VoZP)', () => {
+  const t = parseTab17(txt('pdf-tab16-17-2024.txt'), { rok: 2024 });
+  assert.deepEqual(poradi(t.programy), [1782, 176, 401, 240, 15, 437, 35]);
+  assert.deepEqual(poradi(t.pobyty), [0, 4, 3, 1, 2, 17, 16]);
+  assert.deepEqual(poradi(t.ostatni), [297, 1, 0, 0, 41, 0, 66]);
+  assert.deepEqual(poradi(t.jine_zdroje), [null, 19, null, null, null, null, null]);
+  assert.deepEqual(poradi(t.celkem), [2079, 200, 404, 241, 58, 454, 117]);
+});
+
+test('parseTab17 2019 (čísla na 1. řádku popisku) a 2022 (čísla na 2. řádku; popisek zalomený jinak)', () => {
+  const t19 = parseTab17(txt('pdf-tab16-17-2019.txt'), { rok: 2019 });
+  assert.deepEqual(poradi(t19.programy), [388, 104, 264, 127, 12, 181, 39]);
+  assert.deepEqual(poradi(t19.pobyty), [44, 3, 10, 6, 2, 20, 7]);
+  assert.deepEqual(poradi(t19.ostatni), [113, 0, null, 0, 17, null, 35]);
+  assert.deepEqual(poradi(t19.celkem), [545, 119, 274, 133, 30, 201, 81]);
+  const t22 = parseTab17(txt('pdf-tab16-17-2022.txt'), { rok: 2022 });
+  assert.deepEqual(poradi(t22.programy), [475, 148, 325, 178, 9, 341, 27]);
+  assert.deepEqual(poradi(t22.pobyty), [0, 3, 2, 6, 2, 16, 6]);
+  assert.deepEqual(poradi(t22.ostatni), [683, 56, 108, 48, 35, 0, 80]);
+  assert.equal(t22.jine_zdroje['201'], 19);
+  assert.deepEqual(poradi(t22.celkem), [1158, 225, 435, 232, 46, 357, 113]);
+  // Σ složek = celkem (±1) v každém výřezu
+  for (const [soubor, rok] of [['2019', 2019], ['2022', 2022], ['2024', 2024], ['2018', 2018]]) {
+    const t = parseTab17(txt(`pdf-tab16-17-${soubor}.txt`), { rok });
+    for (const k of ['111', '201', '205', '207', '209', '211', '213']) {
+      const s = ['programy', 'pobyty', 'ostatni', 'jine_zdroje'].reduce((a, id) => a + (t[id][k] ?? 0), 0);
+      assert.ok(Math.abs(s - t.celkem[k]) <= 1, `${rok} ${k}: ${s} vs ${t.celkem[k]}`);
+    }
+  }
+});
+
+test('parseTab17: špatný rok, ročník bez tabulky a text bez ní = null', () => {
+  assert.equal(parseTab17(txt('pdf-tab16-17-2024.txt'), { rok: 2023 }), null);
+  assert.equal(parseTab17(txt('pdf-tab8-2015.txt'), { rok: 2015 }), null);
+  assert.equal(parseTab17(txt('pdf-bez-tabulek-2016.txt'), { rok: 2016 }), null);
+});
+
+test('parseTab16: šestiletá okna ČR, sloupec ZPP, tis. Kč z 2015 (úzké sloupce s jednou mezerou)', () => {
+  const a = parseTab16(txt('pdf-tab16-17-2024.txt'));
+  assert.deepEqual(Object.keys(a.roky).map(Number), [2019, 2020, 2021, 2022, 2023, 2024]);
+  assert.deepEqual(a.roky[2021], { programy: 1226, pobyty: 29, ostatni: 967, jine_zdroje: 16, celkem: 2238 });
+  assert.equal(a.roky[2024].celkem, 3553);
+  assert.equal(a.zpp.rok, 2024);
+  assert.equal(a.zpp.programy, 2431);
+  const b = parseTab16(txt('pdf-tab16-17-2019.txt'));
+  assert.equal(b.roky[2015].programy, 580);
+  assert.equal(b.roky[2019].ostatni, 165);
+  const c = parseTab16(txt('pdf-tab8-2015.txt'));
+  assert.equal(c.jednotka, 'tis');
+  assert.equal(c.zpp, null);
+  assert.deepEqual(c.roky[2015], { programy: 580.341, pobyty: 103.629, ostatni: 88.976, jine_zdroje: 9.725, celkem: 782.671 });
+  assert.equal(c.roky[2013].celkem, 1161.291);
+  assert.equal(parseTab16(txt('pdf-bez-tabulek-2016.txt')), null);
+});
+
+test('vyberTab16: v PDF 2018 jsou sloupce „2018“ a „ZPP“ zaměněné → použije se ten, který sedí na Tab. 17', () => {
+  const t16 = parseTab16(txt('pdf-tab16-17-2018.txt'));
+  const t17 = parseTab17(txt('pdf-tab16-17-2018.txt'), { rok: 2018 });
+  assert.equal(t16.roky[2018].programy, 914);
+  const v = vyberTab16(t16, 2018, t17);
+  assert.equal(v.hodnoty.programy, 876);
+  assert.equal(v.hodnoty.celkem, 1093);
+  assert.match(v.poznamka, /zaměněny/);
+  // ostatní ročníky se nemění
+  const t16b = parseTab16(txt('pdf-tab16-17-2024.txt'));
+  const v24 = vyberTab16(t16b, 2024, parseTab17(txt('pdf-tab16-17-2024.txt'), { rok: 2024 }));
+  assert.equal(v24.hodnoty.programy, 3085);
+  assert.equal(v24.poznamka, null);
+  assert.equal(vyberTab16(t16b, 2015, null), null);
+});
+
+test('data: řady fondu prevence z Tab. 17 bez null 2018–2024 u 7 ZP, 2015–2017 null s důvodem v chybi[]', () => {
+  const R = real();
+  for (const id of ['fond_prevence_programy_mil', 'fond_prevence_pobyty_mil', 'fond_prevence_ostatni_mil', 'fond_prevence_celkem_t17_mil', 'fond_prevence_programy_na_pojistence_kc', 'fond_prevence_ostatni_podil_pct']) {
+    for (const p of R.pojistovny) {
+      for (const rok of [2018, 2019, 2020, 2021, 2022, 2023, 2024]) assert.ok(p.rady[id][String(rok)], `${p.kod} ${id} ${rok}`);
+      for (const rok of [2015, 2016, 2017]) assert.equal(p.rady[id][String(rok)], null, `${p.kod} ${id} ${rok}`);
+    }
+    for (const rok of R.roky) assert.ok(R.cr.rady[id][String(rok)] || (rok < 2018 && id.includes('na_pojistence')) || rok >= 2015, `cr ${id} ${rok}`);
+    assert.ok(R.chybi.some((c) => c.ukazatel === id && c.roky.join() === '2015,2016,2017' && /Tab\. 17 v Hodnocení za rok 2015/.test(c.duvod)), `chybi ${id}`);
+  }
+  // jiné zdroje jen VoZP
+  for (const p of R.pojistovny) {
+    for (const rok of [2018, 2024]) assert.equal(p.rady.fond_prevence_jine_zdroje_mil[String(rok)] !== null, p.kod === '201', `${p.kod} jine ${rok}`);
+  }
+  assert.ok(R.chybi.some((c) => c.ukazatel === 'fond_prevence_jine_zdroje_mil' && Array.isArray(c.kody) && c.kody.length === 6 && !c.kody.includes('201')));
+  // kontrolní hodnoty 2024: zdravotní programy na pojištěnce
+  const na = (kod) => Math.round(R.pojistovny.find((p) => p.kod === kod).rady.fond_prevence_programy_na_pojistence_kc['2024'].hodnota);
+  assert.deepEqual(['111', '201', '205', '207', '209', '211', '213'].map(na), [290, 250, 306, 316, 105, 323, 82]);
+  // ČR 2015–2024 z Tab. 16 (všech 10 let) a covid 2021–22 v podílu ostatních činností
+  for (const rok of R.roky) assert.ok(R.cr.rady.fond_prevence_ostatni_mil[String(rok)], `cr ostatní ${rok}`);
+  assert.equal(R.cr.rady.fond_prevence_ostatni_mil['2021'].hodnota, 967);
+  assert.ok(R.cr.rady.fond_prevence_ostatni_podil_pct['2021'].hodnota > 40);
+  assert.match(R.cr.rady.fond_prevence_programy_mil['2018'].poznamka, /zaměněny/);
+  assert.ok(Object.keys(R.jednotky).includes('fond_prevence_programy_na_pojistence_kc'));
+  assert.match(R._doc, /fond_prevence_programy_na_pojistence_kc/);
+});
+
+test('validátor: fond prevence — Σ složek ≠ celkem Tab. 17 a programy > celkem jsou chyby, rozdíl proti Tab. 3c je WARN', () => {
+  const base = real();
+  const kopie = (fn) => { const R = structuredClone(base); fn(R); return validateHospodareniRady(R); };
+  assert.ok(kopie((R) => { R.pojistovny[0].rady.fond_prevence_ostatni_mil['2024'].hodnota += 5; }).errors.some((e) => /ostatní .* ≠ celkem Tab\. 17/.test(e)));
+  assert.ok(kopie((R) => { R.pojistovny[2].rady.fond_prevence_programy_mil['2022'].hodnota += 50; R.pojistovny[2].rady.fond_prevence_celkem_t17_mil['2022'].hodnota += 50; }).errors.length === 0);
+  assert.ok(kopie((R) => { R.pojistovny[0].rady.fond_prevence_programy_mil['2024'].hodnota = 3000; }).errors.some((e) => /programy_mil\[2024\]|≠ celkem Tab\. 17/.test(e)));
+  const w = kopie((R) => { R.pojistovny[1].rady.fond_prevence_mil['2024'].hodnota += 4; });
+  assert.deepEqual(w.errors.filter((e) => /fond_prevence/.test(e)), []);
+  assert.ok(w.warnings.some((x) => /Tabulka č\. 3c/.test(x)));
+});
+
 // ---------------------------------------------------------------------------------- transform + validátor
 
 test('data/pojistovny-hospodareni-rady.json: validátor projde, VZP 2024 sedí', () => {
@@ -211,6 +322,8 @@ test('sestavRady na fixturách (2015 + 2024) dává stejné hodnoty jako reáln�
       rezervni: parseTabZpRadek(rows(`tab1d-${rok}.json`), /^a\.\s*skutečné naplnění/i),
       tab3: parseTab3Celkem(rows(`tab3-${rok}.json`), { rok }), tab3a: parseTab3Celkem(rows(`tab3a-${rok}.json`), { rok }), tab3c: parseTab3c(rows(`tab3c-${rok}.json`), { rok }),
       tab7: rok === 2024 ? parseTab7(txt('pdf-tab7-2024.txt')) : null, tab4: rok === 2024 ? parseTab4Vydaje(txt('pdf-tab4-2024.txt')) : null,
+      tab17: rok === 2024 ? parseTab17(txt('pdf-tab16-17-2024.txt'), { rok }) : null,
+      tab16: parseTab16(txt(rok === 2024 ? 'pdf-tab16-17-2024.txt' : 'pdf-tab8-2015.txt')),
     };
   });
   const soubory = Object.fromEntries([2015, 2024].map((r) => [r, Object.fromEntries(['pdf', 'xlsx-1', 'xlsx-3'].map((t) => [t, { url: `https://x.test/${r}/${t}` }]))]));

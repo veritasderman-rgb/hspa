@@ -71,6 +71,34 @@ export function validateHospodareniRady(R, { pojistovny } = {}) {
       if (isNum(vl) && isNum(po) && isNum(pred) && Math.abs(vl - (po - pred)) > 0.0015) err(`ZP ${p.kod}[${rok}]: vliv_prerozdeleni (${vl}) ≠ po − před (${(po - pred).toFixed(6)})`);
     }
   }
+  // A6.1 fond prevence: Σ složek = celkem Tab. 17 (±1 mil. Kč, MZ zaokrouhluje každou složku zvlášť), programy ≤ celkem,
+  // celkem Tab. 17 ≈ Tabulka č. 3c (rozdíl jen WARN: u VoZP ČR je v Tab. 3c jiný rozsah zdrojů)
+  const FOND_SLOZKY = ['fond_prevence_programy_mil', 'fond_prevence_pobyty_mil', 'fond_prevence_ostatni_mil', 'fond_prevence_jine_zdroje_mil'];
+  const fondKontrola = (kde, rady, jeZP) => {
+    for (const rok of roky) {
+      const g = (id) => rady?.[id]?.[String(rok)]?.hodnota;
+      const celkem = g('fond_prevence_celkem_t17_mil');
+      if (!isNum(celkem)) continue;
+      const slozky = FOND_SLOZKY.map(g);
+      if (!slozky.slice(0, 3).every(isNum)) { err(`${kde}.fond_prevence[${rok}]: chybí programy / pobyty / ostatní, ale je celkem Tab. 17`); continue; }
+      const s = slozky.reduce((a, v) => a + (isNum(v) ? v : 0), 0);
+      if (Math.abs(s - celkem) > 1) err(`${kde}.fond_prevence[${rok}]: programy + pobyty + ostatní + jiné zdroje = ${s} ≠ celkem Tab. 17 = ${celkem} (> 1 mil. Kč)`);
+      if (slozky[0] > celkem + 1) err(`${kde}.fond_prevence_programy_mil[${rok}] = ${slozky[0]} > celkem ${celkem}`);
+      const t3c = g('fond_prevence_mil');
+      if (jeZP && isNum(t3c) && Math.abs(t3c - celkem) > 1) warnings.push(`${kde}.fond_prevence[${rok}]: celkem Tab. 17 = ${celkem} mil. ≠ Tabulka č. 3c = ${t3c} mil. (rozdíl ${(celkem - t3c).toFixed(1)})`);
+    }
+  };
+  for (const p of R.pojistovny ?? []) fondKontrola(`ZP ${p.kod}`, p.rady, true);
+  fondKontrola('cr', R.cr?.rady, false);
+  for (const id of [...FOND_SLOZKY, 'fond_prevence_celkem_t17_mil']) {
+    for (const rok of roky) {
+      const cr = R.cr?.rady?.[id]?.[String(rok)]?.hodnota;
+      const casti = (R.pojistovny ?? []).map((p) => p.rady?.[id]?.[String(rok)]?.hodnota);
+      if (!isNum(cr) || !casti.some(isNum)) continue;
+      const s = casti.reduce((a, v) => a + (isNum(v) ? v : 0), 0);
+      if (casti.some(isNum) && Math.abs(s - cr) > Math.max(3, Math.abs(cr) * 0.005)) warnings.push(`součet ${id}[${rok}]: Σ ZP (Tab. 17) = ${s} vs cr (Tab. 16) = ${cr}`);
+    }
+  }
   kontrolaRady('cr', R.cr?.rady);
   kontrolaRady('zamestnanecke', R.zamestnanecke?.rady);
 

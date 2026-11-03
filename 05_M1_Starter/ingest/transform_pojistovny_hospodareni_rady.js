@@ -9,7 +9,7 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { readSheet, sheetNames } from './lib/xlsx.js';
-import { KODY, LISTY, STRANKA_URL, findSheet, parseRok } from './lib/mz-hodnoceni.js';
+import { KODY, LISTY, STRANKA_URL, findSheet, parseRok, vyberTab16 } from './lib/mz-hodnoceni.js';
 import { validateHospodareniRady } from './lib/validate-hospodareni-rady.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -36,6 +36,38 @@ const pdfMap = (sel, pdfKey) => (b, k) => {
   const v = b[pdfKey]?.[sel]?.[k];
   return typeof v === 'number' ? { ref: { radek: null, sloupec: null }, hodnota: v } : null;
 };
+const PDF17 = 'PDF Tab. 17 (Náklady na preventivní zdravotní péči a další programy čerpané z fondu prevence ZP a specifických fondů VoZP ČR podle zdravotních pojišťoven; ČR celkem z Tab. 16)';
+const POMLCKA_POZN = 'MZ uvádí „–“ (nula / neuvedeno)';
+const NULA_ROUND = (v) => round(v, 2);
+/**
+ * Složka fondu prevence (mil. Kč) za ZP z Tab. 17, za ČR (`cr`) z Tab. 16 téhož PDF (viz vyberTab16) a za zaměstnanecké ZP
+ * (`zzp`) jako součet šesti ZP bez VZP. `sel` = programy | pobyty | ostatni | jine_zdroje | celkem. „–“ = 0 s poznámkou;
+ * „Z jiných zdrojů“ má jen VoZP ČR (ostatní ZP null).
+ * @returns {{ref:{radek:null,sloupec:null}, hodnota:number, poznamka?:string, list?:string}|null}
+ */
+function fondSlozka(b, k, sel) {
+  const ref = { radek: null, sloupec: null };
+  if (k === 'cr') {
+    const v = vyberTab16(b.tab16, b.rok, b.tab17);
+    const h = v?.hodnoty?.[sel];
+    return typeof h === 'number' ? { ref, hodnota: h, list: 'PDF Tab. 16 (Vývoj nákladů na preventivní zdravotní péči čerpaných z fondu prevence ZP a specifických fondů VoZP ČR; sloupec roku)', ...(v.poznamka ? { poznamka: v.poznamka } : {}) } : null;
+  }
+  if (!b.tab17) return null;
+  if (k === 'zzp') {
+    const casti = KODY.filter((kod) => kod !== '111').map((kod) => fondSlozka(b, kod, sel));
+    const platne = casti.filter(Boolean);
+    if (sel === 'jine_zdroje') return platne.length ? { ref, hodnota: platne.reduce((a, c) => a + c.hodnota, 0) } : null;
+    return platne.length === casti.length ? { ref, hodnota: platne.reduce((a, c) => a + c.hodnota, 0) } : null;
+  }
+  if (sel === 'jine_zdroje' && k !== '201') return null;
+  const v = b.tab17[sel]?.[k];
+  if (v === undefined) return null;
+  if (v === null) return sel === 'celkem' ? null : { ref, hodnota: 0, poznamka: POMLCKA_POZN };
+  return { ref, hodnota: v };
+}
+const fond = (sel) => (b, k) => fondSlozka(b, k, sel);
+const fondDef = (sel, jednotka = 'mil. Kč') => ({ zdroj: 'pdf', list: PDF17, jednotka, f: fond(sel) });
+
 export const UKAZATELE = {
   pojistenci_prumer: { zdroj: 'xlsx-1', list: 'tab.č.1', jednotka: 'osoby', zakladni: true, f: ref1('pojistenci_prumer') },
   statni_pojistenci: { zdroj: 'pdf', list: PDF7, jednotka: 'osoby', f: pdfMap('statni', 'tab7') },
@@ -94,10 +126,35 @@ export const UKAZATELE = {
     zdroj: 'xlsx-3', list: 'Tabulka č. 3c', jednotka: 'Kč',
     f: refConv((b, k) => (b.tab3c?.na_pojistence?.[k] ? { ref: b.tab3c.na_pojistence[k], hodnota: b.tab3c.na_pojistence[k].hodnota } : null), (v) => round(v, 2)),
   },
+  // A6.1: kam fond prevence teče (Tab. 17; ČR z Tab. 16). Celkový fond (výše) sčítá zdravotní programy, ozdravné pobyty a „ostatní činnosti“.
+  fond_prevence_programy_mil: fondDef('programy'),
+  fond_prevence_pobyty_mil: fondDef('pobyty'),
+  fond_prevence_ostatni_mil: fondDef('ostatni'),
+  fond_prevence_jine_zdroje_mil: fondDef('jine_zdroje'),
+  fond_prevence_celkem_t17_mil: fondDef('celkem'),
+  fond_prevence_programy_na_pojistence_kc: {
+    zdroj: 'pdf', list: `${PDF17}; zdravotní programy / průměrný počet pojištěnců (tab.č.1)`, jednotka: 'Kč',
+    f: (b, k) => {
+      const p = fondSlozka(b, k, 'programy'); const poj = b.tab1?.pojistenci_prumer?.[k];
+      return p && poj && poj.hodnota > 0 ? { ref: p.ref, hodnota: NULA_ROUND((p.hodnota * 1e6) / poj.hodnota), ...(p.poznamka ? { poznamka: p.poznamka } : {}) } : null;
+    },
+  },
+  fond_prevence_ostatni_podil_pct: {
+    zdroj: 'pdf', list: `${PDF17}; ostatní činnosti / celkové náklady`, jednotka: '%',
+    f: (b, k) => {
+      const o = fondSlozka(b, k, 'ostatni'); const c = fondSlozka(b, k, 'celkem');
+      return o && c && c.hodnota > 0 ? { ref: o.ref, hodnota: NULA_ROUND((o.hodnota / c.hodnota) * 100) } : null;
+    },
+  },
 };
+const NOVE_FOND = ['fond_prevence_programy_mil', 'fond_prevence_pobyty_mil', 'fond_prevence_ostatni_mil', 'fond_prevence_jine_zdroje_mil', 'fond_prevence_celkem_t17_mil', 'fond_prevence_programy_na_pojistence_kc', 'fond_prevence_ostatni_podil_pct'];
 export const ZAKLADNI_RADY = Object.entries(UKAZATELE).filter(([, d]) => d.zakladni).map(([id]) => id);
 
 const DUVODY = (id, rok) => {
+  if (NOVE_FOND.includes(id)) {
+    if (rok < 2018) return `Tab. 17 v Hodnocení za rok ${rok} není (PDF má jen celkové řady fondu prevence za ČR, bez rozpisu po ZP; ČR viz cr.rady)`;
+    if (id === 'fond_prevence_jine_zdroje_mil') return `Tab. 17 v Hodnocení za rok ${rok} uvádí „Z jiných zdrojů“ jen u VoZP ČR (specifické fondy); u ostatních ZP je řádek pomlčka`;
+  }
   if (['statni_pojistenci', 'statni_pojistenci_pct', 'pojistencu_na_zamestnance'].includes(id)) {
     return `Hodnocení MZ za rok ${rok} nemá v PDF tabulku „Pojištěnci a zaměstnanci … dle zdravotních pojišťoven“ (Tab. 7) s čísly po ZP, jen graf; nedopočítáváno`;
   }
@@ -117,7 +174,7 @@ export function sestavRady({ bundles, soubory, zkratky, stazeno_at = null, neakt
     const r = def.f(b, k);
     if (!r) return null;
     const url = soubory[b.rok]?.[def.zdroj]?.url;
-    return { hodnota: r.hodnota, rok: b.rok, zdroj: url ?? null, list: def.list, radek: r.ref.radek ?? null, sloupec: r.ref.sloupec ?? null };
+    return { hodnota: r.hodnota, rok: b.rok, zdroj: url ?? null, list: r.list ?? def.list, radek: r.ref.radek ?? null, sloupec: r.ref.sloupec ?? null, ...(r.poznamka ? { poznamka: r.poznamka } : {}) };
   };
   const rady = (k) => {
     const o = {};
@@ -153,6 +210,7 @@ export function sestavRady({ bundles, soubory, zkratky, stazeno_at = null, neakt
       'Jednotky: mld. Kč a mil. Kč jsou přepočtem z tis. Kč listů MZ (tis./1e6 resp. tis./1e3); počty v osobách; naklady_na_pojistence_kc a fond_prevence_na_pojistence_kc v Kč.',
       'vliv_prerozdeleni_mld je list tab.č.1c Hodnocení MZ („Vliv přerozdělování“ / v PDF „Výstupy z přerozdělování platby státu“): částka po přerozdělení minus pojistné vybrané před přerozdělením (VZP 2024: 103,378 mld.); součet za všechny ZP odpovídá platbě státu a paušální dani přerozdělené do systému. NENÍ to platba státu na jednotlivou pojišťovnu (tu MZ po ZP nezveřejňuje), a proto čisté saldo přerozdělení z těchto dat nevzniká. pojistne_pred_prerozdelenim_mld a pojistne_po_prerozdeleni_mld jsou sloupce „Příjmy z pojistného – výběr“ a „vč. vlivu přerozdělování“ v tab.č.1; platí vliv_prerozdeleni = po − před (validátor to kontroluje).',
       'naklady_zs_mld a naklady_na_pojistence_kc: ř. I. „Náklady na zdravotní služby celkem čerpané z oddílu A“ v Tabulce č. 3 a 3a (akruální náklady ZFZP, shoda s pojistovny.json pro 2024). hospodarsky_vysledek_mld: tab.č.1 „Saldo příjmů a výdajů celkem vč. zdaňovaných“. zustatek_bu_zfzp_mld: tab.č.1b „KZ na bankovním účtu ZFZP k 31. 12.“; rezervni_fond_mld: tab. č. 1d „Skutečné naplnění rezervního fondu“. pohledavky_po_lhute_mil: pohledávky za plátci pojistného po lhůtě splatnosti; zavazky_po_lhute_mil: závazky vůči poskytovatelům po lhůtě splatnosti (tab.č.1; shoda s PDF Tab. 5 a tab.č.1b).',
+      'Fond prevence (balíček A6.1): fond_prevence_mil / fond_prevence_na_pojistence_kc (Tabulka č. 3c) jsou celkové náklady fondu včetně ozdravných pobytů a „ostatních činností“ (v letech 2021–2022 hlavně antigenní testování na covid, které MZ vykazuje v „ostatních činnostech“). Rozpis po ZP je z PDF Tab. 17 (mil. Kč, ročníky 2018–2024; dříve v PDF není): fond_prevence_programy_mil (zdravotní programy), fond_prevence_pobyty_mil (ozdravné pobyty), fond_prevence_ostatni_mil (ostatní činnosti), fond_prevence_jine_zdroje_mil (jen VoZP ČR, specifické fondy; u ostatních ZP null), fond_prevence_celkem_t17_mil (řádek Celkové náklady). Pomlčka „–“ v Tab. 17 je uložena jako 0 s poznámkou. U `cr` jsou stejné řady z Tab. 16 (u 2015–2017 Tab. 8 v tis. Kč přepočtená na mil. Kč) ze sloupce roku v PDF téhož roku; v PDF 2018 jsou sloupce „2018“ a „2018 ZPP“ zaměněny, proto je u 2018 použit sloupec, který sedí na Tab. 17 (poznámka v buňce). fond_prevence_programy_na_pojistence_kc = zdravotní programy / průměrný počet pojištěnců (tab.č.1) v Kč (MZ zaokrouhluje na mil. Kč, u ZPŠ je chyba zaokrouhlení kolem 3 %); fond_prevence_ostatni_podil_pct = ostatní činnosti / celkové náklady Tab. 17 × 100. Co MZ počítá do „ostatních činností“, Hodnocení nedefinuje. Od 1. 1. 2023 má VZP stejné zdroje fondu jako zaměstnanecké ZP (§ 7c zák. 551/1991), proto skok VZP 2023 → 2024 není srovnatelný s předchozími roky.',
       'statni_pojistenci, pojistencu_na_zamestnance: PDF Tab. 7 (jen ročníky 2018–2024, dříve jen graf). statni_pojistenci_pct = statni_pojistenci / průměrný počet pojištěnců z téže PDF tabulky × 100 na 2 desetinná místa (MZ tiskne zaokrouhleno, v roce 2018 na celá procenta). provozni_naklady_mil = „výdaje na vlastní činnost“ a provozni_naklady_pct = jejich „podíl na výdajích celkem“, jak je tiskne MZ v PDF Tab. 4 (2018–2024): výdaje na vlastní činnost (výdajový ukazatel MF vč. fondů, zahrnuje jinou činnost) / výdaje celkem. Tento podíl se liší od zákonného limitu nákladů na činnost.',
       'provozni_limit_pct je pro všechny roky null: MZ uvádí limit (§ 7 vyhl. 418/2003 Sb.) jen v tis. Kč; z tab.č.1a jsou proto provozni_limit_pridelu_mil, provozni_pridel_mil a provozni_vyuziti_limitu_pct (= příděl / maximální limit přídělu × 100).',
       '`cr` = řádek CELKEM ZP (sedm činných ZP), `zamestnanecke` = CELKEM zaměstnanecké ZP (bez VZP). `historicke[]` je prázdné: v letech 2015–2024 se kódy sedmi ZP nezměnily, sloučené/likvidované ZP v Hodnocení čísla nemají (ingest/mapping/pojistovny_kody.json, `neaktivni_zp`).',

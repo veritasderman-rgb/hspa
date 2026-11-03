@@ -1760,17 +1760,17 @@ i PDF; `zdroj.soubory[]` nese 30 souborů (10 ročníků × 2 typy) s `sha256`. 
 | `roky` | `int[]` | `[2015, …, 2024]`, souvislá řada |
 | `zdroj` | objekt | `nazev`, `url` (stránka MZ), `soubory[]{rok, typ, soubor, url, sha256}`, `stazeno_at` |
 | `jednotky` | `{ukazatel: text}` | jednotka každého ukazatele (tabulka níže) |
-| `pojistovny[]` | 7 položek | `kod`, `zkratka`, `rady{}` (24 ukazatelů), `historicke[]` (prázdné: kódy sedmi ZP se v letech 2015–2024 nezměnily) |
+| `pojistovny[]` | 7 položek | `kod`, `zkratka`, `rady{}` (31 ukazatelů), `historicke[]` (prázdné: kódy sedmi ZP se v letech 2015–2024 nezměnily) |
 | `cr` | `{rady}` | řádek CELKEM sedmi ZP, stejná struktura `rady` |
 | `zamestnanecke` | `{rady}` | CELKEM zaměstnaneckých ZP (bez VZP) |
 | `neaktivni_zp[]` | 7 položek | `kod`, `nazev`, `zkratka`, `stav` (`likvidace`, `vymazana`, `omezeny-rozsah`), `sloucena_do`, `rok`, `zdroj`; čísla nenesou. Pozor: kód `205` má u položky „Pojišťovna Garant - Hospital“ (`omezeny-rozsah`), zatímco ČPZP v `pojistovny[]` má kód 205 také — kolize kódů v datech, nevyřešena |
-| `chybi[]` | 6 položek | `ukazatel`, `roky[]`, `kody` (`"vsechny"`), `duvod` |
+| `chybi[]` | položky | `ukazatel`, `roky[]`, `kody` (`"vsechny"`), `duvod` |
 
 Každý ukazatel v `rady` je objekt `{"2015": obálka | null, …, "2024": obálka | null}`. Obálka má
 `hodnota`, `rok`, `zdroj` (URL souboru), `list`, `radek` (číslo řádku jako v Excelu), `sloupec`
 (písmeno). Hodnoty z PDF mají `radek` a `sloupec` `null`.
 
-Ukazatele (24) a jednotky:
+Ukazatele (31) a jednotky:
 
 | Ukazatel | Jednotka | List / zdroj |
 |---|---|---|
@@ -1796,8 +1796,23 @@ Ukazatele (24) a jednotky:
 | `pohledavky_po_lhute_mil` | mil. Kč | tab.č.1, pohledávky za plátci po lhůtě |
 | `zavazky_po_lhute_mil` | mil. Kč | tab.č.1, závazky vůči poskytovatelům po lhůtě |
 | `hospodarsky_vysledek_mld` | mld. Kč | tab.č.1, saldo příjmů a výdajů celkem |
-| `fond_prevence_mil` | mil. Kč | Tabulka č. 3c |
-| `fond_prevence_na_pojistence_kc` | Kč | Tabulka č. 3c |
+| `fond_prevence_mil` | mil. Kč | Tabulka č. 3c (celkem: zdravotní programy + ozdravné pobyty + ostatní činnosti) |
+| `fond_prevence_na_pojistence_kc` | Kč | Tabulka č. 3c (totéž na pojištěnce; web Peněz ho od A6.1 neukazuje jako index, v roce 2021–22 v něm dominuje covidové testování) |
+| `fond_prevence_programy_mil` | mil. Kč | PDF Tab. 17, „Náklady na zdravotní programy“ (2018–2024; pomlčka „–“ = 0 s `poznamka`); `cr` z Tab. 16 |
+| `fond_prevence_pobyty_mil` | mil. Kč | PDF Tab. 17, „Náklady na ozdravné pobyty“ |
+| `fond_prevence_ostatni_mil` | mil. Kč | PDF Tab. 17, „Ostatní činnosti“ (co do nich MZ počítá, Hodnocení nedefinuje; 2021–22 hlavně antigenní testování na covid) |
+| `fond_prevence_jine_zdroje_mil` | mil. Kč | PDF Tab. 17, „Z jiných zdrojů (VoZP ČR)“; jen VoZP ČR, u ostatních ZP `null` + záznam v `chybi[]` |
+| `fond_prevence_celkem_t17_mil` | mil. Kč | PDF Tab. 17, „Celkové náklady“ (shoda s `fond_prevence_mil` ±1 mil. Kč) |
+| `fond_prevence_programy_na_pojistence_kc` | Kč | zdravotní programy / `pojistenci_prumer`; MZ zaokrouhluje na mil. Kč (u ZPŠ chyba zaokrouhlení kolem 3 %) |
+| `fond_prevence_ostatni_podil_pct` | % | ostatní činnosti / celkové náklady Tab. 17 × 100 |
+
+**Řady fondu prevence z Tab. 17 (A6.1).** U ZP jen ročníky 2018–2024; v PDF 2015–2017 tabulka po pojišťovnách není,
+tyto roky jsou `null` a v `chybi[]` je důvod „Tab. 17 v Hodnocení za rok … není“. V `cr.rady` jsou stejné řady
+2015–2024 z Tab. 16 (u 2015–2017 z Tab. 8 v tis. Kč, přepočteno na mil. Kč), vždy ze sloupce roku v PDF téhož roku. V PDF
+Hodnocení 2018 jsou sloupce „2018“ a „2018 ZPP“ zaměněny, proto je u 2018 použit sloupec, který sedí na Tab. 17
+(vysvětlení v `poznamka` buňky). Parsery `parseTab17`, `parseTab16`, `vyberTab16` v `ingest/lib/mz-hodnoceni.js`,
+fixtury `tests/fixtures/mz-hodnoceni/pdf-tab16-17-*.txt`. Validátor: Σ (programy + pobyty + ostatní + jiné zdroje) =
+celkem Tab. 17 ±1 mil. Kč (chyba), programy ≤ celkem (chyba), celkem Tab. 17 vs. Tabulka č. 3c a Σ ZP vs. `cr` jen jako varování.
 
 **`vliv_prerozdeleni_mld` není platba státu.** Je to list tab.č.1c („Vliv přerozdělování“; v PDF
 „Výstupy z přerozdělování platby státu“) a je rovno `pojistne_po_prerozdeleni_mld` minus

@@ -336,7 +336,8 @@ function renderFin(d) {
   finRows = buildFinRows(d);
   set('zpTableFin', finTable(finRows, FIN_COLS, { label: 'Hospodaření pojišťoven 2024 (tabulka, řaditelná, posuvná)', sortable: true })
     + `<details class="zpc-acc zpc-acc--tbl"><summary>Další sloupce · ${FIN_MORE_COLS.length}</summary>`
-    + finTable(finRows, FIN_MORE_COLS, { label: 'Hospodaření: zůstatky, limity a rezervy (tabulka, posuvná)', sortable: false }) + '</details>');
+    + finTable(finRows, FIN_MORE_COLS, { label: 'Hospodaření: zůstatky, limity a rezervy (tabulka, posuvná)', sortable: false })
+    + '<p class="zpc-cap">Fond prevence je celkem včetně ozdravných pobytů a „ostatních činností“ (2021–22 hlavně testování na covid); samotné zdravotní programy na pojištěnce jsou níže v sekci Fond prevence a provoz.</p></details>');
   const box = document.getElementById('zpTableFin');
   if (!box || box.dataset.sortInit === '1') return;
   box.dataset.sortInit = '1';
@@ -444,6 +445,8 @@ export const POTREBA = {
   /** Řady hospodaření MZ (A1.1): Peníze, státní pojištěnci v kartách ZP na Kmeni. */
   rady: ['zpRady', 'zpStatni', 'zpFondProvoz', 'zpSegmenty', 'zpCards', 'zpInstAparat', 'zpProfil'],
   segmenty: ['zpSegmenty', 'zpProfil'],
+  /** Fond prevence na Penězích (A6.1): kontext změny kmene k 1. 1. a 1. 7. z měsíčního kmene. */
+  fondKmen: ['zpFondProvoz'],
   /** Instituce (A2.1, A3.1, A3.2): orgány, smluvní programy, dostupnost; profil čte všechny tři. */
   instituce: ['zpInstOrgany', 'zpProfil'],
   smluvniProgramy: ['zpInstProgramy', 'zpProfil'],
@@ -461,7 +464,7 @@ async function init() {
   }
   const shell = renderZpShell();
   const skip = Promise.resolve(null);
-  const [d, a, p, o, agg, km, pr, rady, seg, inst, prog, dost, stiz, pa] = await Promise.all([
+  const [d, a, p, o, agg, km, pr, rady, seg, inst, prog, dost, stiz, pa, kmFond] = await Promise.all([
     loadJson('data/pojistovny.json'),
     has(POTREBA.aplikace) ? loadJson('data/pojistovny-aplikace.json') : skip,
     has(POTREBA.prevence) ? loadJson('data/pojistovny-prevence.json') : skip,
@@ -476,6 +479,7 @@ async function init() {
     has(POTREBA.dostupnost) ? loadJson('data/pojistovny-dostupnost.json') : skip,
     has(POTREBA.profil) ? loadJson('data/pojistovny-stiznosti.json') : skip,
     has(POTREBA.profil) ? loadJson('data/pojistovny-porodni-asistence.json') : skip,
+    has(POTREBA.fondKmen) ? loadJson('data/pojistovny-kmen-mesicni.json') : skip,
   ]);
   if (has(['zpPrehled'])) {
     renderPrehled({ d, a, p, tiles: d ? heroTiles(d, { bezFondu: true }) : null, kmen: d ? buildKmenCharts(d) : null, prerozdeleni: pr });
@@ -486,7 +490,7 @@ async function init() {
   if (has(['zpPrevMatrix', 'zpFpStruktura', 'zpMereni'])) renderPrevence(p, d);
   if (has(['zpCards', 'zpChartShare'])) renderKmen(d, rady);
   if (has(['zpTableFin', 'zpChartZust', 'zpChartProvoz', 'zpChartYoy'])) renderHospodareni(d);
-  if (has(['zpPrerozdeleni', 'zpRady', 'zpStatni', 'zpSegmenty', 'zpFondProvoz'])) renderPenize({ PR: pr, R: rady, S: seg });
+  if (has(['zpPrerozdeleni', 'zpRady', 'zpStatni', 'zpSegmenty', 'zpFondProvoz'])) renderPenize({ PR: pr, R: rady, S: seg, K: kmFond });
   if (has(['zpInstOrgany', 'zpInstAparat', 'zpInstProgramy', 'zpInstDostupnost'])) renderInstituce({ I: inst, SP: prog, D: dost, R: rady });
   if (has(['zpProfil'])) renderProfil({ kod: zpZUrl(location.search), data: { P: d, A: a, PV: p, PR: pr, R: rady, S: seg, I: inst, SP: prog, D: dost, ST: stiz, PA: pa } });
   if (has(['zpTablePrev'])) renderServis(d);

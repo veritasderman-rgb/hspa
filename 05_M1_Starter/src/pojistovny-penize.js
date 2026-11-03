@@ -4,7 +4,8 @@
 // data/pojistovny-hospodareni-rady.json (řady MZ 2015–2024) a data/pojistovny-segmenty.json
 // (náklady podle segmentů). Každý soubor je nepovinný: chybí-li, sekce ukáže „nedohledáno“.
 // Načítá je a renderer volá orchestrátor src/pojistovny.js podle kontejnerů na stránce
-// (#zpPrerozdeleni, #zpRady, #zpStatni, #zpSegmenty, #zpFondProvoz).
+// (#zpPrerozdeleni, #zpRady, #zpStatni, #zpSegmenty, #zpFondProvoz). Fond prevence (A6.1) čte navíc
+// data/pojistovny-kmen-mesicni.json (kontext: změna kmene k 1. 1. a 1. 7.).
 //
 // Co se tu ukazuje, jsou fakta zákonem daného mechanismu a vykázaná čísla MZ, ne hodnocení
 // pojišťoven: seřazené grafy nesou větu SORT_NOTE, tabulky jsou v pevném pořadí podle kódu.
@@ -19,10 +20,10 @@
 // jen poslouchá událost `zp:switch` a překreslí příslušný kontejner.
 
 import { esc, fmtKc, dot, set } from './pojistovny-shared.js';
-import { rankedBars, segmentedBar, stackedRows, indexedLines, dumbbell, isNum, figureSwitch, readSwitchFromUrl, tableTwin, kratkyPopisek } from './zp-viz.js';
+import { rankedBars, segmentedBar, stackedRows, indexedLines, dumbbell, isNum, figureSwitch, readSwitchFromUrl, tableTwin, kratkyPopisek, NA_TEXT } from './zp-viz.js';
 import { initZpInteract, MOJE_EVENT, SWITCH_EVENT } from './zp-interact.js';
 import { ZP_BY_KOD } from './zp-palette.js';
-import { mesicX, mesicLabel, xLabel } from './pojistovny-kmen-mesicni.js';
+import { mesicX, mesicLabel, xLabel, fmtZmena, fmtZmenaPct } from './pojistovny-kmen-mesicni.js';
 
 export const SRC_PRER = 'MZ ČR · Přerozdělování pojistného na v.z.p. (PDF, měsíční a roční)';
 export const SRC_RADY = 'MZ ČR · Hodnocení vývoje systému v.z.p. 2015–2024';
@@ -273,8 +274,6 @@ export const UKAZATELE = [
     sub: 'Zůstatek na bankovním účtu základního fondu zdravotního pojištění ke konci roku.' },
   { id: 'hospodarsky_vysledek_mld', typ: 'bary', cr: false, label: 'Hospodářský výsledek (saldo příjmů a výdajů)', unit: 'mld Kč', dec: 1, signed: true,
     sub: 'Saldo příjmů a výdajů celkem; záporné hodnoty doleva od nuly.' },
-  { id: 'fond_prevence_na_pojistence_kc', typ: 'index', cr: true, label: 'Fond prevence na pojištěnce', unit: 'Kč', dec: 0,
-    sub: 'Čerpání fondu prevence na pojištěnce. Kontext, ne hlavní ukazatel (rozhodnutí PS 7. 10. 2026).' },
   { id: 'pojistencu_na_zamestnance', typ: 'index', cr: true, label: 'Pojištěnců na zaměstnance', unit: 'osob', dec: 0,
     sub: 'Průměrný počet pojištěnců na jednoho (přepočteného) zaměstnance pojišťovny (jen 2018–2024).' },
 ];
@@ -526,8 +525,140 @@ export function buildSegmenty(S, R, { kod = KOD_VZP, segment = null } = {}) {
 
 // ---------------------------------------------------------------- A1.5 fond prevence a provoz
 
-export function buildFondProvoz(R) {
-  const fondCh = buildRadyChart(R, 'fond_prevence_na_pojistence_kc', null);
+export const FOND_ROK_ID = 'fond_rok';
+export const FOND_SLOZKY = [
+  { key: 'programy', label: 'Zdravotní programy' },
+  { key: 'pobyty', label: 'Ozdravné pobyty' },
+  { key: 'ostatni', label: 'Ostatní činnosti' },
+];
+export const FOND_SUB_PROGRAMY = 'Kč na pojištěnce a rok, bez ozdravných pobytů a „ostatních činností“ (2021–22 testování na covid). VZP má od 2023 stejné zdroje fondu jako zaměstnanecké ZP (§ 7c zák. 551/1991), proto roky před 2023 a po něm nejsou u VZP srovnatelné.';
+
+/** Roky, pro které MZ zveřejnil rozpis fondu po pojišťovnách (Tab. 17, 2018–2024). */
+export function fondRoky(R) {
+  return rokyUkazatele(R, 'fond_prevence_programy_na_pojistence_kc');
+}
+
+/** Rok přepínače fondu z URL (`?fond_rok=`); mimo dostupné roky = poslední rok. */
+export function fondRokZUrl(search, roky) {
+  const r = Array.isArray(roky) ? roky : [];
+  if (!r.length) return null;
+  let q = '';
+  try { q = `?${new URLSearchParams(String(search ?? '')).toString()}`; } catch (_) { q = ''; }
+  return Number(readSwitchFromUrl(FOND_ROK_ID, r.map(String), String(r[r.length - 1]), q));
+}
+
+/** Přepínač roku čerpání fondu (figureSwitch, id/parametr `fond_rok`, výchozí poslední rok). */
+export function fondPrepinacHtml(roky, rok) {
+  return figureSwitch({ id: FOND_ROK_ID, label: 'Rok čerpání fondu', kind: 'radio', selected: rok, defaultValue: String(roky[roky.length - 1] ?? ''), options: roky.map((y) => ({ value: y, label: String(y) })) });
+}
+
+const fondVal = (z, id, rok) => val(z.rady?.[id]?.[rok]);
+
+/**
+ * Fond prevence jinak (A6.1): (a) zdravotní programy na pojištěnce za rok, (b) složení fondu programy / pobyty / ostatní
+ * po pojišťovnách za rok, (c) podíl „ostatních činností“ v ČR 2015–2024. Celkový fond na pojištěnce (programy + pobyty +
+ * ostatní) se nezobrazuje: v letech 2021–22 v něm dominovalo covidové testování a pořadí pojišťoven se po očištění obrací.
+ * @returns {{roky:number[], rok:number|null, programy:{items,opts}, struktura:{rows,parts,cell,opts,jine:number|null}, ostatniCr:{items,opts}}}
+ */
+export function buildFond(R, rokVstup = null) {
+  const roky = fondRoky(R);
+  const rok = roky.includes(Number(rokVstup)) ? Number(rokVstup) : (roky[roky.length - 1] ?? null);
+  const zp = zpList(R);
+  const crPp = val(R?.cr?.rady?.fond_prevence_programy_na_pojistence_kc?.[rok]);
+  const items = zp.map((z) => {
+    const v = fondVal(z, 'fond_prevence_programy_na_pojistence_kc', rok);
+    const mil = fondVal(z, 'fond_prevence_programy_mil', rok);
+    return { ...base(z), value: isNum(v) ? v : null, rok, tip: isNum(v) ? `${z.zkratka}: ${fmtKc(v, 0)} Kč na pojištěnce na zdravotní programy z fondu prevence${isNum(mil) ? ` (${fmtKc(mil, 0)} mil. Kč)` : ''} · ${rok}` : `${z.zkratka}: nedohledáno` };
+  });
+  const rows = zp.map((z) => ({ ...base(z) }));
+  const zpByKod = new Map(zp.map((z) => [String(z.kod), z]));
+  const cell = (r, p) => {
+    const z = zpByKod.get(String(r.kod));
+    const v = z ? fondVal(z, `fond_prevence_${p.key}_mil`, rok) : null;
+    return isNum(v) ? v : null;
+  };
+  const vozp = zpByKod.get('201');
+  const jine = vozp ? fondVal(vozp, 'fond_prevence_jine_zdroje_mil', rok) : null;
+  const rokyCr = (Array.isArray(R?.roky) ? R.roky : []).filter((y) => isNum(val(R?.cr?.rady?.fond_prevence_ostatni_podil_pct?.[y])));
+  const ostItems = rokyCr.map((y) => {
+    const p = val(R.cr.rady.fond_prevence_ostatni_podil_pct[y]);
+    const o = val(R.cr.rady.fond_prevence_ostatni_mil?.[y]);
+    const c = val(R.cr.rady.fond_prevence_celkem_t17_mil?.[y]);
+    return { key: `r${y}`, label: String(y), value: p, rok: y, tip: `${y}: ostatní činnosti ${isNum(o) ? fmtKc(o, 0) : 'nedohledáno'} mil. Kč z ${isNum(c) ? fmtKc(c, 0) : 'nedohledáno'} mil. Kč fondu prevence všech sedmi pojišťoven (${fmtKc(p, 1)} %)` };
+  });
+  return {
+    roky, rok,
+    programy: {
+      items,
+      opts: {
+        title: `Zdravotní programy z fondu prevence na pojištěnce ${rok ?? ''}`.trim(), sub: FOND_SUB_PROGRAMY,
+        unit: 'Kč', dec: 0, source: SRC_RADY,
+        ref: isNum(crPp) ? { value: crPp, label: 'ČR', kind: 'line' } : null,
+      },
+    },
+    struktura: {
+      rows, parts: FOND_SLOZKY.map((p) => ({ ...p })), cell, jine: isNum(jine) ? jine : null,
+      opts: {
+        title: `Kam fond prevence teče ${rok ?? ''}`.trim(),
+        sub: 'Podíl zdravotních programů, ozdravných pobytů a „ostatních činností“ na součtu těchto tří položek. Co MZ do „ostatních činností“ počítá, Hodnocení nedefinuje; v letech 2021–22 šlo hlavně o antigenní testování.',
+        unit: 'mil. Kč', dec: 0, source: SRC_RADY, rowHeader: 'Pojišťovna',
+      },
+    },
+    ostatniCr: {
+      items: ostItems,
+      opts: {
+        title: `Podíl „ostatních činností“ na fondu prevence, ČR ${rokyCr[0] ?? ''}–${rokyCr[rokyCr.length - 1] ?? ''}`.trim(),
+        sub: 'Ostatní činnosti jako podíl na celkových nákladech fondu všech sedmi pojišťoven. V letech 2021–22 šlo podle poznámky MZ o antigenní testování zaměstnanců ve firmách a OSVČ, které pojišťovny hradily z fondu na žádost MZ.',
+        unit: '%', dec: 1, sort: 'none', source: SRC_RADY,
+      },
+    },
+  };
+}
+
+/**
+ * Kontext bez kauzality: zdravotní programy na pojištěnce za rok t vedle změny kmene k 1. 7. t a k 1. 1. t+1
+ * (čistá změna počtu pojištěnců z měsíčního přerozdělení MZ). Řádky v pevném pořadí podle kódu, pak rok.
+ * @returns {{roky:number[], radky:{kod,zkratka,rok,programy:number|null,jul:object|null,led:object|null}[]}|null}
+ */
+export function buildFondKontext(R, K) {
+  const kz = Array.isArray(K?.prestupy?.pojistovny) ? K.prestupy.pojistovny : [];
+  if (!kz.length) return null;
+  const najdi = (zmeny, rok, termin) => (zmeny || []).find((c) => c.rok === rok && c.termin === termin && isNum(c.zmena)) || null;
+  const roky = fondRoky(R).filter((t) => kz.some((p) => najdi(p.zmeny, t, '1. 7.') || najdi(p.zmeny, t + 1, '1. 1.')));
+  if (!roky.length) return null;
+  const radky = [];
+  for (const z of zpList(R)) {
+    const k = kz.find((p) => String(p.kod) === String(z.kod));
+    for (const t of roky) {
+      const v = fondVal(z, 'fond_prevence_programy_na_pojistence_kc', t);
+      radky.push({ kod: z.kod, zkratka: z.zkratka, rok: t, programy: isNum(v) ? v : null, jul: najdi(k?.zmeny, t, '1. 7.'), led: najdi(k?.zmeny, t + 1, '1. 1.') });
+    }
+  }
+  return { roky, radky };
+}
+
+/** Tabulka kontextu jako tabulkové dvojče (otevřené, s CSV), řádky nesou `data-zp` pro Moje pojišťovna / Porovnat s. */
+export function fondKontextHtml(R, K) {
+  const t = buildFondKontext(R, K);
+  if (!t) return NEDOHLEDANO('Změny kmene k 1. 1. a 1. 7. zatím nejsou k dispozici (nedohledáno).');
+  const title = `Zdravotní programy z fondu prevence na pojištěnce a změna kmene ${t.roky[0]}–${t.roky[t.roky.length - 1]}`;
+  const source = `${SRC_RADY}; MZ ČR · Přerozdělování pojistného na v.z.p. (měsíční PDF, počet pojištěnců odvozen podílem dvou částek)`;
+  const headers = ['Pojišťovna', 'Rok čerpání', 'Programy na pojištěnce, Kč', 'Změna kmene k 1. 7. téhož roku', 'v %', 'Změna kmene k 1. 1. dalšího roku', 'v %'];
+  const zm = (c) => (c ? [esc(fmtZmena(c.zmena)), esc(fmtZmenaPct(c.zmena_pct))] : [esc(NA_TEXT), '']);
+  const body = t.radky.map((r) => `<tr data-zp="${esc(r.kod)}"><th scope="row">${dot(r.kod)}${esc(r.zkratka)}</th><td>${r.rok}</td>`
+    + `<td class="zpv-num">${isNum(r.programy) ? esc(fmtKc(r.programy, 0)) : esc(NA_TEXT)}</td>`
+    + `${zm(r.jul).map((x) => `<td class="zpv-num">${x}</td>`).join('')}${zm(r.led).map((x) => `<td class="zpv-num">${x}</td>`).join('')}</tr>`).join('');
+  const head = headers.map((h, i) => `<th scope="col"${i >= 2 ? ' class="zpv-num"' : ''}>${esc(h)}</th>`).join('');
+  return '<div class="zpv zpv-figure zpv-fond-kontext">'
+    + `<figcaption class="zpv-cap"><span class="zpv-title">${esc('Kontext: zdravotní programy na pojištěnce a změna kmene')}</span>`
+    + `<span class="zpv-sub">${esc('Čerpání za rok t vedle změny kmene k 1. 7. t a k 1. 1. t+1. Jen souběh dvou řad, bez vysvětlení: tabulka neříká, že příspěvky z fondu přestupy ovlivnily, ani že přestupy ovlivnily příspěvky. Změna kmene je čistá (příchozí minus odchozí, včetně narození a úmrtí), hrubé toky přestupů MZ nezveřejňuje.')}</span></figcaption>`
+    + `<details class="zpv-table" open data-csv-title="${esc(title)}" data-csv-source="${esc(source)}"><summary>Tabulka: programy na pojištěnce a změna kmene</summary>`
+    + '<button type="button" class="zpv-csv" data-zpv-csv>Stáhnout CSV</button>'
+    + `<div class="zpv-scroll" tabindex="0" role="region" aria-label="${esc(`Tabulka: ${title}`)}"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div></details></div>`;
+}
+
+/** Provoz: využití zákonného limitu přídělu na provoz (zůstává z A1.5). */
+export function buildProvoz(R) {
   const roky = rokyUkazatele(R, 'provozni_vyuziti_limitu_pct');
   const rok = roky[roky.length - 1] ?? null;
   const items = zpList(R).map((z) => {
@@ -541,21 +672,19 @@ export function buildFondProvoz(R) {
     return { ...base(z), value: isNum(v) ? v : null, rok, tip };
   });
   return {
-    fond: {
-      series: fondCh.series,
-      opts: { ...fondCh.opts, title: `Fond prevence na pojištěnce ${fondCh.roky[0] ?? ''}–${fondCh.roky[fondCh.roky.length - 1] ?? ''}`,
-        sub: 'Kontext, ne hlavní ukazatel (rozhodnutí PS 7. 10. 2026): kolik Kč na pojištěnce pojišťovna z fondu prevence vyčerpala. Index 2015 = 100; surová hodnota je v tooltipu.' },
-    },
-    provoz: {
-      rok, items,
-      opts: {
-        title: `Využití zákonného limitu přídělu na provoz ${rok ?? ''}`.trim(),
-        sub: 'Podíl skutečného přídělu do provozního fondu na maximálním přídělu podle vyhlášky 418/2003 Sb. 100 % = limit vyčerpán.',
-        unit: '%', dec: 1, source: SRC_RADY, maxv: 100,
-        ref: { value: 100, label: 'zákonný limit', kind: 'line' },
-      },
+    rok, items,
+    opts: {
+      title: `Využití zákonného limitu přídělu na provoz ${rok ?? ''}`.trim(),
+      sub: 'Podíl skutečného přídělu do provozního fondu na maximálním přídělu podle vyhlášky 418/2003 Sb. 100 % = limit vyčerpán.',
+      unit: '%', dec: 1, source: SRC_RADY, maxv: 100,
+      ref: { value: 100, label: 'zákonný limit', kind: 'line' },
     },
   };
+}
+
+/** Zpětně kompatibilní obálka: fond (A6.1) + provoz. */
+export function buildFondProvoz(R, rok = null) {
+  return { fond: buildFond(R, rok), provoz: buildProvoz(R) };
 }
 
 // ---------------------------------------------------------------- profil pojišťovny (A2.3)
@@ -598,7 +727,8 @@ export function buildSaldoKarta(PR, kod) {
 // ---------------------------------------------------------------- DOM
 
 const stav = { ukazatel: UKAZATEL_VYCHOZI, rok: null, segment: null, vyber: 'vse' };
-const dataRef = { PR: null, R: null, S: null };
+const dataRef = { PR: null, R: null, S: null, K: null };
+const fondStav = { rok: null };
 
 function zapisUrl() {
   try {
@@ -682,16 +812,40 @@ function segmentyHtml(S, R, kod) {
     + (ch.perPojistence.cr?.odvozeno ? '<p class="zpc-cap">Pásmo je součet nákladů sedmi pojišťoven dělený součtem jejich pojištěnců, MZ ČR jako celek nezveřejňuje.</p>' : '');
 }
 
+/** Dvojice grafů závislá na roce: programy na pojištěnce a složení fondu po pojišťovnách. */
+function fondFigHtml(f) {
+  const st = f.struktura;
+  const jine = st.jine != null
+    ? `<p class="zpc-cap">${esc(`Do podílů se počítají jen tyto tři položky; VoZP ČR navíc čerpala ${fmtKc(st.jine, 0)} mil. Kč „z jiných zdrojů“ (specifické fondy VoZP ČR).`)}</p>`
+    : '';
+  return '<div class="zpc-charts">'
+    + `<div class="zpc-chart">${rankedBars(f.programy.items, f.programy.opts)}</div>`
+    + `<div class="zpc-chart">${stackedRows(st.rows, st.parts, st.cell, st.opts)}${jine}</div></div>`;
+}
+
+/** Celá sekce Fond prevence a provoz (A6.1): přepínač roku, dvojice grafů, ČR v čase, kontext, provoz. */
+export function fondHtml(R, K, rok = null) {
+  const f = buildFond(R, rok);
+  const p = buildProvoz(R);
+  const sw = f.roky.length > 1 ? `<div class="zpc-ctl"><div class="zpc-ctl-rok"><span class="zpc-ctl-lbl">Rok čerpání fondu</span>${fondPrepinacHtml(f.roky, f.rok)}</div></div>` : '';
+  return sw
+    + `<div data-fond-fig>${fondFigHtml(f)}</div>`
+    + '<div class="zpc-charts">'
+    + `<div class="zpc-chart">${rankedBars(f.ostatniCr.items, f.ostatniCr.opts)}</div>`
+    + `<div class="zpc-chart">${rankedBars(p.items, p.opts)}</div></div>`
+    + fondKontextHtml(R, K);
+}
+
 function radyRender() {
   set('zpRady', dataRef.R ? radyHtml(dataRef.R, stav) : NEDOHLEDANO('Řady hospodaření 2015–2024 zatím nejsou k dispozici (nedohledáno).'));
 }
 
 /**
  * Vykreslí sekce stránky Peníze podle přítomných kontejnerů. Chybějící dataset = stav „nedohledáno“.
- * @param {{PR?: object|null, R?: object|null, S?: object|null}} data
+ * @param {{PR?: object|null, R?: object|null, S?: object|null, K?: object|null}} data  K = měsíční kmen (kontext fondu prevence)
  */
-export function renderPenize({ PR = null, R = null, S = null } = {}) {
-  Object.assign(dataRef, { PR, R, S });
+export function renderPenize({ PR = null, R = null, S = null, K = null } = {}) {
+  Object.assign(dataRef, { PR, R, S, K });
   const doc = globalThis.document;
   Object.assign(stav, stavZUrl(globalThis.location?.search));
   set('zpPrerozdeleni', PR ? prerozdeleniHtml(PR, stav.vyber) : NEDOHLEDANO('Data o přerozdělení zatím nejsou k dispozici (nedohledáno).'));
@@ -704,9 +858,8 @@ export function renderPenize({ PR = null, R = null, S = null } = {}) {
   if (doc?.getElementById('zpFondProvoz')) {
     if (!R) set('zpFondProvoz', NEDOHLEDANO('Fond prevence a provoz zatím nejsou k dispozici (nedohledáno).'));
     else {
-      const fp = buildFondProvoz(R);
-      set('zpFondProvoz', `<div class="zpc-charts"><div class="zpc-chart">${indexedLines(fp.fond.series, fp.fond.opts)}</div>`
-        + `<div class="zpc-chart">${rankedBars(fp.provoz.items, fp.provoz.opts)}</div></div>`);
+      fondStav.rok = fondRokZUrl(globalThis.location?.search, fondRoky(R));
+      set('zpFondProvoz', fondHtml(R, K, fondStav.rok));
     }
   }
   vazbaUdalosti(doc);
@@ -732,6 +885,10 @@ function vazbaUdalosti(doc) {
     } else if (id === 'rok' && rady && dataRef.R) {
       stav.rok = Number(value);
       prekresli(rady, radyHtml(dataRef.R, stav), `.zpc-switch[data-switch="rok"] button[data-value="${stav.rok}"]`);
+    } else if (id === FOND_ROK_ID && dataRef.R) {
+      fondStav.rok = Number(value);
+      const fig = doc.getElementById('zpFondProvoz')?.querySelector('[data-fond-fig]');
+      if (fig) prekresli(fig, fondFigHtml(buildFond(dataRef.R, fondStav.rok)));
     } else if (id === 'segment' && seg && dataRef.S) {
       stav.segment = value || null;
       prekresli(seg, segmentyHtml(dataRef.S, dataRef.R, mojeKod() || KOD_VZP), 'select[data-switch="segment"]');
