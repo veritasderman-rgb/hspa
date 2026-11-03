@@ -17,6 +17,7 @@
 // „Srovnávač pojišťoven: interakce“ v src/styles.css a v tests/zp-interact.test.js.
 
 import { formatNumberCz } from './page-shared.js';
+import { tableToCsv, csvFilename } from './zp-viz.js';
 
 export const STORAGE_KEY = 'hspa-moje-zp';
 export const MOJE_EVENT = 'zp:moje-change';
@@ -426,7 +427,30 @@ function bindDelegates(main, doc, win) {
       return;
     }
     if (t.classList.contains('zpv-sort')) sortHeat(t);
+    if (t.hasAttribute('data-zpv-csv')) downloadCsv(t, doc, win);
   });
+}
+
+/** Sestaví CSV z tabulkového dvojčete nad tlačítkem (textContent buněk) a stáhne ho; bez serveru a sledování. */
+function downloadCsv(btn, doc, win) {
+  const details = btn.closest('details.zpv-table');
+  const table = details ? details.querySelector('table') : null;
+  if (!table) return;
+  const cellText = (c) => c.textContent || '';
+  const headers = Array.from(table.querySelectorAll('thead th')).map(cellText);
+  const rows = Array.from(table.querySelectorAll('tbody tr')).map((tr) => Array.from(tr.children).map(cellText));
+  const title = details.getAttribute('data-csv-title') || '';
+  const csv = tableToCsv(headers, rows, { title, source: details.getAttribute('data-csv-source') || '', text: true });
+  const blob = new win.Blob(['\ufeff', csv], { type: 'text/csv;charset=utf-8' });
+  const url = win.URL.createObjectURL(blob);
+  const a = doc.createElement('a');
+  a.href = url;
+  a.download = csvFilename(title, new Date());
+  a.style.display = 'none';
+  doc.body.appendChild(a);
+  a.click();
+  a.remove();
+  win.setTimeout(() => win.URL.revokeObjectURL(url), 1000);
 }
 
 function sortHeat(btn) {

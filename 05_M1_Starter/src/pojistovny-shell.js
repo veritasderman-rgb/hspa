@@ -21,7 +21,7 @@
 // zpTabsHtml, zpZdrojeHtml, legacyRedirect.
 
 import { renderModuleNav, renderMastheadDate, renderFooter, escapeHtml } from './page-shared.js';
-import { loadJson } from './pojistovny-shared.js';
+import { loadJson, loadedJsonUrls } from './pojistovny-shared.js';
 
 export { stariDatHtml } from './pojistovny-stari.js';
 
@@ -121,8 +121,16 @@ export function zpShellHtml(aktivni) {
     + `<div class="zpc-shell-head"><p class="zpc-kicker">${esc(KICKER)}</p>${zpTabsHtml(aktivni)}</div>`;
 }
 
-/** Patička „Zdroje“ ze zdroje[] v pojistovny.json (sbalená, aby nenatahovala stránku). */
-export function zpZdrojeHtml(d) {
+/** Odstavec „Data této stránky (JSON)“ s odkazy na načtené datasety; bez URL prázdný řetězec. */
+export function zpZdrojeJsonHtml(jsonUrls) {
+  const urls = (Array.isArray(jsonUrls) ? jsonUrls : []).filter((u) => typeof u === 'string' && u);
+  if (!urls.length) return '';
+  const links = urls.map((u) => `<a href="${esc(u)}">${esc(u.split('/').pop())}</a>`).join(' · ');
+  return `<p class="zpc-zdroje-json">Data této stránky (JSON, CC BY 4.0): ${links}</p>`;
+}
+
+/** Patička „Zdroje“ ze zdroje[] v pojistovny.json (sbalená, aby nenatahovala stránku); jsonUrls = načtené datasety. */
+export function zpZdrojeHtml(d, jsonUrls = []) {
   const list = Array.isArray(d?.zdroje) ? d.zdroje : [];
   if (!list.length) return '';
   const items = list.map((z) => `<li>${esc(z.nazev || z.id || '')}`
@@ -130,7 +138,8 @@ export function zpZdrojeHtml(d) {
     + `${z.clanek ? ` · <a href="${esc(z.clanek)}">článek</a>` : ''}</li>`).join('');
   return `<details class="zpc-acc zpc-zdroje"><summary>Zdroje dat srovnávače<span class="zpc-n"> · ${list.length}</span></summary>`
     + `<div class="zpc-acc-body"><ul class="zpc-zdroje-list">${items}</ul>`
-    + '<p class="zpc-note">Každé číslo ve srovnávači nese zdroj a rok. Hodnocení v semaforu vzniká až po právu pojišťovny na odpověď.</p></div></details>';
+    + '<p class="zpc-note">Každé číslo ve srovnávači nese zdroj a rok. Hodnocení v semaforu vzniká až po právu pojišťovny na odpověď.</p>'
+    + `${zpZdrojeJsonHtml(jsonUrls)}</div></details>`;
 }
 
 /**
@@ -166,5 +175,20 @@ export async function renderZpShell({ aktivni, doc = globalThis.document } = {})
   const foot = doc.getElementById('zpZdroje');
   if (!foot) return;
   const d = await loadJson(DATA_URL);
-  foot.innerHTML = zpZdrojeHtml(d);
+  foot.innerHTML = zpZdrojeHtml(d, loadedJsonUrls());
+  // ostatní moduly stránky načítají data až po shellu → seznam JSON se doplní po načtení stránky
+  if (typeof globalThis.addEventListener === 'function' && !renderZpShell._loadHook) {
+    renderZpShell._loadHook = true;
+    globalThis.addEventListener('load', () => refreshZdrojeJson(doc), { once: true });
+  }
+}
+
+/** Doplní / obnoví odstavec s odkazy na JSON v už vykreslené patičce (neruší otevření <details>). */
+export function refreshZdrojeJson(doc = globalThis.document) {
+  const body = doc?.querySelector ? doc.querySelector('#zpZdroje .zpc-acc-body') : null;
+  if (!body) return;
+  const html = zpZdrojeJsonHtml(loadedJsonUrls());
+  const cur = body.querySelector('.zpc-zdroje-json');
+  if (cur) cur.remove();
+  if (html) body.insertAdjacentHTML('beforeend', html);
 }

@@ -11,7 +11,7 @@ import {
   rankedBars, segmentedBar, statTiles, meter, indexedLines, dumbbell,
   heatmap, dotMatrix, coverageMatrix,
   foldParts, indexSeries, dodgeLabels, niceTicks, meterSignal, dotScore, diffPct, sortDesc, pct,
-  NA_TEXT, ZP_KODY,
+  NA_TEXT, ZP_KODY, tableToCsv, csvFilename, stripHtml, csvCell,
 } from '../src/zp-viz.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -32,7 +32,7 @@ const ZP = [
 const count = (s, re) => (s.match(re) || []).length;
 /** Počet řádků v tbody tabulkového dvojčete (<details class="zpv-table">). */
 function twinRows(html) {
-  const m = /<details class="zpv-table">[\s\S]*?<tbody>([\s\S]*?)<\/tbody>/.exec(html);
+  const m = /<details class="zpv-table"[^>]*>[\s\S]*?<tbody>([\s\S]*?)<\/tbody>/.exec(html);
   assert.ok(m, 'chybí tabulkové dvojče');
   return count(m[1], /<tr>/g);
 }
@@ -461,4 +461,66 @@ test('CSS: každá sekce srovnávače má vyrovnané závorky (chybějící } u 
     const open = (sec.match(/\{/g) || []).length, close = (sec.match(/\}/g) || []).length;
     assert.equal(open, close, `nevyrovnané závorky v sekci začínající na pozici ${start}`);
   });
+});
+
+// --- A4.1: export CSV z tabulkového dvojčete --------------------------------
+
+test('tableToCsv: komentář, hlavička, řádky, CRLF, bez BOM', () => {
+  const csv = tableToCsv(['Položka', 'Hodnota (%)'], [['VZP', '22,9'], ['VoZP', '19,2']], { title: 'Tržní podíl', source: 'CRP 2025' });
+  const lines = csv.split('\r\n');
+  assert.equal(lines[0], '# Tržní podíl · zdroj: CRP 2025 · HSPA Monitor (skorezdravotnictvi.cz) · CC BY 4.0');
+  assert.equal(lines[1], 'Položka;Hodnota (%)');
+  assert.equal(lines[2], 'VZP;22,9');
+  assert.equal(lines[4], '');
+  assert.ok(!csv.includes('\ufeff'), 'BOM přidává až stažení');
+  assert.ok(tableToCsv(['a'], [], {}).startsWith('# HSPA Monitor'));
+});
+
+test('tableToCsv: escapování RFC 4180 (oddělovač, uvozovky, nový řádek)', () => {
+  const csv = tableToCsv(['a;b', 'c'], [['x"y', 'l1\nl2'], ['ok', 'p;q']]);
+  assert.match(csv, /\r\n"a;b";c\r\n/);
+  assert.match(csv, /"x""y";l1 l2/); // nový řádek v buňce se sloučí na mezeru, řádek CSV se nerozbije
+  assert.match(csv, /ok;"p;q"/);
+  assert.equal(csvCell('a\nb'), '"a\nb"');
+  assert.equal(csvCell('say "hi"'), '"say ""hi"""');
+  assert.equal(csvCell(null), '');
+  assert.equal(tableToCsv(['a', 'b'], [['1,5', '2']], { sep: ',' }).split('\r\n')[2], '"1,5",2');
+});
+
+test('tableToCsv: značky a entity pryč, nbsp → mezera, typografické minus zůstává', () => {
+  assert.equal(stripHtml('98,4 <span class="zpv-raw">(123&nbsp;456)</span>'), '98,4 (123 456)');
+  assert.equal(stripHtml('A &amp; B &lt;5 &#8722;3'), 'A & B <5 −3');
+  assert.equal(stripHtml('12\u00a0345\u202f6'), '12 345 6');
+  const csv = tableToCsv(['x'], [['−1,2&nbsp;%'], ['<b>tučně</b>']]);
+  assert.ok(csv.includes('−1,2 %'));
+  assert.ok(csv.includes('\r\ntučně\r\n'));
+  // text: true nemaže značky-podobný text
+  assert.ok(tableToCsv(['x'], [['<5 případů']], { text: true }).includes('<5 případů'));
+});
+
+test('csvFilename: slug bez diakritiky, max 60 znaků, datum', () => {
+  assert.equal(csvFilename('Tržní podíl pojišťoven', '2026-11-03'), 'hspa-pojistovny-trzni-podil-pojistoven-2026-11-03.csv');
+  assert.equal(csvFilename('', new Date('2026-01-02T10:00:00Z')), 'hspa-pojistovny-data-2026-01-02.csv');
+  const long = csvFilename('Příliš žluťoučký kůň úpěl ďábelské ódy '.repeat(5), '2026-11-03');
+  const slug = long.replace('hspa-pojistovny-', '').replace('-2026-11-03.csv', '');
+  assert.ok(slug.length <= 60 && !slug.endsWith('-') && /^[a-z0-9-]+$/.test(slug));
+});
+
+test('tabulková dvojčata všech primitiv nesou tlačítko CSV, název a zdroj', () => {
+  const out = [
+    rankedBars(ZP, { title: 'Bary', source: 'Zdroj A' }),
+    segmentedBar(ZP, { title: 'Segmenty', source: 'Zdroj B' }),
+    indexedLines(SERIES, { title: 'Řady', source: 'Zdroj C' }),
+    dumbbell([{ kod: '111', label: 'VZP', from: 100, to: 120 }], { title: 'Plán', source: 'Zdroj D' }),
+  ];
+  const titles = ['Bary', 'Segmenty', 'Řady', 'Plán'];
+  out.forEach((h, i) => {
+    assert.equal(count(h, /data-zpv-csv/g), 1, `${titles[i]}: tlačítko`);
+    assert.match(h, /<button type="button" class="zpv-csv" data-zpv-csv>Stáhnout CSV<\/button>/);
+    assert.match(h, new RegExp(`<details class="zpv-table" data-csv-title="${titles[i]}" data-csv-source="Zdroj ${'ABCD'[i]}">`));
+  });
+  assert.match(rankedBars(ZP, { title: EVIL }), /data-csv-title="&lt;script&gt;/);
+  assert.ok(!rankedBars(ZP, { title: EVIL }).includes('<script>'));
+  // každý tableTwin ve zdroji dostává source
+  assert.equal(count(SRC, /tableTwin\(/g) - 1, count(SRC, /, 1, source\);/g));
 });

@@ -91,14 +91,69 @@ function caption(o, extra = '') {
   return `<figcaption class="zpv-cap">${t}${s}${m}${z}</figcaption>`;
 }
 
-/** Tabulkové dvojče: headers = [text], rows = [[html…]] (první buňka = th). */
-function tableTwin(title, headers, rows, numFrom = 1) {
+// ---------------------------------------------------------------------
+//  Export CSV z tabulkového dvojčete (A4.1) — čisté funkce, stažení řeší zp-interact.js
+// ---------------------------------------------------------------------
+
+const ENTITIES = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ' };
+
+/** HTML buňky → prostý text: značky pryč, entity rozkódované, nezlomitelné mezery → mezera. */
+export function stripHtml(html) {
+  return String(html ?? '')
+    .replace(/<\/?[a-zA-Z][^>]*>/g, '')
+    .replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (m, e) => {
+      if (e[0] === '#') {
+        const cp = e[1] === 'x' || e[1] === 'X' ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10);
+        return Number.isFinite(cp) && cp > 0 && cp <= 0x10ffff ? String.fromCodePoint(cp) : m;
+      }
+      const v = ENTITIES[e.toLowerCase()];
+      return v === undefined ? m : v;
+    })
+    .replace(/[\u00a0\u202f\u2007]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/** Jedna hodnota CSV podle RFC 4180: uvozovky, když obsahuje oddělovač, `"` nebo nový řádek. */
+export function csvCell(value, sep = ';') {
+  const t = String(value ?? '');
+  return t.includes(sep) || /["\r\n]/.test(t) ? `"${t.replace(/"/g, '""')}"` : t;
+}
+
+/**
+ * Tabulka (hlavička + řádky) → CSV text. První řádek je komentář se zdrojem a licencí.
+ * BOM se nepřidává (dělá to až stažení). Buňky jsou HTML string (z tableTwin);
+ * `text: true` = buňky už jsou prostý text (z textContent), nemažou se značky.
+ * @param {string[]} headers
+ * @param {Array<Array<string>>} rows
+ * @param {{sep?: string, title?: string, source?: string, text?: boolean}} [opts]
+ */
+export function tableToCsv(headers, rows, { sep = ';', title = '', source = '', text = false } = {}) {
+  const clean = (v) => (text ? String(v ?? '').replace(/[\u00a0\u202f\u2007]/g, ' ').replace(/\s+/g, ' ').trim() : stripHtml(v));
+  const note = [title ? clean(title) : '', source ? `zdroj: ${clean(source)}` : '',
+    'HSPA Monitor (skorezdravotnictvi.cz)', 'CC BY 4.0'].filter(Boolean).join(' · ');
+  const line = (cells) => cells.map((c) => csvCell(clean(c), sep)).join(sep);
+  return [`# ${note}`, line(headers ?? []), ...(rows ?? []).map(line)].join('\r\n') + '\r\n';
+}
+
+/** Název staženého souboru: hspa-pojistovny-<slug názvu>-<YYYY-MM-DD>.csv (slug bez diakritiky, ≤ 60 znaků). */
+export function csvFilename(title, date = new Date()) {
+  const slug = String(title ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60).replace(/-+$/g, '') || 'data';
+  const d = date instanceof Date ? date.toISOString().slice(0, 10) : String(date).slice(0, 10);
+  return `hspa-pojistovny-${slug}-${d}.csv`;
+}
+
+/** Tabulkové dvojče: headers = [text], rows = [[html…]] (první buňka = th); source jde do CSV. */
+function tableTwin(title, headers, rows, numFrom = 1, source = '') {
   const head = headers.map((h, i) =>
     `<th scope="col"${i >= numFrom ? ' class="zpv-num"' : ''}>${esc(h)}</th>`).join('');
   const body = rows.map((r) => `<tr>${r.map((c, i) => (i === 0
     ? `<th scope="row">${c}</th>`
     : `<td${i >= numFrom ? ' class="zpv-num"' : ''}>${c}</td>`)).join('')}</tr>`).join('');
-  return `<details class="zpv-table"><summary>Zobrazit jako tabulku</summary>`
+  return `<details class="zpv-table" data-csv-title="${esc(title || 'data grafu')}" data-csv-source="${esc(source || '')}">`
+    + `<summary>Zobrazit jako tabulku</summary>`
+    + `<button type="button" class="zpv-csv" data-zpv-csv>Stáhnout CSV</button>`
     + `<div class="zpv-scroll" tabindex="0" role="region" aria-label="${esc('Tabulka: ' + (title || 'data grafu'))}">`
     + `<table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div></details>`;
 }
@@ -221,7 +276,7 @@ export function rankedBars(items, opts = {}) {
     + `${refOk ? `. ${refText}` : ''}.`;
   const plot = `<div class="zpv-plot zpv-barlist ${valWidthClass(texts)}${kind === 'line' ? ' zpv-has-refline' : ''}${hasNeg ? ' zpv-has-neg' : ''}" role="group" aria-label="${esc(aria)}">${rowsHtml}</div>`;
   const table = tableTwin(opts.title, ['Položka', unit ? `Hodnota (${unit})` : 'Hodnota'],
-    rows.map((r, i) => [esc(r.label ?? ''), esc(texts[i])]));
+    rows.map((r, i) => [esc(r.label ?? ''), esc(texts[i])]), 1, source);
   return figure('bars', opts, plot + table, { extraCap: extra });
 }
 
@@ -294,7 +349,7 @@ export function segmentedBar(parts, opts = {}) {
       esc(p.label ?? ''),
       esc(fmtValue(p.value, dec, unit)),
       esc(isNum(p.value) && tTotal > 0 ? `${formatNumberCz((p.value / tTotal) * 100, { minDecimals: 1, maxDecimals: 1 })} %` : NA_TEXT),
-    ]));
+    ]), 1, source);
   return figure('segmented', opts, plot + table, { colored: true });
 }
 
@@ -538,7 +593,7 @@ export function indexedLines(series, opts = {}) {
       if (!p || !isNum(p.index)) return NA_TEXT;
       const rawv = isNum(p.value) ? ` <span class="zpv-raw">(${esc(fmtValue(p.value, dec, unit))})</span>` : '';
       return `${esc(formatNumberCz(p.index, { minDecimals: 1, maxDecimals: 1 }))}${rawv}`;
-    })]));
+    })]), 1, source);
   return figure('lines', opts, plot + table, { colored: true, extraCap: `<span class="zpv-axisnote">Index, ${esc(baseLabel)}; jedna osa pro všechny řady.</span>` });
 }
 
@@ -618,7 +673,7 @@ export function dumbbell(items, opts = {}) {
   const aria = `${opts.title || 'Srovnání'}: ${rows.map((r, i) => `${r.label} ${fromLabel} ${fmtValue(r.from, dec, unit)}, ${toLabel} ${toTexts[i]}`).join('; ')}.`;
   const plot = `<div class="zpv-plot zpv-barlist zpv-dbplot ${valWidthClass(toTexts)}" role="group" aria-label="${esc(aria)}">${legend}${rowsHtml}</div>`;
   const table = tableTwin(opts.title, ['Položka', fromLabel, toLabel, 'Rozdíl'],
-    rows.map((r, i) => [esc(r.label ?? ''), esc(fmtValue(r.from, dec, unit)), esc(toTexts[i]), esc(signedPct(diffPct(r.from, r.to)))]));
+    rows.map((r, i) => [esc(r.label ?? ''), esc(fmtValue(r.from, dec, unit)), esc(toTexts[i]), esc(signedPct(diffPct(r.from, r.to)))]), 1, source);
   let extra = lo > 0 ? `<span class="zpv-axisnote">Osa nezačíná nulou (od ${esc(fmtValue(lo, dec, unit))}).</span>` : '';
   const note = opts.sortNote === undefined ? SORT_NOTE : opts.sortNote;
   if (sort === 'desc' && note) extra += `<span class="zpv-sortnote">${esc(note)}</span>`;

@@ -87,9 +87,16 @@ async function fetchJson(url, attempt = 0) {
 // Jeden fetch na URL a stránku: shell (zdroje), orchestrátor i semafor čtou
 // data/pojistovny.json — sdílejí tentýž promise. Neúspěch (null) se necachuje.
 const jsonCache = new Map();
+const jsonLoaded = [];
+/** URL úspěšně načtených přes loadJson v pořadí načtení, bez duplicit (patička „Data této stránky“). */
+export function loadedJsonUrls() { return jsonLoaded.slice(); }
 export function loadJson(url) {
   if (!jsonCache.has(url)) {
-    const pr = fetchJson(url).then((v) => { if (v == null) jsonCache.delete(url); return v; });
+    const pr = fetchJson(url).then((v) => {
+      if (v == null) jsonCache.delete(url);
+      else if (!jsonLoaded.includes(url)) jsonLoaded.push(url);
+      return v;
+    });
     jsonCache.set(url, pr);
   }
   return jsonCache.get(url);

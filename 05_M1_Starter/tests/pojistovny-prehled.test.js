@@ -8,7 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
-  ZP_STRANKY, ZP_SKUPINY, LEGACY_HASH, zpStrankaById, zpStrankyVSkupine, zpTabsHtml, zpShellHtml, zpZdrojeHtml, legacyRedirect,
+  ZP_STRANKY, ZP_SKUPINY, LEGACY_HASH, zpStrankaById, zpStrankyVSkupine, zpTabsHtml, zpShellHtml, zpZdrojeHtml, zpZdrojeJsonHtml, legacyRedirect,
 } from '../src/pojistovny-shell.js';
 import {
   aplikaceSkore, zpSouhrny, semaforRadekHtml, semaforMiniHtml, ovKartaHtml, ovMiniKartyHtml, temaKartyHtml, buildPrehled,
@@ -85,6 +85,31 @@ test('shell: zdroje z pojistovny.json jako sbalená patička, escapování, prá
   assert.match(html, /<details class="zpc-acc zpc-zdroje">/);
   assert.equal(zpZdrojeHtml({}), '');
   assert.ok(!zpZdrojeHtml({ zdroje: [{ nazev: '<script>x</script>' }] }).includes('<script>'));
+});
+
+test('shell: patička vypisuje odkazy na JSON stránky (A4.1), escapované, bez URL nic', () => {
+  const html = zpZdrojeHtml(D, ['data/pojistovny.json', 'data/pojistovny-prevence.json', 'data/"x<y>.json']);
+  assert.match(html, /<p class="zpc-zdroje-json">Data této stránky \(JSON, CC BY 4\.0\): <a href="data\/pojistovny\.json">pojistovny\.json<\/a> · <a href="data\/pojistovny-prevence\.json">/);
+  assert.ok(!html.includes('<y>'));
+  assert.ok(!zpZdrojeHtml(D).includes('zpc-zdroje-json'));
+  assert.equal(zpZdrojeJsonHtml([]), '');
+});
+
+test('loadJson: loadedJsonUrls bez duplicit, jen úspěšná načtení, v pořadí', async () => {
+  const { loadJson, loadedJsonUrls } = await import('../src/pojistovny-shared.js');
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (u) => (String(u).includes('chybi')
+    ? { ok: false, status: 404, json: async () => null }
+    : { ok: true, json: async () => ({ u }) });
+  try {
+    await loadJson('data/a41-b.json');
+    await loadJson('data/a41-a.json');
+    await loadJson('data/a41-b.json');
+    await loadJson('data/a41-chybi.json');
+    const urls = loadedJsonUrls();
+    assert.deepEqual(urls.filter((u) => u.includes('a41')), ['data/a41-b.json', 'data/a41-a.json']);
+    assert.equal(new Set(urls).size, urls.length);
+  } finally { globalThis.fetch = realFetch; }
 });
 
 test('shell: staré odkazy — dotazník a kotvy #modul-… míří na podstránky', () => {

@@ -287,3 +287,13 @@ test('fmtCount: záporné číslo s U+2212, prefix, desetinná místa; NaN → n
   assert.equal(fmtCount(Number.NaN, 1), null);
   assert.doesNotMatch(fmtCount(-1234.5, 1), /-/);
 });
+
+test('CSV: delegovaný click na [data-zpv-csv], BOM + text/csv, bez sledování', () => {
+  assert.match(SRC, /hasAttribute\('data-zpv-csv'\)/);
+  assert.match(SRC, /'\\ufeff'/);
+  assert.match(SRC, /text\/csv;charset=utf-8/);
+  assert.match(SRC, /revokeObjectURL/);
+  assert.ok(!/fetch\(|sendBeacon|XMLHttpRequest/.test(SRC.split('function downloadCsv')[1].split('function sortHeat')[0]));
+  assert.match(CSS, /\.zpv-csv \{[^}]*min-height: 24px[^}]*font-size: 12\.5px/);
+  assert.match(CSS, /@media print \{[\s\S]*?\.zpv-csv \{ display: none; \}/);
+});

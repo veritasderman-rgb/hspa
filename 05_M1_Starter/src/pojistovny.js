@@ -33,7 +33,7 @@ import { renderApps, renderPrevence, renderOtazky } from './pojistovny-prevence.
 import { renderDotaznik, renderDotaznikAgregace } from './zp-dotaznik.js';
 import { statTiles, rankedBars, segmentedBar, indexedLines, dumbbell, isNum, pct } from './zp-viz.js';
 import { initZpInteract, MOJE_EVENT } from './zp-interact.js';
-import { renderZpShell, legacyRedirect } from './pojistovny-shell.js';
+import { renderZpShell, legacyRedirect, refreshZdrojeJson } from './pojistovny-shell.js';
 import { renderPrehled } from './pojistovny-prehled.js';
 import { renderKmenMesicni } from './pojistovny-kmen-mesicni.js';
 import { renderStariDat } from './pojistovny-stari.js';
@@ -453,6 +453,7 @@ async function init() {
   // stáří dat: věta pod nadpisem + sbalená tabulka nad patičkou Zdroje, z datasetů, které stránka právě načetla
   const stari = renderStariDat({ datasety: { pojistovny: d, prevence: p, aplikace: a, otazky: o } }).catch(() => null);
   await Promise.all([shell, stari]);
+  refreshZdrojeJson(doc);
 }
 
 if (typeof document !== 'undefined') {
