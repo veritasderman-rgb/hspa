@@ -61,11 +61,15 @@ export const SITEMAP_EXCLUDED = {
   // Srovnávač pojišťoven: pracovní verze pod heslem (middleware.js), do zveřejnění rozhodnutím PS mimo sitemapu.
   '/pojistovny.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, pracovní verze pod heslem' },
   '/pojistovny-kmen.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, podstránka pod heslem' },
+  '/pojistovny-penize.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, podstránka pod heslem' },
   '/pojistovny-prevence.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, podstránka pod heslem' },
   '/pojistovny-aplikace.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, podstránka pod heslem' },
   '/pojistovny-gramotnost.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, podstránka pod heslem' },
   '/pojistovny-metodika.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, podstránka pod heslem' },
   '/pojistovny-indikatory.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, podstránka pod heslem' },
+  '/pojistovny-instituce.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, podstránka pod heslem' },
+  // profil jedné pojišťovny (?zp=<kód>); stránka s parametrem se do sitemapy nezapisuje, sama stránka je noindex
+  '/pojistovna.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, profil pojišťovny pod heslem' },
 };
 
 // Kurátorovaný seznam statických (sekčních) stránek.

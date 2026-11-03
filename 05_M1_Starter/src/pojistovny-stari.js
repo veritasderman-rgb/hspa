@@ -12,6 +12,9 @@
 //   stiznosti.json    stav_k, pojistovny[].roky[].rok
 //   opendata.json     stav_k
 //   vek.json          rok (zatím ho žádná stránka nenačítá, řádek se proto nikde nezobrazí)
+//   hospodareni-rady.json  roky[] (MZ Hodnocení 2015–2024), prerozdeleni.json  mesice[] (1/2019 až poslední měsíc),
+//   segmenty.json     roky[] (náklady podle segmentů); všechny tři jsou na stránce Peníze
+//   instituce.json, smluvni-programy.json, dostupnost.json  stav_k (stránka Instituce)
 // Řádek, jehož soubor stránka nenačetla, se vynechá. Míchají-li se na stránce dva roky téže
 // veličiny (např. náklady 2024 a 2025, výroční zprávy o prevenci 2020/2024/2025), blok přidá
 // varování — srovnání pojišťoven patří jen do jednoho roku.
@@ -30,10 +33,16 @@ export const ZP_DATASETY = {
   stiznosti: 'data/pojistovny-stiznosti.json',
   opendata: 'data/pojistovny-opendata.json',
   vek: 'data/pojistovny-vek.json',
+  hospodareniRady: 'data/pojistovny-hospodareni-rady.json',
+  prerozdeleni: 'data/pojistovny-prerozdeleni.json',
+  segmenty: 'data/pojistovny-segmenty.json',
+  instituce: 'data/pojistovny-instituce.json',
+  smluvniProgramy: 'data/pojistovny-smluvni-programy.json',
+  dostupnost: 'data/pojistovny-dostupnost.json',
 };
 
 /** Datasety, které stránka načítá mimo orchestrátor (src/pojistovny.js) vlastním modulem. */
-export const STARI_DOPLNEK = { kmen: ['sit'], indikatory: ['stiznosti', 'opendata'] };
+export const STARI_DOPLNEK = { instituce: ['sit'], aplikace: ['stiznosti', 'opendata'] };
 
 /** Pojmenování veličin pro varování (klíč `velicina` v registru). */
 export const STARI_VELICINY = {
@@ -118,7 +127,7 @@ export const STARI_REGISTR = [
     vyber: (o) => (o?.generated_at ? { kDatu: datumCz(isoDen(o.generated_at)), kratce: `otázky ${datumCz(isoDen(o.generated_at))}`, roky: [], stav: o.version ? `verze ${o.version}` : '' } : null),
   },
   {
-    id: 'sit', dataset: 'sit', velicina: 'sit', stranky: ['kmen'],
+    id: 'sit', dataset: 'sit', velicina: 'sit', stranky: ['instituce'],
     nazev: 'Síť smluvních odborností', zdroj: 'NRPZS (ÚZIS) a číselník IČZ pojišťoven (NZIP)',
     vyber: (s) => {
       const rok = isNum(s?.rok) ? s.rok : (s?.ref_datum ? Number(isoDen(s.ref_datum).slice(0, 4)) : null);
@@ -128,7 +137,7 @@ export const STARI_REGISTR = [
     },
   },
   {
-    id: 'stiznosti', dataset: 'stiznosti', velicina: 'stiznosti', stranky: ['indikatory'],
+    id: 'stiznosti', dataset: 'stiznosti', velicina: 'stiznosti', stranky: ['aplikace'],
     nazev: 'Stížnosti a podněty na dostupnost', zdroj: 'Výroční zprávy pojišťoven (§ 16a zákona 106/1999 Sb., § 40 zákona 48/1997 Sb.)',
     vyber: (s) => {
       if (!s?.stav_k) return null;
@@ -137,9 +146,51 @@ export const STARI_REGISTR = [
     },
   },
   {
-    id: 'opendata', dataset: 'opendata', velicina: 'opendata', stranky: ['indikatory'],
+    id: 'opendata', dataset: 'opendata', velicina: 'opendata', stranky: ['aplikace'],
     nazev: 'Otevřená data pojišťoven (audit)', zdroj: 'Weby pojišťoven, NKOD (data.gov.cz), výroční zprávy',
     vyber: (o) => (o?.stav_k ? { kDatu: `stav k ${datumCz(o.stav_k)}`, kratce: `open data k ${datumCz(o.stav_k)}`, roky: [], stav: o.version ? `verze ${o.version}` : '' } : null),
+  },
+  {
+    id: 'hospodareniRady', dataset: 'hospodareniRady', velicina: 'hospodareniRady', stranky: ['penize', 'kmen', 'instituce'],
+    nazev: 'Řady hospodaření 2015–2024', zdroj: 'MZ ČR + MF · Hodnocení vývoje systému v.z.p. (tabulková příloha a PDF)',
+    vyber: (r) => {
+      const r2 = uniq(r?.roky || []);
+      return r2.length ? { kDatu: rozsah(r2), kratce: `MZ ${rozsah(r2)}`, roky: [], stav: sestaven(r) } : null;
+    },
+  },
+  {
+    id: 'prerozdeleni', dataset: 'prerozdeleni', velicina: 'prerozdeleni', stranky: ['penize', 'prehled'],
+    nazev: 'Přerozdělení pojistného', zdroj: 'MZ ČR · Přerozdělování pojistného na v.z.p. (měsíční PDF)',
+    vyber: (p) => {
+      const m = Array.isArray(p?.mesice) ? p.mesice : [];
+      if (!m.length) return null;
+      const lab = (x) => { const mt = /^(\d{4})-(\d{2})$/.exec(String(x)); return mt ? `${Number(mt[2])}/${mt[1]}` : String(x); };
+      const rozpeti = `${lab(m[0])}–${lab(m[m.length - 1])}`;
+      return { kDatu: rozpeti, kratce: `přerozdělení ${rozpeti}`, roky: [], stav: [isNum(p.posledni_rok_rocni) ? `roční saldo za ${p.posledni_rok_rocni}` : '', sestaven(p)].filter(Boolean).join(' · ') };
+    },
+  },
+  {
+    id: 'segmenty', dataset: 'segmenty', velicina: 'segmenty', stranky: ['penize'],
+    nazev: 'Náklady podle segmentů', zdroj: 'MZ ČR + MF · Hodnocení vývoje systému v.z.p., tab. č. 3 a 3a',
+    vyber: (x) => {
+      const r2 = uniq((Array.isArray(x?.roky) ? x.roky : []).map(Number));
+      return r2.length ? { kDatu: rozsah(r2), kratce: `segmenty ${rozsah(r2)}`, roky: [], stav: sestaven(x) } : null;
+    },
+  },
+  {
+    id: 'instituce', dataset: 'instituce', velicina: 'instituce', stranky: ['instituce'],
+    nazev: 'Zákon, vznik a orgány pojišťoven', zdroj: 'Zákony č. 551/1991 Sb. a č. 280/1992 Sb., výroční zprávy pojišťoven 2023–2025',
+    vyber: (d) => (d?.stav_k ? { kDatu: `stav k ${datumCz(d.stav_k)}`, kratce: `instituce k ${datumCz(d.stav_k)}`, roky: [], stav: sestaven(d) } : null),
+  },
+  {
+    id: 'smluvniProgramy', dataset: 'smluvniProgramy', velicina: 'smluvniProgramy', stranky: ['instituce'],
+    nazev: 'Smluvní programy pro poskytovatele', zdroj: 'Weby pojišťoven (sekce pro poskytovatele), výroční zprávy 2025',
+    vyber: (d) => (d?.stav_k ? { kDatu: `weby k ${datumCz(d.stav_k)}`, kratce: `programy k ${datumCz(d.stav_k)}`, roky: [], stav: 'existence programu není jeho účinek' } : null),
+  },
+  {
+    id: 'dostupnost', dataset: 'dostupnost', velicina: 'dostupnost', stranky: ['instituce'],
+    nazev: 'Co pojišťovny publikují o dostupnosti', zdroj: 'Výroční zprávy 2023–2025 a weby pojišťoven (inventář)',
+    vyber: (d) => (d?.stav_k ? { kDatu: `stav k ${datumCz(d.stav_k)}`, kratce: `dostupnost k ${datumCz(d.stav_k)}`, roky: [], stav: 'nenalezeno neznamená, že údaj pojišťovna nemá' } : null),
   },
   {
     id: 'vek', dataset: 'vek', velicina: 'kmen', stranky: [],

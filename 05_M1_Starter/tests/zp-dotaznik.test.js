@@ -208,7 +208,7 @@ test('validateOdpoved: povolene_respondenty omezí typy; řídicí znaky se odst
 });
 
 test('data: adresné sady pojišťoven mají povolene_respondenty ["pojistovna"]; veřejná anketa jen verejnost', () => {
-  for (const id of ['fond-prevence', 'rizikovi-pojistenci', 'pobocky-definice', 'pravo-na-odpoved']) {
+  for (const id of ['fond-prevence', 'rizikovi-pojistenci', 'pobocky-definice', 'dostupnost-prechody', 'pravo-na-odpoved']) {
     const real = OTAZKY.sady.find((s) => s.id === id);
     assert.deepEqual(real.povolene_respondenty, ['pojistovna'], id);
     assert.equal(validateOdpoved(real, { sada_id: id, sada_verze: real.verze, respondent_typ: 'verejnost', odpovedi: {} }).ok, false, `${id}: veřejnost nesmí odpovídat`);
@@ -747,7 +747,7 @@ const WEB_DOTAZNIKY = OTAZKY.sady.filter((s) => s.typ === 'dotaznik' && s.kanal 
 test('sady: každá má unikátní id otázek, povolený kanal, fázi, respondenta a úvod', () => {
   assert.deepEqual(OTAZKY.sady.map((s) => s.id), [
     'fond-prevence', 'rizikovi-pojistenci', 'aplikace-privetivost', 'napo-pacientske-organizace',
-    'pojistenci-anketa', 'pravo-na-odpoved', 'pobocky-definice',
+    'pojistenci-anketa', 'pravo-na-odpoved', 'pobocky-definice', 'dostupnost-prechody',
   ]);
   for (const s of OTAZKY.sady) {
     const ids = flattenOtazky(s).map((q) => q.id);
@@ -766,6 +766,7 @@ test('sady: limity počtu otázek ze zadání a pravni_zaklad jen u sad pro poji
   assert.ok(pocet('pojistenci-anketa') <= 8);
   assert.equal(pocet('pravo-na-odpoved'), 3);
   assert.equal(pocet('pobocky-definice'), 4);
+  assert.equal(pocet('dostupnost-prechody'), 4);
   assert.deepEqual(sadaById('rizikovi-pojistenci').casti.map((c) => c.id), ['A', 'B', 'C', 'D']);
   for (const s of OTAZKY.sady) {
     const proPojistovny = /pojišťovn/.test(s.respondent) && !/pacient|veřejnost|IT expert/.test(s.respondent);

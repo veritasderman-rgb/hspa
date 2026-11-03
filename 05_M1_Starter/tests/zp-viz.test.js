@@ -11,7 +11,7 @@ import {
   rankedBars, segmentedBar, statTiles, meter, indexedLines, dumbbell,
   heatmap, dotMatrix, coverageMatrix,
   foldParts, indexSeries, dodgeLabels, niceTicks, meterSignal, dotScore, diffPct, sortDesc, pct,
-  NA_TEXT, ZP_KODY,
+  NA_TEXT, ZP_KODY, tableToCsv, csvFilename, stripHtml, csvCell, figureSwitch, readSwitchFromUrl, fmtRozdil,
 } from '../src/zp-viz.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -32,7 +32,7 @@ const ZP = [
 const count = (s, re) => (s.match(re) || []).length;
 /** Počet řádků v tbody tabulkového dvojčete (<details class="zpv-table">). */
 function twinRows(html) {
-  const m = /<details class="zpv-table">[\s\S]*?<tbody>([\s\S]*?)<\/tbody>/.exec(html);
+  const m = /<details class="zpv-table"[^>]*>[\s\S]*?<tbody>([\s\S]*?)<\/tbody>/.exec(html);
   assert.ok(m, 'chybí tabulkové dvojče');
   return count(m[1], /<tr>/g);
 }
@@ -124,6 +124,16 @@ test('rankedBars: referenční zóna/linka v tracku + popisek v záhlaví', () =
   assert.ok(line.includes('zpv-has-refline'));
   const above = rankedBars(ZP, { ref: { value: 20, label: 'Nad', kind: 'zone-above' } });
   assert.ok(above.includes('zpv-ref--above'));
+});
+
+test('rankedBars: ref.text nahradí „label: hodnota“ v popisku zóny i v aria', () => {
+  const items = [{ kod: '111', label: 'VZP', value: 4.1 }, { kod: '201', label: 'VoZP', value: 2.5 }];
+  const ref = { value: 3.5, label: 'kritické pásmo 3–4 % výdajů', text: 'kritické pásmo 3–4 % výdajů', kind: 'zone-below' };
+  const withText = rankedBars(items, { unit: '%', dec: 1, ref });
+  assert.match(withText, /<span class="zpv-refkey">[\s\S]*kritické pásmo 3–4 % výdajů<\/span>/);
+  assert.doesNotMatch(withText, /kritické pásmo 3–4 % výdajů: 3,5/, 'číslo 3,5 v popisku není');
+  const bez = rankedBars(items, { unit: '%', dec: 1, ref: { ...ref, text: undefined } });
+  assert.match(bez, /kritické pásmo 3–4 % výdajů: 3,5\s%/, 'bez text zůstává „label: hodnota“');
 });
 
 test('rankedBars allowNegative: nulová osa, záporné bary doleva, znaménko, styly', () => {
@@ -451,4 +461,126 @@ test('CSS: každá sekce srovnávače má vyrovnané závorky (chybějící } u 
     const open = (sec.match(/\{/g) || []).length, close = (sec.match(/\}/g) || []).length;
     assert.equal(open, close, `nevyrovnané závorky v sekci začínající na pozici ${start}`);
   });
+});
+
+// --- A4.1: export CSV z tabulkového dvojčete --------------------------------
+
+test('tableToCsv: komentář, hlavička, řádky, CRLF, bez BOM', () => {
+  const csv = tableToCsv(['Položka', 'Hodnota (%)'], [['VZP', '22,9'], ['VoZP', '19,2']], { title: 'Tržní podíl', source: 'CRP 2025' });
+  const lines = csv.split('\r\n');
+  assert.equal(lines[0], '# Tržní podíl · zdroj: CRP 2025 · HSPA Monitor (skorezdravotnictvi.cz) · CC BY 4.0');
+  assert.equal(lines[1], 'Položka;Hodnota (%)');
+  assert.equal(lines[2], 'VZP;22,9');
+  assert.equal(lines[4], '');
+  assert.ok(!csv.includes('\ufeff'), 'BOM přidává až stažení');
+  assert.ok(tableToCsv(['a'], [], {}).startsWith('# HSPA Monitor'));
+});
+
+test('tableToCsv: escapování RFC 4180 (oddělovač, uvozovky, nový řádek)', () => {
+  const csv = tableToCsv(['a;b', 'c'], [['x"y', 'l1\nl2'], ['ok', 'p;q']]);
+  assert.match(csv, /\r\n"a;b";c\r\n/);
+  assert.match(csv, /"x""y";l1 l2/); // nový řádek v buňce se sloučí na mezeru, řádek CSV se nerozbije
+  assert.match(csv, /ok;"p;q"/);
+  assert.equal(csvCell('a\nb'), '"a\nb"');
+  assert.equal(csvCell('say "hi"'), '"say ""hi"""');
+  assert.equal(csvCell(null), '');
+  assert.equal(tableToCsv(['a', 'b'], [['1,5', '2']], { sep: ',' }).split('\r\n')[2], '"1,5",2');
+});
+
+test('tableToCsv: značky a entity pryč, nbsp → mezera, typografické minus zůstává', () => {
+  assert.equal(stripHtml('98,4 <span class="zpv-raw">(123&nbsp;456)</span>'), '98,4 (123 456)');
+  assert.equal(stripHtml('A &amp; B &lt;5 &#8722;3'), 'A & B <5 −3');
+  assert.equal(stripHtml('12\u00a0345\u202f6'), '12 345 6');
+  const csv = tableToCsv(['x'], [['−1,2&nbsp;%'], ['<b>tučně</b>']]);
+  assert.ok(csv.includes('−1,2 %'));
+  assert.ok(csv.includes('\r\ntučně\r\n'));
+  // text: true nemaže značky-podobný text
+  assert.ok(tableToCsv(['x'], [['<5 případů']], { text: true }).includes('<5 případů'));
+});
+
+test('csvFilename: slug bez diakritiky, max 60 znaků, datum', () => {
+  assert.equal(csvFilename('Tržní podíl pojišťoven', '2026-11-03'), 'hspa-pojistovny-trzni-podil-pojistoven-2026-11-03.csv');
+  assert.equal(csvFilename('', new Date('2026-01-02T10:00:00Z')), 'hspa-pojistovny-data-2026-01-02.csv');
+  const long = csvFilename('Příliš žluťoučký kůň úpěl ďábelské ódy '.repeat(5), '2026-11-03');
+  const slug = long.replace('hspa-pojistovny-', '').replace('-2026-11-03.csv', '');
+  assert.ok(slug.length <= 60 && !slug.endsWith('-') && /^[a-z0-9-]+$/.test(slug));
+});
+
+test('tabulková dvojčata všech primitiv nesou tlačítko CSV, název a zdroj', () => {
+  const out = [
+    rankedBars(ZP, { title: 'Bary', source: 'Zdroj A' }),
+    segmentedBar(ZP, { title: 'Segmenty', source: 'Zdroj B' }),
+    indexedLines(SERIES, { title: 'Řady', source: 'Zdroj C' }),
+    dumbbell([{ kod: '111', label: 'VZP', from: 100, to: 120 }], { title: 'Plán', source: 'Zdroj D' }),
+  ];
+  const titles = ['Bary', 'Segmenty', 'Řady', 'Plán'];
+  out.forEach((h, i) => {
+    assert.equal(count(h, /data-zpv-csv/g), 1, `${titles[i]}: tlačítko`);
+    assert.match(h, /<button type="button" class="zpv-csv" data-zpv-csv>Stáhnout CSV<\/button>/);
+    assert.match(h, new RegExp(`<details class="zpv-table" data-csv-title="${titles[i]}" data-csv-source="Zdroj ${'ABCD'[i]}">`));
+  });
+  assert.match(rankedBars(ZP, { title: EVIL }), /data-csv-title="&lt;script&gt;/);
+  assert.ok(!rankedBars(ZP, { title: EVIL }).includes('<script>'));
+  // každý tableTwin ve zdroji dostává source
+  assert.equal(count(SRC, /tableTwin\(/g) - 1, count(SRC, /, 1, source\);/g));
+});
+
+// --- A4.3 figureSwitch a A4.2 pomocné funkce ----------------------------------------
+const OPT3 = [{ value: 'vse', label: 'Všech 7' }, { value: 'bez-vzp', label: 'Bez VZP ČR' }, { value: 'od-2023', label: 'Od 1/2023' }];
+
+test('figureSwitch (radio): radiogroup, aria-label, výchozí hodnota, roving tabindex', () => {
+  const h = figureSwitch({ id: 'kmen', label: 'Rozsah grafu', options: OPT3, selected: 'bez-vzp', defaultValue: 'vse' });
+  assert.match(h, /^<div class="zpc-switch" role="radiogroup" aria-label="Rozsah grafu" data-switch="kmen" data-default="vse">/);
+  assert.equal((h.match(/role="radio"/g) || []).length, 3);
+  assert.equal((h.match(/aria-checked="true"/g) || []).length, 1);
+  assert.match(h, /aria-checked="true" tabindex="0" data-value="bez-vzp">Bez VZP ČR</);
+  assert.equal((h.match(/tabindex="-1"/g) || []).length, 2);
+  // bez vybrané / neznámé hodnoty je zaškrtnutá první
+  assert.match(figureSwitch({ id: 'x', label: 'X', options: OPT3 }), /aria-checked="true" tabindex="0" data-value="vse"/);
+  assert.match(figureSwitch({ id: 'x', label: 'X', options: OPT3, selected: 'hm' }), /aria-checked="true" tabindex="0" data-value="vse"/);
+  // čísla jako hodnoty (rok)
+  assert.match(figureSwitch({ id: 'rok', label: 'Rok', options: [{ value: 2023, label: '2023' }, { value: 2024, label: '2024' }], selected: 2024 }), /aria-checked="true" tabindex="0" data-value="2024"/);
+  assert.doesNotMatch(figureSwitch({ id: 'x', label: 'X', options: OPT3 }), /data-default/);
+});
+
+test('figureSwitch (select): label + select s data-switch, vybraná option, escapování', () => {
+  const h = figureSwitch({ id: 'ukazatel', label: 'Ukazatel', kind: 'select', options: [{ value: 'a', label: 'A' }, { value: 'b', label: EVIL }], selected: 'b' });
+  assert.match(h, /^<label class="zpc-ctl zpc-ctl--select"><span class="zpc-ctl-lbl">Ukazatel<\/span><select class="zpc-sit-select zpc-ctl-select" data-switch="ukazatel">/);
+  assert.match(h, /<option value="b" selected>/);
+  assert.doesNotMatch(h, /<script>/);
+  assert.match(h, /&lt;script&gt;/);
+  assert.equal(figureSwitch({ id: 'x', label: 'X', options: [] }).includes('role="radio"'), false);
+});
+
+test('readSwitchFromUrl: hodnota z URL, neznámá hodnota a chybějící parametr = fallback', () => {
+  const allowed = OPT3.map((o) => o.value);
+  assert.equal(readSwitchFromUrl('kmen', allowed, 'vse', '?kmen=bez-vzp'), 'bez-vzp');
+  assert.equal(readSwitchFromUrl('kmen', allowed, 'vse', '?a=1&kmen=od-2023'), 'od-2023');
+  assert.equal(readSwitchFromUrl('kmen', allowed, 'vse', '?kmen=hmm'), 'vse');
+  assert.equal(readSwitchFromUrl('kmen', allowed, 'vse', ''), 'vse');
+  assert.equal(readSwitchFromUrl('kmen', allowed, 'vse', undefined), 'vse', 'bez location.search = fallback');
+  assert.equal(readSwitchFromUrl('rok', [2023, 2024], 2024, '?rok=2023'), 2023, 'vrací hodnotu z allowed (číslo)');
+});
+
+test('fmtRozdil: znaménko, typografické minus, ±0 po zaokrouhlení, null při chybějící hodnotě', () => {
+  assert.equal(fmtRozdil(12.34, 10, 1, 'p. b.'), '+2,3\u00a0p. b.'.replace('\u00a0', ' '));
+  assert.match(fmtRozdil(1, 4.5, 1), /^−3,5$/);
+  assert.equal(fmtRozdil(2.001, 2, 1), '±0');
+  assert.equal(fmtRozdil(null, 2, 1), null);
+  assert.equal(fmtRozdil(2, undefined, 1), null);
+});
+
+test('statTiles: volitelný řádek cmp pod hodnotou (druhá pojišťovna a rozdíl), bez cmp beze změny', () => {
+  const h = statTiles([{ value: 5, label: 'L', decimals: 1, unit: '%', cmp: { kod: '205', label: 'ČPZP', text: '4,0 %', diff: '+1,0 p. b.' } }, { value: 1, label: 'M' }]);
+  assert.match(h, /<span class="zpv-tile-cmp" data-zp="205">ČPZP: 4,0 % · rozdíl \+1,0 p\. b\.<\/span>/);
+  assert.equal((h.match(/zpv-tile-cmp/g) || []).length, 1);
+  assert.match(statTiles([{ value: 5, label: 'L', cmp: { label: 'X', text: EVIL } }]), /&lt;script&gt;/);
+});
+
+test('rankedBars: minv + maxv dají dvěma grafům stejnou osu', () => {
+  const a = rankedBars([{ label: 'A', value: -2 }, { label: 'B', value: 4 }], { allowNegative: true, maxv: 10, minv: -10 });
+  const b = rankedBars([{ label: 'A', value: -2 }, { label: 'B', value: 1 }], { allowNegative: true, maxv: 10, minv: -10 });
+  const nula = (h) => h.match(/--x:([\d.]+)%" aria-hidden/)?.[1];
+  assert.equal(nula(a), '50');
+  assert.equal(nula(a), nula(b));
 });

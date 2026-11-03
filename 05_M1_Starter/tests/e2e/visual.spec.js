@@ -20,11 +20,14 @@ const PAGES = [
   { path: '/pojistovny.html',             name: 'insurers' },
   // Podstránky srovnávače (P1.6, PLAN-SROVNAVAC-POJISTOVEN.md § 2.8)
   { path: '/pojistovny-kmen.html',        name: 'insurers-kmen' },
+  { path: '/pojistovny-penize.html',      name: 'insurers-penize' },
   { path: '/pojistovny-prevence.html',    name: 'insurers-prevence' },
   { path: '/pojistovny-aplikace.html',    name: 'insurers-aplikace' },
   { path: '/pojistovny-gramotnost.html',  name: 'insurers-gramotnost' },
   { path: '/pojistovny-metodika.html',    name: 'insurers-metodika' },
   { path: '/pojistovny-indikatory.html',  name: 'insurers-indikatory' },
+  { path: '/pojistovny-instituce.html',   name: 'insurers-instituce' },
+  { path: '/pojistovna.html?zp=111',      name: 'insurers-profil' },
   // Pozn.: dlouhé články (clanek-*.html) se z vizuálních snapshotů vynechávají —
   // Article Visuals používají JS count-up animace (requestAnimationFrame), které
   // CSS `animation:none` nezastaví, takže snapshot padá na nedeterministický

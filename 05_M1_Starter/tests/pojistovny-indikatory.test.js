@@ -110,7 +110,11 @@ test('opendata: bez souboru věta, se souborem souhrn 7 řádků, detaily a cent
 
 test('stránka: HTML má kontejnery, shell data-aktivni, oba moduly; sitemap noindex; e2e visual zahrnuje stránku', () => {
   const html = fs.readFileSync(path.join(ROOT, 'pojistovny-indikatory.html'), 'utf8');
-  for (const id of ['zpShell', 'zpMojeZp', 'zpIndStrucne', 'zpIndKdo', 'zpIndKontrakt', 'zpIndAuto', 'zpIndDatasety', 'zpIndNavrhy', 'zpIndMezery', 'zpStiznosti', 'zpOpendata', 'zpZdroje']) assert.match(html, new RegExp(`id="${id}"`), id);
+  for (const id of ['zpShell', 'zpMojeZp', 'zpIndStrucne', 'zpIndKdo', 'zpIndKontrakt', 'zpIndAuto', 'zpIndDatasety', 'zpIndNavrhy', 'zpIndMezery', 'zpZdroje']) assert.match(html, new RegExp(`id="${id}"`), id);
+  assert.doesNotMatch(html, /id="zpStiznosti"|id="zpOpendata"/, 'stížnosti a open data jsou od A0.5 na stránce Aplikace a servis');
+  const apl = fs.readFileSync(path.join(ROOT, 'pojistovny-aplikace.html'), 'utf8');
+  for (const id of ['zpStiznosti', 'zpOpendata', 'zpTablePrev', 'zpAppFunkce']) assert.match(apl, new RegExp(`id="${id}"`), id);
+  assert.match(apl, /src\/pojistovny-indikatory\.js/);
   assert.match(html, /data-aktivni="indikatory"/);
   assert.match(html, /src\/pojistovny\.js/);
   assert.match(html, /src\/pojistovny-indikatory\.js/);

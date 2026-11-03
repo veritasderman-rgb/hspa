@@ -151,6 +151,8 @@ pojištěnců a odlišným podílem zvlášť nákladných hrazených služeb“
 tedy oficiální měřítko nákladovosti kmene, které v sobě má věk, pohlaví, farmaceuticko-nákladové
 skupiny i nákladné služby.
 
+**Pojmenování na webu.** Hodnota z tohoto indexu se na webu označuje „přepočteno na index přerozdělení“, ne „standardizováno“: index zahrnuje věk, pohlaví a farmaceuticko-nákladové skupiny, není to věková standardizace, a slovo „standardizováno“ zůstává vyhrazeno stavu `dolozeno` (až budou váhy ÚZIS).
+
 **Data a skript.** `ingest/manual/pojistovny/prerozdeleni-mz.json` (měsíční řady 2022–2026/10,
 7 ZP + celkem, zdroj a datum ověření; index používá jen rok hospodaření) → `ingest/transform_pojistovny_index_prerozdeleni.js`
 → `pojistovny[].hospodareni.index_prerozdeleni` {hodnota, rok, zdroj, poznamka, median_kc,

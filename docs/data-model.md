@@ -1725,3 +1725,312 @@ a pásek odstranit po položkách:
 
 Až vznikne: validátor kontroluje, že `cesta` existuje a `hodnota` sedí s datasetem
 (drift jako `claims.json`); schéma potvrdí balíček, který soubor založí.
+
+### Analytické datasety srovnávače (PLAN-SROVNAVAC-ANALYTIK.md § 6)
+
+Šest souborů z analytického plánu `05_M1_Starter/PLAN-SROVNAVAC-ANALYTIK.md`. Platí stejné
+konvence jako výše: `version`, `generated_at`, `_doc`, `zdroj`; číselná položka je obálka
+`{hodnota, rok, zdroj, list, radek, sloupec}` (u hodnot z PDF jsou `radek` a `sloupec` `null`),
+nebo `null` s položkou v `chybi[]`. Kódy ZP jsou řetězce (`"111"`). Nic se nedopočítává
+mimo uvedené podíly.
+
+| Soubor | Vznik | Validátor | Kdo čte |
+|---|---|---|---|
+| `pojistovny-hospodareni-rady.json` | generovaný | `ingest/lib/validate-hospodareni-rady.js` | `src/pojistovny-penize.js` (vzniká) |
+| `pojistovny-prerozdeleni.json` | generovaný | `ingest/lib/validate-prerozdeleni.js` | `src/pojistovny-penize.js` (vzniká) |
+| `pojistovny-segmenty.json` | generovaný | `ingest/lib/validate-segmenty.js` (volá ho transform před zápisem) | `src/pojistovny-penize.js` (vzniká) |
+| `pojistovny-instituce.json` | ruční | `ingest/lib/validate-instituce.js` | `src/pojistovny-instituce.js` (vzniká) |
+| `pojistovny-smluvni-programy.json` | ruční | `ingest/lib/validate-smluvni-programy.js` | `src/pojistovny-instituce.js` (vzniká) |
+| `pojistovny-dostupnost.json` | ruční | `ingest/lib/validate-dostupnost.js` | `src/pojistovny-instituce.js` (vzniká) |
+
+Validátory jsou čisté funkce. Pět z nich (hospodareni-rady, prerozdeleni, instituce, smluvni-programy,
+dostupnost) importuje `ingest/validate-pojistovny.js` (`npm run validate:pojistovny`, součást `validate:all`).
+Validátor segmentů běží v transformu a do `validate-pojistovny.js` zatím zapojen není.
+
+#### `data/pojistovny-hospodareni-rady.json` — řady hospodaření 7 ZP, 2015–2024 (generovaný)
+
+Generuje `ingest/transform_pojistovny_hospodareni_rady.js` (`npm run transform:pojistovny-mz`) z cache,
+kterou stahuje `ingest/fetchers/mz-hodnoceni.js` (parsery `ingest/lib/mz-hodnoceni.js`). Zdroj:
+Hodnocení vývoje systému veřejného zdravotního pojištění MZ ČR, pro každý ročník XLSX (tabulková příloha)
+i PDF; `zdroj.soubory[]` nese 30 souborů (10 ročníků × 2 typy) s `sha256`. Jeden ročník = jedna hodnota
+„skutečnost“ daného roku.
+
+| Klíč | Typ | Popis |
+|---|---|---|
+| `roky` | `int[]` | `[2015, …, 2024]`, souvislá řada |
+| `zdroj` | objekt | `nazev`, `url` (stránka MZ), `soubory[]{rok, typ, soubor, url, sha256}`, `stazeno_at` |
+| `jednotky` | `{ukazatel: text}` | jednotka každého ukazatele (tabulka níže) |
+| `pojistovny[]` | 7 položek | `kod`, `zkratka`, `rady{}` (24 ukazatelů), `historicke[]` (prázdné: kódy sedmi ZP se v letech 2015–2024 nezměnily) |
+| `cr` | `{rady}` | řádek CELKEM sedmi ZP, stejná struktura `rady` |
+| `zamestnanecke` | `{rady}` | CELKEM zaměstnaneckých ZP (bez VZP) |
+| `neaktivni_zp[]` | 7 položek | `kod`, `nazev`, `zkratka`, `stav` (`likvidace`, `vymazana`, `omezeny-rozsah`), `sloucena_do`, `rok`, `zdroj`; čísla nenesou. Pozor: kód `205` má u položky „Pojišťovna Garant - Hospital“ (`omezeny-rozsah`), zatímco ČPZP v `pojistovny[]` má kód 205 také — kolize kódů v datech, nevyřešena |
+| `chybi[]` | 6 položek | `ukazatel`, `roky[]`, `kody` (`"vsechny"`), `duvod` |
+
+Každý ukazatel v `rady` je objekt `{"2015": obálka | null, …, "2024": obálka | null}`. Obálka má
+`hodnota`, `rok`, `zdroj` (URL souboru), `list`, `radek` (číslo řádku jako v Excelu), `sloupec`
+(písmeno). Hodnoty z PDF mají `radek` a `sloupec` `null`.
+
+Ukazatele (24) a jednotky:
+
+| Ukazatel | Jednotka | List / zdroj |
+|---|---|---|
+| `pojistenci_prumer` | osoby | tab.č.1 |
+| `statni_pojistenci` | osoby | PDF Tab. 7 (2018–2024; 2015–2017 `null`) |
+| `statni_pojistenci_pct` | % | PDF Tab. 7, podíl vypočtený z počtů |
+| `zamestnanci` | osoby (přepočtený počet) | tab.č.1 |
+| `pojistencu_na_zamestnance` | osoby | PDF Tab. 7 |
+| `prijmy_celkem_mld` | mld. Kč | tab.č.1 |
+| `pojistne_pred_prerozdelenim_mld` | mld. Kč | tab.č.1, „Příjmy z pojistného – výběr“ |
+| `pojistne_po_prerozdeleni_mld` | mld. Kč | tab.č.1, „vč. vlivu přerozdělování“ |
+| `vliv_prerozdeleni_mld` | mld. Kč | tab.č.1c (viz níže) |
+| `naklady_zs_mld` | mld. Kč | Tabulka č. 3 |
+| `naklady_na_pojistence_kc` | Kč | Tabulka č. 3a |
+| `provozni_naklady_mil` | mil. Kč | PDF Tab. 4 (výdaje na vlastní činnost) |
+| `provozni_naklady_pct` | % | PDF Tab. 4 (podíl na výdajích celkem) |
+| `provozni_limit_pct` | % | `null` ve všech letech (MZ uvádí limit jen v tis. Kč) |
+| `provozni_limit_pridelu_mil` | mil. Kč | tab.č.1a |
+| `provozni_pridel_mil` | mil. Kč | tab.č.1a |
+| `provozni_vyuziti_limitu_pct` | % | tab.č.1a, příděl / maximální limit přídělu × 100 |
+| `zustatek_bu_zfzp_mld` | mld. Kč | tab.č.1b, KZ na účtu ZFZP k 31. 12. |
+| `rezervni_fond_mld` | mld. Kč | tab. č. 1d |
+| `pohledavky_po_lhute_mil` | mil. Kč | tab.č.1, pohledávky za plátci po lhůtě |
+| `zavazky_po_lhute_mil` | mil. Kč | tab.č.1, závazky vůči poskytovatelům po lhůtě |
+| `hospodarsky_vysledek_mld` | mld. Kč | tab.č.1, saldo příjmů a výdajů celkem |
+| `fond_prevence_mil` | mil. Kč | Tabulka č. 3c |
+| `fond_prevence_na_pojistence_kc` | Kč | Tabulka č. 3c |
+
+**`vliv_prerozdeleni_mld` není platba státu.** Je to list tab.č.1c („Vliv přerozdělování“; v PDF
+„Výstupy z přerozdělování platby státu“) a je rovno `pojistne_po_prerozdeleni_mld` minus
+`pojistne_pred_prerozdelenim_mld`. VZP 2024: 293,134759 − 189,756319 = 103,37844 mld. Kč. Součet za všechny
+ZP odpovídá platbě státu a paušální dani přerozdělené do systému. MZ platbu státu po jednotlivých ZP
+nezveřejňuje, proto z těchto dat čisté saldo přerozdělení po pojišťovnách nevzniká (relativní saldo
+je v `pojistovny-prerozdeleni.json`, jiný výpočet).
+
+Validátor hlídá: `roky` 2015→2024 souvisle; sedm kódů v pořadí; každá obálka má číselnou `hodnota`,
+`rok` shodný s klíčem, `zdroj` jako https URL a `list`; 12 základních řad nesmí být `null`; `vliv` =
+po − před (±0,0015 mld. Kč); Σ ZP = `cr` (resp. `zamestnanecke`) ±0,5 % u součtových ukazatelů;
+`statni_pojistenci_pct` v pásmu 40–70 %, `provozni_naklady_pct` 0,5–5 %; srovnání s `pojistovny.json`
+(počet pojištěnců, příjmy, náklady na pojištěnce, hospodářský výsledek) v toleranci 0,1 % nebo absolutní
+toleranci.
+
+```json
+{
+  "version": "1.0", "generated_at": "…",
+  "roky": [2015, "…", 2024],
+  "pojistovny": [{ "kod": "111", "zkratka": "VZP ČR", "historicke": [],
+    "rady": {
+      "pojistenci_prumer": { "2024": { "hodnota": 6150186, "rok": 2024,
+        "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni_tab_1-1a-1b-1c-1d-2-4.xlsx",
+        "list": "tab.č.1", "radek": 7, "sloupec": "D" }, "…": "…" },
+      "…": "…" } }],
+  "chybi": [{ "ukazatel": "statni_pojistenci", "roky": [2015, 2016, 2017], "kody": "vsechny", "duvod": "…" }]
+}
+```
+
+#### `data/pojistovny-prerozdeleni.json` — výběr vs. výsledek přerozdělení (generovaný)
+
+Generuje `ingest/transform_pojistovny_prerozdeleni.js` (součást `npm run transform:pojistovny-mz`) ze dvou ručně přepsaných vstupů z PDF MZ „Přerozdělování pojistného“:
+`ingest/manual/pojistovny/prerozdeleni-mz-vyber.json` (100% výběr, 2019→, a doplněk výsledku 2019–2021,
+tis. Kč/měsíc) a `prerozdeleni-mz-pojistovna.json` (částka po přerozdělení, 2022→). Vstupy stahuje
+`ingest/fetchers/mz-prerozdeleni.js`. Počet pojištěnců bere z `pojistovny-hospodareni-rady.json`, jinak z
+`pojistovny-kmen-mesicni.json`. Validátor `validatePrerozdeleni()` v `ingest/lib/validate-prerozdeleni.js`
+(při chybě transform skončí výjimkou).
+
+| Klíč | Typ | Popis |
+|---|---|---|
+| `mesice` | `string[]` | `"YYYY-MM"`, leden 2019 – říjen 2026 (94 měsíců), souvislá řada |
+| `pojistovny[]` | 7 položek | `kod`, `zkratka`, `vybrano[]` (tis. Kč, 100% výběr), `po_prerozdeleni[]` (tis. Kč), `rozdil[]` (tis. Kč = po − vybrano), `rozdil_relativni[]` (tis. Kč), `rocne{rok: …}` |
+| `celkem` | objekt | Σ sedmi ZP: `vybrano[]`, `po_prerozdeleni[]`, `rozdil[]`, `rocne{rok: …}` (u `celkem.rocne` jsou položky salda `null`) |
+| `posledni_rok_rocni` | `int` | `2025` (poslední rok s 12 měsíci) |
+| `posledni_mesic` | `string` | `"2026-10"` |
+| `zdroj` | objekt | `vyber` a `po_prerozdeleni` (`nazev`, `url`, `soubory[]`, `overeno`), `pocet_pojistencu` (text: odkud se bere počet), `vstupy[]` |
+
+Položky `rocne[rok]`: `vybrano_mld`, `po_prerozdeleni_mld`, `rozdil_mld`, `saldo_relativni_mld`,
+`saldo_relativni_pct_vybraneho`, `pojistenci_prumer`, `pojistenci_zdroj` (`"hospodareni-rady"` nebo
+`"kmen-mesicni"`), `rozdil_na_pojistence_kc`, `saldo_relativni_na_pojistence_kc`, `mesicu`. Neúplný rok
+(`mesicu` < 12, v datech 2026 s `mesicu` 10) má roční hodnoty `null`.
+
+**Definice relativního salda** (doslova z `_doc`):
+
+> saldo_relativni_mld = po_prerozdeleni − vybrano × (Σ po_prerozdeleni všech sedmi ZP / Σ vybrano všech sedmi ZP), za rok z ročních součtů; rozdil_relativni[] je totéž po měsících (tis. Kč, podíl se počítá v témže měsíci). Je to aritmetická identita, ne odhad: o kolik pojišťovna dostala víc nebo míň, než kdyby se celý objem po přerozdělení (vybrané pojistné + platba státu + paušální daň + úroky) rozdělil v poměru jejího podílu na vybraném pojistném. Součet přes sedm pojišťoven je z konstrukce nula.
+
+Ve stejném `_doc` je i věta: „Čisté saldo vůči platbě státu (po − vybrano − platba státu na pojišťovnu) z veřejných dat spočítat nejde“. Platba státu jde na zvláštní účet přerozdělování, ne na konkrétní pojišťovnu, a MZ ji po pojišťovnách nezveřejňuje. Rozdíl `rozdil` (včetně platby státu, paušální daně a úroků) je totéž jako `vliv_prerozdeleni_mld` v `pojistovny-hospodareni-rady.json` (VZP 2024: 103,373 mld. zde proti 103,378 mld. v Hodnocení). Tabulka 100% výběru v PDF MZ je o zhruba 0,6 % nižší než „výběr“ v Tab. 1 Hodnocení MZ (2024: 340,615 vs 342,591 mld. Kč); validátor to hlásí jako varování.
+
+Validátor hlídá: 7 ZP se správnými kódy; měsíce souvislé a řady stejně dlouhé; `vybrano` > 0 tam, kde není `null`;
+Σ sedmi ZP = `celkem` ±2 tis. Kč měsíčně (výběr i po přerozdělení); `rozdil` = po − vybrano; roční součty
+odpovídají měsíčním a mají 12 měsíců; Σ `saldo_relativni_mld` za rok = 0 (±0,001 mld. Kč) a Σ měsíčních
+`rozdil_relativni` = 0 (±2 tis. Kč); `posledni_rok_rocni` je poslední rok s 12 měsíci; rok 2024: Σ výběru ≈
+„výběr“ v Tab. 1 Hodnocení (±0,5 %, jinak varování).
+
+```json
+{
+  "version": "1.0", "generated_at": "2026-11-03T07:02:58Z", "_doc": "…",
+  "mesice": ["2019-01", "…", "2026-10"],
+  "pojistovny": [{ "kod": "111", "zkratka": "VZP ČR",
+    "vybrano": [12323903, "…"], "po_prerozdeleni": [17215459, "…"], "rozdil": [4891556, "…"],
+    "rozdil_relativni": [1628893.1, "…"],
+    "rocne": { "2024": { "vybrano_mld": 188.541, "po_prerozdeleni_mld": 291.914, "rozdil_mld": 103.373,
+      "saldo_relativni_mld": 17.2536, "saldo_relativni_pct_vybraneho": 9.15, "pojistenci_prumer": 6150186,
+      "pojistenci_zdroj": "hospodareni-rady", "rozdil_na_pojistence_kc": 16808,
+      "saldo_relativni_na_pojistence_kc": 2805, "mesicu": 12 } } }],
+  "celkem": { "…": "…" },
+  "posledni_rok_rocni": 2025, "posledni_mesic": "2026-10"
+}
+```
+
+#### `data/pojistovny-segmenty.json` — náklady ZS podle segmentů péče, 7 ZP + CELKEM, 2015–2024 (generovaný)
+
+Generuje `ingest/transform_pojistovny_segmenty.js` (součást `npm run transform:pojistovny-mz`) z XLSX Hodnocení
+MZ ČR, listy „Tabulka č. 3“ (tis. Kč) a „Tabulka č. 3a“ (Kč na pojištěnce); `zdroj.soubory[]` nese 10 souborů
+(`typ: "xlsx-3"`). Náklady ZFZP na zdravotní služby, skutečnost. Validátor `validateSegmenty()` v
+`ingest/lib/validate-segmenty.js` běží v transformu před zápisem (chyba = soubor se nezapíše). Čte
+`src/pojistovny-penize.js` (vzniká souběžně).
+
+| Klíč | Typ | Popis |
+|---|---|---|
+| `roky` | `int[]` | `[2015, …, 2024]` |
+| `zdroj` | objekt | `nazev`, `url`, `soubory[]{rok, typ, soubor, url, sha256}` |
+| `segmenty[]` | 62 položek | `id` (slug stabilní napříč ročníky), `nazev`, `nazev_kratky`, `skupina` (`ambulantni` 23 · `luzkova` 19 · `leky` 5 · `ostatni` 15), `uroven` (1–4 podle kódu řádku v listu), `poradi`; pokud se úroveň mezi ročníky liší, je v `uroven_podle_roku` |
+| `cr` | `{rady}` | řádek CELKEM ZP; `rady{rok: {segment_id: obálka}}` |
+| `pojistovny[]` | 7 položek | `kod`, `zkratka`, `rady{rok: {segment_id: obálka}}`, `celkem{rok: obálka}` (řádek I. „Náklady na zdravotní služby celkem“) |
+| `chybi[]` | 26 položek | `segment`, `roky[]`, `kody` (`"vsechny"` nebo kód ZP), `duvod` (např. řádek „Soudní lékařství“ v Tabulce č. 3 není v letech 2023–2024) |
+
+Obálka segmentu: `tis_kc` (skutečnost v tis. Kč, bez zaokrouhlení), `na_pojistence_kc` (z Tabulky č. 3a, Kč),
+`zpp_tis_kc` (plán, zdravotně pojistný plán téhož roku, tis. Kč), `zdroj`, `list`, `radek`, `sloupec`. Segment,
+který ročník v listu nemá, je `null` a je v `chybi[]`. Nic se nedopočítává ani nesčítá.
+
+Validátor hlídá: 7 ZP a CELKEM; roky vzestupně po jednom; každá hodnota je obálka nebo `null`; `id` segmentů
+jsou jedinečná; enumy `skupina` a `uroven`; Σ řádků úrovně 1 = `celkem` ±0,5 %; `celkem` = `naklady_zs_mld`
+v `pojistovny-hospodareni-rady.json` ±0,1 % (jen varování: `na_pojistence_kc` × počet pojištěnců ≈ `tis_kc` × 1000 ±1 %).
+
+```json
+{
+  "roky": [2015, "…", 2024],
+  "segmenty": [{ "id": "amb_celkem", "nazev": "Na ambulantní péči celkem …", "nazev_kratky": "Ambulantní péče celkem",
+                 "skupina": "ambulantni", "uroven": 1, "poradi": 1 }, "…"],
+  "pojistovny": [{ "kod": "111", "zkratka": "VZP ČR",
+    "rady": { "2024": { "amb_celkem": { "tis_kc": 80154583, "na_pojistence_kc": 13032.871363565266,
+      "zpp_tis_kc": 73998000, "zdroj": "https://mzd.gov.cz/wp-content/uploads/2024/06/vz2024_hodnoceni_tab_3-3a-3b-3c.xlsx",
+      "list": "Tabulka č. 3 (tis. Kč) a Tabulka č. 3a (Kč na pojištěnce)", "radek": 9, "sloupec": "F" }, "…": "…" } },
+    "celkem": { "2024": { "tis_kc": "…", "…": "…" } } }],
+  "chybi": [{ "segment": "amb_soudni", "roky": [2023, 2024], "kody": "vsechny", "duvod": "…" }]
+}
+```
+
+Plán A1.4 předepisuje k grafu poznámku, že segmenty jsou ze ZFZP, akruálně, podle metodiky MZ.
+
+#### `data/pojistovny-instituce.json` — instituční rámec 7 ZP (ruční)
+
+Ručně vedený dataset: zákon, vznik, složení a způsob obsazení orgánů, ředitel, dohled, limit nákladů
+na činnost, členství. Zdroje: výroční zprávy 2024 a 2025 (`ingest/manual/pojistovny/vz-text/<kod>-<rok>.txt`,
+strana PDF) a konsolidovaná znění zákonů (`zdroje[]`, 19 položek s `id`, `nazev`, `url`, `overeno`, `poznamka`).
+Validátor `validateInstituce()` v `ingest/lib/validate-instituce.js`. Čte `src/pojistovny-instituce.js` (vzniká).
+
+**Neobsahuje jména osob.** Členové orgánů jsou jen počty a způsob obsazení. Validátor odmítá klíče
+`jmeno`, `prijmeni`, `osoby`, `osoba`, `clenove`, `predseda`, `mistopredseda`. Jména jsou třída C
+a o nich rozhodne vydavatel; v `chybi[]` je to první položka (`pole: "organy.*.osoby"`).
+
+| Klíč | Typ | Popis |
+|---|---|---|
+| `stav_k` | `YYYY-MM-DD` | datum stavu dat (2026-11-03) |
+| `limit_vzorec` | objekt | `predpis` (vyhl. 418/2003 Sb., § 7 odst. 2), `vzorec`, `vyznam`, `url`, `overeno`, `poznamka` |
+| `zdroje[]` | 19 položek | `id`, `nazev`, `url`, `overeno`, `poznamka`; na ně odkazují všechna pole přes `zdroj` |
+| `pojistovny[]` | 7 položek | viz níže |
+| `chybi[]` | 11 položek | `kod` (ZP nebo `null`), `pole`, `duvod` |
+
+Položka `pojistovny[]`: `kod`, `zkratka`, `nazev`, `ico` (text), `sidlo_mesto`, `ico_zdroj{soubor, strana, vz_url, shoda}`,
+`zakon{cislo, nazev, zdroj}` (`551/1991 Sb.` u VZP, `280/1992 Sb.` u ostatních), `vznik{rok, datum, puvod, poznamka, sloucene[], zdroj}`
+(`puvod` ∈ `statni` | `resortni` | `podnikova` | `oborova`), `organy{spravni_rada, dozorci_rada, reditel, rozhodci_organ}`,
+`dohled{organy[], poznamka, zdroj}`, `provozni_limit_pct{hodnota, rok, zdroj}` (rok podle zdroje; u VZP 2024),
+`clenstvi[]{nazev, url, poznamka, zdroj}`, `weby{hlavni, pro_poskytovatele, vyrocni_zpravy}`,
+`zamestnanci_odkaz` (text: cesta do `pojistovny.json`, zaměstnanci se tu neduplikují), `poznamky[]`.
+
+Orgán: `spravni_rada` a `dozorci_rada` mají `pocet`, `obsazeni[]{kdo, pocet, poznamka}` (součet `pocet` = `pocet`
+hlídá validátor), `funkcni_obdobi_let`, `zdroj`; `reditel` má `funkce`, `jmenuje`, `funkcni_obdobi_let`, `ve_funkci_od`,
+`poznamka`, `zdroj`; `rozhodci_organ` má `existuje`, `slozeni_zakon`, `poznamka`, `zdroj`.
+
+Validátor hlídá: 7 ZP s unikátními kódy; enumy (`puvod`, `zakon.cislo`); VZP podle 551/1991, zaměstnanecké
+podle 280/1992; součet `obsazeni[].pocet` = `pocet`; u každého pole `zdroj` (citace + paragraf nebo VZ, URL
+v `zdroje[]`); `stav_k` jako datum; zákaz klíčů s osobními údaji.
+
+```json
+{
+  "stav_k": "2026-11-03",
+  "pojistovny": [{ "kod": "111", "zkratka": "VZP ČR", "nazev": "Všeobecná zdravotní pojišťovna ČR",
+    "ico": "41197518", "zakon": { "cislo": "551/1991 Sb.", "…": "…" },
+    "vznik": { "rok": 1992, "datum": "1992-01-01", "puvod": "statni", "sloucene": [], "…": "…" },
+    "organy": { "spravni_rada": { "pocet": 30, "obsazeni": [{ "kdo": "vláda", "pocet": 10, "…": "…" }, "…"] },
+                "…": "…" },
+    "provozni_limit_pct": { "hodnota": 2.91, "rok": 2024, "zdroj": { "…": "…" } } }],
+  "chybi": [{ "kod": null, "pole": "organy.*.osoby", "duvod": "Jména členů orgánů se záměrně nezapisují …" }]
+}
+```
+
+#### `data/pojistovny-smluvni-programy.json` — bonifikační programy pro poskytovatele (ruční)
+
+Rešerše webů pojišťoven (ruční průchod 2026-11-03). U programů bez veřejné stránky je citace z výroční
+zprávy 2025 (`zdroj_typ: "vz"`). Inventář existence programů, ne hodnocení. Soubor sám říká, že existence
+programu není jeho účinek ani důkaz kvality a počet programů se nesmí řadit ani sčítat do pořadí pojišťoven.
+Prázdný seznam neznamená, že program neexistuje. Validátor `validateSmluvniProgramy()` v
+`ingest/lib/validate-smluvni-programy.js`; čte `src/pojistovny-instituce.js` (vzniká).
+
+| Klíč | Typ | Popis |
+|---|---|---|
+| `stav_k` | `YYYY-MM-DD` | datum stavu (2026-11-03) |
+| `skala.segmenty` | `{id: popis}` | enum segmentů: `VPL`, `PLDD`, `AS`, `stomatologie`, `nemocnice`, `lekarna`, `fyzioterapie`, `domaci_pece`, `vice`, `jiny` |
+| `skala.kriteria` | `{id: popis}` | enum kritérií: `kvalita`, `dostupnost`, `e-health`, `prevence`, `ekonomika` |
+| `pojistovny[]` | 7 položek | `kod`, `zkratka`, `web_pro_poskytovatele`, `programy[]`, `nenalezeno`, `poznamky[]` |
+| `chybi[]` | 4 texty | co se nepodařilo dohledat (např. e-health program u žádné ZP, veřejná stránka ČPZP) |
+
+Program (`programy[]`, celkem 28 v datech): `id` (`"<kod>-<slug>"`, např. `"111-vzp-plus-vpl"`), `nazev`,
+`segment` (enum), `kriteria[]` (enum), `popis`, `od_roku` (rok, nebo `null`; validátor hlídá 1990–2100),
+`url` (https), `citace` (doslovný výňatek), `overeno` (datum), `zdroj_typ` (`web` | `vz`; 16 + 12).
+`nenalezeno` je `null`, nebo — u pojišťovny bez programů — `{popis, url[]}` (validátor to vyžaduje).
+Ve všech sedmi ZP je v datech `null`.
+
+Validátor hlídá enumy segmentů a kritérií, https URL a formát dat. Obsah nehodnotí.
+
+#### `data/pojistovny-dostupnost.json` — co pojišťovny publikují o dostupnosti péče (ruční)
+
+Inventář: 5 sloupců × 7 ZP. Nehodnotí dostupnost ani pojišťovny; říká jen, zda a kde je údaj k dispozici.
+Zdroje: výroční zprávy 2023–2025 (`radek` = číslo řádku v textu z `vz-text/`, citace je doslovný zlomek jednoho
+řádku) a weby pojišťoven (ověřeno 2026-11-03 přímým stažením; sitemap prohledán na klíčová slova). Citace
+ověřuje `tests/pojistovny-dostupnost-data.test.js` proti textům VZ. Validátor `validateDostupnost()` v
+`ingest/lib/validate-dostupnost.js`; čte `src/pojistovny-instituce.js` (vzniká).
+
+| Sloupec (`id`) | Název | Co se zjišťuje (`popis`, zkráceně) |
+|---|---|---|
+| `cekaci_doby` | Čekací doby | Publikuje pojišťovna, jak dlouho pojištěnci čekají na plánovanou péči, nebo odkazuje na tato data? |
+| `sit_nedostatkove` | Nedostatkové oblasti | Publikuje seznam oblastí či okresů se zhoršenou dostupností, nebo programy pro ně? |
+| `zajisteni_pece` | Zajištění péče na žádost | Má postup pro pojištěnce, který nenašel lékaře, a publikuje počty žádostí či výsledky? |
+| `lhuty_307` | Plnění NV 307/2012 | Publikuje číselné vyhodnocení dojezdových dob a lhůt, nebo jen tvrdí, že síť kritéria splňuje? |
+| `par16` | Mimořádná úhrada § 16 | Publikuje počty žádostí o mimořádnou úhradu podle § 16 zák. 48/1997 Sb., podíl schválených a lhůty vyřízení? |
+
+Stav buňky (`pojistovny[].<sloupec>`): `stav` ∈ `ano` | `castecne` | `ne` (škála v `skala`: `ano` = veřejný a konkrétní
+údaj; `castecne` = píše se o tom neúplně; `ne` = při uvedeném hledání nenalezeno). Buňka nese `co` (slovní popis
+co říká a kde se hledalo), `url` (https), nebo `soubor` + `radek` (text VZ), `citace` (max 200 znaků), `rok`
+a `overeno`. Každá buňka s `stav` musí mít `url`, nebo `soubor` + `radek`.
+
+Dataset dále nese `srovnatelnost[]` (5 textů: stav „ano“ u různých ZP neříká totéž, proto se počty nesmějí řadit
+do jednoho žebříčku), `chybi[]` (6 textů) a `pojistovny[].poznamky`. Čekací doby v textech VZP ČR a ZP MV ČR
+se týkají čekací listiny k transplantaci, ne čekacích dob na péči.
+
+```json
+{ "stav_k": "2026-11-03",
+  "sloupce": [{ "id": "cekaci_doby", "nazev": "Čekací doby", "popis": "…", "pravni_zaklad": "…" }, "…"],
+  "pojistovny": [{ "kod": "111", "zkratka": "VZP ČR",
+    "cekaci_doby": { "stav": "ne", "co": "…", "url": null, "soubor": "111-2025.txt", "radek": 1299,
+                     "citace": "…", "rok": 2025, "overeno": "2026-11-03" },
+    "par16": { "stav": "castecne", "co": "…", "url": null, "soubor": "111-2024.txt", "radek": "…", "…": "…" } }, "…"] }
+```
+
+### Doplňky k existujícím souborům
+
+- **`data/pojistovny-otazky.json`** — sada `dostupnost-prechody` („Dostupnost péče a přestupy pojištěnců – první
+  kolo“, typ `otevrene`, verze `"1"`, `faze` „kolo 1 · leden 2027 (spolu s fondem prevence)“, respondent všech
+  7 ZP) se čtyřmi otázkami (`par16`, `zajisteni-pece`, `cekaci-doby`, `prechody`). Sada je navržená; odešle se až
+  s kolem 1 a rozhoduje o tom člověk.
+- **`data/explainers.json`** (§ 8 výše) — explainer `prerozdeleni_pojistneho` („Přerozdělení pojistného“,
+  `category` `money`, `linked_indicators` `uhrada_zp_per_pojistenec`, `linked_strategies` `inst_vzp`, `inst_szp`,
+  `verification_status` `needs_verification`, `verified_at` 2026-11-03). Text popisuje tentýž mechanismus jako
+  `pojistovny-prerozdeleni.json`.

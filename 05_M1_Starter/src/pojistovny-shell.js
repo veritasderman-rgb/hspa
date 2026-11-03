@@ -13,15 +13,15 @@
 // přežije přechod mezi stránkami přes localStorage (src/zp-interact.js,
 // klíč hspa-moje-zp).
 //
-// Záložky jsou ve dvou skupinách (ZP_SKUPINY): „pro pojištěnce“ (Přehled, Kmen, Prevence,
-// Aplikace, Zdravotní gramotnost) vlevo a „pro redakci a data“ (Metodika, Indikátory) vpravo,
+// Záložky jsou ve dvou skupinách (ZP_SKUPINY): „pro pojištěnce“ (Přehled, Kmen, Peníze, Prevence,
+// Aplikace, Zdravotní gramotnost, Instituce) vlevo a „pro redakci a data“ (Metodika, Indikátory) vpravo,
 // světlejším písmem a za svislým oddělovačem. Stáří dat pod nimi řeší src/pojistovny-stari.js.
 //
 // Čisté funkce (testované bez DOM): zpStrankaById, zpStrankyVSkupine, zpShellHtml,
 // zpTabsHtml, zpZdrojeHtml, legacyRedirect.
 
 import { renderModuleNav, renderMastheadDate, renderFooter, escapeHtml } from './page-shared.js';
-import { loadJson } from './pojistovny-shared.js';
+import { loadJson, loadedJsonUrls } from './pojistovny-shared.js';
 
 export { stariDatHtml } from './pojistovny-stari.js';
 
@@ -47,8 +47,13 @@ export const ZP_STRANKY = [
   { id: 'prehled', skupina: 'pojistenci', href: 'pojistovny.html', label: 'Přehled' },
   {
     id: 'kmen', skupina: 'pojistenci', href: 'pojistovny-kmen.html', label: 'Kmen a hospodaření', kicker: 'CRP 2025 · MZ a MF 2024 · ZPP 2026',
-    veta: 'Kdo koho pojišťuje, jak starý kmen nese, kolik stojí jeho péče a s jakou rezervou vstupuje do roku 2026.',
-    co: 'Karty pojišťoven, vývoj kmene, hospodaření, kraje, síť odborností',
+    veta: 'Kdo koho pojišťuje, jak starý kmen nese a kolik stojí jeho péče. Hospodaření a rezervy jsou na stránce Peníze.',
+    co: 'Karty pojišťoven, vývoj kmene, věk kmene, kraje, měsíční kmen',
+  },
+  {
+    id: 'penize', skupina: 'pojistenci', href: 'pojistovny-penize.html', label: 'Peníze', kicker: 'MZ 2015–2024 · přerozdělení 2019–2026',
+    veta: 'Kdo do přerozdělení přispívá a kdo z něj bere, jak se hospodaření vyvíjelo deset let a za co pojišťovny platí.',
+    co: 'Relativní saldo přerozdělení, řady 2015–2024, státní pojištěnci, segmenty, fond prevence, provoz, rezervy 2026',
   },
   {
     id: 'prevence', skupina: 'pojistenci', href: 'pojistovny-prevence.html', label: 'Prevence', kicker: 'Kolo 1 · weby a výroční zprávy',
@@ -56,14 +61,19 @@ export const ZP_STRANKY = [
     co: 'Nabídka 7 × 9, onkologie a duševní zdraví, struktura fondu, odpovědi z VZ',
   },
   {
-    id: 'aplikace', skupina: 'pojistenci', href: 'pojistovny-aplikace.html', label: 'Aplikace', kicker: 'První výstup PS',
-    veta: 'Deset funkcí aplikací sedmi pojišťoven a návrh kritérií přívětivosti.',
-    co: 'Matice funkcí, kritéria přívětivosti, rozpory a chybějící data',
+    id: 'aplikace', skupina: 'pojistenci', href: 'pojistovny-aplikace.html', label: 'Aplikace a servis', kicker: 'První výstup PS',
+    veta: 'Deset funkcí aplikací, klientský servis, stížnosti na dostupnost a co pojišťovny publikují jako otevřená data.',
+    co: 'Matice funkcí, kritéria přívětivosti, pobočky a bonusy, stížnosti a § 16a, audit open dat',
   },
   {
     id: 'gramotnost', skupina: 'pojistenci', href: 'pojistovny-gramotnost.html', label: 'Zdravotní gramotnost', kicker: 'V přípravě · druhé téma PS',
     veta: 'Jak pojišťovny hledají rizikové pojištěnce a podporují zdravotní gramotnost.',
     co: 'Rizikové skupiny, návrh dotazníků, souhrnné odpovědi',
+  },
+  {
+    id: 'instituce', skupina: 'pojistenci', href: 'pojistovny-instituce.html', label: 'Instituce', kicker: 'Zákony · VZ 2024–2025 · weby 2026',
+    veta: 'Kdo pojišťovnu řídí, kdo ji kontroluje, jak velký aparát má a co nabízí poskytovatelům; co publikuje o dostupnosti péče.',
+    co: 'Zákon a orgány, zaměstnanci, limit provozu, smluvní programy, dostupnost a § 16, síť odborností',
   },
   {
     id: 'metodika', skupina: 'redakce', href: 'pojistovny-metodika.html', label: 'Metodika a semafor', kicker: 'Derivát metodiky Barometru',
@@ -121,8 +131,16 @@ export function zpShellHtml(aktivni) {
     + `<div class="zpc-shell-head"><p class="zpc-kicker">${esc(KICKER)}</p>${zpTabsHtml(aktivni)}</div>`;
 }
 
-/** Patička „Zdroje“ ze zdroje[] v pojistovny.json (sbalená, aby nenatahovala stránku). */
-export function zpZdrojeHtml(d) {
+/** Odstavec „Data této stránky (JSON)“ s odkazy na načtené datasety; bez URL prázdný řetězec. */
+export function zpZdrojeJsonHtml(jsonUrls) {
+  const urls = (Array.isArray(jsonUrls) ? jsonUrls : []).filter((u) => typeof u === 'string' && u);
+  if (!urls.length) return '';
+  const links = urls.map((u) => `<a href="${esc(u)}">${esc(u.split('/').pop())}</a>`).join(' · ');
+  return `<p class="zpc-zdroje-json">Data této stránky (JSON, CC BY 4.0): ${links}</p>`;
+}
+
+/** Patička „Zdroje“ ze zdroje[] v pojistovny.json (sbalená, aby nenatahovala stránku); jsonUrls = načtené datasety. */
+export function zpZdrojeHtml(d, jsonUrls = []) {
   const list = Array.isArray(d?.zdroje) ? d.zdroje : [];
   if (!list.length) return '';
   const items = list.map((z) => `<li>${esc(z.nazev || z.id || '')}`
@@ -130,7 +148,8 @@ export function zpZdrojeHtml(d) {
     + `${z.clanek ? ` · <a href="${esc(z.clanek)}">článek</a>` : ''}</li>`).join('');
   return `<details class="zpc-acc zpc-zdroje"><summary>Zdroje dat srovnávače<span class="zpc-n"> · ${list.length}</span></summary>`
     + `<div class="zpc-acc-body"><ul class="zpc-zdroje-list">${items}</ul>`
-    + '<p class="zpc-note">Každé číslo ve srovnávači nese zdroj a rok. Hodnocení v semaforu vzniká až po právu pojišťovny na odpověď.</p></div></details>';
+    + '<p class="zpc-note">Každé číslo ve srovnávači nese zdroj a rok. Hodnocení v semaforu vzniká až po právu pojišťovny na odpověď.</p>'
+    + `${zpZdrojeJsonHtml(jsonUrls)}</div></details>`;
 }
 
 /**
@@ -166,5 +185,20 @@ export async function renderZpShell({ aktivni, doc = globalThis.document } = {})
   const foot = doc.getElementById('zpZdroje');
   if (!foot) return;
   const d = await loadJson(DATA_URL);
-  foot.innerHTML = zpZdrojeHtml(d);
+  foot.innerHTML = zpZdrojeHtml(d, loadedJsonUrls());
+  // ostatní moduly stránky načítají data až po shellu → seznam JSON se doplní po načtení stránky
+  if (typeof globalThis.addEventListener === 'function' && !renderZpShell._loadHook) {
+    renderZpShell._loadHook = true;
+    globalThis.addEventListener('load', () => refreshZdrojeJson(doc), { once: true });
+  }
+}
+
+/** Doplní / obnoví odstavec s odkazy na JSON v už vykreslené patičce (neruší otevření <details>). */
+export function refreshZdrojeJson(doc = globalThis.document) {
+  const body = doc?.querySelector ? doc.querySelector('#zpZdroje .zpc-acc-body') : null;
+  if (!body) return;
+  const html = zpZdrojeJsonHtml(loadedJsonUrls());
+  const cur = body.querySelector('.zpc-zdroje-json');
+  if (cur) cur.remove();
+  if (html) body.insertAdjacentHTML('beforeend', html);
 }

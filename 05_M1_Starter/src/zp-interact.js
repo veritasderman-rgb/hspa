@@ -12,15 +12,25 @@
 //      heatmapy s popisem programu, dot matrix, matice pokrytí, řádky barů).
 //   4. Animace — IntersectionObserver přidá .is-in na figure.zpv, count-up.
 //   5. Řazení heatmap (button.zpv-sort[data-col]) a „Rozbalit vše“.
+//   6. „Porovnat s“ (A4.2) — druhý řádek chipů v #zpPorovnatZp (vytvoří se pod #zpMojeZp),
+//      výběr v localStorage (hspa-porovnat-zp), main[data-porovnat-zp], event `zp:porovnat-change`;
+//      marky druhé ZP dostanou .is-porovnat (obrys), řádky tabulek data-porovnat="true".
+//      Parametr ?porovnat=<kód> v URL má při načtení přednost před localStorage.
+//   7. Přepínače u grafů (A4.3) — figureSwitch() ze zp-viz.js: jeden delegovaný handler (klik,
+//      šipky, change), zápis `?<id>=…` do URL (replaceState) a event `zp:switch` {id, value}.
 //
 // Kontrakt (třídy, atributy, události) je shrnutý v hlavičce CSS sekce
 // „Srovnávač pojišťoven: interakce“ v src/styles.css a v tests/zp-interact.test.js.
 
-import { formatNumberCz } from './page-shared.js';
+import { formatNumberCz, escapeHtml } from './page-shared.js';
+import { tableToCsv, csvFilename } from './zp-viz.js';
 
 export const STORAGE_KEY = 'hspa-moje-zp';
 export const MOJE_EVENT = 'zp:moje-change';
 export const HOVER_PREFIX = 'zpi-hover-';
+export const POROVNAT_KEY = 'hspa-porovnat-zp';
+export const POROVNAT_EVENT = 'zp:porovnat-change';
+export const SWITCH_EVENT = 'zp:switch';
 /** Co ukazuje tooltip: datové marky i buňky/řádky s popisem (heatmapa, dot matrix,
  *  matice pokrytí, řádek baru). Hover i focus; fokusovatelné jsou jen prvky s tabindex. */
 export const TIP_SELECTOR = '.zpv-mark, [data-tip]';
@@ -215,6 +225,78 @@ export function renderMojeZpChips(container, zpList, selected = null) {
   return row;
 }
 
+/** Načte vybraný kód „Porovnat s“; neplatná/chybějící hodnota i vyhozená výjimka → null. */
+export function readPorovnat(storage = defaultStorage(), valid = ZP_KODY) {
+  try {
+    if (!storage) return null;
+    const v = storage.getItem(POROVNAT_KEY);
+    return v && valid.includes(v) ? v : null;
+  } catch (_) { return null; }
+}
+
+/** Uloží (nebo při null smaže) „Porovnat s“. Vrací true, když se zápis povedl. */
+export function writePorovnat(kod, storage = defaultStorage()) {
+  try {
+    if (!storage) return false;
+    if (kod == null) storage.removeItem(POROVNAT_KEY);
+    else storage.setItem(POROVNAT_KEY, String(kod));
+    return true;
+  } catch (_) { return false; }
+}
+
+/** Kód z `?porovnat=` v query stringu; neznámý nebo chybějící = null. */
+export function porovnatZUrl(search, valid = ZP_KODY) {
+  let v = null;
+  try { v = new URLSearchParams(String(search ?? '')).get('porovnat'); } catch (_) { v = null; }
+  return v && valid.includes(v) ? v : null;
+}
+
+/** Query string s nastaveným (nebo při null / výchozí hodnotě smazaným) parametrem; ostatní parametry zůstanou. */
+export function searchWith(search, id, value, defaultValue = null) {
+  let p;
+  try { p = new URLSearchParams(String(search ?? '')); } catch (_) { p = new URLSearchParams(''); }
+  if (value == null || value === '' || (defaultValue != null && String(value) === String(defaultValue))) p.delete(id);
+  else p.set(id, String(value));
+  const out = p.toString();
+  return out ? `?${out}` : '';
+}
+
+/** Index další volby radiogroupu po šipce (cyklicky); jiná klávesa = -1. */
+export function nextSwitchIndex(length, index, key) {
+  const step = key === 'ArrowRight' || key === 'ArrowDown' ? 1 : key === 'ArrowLeft' || key === 'ArrowUp' ? -1 : 0;
+  if (!step || !(length > 0) || !(index >= 0)) return -1;
+  return (index + step + length) % length;
+}
+
+/**
+ * HTML řádku chipů „Porovnat s“ (čistá funkce; DOM ho jen vloží). Pojišťovna vybraná jako „Moje“
+ * je disabled (nejde porovnávat sama se sebou); „Zrušit“ je disabled bez výběru.
+ * @param {Array} zpList  [{kod, zkratka, nazev, token}]
+ * @param {string|null} [moje]
+ * @param {string|null} [porovnat]
+ */
+export function porovnatChipsHtml(zpList, moje = null, porovnat = null) {
+  const e = escapeHtml;
+  const chips = normalizeZpList(zpList).map((z) => {
+    const isMoje = moje != null && moje === z.kod;
+    const title = isMoje ? `${z.nazev} (je vaše pojišťovna)` : z.nazev;
+    return `<button type="button" class="zpi-chip zpi-chip--porovnat" data-zp="${e(z.kod)}" aria-pressed="${porovnat === z.kod}" title="${e(title)}"${isMoje ? ' disabled' : ''}>`
+      + `<span class="zpi-dot" style="--c:var(${e(z.cssVar)})" aria-hidden="true"></span><span>${e(z.zkratka)}</span></button>`;
+  }).join('');
+  return '<div class="zpi-chips zpi-chips--porovnat" role="group" aria-label="Porovnat s">'
+    + '<span class="zpi-chips-lbl">Porovnat s</span>'
+    + `${chips}<button type="button" class="zpi-chip zpi-chip--clear zpi-chip--porovnat" data-zp-clear-porovnat${porovnat == null ? ' disabled' : ''}>Zrušit</button></div>`;
+}
+
+/** Vloží řádek „Porovnat s“ do kontejneru; bez kontejneru nic. */
+export function renderPorovnatChips(container, zpList, moje = null, porovnat = null) {
+  if (!container) return null;
+  // HTML skládá porovnatChipsHtml a všechny texty prošly escapeHtml; do tooltipu (textContent) se nikdy nevkládá HTML
+  container.replaceChildren();
+  container.insertAdjacentHTML('beforeend', porovnatChipsHtml(zpList, moje, porovnat));
+  return container.firstElementChild || null;
+}
+
 // ---------------------------------------------------------------------------
 // DOM část
 // ---------------------------------------------------------------------------
@@ -282,15 +364,49 @@ export function initZpInteract(root = globalThis.document) {
     else main.removeAttribute('data-moje-zp');
     main.querySelectorAll('tr[data-zp]').forEach((tr) => {
       if (kod && tr.getAttribute('data-zp') === kod) tr.setAttribute('aria-current', 'true');
+      else if (tr.getAttribute('data-porovnat') === 'true') tr.setAttribute('aria-current', 'false'); // řádek druhé ZP
       else tr.removeAttribute('aria-current');
     });
     main.querySelectorAll('.zpv-mark[data-zp], tr[data-zp]').forEach((el) => {
       el.classList.toggle('is-moje', !!kod && el.getAttribute('data-zp') === kod);
     });
-    doc.querySelectorAll('.zpi-chip[data-zp]').forEach((b) => {
+    // chipy „Moje“ (řádek „Porovnat s“ má vlastní modifikátor a vlastní stav)
+    doc.querySelectorAll('.zpi-chip[data-zp]:not(.zpi-chip--porovnat)').forEach((b) => {
       b.setAttribute('aria-pressed', kod && b.getAttribute('data-zp') === kod ? 'true' : 'false');
     });
-    doc.querySelectorAll('.zpi-chip--clear').forEach((b) => { b.disabled = !kod; });
+    doc.querySelectorAll('.zpi-chip--clear:not(.zpi-chip--porovnat)').forEach((b) => { b.disabled = !kod; });
+    doc.querySelectorAll('.zpi-chip--porovnat[data-zp]').forEach((b) => { b.disabled = !!kod && b.getAttribute('data-zp') === kod; });
+  };
+
+  // „Porovnat s“: stav v main[data-porovnat-zp], třída .is-porovnat na markách a řádcích druhé ZP
+  const syncPorovnat = (kod) => {
+    if (kod) main.setAttribute('data-porovnat-zp', kod);
+    else main.removeAttribute('data-porovnat-zp');
+    main.querySelectorAll('.zpv-mark[data-zp], tr[data-zp]').forEach((el) => {
+      const on = !!kod && el.getAttribute('data-zp') === kod;
+      el.classList.toggle('is-porovnat', on);
+      if (el.tagName !== 'TR') return;
+      if (on) {
+        el.setAttribute('data-porovnat', 'true');
+        if (el.getAttribute('aria-current') !== 'true') el.setAttribute('aria-current', 'false');
+      } else {
+        el.removeAttribute('data-porovnat');
+        if (el.getAttribute('aria-current') === 'false') el.removeAttribute('aria-current');
+      }
+    });
+    doc.querySelectorAll('.zpi-chip--porovnat[data-zp]').forEach((b) => {
+      b.setAttribute('aria-pressed', kod && b.getAttribute('data-zp') === kod ? 'true' : 'false');
+    });
+    doc.querySelectorAll('[data-zp-clear-porovnat]').forEach((b) => { b.disabled = !kod; });
+  };
+
+  const setPorovnat = (kod) => {
+    const moje = main.getAttribute('data-moje-zp');
+    const valid = kod != null && kod !== moje && normalizeZpList(chipsList).some((z) => z.kod === kod) ? kod : null;
+    writePorovnat(valid);
+    syncPorovnat(valid);
+    syncPorovnatUrl(win, valid);
+    doc.dispatchEvent(new win.CustomEvent(POROVNAT_EVENT, { bubbles: true, detail: { kod: valid } }));
   };
 
   const setMoje = (kod) => {
@@ -298,16 +414,29 @@ export function initZpInteract(root = globalThis.document) {
     writeMojeZp(valid);
     syncMoje(valid);
     doc.dispatchEvent(new win.CustomEvent(MOJE_EVENT, { bubbles: true, detail: { kod: valid } }));
+    // stejná pojišťovna nemůže být zároveň „Moje“ i „Porovnat s“
+    if (valid && main.getAttribute('data-porovnat-zp') === valid) setPorovnat(null);
   };
 
   const current = first ? readMojeZp(defaultStorageOf(win)) : main.getAttribute('data-moje-zp');
   syncMoje(current);
+
+  // „Porovnat s“: URL (?porovnat=) má při načtení přednost před localStorage
+  let currentPor = main.getAttribute('data-porovnat-zp');
+  if (first) {
+    const urlPor = porovnatZUrl(win.location ? win.location.search : '');
+    currentPor = urlPor || readPorovnat(defaultStorageOf(win));
+    if (currentPor && currentPor === current) currentPor = null;
+    if (urlPor && currentPor) writePorovnat(currentPor, defaultStorageOf(win));
+  }
+  syncPorovnat(currentPor);
 
   // ---- globální (jednou na dokument/main) ---------------------------------
   if (first) {
     main.dataset.zpiInit = '1';
     bindDelegates(main, doc, win);
     if (current) doc.dispatchEvent(new win.CustomEvent(MOJE_EVENT, { bubbles: true, detail: { kod: current, initial: true } }));
+    if (currentPor) doc.dispatchEvent(new win.CustomEvent(POROVNAT_EVENT, { bubbles: true, detail: { kod: currentPor, initial: true } }));
   }
 
   // ---- animace ------------------------------------------------------------
@@ -332,10 +461,64 @@ export function initZpInteract(root = globalThis.document) {
     if (!kod) return;
     setMoje(main.getAttribute('data-moje-zp') === kod ? null : kod);
   });
+  // druhý řádek chipů pod „Moje pojišťovna“ (kontejner se vytvoří sám, HTML stránek se nemění)
+  let porContainer = doc.getElementById('zpPorovnatZp');
+  if (!porContainer) {
+    porContainer = doc.createElement('div');
+    porContainer.id = 'zpPorovnatZp';
+    porContainer.className = 'zpc-moje zpc-porovnat';
+    container.insertAdjacentElement('afterend', porContainer);
+  }
+  porContainer.addEventListener('click', (e) => {
+    const t = e.target.closest ? e.target.closest('button') : null;
+    if (!t || !porContainer.contains(t) || t.disabled) return;
+    if (t.hasAttribute('data-zp-clear-porovnat')) { setPorovnat(null); return; }
+    const kod = t.getAttribute('data-zp');
+    if (!kod) return;
+    setPorovnat(main.getAttribute('data-porovnat-zp') === kod ? null : kod);
+  });
   return loadZpList().then((list) => {
     chipsList = list;
     renderMojeZpChips(container, list, main.getAttribute('data-moje-zp'));
+    renderPorovnatChips(porContainer, list, main.getAttribute('data-moje-zp'), main.getAttribute('data-porovnat-zp'));
   });
+}
+
+/** Parametr ?porovnat= se v URL udržuje jen tam, kde už je, a na profilu pojišťovny (sdílitelný odkaz). */
+function syncPorovnatUrl(win, kod) {
+  try {
+    const u = new win.URL(win.location.href);
+    const maParam = u.searchParams.has('porovnat');
+    const profil = /\/pojistovna(\.html)?$/.test(u.pathname);
+    if (!maParam && !profil) return;
+    u.search = searchWith(u.search, 'porovnat', kod);
+    win.history.replaceState(null, '', u);
+  } catch (_) { /* bez history API se stav jen nezapíše */ }
+}
+
+/** Zápis `?<id>=<value>` do URL (výchozí hodnota parametr smaže). */
+function switchToUrl(win, id, value, def) {
+  try {
+    const u = new win.URL(win.location.href);
+    u.search = searchWith(u.search, id, value, def);
+    win.history.replaceState(null, '', u);
+  } catch (_) { /* bez history API se stav jen nezapíše */ }
+}
+
+function emitSwitch(doc, win, id, value, def) {
+  switchToUrl(win, id, value, def);
+  doc.dispatchEvent(new win.CustomEvent(SWITCH_EVENT, { bubbles: true, detail: { id, value } }));
+}
+
+function pickRadio(btn, doc, win) {
+  const group = btn.closest('.zpc-switch[data-switch]');
+  if (!group || btn.getAttribute('aria-checked') === 'true') return;
+  group.querySelectorAll('button[role="radio"]').forEach((b) => {
+    const on = b === btn;
+    b.setAttribute('aria-checked', String(on));
+    b.setAttribute('tabindex', on ? '0' : '-1');
+  });
+  emitSwitch(doc, win, group.getAttribute('data-switch'), btn.getAttribute('data-value'), group.getAttribute('data-default'));
 }
 
 function defaultStorageOf(win) {
@@ -421,12 +604,52 @@ function bindDelegates(main, doc, win) {
   main.addEventListener('click', (e) => {
     const t = e.target.closest ? e.target.closest('button') : null;
     if (!t) return;
+    if (t.getAttribute('role') === 'radio' && t.closest('.zpc-switch[data-switch]')) { pickRadio(t, doc, win); return; }
     if (t.classList.contains('zpi-expand-all')) {
       main.querySelectorAll('details').forEach((d) => { d.open = true; });
       return;
     }
     if (t.classList.contains('zpv-sort')) sortHeat(t);
+    if (t.hasAttribute('data-zpv-csv')) downloadCsv(t, doc, win);
   });
+
+  // A4.3: select přepínač a šipky u radiogroupu
+  main.addEventListener('change', (e) => {
+    const sel = e.target && e.target.closest ? e.target.closest('select[data-switch]') : null;
+    if (sel) emitSwitch(doc, win, sel.getAttribute('data-switch'), sel.value, sel.getAttribute('data-default'));
+  });
+  main.addEventListener('keydown', (e) => {
+    const b = e.target && e.target.closest ? e.target.closest('.zpc-switch[data-switch] button[role="radio"]') : null;
+    if (!b) return;
+    const all = Array.from(b.closest('.zpc-switch').querySelectorAll('button[role="radio"]'));
+    const i = nextSwitchIndex(all.length, all.indexOf(b), e.key);
+    if (i < 0) return;
+    e.preventDefault();
+    pickRadio(all[i], doc, win);
+    all[i].focus();
+  });
+}
+
+/** Sestaví CSV z tabulkového dvojčete nad tlačítkem (textContent buněk) a stáhne ho; bez serveru a sledování. */
+function downloadCsv(btn, doc, win) {
+  const details = btn.closest('details.zpv-table');
+  const table = details ? details.querySelector('table') : null;
+  if (!table) return;
+  const cellText = (c) => c.textContent || '';
+  const headers = Array.from(table.querySelectorAll('thead th')).map(cellText);
+  const rows = Array.from(table.querySelectorAll('tbody tr')).map((tr) => Array.from(tr.children).map(cellText));
+  const title = details.getAttribute('data-csv-title') || '';
+  const csv = tableToCsv(headers, rows, { title, source: details.getAttribute('data-csv-source') || '', text: true });
+  const blob = new win.Blob(['\ufeff', csv], { type: 'text/csv;charset=utf-8' });
+  const url = win.URL.createObjectURL(blob);
+  const a = doc.createElement('a');
+  a.href = url;
+  a.download = csvFilename(title, new Date());
+  a.style.display = 'none';
+  doc.body.appendChild(a);
+  a.click();
+  a.remove();
+  win.setTimeout(() => win.URL.revokeObjectURL(url), 1000);
 }
 
 function sortHeat(btn) {

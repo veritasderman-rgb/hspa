@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil pojišťovny — Srovnávač pojišťoven, pracovní verze · HSPA Monitor</title>
+<meta name="description" content="Profil jedné zdravotní pojišťovny: kmen, peníze, prevence, aplikace a servis, orgány a dostupnost na jedné stránce. Pracovní verze.">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Profil pojišťovny — Srovnávač zdravotních pojišťoven">
+<meta property="og:locale" content="cs_CZ">
+<link rel="stylesheet" href="src/styles.min.css">
+<!--
+  audit:
+    status: draft
+    pristup: heslo (middleware.js, POJISTOVNY_HESLO, matcher /pojistovna.html) + noindex
+    trida: C (nová stránka, hodnocení pojmenovaných institucí)
+    stranka: profil (A2.3, PLAN-SROVNAVAC-ANALYTIK.md § 3); adresa pojistovna.html?zp=<kód>, bez parametru nebo s neplatným kódem rozcestník sedmi pojišťoven
+    zdroje: všechny data/pojistovny*.json; renderery se neduplikují, src/pojistovna.js jen skládá build* funkce ostatních stránek
+    hranice: profil není téma srovnávače (není v záložkách), výběr „Moje pojišťovna“ za čtenáře nenastavuje; fakta se řadí, nabídka se nehodnotí
+-->
+</head>
+<body>
+<a class="skip-link" href="#content">Přeskočit na hlavní obsah</a>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Srovnávač pojišťoven</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+  <div id="zpShell" class="zpc-shell" data-aktivni="profil"></div>
+
+  <section class="zpc-mod zpc-mod--page" id="modul-profil" aria-labelledby="zpProfilHead">
+    <div class="zpc-mod-head"><h1 id="zpProfilHead">Profil pojišťovny</h1><span class="zpc-stav">všechny hodnoty na jedné stránce</span></div>
+    <div class="zpc-moje-wrap">
+      <p class="zpc-moje-lbl" id="zpMojeLbl">Moje pojišťovna: vyberte ji a zvýrazní se ve všech grafech a tabulkách, i na ostatních stránkách srovnávače.</p>
+      <div id="zpMojeZp" class="zpc-moje" aria-describedby="zpMojeLbl"></div>
+    </div>
+    <div id="zpProfil" class="zpc-prof"></div>
+  </section>
+
+  <div id="zpZdroje" class="zpc-zdroje-wrap"></div>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/pojistovny.js"></script>
+</body>
+</html>

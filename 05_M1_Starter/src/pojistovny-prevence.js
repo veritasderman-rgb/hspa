@@ -11,7 +11,7 @@
 //   buildFondParts, coverageState, buildCoverage, odhadniSkupinu.
 
 import { NA, esc, num, fmtKc, levelBadge, dot, li, set, short, datumCz, LEVELS, LEVEL_LABEL } from './pojistovny-shared.js';
-import { heatmap, dotMatrix, coverageMatrix, segmentedBar, dumbbell, isNum } from './zp-viz.js';
+import { heatmap, dotMatrix, coverageMatrix, segmentedBar, dumbbell, rankedBars, isNum } from './zp-viz.js';
 import { initZpInteract, MOJE_EVENT } from './zp-interact.js';
 import { ZP_BY_KOD } from './zp-palette.js';
 
@@ -53,6 +53,25 @@ export function buildAppMatrix(a) {
   return { rows, cols, cell };
 }
 
+/**
+ * Souhrn „kolik pojišťoven funkci má“ (A0.1): ano = 1, částečně = ½, ne = 0; aplikace bez
+ * jediného známého údaje (u ZPŠ) se nepočítá. `max` = počet aplikací se známými funkcemi.
+ * @returns {{items: Array<{key,label,value,tip}>, max: number}}
+ */
+export function buildFunkceSouhrn(a) {
+  const funkce = Array.isArray(a?.funkce) ? a.funkce : [];
+  const apps = (a?.aplikace || []).filter((x) => Object.values(x.funkce || {}).some((v) => v === true || v === false || v === 'partial'));
+  const items = funkce.map((f) => {
+    const vals = apps.map((x) => x.funkce?.[f.id]);
+    const value = vals.reduce((n, v) => n + (v === true ? 1 : v === 'partial' ? 0.5 : 0), 0);
+    const chybi = apps.filter((x) => x.funkce?.[f.id] === false).map((x) => zkratka(x.kod));
+    const tip = `${f.label}: ${fmtKc(value, value % 1 ? 1 : 0)} z ${apps.length} pojišťoven`
+      + (chybi.length ? ` · chybí: ${chybi.join(', ')}` : '');
+    return { key: f.id, label: f.label, value, tip };
+  });
+  return { items, max: apps.length };
+}
+
 const STUPEN_DOT = { 0: false, 1: 'partial', 2: true };
 
 /** Matice kritérií přívětivosti (návrh, P2.3): prázdné `kriteria` = všechny buňky „—“. */
@@ -81,6 +100,13 @@ export function renderApps(a) {
     scoreLabel: 'n/10',
     source,
     rowHeader: 'Pojišťovna · aplikace',
+  }));
+  const fs = buildFunkceSouhrn(a);
+  set('zpAppFunkce', rankedBars(fs.items, {
+    title: 'Kolik pojišťoven funkci má',
+    sub: 'Součet za sedm aplikací (částečně = ½); dole jsou funkce, které chybějí nejčastěji.',
+    unit: '', dec: 1, maxv: fs.max, source,
+    sortNote: 'Řazeno podle počtu pojišťoven, nejde o hodnocení.',
   }));
   set('zpAppCap', 'Počty uživatelů uvádějí ve výročních zprávách jen VZP a OZP; u ostatních je nutný dotaz. U ZPŠ nejsou funkce známy.');
 
@@ -529,7 +555,7 @@ export function renderPrevence(p, d) {
 
 // ---------------------------------------------------------------- modul 4: otázky
 /** Pořadí sad podle fází (docs/pojistovny-dotazniky.md § Přehled); neznámé sady až na konec v pořadí JSON. */
-export const SADY_PORADI = ['aplikace-privetivost', 'fond-prevence', 'pobocky-definice', 'napo-pacientske-organizace', 'pravo-na-odpoved', 'rizikovi-pojistenci', 'pojistenci-anketa'];
+export const SADY_PORADI = ['aplikace-privetivost', 'fond-prevence', 'pobocky-definice', 'dostupnost-prechody', 'napo-pacientske-organizace', 'pravo-na-odpoved', 'rizikovi-pojistenci', 'pojistenci-anketa'];
 
 const KANAL_LABEL = { 'web-token': 'osobní odkaz od redakce', 'web-verejnost': 'veřejně na webu, bez tokenu', 'dopis+web': 'dopis s nabídkou spolupráce + web', interni: 'vyplňuje redakce (interní list)' };
 

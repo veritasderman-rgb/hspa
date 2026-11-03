@@ -11,9 +11,9 @@ import {
   buildAppMatrix, buildKriteriaMatrix, buildPrevHeatmap, buildOnkoMatrix, buildDusevniHeatmap,
   buildFondParts, coverageState, buildCoverage, odhadniSkupinu, normSkupina, levelOf,
   buildPrevProc, prevProcHtml, pocetPolozek, PREV_HEAT_FOOT, buildOtazkySady, otazkySadyHtml, SADY_PORADI, sadaCasti, vyhodnoceniHtml,
-  FOND_SKUPINY, VZ_OTAZKY,
+  FOND_SKUPINY, VZ_OTAZKY, buildFunkceSouhrn,
 } from '../src/pojistovny-prevence.js';
-import { dotMatrix, heatmap, segmentedBar, coverageMatrix, dumbbell } from '../src/zp-viz.js';
+import { dotMatrix, heatmap, segmentedBar, coverageMatrix, dumbbell, rankedBars } from '../src/zp-viz.js';
 import { validateAll, loadDatasets } from '../ingest/validate-pojistovny.js';
 import { datumCz } from '../src/pojistovny-shared.js';
 
@@ -37,6 +37,26 @@ test('buildAppMatrix: 7 ZP × 10 funkcí, ZPŠ bez údajů, uživatelé v sub ř
   const vozp = m.rows.find((r) => r.kod === '201');
   assert.equal(m.cell(vozp, m.cols.find((c) => c.key === 'edoklady_eneschopenky')), false);
   assert.equal(m.cell(vozp, m.cols.find((c) => c.key === 'bankid')), true);
+});
+
+test('buildFunkceSouhrn: kolik pojišťoven funkci má (ano = 1, částečně = ½), ZPŠ bez údajů se nepočítá, eDoklady a eRecept chybějí nejčastěji', () => {
+  const f = buildFunkceSouhrn(APP);
+  assert.equal(f.items.length, 10);
+  assert.equal(f.max, 6, 'šest aplikací se známými funkcemi (ZPŠ ne)');
+  const val = (id) => f.items.find((i) => i.key === id).value;
+  assert.equal(val('edoklady_eneschopenky'), 2);
+  assert.equal(val('erecept_leky'), 2);
+  assert.equal(val('prehled_pojisteni'), 6);
+  const min = Math.min(...f.items.map((i) => i.value));
+  assert.deepEqual(f.items.filter((i) => i.value === min).map((i) => i.key).sort(), ['edoklady_eneschopenky', 'erecept_leky']);
+  assert.match(f.items.find((i) => i.key === 'erecept_leky').tip, /chybí: VoZP, ČPZP, ZP MV, RBP|chybí: /);
+  // částečně = ½
+  const a = { funkce: [{ id: 'x', label: 'X' }], aplikace: [{ kod: '111', zp: 'VZP', funkce: { x: true } }, { kod: '201', zp: 'VoZP', funkce: { x: 'partial' } }, { kod: '209', zp: 'ZPŠ', funkce: { x: null } }] };
+  assert.equal(buildFunkceSouhrn(a).items[0].value, 1.5);
+  assert.equal(buildFunkceSouhrn(a).max, 2);
+  assert.deepEqual(buildFunkceSouhrn(null), { items: [], max: 0 });
+  const html = rankedBars(f.items, { title: 'Kolik pojišťoven funkci má', maxv: f.max, dec: 1 });
+  assert.match(html.slice(html.lastIndexOf('<div class="zpv-row"')), /eDoklady|eRecept/, 'dole jsou funkce, které chybějí nejčastěji');
 });
 
 test('dotMatrix nad daty aplikací: poslední sloupec n/10, ZPŠ bez skóre', () => {
