@@ -2071,7 +2071,7 @@ Bilance fondu prevence (Fprev) sedmi ZP za roky 2022–2025 z výročních zprá
 `ingest/manual/pojistovny/vz-text/<kod>-<rokVZ>.txt` (k dispozici VZ 2023–2025, u RBP 2023 a 2025, u ZPŠ 2023 a 2024; ZPŠ 2020
 v repu je, ale mimo rozsah). Oddíl „Fond prevence“ má podle šablony MZ (příloha č. 7) tabulku A (tvorba a čerpání, účetně)
 a B (příjmy a výdaje bankovního účtu fondu), vždy se sloupcem „Skutečnost“. Generuje ho
-`node ingest/transform_pojistovny_fond_bilance.js` (`node ingest/transform_pojistovny_fond_bilance.js`), idempotentně (druhý běh nemění
+`node ingest/transform_pojistovny_fond_bilance.js`, idempotentně (druhý běh nemění
 soubor ani `generated_at`); validátor `ingest/lib/validate-fond-bilance.js` je součást `validate:pojistovny`. Částky jsou
 v tis. Kč, počty v kusech. Dataset je účetní evidence, nic nehodnotí.
 
