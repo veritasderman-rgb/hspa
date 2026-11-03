@@ -216,6 +216,39 @@ do `validateAll`), schéma do `docs/data-model.md` v témž PR.
    jdou ven až s kolem 1 (člověk, metodika § 4.3).
 
 ---
+## 8. Stav implementace (3. 11. 2026)
+
+Commity jsou v historii větve `claude/focused-hopper-ley6gn`. Odchylky od plánu z implementace (relativní saldo místo čistého, okno přerozdělení, složení orgánů podle § 10a a § 20 zákonů, jména členů orgánů) jsou zapsané v § 0 a § 3 a tady se neopakují.
+
+| Balíček | Stav | Commit / soubor | Poznámka |
+|---|---|---|---|
+| A0.1 | hotovo | e245c51 · `src/pojistovny-prehled.js` | přehled má 4 grafy s rozptylem; matice VZ a n/10 pryč (§ 3) |
+| A0.2 | hotovo | e245c51 · `src/styles.css` | grafy přehledu pod sebou na mobilu |
+| A0.3 | hotovo | e245c51 · `src/pojistovny.js` | popisek rezerv bez čísla 3,5 % |
+| A0.4 | hotovo | e245c51 · `src/pojistovny.js`, `pojistovny-kmen.html` | pojmenování přepočtu |
+| A0.5 | hotovo | e245c51 · `pojistovny-aplikace.html`, `src/pojistovny-shell.js` | Aplikace a servis: servis, stížnosti, § 16a, open data |
+| A0.6 | hotovo | e245c51 · `src/pojistovny-kmen-mesicni.js` | přepínač „všech 7 / bez VZP“ |
+| A0.7 | hotovo | e245c51 · `data/explainers.json` | vysvětlující vrstva a explainer `pojistovny` |
+| A1.1 | hotovo | 4b8c78e · `ingest/fetchers/mz-hodnoceni.js`, `data/pojistovny-hospodareni-rady.json` | řady 2015–2024 z XLSX a PDF MZ |
+| A1.2 | hotovo | 078dbec, 59e9a01 · `data/pojistovny-prerozdeleni.json` | relativní saldo, okno 12/Y−1–11/Y (§ 3) |
+| A1.3 | hotovo | e72bdc2 · `src/pojistovny-penize.js`, karta ZP na Kmeni | státní pojištěnci z Tab. 7 |
+| A1.4 | hotovo | 80742cf · `data/pojistovny-segmenty.json` | segmenty z Tabulky č. 3 a 3a |
+| A1.5 | hotovo | e72bdc2 · `src/pojistovny-penize.js` | fond prevence a provoz jako řady, limit u 7 ZP |
+| A1.6 | hotovo (třída C) | e72bdc2, b6538c7 · `pojistovny-penize.html`, `package.json`, `.github/workflows/pojistovny-mz.yml` | stránka, skript `data:pojistovny-mz` a workflow; merge rozhodne vydavatel |
+| A2.1 | hotovo bez jmen | 28def47 · `data/pojistovny-instituce.json` | jména členů orgánů nejsou; volitelný PR třídy C nerozhodnut (§ 3) |
+| A2.2 | hotovo | e245c51 · `data/explainers.json` (`prerozdeleni_pojistneho`) | explainer přerozdělení |
+| A2.3 | hotovo | f691fa8, 35a8c65 · `pojistovna.html`, `src/pojistovna.js`, `middleware.js` | profil `?zp=`; rozcestník bez parametru |
+| A3.1 | hotovo | 4e5ea61 · `data/pojistovny-dostupnost.json` | prázdné buňky = otázka do kola 1 |
+| A3.2 | hotovo | 53a6d77 · `data/pojistovny-smluvni-programy.json` | každý program s citací a datem ověření |
+| A3.3 | hotovo | 4e5ea61 · `data/pojistovny-dostupnost.json` (sloupec § 16) | počty jen tam, kde je zdroj |
+| A4.1 | hotovo | e4f2ae8 · `src/zp-viz.js` (`tableToCsv`), `src/zp-interact.js` | CSV u tabulkových dvojčat, odkazy na JSON v patičce „Zdroje“ |
+| A4.2 | probíhá | `src/zp-interact.js`, `src/pojistovna.js` | „Porovnat s“ (`hspa-porovnat-zp`) je rozpracované v pracovním stromu, bez commitu; dělá frontendový agent |
+| A4.3 | probíhá | `src/zp-viz.js` | `figureSwitch` je rozpracovaný v pracovním stromu, bez commitu; dělá frontendový agent |
+| A5.1 | hotovo | 428901a · `PROMPT_ROUTINE.md` | blok „Data MZ po pojišťovnách“ |
+
+Po dokončení A4.2 a A4.3 se jejich řádky přepíšou na „hotovo“ s commitem.
+
+---
 
 ## Příloha — Brief pro implementační session (šablona)
 

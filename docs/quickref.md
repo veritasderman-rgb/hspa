@@ -21,7 +21,8 @@ Jednostránkový cheatsheet pro rychlou orientaci. Pro hloubku viz
 | ETL/ingest | `05_M1_Starter/ingest/` |
 | Skripty | `05_M1_Starter/scripts/` |
 | Testy | `05_M1_Starter/tests/` (731 testů, 0 failures) |
-| Srovnávač pojišťoven (pracovní, pod heslem) | přehled `pojistovny.html` + podstránky `pojistovny-kmen` / `-prevence` / `-aplikace` / `-gramotnost` / `-metodika.html`; shell `src/pojistovny-shell.js`, přehled `src/pojistovny-prehled.js`, síť odborností `src/pojistovny-sit.js`; plán `PLAN-SROVNAVAC-POJISTOVEN.md` § 2.8 |
+| Srovnávač pojišťoven (pracovní, pod heslem) | přehled `pojistovny.html` + osm podstránek `pojistovny-kmen` / `-penize` / `-prevence` / `-aplikace` / `-gramotnost` / `-instituce` / `-metodika` / `-indikatory`, profil `pojistovna.html?zp=<kód>`; shell `src/pojistovny-shell.js`, přehled `src/pojistovny-prehled.js`, síť odborností `src/pojistovny-sit.js`; plán `PLAN-SROVNAVAC-POJISTOVEN.md` § 2.8 |
+| Srovnávač pojišťoven — Peníze, Instituce, profil (pod heslem) | `pojistovny-penize.html` → `src/pojistovny-penize.js` (data `pojistovny-prerozdeleni.json`, `-hospodareni-rady.json`, `-segmenty.json`); `pojistovny-instituce.html` → `src/pojistovny-instituce.js` (data `pojistovny-instituce.json`, `-smluvni-programy.json`, `-dostupnost.json`); profil `pojistovna.html?zp=<kód>` → `src/pojistovna.js`; fetchery `ingest/fetchers/mz-hodnoceni.js`, `mz-prerozdeleni.js`; workflow `.github/workflows/pojistovny-mz.yml`; detail `docs/site-architecture.md` |
 | Doložka (registr tvrzení) | `data/claims.json` → klikatelné doložky v článcích; engine `src/dolozka-engine.js`, UI `src/dolozka-inline.js`, statistiky `redakce.html#duveryhodnost` |
 | Dokumentace pro vývojáře | `docs/` (root level) |
 | Ústava provozu, brána PR, kill switch | `GOVERNANCE.md`; `scripts/pr-gate.js` (třída A/B/C), `data/ai-provoz.json` + `scripts/ai-provoz.js`; incidenty `docs/incidents.md` |
@@ -45,6 +46,7 @@ npm run validate:evidence        # registr evidence-auditu (data/evidence-audit.
 npm run evidence:queue -- --status   # fronta evidence-auditu: kolik článků/indikátorů čeká na ověření v PubMed
 npm run validate:pojistovny      # dataset Srovnávače pojišťoven (data/pojistovny*.json; součást validate:all)
 npm run data:pojistovny-crp      # CRP agregace pojištěnců (věkové pásy) + standardizace nákladů na pojištěnce
+npm run data:pojistovny-mz      # Hodnocení MZ 2015–2024 (XLSX + PDF) a měsíční přerozdělení po ZP → data/pojistovny-hospodareni-rady.json, -prerozdeleni.json, -segmenty.json (stahuje z webu MZ, potřebuje `pdftotext`; roční běh = workflow pojistovny-mz.yml)
 node ingest/fetchers/pojistovny-vz.js   # výroční zprávy 7 ZP: stažení PDF (cache) + manifest + text do ingest/manual/pojistovny/vz-text/ (volby --jen-stazeni | --jen-text | --force | --kod 111 | --rok-od 2024; potřebuje `pdftotext`, tj. poppler-utils; bez skriptu v package.json = třída C)
 node scripts/pojistovny-verify.js       # ověří čísla srovnávače proti textům VZ → data/pojistovny-verifikace.json (--dry = jen souhrn); roční rutina .github/workflows/pojistovny-vz.yml
 npm run export:dotaznik          # export odpovědí z dotazníku pojišťoven (Neon, vyžaduje DATABASE_URL)
