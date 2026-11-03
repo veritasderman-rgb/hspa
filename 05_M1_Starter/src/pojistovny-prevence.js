@@ -738,7 +738,7 @@ export function buildVyuziti(F, R, B) {
     const rad = (id) => rVal(r?.rady?.[id]?.[rok]);
     const poj = rad('pojistenci_prumer');
     const pocet = rVal(bz.get(String(z.kod))?.roky?.[rok]?.vyuziti?.pocet_prispevku);
-    return {
+    const row = {
       kod: z.kod, zkratka: z.zkratka,
       dospely: stropText(z.podminky?.strop_dospely_kc), dite: stropText(z.podminky?.strop_dite_kc),
       programy: Number.isFinite(rad('fond_prevence_programy_na_pojistence_kc')) ? rad('fond_prevence_programy_na_pojistence_kc') : null,
@@ -746,8 +746,64 @@ export function buildVyuziti(F, R, B) {
       prispevku100: Number.isFinite(pocet) && Number.isFinite(poj) && poj > 0 ? (pocet / poj) * 100 : null,
       zustatek: zus.rok != null && Number.isFinite(zusPo.get(String(z.kod))) ? zusPo.get(String(z.kod)) : null,
     };
+    row.postup = vyuzitiPostup(z, r, bz.get(String(z.kod)), rok, zus.rok, row);
+    return row;
   });
   return { rok, zustatekRok: zus.rok, radky };
+}
+
+const bunka = (b) => (b && typeof b === 'object' ? b.hodnota : b);
+const vzRadek = (b) => (b?.soubor ? `přepis VZ ${b.soubor}${b.radek != null ? `, ř. ${b.radek}` : ''}` : 'výroční zpráva');
+
+/** Jedna věta ke stropu: text buňky + doslovná citace z podmínek, nebo proč chybí. */
+function stropPostup(nazev, b) {
+  if (!b || b.stav == null) return `${nazev}: v podmínkách pojišťovny jsme souhrnný roční strop nenašli${b?.poznamka ? ` (${b.poznamka})` : ''}; otázka do kola 1.`;
+  const text = stropText(b);
+  const cit = b.citace ? ` Citace z podmínek: „${b.citace}“.` : '';
+  const pozn = b.poznamka ? ` ${b.poznamka}` : '';
+  return `${nazev}: ${text}.${cit}${pozn}`;
+}
+
+/**
+ * Postup výpočtu každého čísla v řádku tabulky „Kolik z fondu doopravdy dostanete“ jedné pojišťovny:
+ * zdroj, vzorec a dosazená čísla. Vrací pole vět (jedna položka = jeden sloupec).
+ * @param {object} z   záznam pojistovny[] z pojistovny-fond-pravidla.json
+ * @param {object} r   záznam pojistovny[] z pojistovny-hospodareni-rady.json (řady MZ)
+ * @param {object} b   záznam pojistovny[] z pojistovny-fond-bilance.json (přepisy VZ)
+ * @param {number} rok rok řádku (programy, plán, příspěvky)
+ * @param {number|null} zusRok rok zůstatku
+ * @param {object} row hotový řádek tabulky (výsledné hodnoty)
+ */
+export function vyuzitiPostup(z, r, b, rok, zusRok, row) {
+  const cell = (id, y = rok) => r?.rady?.[id]?.[y] ?? null;
+  const v = (id, y = rok) => bunka(cell(id, y));
+  const out = [];
+  out.push(stropPostup('Strop, dospělý', z.podminky?.strop_dospely_kc));
+  out.push(stropPostup('Strop, dítě', z.podminky?.strop_dite_kc));
+
+  const prog = v('fond_prevence_programy_mil'); const poj = v('pojistenci_prumer');
+  if (Number.isFinite(prog) && Number.isFinite(poj) && poj > 0) {
+    out.push(`Programy na pojištěnce ${rok}: náklady na zdravotní programy z fondu prevence ${fmtKc(prog, 0)} mil. Kč (MZ, Hodnocení ${rok}, Tab. 17; bez ozdravných pobytů a „ostatních činností“) ÷ průměrný počet pojištěnců ${fmtKc(poj, 0)} (MZ, tab. č. 1) = ${fmtKc(prog * 1e6 / poj, 0)} Kč. MZ uvádí programy zaokrouhlené na miliony, u malých pojišťoven je v tom chyba zaokrouhlení i několik procent.`);
+  } else out.push(`Programy na pojištěnce ${rok}: nedohledáno (chybí Tab. 17 nebo průměrný počet pojištěnců).`);
+
+  const skut = v('fond_prevence_mil'); const plan = v('fond_prevence_zpp_mil');
+  if (Number.isFinite(skut) && Number.isFinite(plan) && plan > 0) {
+    out.push(`Plnění plánu ${rok}: skutečné náklady fondu prevence ${fmtKc(skut, 1)} mil. Kč ÷ plán ve zdravotně pojistném plánu ${fmtKc(plan, 1)} mil. Kč (obojí MZ, Hodnocení ${rok}, Tabulka č. 3c, sloupce „Skutečnost“ a „ZPP“) = ${fmtKc(100 * skut / plan, 1)} %.`);
+  } else out.push(`Plnění plánu ${rok}: nedohledáno (Tabulka č. 3c bez plánu).`);
+
+  const pc = b?.roky?.[rok]?.vyuziti?.pocet_prispevku;
+  if (Number.isFinite(bunka(pc)) && Number.isFinite(poj) && poj > 0) {
+    out.push(`Příspěvků na 100 pojištěnců ${rok}: ${fmtKc(bunka(pc), 0)} vyplacených příspěvků (${vzRadek(pc)}${pc.citace ? `: „${pc.citace}“` : ''}) ÷ ${fmtKc(poj, 0)} pojištěnců × 100 = ${fmtKc(100 * bunka(pc) / poj, 0)}. Jsou to příspěvky, ne osoby: jeden pojištěnec může za rok dostat víc příspěvků.`);
+  } else {
+    const duvod = b?.roky?.[rok]?.poznamky?.vyuziti || b?.roky?.[rok]?.vyuziti?.definice || 'výroční zpráva počet vyplacených příspěvků, žádostí ani osob za celý fond neuvádí';
+    out.push(`Příspěvků na 100 pojištěnců ${rok}: nelze spočítat, ${String(duvod).replace(/\.$/, '')}. Otázka do kola 1.`);
+  }
+
+  const zk = zusRok != null ? b?.roky?.[zusRok]?.zustatek_konecny : null; const pojZ = zusRok != null ? v('pojistenci_prumer', zusRok) : null;
+  if (Number.isFinite(bunka(zk)) && Number.isFinite(pojZ) && pojZ > 0) {
+    out.push(`Zůstatek na pojištěnce k 31. 12. ${zusRok}: účetní konečný zůstatek fondu prevence ${fmtKc(bunka(zk), 0)} tis. Kč (${vzRadek(zk)}${zk.citace ? `: „${zk.citace}“` : ''}) ÷ ${fmtKc(pojZ, 0)} pojištěnců (MZ, tab. č. 1, ${zusRok}) = ${fmtKc(bunka(zk) * 1000 / pojZ, 0)} Kč. Je to stav účtu fondu, ne „nevyužité peníze“: část je už vázaná na schválené, dosud nevyplacené příspěvky.`);
+  } else out.push(`Zůstatek na pojištěnce: nedohledáno (výroční zpráva ${zusRok ?? rok} není v přepisech).`);
+  return out;
 }
 
 /** Sekce „Kolik z fondu doopravdy dostanete“ jako tabulkové dvojče s CSV; bez řazení a bez pořadí. */
@@ -772,7 +828,16 @@ export function vyuzitiHtml(F, R, B) {
     + `<span class="zpv-sub">${esc('Zůstatek fondu je účetní stav k 31. 12., ne „nevyužité peníze“. Zdravotní programy jsou bez ozdravných pobytů a „ostatních činností“.')}</span></figcaption>`
     + `<details class="zpv-table" open data-csv-title="${esc(title)}" data-csv-source="${esc(source)}"><summary>Tabulka: strop a průměrné čerpání</summary>`
     + '<button type="button" class="zpv-csv" data-zpv-csv>Stáhnout CSV</button>'
-    + `<div class="zpv-scroll" tabindex="0" role="region" aria-label="${esc(`Tabulka: ${title}`)}"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div></details></div>`;
+    + `<div class="zpv-scroll" tabindex="0" role="region" aria-label="${esc(`Tabulka: ${title}`)}"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div></details></div>`
+    + vyuzitiPostupHtml(t);
+}
+
+/** Rozbalovací blok pod tabulkou: pro každou pojišťovnu zdroj, vzorec a dosazená čísla každého sloupce. */
+export function vyuzitiPostupHtml(t) {
+  const items = t.radky.map((r) => `<details class="zpc-acc" data-zp="${esc(r.kod)}"><summary>${dot(r.kod)}${esc(r.zkratka)}<span class="zpc-n">${r.postup.length} čísel</span></summary><div class="zpc-acc-body"><ol>`
+    + r.postup.map((v) => `<li>${esc(v)}</li>`).join('') + '</ol></div></details>').join('');
+  return `<details class="zpc-acc zpc-acc--tbl"><summary>Jak jsme to počítali, pojišťovna po pojišťovně<span class="zpc-n">${t.radky.length}</span></summary><div class="zpc-acc-body">`
+    + `<p class="zpc-note">Každé číslo v tabulce vzniká ze dvou veřejných čísel: čitatel je z Hodnocení MZ nebo z výroční zprávy pojišťovny (u přepisů uvádíme soubor a řádek), jmenovatel je průměrný počet pojištěnců podle MZ. Stropy jsou citace z podmínek pojišťoven.</p>${items}</div></details>`;
 }
 
 /** Vykreslí sekci do #zpFpVyuziti; data si dočte přes sdílenou cache (stejný fetch použije patička Zdroje). */

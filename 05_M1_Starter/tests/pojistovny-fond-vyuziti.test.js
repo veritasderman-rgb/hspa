@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildVyuziti, vyuzitiHtml } from '../src/pojistovny-prevence.js';
+import { buildVyuziti, vyuzitiHtml, vyuzitiPostup } from '../src/pojistovny-prevence.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const json = (f) => JSON.parse(fs.readFileSync(path.join(ROOT, 'data', f), 'utf8'));
@@ -78,4 +78,26 @@ test('A7.2: stránka Prevence má kontejner sekce za pravidly fondu a explainer 
   const e = json('explainers.json').explainers.find((x) => x.id === 'fond_prevence');
   assert.ok(e.key_facts.some((k) => k.label === 'Nárok vs. průměr' && /horní mez/.test(k.value)));
   assert.match(e.tldr_public, /průměr přes všechny pojištěnce včetně těch, kteří nečerpají/);
+});
+
+test('postup výpočtu: každá pojišťovna má 6 vět se zdrojem a dosazenými čísly, ZPŠ vzorec příspěvků, ostatní důvod', () => {
+  const t = buildVyuziti(F, R, B);
+  assert.equal(t.radky.length, 7);
+  for (const r of t.radky) {
+    assert.equal(r.postup.length, 6, `${r.zkratka}: 6 vět (2 stropy + 4 čísla)`);
+    assert.match(r.postup[2], /Tab\. 17/, `${r.zkratka}: programy odkazují na Tab. 17`);
+    assert.match(r.postup[3], /Tabulka č\. 3c/, `${r.zkratka}: plnění odkazuje na Tab. 3c`);
+    assert.match(r.postup[5], /přepis VZ \d{3}-\d{4}\.txt, ř\. \d+/, `${r.zkratka}: zůstatek má soubor a řádek VZ`);
+  }
+  const zps = t.radky.find((r) => r.kod === '209');
+  assert.match(zps.postup[4], /85\D266 vyplacených příspěvků .*209-2024\.txt, ř\. 1016.*÷ 143\D485 pojištěnců × 100 = 59/);
+  assert.match(zps.postup[2], /15 mil\. Kč .*÷ průměrný počet pojištěnců 143\D485 .*= 105 Kč/);
+  assert.match(zps.postup[3], /57,7 mil\. Kč ÷ .*63,0 mil\. Kč .*= 91,6\D%/);
+  const vzp = t.radky.find((r) => r.kod === '111');
+  assert.match(vzp.postup[4], /nelze spočítat/);
+  assert.match(vzp.postup[0], /bez souhrnného stropu/);
+  const html = vyuzitiHtml(F, R, B);
+  assert.match(html, /Jak jsme to počítali, pojišťovna po pojišťovně/);
+  assert.equal((html.match(/<details class="zpc-acc" data-zp="/g) || []).length, 7);
+  assert.doesNotMatch(html, /pořadí|žebříček|štědr/);
 });
