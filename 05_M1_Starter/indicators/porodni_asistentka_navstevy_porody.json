@@ -1,0 +1,50 @@
+{
+  "id": "porodni_asistentka_navstevy_porody",
+  "name": "Ženy s návštěvou porodní asistentky na 100 porodů",
+  "area": "Procesy",
+  "domain": "Porodní a poporodní péče",
+  "subdomain": "Šestinedělí",
+  "definition": "Počet žen, kterým byl v daném čtvrtletí vykázán výkon 06211 NÁVŠTĚVA TĚHOTNÉ NEBO MATKY V ŠESTINEDĚLÍ PORODNÍ ASISTENTKOU hrazený z veřejného zdravotního pojištění, vztažený na 100 porodů téhož čtvrtletí. Čitatel: unikátní ženy s alespoň jedním výkonem 06211 v kvartálu (NRHZS). Jmenovatel: porody podle NRHZS (porodní výkony 63119, 63120, 63121, 63123, 63125, 63127, 63129 a 63131). Indikátor měří, jak se v praxi využívá nárok na tři hrazené návštěvy porodní asistentky v šestinedělí, který od 1. 1. 2026 dostává každá rodička formou žádanky při propuštění z porodnice.",
+  "unit": "na 100 porodů",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_data_request",
+      "endpoint": "https://github.com/veritasderman-rgb/hspa/blob/main/05_M1_Starter/ingest/manual/uzis-06211/uzis-06211-2025q1-2026q2.json",
+      "dataset": "ÚZIS ČR — Národní registr hrazených zdravotních služeb (NRHZS): výkon 06211 podle kraje poskytovatele a zdravotní pojišťovny, 2025 Q1 – 2026 Q2. Odpověď na datový požadavek UZIS/080507/2026 (přijato 16. 9. 2026, vyřízeno 30. 10. 2026). Normalizovaný přepis tabulek 1–3 je v repozitáři projektu.",
+      "dimensions": {
+        "obdobi": "čtvrtletí 2025 Q1 – 2026 Q2 (2026 předběžně)",
+        "kraj": "kraj poskytovatele zdravotních služeb (14 krajů + ČR)",
+        "pojistovna": "7 zdravotních pojišťoven",
+        "metrika": "vykázané výkony 06211, unikátní ženy, porody, počet IČZ odbornosti 921 a 603 s vykázaným výkonem"
+      },
+      "note": "Hodnota 2026 = 1. čtvrtletí 2026: 2 607 žen / 17 414 porodů = 15,0. Hodnota 2025 = součet žen přes čtyři kvartály / součet porodů za rok: 2 661 / 75 086 = 3,5 (po kvartálech 3,0 · 3,3 · 3,5 · 4,3). Předběžná hodnota za 2. čtvrtletí 2026 (2 960 / 14 707 = 20,1) se do indikátoru nepromítá, protože jmenovatel je zjevně neúplný: porody meziročně −21,5 % proti −3,4 % v 1. čtvrtletí."
+    }
+  },
+  "benchmark_source": {
+    "type": "narrative_only",
+    "code": "no_direct_benchmark",
+    "dataset": "Mezinárodně srovnatelný ukazatel neexistuje: výkon 06211 a nárok na tři návštěvy jsou česká úhradová konstrukce a země organizují poporodní péči odlišně (Německo zákonný nárok na návštěvy Hebamme, Nizozemsko kraamzorg, Velká Británie komunitní porodní asistentky NHS). Orientační normou je doporučení WHO (2022) nejméně čtyř poporodních kontaktů, z nichž kontakt v prvním týdnu má pokud možno proběhnout doma. Indikátor se hodnotí proti vlastní časové řadě, proti nároku (teoreticky až 100 žen na 100 porodů) a mezi kraji.",
+    "value": null,
+    "url": "https://www.who.int/publications/i/item/9789240045989"
+  },
+  "signal_thresholds": {
+    "good": 2,
+    "warn": 5
+  },
+  "frequency": "quarterly",
+  "stewards": [
+    "zdravotní pojišťovny (zákonná povinnost zajistit místní a časovou dostupnost, smluvní politika v odbornostech 921 a 603)",
+    "Ministerstvo zdravotnictví ČR (seznam zdravotních výkonů, úhradová vyhláška, indikace výkonu 06211)",
+    "porodnice (vydávání žádanek při propuštění, návštěvní služba vlastních porodních asistentek)",
+    "porodní asistentky a jejich profesní organizace (UNIPA, ČKPA)",
+    "ÚZIS ČR (NRHZS)"
+  ],
+  "method_notes": "Hodnota 2026 (1. čtvrtletí) = 15,0 žen s návštěvou na 100 porodů; 2025 = 3,5. Vykázaných výkonů 06211 bylo v 1. čtvrtletí 2026 celkem 3 953 proti 833 v 1. čtvrtletí 2025 (4,7×); v celém roce 2025 3 981. Na jednu ženu s návštěvou připadá stabilně 1,5 výkonu za čtvrtletí (2025 i 2026). Kdyby každá rodička z 1. čtvrtletí 2026 využila všechny tři návštěvy, bylo by výkonů 52 242; vykázaných 3 953 je 7,6 % z tohoto stropu. Počet poskytovatelů (IČZ), kteří výkon vykázali: odbornost 921 (porodní asistentka) 13–16 v roce 2025, 53 v 1. a 60 ve 2. čtvrtletí 2026; odbornost 603 (gynekologie a porodnictví) 30–43 v roce 2025, 83 v obou čtvrtletích 2026. Rozpětí mezi kraji v 1. čtvrtletí 2026: 7,4 (Plzeňský) až 29,8 (Zlínský); mezi pojišťovnami 11,9 (VoZP, ZPŠ) až 17,8 (OZP). Signál je neutral: chybí benchmark i oficiální cílová hodnota. Indikátor má hodnotu za čtvrtletí, kontrakt ji vede pod rokem 2026; po dodání dat za celý rok 2026 se přepočte na roční hodnotu stejnou metodou jako rok 2025. Ověření (3. 11. 2026): hodnota i celá řada spočteny přímo ze zdrojových tabulek ÚZIS (normalizovaný přepis ingest/manual/uzis-06211/); kontroly konzistence: součet porodů přes pojišťovny = celá ČR ve všech čtvrtletích, součet žen přes kraje = celá ČR + 7 (ženy s výkonem ve více krajích, jak uvádí ÚZIS). Ověřena je shoda se zdrojem; samotná data za rok 2026 ÚZIS označuje jako předběžná.",
+  "limitations": "1. **Nejde o podíl rodiček, které službu využily.** Čitatel jsou ženy s návštěvou v kvartálu (i těhotné a ženy, které rodily v předchozím kvartálu), jmenovatel porody v kvartálu. Kohortový ukazatel (kolik žen, které porodily v měsíci M, mělo návštěvu do 42 dnů) data zatím neumožňují. 2. **Výkon 06211 zahrnuje i návštěvy v těhotenství**; rozdělení před porodem a po porodu tabulky nemají. 3. **Rok 2026 jsou předběžná data**; ve 2. čtvrtletí je neúplný počet porodů, proto se nepoužívá. 4. **Jen veřejné zdravotní pojištění**: bez části cizinek a bez přímo placené péče porodních asistentek, kterou si ženy hradily i před rokem 2026. 5. **Kraj = kraj poskytovatele**, ne bydliště ženy; IČZ s vykázaným výkonem nejsou totéž co smluvní síť a nic neříkají o kapacitě poskytovatele. 6. Úhrnná hodnota 2025 sčítá unikátní ženy po kvartálech; ženu s návštěvami ve dvou kvartálech počítá dvakrát.",
+  "determinants": "**Žádanka a informace.** Od 1. 1. 2026 je indikace návštěv při propuštění z porodnice povinná; jestli žena ví, komu zavolat, záleží na porodnici a na seznamech pojišťoven.\n\n**Síť poskytovatelů.** Návštěvy zajišťují porodní asistentky porodnic a ambulantních gynekologů (odbornost 603) i samostatné porodní asistentky (921). Kterými poskytovateli síť zajistí, rozhodují podle MZ ČR zdravotní pojišťovny.\n\n**Úhrada a doprava.** Výkon má časovou dotaci 60 minut; v únoru 2026 pojišťovny navrhly zkrácení na 20 minut, návrh byl v březnu 2026 stažen z hlasování pracovní skupiny k seznamu výkonů. Profesní organizace upozorňují na odlišné podmínky úhrady dopravy pro nemocnice a samostatné porodní asistentky.\n\n**Načasování.** Nárok lze čerpat jen během šestinedělí; pozdě sjednaná návštěva se nemusí uskutečnit vůbec.",
+  "importance": "Šestinedělí je období, kdy se rozhoduje o kojení, hojení po porodu a záchytu poporodní deprese, a česká rodička v něm dosud zůstávala bez pravidelného kontaktu se zdravotníkem, dokud nepřišla komplikace. WHO (2022) doporučuje nejméně čtyři poporodní kontakty a ten v prvním týdnu pokud možno doma. Od 1. 1. 2026 má každá žena v ČR nárok na tři hrazené návštěvy porodní asistentky; indikátor ukazuje, nakolik se nárok mění ve skutečnou péči.\n\nPrvní data ÚZIS ukazují rychlý nárůst ze 3,5 žen s návštěvou na 100 porodů (2025) na 15,0 v 1. čtvrtletí 2026, ale zároveň to, že vykázaných návštěv je zhruba třináctkrát méně, než nárok dovoluje, a že se kraje liší čtyřnásobně. Z pohledu HSPA patří do dimenze dostupnosti: měří, zda se reformou slíbená služba dostane k ženám bez ohledu na kraj a pojišťovnu.",
+  "patient_story": "Modelová situace. Lucie porodila v únoru 2026. Při propuštění dostala spolu s propouštěcí zprávou žádanku na tři návštěvy porodní asistentky doma; nevěděla ale, komu zavolat. Než našla porodní asistentku se smlouvou u své pojišťovny, bylo dítěti pět týdnů a šestinedělí končilo.\n\nV Plzeňském kraji připadlo v 1. čtvrtletí 2026 na 100 porodů 7,4 ženy s návštěvou porodní asistentky, ve Zlínském 29,8. Celostátně 15,0, čtyřikrát víc než v roce 2025 (3,5). Vykázaných návštěv bylo 3 953, zatímco tři návštěvy pro každou rodičku by znamenaly přes 52 tisíc.\n\nNárok tedy na papíře existuje pro všechny, v praxi připadla v 1. čtvrtletí 2026 jedna žena s návštěvou zhruba na každých sedm porodů, a v některých krajích výrazně víc než v jiných. Indikátor bude ukazovat, jestli se rozdíl zmenšuje.",
+  "framework": "hspa",
+  "dimension": "dostupnost"
+}
