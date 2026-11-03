@@ -30,6 +30,7 @@ import { validatePrerozdeleni } from './lib/validate-prerozdeleni.js';
 import { validateInstituce } from './lib/validate-instituce.js';
 import { validateSmluvniProgramy } from './lib/validate-smluvni-programy.js';
 import { validateDostupnost } from './lib/validate-dostupnost.js';
+import { validateSegmenty } from './lib/validate-segmenty.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -54,6 +55,7 @@ export const OPTIONAL_FILES = {
   instituce: 'pojistovny-instituce.json',
   smluvniProgramy: 'pojistovny-smluvni-programy.json',
   dostupnost: 'pojistovny-dostupnost.json',
+  segmenty: 'pojistovny-segmenty.json',
 };
 export const STD_STAVY = ['dolozeno', 'placeholder-bez-vah', 'index-prerozdeleni'];
 
@@ -572,6 +574,7 @@ export function validateAll(datasets) {
     ['instituce', (d) => validateInstituce(d)],
     ['smluvniProgramy', (d) => validateSmluvniProgramy(d)],
     ['dostupnost', (d) => validateDostupnost(d)],
+    ['segmenty', (d) => validateSegmenty(d, { hospodareniRady: datasets?.hospodareniRady })],
   ];
   for (const [key, fn] of dalsi) {
     if (datasets?.[key] == null) continue;
