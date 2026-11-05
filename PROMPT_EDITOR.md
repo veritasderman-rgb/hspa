@@ -42,7 +42,11 @@ git fetch origin main
 
 ## 2. Třída A — merge po zelené CI
 
-Bez obsahové revize, ale s kontrolou, že brána nelže:
+PR třídy A se normálně zmerguje **sám**: brána (`pr-gate.yml`) mu zapne auto-merge
+GitHubu a GitHub ho zmerguje po zelených povinných checkách. Editor se ho dotkne,
+jen když je po zelené CI pořád otevřený (shrnutí běhu brány říká, proč se auto-merge
+nezapnul: chybí secret `AUTOMERGE_TOKEN`, ruleset, nebo PR z forku). Pak platí
+totéž co dřív — bez obsahové revize, ale s kontrolou, že brána nelže:
 
 - diff obsahuje jen soubory tříd A (`node scripts/pr-gate.js --base origin/main --head <sha>`),
 - žádné generované artefakty (`search-index`, `diagnoza-index`, `souvislosti`, `styles.min.css`),

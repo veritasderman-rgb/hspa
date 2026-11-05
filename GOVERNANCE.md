@@ -6,7 +6,7 @@
 > takový PR odmítne zmergovat (třída C, § 3). Každá změna má záznam v
 > `docs/decisions-log.md`.
 >
-> Verze: 2026-10-06 (v1 — zavedení AI-first provozu).
+> Verze: 2026-11-05 (v1.1 — třída A merguje GitHub auto-merge; v1 2026-10-06 zavedení AI-first provozu).
 
 ---
 
@@ -50,7 +50,7 @@ co není zařazené, čeká na člověka.
 
 | Třída | Co typicky obsahuje | Kdo rozhoduje | Jak |
 |---|---|---|---|
-| **A · auto** | mechanické datové změny bez nového čtenářského textu: stav legislativního radaru, čerstvost dat, snapshoty, cover obrázky, statistiky návštěvnosti | CI | editor zmerguje po zelené CI bez obsahové revize |
+| **A · auto** | mechanické datové změny bez nového čtenářského textu: stav legislativního radaru, čerstvost dat, snapshoty, cover obrázky, statistiky návštěvnosti | CI | brána zapne auto-merge GitHubu a PR se zmerguje sám po zelených povinných checkách (`pr-gate.yml`); kde auto-merge nejde zapnout (chybí token nebo ruleset, PR z forku), zmerguje ho editor po zelené CI, bez obsahové revize |
 | **B · editor** | nové články a revize, indikátory a karty, registr tvrzení, evidence-audit, glosář, explainery, strategie, testy, běžný kód a styly, dokumentace, plán práce | nezávislý AI editor (`PROMPT_EDITOR.md`) | adversariální revize podle checklistu → merge, nebo „změny vyžadovány" pro autorku |
 | **C · člověk** | tato ústava, prompty rutin, workflows a nastavení agenta, kill switch, Barometr (výroky a verdikty o jmenovaných osobách), střet zájmů a data o osobách, data pohotovostí a okresní stránky (bezpečnostně kritické), nové stránky webu, mazání článků, závislosti a konfigurace nasazení, sledování a soukromí, cokoli s penězi, právem, osobními údaji nebo vnějšími závazky | Josef Pavlovic | label `brana-clovek`, čeká na ruční merge; editor ho nikdy nemerguje |
 
