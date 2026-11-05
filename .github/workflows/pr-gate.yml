@@ -88,35 +88,71 @@ jobs:
         # před doběhnutím testů, proto krok napřed ověří, že ruleset všechny tři
         # checky vyžaduje, a jinak auto-merge nezapne.
         #
+        # Kill switch (GOVERNANCE.md § 5): při stavu „pozastaveno" se auto-merge
+        # nezapíná a už zapnutý se vypne — tenhle krok publikuje, ne jen validuje.
+        # Stav se čte vždy z main, ne z checkoutu, stejně jako v cronech.
+        #
         # Token: secret AUTOMERGE_TOKEN = fine-grained PAT vydavatele jen pro tohle
         # repo (Contents: write, Pull requests: write). GITHUB_TOKEN použít nejde:
         # merge provedený jeho jménem nespustí regenerate-artifacts.yml (push od
         # GITHUB_TOKEN nevyvolá workflow) a web by se nenasadil — Vercel build
-        # obsahového merge přeskakuje a čeká na commit bota.
+        # obsahového merge přeskakuje a čeká na commit bota. GITHUB_TOKEN slouží
+        # jen ke čtení (stav auto-merge, pravidla větve).
         #
         # Když token chybí, ruleset není importovaný nebo PR přišel z forku (secret
         # není k dispozici), krok to jen zapíše do shrnutí a PR třídy A zmerguje
         # editor jako dřív (PROMPT_EDITOR.md § 2). Když PR po dalším pushi z třídy A
-        # vypadne (label B/C), auto-merge se vypne.
+        # vypadne (label B/C) nebo je provoz pozastaven, už zapnutý auto-merge se
+        # VYPNE A VYPNUTÍ SE OVĚŘÍ — když se to nepovede, krok spadne a brána
+        # (povinný check) PR zablokuje. Push autora s právem zápisu totiž auto-merge
+        # sám nevypíná, a bez ověření by se B/C změny zmergovaly bez revize.
         if: github.event.pull_request.head.repo.full_name == github.repository
-        continue-on-error: true
         env:
-          GH_TOKEN: ${{ secrets.AUTOMERGE_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+          AUTOMERGE_TOKEN: ${{ secrets.AUTOMERGE_TOKEN }}
           REPO: ${{ github.repository }}
           PR: ${{ github.event.pull_request.number }}
           LABEL: ${{ steps.trida.outputs.label }}
           BASE_REF: ${{ github.base_ref }}
         run: |
-          if [ -z "$GH_TOKEN" ]; then
-            echo "::notice::Secret AUTOMERGE_TOKEN neni nastaven - trida A ceka na merge editorem."
-            echo "Auto-merge: nezapnuto (chybí secret \`AUTOMERGE_TOKEN\`)." >> "$GITHUB_STEP_SUMMARY"
+          shrnuti() { echo "$1" >> "$GITHUB_STEP_SUMMARY"; echo "$1"; }
+          zapnuto() { gh api "repos/$REPO/pulls/$PR" --jq '.auto_merge != null'; }
+
+          # Uz zapnuty auto-merge? (cteni staci GITHUB_TOKEN)
+          ARMED=$(zapnuto)
+
+          # Kill switch - stav vzdy z main. Chyba cteni = krok spadne = bezpecna strana.
+          git fetch --no-tags --depth=1 origin main
+          git show origin/main:05_M1_Starter/data/ai-provoz.json > "$RUNNER_TEMP/ai-provoz.json"
+          BEZI=0
+          if AI_PROVOZ_STATE="$RUNNER_TEMP/ai-provoz.json" node scripts/ai-provoz.js check; then BEZI=1; fi
+
+          CHTIT=0
+          if [ "$LABEL" = "brana-auto" ] && [ "$BEZI" = 1 ]; then CHTIT=1; fi
+
+          if [ "$CHTIT" = 0 ]; then
+            if [ "$ARMED" = true ]; then
+              if [ -z "$AUTOMERGE_TOKEN" ]; then
+                echo "::error::Auto-merge je zapnuty, ale PR uz neni trida A nebo je provoz pozastaven, a chybi AUTOMERGE_TOKEN na jeho vypnuti. Brana PR blokuje."
+                exit 1
+              fi
+              GH_TOKEN="$AUTOMERGE_TOKEN" gh pr merge "$PR" --repo "$REPO" --disable-auto || true
+              ARMED=$(zapnuto)
+              if [ "$ARMED" = true ]; then
+                echo "::error::Vypnuti auto-merge se nepodarilo overit (PR uz neni trida A nebo je provoz pozastaven). Brana PR blokuje."
+                exit 1
+              fi
+              shrnuti "Auto-merge vypnut: PR už není třída A, nebo je provoz AI pozastaven."
+            fi
+            if [ "$BEZI" = 0 ]; then
+              shrnuti "Auto-merge: nezapnuto, provoz AI je pozastaven (GOVERNANCE.md § 5, workflow ai-provoz.yml)."
+            fi
             exit 0
           fi
-          if [ "$LABEL" != "brana-auto" ]; then
-            # PR mohl byt drive trida A a po dalsim pushi vyrust do B/C.
-            if gh pr merge "$PR" --repo "$REPO" --disable-auto >/dev/null 2>&1; then
-              echo "Auto-merge vypnut: PR už není třída A." >> "$GITHUB_STEP_SUMMARY"
-            fi
+
+          if [ -z "$AUTOMERGE_TOKEN" ]; then
+            echo "::notice::Secret AUTOMERGE_TOKEN neni nastaven - trida A ceka na merge editorem."
+            shrnuti "Auto-merge: nezapnuto (chybí secret \`AUTOMERGE_TOKEN\`)."
             exit 0
           fi
           RULES=$(gh api "repos/$REPO/rules/branches/$BASE_REF" \
@@ -124,9 +160,17 @@ jobs:
           for CHECK in check e2e "Brána PR"; do
             if ! printf '%s' "$RULES" | jq -e --arg c "$CHECK" 'index($c) != null' >/dev/null; then
               echo "::warning::Ruleset vetve $BASE_REF nevyzaduje check '$CHECK' - auto-merge nezapinam (import docs/github-ruleset-main.json)."
-              echo "Auto-merge: nezapnuto (ruleset větve \`$BASE_REF\` nevyžaduje povinný check \`$CHECK\`)." >> "$GITHUB_STEP_SUMMARY"
+              shrnuti "Auto-merge: nezapnuto (ruleset větve \`$BASE_REF\` nevyžaduje povinný check \`$CHECK\`)."
               exit 0
             fi
           done
-          gh pr merge "$PR" --repo "$REPO" --auto --merge
-          echo "Auto-merge zapnut: PR se zmerguje sám po zelených povinných checkách (check, e2e, Brána PR)." >> "$GITHUB_STEP_SUMMARY"
+          if [ "$ARMED" = true ]; then
+            shrnuti "Auto-merge už je zapnutý: PR se zmerguje po zelených povinných checkách."
+            exit 0
+          fi
+          if GH_TOKEN="$AUTOMERGE_TOKEN" gh pr merge "$PR" --repo "$REPO" --auto --merge; then
+            shrnuti "Auto-merge zapnut: PR se zmerguje sám po zelených povinných checkách (check, e2e, Brána PR)."
+          else
+            echo "::warning::Zapnuti auto-merge selhalo (token, opravneni nebo API) - PR tridy A zmerguje editor."
+            shrnuti "Auto-merge: zapnutí selhalo, PR zmerguje editor po zelené CI."
+          fi
