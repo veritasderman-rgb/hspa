@@ -45,7 +45,7 @@ git fetch origin main
 PR třídy A se normálně zmerguje **sám**: brána (`pr-gate.yml`) mu zapne auto-merge
 GitHubu a GitHub ho zmerguje po zelených povinných checkách. Editor se ho dotkne,
 jen když je po zelené CI pořád otevřený (shrnutí běhu brány říká, proč se auto-merge
-nezapnul: chybí secret `AUTOMERGE_TOKEN`, ruleset, nebo PR z forku). Pak platí
+nezapnul: chybí secret `AUTOMERGE_TOKEN`, ruleset, PR z forku, nebo byl provoz pozastaven). Pak platí
 totéž co dřív — bez obsahové revize, ale s kontrolou, že brána nelže:
 
 - diff obsahuje jen soubory tříd A (`node scripts/pr-gate.js --base origin/main --head <sha>`),
