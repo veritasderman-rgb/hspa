@@ -122,10 +122,14 @@ jobs:
           ZBYLO=""
           for PR in $ARMED; do
             gh pr merge "$PR" --repo "$REPO" --disable-auto || true
-            if [ "$(gh api "repos/$REPO/pulls/$PR" --jq '.auto_merge != null')" = true ]; then
-              ZBYLO="$ZBYLO #$PR"
-            else
+            # Overeni: vypnuto je jen explicitni "false". Chyba API (prazdny
+            # vystup, nenulovy kod) se pocita jako NEvypnuto - uvnitr if by
+            # set -e selhani substituce nezachytil.
+            STAV=$(gh api "repos/$REPO/pulls/$PR" --jq '.auto_merge != null' 2>/dev/null || echo chyba)
+            if [ "$STAV" = false ]; then
               echo "Auto-merge vypnut: PR #$PR" | tee -a "$GITHUB_STEP_SUMMARY"
+            else
+              ZBYLO="$ZBYLO #$PR"
             fi
           done
           if [ -n "$ZBYLO" ]; then
