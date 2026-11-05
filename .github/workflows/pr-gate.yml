@@ -171,7 +171,14 @@ jobs:
             shrnuti "Auto-merge už je zapnutý: PR se zmerguje po zelených povinných checkách."
             exit 0
           fi
-          if GH_TOKEN="$AUTOMERGE_TOKEN" gh pr merge "$PR" --repo "$REPO" --auto --merge; then
+          # Zapnutí přímo mutací enablePullRequestAutoMerge, ne `gh pr merge --auto`:
+          # gh při stavu „mergeable" PR rovnou zmerguje, a token vydavatele má
+          # v rulesetu výjimku role admin. Mutace nikdy nemerguje hned — u PR, který
+          # už je čistý, skončí chybou a PR zmerguje editor po zelené CI.
+          NODE_ID=$(gh api "repos/$REPO/pulls/$PR" --jq '.node_id')
+          if GH_TOKEN="$AUTOMERGE_TOKEN" gh api graphql \
+              -f query='mutation($id: ID!) { enablePullRequestAutoMerge(input: {pullRequestId: $id, mergeMethod: MERGE}) { pullRequest { autoMergeRequest { enabledAt } } } }' \
+              -f id="$NODE_ID" >/dev/null; then
             shrnuti "Auto-merge zapnut: PR se zmerguje sám po zelených povinných checkách (check, e2e, Brána PR)."
           else
             echo "::warning::Zapnuti auto-merge selhalo (token, opravneni nebo API) - PR tridy A zmerguje editor."

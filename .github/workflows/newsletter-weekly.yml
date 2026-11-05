@@ -30,7 +30,13 @@ jobs:
       run:
         working-directory: 05_M1_Starter
     steps:
+      # Push do main jde tokenem vydavatele (AUTOMERGE_TOKEN): ruleset main pouští
+      # přímé pushe jen roli Repository admin, GITHUB_TOKEN by zablokoval
+      # (docs/github-ruleset-main.json, docs/ai-first-rollout.md). Bez secretu
+      # zůstává GITHUB_TOKEN — funguje, dokud ruleset není aktivní.
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.AUTOMERGE_TOKEN || github.token }}
 
       - uses: actions/setup-node@v4
         with:
