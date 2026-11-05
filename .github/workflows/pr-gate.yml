@@ -90,7 +90,10 @@ jobs:
         #
         # Kill switch (GOVERNANCE.md § 5): při stavu „pozastaveno" se auto-merge
         # nezapíná a už zapnutý se vypne — tenhle krok publikuje, ne jen validuje.
-        # Stav se čte vždy z main, ne z checkoutu, stejně jako v cronech.
+        # Stav se čte vždy z main, ne z checkoutu, stejně jako v cronech. Pauza
+        # zapnutá až po tomhle kroku (v okně do doběhnutí CI) je pokrytá z druhé
+        # strany: ai-provoz.yml při pozastavení vypne auto-merge na všech
+        # otevřených PR.
         #
         # Token: secret AUTOMERGE_TOKEN = fine-grained PAT vydavatele jen pro tohle
         # repo (Contents: write, Pull requests: write). GITHUB_TOKEN použít nejde:

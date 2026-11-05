@@ -10,6 +10,12 @@ name: AI provoz · kill switch
 # refresh), a blok A každé rutiny (autorka, editor, porada, ombudsman).
 # Při `pozastaveno` skončí na prvním kroku kódem 1, dřív než cokoli udělají.
 #
+# Pozastavení navíc vypne auto-merge na všech otevřených PR (krok „Vypnout
+# čekající auto-merge"): brána pr-gate.yml ho u třídy A zapíná a běží jen na
+# události PR, takže by pauza v okně mezi zapnutím auto-merge a doběhnutím CI
+# PR pustila do mainu. Po `obnovit` se auto-merge sám nezapne — zapne ho
+# další push do PR, nebo PR zmerguje editor (PROMPT_EDITOR.md § 2).
+#
 # Skript scripts/ai-provoz.js je bez závislostí — npm ci tu záměrně není,
 # kill switch musí fungovat i s rozbitým zbytkem repa.
 
@@ -30,6 +36,8 @@ on:
 
 permissions:
   contents: write
+  # Vypnutí auto-merge na otevřených PR při pozastavení.
+  pull-requests: write
 
 # Dva přepínače naráz se nesmí předběhnout.
 concurrency:
@@ -96,3 +104,36 @@ jobs:
           done
           echo "::error::Kill switch se nepodařilo zapsat do main ani po 5 pokusech — zkuste workflow znovu nebo commitněte data/ai-provoz.json ručně."
           exit 1
+
+      - name: Vypnout čekající auto-merge
+        # Běží jen při pozastavení, a i když commit stavu selhal: vypnout
+        # rozjeté auto-merge je důležitější než zápis. Když něco zůstane
+        # zapnuté, běh skončí červeně, aby to vydavatel viděl a vypnul ručně.
+        if: ${{ inputs.akce == 'pozastavit' && !cancelled() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          ARMED=$(gh api "repos/$REPO/pulls?state=open&per_page=100" --paginate --jq '.[] | select(.auto_merge != null) | .number')
+          if [ -z "$ARMED" ]; then
+            echo "Auto-merge: zadny otevreny PR ho nema zapnuty." | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          ZBYLO=""
+          for PR in $ARMED; do
+            gh pr merge "$PR" --repo "$REPO" --disable-auto || true
+            # Overeni: vypnuto je jen explicitni "false". Chyba API (prazdny
+            # vystup, nenulovy kod) se pocita jako NEvypnuto - uvnitr if by
+            # set -e selhani substituce nezachytil.
+            STAV=$(gh api "repos/$REPO/pulls/$PR" --jq '.auto_merge != null' 2>/dev/null || echo chyba)
+            if [ "$STAV" = false ]; then
+              echo "Auto-merge vypnut: PR #$PR" | tee -a "$GITHUB_STEP_SUMMARY"
+            else
+              ZBYLO="$ZBYLO #$PR"
+            fi
+          done
+          if [ -n "$ZBYLO" ]; then
+            echo "::error::Auto-merge se nepodarilo vypnout u PR:$ZBYLO - vypnete ho rucne na strance PR."
+            echo "Auto-merge se NEPODAŘILO vypnout:$ZBYLO" >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
