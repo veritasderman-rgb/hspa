@@ -6,6 +6,12 @@ Formát: každá položka má `Datum`, `PR`, `Co`, `Proč`, `Důsledek`.
 
 ---
 
+## 2026-11-05 — Třída A merguje GitHub auto-merge, ne editor
+
+- **PR**: „brána: auto-merge třídy A“, třída C (merguje vydavatel; mění `GOVERNANCE.md` § 3 a `pr-gate.yml`)
+- **Co**: krok `Auto-merge třídy A` v `.github/workflows/pr-gate.yml`: u labelu `brana-auto` zapne `gh pr merge --auto --merge` tokenem ze secretu `AUTOMERGE_TOKEN` (fine-grained PAT vydavatele), GitHub PR zmerguje po zelených povinných checkách rulesetu (`check`, `e2e`, `Brána PR`). Krok napřed ověří přes `repos/{repo}/rules/branches/main`, že ruleset všechny tři checky vyžaduje; jinak (i bez tokenu, u PR z forku) jen zapíše důvod do shrnutí a PR nechá editorovi. Po pushi, který PR vyřadí z třídy A, auto-merge vypne.
+- **Proč**: vydavatel mergoval ručně všech 25 posledních PR včetně třídy B; editor (`HSPA – editor`) byl vypnutý a ruleset nikdy neimportovaný. Třída A je mechanická a podle ústavy o ní rozhoduje CI, lidské kliknutí tam nemá co dělat.
+- **Důsledek**: **NEPOUŽÍVAT `GITHUB_TOKEN`** pro merge do `main` — push jeho jménem nespustí `regenerate-artifacts.yml`, Vercel build obsahového merge přeskočí (`vercel-ignore-build.sh`) a web se nenasadí. **NEZAPÍNAT auto-merge bez rulesetu** s povinnými checky (PR by se zmergoval před testy). Rozšíření na třídu B je změna ústavy (§ 12: až po 4 týdnech běhu editora s nejvýš jedním S2), ne jen řádek ve workflow.
 
 ## 2026-11-02 — Neon projekt `hspa-dotazniky` založen, migrace spuštěny
 

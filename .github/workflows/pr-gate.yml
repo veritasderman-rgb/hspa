@@ -5,9 +5,11 @@ name: Brána PR
 # (05_M1_Starter/scripts/pr-gate.js) a výsledek zapíše jako label
 # brana-auto / brana-editor / brana-clovek + tabulku do shrnutí běhu.
 #
-# Nic nemerguje. Merge dělá editor (třídy A/B, PROMPT_EDITOR.md) nebo
-# vydavatel (třída C). Job je povinný check větve main — když brána
-# spadne, PR nejde zmergovat.
+# Třída A: brána zapne auto-merge GitHubu (krok „Auto-merge třídy A“) a PR
+# se zmerguje sám, jakmile projdou povinné checky rulesetu větve main
+# (check, e2e, Brána PR). Třídu B merguje editor (PROMPT_EDITOR.md), třídu C
+# vydavatel. Job je povinný check větve main — když brána spadne, PR nejde
+# zmergovat.
 #
 # Label se nastavuje s continue-on-error: PR z forku má token jen pro čtení,
 # tam zůstane výsledek aspoň ve shrnutí běhu a PR bez labelu editor podle
@@ -77,3 +79,54 @@ jobs:
           done
           # shellcheck disable=SC2086
           gh pr edit "$PR" --repo "$REPO" --add-label "$LABEL" $REMOVE
+
+      - name: Auto-merge třídy A
+        # GOVERNANCE.md § 3: o třídě A rozhoduje CI. Krok zapne auto-merge GitHubu;
+        # samotný merge udělá GitHub až po zelených povinných checkách rulesetu
+        # (docs/github-ruleset-main.json). Brána tím nic neobchází — bez rulesetu
+        # s povinnými checky by `gh pr merge --auto` zmergoval PR okamžitě, ještě
+        # před doběhnutím testů, proto krok napřed ověří, že ruleset všechny tři
+        # checky vyžaduje, a jinak auto-merge nezapne.
+        #
+        # Token: secret AUTOMERGE_TOKEN = fine-grained PAT vydavatele jen pro tohle
+        # repo (Contents: write, Pull requests: write). GITHUB_TOKEN použít nejde:
+        # merge provedený jeho jménem nespustí regenerate-artifacts.yml (push od
+        # GITHUB_TOKEN nevyvolá workflow) a web by se nenasadil — Vercel build
+        # obsahového merge přeskakuje a čeká na commit bota.
+        #
+        # Když token chybí, ruleset není importovaný nebo PR přišel z forku (secret
+        # není k dispozici), krok to jen zapíše do shrnutí a PR třídy A zmerguje
+        # editor jako dřív (PROMPT_EDITOR.md § 2). Když PR po dalším pushi z třídy A
+        # vypadne (label B/C), auto-merge se vypne.
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.AUTOMERGE_TOKEN }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+          LABEL: ${{ steps.trida.outputs.label }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::notice::Secret AUTOMERGE_TOKEN neni nastaven - trida A ceka na merge editorem."
+            echo "Auto-merge: nezapnuto (chybí secret \`AUTOMERGE_TOKEN\`)." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          if [ "$LABEL" != "brana-auto" ]; then
+            # PR mohl byt drive trida A a po dalsim pushi vyrust do B/C.
+            if gh pr merge "$PR" --repo "$REPO" --disable-auto >/dev/null 2>&1; then
+              echo "Auto-merge vypnut: PR už není třída A." >> "$GITHUB_STEP_SUMMARY"
+            fi
+            exit 0
+          fi
+          RULES=$(gh api "repos/$REPO/rules/branches/$BASE_REF" \
+            --jq '[.[] | select(.type == "required_status_checks") | .parameters.required_status_checks[].context]')
+          for CHECK in check e2e "Brána PR"; do
+            if ! printf '%s' "$RULES" | jq -e --arg c "$CHECK" 'index($c) != null' >/dev/null; then
+              echo "::warning::Ruleset vetve $BASE_REF nevyzaduje check '$CHECK' - auto-merge nezapinam (import docs/github-ruleset-main.json)."
+              echo "Auto-merge: nezapnuto (ruleset větve \`$BASE_REF\` nevyžaduje povinný check \`$CHECK\`)." >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+          done
+          gh pr merge "$PR" --repo "$REPO" --auto --merge
+          echo "Auto-merge zapnut: PR se zmerguje sám po zelených povinných checkách (check, e2e, Brána PR)." >> "$GITHUB_STEP_SUMMARY"

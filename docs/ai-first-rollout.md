@@ -87,6 +87,19 @@ které z agentní session nejdou (proxy GitHubu zápis do nastavení repa nepou�
   - Po importu: otevřené PR bez nového pushe nemají check `Brána PR` — editor je srovná
     `update_pull_request_branch` (merge mainu do větve spustí všechny checky).
 - [x] **Labely** `rozhodnuti`, `incident` založeny (`brana-*` si brána založí sama při prvním běhu).
+- [ ] **Auto-merge třídy A** (PR „brána: auto-merge třídy A“, 2026-11-05) — **tři kroky vydavatele**,
+  každý z nastavení repa, z agentní session nejdou:
+  1. importovat ruleset výše (bez povinných checků brána auto-merge **nezapne** — jinak by
+     `gh pr merge --auto` zmergoval PR hned, před doběhnutím testů);
+  2. *Settings → General → Pull Requests* → zaškrtnout **Allow auto-merge**;
+  3. založit fine-grained PAT (*Settings → Developer settings → Personal access tokens →
+     Fine-grained*): jen repo `hspa`, oprávnění *Contents: Read and write* a *Pull requests:
+     Read and write*, expirace podle uvážení (po vypršení brána jen přestane auto-merge
+     zapínat a třídu A převezme editor) → uložit jako secret **`AUTOMERGE_TOKEN`**
+     (*Settings → Secrets and variables → Actions*). Proč ne `GITHUB_TOKEN`: merge jeho
+     jménem nespustí `regenerate-artifacts.yml` a web by se po merge nenasadil.
+  Ověření: další PR třídy A (např. kvartální `refresh.yml`, `ga4-stats.yml`) má ve shrnutí
+  běhu *Brána PR* řádek „Auto-merge zapnut“ a po zelené CI se zmerguje bez kliknutí.
 - [x] **Routine `HSPA – editor`** založena podle `PROMPT_EDITOR.md` § 7
   (`trig_01RYcBtKT29MCRCpn6gQZ6Hs`, cron `0 5 * * *`, nová session na každé spuštění,
   notifikace push + e-mail), **vypnutá** — zapne ji vydavatel po merge tohoto PR, až
