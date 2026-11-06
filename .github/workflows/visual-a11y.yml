@@ -76,7 +76,14 @@ jobs:
         working-directory: 05_M1_Starter
 
     steps:
+      # Push do main jde tokenem vydavatele (AUTOMERGE_TOKEN): ruleset main pouští
+      # přímé pushe jen roli Repository admin, GITHUB_TOKEN by zablokoval
+      # (docs/github-ruleset-main.json, docs/ai-first-rollout.md). Bez secretu
+      # zůstává GITHUB_TOKEN — funguje, dokud ruleset není aktivní.
+      # Jen v ručním přegenerování baseline: PR běhy (kód z větví) token nedostanou.
       - uses: actions/checkout@v5
+        with:
+          token: ${{ (github.event_name == 'workflow_dispatch' && inputs.update_baseline) && secrets.AUTOMERGE_TOKEN || github.token }}
 
       - uses: actions/setup-node@v5
         with:

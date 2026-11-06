@@ -69,21 +69,40 @@ které z agentní session nejdou (proxy GitHubu zápis do nastavení repa nepou�
   přeskočený job GitHub u povinných checků počítá jako splněný. (Dva workflows se
   stejným jménem jobu — původní návrh — GitHub výslovně označuje za nejednoznačné.)
 - [ ] **Branch protection `main`** — **krok vydavatele.** (Agentní session ho založit nemůže:
-  proxy GitHubu zápis do nastavení repa nepouští a bezpečnostní klasifikátor session bere
-  výjimku pro GitHub Actions jako udělení oprávnění.) Hotový ruleset je v
-  [`docs/github-ruleset-main.json`](github-ruleset-main.json): GitHub → *Settings → Rules →
-  Rulesets → New ruleset ▾ → Import a ruleset* → vybrat soubor → *Create*. Obsah:
+  proxy GitHubu zápis do nastavení repa nepouští.) Hotový ruleset je v
+  [`docs/github-ruleset-main.json`](github-ruleset-main.json). Zakládá se přes API
+  z počítače vydavatele (`gh api -X POST repos/veritasderman-rgb/hspa/rulesets --input
+  docs/github-ruleset-main.json`), **až po merge PR, který přepnul pushe cronů na
+  `AUTOMERGE_TOKEN`** — dřív by ruleset crony zablokoval. Obsah:
   - povinné checky `check` (Deploy check), `e2e` (Visual + a11y regression), `Brána PR` —
     jména checků jsou **jména jobů**, ne workflows; bez „require branches up to date";
   - zákaz force-push (`non_fast_forward`) a smazání větve; bez „require linear history"
     (repo merguje merge commitem); bez „require approvals" (schválení = merge editora,
     třídu C merguje člověk);
-  - **výjimka pro aplikaci GitHub Actions** (`Integration` 15368, bypass `always`): bez ní by
-    povinné checky zablokovaly i přímé pushe cronů do `main` s `GITHUB_TOKEN`
-    (publikace, newsletter, refresh, regenerace artefaktů, kill switch). Rulesety na
-    rozdíl od klasické branch protection tuhle výjimku umí, proto ruleset.
-  - Žádná výjimka pro adminy: editor pracuje účtem vydavatele přes MCP, výjimka pro
-    admina by bránu obešla. V nouzi ruleset vypne vydavatel v nastavení (`Disabled`).
+  - **výjimka pro roli Repository admin** (`RepositoryRole` 5, bypass `always`). Původně
+    měla výjimku dostat aplikace GitHub Actions (`Integration` 15368), ale u repa na
+    osobním účtu ji GitHub odmítá (422 „Actor GitHub Actions integration must be part of
+    the ruleset source or owner organization“, 2026-11-05) a v UI ji nenabízí. Crony proto
+    do `main` pushují tokenem vydavatele: checkout v devíti workflows (publish-articles,
+    regenerate-artifacts, refresh, newsletter-weekly, ga4-stats, social-generate,
+    awareness-weekly, ai-provoz, visual-a11y při ručním přegenerování baseline) bere
+    `secrets.AUTOMERGE_TOKEN`, bez secretu `GITHUB_TOKEN`.
+  - **Vědomě přijaté riziko (rozhodnutí vydavatele 2026-11-05):** editor pracuje účtem
+    vydavatele přes MCP, takže výjimku má i on — technicky může mergovat a pushovat do
+    `main` bez povinných checků. Bránu proto drží prompt editora (Routine *HSPA – editor*:
+    sám nemerguje ani nepushuje do `main`, merge třídy A nechává na auto-merge) a
+    `PROMPT_EDITOR.md`. Bezpečnější alternativa, kdyby se rozhodnutí měnilo: výjimka jen
+    pro deploy keys a crony pushují přes SSH deploy key v secretu — vydavatel ani editor
+    pak výjimku nemají.
+  - Vedlejší efekty pushe tokenem: push s PAT na rozdíl od `GITHUB_TOKEN` spouští další
+    workflows. Na push do `main` reaguje jen `regenerate-artifacts.yml`; po publikaci nebo
+    refreshi proto doběhne regenerace a pushne prázdný commit (druhý build Vercelu se
+    stejným obsahem). Smyčka nevzniká: commity regenerace mění jen generované artefakty,
+    které nejsou v `paths`. Autor commitů zůstává `github-actions[bot]` (git config v
+    každém workflow), takže `vercel-ignore-build.sh` je dál staví.
+  - Brána zapíná auto-merge mutací `enablePullRequestAutoMerge`, ne `gh pr merge --auto`:
+    gh u PR ve stavu „mergeable" merguje hned a token vydavatele má výjimku. Mutace hned
+    nemerguje nikdy. V nouzi ruleset vypne vydavatel v nastavení (`Disabled`).
   - Po importu: otevřené PR bez nového pushe nemají check `Brána PR` — editor je srovná
     `update_pull_request_branch` (merge mainu do větve spustí všechny checky).
 - [x] **Labely** `rozhodnuti`, `incident` založeny (`brana-*` si brána založí sama při prvním běhu).
@@ -91,11 +110,12 @@ které z agentní session nejdou (proxy GitHubu zápis do nastavení repa nepou�
   každý z nastavení repa, z agentní session nejdou:
   1. importovat ruleset výše (bez povinných checků brána auto-merge **nezapne** — jinak by
      `gh pr merge --auto` zmergoval PR hned, před doběhnutím testů);
-  2. *Settings → General → Pull Requests* → zaškrtnout **Allow auto-merge**;
-  3. založit fine-grained PAT (*Settings → Developer settings → Personal access tokens →
+  2. ✅ (2026-11-05) *Settings → General → Pull Requests* → zaškrtnout **Allow auto-merge**;
+  3. ✅ (2026-11-05, platnost do 4. 11. 2027) založit fine-grained PAT (*Settings → Developer settings → Personal access tokens →
      Fine-grained*): jen repo `hspa`, oprávnění *Contents: Read and write* a *Pull requests:
-     Read and write*, expirace podle uvážení (po vypršení brána jen přestane auto-merge
-     zapínat a třídu A převezme editor) → uložit jako secret **`AUTOMERGE_TOKEN`**
+     Read and write*. **Po vypršení přestanou crony pushovat do `main`** (ruleset je pustí
+     jen s tímto tokenem) a brána přestane zapínat auto-merge — token obnovit před
+     4. 11. 2027 → uložit jako secret **`AUTOMERGE_TOKEN`**
      (*Settings → Secrets and variables → Actions*). Proč ne `GITHUB_TOKEN`: merge jeho
      jménem nespustí `regenerate-artifacts.yml` a web by se po merge nenasadil.
   Ověření: další PR třídy A (např. kvartální `refresh.yml`, `ga4-stats.yml`) má ve shrnutí
