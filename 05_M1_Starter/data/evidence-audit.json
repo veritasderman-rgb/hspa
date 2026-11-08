@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-11-01T00:00:00Z",
+  "generated_at": "2026-11-08T00:00:00Z",
   "_doc": "Registr evidence-auditu (PROMPT_EVIDENCE_AUDIT.md): pro každý ověřený článek / indikátor seznam tvrzení, které studie z PubMed/Consensus je řeší, a verdikt (supported / partial / contradicted / no-evidence / not-applicable / unclear). Zapisuje jen orchestrace (Sonnet hledá, Opus rozhoduje), mění se výhradně commitem. content_hash = sha1 souboru v době kontroly; scripts/evidence-audit-queue.js podle něj pozná, že se obsah změnil (stale). Consensus i PubMed jsou nástroje, ne zdroje — do registru patří jen ověřené studie s PMID/DOI, nikdy provozní texty nástrojů.",
   "items": [
     {
@@ -18226,6 +18226,2129 @@
       ],
       "followup": "Tvrzení 3 (cca 9,5 % HDP do 2030, CEFRES/MZ ČR analýza 2024) literaturou neověřitelné a citovaná analýza nemá v kartě odkaz — redakce má doplnit odkaz na primární zdroj nebo větu přeformulovat (mimo pravomoc auditu). Číslo „US 17 % HDP“ je administrativní statistika OECD, mimo rozsah evidence-auditu.",
       "notes": "Rešerše: PubMed 8 volání (3 search, 3 get_article_metadata, 1 lookup_article_by_citation, 1 dohledání Tanaka podle titulu), Consensus 1 dotaz. Kandidáti z Consensu Bradley 2011, Lastuka 2025 a Tanaka 2022 ověřeni v PubMed; Park 2025 (Health Serv Res) a Zarulli 2021 v PubMed neověřeny, nepoužity. Karta žádnou studii předtím necitovala. Validita ukazatele (SHA/OECD definice) je metodická, ne literární. Adjudikace: 1 volání PubMed (get_article_metadata pro 6 PMID) potvrdilo Lastuka 2025, Tanaka 2022 (Am J Epidemiol 191(3):386-396), Bradley 2011 (BMJ Qual Saf 20(10):826-31), žádná retrakce; z dříve nevyhodnocených kandidátů doplněny Barthold 2013 (AJPH 104(11):2163-9) a Nixon & Ulmann 2006 (Eur J Health Econ 7(1):7-18) jako podpora tvrzení 2; Lorenzoni & Dougherty 2022 (PMID 35783560, ceny vs. objemy, PPP) jen kontext, nepoužit. Tvrzení 2 povýšeno na confidence high. Zápis: karta dostala pole literature se 4 studiemi (Nixon & Ulmann jen v registru)."
+    },
+    {
+      "id": "clanek-roseto-naruby.html",
+      "type": "article",
+      "checked_at": "2026-11-08",
+      "run_id": "ea-2026-11-08-01",
+      "content_hash": "c1eae7193b72f3db341374f28fa0617988c416ac",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "write": "sonnet"
+      },
+      "calls": {
+        "pubmed": 3,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "text": "Muži v Rosetu umírali na infarkt méně než z poloviny tak často jako muži v Bangoru. Přitom obvyklé rizikové faktory, hlavně kouření a strava, byly v obou obcích rozšířené stejně (Wolf, 1992).",
+          "location": "úvod (perex a první odstavec)",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "1419870",
+              "doi": "10.1007/BF02690896",
+              "title": "Predictors of myocardial infarction over a span of 30 years in Roseto, Pennsylvania.",
+              "year": 1992,
+              "journal": "Integr Physiol Behav Sci",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova: Roseto cca 1 600 obyvatel, Bangor cca 5 000; na začátku studie úmrtnost mužů na infarkt v Rosetu méně než poloviční než v Bangoru při stejné prevalenci obvyklých rizikových faktorů, hlavně kouření a stravy. Sledování 30 let. Jde o pozorovací, ekologické srovnání dvou obcí (autor je zároveň původcem hypotézy)."
+        },
+        {
+          "text": "Egolf a kolegové prošli úmrtní listy Roseta a Bangoru od roku 1935 do roku 1985. Prvních třicet let měl Roseto nižší úmrtnost na infarkt. Poté, co se tradiční rodinné a komunitní vazby rozvolnily, se vyrovnala Bangoru. Přírůstek se týkal hlavně mladších mužů a starších žen.",
+          "location": "sekce Obrat: městečko, které se změnilo",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "1636828",
+              "doi": "10.2105/ajph.82.8.1089",
+              "title": "The Roseto effect: a 50-year comparison of mortality rates.",
+              "year": 1992,
+              "journal": "Am J Public Health",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "8066487",
+              "doi": "10.1016/0277-9536(94)90165-1",
+              "title": "Community social change and mortality.",
+              "year": 1994,
+              "journal": "Soc Sci Med",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt Egolf 1992: úmrtní listy 1935 až 1985, věkově standardizované míry po dekádách; nižší úmrtnost prvních 30 let, poté vzestup na úroveň Bangoru po erozi soudržných vazeb, hlavně mladší muži a starší ženy. Lasker 1994 (sňatky, spolky, volby, sociální třída, zrychlení změn v 60. letech, ztráta ochrany po 1965) potvrzuje popis změn; autoři sami formulují jen, že změny 'may help to explain', tedy souběh, ne kauzalita."
+        },
+        {
+          "text": "Tři autoři z Newyorské univerzity srovnali úmrtí na infarkt v Rosetu a okolních obcích s Framinghamskou studií srdce a po zohlednění věku a pohlaví nenašli důkaz, že by Rosetané umírali méně. Studie z Roseta souvislost sociální opory a zdraví ani nepodpořila, ani nevyvrátila (Adhikari, Ogedegbe a Devinsky, 2026).",
+          "location": "sekce Co Roseto nedokazuje",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42518891",
+              "doi": "10.7759/cureus.113024",
+              "title": "The Roseto Study: Selection Bias Versus Social Support.",
+              "year": 2026,
+              "journal": "Cureus",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: srovnání s Framingham Heart Study standardizované na věk a pohlaví, bez důkazu nižší úmrtnosti na infarkt v Rosetu; závěr o zkreslení výběru; 'the Roseto study neither supported nor refuted this connection' (odpovídá citaci v článku). Afilace NYU Grossman, tři autoři. Zdroj je jediná krátká práce v otevřeném časopise, jak článek sám přiznává; vzhledem k tomu jde o úplně přesný popis. Stejný abstrakt uvádí i vyšší spotřebu nasycených tuků v Rosetu (odpovídá větě v sekci Zdánlivě jasná odpověď). Nález PMID 42564463 (oprava) se týká jen afiliací."
+        },
+        {
+          "text": "Metaanalýza Holt-Lunstadové a kolegů spojila 148 studií s 308 849 účastníky. Lidé se silnějšími sociálními vztahy měli o 50 % vyšší šanci, že sledované období přežijí. Nejsilnější byla souvislost u složených měr sociální integrace. Autoři ji řadí na úroveň zavedených rizikových faktorů úmrtnosti.",
+          "location": "databox a sekce Kde ta myšlenka stojí doopravdy",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "20668659",
+              "doi": "10.1371/journal.pmed.1000316",
+              "title": "Social relationships and mortality risk: a meta-analytic review.",
+              "year": 2010,
+              "journal": "PLoS Med",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: 148 studií, 308 849 účastníků, OR 1,50 (95% CI 1,42 až 1,59), 'a 50% increased likelihood of survival'; nejsilnější pro komplexní míry sociální integrace (OR 1,91; 1,63 až 2,23); 'comparable with well-established risk factors'. Všechna čísla v abstraktu. Pozn.: asociační data z pozorovacích studií, kauzalita nedokázána, článek ji tak ani netvrdí."
+        },
+        {
+          "text": "Metaanalýza 42 studií s více než dvaceti miliony lidí zjistila, že nezaměstnaní v produktivním věku mají vyšší riziko úmrtí, s průměrným poměrem rizik 1,63. U mužů bylo vyšší než u žen. A ve studiích, které braly v potaz kouření, pití a další zdravotní chování, byl průměrný poměr rizik zhruba o čtvrtinu nižší (Roelfs et al., 2011).",
+          "location": "sekce Kde ta myšlenka stojí doopravdy, odstavec Druhý pilíř je práce",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "21330027",
+              "doi": "10.1016/j.socscimed.2011.01.005",
+              "title": "Losing life and livelihood: a systematic review and meta-analysis of unemployment and all-cause mortality.",
+              "year": 2011,
+              "journal": "Soc Sci Med",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: 235 odhadů ze 42 studií, více než 20 milionů osob, průměrné HR 1,63, vyšší u mužů, o 24 % nižší u studií kontrolujících zdravotní chování. Věta článku 'Ztráta práce tedy zřejmě nepůsobí jen přes cigarety a sklenky' je správně opatrná interpretace (23 % až čtvrtina rozdílu ostatně připadá na chování). Reverzní kauzalita (špatné zdraví vede ke ztrátě práce) není v abstraktu řešena."
+        },
+        {
+          "text": "Systematický přehled 14 prospektivních studií v International Journal of Epidemiology nenašel u většiny dimenzí sociálního kapitálu, jako je důvěra, sociální opora nebo pocit sounáležitosti, souvislost s úmrtností; omezené náznaky měl jen u společenské a občanské angažovanosti (Choi et al., 2014).",
+          "location": "sekce Kde ta myšlenka stojí doopravdy",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "25369975",
+              "doi": "10.1093/ije/dyu212",
+              "title": "Social capital, mortality, cardiovascular events and cancer: a systematic review of prospective studies.",
+              "year": 2014,
+              "journal": "Int J Epidemiol",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "31431915",
+              "doi": "10.1016/j.ssmph.2019.100425",
+              "title": "Social capital and health: A systematic review of systematic reviews.",
+              "year": 2019,
+              "journal": "SSM Popul Health",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt Choi: 14 prospektivních studií, souhrnné odhady bez souvislosti většiny dimenzí s celkovou úmrtností, KVO a rakovinou; omezený důkaz pro sociální a občanskou participaci při nejextrémnějších srovnáních. Ehsan 2019 (přehled 20 systematických přehledů: dobrý důkaz, že SC predikuje lepší zdraví a indikátory SC chrání před úmrtností, ale mnoho nulových a negativních vztahů) je ověřen a věta článku o 'ochranném vlivu vedle mnoha nulových výsledků' ji odpovídá. Pozn.: článek Choi uvádí jako 'u většiny dimenzí bez souvislosti' správně, ale nezmiňuje omezenou kvalitu měření SC, což abstrakt zdůrazňuje."
+        },
+        {
+          "text": "Metaanalýza 470 studií a 12 778 odhadů souvislost sociálního kapitálu a zdraví našla, ale konzistentně velmi malou (Xue, Reed a Menclova, 2020).",
+          "location": "sekce Kde ta myšlenka stojí doopravdy",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "32497954",
+              "doi": "10.1016/j.jhealeco.2020.102317",
+              "title": "Social capital and health: a meta-analysis.",
+              "year": 2020,
+              "journal": "J Health Econ",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: 12 778 odhadů z 470 studií; sociální kapitál významně souvisí s pozitivními zdravotními výsledky, ale velikosti účinků jsou 'consistently very small'. Přesně odpovídá. Autoři navíc zpochybňují iniciativy WHO a OECD, což článek neuvádí (nevadí)."
+        },
+        {
+          "text": "Metaanalýza víceúrovňových studií o sousedstvích ukázala vyšší úmrtnost v sociálně slabších oblastech i po zohlednění socioekonomického postavení jednotlivce, přičemž souvislost byla silnější u mužů a mladších lidí. Tentýž přehled našel souvislost úmrtnosti se soudržností sousedství, ne však jasnou souvislost s místní nerovností či se sociálním kapitálem (Meijer et al., 2012).",
+          "location": "sekce Kde ta myšlenka stojí doopravdy",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "22365939",
+              "doi": "10.1016/j.socscimed.2011.11.034",
+              "title": "Do neighborhoods affect individual mortality? A systematic review and meta-analysis of multilevel studies.",
+              "year": 2012,
+              "journal": "Soc Sci Med",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: 40 studií v systematickém přehledu, 18 v metaanalýze; vyšší úmrtnost v oblastech s nízkým socioekonomickým statusem při kontrole individuálního SES, silnější u mužů a mladších a u menších geografických jednotek; systematický přehled naznačuje souvislost soudržnosti a úmrtnosti, bez jasné souvislosti s příjmovou nerovností či sociálním kapitálem. Soudržnost pochází z kvalitativní části přehledu, ne z metaanalýzy, a článek to říká správně ('tentýž přehled')."
+        }
+      ],
+      "summary": {
+        "supported": 8,
+        "partial": 0,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "none",
+          "detail": "Všech 10 ověřených studií k tvrzením s verdiktem supported (Wolf 1992, Egolf 1992, Lasker 1994, Adhikari 2026, Holt-Lunstad 2010, Roelfs 2011, Choi 2014, Ehsan 2019, Xue 2020, Meijer 2012) článek už v article-sources cituje, proto žádný zdroj nepřidán. data/claims.json neobsahuje pro článek žádná tvrzení, proto bez claim-note. Bez contradicted, takže bez flagu a issue. Do audit: komentáře článku a do articles.json audit.notes připojena věta „evidence-audit 2026-11-08: 8 tvrzení, 8 supported; viz data/evidence-audit.json“; audit-status beze změny (review-pending).",
+          "ref": ""
+        }
+      ],
+      "followup": "Z rozpočtu 8 tvrzení vynechána: Bruhn 1965 (abstrakt v PubMed chybí), Keys 1966 (bez abstraktu), Stout 1964 (bez abstraktu), Kawachi 1997, Lynch 2000, Pearce & Davey Smith 2003 (neověřeno v tomto běhu) a vedlejší věta o Holt-Lunstad/Ehsan.",
+      "notes": "Rešerše (Sonnet): PubMed 3 volání (get_article_metadata, dávky po 3-4 PMID, 12 záznamů). Consensus nepoužit (0 dotazů), PubMed dal vše. Adjudikace nebyla potřeba. České statistiky ČSÚ a RE:START nejsou předmětem auditu. Článek je důsledně opatrný (Roseto jako hypotéza, ekologická data); žádné tvrzení nevyžaduje akci. prose_change prázdné."
+    },
+    {
+      "id": "clanek-uspech-ktery-nikdo-nevidi.html",
+      "type": "article",
+      "checked_at": "2026-11-08",
+      "run_id": "ea-2026-11-08-01",
+      "content_hash": "ef4b2ef644617f3b923929e11f0023f1ad6f70d6",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 10,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "text": "Systematický přehled Masters a kolegů (2017) v Journal of Epidemiology and Community Health prošel 52 studií z bohatých zemí, které počítaly návratnost intervencí veřejného zdraví. Medián návratnosti: 14,3 ku 1 ... U celostátních opatření 27,2, u místních 4,1.",
+          "location": "Zdánlivě jasná odpověď",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "28356325",
+              "doi": "10.1136/jech-2016-208141",
+              "title": "Return on investment of public health interventions: a systematic review.",
+              "year": 2017,
+              "journal": "J Epidemiol Community Health",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje: abstrakt uvádí 52 studií z vysokopříjmových zemí, medián ROI 14,3:1, celostátní 27,2:1, místní 4,1:1. Článek správně mluví o mediánu; kvalitu zahrnutých studií abstrakt nehodnotí."
+        },
+        {
+          "text": "Jeden rok života v plném zdraví navíc (QALY) stál z rozpočtu veřejného zdraví zhruba 3 800 liber, z rozpočtu NHS zhruba 13 500. Miliarda navíc do veřejného zdraví by podle jejich nejopatrnějšího odhadu přinesla přes 206 tisíc QALY, stejná miliarda do léčby přes 67 tisíc.",
+          "location": "Zdánlivě jasná odpověď (databox Kolik stojí jeden rok života ve zdraví navíc)",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "33039987",
+              "doi": "10.1136/bmjopen-2019-036411",
+              "title": "Is an ounce of prevention worth a pound of cure? A cross-sectional study of the impact of English public health grant on mortality and morbidity.",
+              "year": 2020,
+              "journal": "BMJ Open",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Všechna čísla jsou v abstraktu (~3 800 vs ~13 500 GBP/QALY; 206 398 vs 67 060 QALY na 1 mld. GBP, nejkonzervativnější odhad). Tvrzení se týká Anglie, ne ČR, přenositelnost tedy není předmětem věty. Intervaly spolehlivosti jsou široké (206 398; 95% CI 36 591–376 205), text je neuvádí; formulace „podle nejopatrnějšího odhadu“ je v mezích abstraktu."
+        },
+        {
+          "text": "Na datech z 25 zemí OECD za léta 1970–2018 pak ukázali dvě věci. Když vlády konsolidují rozpočty, výdaje na prevenci klesají, absolutně i v poměru k léčbě. A levicové vlády do veřejného zdraví neinvestují víc než pravicové ... země s národní zdravotní službou placenou z daní drží výdaje na prevenci výš než země se systémem zdravotního pojištění.",
+          "location": "Proč to nefunguje: tichá politika",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "35985243",
+              "doi": "10.1016/j.socscimed.2022.115272",
+              "title": "The politics of public health investments.",
+              "year": 2022,
+              "journal": "Soc Sci Med",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt potvrzuje všechna tři zjištění. Jde o asociace v panelových datech, ne o kauzální důkaz; sloveso „ukázali“ je v mezích abstraktu."
+        },
+        {
+          "text": "Pět autorů ze zdravotní divize OECD ... v přehledu pro Lancet Public Health konstatuje, že výdaje na prevenci se v zemích OECD dvacet let drží kolem 3 % výdajů na zdravotnictví, za covidu se dočasně zdvojnásobily a ten trend se už obrátil. Problém podle autorů není v chybějících důkazech, ale v chybějící politické vůli a v systémech, které neumějí důkazy proměnit v rozpočet.",
+          "location": "Proč to nefunguje: tichá politika",
+          "kind": "policy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42753783",
+              "doi": "10.1016/S2468-2667(26)00161-1",
+              "title": "Fit for the future: from siloed to integrated public health systems.",
+              "year": 2026,
+              "journal": "Lancet Public Health",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt potvrzuje ~3 % po dvě dekády, dočasné zdvojnásobení za covidu, obrat trendu a chybějící politickou vůli. Jde o přehledový článek (Review) autorů z OECD, ne o systematický přehled. Ke zpřesnění citace pro redakci: PubMed už uvádí ročník 11(11):e904–e907; položka v article-sources píše, že ročník a strany zatím chybí."
+        },
+        {
+          "text": "Harvey Fineberg ... napsal do časopisu JAMA esej s názvem „Paradox prevence nemocí: oslavovaná v principu, odmítaná v praxi“. Vyjmenoval v něm, proč prevence prohrává. Její úspěch je neviditelný a postrádá drama. Často vyžaduje trvalou změnu chování. Přínos přichází se zpožděním ... Statistické životy nemají citovou váhu. A přínos často nedopadne na toho, kdo platí.",
+          "location": "Proč to nefunguje: tichá politika",
+          "kind": "mechanism",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "23821092",
+              "doi": "10.1001/jama.2013.7518",
+              "title": "The paradox of disease prevention: celebrated in principle, resisted in practice.",
+              "year": 2013,
+              "journal": "JAMA",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Výčet v článku přesně odpovídá abstraktu. Jde o esej, tedy expertní argumentaci, ne o empirickou studii. Tvrzení ale reprodukuje jen obsah eseje, ne empirický fakt, takže verdikt supported platí."
+        },
+        {
+          "text": "Prevence nemusí šetřit, aby se vyplatila. Fineberg na ni upozornil ve stejném eseji. Od prevence chceme, aby přinesla čistou finanční úsporu. Od léčby chceme jen to, aby za své peníze stála.",
+          "location": "Komplikace: prevence nemusí šetřit, aby se vyplatila",
+          "kind": "mechanism",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "23821092",
+              "doi": "10.1001/jama.2013.7518",
+              "title": "The paradox of disease prevention: celebrated in principle, resisted in practice.",
+              "year": 2013,
+              "journal": "JAMA",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova: „prevention is expected to produce a net financial return, whereas treatment is expected only to be worth its cost“. Přesná shoda."
+        },
+        {
+          "text": "A pak je tu hlubší háček, který v roce 1981 popsal britský epidemiolog Geoffrey Rose v British Medical Journal ... Opatření, které přinese velký prospěch celé populaci, přinese každému jednotlivci jen nepatrný prospěch. Ve slavném textu z roku 1985 „Sick individuals and sick populations“ Rose vysvětlil ... Můžete hledat a chránit jednotlivce s vysokým rizikem, nebo ovlivnit příčiny, které posouvají riziko celé populace.",
+          "location": "Komplikace: prevence nemusí šetřit, aby se vyplatila",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "3872850",
+              "doi": "10.1093/ije/14.1.32",
+              "title": "Sick individuals and sick populations.",
+              "year": 1985,
+              "journal": "Int J Epidemiol",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "6786649",
+              "doi": "10.1136/bmj.282.6279.1847",
+              "title": "Strategy of prevention: lessons from cardiovascular disease.",
+              "year": 1981,
+              "journal": "Br Med J (Clin Res Ed)",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace: BMJ 1981 má v PMC záznam PMC1506445, ale plný text je jen sken a get_full_text_article vrátil prázdný text. Abstrakt v PubMed není. Formulaci paradoxu prevence proto z PubMed doložit nelze. Abstrakt z roku 1985 potvrzuje druhou část věty, tedy přístup vysokého rizika proti populačnímu přístupu. Verdikt zůstává partial. Upřesňující věta se nepřidává: článek v rámečku limitů sám uvádí, že Roseho text z roku 1981 jen parafrázuje, protože plný text nebyl dostupný, a rozsah tvrzení tedy není širší, než článek přiznává."
+        },
+        {
+          "text": "Historici to dnes říkají otevřeně: Snowova data spojitost mezi odmontovanou klikou a koncem epidemie nepodporují, epidemie slábla už předtím. ... nových případů ubylo ještě předtím, než se přestala pít voda z pumpy.",
+          "location": "Perex a úvodní scéna (Broad Street)",
+          "kind": "mechanism",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "10714917",
+              "doi": "10.1016/s0277-9536(99)00345-7",
+              "title": "Our sense of Snow: the myth of John Snow in medical geography.",
+              "year": 2000,
+              "journal": "Soc Sci Med",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt McLeod 2000: Snowova data a text souvislost nepodporují a počet úmrtí klesal už před odstraněním kliky. Druhá část věty („nových případů ubylo“) vychází ze Snowovy vlastní tabulky a textu (primární zdroj, který článek cituje), McLeod mluví o úmrtích. Plurál „historici“ v tomto běhu dokládá jen jedna práce; druhý zdroj (Brody 2000, PMID 10892779) zůstává neověřen, proto confidence medium."
+        },
+        {
+          "text": "Mezinárodně se k tomu používá metrika 7-1-7: nejvýš sedm dní na odhalení ohniska, jeden den na nahlášení odpovědným orgánům a sedm dní na zahájení prvních opatření.",
+          "location": "Reforma, která musí změřit nic",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "41836645",
+              "doi": "10.12688/wellcomeopenres.25041.3",
+              "title": "Adoption and use of the 7-1-7 metrics for effective detection, notification, and early response actions to public health events: A mixed-methods study in Cambodia, January 2023 to July 2025.",
+              "year": 2026,
+              "journal": "Wellcome Open Res",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "42760915",
+              "doi": "10.12688/wellcomeopenres.25087.1",
+              "title": "Implementation of 7-1-7 for improving timeliness in outbreak detection and response in Thailand: A mixed-methods study on challenges in application and achievement of targets in 2024-25.",
+              "year": 2026,
+              "journal": "Wellcome Open Res",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "39627766",
+              "doi": "10.1186/s12889-024-20886-y",
+              "title": "Evaluation of response to a cholera outbreak in January 2024 using the 7-1-7 timeliness metrics: a case study of Elegu Point of Entry, Uganda.",
+              "year": 2024,
+              "journal": "BMC Public Health",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Mezinárodní používání metriky a první dvě složky (7 dní na odhalení, 1 den na nahlášení) abstrakty implementačních studií potvrzují. Třetí složka je v abstraktech formulovaná jako dokončení časných opatření do 7 dní (complete early response actions), článek píše zahájení. Metrika je tedy přísnější, než ji článek popisuje. Zakládající práce Frieden et al. 2021 je v PubMed dohledaná (PMID 34242563), její metadata ale v tomto běhu kvůli stropu volání ověřena nebyla. Upřesnění formulace (zahájení → dokončení) je k posouzení redakcí. Upřesňující věta se nenavrhuje, protože tvrzení není širší než evidence, jen jinak formulované."
+        }
+      ],
+      "summary": {
+        "supported": 7,
+        "partial": 2,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "none",
+          "detail": "Žádné source-added: všechny ověřené studie (Masters 2017, Martin 2020, Jacques & Noël 2022, Colombo 2026, Fineberg 2013, Rose 1981, Rose 1985, McLeod 2000) článek už cituje v article-sources. Implementační studie k 7-1-7 se nepřidávají (chybějí ověřená autorská a stránková metadata pro přesný text položky). claims.json žádné tvrzení článku neobsahuje, takže bez claim-note. Žádné contradicted, takže bez flagged a issue; audit-status se nemění (review-pending). prose_change prázdný. Zapsána věta do audit.notes v data/articles.json a do HTML hlavičky audit: „evidence-audit 2026-11-08: 9 tvrzení, 7 supported, 2 partial; viz data/evidence-audit.json“.",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "K posouzení redakcí, mimo pravomoc auditu: (1) Položka Colombo et al. 2026 v article-sources uvádí, že ročník a strany chybí, PubMed už má Lancet Public Health 2026;11(11):e904–e907. Úprava existující položky je redakční změna. (2) Věta o 7-1-7 píše „zahájení prvních opatření“, definice v implementačních studiích zní „dokončení časných opatření do 7 dní“ (PMID 41836645, 39627766).",
+          "ref": "clanek-uspech-ktery-nikdo-nevidi.html"
+        }
+      ],
+      "followup": "(a) Frieden TR et al. 2021, PMID 34242563 (zakládající text metriky 7-1-7): metadata neověřena kvůli stropu volání, případně source-added k větě o 7-1-7 v příštím běhu; (b) Brody et al. 2000, PMID 10892779 (druhý zdroj k „historici říkají“): neověřen; (c) Rose 1981 BMJ (PMID 6786649) nemá abstrakt ani strojově čitelný plný text, formulaci paradoxu prevence z PubMed doložit nelze (článek to sám přiznává v rámečku limitů).",
+      "notes": "PubMed dostupný; Consensus nebyl použit (PubMed i studie citované v článku stačily). Rešerše 7 volání PubMed + adjudikace (Opus) 3 volání (get_article_metadata PMID 6786649, search_articles Frieden 7-1-7, get_full_text_article PMC1506445). claims.json neobsahuje žádná tvrzení tohoto článku, claim_id proto chybí. Vynechána neodborná tvrzení: Snowova tabulka onemocnění (primární historický zdroj, ne studie), data OECD HC.6, rozpočty KHS, případ záškrtu v Ostravě (tisková zpráva), citace Fošuma a Maďara, popis reformy, hypotéza o vyjmutí z ministerstva (článek ji sám označuje za nedoloženou). Poznámka k nástroji lookup_article_by_citation: výstup má prohozená pole pmid a key; PMID Rose 3872850 a 6786649 ověřeny následným get_article_metadata. Finální verdikty: 7 supported, 2 partial, 0 contradicted."
+    },
+    {
+      "id": "clanek-zemepis-a-diagnoza.html",
+      "type": "article",
+      "checked_at": "2026-11-08",
+      "run_id": "ea-2026-11-08-01",
+      "content_hash": "8a31060aec747ea2341fd1487dc3e7a11ac5a111",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "sonnet"
+      },
+      "calls": {
+        "pubmed": 2,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "text": "Hlavní zjištění stojí v abstraktu suchou větou: mezi sousedními komunitami jsou velké rozdíly ve vstupech, ve využití služeb i ve výdajích.",
+          "location": "Muž, který začal počítat",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "4750608",
+              "doi": "10.1126/science.182.4117.1102",
+              "title": "Small area variations in health care delivery.",
+              "year": 1973,
+              "journal": "Science",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt Wennberg a Gittelsohn 1973 doslova uvádí velké rozdíly ve vstupech, využití služeb a výdajích mezi sousedními komunitami ve Vermontu. Konkrétní čísla abstrakt neuvádí a článek je k této studii nevztahuje. V metadatech není retrakce ani erratum."
+        },
+        {
+          "text": "V roce 1936 mělo dítě v Enfieldu dvacetkrát vyšší šanci, že o mandle přijde, než dítě v Hornsey. … Podle pozdějšího shrnutí v časopise Lancet se míra tonzilektomií mezi oblastmi venkovského Vermontu lišila téměř dvanáctkrát. … Radikální odstranění prostaty se mezi americkými regiony v letech 2008 až 2010 lišilo víc než desetkrát … Operace tlustého střeva kvůli rakovině … se lišila méně než třikrát.",
+          "location": "Úvod, odstavec o Wennbergovi 1973, sekce Obrat a databox „Kolikrát se liší stejný výkon“",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "24075052",
+              "doi": "10.1016/S0140-6736(13)61215-5",
+              "title": "Understanding regional variation in the use of surgery.",
+              "year": 2013,
+              "journal": "Lancet",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace: plný text otevřeně dostupný v PMC4211114 obsahuje všechna čísla doslova (Enfield proti Hornsey 1936, 20×; Vermont téměř 12×; radikální prostatektomie SCV 13,5, více než desetkrát; kolektomie u karcinomu méně než třikrát). Rešerše měla verdikt partial jen proto, že čísla nejsou v abstraktu. Jde o sekundární citaci (primární Glover 1938 a Wennberg-Gittelsohn 1973 na čísla ověřeny nebyly); článek je přebírá výslovně podle Birkmeyer et al. 2013, proto medium."
+        },
+        {
+          "text": "Míra variability je vlastností výkonu, ne země, ve které se provádí. Vynětí mandlí, operace hemoroidů, odstranění dělohy a prostaty se mezi oblastmi lišily mnohem víc než operace slepého střeva, kýly nebo žlučníku.",
+          "location": "Obrat: nemocnost to nevysvětluje",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "7133068",
+              "doi": "10.1056/NEJM198211183072104",
+              "title": "Small-area variations in the use of common surgical procedures: an international comparison of New England, England, and Norway.",
+              "year": 1982,
+              "journal": "N Engl J Med",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt McPherson 1982 sedí: 7 výkonů, oblasti jižního Norska, 21 okresů West Midlands, 18 oblastí New England, shodné pořadí variability a míra variability charakterističtější pro výkon než pro zemi. Abstrakt navíc uvádí, že oprava kýly kolísala víc v Anglii a hysterektomie v Norsku; článek to nezmiňuje, hlavní tvrzení to nemění."
+        },
+        {
+          "text": "Birkmeyer a kolegové, mezi nimi i sám Wennberg, to v roce 2013 v Lancetu pojmenovali „chirurgické podpisy“. … Tam podle Birkmeyerova přehledu hodně rozhoduje, kolik lékařů v regionu pracuje, přestože na počet operací má počet specialistů překvapivě malý vliv.",
+          "location": "Obrat: nemocnost to nevysvětluje",
+          "kind": "mechanism",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "24075052",
+              "doi": "10.1016/S0140-6736(13)61215-5",
+              "title": "Understanding regional variation in the use of surgery.",
+              "year": 2013,
+              "journal": "Lancet",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace z plného textu PMC4211114. Abstrakt: nemocnost, diagnostika a postoje pacientů vysvětlují jen malou část variability, hlavní roli hrají přesvědčení lékařů a preference pacientů („surgical signatures“). Plný text doložil i počet lékařů jako hlavní determinant celkových výdajů, nabídku specialistů jako slabý prediktor počtu výkonů, Harlingen, Chassin 17–32 % nevhodných výkonů, Havaj a stabilitu variability za 20 let. Drobnost: přehled mluví o celkových výdajích, článek o „celkovém objemu péče“; verdikt to neovlivní."
+        },
+        {
+          "text": "Elliott Fisher s kolegy v roce 2003 sledovali stovky tisíc amerických seniorů … v 306 regionech. V „drahých“ regionech dostali pacienti zhruba o 60 % víc péče … Nepřežívali o nic lépe, jejich zdraví se horšilo stejným tempem, se svou péčí nebyli spokojenější a u několika preventivních ukazatelů byla kvalita v drahých regionech dokonce horší.",
+          "location": "Obrat: nemocnost to nevysvětluje",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "12585825",
+              "doi": "10.7326/0003-4819-138-4-200302180-00006",
+              "title": "The implications of regional variations in Medicare spending. Part 1: the content, quality, and accessibility of care.",
+              "year": 2003,
+              "journal": "Ann Intern Med",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "12585826",
+              "doi": "10.7326/0003-4819-138-4-200302180-00007",
+              "title": "The implications of regional variations in Medicare spending. Part 2: health outcomes and satisfaction with care.",
+              "year": 2003,
+              "journal": "Ann Intern Med",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakty obou částí sedí: 306 HRR, přibližně o 60 % víc péče, kvalita u několika preventivních ukazatelů horší, žádné lepší přežití, žádný rozdíl v poklesu funkčního stavu ani ve spokojenosti. Kohorty mají 614 503 + 195 429 + 159 393 osob, takže „stovky tisíc“ sedí. Jde o observační studii a článek ji správně podává jako souvislost."
+        },
+        {
+          "text": "Ekonomové Folland a Stano v roce 1989 vzali data z Michiganu … Připustili, že u některých jednotlivých výkonů je styl nepochybně důležitý. Pro celkový objem péče v oblasti … ale vyšel jako nepodstatný. Stano pak v letech 1991 a 1993 … tvrdil, že metodami srovnávání malých oblastí nejde hypotézu o stylu praxe ani dokázat, ani vyvrátit.",
+          "location": "Komplikace: a co když je to celé jinak?",
+          "kind": "mechanism",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "10303558",
+              "doi": "10.1016/0167-6296(89)90010-6",
+              "title": "Sources of small area variations in the use of medical care.",
+              "year": 1989,
+              "journal": "J Health Econ",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "1761828",
+              "doi": "10.1215/03616878-16-3-573",
+              "title": "Further issues in small area variations analysis.",
+              "year": 1991,
+              "journal": "J Health Polit Policy Law",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "10125815",
+              "doi": "10.1016/0168-8510(93)90084-3",
+              "title": "Evaluating the policy role of the small area variations and physician practice style hypotheses.",
+              "year": 1993,
+              "journal": "Health Policy",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Všechny tři abstrakty odpovídají. Podle Folland a Stano 1989 (Michigan) je styl praxe důležitý u některých jednotlivých výkonů, pro agregovaný index ale nedůležitý. Podle Stano 1991 nelze hypotézu tradičními metodami ani založit, ani vyvrátit. Podle Stano 1993 agregace zakrývá roli stylu."
+        },
+        {
+          "text": "Využili toho, že se američtí senioři stěhují. … Výsledek leží uprostřed: 40 až 50 % zeměpisných rozdílů ve využití péče jde na vrub pacientům samotným, jejich zdraví a přáním. Zbytek patří místu.",
+          "location": "Komplikace: a co když je to celé jinak?",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "28111482",
+              "doi": "10.1093/qje/qjw023",
+              "title": "Sources of geographic variation in health care: evidence from patient migration.",
+              "year": 2016,
+              "journal": "Q J Econ",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova: 40–50 % zeměpisné variability ve využití připadá na faktory poptávky včetně zdraví a preferencí, zbytek na nabídkové faktory vázané na místo. Vzorek tvoří příjemci Medicare 65+. Článek přenositelnost na ČR netvrdí."
+        },
+        {
+          "text": "Americká pracovní skupina USPSTF v roce 2020 uzavřela, že důkazy nestačí k posouzení přínosů a rizik plošného screeningu kognitivních poruch u seniorů bez příznaků.",
+          "location": "Co tato čísla neříkají",
+          "kind": "policy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "32096858",
+              "doi": "10.1001/jama.2020.0435",
+              "title": "Screening for Cognitive Impairment in Older Adults: US Preventive Services Task Force Recommendation Statement.",
+              "year": 2020,
+              "journal": "JAMA",
+              "study_type": "guideline",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "USPSTF vydala I statement: evidence nestačí a poměr přínosů a rizik nelze určit u komunitně žijících osob 65+ bez rozpoznaných příznaků. Odpovídá."
+        }
+      ],
+      "summary": {
+        "supported": 8,
+        "partial": 0,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "none",
+          "detail": "Všech 10 ověřených studií už článek cituje v article-sources ve skupině Recenzovaná literatura, source-added nevzniká. V data/claims.json nejsou pro článek žádné záznamy, claim-note nevzniká. Bez contradicted a partial, takže bez flagu, issue a zásahu do prose. Doplněna jen věta evidence-audit do audit: komentáře v hlavičce článku (články mají audit v articles.json prázdný, proto jen HTML komentář).",
+          "ref": ""
+        }
+      ],
+      "notes": "PubMed dostupný: rešerše 1 volání (get_article_metadata, 10 PMID), adjudikace 1 volání (get_full_text_article, PMC4211114, Birkmeyer 2013). Žádná retrakce ani erratum. Consensus nepoužit, všechna tvrzení nesou studie citované v článku. Čísla 20×, ~12×, >10×, <3× plný text Birkmeyer 2013 dokládá doslova, proto partial z rešerše povýšeno na supported (medium, sekundární citace výslovně atribuovaná). Neauditováno podle protokolu (administrativní statistika): česká data ÚZIS NZIS Open PPS-08-06 a PPS-09-02, ČSÚ OBY04BK, poměry okresů a pořadová korelace. Primární Glover 1938 (PMID 19991659) a Wennberg-Fowler 1977 (PMID 894131) nemají abstrakt ani PMC plný text, jejich zjištění jsou doložena jen sekundárně přes Birkmeyer 2013, což článek tak i atribuuje."
+    },
+    {
+      "id": "clanek-screening-kolorektalni-25-let-2026.html",
+      "type": "article",
+      "checked_at": "2026-11-08",
+      "run_id": "ea-2026-11-08-01",
+      "content_hash": "f95c34139ad232f39532eb5c01a7d2a3cb9cebf8",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "sonnet"
+      },
+      "calls": {
+        "pubmed": 8,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Věkově standardizovaná incidence kolorektálního karcinomu byla v letech 2022–2024 o 31,7 % nižší než v letech 1998–2000 a úmrtnost o 50,0 %.",
+          "location": "sekce „Co se povedlo: lepší kolonoskopie a nižší úmrtnost“ / perex / databox",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42882777",
+              "doi": "10.3390/cancers18193082",
+              "title": "Twenty-Five Years of Colorectal Cancer Screening in the Czech Republic: National Registry Trends in Program Performance and Cancer Burden.",
+              "year": 2026,
+              "journal": "Cancers (Basel)",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno v abstraktu i v plném textu (PMC13664002): 2022–2024 proti 1998–2000 incidence −31,7 %, mortalita −50,0 %. Retrospektivní populační registrová analýza; autoři píší, že souběh se screeningem sám o sobě není důkazem jeho účinku. Článek to reprodukuje věrně."
+        },
+        {
+          "claim_id": "",
+          "text": "Studie tedy neříká, jakou část poklesu má na svědomí screening. (Organizovaný screening se s poklesem časově shodoval; na pokles mohla působit i lepší léčba nebo změny rizikových faktorů.)",
+          "location": "callout „Co studie neprokazuje“",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42882777",
+              "doi": "10.3390/cancers18193082",
+              "title": "Twenty-Five Years of Colorectal Cancer Screening in the Czech Republic: National Registry Trends in Program Performance and Cancer Burden.",
+              "year": 2026,
+              "journal": "Cancers (Basel)",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "17253456",
+              "doi": "10.1002/14651858.CD001216.pub2",
+              "title": "Screening for colorectal cancer using the faecal occult blood test, Hemoccult.",
+              "year": 2007,
+              "journal": "Cochrane Database Syst Rev",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Zdrženlivá formulace odpovídá abstraktu i diskusi plného textu. Cochrane 2007 (RCT, guajakový test) jen kontext: kauzální přínos screeningu na mortalitu je z RCT doložen, podíl na českém poklesu z registrových dat určit nelze. Nic neměnit."
+        },
+        {
+          "claim_id": "",
+          "text": "Pozitivní prediktivní hodnota pro adenom stoupla z 29,6 % na 48,3 %; záchyt adenomů při screeningové kolonoskopii (ADR) vzrostl z 25,3 % na 32,6 %; podíl vyšetření s karcinomem klesl z 6,3 % na 2,8 % po pozitivním testu a z 1,8 % na 0,5 % při screeningové kolonoskopii.",
+          "location": "sekce „Co se povedlo“ + graf „Co kolonoskopie v programu nacházejí“",
+          "kind": "measurement",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42882777",
+              "doi": "10.3390/cancers18193082",
+              "title": "Twenty-Five Years of Colorectal Cancer Screening in the Czech Republic: National Registry Trends in Program Performance and Cancer Burden.",
+              "year": 2026,
+              "journal": "Cancers (Basel)",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "38775234",
+              "doi": "10.1080/00365521.2024.2356649",
+              "title": "Effect of fecal immunochemical test cut-off levels on adenoma detection rate: a systematic review and meta-analysis.",
+              "year": 2024,
+              "journal": "Scand J Gastroenterol",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Všechna čísla doslovně v abstraktu i plném textu. Plný text doplňuje roky: ADR 25,3 % v roce 2009 → 32,6 %; PPV pro adenom 48,3 % v roce 2025. Metaanalýza 2024 jen kontext (jiné definice a cut-off FIT)."
+        },
+        {
+          "claim_id": "",
+          "text": "Screeningovými metodami je pokryto 33,7 % cílové populace (41,0 % včetně vyšetření mimo program); do šesti měsíců po pozitivním testu podstoupilo kolonoskopii 58,0 % lidí, pod kódem FOBT+ 37,6 %; průměrné čekání na kolonoskopii FOBT+ bylo 80 dní.",
+          "location": "sekce „Kde program ztrácí lidi“ / databox / flow",
+          "kind": "measurement",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42882777",
+              "doi": "10.3390/cancers18193082",
+              "title": "Twenty-Five Years of Colorectal Cancer Screening in the Czech Republic: National Registry Trends in Program Performance and Cancer Burden.",
+              "year": 2026,
+              "journal": "Cancers (Basel)",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt uvádí všech pět čísel doslovně. Plný text upřesňuje období: pokrytí 33,7 % a 41,0 % = rok 2025; compliance 58,0 % = pozitivní FIT z 1. pololetí 2025; čekání 80 dní = 4. čtvrtletí 2025."
+        },
+        {
+          "claim_id": "",
+          "text": "Zbylých 42 % lidí s pozitivním testem kolonoskopii do půl roku nepodstoupilo vůbec.",
+          "location": "nadpis, perex a sekce „Kde program ztrácí lidi“",
+          "kind": "measurement",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42882777",
+              "doi": "10.3390/cancers18193082",
+              "title": "Twenty-Five Years of Colorectal Cancer Screening in the Czech Republic: National Registry Trends in Program Performance and Cancer Burden.",
+              "year": 2026,
+              "journal": "Cancers (Basel)",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Plný text (PMC13664002) uvádí doslova, že zbylých 42,0 % lidí s pozitivním FIT nemělo kolonoskopii v daném okně; „vůbec“ znamená pod žádným kódem výkonu a okno 6 měsíců věta uvádí. Upřesnění není potřeba."
+        },
+        {
+          "claim_id": "",
+          "text": "Americká kohorta Douglase Corleyho a kolegů (JAMA 2017) sledovala 70 124 lidí s pozitivním FIT. Proti kolonoskopii do 8–30 dnů nenašla významně vyšší riziko karcinomu ani pokročilého stadia při čekání do 7–9 měsíců. Vyšší bylo až při kolonoskopii po 10–12 měsících (OR 1,48 a 1,97) a po více než 12 měsících (2,25 a 3,22).",
+          "location": "sekce „Kde program ztrácí lidi“ (odstavec o čekání na kolonoskopii)",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "28444278",
+              "doi": "10.1001/jama.2017.3634",
+              "title": "Association Between Time to Colonoscopy After a Positive Fecal Test Result and Risk of Colorectal Cancer and Cancer Stage at Diagnosis.",
+              "year": 2017,
+              "journal": "JAMA",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "33010414",
+              "doi": "10.1016/j.cgh.2020.09.048",
+              "title": "Association Between Time to Colonoscopy After Positive Fecal Testing and Colorectal Cancer Outcomes: A Systematic Review.",
+              "year": 2020,
+              "journal": "Clin Gastroenterol Hepatol",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Čísla přesně podle abstraktu Corley 2017 (retrospektivní kohorta, USA; kauzalita neprokázána). Systematický přehled Forbes 2020 shodně: kolonoskopie po více než 9 měsících spojena s vyšším výskytem CRC i pokročilého stadia. Přehled doplněn do zdrojů."
+        },
+        {
+          "claim_id": "",
+          "text": "Francouzská celostátní kohorta Adriena Granchera a kolegů (Gut 2026) s 374 113 lidmi, kteří po pozitivním FIT kolonoskopii podstoupili, nenašla vyšší riziko karcinomu ani pokročilého stadia při čekání až do 24 měsíců oproti intervalu 2–3 měsíce; lidé s f-Hb ≥ 200 µg/g měli karcinom osmkrát pravděpodobněji než skupina s 30–40 µg/g; kolonoskopii podstoupilo 86,6 %.",
+          "location": "sekce „Kde program ztrácí lidi“ a „Mezinárodní srovnání“",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "41309226",
+              "doi": "10.1136/gutjnl-2025-336036",
+              "title": "Does a long time to colonoscopy after a positive faecal immunochemical test result have a deleterious impact on colorectal cancer outcomes? A nationwide cohort study.",
+              "year": 2026,
+              "journal": "Gut",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "33010414",
+              "doi": "10.1016/j.cgh.2020.09.048",
+              "title": "Association Between Time to Colonoscopy After Positive Fecal Testing and Colorectal Cancer Outcomes: A Systematic Review.",
+              "year": 2020,
+              "journal": "Clin Gastroenterol Hepatol",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Čísla i závěr autorů reprodukovány správně podle abstraktu. Napětí s Corley 2017 a Forbes 2020 článek nezamlčuje: stejný odstavec uvádí Corleyho vyšší riziko po 10–12 a >12 měsících. Upřesnění není potřeba."
+        },
+        {
+          "claim_id": "",
+          "text": "Luis Bujanda a kolegové (JAMA Network Open 2026) popsali, že věkově standardizovaná úmrtnost na kolorektální karcinom v Baskicku (2,2 mil. obyvatel) klesla mezi lety 2004 a 2024 z 32,8 na 23,1 na 100 000, tedy o 29,6 %; ve věku 50–69 let klesla o 50,1 %; zlom v trendu v roce 2012, tři roky po startu programu (2009).",
+          "location": "sekce „Mezinárodní srovnání“",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42555038",
+              "doi": "10.1001/jamanetworkopen.2026.26951",
+              "title": "Colorectal Cancer Mortality Following an Organized Fecal Immunochemical Test-Based Screening Program.",
+              "year": 2026,
+              "journal": "JAMA Netw Open",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Všechna čísla v abstraktu. Retrospektivní popisná kohorta, závěr 'associated with'; článek správně uvádí, že příčinu nedokazuje. Studie už je ve zdrojích článku."
+        }
+      ],
+      "summary": {
+        "supported": 8,
+        "partial": 0,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Přidán systematický přehled Forbes 2021 (PMID 33010414) do skupiny Recenzovaná literatura v article-sources.",
+          "ref": "33010414"
+        },
+        {
+          "type": "card-note",
+          "detail": "Do audit: komentáře v hlavičce článku připojena věta evidence-audit 2026-11-08 (8 tvrzení, 8 supported). articles.json nemá pole audit.notes, proto beze změny; claims.json pro článek nemá záznamy.",
+          "ref": ""
+        }
+      ],
+      "notes": "Adjudikace Opus: tvrzení o 42 % povýšeno z partial na supported (plný text PMC13664002 uvádí číslo doslova). Pro redakci (mimo pravomoc auditu): věta v disclaimeru o nedostupném plném textu je zastaralá, plný text je v PMC13664002 a lze doplnit roky (pokrytí 33,7 % a 41,0 % za 2025, compliance 58,0 % z 1. pololetí 2025, čekání 80 dní za 4. čtvrtletí 2025, ADR 25,3 % z 2009, PPV 48,3 % z 2025). Nesoulad datePublished v JSON-LD (2026-10-21 vs 2026-11-05) a status draft v audit komentáři jsou mimo rozsah auditu. Vynecháno jako nevěcné: údaje ÚZIS PPS-02, Věstník MZ 22/2025, směrnice 2010, cílový věk 45–74."
+    },
+    {
+      "id": "clanek-hpv-zatez-miliarda.html",
+      "type": "article",
+      "checked_at": "2026-11-08",
+      "run_id": "ea-2026-11-08-01",
+      "content_hash": "cfd8c1372ce402ea4c8ec3f3ad2cb6e3167ff069",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "sonnet"
+      },
+      "calls": {
+        "pubmed": 5,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Ze 112 543 nových případů připadá 84,2 % na ženy. [...] Předčasná úmrtí na nádory přisouditelné HPV stála podle abstraktu studie 3,29 miliardy korun ušlé produktivity a 27 436 let života.",
+          "location": "Kde účet vzniká; Muži: rostoucí účet za nádory hlavy a krku",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42417605",
+              "doi": "10.1080/21645515.2026.2696062",
+              "title": "Economic and epidemiological burden of HPV-related diseases in the Czech Republic: A claims database analysis.",
+              "year": 2026,
+              "journal": "Human vaccines & immunotherapeutics",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova: 84,2 % případů u žen, 27 436 ztracených let života, nepřímé náklady 'over 3.29 billion CZK'. Plný text (PMC13348910) v Results uvádí 112 543 incidentních případů a nepřímé náklady 'nearly CZK 3 billion' — vnitřní rozpor studie, který článek sám přiznává v caveatu a výslovně cituje abstrakt. Odhady jsou populační (podíly přisouditelné HPV z literatury), ne virologicky potvrzené případy; článek to uvádí."
+        },
+        {
+          "claim_id": "",
+          "text": "112 543 nových onemocnění přisouditelných HPV za tři roky; přímé náklady 1,06 mld. Kč (součet 350 978 244 + 380 146 630 + 332 159 046 Kč)",
+          "location": "Databox Zátěž nemocí spojených s HPV; tabulka nákladů",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42417605",
+              "doi": "10.1080/21645515.2026.2696062",
+              "title": "Economic and epidemiological burden of HPV-related diseases in the Czech Republic: A claims database analysis.",
+              "year": 2026,
+              "journal": "Human vaccines & immunotherapeutics",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Open-access plný text (PMC13348910, 2026-11-08) doslova uvádí 112,543 incidentních případů 2018–2020 a roční přímé náklady CZK 350,978,244 / 380,146,630 / 332,159,046; součet 1 063 283 920 Kč je aritmeticky správný a jde o vlastní sečtení redakce, což článek přiznává. Abstrakt sám uvádí jen 'over 100,000' a 'exceeded 1 billion CZK'."
+        },
+        {
+          "claim_id": "",
+          "text": "Studie ČVUT je první, která zátěž HPV v Česku nepočítá modelem, ale z reálných dat zdravotních pojišťoven; vybrala 32 diagnóz podle MKN-10 a pomocí podílů přisouditelných HPV z mezinárodní literatury odhadla podíl na HPV.",
+          "location": "Co studie měří a co změřit neumí",
+          "kind": "measurement",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "42417605",
+              "doi": "10.1080/21645515.2026.2696062",
+              "title": "Economic and epidemiological burden of HPV-related diseases in the Czech Republic: A claims database analysis.",
+              "year": 2026,
+              "journal": "Human vaccines & immunotherapeutics",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Plný text potvrzuje metodu: šest ze sedmi pojišťoven, asi 44 % pojištěnců, 32 diagnóz podle MKN-10, atribuce podle publikovaných HPV-AF a extrapolace na ČR. Prvenství je vlastní tvrzení autorů ('to the best of our knowledge'), proto confidence medium. Článek vynechává upřesnění 'všech onemocnění spojených s HPV'; není to věcný rozpor."
+        },
+        {
+          "claim_id": "",
+          "text": "Systematický přehled (Beltrame et al. 2026) shrnul 17 studií z bohatých zemí, které zavedly očkování obou pohlaví, a našel u mužů konzistentní pokles genitálních bradavic, zatímco incidence HPV nádorů celkově zatím roste; u amerických mužů 20–44 let klesla incidence nádorů orofaryngu o 11 až 19 %, u mužů 15–34 let nádoru penisu o 6 až 38 %, v Rakousku análního karcinomu u mužů 30–39 let o 38 %; část efektu může být kolektivní imunita.",
+          "location": "Mezinárodní srovnání: proočkovanost stagnuje, evidence o dopadu roste",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42217245",
+              "doi": "10.1002/rmv.70171",
+              "title": "Impact of Male Human Papillomavirus (HPV) Vaccination on HPV Infection and HPV-Related Diseases: A Systematic Review.",
+              "year": 2026,
+              "journal": "Reviews in medical virology",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova odpovídá všem číslům (17 studií, high-income země, orofarynx −11 až −19 %, penis −6 až −38 %, Rakousko anální karcinom −38 %, kolektivní imunita). Sílu důkazů přehled hodnotí jako 'limited but consistent'; článek to vyjadřuje slovy 'první signály' a zahraniční evidenci nepřenáší na ČR."
+        },
+        {
+          "claim_id": "",
+          "text": "Data pojišťoven neobsahují virologické potvrzení, autoři ale trend považují za konzistentní s mezinárodní evidencí, podle níž rostoucí incidenci nádorů orofaryngu pohání právě HPV.",
+          "location": "Muži: rostoucí účet za nádory hlavy a krku",
+          "kind": "mechanism",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42417605",
+              "doi": "10.1080/21645515.2026.2696062",
+              "title": "Economic and epidemiological burden of HPV-related diseases in the Czech Republic: A claims database analysis.",
+              "year": 2026,
+              "journal": "Human vaccines & immunotherapeutics",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "26049691",
+              "doi": "10.1097/PPO.0000000000000115",
+              "title": "Prevalence of Human Papillomavirus in Oropharyngeal Cancer: A Systematic Review.",
+              "year": 2015,
+              "journal": "Cancer journal (Sudbury, Mass.)",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "39493458",
+              "doi": "10.3389/fonc.2024.1444326",
+              "title": "Evolving trends in oral cancer burden in Europe: a systematic review.",
+              "year": 2024,
+              "journal": "Frontiers in oncology",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Kamenský (Discussion) říká: 'these trends are consistent with international evidence suggesting that the rising incidence of head and neck cancers – particularly oropharyngeal cancers – is increasingly driven by HPV infection.' Článek autory cituje věrně; 'pohání právě HPV' je mírné zesílení proti 'increasingly driven'. Stein 2015 (105 studií, 9 541 vzorků, 23 zemí): podíl HPV-pozitivních OPSCC v Evropě vzrostl o 21,5 %, nejnověji téměř 50 %; kauzalitu formuluje opatrně. Ghanem 2024 jen kontext. Tvrzení se týká atribuce autorům, ne kauzality v ČR."
+        }
+      ],
+      "summary": {
+        "supported": 5,
+        "partial": 0,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Do article-sources přidána skupina Recenzovaná literatura se zdrojem Stein AP et al. 2015 (PMID 26049691), k tvrzení o HPV jako hnacím faktoru nádorů orofaryngu.",
+          "ref": "26049691"
+        },
+        {
+          "type": "none",
+          "detail": "Žádné contradicted ani partial; audit-status zůstává review-pending. Do audit komentáře a articles.json audit.notes připojena věta o evidence-auditu.",
+          "ref": ""
+        }
+      ],
+      "notes": "PubMed 5 volání (rešerše 3, adjudikace 2: plný text PMC13348910 a metadata Stein 2015). Consensus nepoužit. Adjudikace povýšila dvě tvrzení z partial na supported na základě open-access plného textu. Rozpor uvnitř studie (abstrakt 3,29 mld. vs. Results 'nearly CZK 3 billion') článek přiznává v caveatu. Vyřazeno jako administrativní/politické: proočkovanost 69,8 %/42,5 %, právní rámec, deklarace 2026, britský NHS program. data/claims.json pro článek nemá tvrzení."
+    },
+    {
+      "id": "clanek-umrtnost-schizofrenie.html",
+      "type": "article",
+      "checked_at": "2026-11-08",
+      "run_id": "ea-2026-11-08-01",
+      "content_hash": "8e5ac0a90d65263f1828ecfbf52b94eb00ed44e7",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 12,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "umrtnost-schizofrenie--05",
+          "text": "mezinárodní metaanalýza jedenácti studií na téměř 250 tisících pacientech vyčíslila ztrátu na 14,5 roku života a naději dožití lidí se schizofrenií na 64,7 roku",
+          "location": "sekce „Mezinárodní srovnání: Česko vypadá dobře. To je past“; databox",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "28237639",
+              "doi": "10.1016/S2215-0366(17)30078-0",
+              "title": "Years of potential life lost and life expectancy in schizophrenia: a systematic review and meta-analysis",
+              "year": 2017,
+              "journal": "Lancet Psychiatry",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno. Abstrakt uvádí 11 studií, až 247 603 pacientů, 14,5 roku ztraceného života (95% CI 11,2–17,8) a naději dožití 64,7 roku (95% CI 61,1–71,3). Bez retrakce. Článek studii už cituje a výslovně ji označuje za mezinárodní metaanalýzu, ne za českou hodnotu."
+        },
+        {
+          "claim_id": "",
+          "text": "pro rok 2014 spočítal standardizovaný poměr úmrtnosti 2,2 pro všechny duševní poruchy, 2,3 pro okruh psychóz F20–F29 a 3,5 pro poruchy z užívání návykových látek",
+          "location": "sekce „Stav v Česku: deset let vodorovná čára“; zdroje (Recenzovaná literatura)",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "29884434",
+              "doi": "10.1016/S2468-2667(18)30077-X",
+              "title": "Mortality in people with mental disorders in the Czech Republic: a nationwide, register-based cohort study",
+              "year": 2018,
+              "journal": "Lancet Public Health",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno. Hodnoty SMR i intervaly spolehlivosti odpovídají abstraktu a článek studii cituje správně. Kohortu tvoří lidé propuštění z psychiatrických lůžek v letech 1994–2013, ne všichni léčení; článek to uvádí."
+        },
+        {
+          "claim_id": "",
+          "text": "Většinu toho rozdílu netvoří sebevraždy, ale infarkty, mozkové příhody a nádory — tedy nemoci, které systém běžně umí najít včas.",
+          "location": "perex; sekce „Co ukazatel měří“",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "23694688",
+              "doi": "10.1136/bmj.f2539",
+              "title": "The gap in life expectancy from preventable physical illness in psychiatric patients in Western Australia: retrospective analysis of population based registers",
+              "year": 2013,
+              "journal": "BMJ",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "25671328",
+              "doi": "10.1001/jamapsychiatry.2014.2502",
+              "title": "Mortality in mental disorders and global disease burden implications: a systematic review and meta-analysis",
+              "year": 2015,
+              "journal": "JAMA Psychiatry",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "39626570",
+              "doi": "10.1016/j.euroneuro.2024.11.001",
+              "title": "Sex-stratified mortality estimates in people with schizophrenia: A systematic review and meta-analysis of cohort studies of 2,700,825 people with schizophrenia",
+              "year": 2024,
+              "journal": "Eur Neuropsychopharmacol",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Jádro tvrzení evidence podporuje: většinu nadúmrtí netvoří sebevraždy, ale tělesné nemoci. Lawrence 2013 (BMJ, 292 585 psychiatrických pacientů v Západní Austrálii) přičítá 77,7 % nadúmrtí tělesným nemocem a 13,9 % sebevraždám. Walker 2015 uvádí, že 67,3 % úmrtí lidí s duševními poruchami má přirozenou příčinu. Výčet v perexu je ale užší než evidence. Kardiovaskulární nemoci (29,9 %) a nádory (13,5 %) dávají dohromady asi 43 % nadúmrtí, tedy samy o sobě většinu netvoří. Sekce „Co ukazatel měří“ výčet správně rozšiřuje o CHOPN a cirhózu. Data se týkají všech psychiatrických pacientů, ne jen schizofrenie, a pocházejí ze zahraničí. Pro ČR sada OECD příčiny smrti nerozpadá, což článek v poznámce pod zdroji přiznává. Přenositelnost na ČR je pravděpodobná, ale neověřená. Upřesňující věta není nutná, protože článek tvrzení už vymezuje jako převzaté z mezinárodní literatury. Stačí doplnit zdroj."
+        },
+        {
+          "claim_id": "",
+          "text": "Lidé se závažným duševním onemocněním chodí méně na preventivní prohlídky i na onkologické screeningy. Jejich tělesné potíže se navíc snáz vysvětlí psychiatrickou diagnózou (diagnostic overshadowing).",
+          "location": "sekce „Proč se ta čára nehýbe“",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "38282230",
+              "doi": "10.1002/pon.6274",
+              "title": "Barriers and facilitators for people with severe mental illness accessing cancer screening: A systematic review",
+              "year": 2024,
+              "journal": "Psychooncology",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "35952461",
+              "doi": "10.1016/j.canep.2022.102233",
+              "title": "Cancer incidence and stage at diagnosis among people with psychotic disorders: Systematic review and meta-analysis",
+              "year": 2022,
+              "journal": "Cancer Epidemiol",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "40897506",
+              "doi": "10.3399/BJGP.2024.0826",
+              "title": "Increasing uptake of physical health checks for people living with severe mental illness: a systematic review",
+              "year": 2026,
+              "journal": "Br J Gen Pract",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Nízkou účast na onkologických screeningech a pozdější záchyt nádorů evidence podporuje. U psychotických poruch je při diagnóze o 22 % vyšší šance metastáz. Abstrakty ale nezmiňují preventivní prohlídky u praktického lékaře ani jev diagnostic overshadowing, takže druhá věta zůstává bez přímé opory v ověřených abstraktech. Veškerá evidence je zahraniční a přenositelnost na ČR (zvaní na screening, registrace u praktika) není ověřena. Prose není potřeba měnit."
+        },
+        {
+          "claim_id": "",
+          "text": "Antipsychotika druhé generace, bez kterých se většina pacientů neobejde, zvyšují hmotnost, glykemii a hladinu tuků v krvi.",
+          "location": "sekce „Proč se ta čára nehýbe“ (Léčba sama zvyšuje riziko)",
+          "kind": "mechanism",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "36640396",
+              "doi": "10.1002/wps.21036",
+              "title": "Metabolic side effects in persons with schizophrenia during mid- to long-term treatment with antipsychotics: a network meta-analysis of randomized controlled trials",
+              "year": 2023,
+              "journal": "World Psychiatry",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "31860457",
+              "doi": "10.1016/S2215-0366(19)30416-X",
+              "title": "Comparative effects of 18 antipsychotics on metabolic function in patients with schizophrenia, predictors of metabolic dysregulation, and association with psychopathology: a systematic review and network meta-analysis",
+              "year": 2020,
+              "journal": "Lancet Psychiatry",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Směr tvrzení podporují dvě síťové metaanalýzy RCT (137 a 100 studií). Přírůstek hmotnosti a změny glukózy a lipidů jsou doloženy, u klozapinu a olanzapinu jsou největší. Efekt se ale mezi jednotlivými léky výrazně liší a některá antipsychotika druhé generace jsou metabolicky šetrnější, takže generalizace na celou třídu je zjednodušení. Pro populárně-odborný text je to přijatelné, protože článek uvádí klozapin jako lék pana Jiřího. Výrok, že se většina pacientů bez antipsychotik neobejde, je klinický úsudek, ne předmět ověření."
+        },
+        {
+          "claim_id": "",
+          "text": "mezinárodní řada: mortality gap se v čase nezmenšuje (Česko: poměr 2012–2021 beze změny)",
+          "location": "perex; sekce „Stav v Česku: deset let vodorovná čára“; zdroje (Hjorthøj)",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "28237639",
+              "doi": "10.1016/S2215-0366(17)30078-0",
+              "title": "Years of potential life lost and life expectancy in schizophrenia: a systematic review and meta-analysis",
+              "year": 2017,
+              "journal": "Lancet Psychiatry",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "39626570",
+              "doi": "10.1016/j.euroneuro.2024.11.001",
+              "title": "Sex-stratified mortality estimates in people with schizophrenia: A systematic review and meta-analysis of cohort studies of 2,700,825 people with schizophrenia",
+              "year": 2024,
+              "journal": "Eur Neuropsychopharmacol",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "23694688",
+              "doi": "10.1136/bmj.f2539",
+              "title": "The gap in life expectancy from preventable physical illness in psychiatric patients in Western Australia: retrospective analysis of population based registers",
+              "year": 2013,
+              "journal": "BMJ",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Mezinárodní část potvrzena. Hjorthøj 2017 uvádí, že ztráta se v čase nezmenšila, metaanalýza z roku 2024, že se rozdíl v úmrtnosti v čase nezlepšil. Lawrence 2013 ukazuje, že rozdíl v naději dožití se v letech 1985–2005 dokonce rozšířil (u mužů z 13,5 na 15,9 roku). Česká řada OECD (3,1 → 3,0) jsou administrativní data a evidence-audit ji neověřuje."
+        },
+        {
+          "claim_id": "",
+          "text": "Prevalence kuřáctví je u lidí se schizofrenií násobně vyšší než v běžné populaci (16,4 %) a odvykací podpora je v psychiatrických ambulancích výjimkou.",
+          "location": "sekce „Proč se ta čára nehýbe“ (Kouření a alkohol); databox",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "15949648",
+              "doi": "10.1016/j.schres.2005.02.010",
+              "title": "A meta-analysis of worldwide studies demonstrates an association between schizophrenia and tobacco smoking behaviors",
+              "year": 2005,
+              "journal": "Schizophr Res",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "První polovinu tvrzení podporuje metaanalýza de Leon & Diaz 2005 (42 studií z 20 zemí). Šance na současné kouření je u schizofrenie oproti obecné populaci zhruba šestinásobná (OR 5,9; u mužů 7,2, u žen 3,3) a míra odvykání je nižší. Jde o poměr šancí, ne o poměr prevalencí. Při populační prevalenci kolem 16–25 % mu odpovídá zhruba trojnásobná až čtyřnásobná prevalence, takže formulace „násobně vyšší“ obstojí. Česká prevalence kouření u schizofrenie ale v ověřené evidenci není a srovnání s českými 16,4 % je přenos zahraniční evidence. Druhá polovina (odvykací podpora v českých psychiatrických ambulancích je výjimkou) je organizační tvrzení o ČR bez studijní opory a evidence-audit ji neposuzuje. Formulace není očividně širší než evidence, upřesňující věta se nenavrhuje."
+        }
+      ],
+      "summary": {
+        "supported": 4,
+        "partial": 3,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "claim-note",
+          "detail": "source_note u umrtnost-schizofrenie--05 doplněn o PMID:28237639 / DOI:10.1016/S2215-0366(17)30078-0, ověřeno 2026-11-08",
+          "ref": "umrtnost-schizofrenie--05"
+        },
+        {
+          "type": "source-added",
+          "detail": "Lawrence D, Hancock KJ, Kisely S. BMJ 2013;346:f2539 (PMID 23694688, DOI 10.1136/bmj.f2539) do article-sources (Recenzovaná literatura) — k podílu tělesných nemocí a sebevražd na nadúmrtí",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "de Leon J, Diaz FJ. Schizophr Res 2005;76(2-3):135-57 (PMID 15949648, DOI 10.1016/j.schres.2005.02.010) do article-sources (Recenzovaná literatura) — ke kuřáctví u schizofrenie",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "Pillinger T et al. Lancet Psychiatry 2020;7(1):64-77 (PMID 31860457, DOI 10.1016/S2215-0366(19)30416-X; ročník, číslo a stránkování ověřeny v PubMed metadatech při zápisu) do article-sources (Recenzovaná literatura) — k metabolickým účinkům antipsychotik",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Žádné contradicted: bez flagged a issue, audit-status zůstává review-pending, prose beze změny. Do hlavičky audit: (notes) a do articles.json → audit.notes připojena věta „evidence-audit 2026-11-08: 7 tvrzení, 4 supported, 3 partial; viz data/evidence-audit.json“; audit.last_reviewed beze změny.",
+          "ref": ""
+        }
+      ],
+      "followup": "(1) Přímá opora pro diagnostic overshadowing a pro účast lidí se závažným duševním onemocněním na preventivních prohlídkách u praktického lékaře (tvrzení o screeningu je partial). (2) Jako zdroj ke screeningovému tvrzení doplnit SR 38282230 (Psychooncology 2024, DOI 10.1002/pon.6274) po načtení autorů a stránkování z PubMed metadat. (3) Podíl konkrétních příčin smrti (ICHS, CMP, nádory) na nadúmrtí přímo u schizofrenie (např. Olfson 2015 JAMA Psychiatry). (4) Česká prevalence kouření u schizofrenie v ověřené evidenci chybí; metabolický monitoring v ČR neověřen.",
+      "notes": "Consensus nevolán (PubMed dal pro většinu tvrzení studie). Rešerše: 8 volání PubMed (1 lookup citací, 5 vyhledávání, 2 dávky metadat); citované studie ověřeny v PubMed (PMID 29884434 Krupchanka, 28237639 Hjorthøj). Vyřazeno jako administrativní/nad rámec (not-applicable, nepočítá se mezi auditovaná tvrzení): claims --01, --03, --04 (OECD/ÚZIS/Eurostat statistika), --02 a --06 (vlastní výpočty z dat MZ), kardiovaskulární a léčitelná mortalita v ČR, počty psychiatrů, výdaje, délka hospitalizace, politická doporučení. Adjudikace (Opus): 3 volání PubMed; rešeršní no-evidence u kouření změněno na partial podle metaanalýzy de Leon & Diaz 2005; partial u příčin smrti ponecháno (Lawrence 2013: 77,7 % nadúmrtí tělesné nemoci, 13,9 % sebevraždy, ale výčet „infarkty, mozkové příhody a nádory“ sám dává asi 43 % a data jsou zahraniční, za všechny psychiatrické pacienty). Upřesňující věta se nenavrhla, protože poznámka pod zdroji už tvrzení vymezuje jako převzaté z mezinárodní literatury. Zápis (Opus): 1 volání PubMed (metadata 31860457, 23694688, 15949648) — potvrzeno Lancet Psychiatry 2020;7(1):64-77, BMJ 2013;346:f2539, Schizophr Res 2005;76(2-3):135-57. Žádné contradicted, prose beze změny."
+    },
+    {
+      "id": "indicator:infekce_nosokomialni",
+      "type": "indicator",
+      "checked_at": "2026-11-08",
+      "run_id": "ea-2026-11-08-01",
+      "content_hash": "944053dfba88666747a937abcd7a11a4dcf3bcc8",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 12,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "text": "Indikátor sleduje nemocniční infekce jako klíčový ukazatel bezpečnosti pacientů — data přicházejí jen jednou za několik let, proto je dobré číst ho spolu s ukazateli rezistence a spotřeby antibiotik.",
+          "location": "patient_story, poslední věta (validita ukazatele)",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "25467650",
+              "doi": "10.1016/S1473-3099(14)70854-0",
+              "title": "Hospital organisation, management, and structure for prevention of health-care-associated infection: a systematic review and expert consensus.",
+              "year": 2015,
+              "journal": "Lancet Infect Dis",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "42753952",
+              "doi": "10.1016/j.jhin.2026.09.008",
+              "title": "Evaluating artificial intelligence-assisted surveillance of healthcare-associated infections using a standard European point prevalence study in a regional hospital, the Czech Republic, 2025.",
+              "year": 2026,
+              "journal": "J Hosp Infect",
+              "study_type": "methodological",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "28989467",
+              "doi": "10.1177/1757177416637131",
+              "title": "A cross-sectional survey of the acceptability of data collection processes for validation of a European point prevalence survey of healthcare-associated infections and antimicrobial use.",
+              "year": 2016,
+              "journal": "J Infect Prev",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Vazbu HAI na bezpečnost pacientů podporuje evropský systematický přehled Zingg 2015 (92 studií): HAI v Evropě vedou k zhruba 37 000 úmrtím ročně a jejich prevence je cestou ke zlepšení bezpečnosti pacientů. Česká studie z Liberce (2026, ECDC metodika, 749 pacientů, prevalence 8,1 %) ukazuje, že PPS je v českém prostředí proveditelná a dobře shodná s AI surveillance (kappa 0,885), jde ale o jednu nemocnici a srovnání dvou metod, ne o validaci proti zlatému standardu. Validaci prevalence HAI jako míry výkonu celého systému žádný nalezený abstrakt neposuzuje. Že ECDC PPS sbírá HAI společně se spotřebou antibiotik, dokládá Price 2016 (validační PPS HAI a AMU v 10 zemích); doporučení číst indikátor spolu s rezistencí a spotřebou antibiotik i periodicita vln jsou redakční, resp. administrativní údaje, literatura je nehodnotí."
+        },
+        {
+          "text": "PPS = jednodenní snapshot, ne kontinuální. Citlivost na intenzitu surveillance (více aktivně sledujících nemocnic = vyšší zachycený podíl).",
+          "location": "limitations",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "42753952",
+              "doi": "10.1016/j.jhin.2026.09.008",
+              "title": "Evaluating artificial intelligence-assisted surveillance of healthcare-associated infections using a standard European point prevalence study in a regional hospital, the Czech Republic, 2025.",
+              "year": 2026,
+              "journal": "J Hosp Infect",
+              "study_type": "methodological",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "28989467",
+              "doi": "10.1177/1757177416637131",
+              "title": "A cross-sectional survey of the acceptability of data collection processes for validation of a European point prevalence survey of healthcare-associated infections and antimicrobial use.",
+              "year": 2016,
+              "journal": "J Infect Prev",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Jednodenní povahu PPS abstrakt Liberec 2026 doslova uvádí (one-day PPS podle ECDC). Citlivost na způsob vyhledávání podporuje: pasivní surveillance podle autorů HAI podhodnocuje; ruční PPS i AI surveillance minuly po 7 HAI a každá zachytila 90,3 % infekcí ze souhrnného souboru obou metod. Price 2016: sběr HAI považovalo za snadný jen 12,8 % sběratelů a 56,8 % uvedlo možné disincentivy hlášení, kvalita dat závisí na zaškolení a definicích. Konkrétní směr „více aktivně sledujících nemocnic = vyšší zachycený podíl“ v abstraktech doslova není, jde o úsudek z obecného principu; proto partial. Zahraniční část evidence (Price) se týká metodiky ECDC, která se v ČR používá shodně, přenositelnost je tedy dobrá. Do limitations doplněna jedna upřesňující věta s citací Liberec 2026."
+        },
+        {
+          "text": "Politické páky jsou proto spíš v prevenci než v samotném čísle prevalence: personální standard pro hygieniky a sestry pro prevenci infekcí, dávkovače dezinfekce u každého lůžka, programy racionálního užívání antibiotik ve všech nemocnicích",
+          "location": "patient_story, čtvrtý odstavec",
+          "kind": "efficacy",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "25467650",
+              "doi": "10.1016/S1473-3099(14)70854-0",
+              "title": "Hospital organisation, management, and structure for prevention of health-care-associated infection: a systematic review and expert consensus.",
+              "year": 2015,
+              "journal": "Lancet Infect Dis",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "42922243",
+              "doi": "10.7417/CT.2026.2174",
+              "title": "Effectiveness of Quality Improvement Strategies in Preventing Healthcare-Associated Infections Among Neurosurgical Patients Admitted to Intensive Care Units: A Systematic Review.",
+              "year": 2026,
+              "journal": "Clin Ter",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "42685915",
+              "doi": "10.1016/j.jhin.2026.08.021",
+              "title": "Real-world implementation and impact of interventional antimicrobial stewardship programmes in Asian hospital settings: an updated systematic review mapped to IDSA/SHEA recommendations, the WHO Bacterial Priority Pathogens List, and AWaRe antibiotic categories.",
+              "year": 2026,
+              "journal": "J Hosp Infect",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "42620197",
+              "doi": "10.64898/2026.07.28.26359185",
+              "title": "Effectiveness of Hand Hygiene Interventions in Healthcare Facilities in Low- and Middle-Income Countries (LMICs): A Systematic Review.",
+              "year": 2026,
+              "journal": "medRxiv",
+              "study_type": "preprint",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Jádro tvrzení (prevence infekcí stojí na organizaci, personálu a vybavení) podporuje evropský systematický přehled a expertní konsenzus Zingg 2015 (92 studií 1996–2012): mezi deset klíčových složek účinných programů patří organizace prevence infekcí na úrovni nemocnice, obsazenost lůžek a personální zajištění, dostupnost materiálu a vybavení, surveillance se zpětnou vazbou a multimodální programy. Konkrétní podoba pák (národní personální standard, dávkovač u každého lůžka) v abstraktu není, jde o redakční převod obecných složek. Programy racionálního užívání antibiotik podle asijského přehledu (32 studií, převážně jednocentrových) konzistentně snižují spotřebu antibiotik a náklady, rezistence méně konzistentně, mortalita beze změny; vliv na prevalenci HAI tento přehled nehodnotí. Ageel 2026 (17 převážně nerandomizovaných studií) potvrzuje pokles device-asociovaných infekcí po zavedení svazků péče, ale jen na neurochirurgických JIP. Preprint o hygieně rukou v LMIC je jen kontext. Evidence je zahraniční, u Zingg 2015 evropská a dobře přenositelná na ČR."
+        }
+      ],
+      "summary": {
+        "supported": 0,
+        "partial": 3,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "indicators/infekce_nosokomialni.json → literature: Zingg 2015 (PMID 25467650, Lancet Infect Dis, systematický přehled s expertním konsenzem)",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/infekce_nosokomialni.json → literature: Liberec PPS vs. AI surveillance 2025 (PMID 42753952, J Hosp Infect 2026)",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/infekce_nosokomialni.json → literature: Price 2016 (PMID 28989467, J Infect Prev, přijatelnost sběru dat validační PPS)",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/infekce_nosokomialni.json → literature: asijský systematický přehled programů racionálního užívání antibiotik (PMID 42685915, J Hosp Infect 2026)",
+          "ref": ""
+        },
+        {
+          "type": "card-note",
+          "detail": "indicators/infekce_nosokomialni.json → limitations: připojena jedna věta (measurement verdikt, s citací PMID 42753952): ruční PPS v Liberci zachytila 90,3 % infekcí ze souhrnného souboru ruční a AI surveillance, i jednodenní šetření část infekcí mine.",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "claim-note se nepoužije: tři záznamy data/claims.json s indicator_id infekce_nosokomialni (epidemiologie-3-modely-rozhodovani--04, nosokomialni-infekce--01, nosokomialni-infekce--05) jsou čísla z ECDC PPS a jejich quote neodpovídá žádné auditované větě; flagged/issue nejsou potřeba (žádný verdikt contradicted).",
+          "ref": ""
+        }
+      ],
+      "followup": "K validitě ECDC PPS jako celostátní míry chybí ověřená validační studie (Suetens et al. 2018, Euro Surveill, se v PubMed dohledat nepodařilo; neověřeno, proto nezapsáno). Tvrzení karty, že nízká diagnostika (méně hemokultur) může prevalenci uměle snižovat, nebylo mezi auditovanými tvrzeními a v nalezených abstraktech doloženo není. Rešerše překročila strop PubMed (9 místo 8 volání).",
+      "notes": "Karta neodkazuje na žádnou publikaci s DOI/PMID (cituje jen ECDC factsheet a SZÚ Hygiena 2023), takže found_via article nepoužito. Consensus nepoužit (PubMed vrátil několik kandidátů). Rešerše (Sonnet) 9 volání PubMed (7 vyhledávání + 2 načtení metadat), první dva dotazy příliš úzké s 0 výsledky; adjudikace (Opus) 3 volání PubMed: metadata 4 studií z rešerše, 1 vyhledávání a metadata Zingg 2015 (25467650; 25749221 je jen erratum k témuž článku, do registru se nepíše). Studie 38677480 (Itálie PPS 2022, COVID) a 37067662 (Čína PPS) načteny, ale nepoužity (nerelevantní pro tvrzení). Všechna tři tvrzení partial; Zingg 2015 zvedá jistotu u tvrzení o pákách prevence a o vazbě HAI na bezpečnost pacientů z low na medium. Programy racionálního užívání antibiotik doložené snížení HAI v nalezené evidenci nemají (asijský přehled měří spotřebu, náklady, rezistenci a mortalitu). Preprint 42620197 (medRxiv) a úzký přehled Ageel 2026 (42922243) zůstávají jen v registru, do literature karty se nepřidávají. Číselné hodnoty karty (6,7 %, 6,8 %, rozpětí 3,0–13,8 %, 0,82 úvazku, 42,4 % lůžek s dávkovačem, 27,6 hemokultury atd.) pocházejí z ECDC country factsheetu a v žádném abstraktu nejsou; patří k drift-checku claims.json, ne k evidence-auditu."
+    },
+    {
+      "id": "indicator:kojeni_pri_propusteni",
+      "type": "indicator",
+      "checked_at": "2026-11-08",
+      "run_id": "ea-2026-11-08-01",
+      "content_hash": "15504df954f7c05302a2effdca33c3eb17eea022",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 10,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Právě tyto kroky definuje iniciativa Baby-Friendly Hospital (WHO/UNICEF, „Deset kroků k úspěšnému kojení“).",
+          "location": "indicators/kojeni_pri_propusteni.json, pole determinants (Praxe porodnice a laktační podpora); obdobně importance a patient_story",
+          "kind": "mechanism",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "39919651",
+              "doi": "10.1016/j.wombi.2025.101881",
+              "title": "Impact of baby-friendly hospital initiatives on breastfeeding outcomes: Systematic review and meta-analysis.",
+              "year": 2025,
+              "journal": "Women and Birth",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "40732908",
+              "doi": "10.3390/nu17142283",
+              "title": "Effectiveness of Baby-Friendly Hospital Initiative on Early Initiation and Exclusive Breastfeeding Practice: Systematic Review and Meta-Analysis.",
+              "year": 2025,
+              "journal": "Nutrients",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "36461061",
+              "doi": "10.1186/s13006-022-00517-1",
+              "title": "Factors associated with exclusive breastfeeding at discharge during the COVID-19 pandemic in 17 WHO European Region countries.",
+              "year": 2022,
+              "journal": "International Breastfeeding Journal",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Věta je popisná: Deset kroků BFHI skutečně zahrnuje kontakt kůže na kůži, rooming-in, kojení podle potřeby a nedokrmování bez indikace (programový dokument WHO/UNICEF, ne studie). Kontextové tvrzení, že praxe porodnice určuje kojení, podporují dvě metaanalýzy z roku 2025: Fan (86 studií, výlučné kojení ve 3 měsících OR 1,77) a Habte (30 studií, RR 1,56 v 6 měsících). Vysoká heterogenita. Přímo v okamžiku propuštění to doplňuje průřezová studie Chertok 2022 (26 709 matek, 17 zemí): s nižším výlučným kojením při propuštění souvisely chybějící časná iniciace kojení, neúplný rooming-in a nedostatečná podpora kojení. Jde o observační asociace."
+        },
+        {
+          "claim_id": "",
+          "text": "Klíčem k úspěšnému startu je časný kontakt kůže na kůži, rooming-in a kojení dle potřeby bez zbytečného dokrmování.",
+          "location": "indicators/kojeni_pri_propusteni.json, pole patient_story (3. odstavec) a determinants",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "27885658",
+              "doi": "10.1002/14651858.CD003519.pub4",
+              "title": "Early skin-to-skin contact for mothers and their healthy newborn infants.",
+              "year": 2016,
+              "journal": "Cochrane Database of Systematic Reviews",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "31022227",
+              "doi": "10.1371/journal.pone.0215869",
+              "title": "The effect of rooming-in on duration of breastfeeding: A systematic review of randomised and non-randomised prospective controlled studies.",
+              "year": 2019,
+              "journal": "PLoS ONE",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "36461061",
+              "doi": "10.1186/s13006-022-00517-1",
+              "title": "Factors associated with exclusive breastfeeding at discharge during the COVID-19 pandemic in 17 WHO European Region countries.",
+              "year": 2022,
+              "journal": "International Breastfeeding Journal",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "39919651",
+              "doi": "10.1016/j.wombi.2025.101881",
+              "title": "Impact of baby-friendly hospital initiatives on breastfeeding outcomes: Systematic review and meta-analysis.",
+              "year": 2025,
+              "journal": "Women and Birth",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Evidence pro jednotlivé kroky je nestejná. Kontakt kůže na kůži: Cochrane, Moore 2016 (46 RCT) ukazuje vyšší výlučné kojení od propuštění do 1 měsíce (RR 1,30; 95% CI 1,12–1,49; střední kvalita GRADE) a vyšší kojení v 1. až 4. měsíci (RR 1,24). Rooming-in samostatně: Ng 2019 (7 studií) nenašel rozdíl v plném kojení po 3 až 6 měsících (velmi nízká až nízká kvalita), vyšší bylo jen částečné kojení. Chertok 2022 spojuje neúplný rooming-in a chybějící časnou iniciaci s nižším výlučným kojením při propuštění, jde ale o observační asociaci. K dokrmování bez indikace se metaanalýzu dohledat nepodařilo. Prokázaný účinek má balíček BFHI, ne každý krok zvlášť, takže formulace „klíčem“ je silnější než evidence pro rooming-in. Směr tvrzení odpovídá doporučení WHO/UNICEF. Evidence je zahraniční, přenositelnost na české porodnice se předpokládá."
+        },
+        {
+          "claim_id": "",
+          "text": "Jako referenční hodnotu používáme sdružený podíl výlučně kojených dětí při propuštění napříč 17 zeměmi evropského regionu WHO — 72,4 % (n = 19 350 z 26 709; období prvních dvou let pandemie covid-19).",
+          "location": "indicators/kojeni_pri_propusteni.json, pole benchmark_source.note (value 72,4; url PMC9716162)",
+          "kind": "measurement",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "36461061",
+              "doi": "10.1186/s13006-022-00517-1",
+              "title": "Factors associated with exclusive breastfeeding at discharge during the COVID-19 pandemic in 17 WHO European Region countries.",
+              "year": 2022,
+              "journal": "International Breastfeeding Journal",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "PMC9716162 odpovídá PMID 36461061 (Chertok et al., Int Breastfeed J 2022;17(1):83). Abstrakt doslova uvádí 26 709 matek ze 17 zemí evropského regionu WHO, z nich 72,4 % (n = 19 350) výlučně kojilo při propuštění, a to během pandemie covid-19. Všechna čísla v kartě sedí. Upřesnění pro redakci: nejde o statistiku WHO, ale o průřezové dotazníkové šetření, v němž výživu při propuštění uváděly samy matky (studie IMAgiNE EURO, NCT04847336). Popisek datasetu „IBCLC/WHO European Region“ a typ „who“ v benchmark_source jsou proto nepřesné, změna ale nespadá do pravomoci auditu. Přesné období 3/2020–2/2022 v abstraktu není, abstrakt uvádí jen pandemii covid-19."
+        }
+      ],
+      "summary": {
+        "supported": 2,
+        "partial": 1,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "literature karty: Chertok et al. 2022, Int Breastfeed J (PMID 36461061, DOI 10.1186/s13006-022-00517-1, cross-sectional) — zdroj benchmarku (PMC9716162); 72,4 % (n = 19 350 z 26 709) výlučně kojilo při propuštění, samoreport matek, ne statistika WHO.",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "literature karty: Moore et al. 2016, Cochrane Database Syst Rev (PMID 27885658, DOI 10.1002/14651858.CD003519.pub4, systematic review) — doklad k determinants a patient_story (kontakt kůže na kůži): 46 RCT, výlučné kojení od propuštění do 1 měsíce RR 1,30 (95% CI 1,12–1,49).",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "literature karty: Ng et al. 2019, PLoS One (PMID 31022227, DOI 10.1371/journal.pone.0215869, systematic review) — kontext k rooming-in: 7 studií, bez rozdílu v plném kojení po 3–6 měsících; samostatný účinek rooming-in neprokázán.",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "literature karty: Fan et al. 2025, Women Birth (PMID 39919651, DOI 10.1016/j.wombi.2025.101881, meta-analysis) — doklad k determinants (BFHI): 86 studií, výlučné kojení ve 3 měsících OR 1,77 (95% CI 1,37–2,29).",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "literature karty: Habte et al. 2025, Nutrients (PMID 40732908, DOI 10.3390/nu17142283, meta-analysis) — doklad k determinants (BFHI): 30 studií, výlučné kojení v 6 měsících RR 1,56 při vysoké heterogenitě.",
+          "ref": ""
+        },
+        {
+          "type": "card-note",
+          "detail": "limitations, bod 5 (Srovnatelnost benchmarku): na konec bodu připojena jedna věta: „Benchmark navíc nevychází z registru, ale z průřezového šetření, v němž výživu při propuštění uváděly samy matky (Chertok et al., Int Breastfeed J 2022;17:83, PMID 36461061), takže jeho srovnání s českými registrovými daty vykazovanými porodnicemi je jen orientační.“",
+          "ref": ""
+        }
+      ],
+      "followup": "Neověřeno: tvrzení o dokrmování bez medicínské indikace (in-hospital supplementation) zůstalo bez metaanalýzy; přesné období benchmarku 3/2020–2/2022 abstrakt neuvádí; tvrzení o císařském řezu (plné kojení kolem 35 % v roce 2020) a o sociálním gradientu kojení nebyla v rozpočtu ověřena; validita ukazatele jako míry výkonu systému nebyla samostatně hledána.",
+      "notes": "PubMed použito 7 volání (strop 8): 4 hledání s dotazy na BFHI a suplementaci, 1 hledání metadat 6 PMID, 1 neúspěšná konverze PMC9716162 na PMID (API_ERROR), 1 hledání IBJ. Consensus nepoužit (PubMed dal 3 metaanalýzy a přehled, podmínka pro Consensus nesplněna). Nedohledána citovaná studie PMC9716162 (benchmark). Nepokryto z rozpočtu: vliv způsobu porodu (císařský řez, kolem 35 %) a kontakt kůže na kůži. Dotaz na in-hospital formula supplementation vrátil 0 záznamů. Karta neodkazuje na literaturu mimo benchmark a validita ukazatele jako míry výkonu systému (max 3 tvrzení) nebyla samostatně hledána. | Adjudikace použila 3 volání PubMed. Převod PMC9716162 na PMID 36461061 a metadata této studie ověřily benchmark: 72,4 %, n = 19 350 z 26 709 a 17 zemí sedí doslova s abstraktem. Třetí volání ověřilo Cochrane přehled Moore 2016 (PMID 27885658) ke kontaktu kůže na kůži. Výsledné verdikty: 2 supported (BFHI, benchmark), 1 partial (jednotlivé kroky jako „klíč“).\n\nprose_change zůstává prázdné. Jde o kartu indikátoru, kde audit smí měnit jen pole literature a u measurement verdiktu přidat jednu větu do limitations; partial tvrzení v patient_story navíc odpovídá doporučení WHO/UNICEF a slabší je jen evidence pro rooming-in samostatně.\n\nK posouzení redakcí: benchmark_source.type „who“ a popisek „IBCLC/WHO European Region“ neodpovídají zdroji. Ve skutečnosti jde o šetření IMAgiNE EURO mezi matkami (samoreport), ne o statistiku WHO."
+    },
+    {
+      "id": "indicator:prevalence_dusevni_poruchy_dospeli",
+      "type": "indicator",
+      "checked_at": "2026-11-08",
+      "run_id": "ea-2026-11-08-01",
+      "content_hash": "5eb6adffd7146b3787e730169bc713d93fd12fcc",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 10,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Diagnostika probíhala nástrojem M.I.N.I. v5, který má vysokou shodu s klinicky stanovenou diagnózou.",
+          "location": "method_notes",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "9881538",
+              "doi": "",
+              "title": "The Mini-International Neuropsychiatric Interview (M.I.N.I.): the development and validation of a structured diagnostic psychiatric interview for DSM-IV and ICD-10.",
+              "year": 1998,
+              "journal": "J Clin Psychiatry",
+              "study_type": "methodological",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "32988427",
+              "doi": "10.1017/S2045796020000888",
+              "title": "Increase in prevalence of current mental disorders in the context of COVID-19: analysis of repeated nationwide cross-sectional surveys.",
+              "year": 2020,
+              "journal": "Epidemiol Psychiatr Sci",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Věta je téměř doslovný převzatý popis z metodiky Winkler et al. 2020 (plný text PMC7573458: M.I.N.I. „has demonstrated a high concordance with clinician-assessed diagnosis“, s odkazem na Sheehan). Abstrakt validační práce Sheehan et al. 1998 (PMID 9881538) ale uvádí jen to, že nástroj byl validován proti SCID-P, CIDI a expertnímu klinickému úsudku a že je určen i pro epidemiologické studie. Míru shody (kappa, senzitivitu, specificitu) abstrakt nekvantifikuje, takže „vysoká shoda“ je doložena jen sekundární citací. Abstrakt téže studie NÚDZ označuje M.I.N.I. za „main screening instrument“ a výsledek popisuje jako „symptoms of at least one current mental disorder“. V roce 2020 část vzorku vyplňovala dotazník online (CAWI) a kritérium GAD autoři zmírnili, což podle nich vedlo k relativně vysoké prevalenci GAD. Karta v limitations správně uvádí, že nejde o klinicky potvrzenou diagnózu. Verdikt partial: kvalitativně doloženo, kvantitativně ne."
+        },
+        {
+          "claim_id": "",
+          "text": "Podle CZEMS 2017 nedostávalo péči 61 % lidí s afektivní poruchou a až 93 % lidí s poruchou z užívání alkoholu (Winkler et al., European Psychiatry 2019).",
+          "location": "method_notes / determinants / patient_story",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "31009916",
+              "doi": "10.1016/j.eurpsy.2019.04.003",
+              "title": "The treatment gap for mental disorders and associated factors in the Czech Republic.",
+              "year": 2019,
+              "journal": "Eur Psychiatry",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "38042095",
+              "doi": "10.1016/j.psychres.2023.115641",
+              "title": "Population mental health, help-seeking and associated barriers following the COVID-19 pandemic: Analysis of repeated nationally representative cross-sectional surveys in Czechia.",
+              "year": 2023,
+              "journal": "Psychiatry Res",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt PMID 31009916 uvádí doslova: „treatment gap for mental disorders ranged from 61% for affective to 93% for alcohol use disorders“ (CZEMS, M.I.N.I., n = 659 osob s aktuální poruchou). Čísla tedy sedí. Atribuce je ale chybná: prvním autorem je Kagstrom A. (Kagstrom et al., Eur Psychiatry 2019;59:37-43), Winkler P. je až předposlední autor. Studie Winkler et al. 2020 v plném textu cituje tentýž údaj také jako „Kagstrom et al.“. Potočár et al. 2023 uvádí treatment gap kolem 80 % v letech 2017–2022 (souhrnná hodnota, jiná agregace), mezera tedy trvala i v roce 2022. Text o ČR stojí na české evidenci, otázka přenositelnosti tu nevzniká."
+        },
+        {
+          "claim_id": "",
+          "text": "Aktuální prevalence JAKÉKOLI duševní poruchy: 20,02 % (2017) → 29,63 % (květen 2020) → 27,22 % (listopad–prosinec 2022); deprese 3,96 % → 11,77 %, úzkostné poruchy 7,79 % → 12,84 %; při domácnostním výběru a osobním rozhovoru vychází v 2022 19,9 %, panelový a telefonický vzorek 34,3 % a 26,7 %.",
+          "location": "method_notes",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "32988427",
+              "doi": "10.1017/S2045796020000888",
+              "title": "Increase in prevalence of current mental disorders in the context of COVID-19: analysis of repeated nationwide cross-sectional surveys.",
+              "year": 2020,
+              "journal": "Epidemiol Psychiatr Sci",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "38042095",
+              "doi": "10.1016/j.psychres.2023.115641",
+              "title": "Population mental health, help-seeking and associated barriers following the COVID-19 pandemic: Analysis of repeated nationally representative cross-sectional surveys in Czechia.",
+              "year": 2023,
+              "journal": "Psychiatry Res",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "31096115",
+              "doi": "10.1016/j.eurpsy.2019.05.001",
+              "title": "Prevalence of mental disorders and associated disability: Results from the cross-sectional CZEch mental health Study (CZEMS).",
+              "year": 2019,
+              "journal": "Eur Psychiatry",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Všechna čísla jsou v abstraktech. PMID 32988427: 20,02 → 29,63 %, deprese 3,96 → 11,77 %, úzkostné poruchy 7,79 → 12,84 %, n = 3306 a 3021. PMID 38042095: 2017 20,02 %, 2022 27,22 % (n = 7311); panel s online sběrem 34,29 % (karta zaokrouhluje na 34,3 %), telefon 26,7 %, domácnostní výběr s osobním rozhovorem 19,9 %. Studie jsou dohledatelné a nejsou retrahované. Drobnost: method_notes uvádí Potočár et al. jednou s rokem 2024 a jednou 2023. Správně je 2023 (Psychiatry Res 2023;331:115641, vyšlo 27. 11. 2023). Původní zpráva CZEMS (PMID 31096115) podle rešerše uvádí pro 2017 21,9 %. Jde o jinou váhu/definici, je to jen kontext, ne rozpor. Kartu jsem v tomto bodě znovu neověřoval."
+        }
+      ],
+      "summary": {
+        "supported": 2,
+        "partial": 1,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "literature karty: Winkler et al. 2020, Epidemiol Psychiatr Sci 2020;29:e173 (PMID 32988427, DOI 10.1017/S2045796020000888, cross-sectional): prevalence aktuální duševní poruchy 20,02 % (2017) a 29,63 % (2020), deprese 3,96 → 11,77 %, úzkostné poruchy 7,79 → 12,84 % (M.I.N.I.).",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "literature karty: Potočár et al. 2023, Psychiatry Res 2023;331:115641 (PMID 38042095, DOI 10.1016/j.psychres.2023.115641, cross-sectional): prevalence 27,22 % (2022, n = 7311), podle metody sběru 19,9 % / 34,29 % / 26,7 %; treatment gap kolem 80 % v letech 2017–2022.",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "literature karty: Kagstrom et al. 2019, Eur Psychiatry 2019;59:37-43 (PMID 31009916, DOI 10.1016/j.eurpsy.2019.04.003, cross-sectional): treatment gap 61 % (afektivní poruchy) až 93 % (poruchy z užívání alkoholu), CZEMS 2017.",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "literature karty: Sheehan et al. 1998, J Clin Psychiatry 1998;59 Suppl 20:22-33 (PMID 9881538, bez DOI, methodological): validace M.I.N.I. proti SCID-P, CIDI a expertnímu klinickému úsudku; míra shody v abstraktu není kvantifikována.",
+          "ref": ""
+        },
+        {
+          "type": "card-note",
+          "detail": "Chybná atribuce v method_notes: „(Winkler et al., European Psychiatry 2019)“ u treatment gapu 61 % / 93 % má správně znít Kagstrom et al., Eur Psychiatry 2019;59:37-43 (PMID 31009916). Prose audit nemění, k opravě redakcí.",
+          "ref": ""
+        },
+        {
+          "type": "card-note",
+          "detail": "Nesoulad roku v method_notes: Potočár et al. je jednou uveden s rokem 2024 („Psychiatry Research 2024“) a jednou s rokem 2023. Správně je Psychiatry Res 2023;331:115641 (PMID 38042095). K opravě redakcí.",
+          "ref": ""
+        },
+        {
+          "type": "card-note",
+          "detail": "limitations: za první větu (… jednu z nejnižších hodnot v EU.) vložena jedna věta k verdiktu measurement partial: „Nástroj M.I.N.I. byl validován proti strukturovaným rozhovorům SCID-P a CIDI a proti expertnímu klinickému úsudku (Sheehan et al., J Clin Psychiatry 1998, PMID 9881538), autoři šetření NÚDZ ho však používají jako screeningový nástroj a výsledek popisují jako příznaky aktuální poruchy, v roce 2020 navíc se zmírněným kritériem generalizované úzkostné poruchy (Winkler et al., Epidemiol Psychiatr Sci 2020, PMID 32988427).“",
+          "ref": ""
+        }
+      ],
+      "followup": "Neověřeno: kauzální věty v determinants a patient_story (stigma a nízké sebe-rozpoznání jako příčina rozdílu proti EHIS, pandemie COVID-19 jako příčina nárůstu, dostupnost ambulantní psychiatrie a psychoterapie); benchmark EHIS 2019 (≤ 3,0 % vs. průměr EU 6,3 %) a IHME/OECD 17,3 % (mimo PubMed); údaj 21,9 % pro 2017 z PMID 31096115 (znám jen z rešerše). Citace Sheehan 1998 (PMID 9881538) je bez DOI. Strop volání PubMed vyčerpán (8 rešerše + 2 adjudikace). Dvě citační chyby v method_notes (Winkler místo Kagstrom, rok 2024 místo 2023) čekají na opravu redakcí.",
+      "notes": "Využito 8 volání PubMed v rešerši (strop): metadata 32988427+38042095, lookup Winkler 2019 (nejednoznačné), search validace M.I.N.I. (prázdný dotaz), metadata 31096115/31009916/30875582, search validace M.I.N.I., search Sheehan (prázdný), lookup Sheehan 1998, metadata 9881538. Consensus nepoužit, PubMed dal dostatek. Kauzální věty v determinants/patient_story nebyly do 3 tvrzení zařazeny. Adjudikace (Opus): 2 volání PubMed (metadata 4 PMID, plný text PMC7573458). Finální verdikty: 2× supported (prevalence; treatment gap), 1× partial (shoda M.I.N.I. s klinickou diagnózou). Kontradikce nejsou, flagged ani issue se nezakládá. Karta dostala pole literature (4 studie) a jednu větu do limitations. Prahy signal_thresholds se z literatury neodvozují."
+    },
+    {
+      "id": "indicator:lekari_per_1000",
+      "type": "indicator",
+      "checked_at": "2026-11-08",
+      "run_id": "ea-2026-11-08-01",
+      "content_hash": "5b69a01d7bba6b06ec11b3874d0bd89ddc7362dd",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 10,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "text": "Hustota lékařů je proxy strukturní kapacity systému.",
+          "location": "patient_story, závěrečný odstavec; definice a direction higher_is_better",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "30776056",
+              "doi": "10.1001/jamainternmed.2018.7624",
+              "title": "Association of Primary Care Physician Supply With Population Mortality in the United States, 2005-2015.",
+              "year": 2019,
+              "journal": "JAMA Internal Medicine",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace ověřila PMID 30776056 v PubMed (Basu et al., JAMA Intern Med 2019;179(4):506-514). Šlo o observační analýzu 3 142 okresů USA v letech 2005–2015. Každých 10 praktiků primární péče navíc na 100 000 obyvatel souviselo s +51,5 dne naděje dožití, 10 specialistů navíc jen s +19,2 dne. Studie tedy podporuje, že nabídka lékařů je smysluplný strukturní vstup a že směr higher_is_better dává smysl. Zároveň ukazuje, že přínos závisí na mixu (primární péče vs. specialisté), který souhrnný head count nerozlišuje. Karta to sama připouští („interpretovat ji nutno společně s distribucí, specializačním mixem a úvazkovou intenzitou“). Evidence je americká a observační, přenositelnost na ČR je omezená. Proto partial, ne supported. Ve vymezeném rozpočtu nebyl ověřen žádný mezinárodní systematický přehled."
+        },
+        {
+          "text": "Lékařů máme nad OECD průměrem, přesto čekání chronicky narůstá. (a směr higher_is_better v kartě)",
+          "location": "patient_story, úvodní odstavec; pole direction",
+          "kind": "other",
+          "verdict": "not-applicable",
+          "confidence": "medium",
+          "evidence": [],
+          "note": "Potvrzuji verdikt rešerše. Srovnání s OECD je statistický údaj (OECD DF_PHYS: ČR 4,29 vs. průměr OECD 4,02, 2024), ověřený seed-auditem 2. 11. 2026, ne tvrzení pro recenzovanou literaturu. Věta o chronicky narůstajícím čekání nemá zdroj a o čekacích dobách v ČR nebyla nalezena studie indexovaná v PubMed. K posouzení redakcí: doložit zdroj (např. data ZP/ÚZIS o čekacích dobách) nebo formulaci zmírnit. Číselné údaje z ÚZIS v patient_story (třetina lékařů 60+, 80 % cíle praktiků, 65 % doplnění absolventy, 1,2–1,5 úvazku) jsou mimo rozsah evidence-auditu. Patří do kontroly zdrojů redakcí. Směr higher_is_better částečně podporuje Basu 2019 (viz tvrzení 1), prahy good 2 % / warn 5 % jsou provozní konvence dashboardu."
+        },
+        {
+          "text": "rozšíření kompetencí sester praktiků (nurse practitioners model — UK NICE 2023)",
+          "location": "patient_story, třetí odstavec (politické páky)",
+          "kind": "efficacy",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "30011347",
+              "doi": "10.1002/14651858.CD001271.pub3",
+              "title": "Nurses as substitutes for doctors in primary care.",
+              "year": 2018,
+              "journal": "The Cochrane database of systematic reviews",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzuji partial. Cochrane přehled Laurant et al. 2018 (18 RCT, 17 z vysokopříjmových zemí) jsem ověřil v PubMed. Podle něj péče vedená sestrami jako náhrada lékařů v primární péči pravděpodobně dosahuje stejných nebo lepších zdravotních výsledků a vyšší spokojenosti pacientů (nízká až střední jistota). Konzultace jsou ale delší a vliv na náklady i procesy péče je nejistý (velmi nízká jistota). Páka „rozšíření kompetencí sester“ je tedy literaturou podložena co do kvality a výsledků. Přímý důkaz, že rozšíří kapacitu nebo zkrátí čekání, přehled nepřináší. Evidence je zahraniční, přenositelnost na český právní rámec kompetencí sester je nejistá. Citaci „UK NICE 2023“ nelze dohledat v PubMed, karta k ní neuvádí odkaz a označení NICE jako autora „nurse practitioners model“ je sporné. K posouzení redakcí: doplnit přesný odkaz, nebo citaci nahradit odkazem na Laurant 2018."
+        }
+      ],
+      "summary": {
+        "supported": 0,
+        "partial": 2,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 1,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "indicators/lekari_per_1000.json → literature (pole založeno): Basu S et al. JAMA Intern Med 2019;179(4):506-514, PMID 30776056, DOI 10.1001/jamainternmed.2018.7624 — k hustotě lékařů jako proxy strukturní kapacity a ke směru higher_is_better.",
+          "ref": "https://pubmed.ncbi.nlm.nih.gov/30776056/"
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/lekari_per_1000.json → literature: Laurant M et al. Cochrane Database Syst Rev 2018;7(7):CD001271, PMID 30011347, DOI 10.1002/14651858.CD001271.pub3 — k páce rozšíření kompetencí sester v patient_story.",
+          "ref": "https://pubmed.ncbi.nlm.nih.gov/30011347/"
+        },
+        {
+          "type": "card-note",
+          "detail": "indicators/lekari_per_1000.json → limitations: připojena jedna věta s citací (measurement = partial): „Souhrnná hustota nerozlišuje mix: v USA souviselo +10 lékařů primární péče na 100 000 obyvatel s +51,5 dne naděje dožití, +10 specialistů jen s +19,2 dne (Basu et al., JAMA Intern Med 2019, PMID 30776056).“",
+          "ref": "https://doi.org/10.1001/jamainternmed.2018.7624"
+        },
+        {
+          "type": "none",
+          "detail": "Tvrzení 2 (srovnání s OECD a narůstající čekání) je not-applicable, na kartě žádná akce. Žádný contradicted, proto bez flagged a bez issue. V data/claims.json žádné tvrzení této karty není (záznamy s indicator_id lekari_per_1000 patří článkům), claim-note nepřichází v úvahu.",
+          "ref": ""
+        }
+      ],
+      "followup": "(a) Mezinárodní systematický přehled vztahu hustoty lékařů a výsledků péče nebyl v rozpočtu volání dohledán, tvrzení 1 stojí jen na observační studii z USA (Basu 2019). (b) Věta o chronicky narůstajícím čekání v patient_story nemá zdroj, k posouzení redakcí. (c) Citace „UK NICE 2023“ a „ÚZIS analýza 2024“ v patient_story jsou bez odkazu a DOI, v PubMed nedohledatelné. (d) Formulace „finských peripherally tariffs“ a číselné údaje ÚZIS o věkové struktuře, doplňování absolventy a úvazcích jsou mimo rozsah evidence-auditu, ke kontrole zdrojů redakcí.",
+      "notes": "Rešerše (Sonnet): PubMed 8 volání (3 hledání bez využitelného výsledku, 1 hledání Cochrane, 1 metadata 3 PMID, 1 neúspěšné lookup_article_by_citation kvůli formátu parametru, 2 hledání); Consensus nepoužit, protože strop PubMed nedovoloval ověřit kandidáty. Adjudikace (Opus): 2 volání PubMed — get_article_metadata ověřilo PMID 30776056 a 30011347, search_articles k mezinárodnímu přehledu hustoty lékařů a mortality nepřineslo použitelný výsledek. Tvrzení 1 rešerše vedla jako unclear, adjudikace jej na základě Basu 2019 povýšila na partial. Zápis (Opus): pole literature založeno se 2 studiemi, do limitations připojena jedna věta s citací; patient_story ani čísla beze změny."
     }
   ]
 }
