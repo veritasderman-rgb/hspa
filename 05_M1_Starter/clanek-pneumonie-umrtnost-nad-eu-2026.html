@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-11-09
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-11-09
+    creation_phase: rutina+indicator-add
+    form: article
+    primary_sources_count: 6
+    evidence_sources_count: 4
+    visual_elements_count: 5
+    notes: "Doprovodny clanek k novemu indikatoru mortalita_pneumonie (Vysledky · Mortalita · Infekce dolnich dychacich cest, framework hspa, dimension zdravi, direction lower_is_better, signal bad, benchmark EU27 24,97, prahy good 5 / warn 15 jako u mortalita_chopn). Vytvoreno z bloku F rutiny 2026-11-09 (pondeli = INDICATOR-ADD). Forma: standardni clanek 8.3, ne esej — chybi dolozena uvodni scena. KPI: 39,02 umrti na 100 000 obyvatel (Eurostat hlth_cd_asdr2, CZ, sex=T, age=TOTAL, icd10=J12-J18, unit=RT, ESP 2013; dataset aktualizovan 8. 6. 2026; stazeno z API 9. 11. 2026). Bench: EU27_2020 24,97 (2023, tataz rada). Pomer 39,02/24,97 = 1,56, odchylka +56,3 % (vypocet redakce). RADA CZ: 2018 38,86 · 2019 38,58 · 2020 41,29 · 2021 37,84 · 2022 40,45 · 2023 39,02. EU: 2018 24,76 · 2019 23,54 · 2020 22,85 · 2021 21,45 · 2022 23,36 · 2023 24,97. Sousede 2023: DE 19,57 · AT 12,82 · PL 59,20 · SK 74,85 (SK 2021 133,68, 2022 102,74). ABSOLUTNE: Eurostat hlth_cd_aro (J12-J18, NR, TOT_IN, dataset aktualizovan 27. 10. 2026, stazeno 9. 11. 2026) 2018 3 420 · 2019 3 484 · 2020 3 829 · 2021 3 602 · 2022 3 804 · 2023 3 747 · 2024 3 852. NZIP (vlastni vypocet z otevrenych dat stazenych 9. 11. 2026, soucet pocet_hosp pro hlavni dg zacinajici J12-J18; dataset 1952 sloupec zdg, dataset 2225 sloupce ZDG, umrti = umrti za hospitalizace): akutni pece 2018 30 561 · 2019 30 503 · 2020 51 525 · 2021 99 498 · 2022 43 404 · 2023 35 773 · 2024 41 340 · 2025 34 444; z toho J12.8 2020 26 248 · 2021 76 147 · 2022 15 852 · 2025 1 196. Intenzivni pece pripady/umrti: 2019 5 191/1 071 · 2023 5 895/1 219 · 2024 6 911/1 198 · 2025 5 600/1 066. Podily umrti 20,6 % (2019) a 19,0 % (2025) jsou vypocet redakce. COVID kodovani: WHO International Guidelines for Certification and Classification (Coding) of COVID-19 as Cause of Death (duben 2020), kody U07.1/U07.2. EVIDENCE (overeno v PubMed 9. 11. 2026 pres get_article_metadata): Bonten MJ et al. N Engl J Med 2015;372(12):1114-25, PMID 25785969, doi 10.1056/NEJMoa1408544 (RCT CAPITA, 84 496 osob 65+, PCV13 ucinnost 45,6 % proti VT-CAP, 5,1 % proti CAP z jakekoli priciny n.s., umrti podobna); Moberley S et al. Cochrane 2013 CD000422.pub3, PMID 23440780 (18 RCT + 7 non-RCT; IPD OR 0,26; celkova umrtnost OR 0,90 CI 0,74-1,09; vseobecna pneumonie ve vysokoprijmovych zemich OR 0,71 CI 0,45-1,12 n.s.); Falci L et al. Am J Epidemiol 2018;187(1):144-152, PMID 28595293, doi 10.1093/aje/kwx207 (NYC 2010-2014, 66,8 % listu s pneumonii omezene kvality, 45,9 % jen J18.9). Mackenbach JP et al. J Epidemiol Community Health 1987;41(2):156-60, PMID 3655636 — prevzato z registru clanku o CHOPN (overeno v PubMed 12. 10. 2026), v tomto behu potvrzeno jen pres Consensus (DOI 10.1136/jech.41.2.156). Consensus (1 dotaz) nasel i Kelson & Heller 1983 a Marshall et al. 2018 (Respir Res) — v PubMed v ramci stropu 8 dotazu neovereny, proto necitovany. Databox: hodnoty literalne z data/indicators.json (vakcinace_pneumokok_65 28,6 % 2025; vakcinace_chripka_65 24,6 % 2026 vs OECD 51 / EU 41; hospitalizace_acsc 592 vs OECD 473 2023; mortalita_chopn 33,48 vs EU 27,86 2023; umrti_doma_nebo_hospici_pct 26,2 % 2022 vs OECD 32 / EU 31,5). Pani Vera je modelova postava (patient_story karty), v clanku nepouzita. Ceka na schvaleni redakce."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Na zápal plic umírá v Česku o polovinu víc lidí než v průměru EU. Za šest let se to nezměnilo · HSPA Monitor</title>
+<meta name="description" content="Na zápal plic zemřelo v Česku podle Eurostatu v roce 2023 39,02 lidí na 100 000 obyvatel, v průměru EU 24,97. Česko je o 56 % nad Evropou a jeho hodnota se od roku 2018 prakticky nezměnila. Rakousko má třetinu české úmrtnosti, Polsko a Slovensko naopak víc. Tak velké rozdíly vypovídají i o tom, jak se vyplňují úmrtní listy. Nový indikátor HSPA Monitoru ukazuje, co v tom čísle dělá stáří, kódování příčin smrti a nízká proočkovanost seniorů.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Na zápal plic umírá v Česku o polovinu víc lidí než v průměru EU. Za šest let se to nezměnilo">
+<meta property="og:description" content="39,02 úmrtí na zápal plic na 100 000 obyvatel v Česku proti 24,97 v EU (Eurostat 2023). Nový indikátor HSPA Monitoru.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-pneumonie-umrtnost-nad-eu-2026.html">
+<meta property="article:published_time" content="2026-11-11">
+<meta property="article:section" content="Mortalita a zátěž nemocí">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-pneumonie-umrtnost-nad-eu-2026.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "Na zápal plic umírá v Česku o polovinu víc lidí než v průměru EU. Za šest let se to nezměnilo",
+  "description": "Na zápal plic zemřelo v Česku podle Eurostatu v roce 2023 39,02 lidí na 100 000 obyvatel, v průměru EU 24,97. Česko je o 56 % nad Evropou a jeho hodnota se od roku 2018 prakticky nezměnila. Rakousko má třetinu české úmrtnosti, Polsko a Slovensko naopak víc. Tak velké rozdíly vypovídají i o tom, jak se vyplňují úmrtní listy. Nový indikátor HSPA Monitoru ukazuje, co v tom čísle dělá stáří, kódování příčin smrti a nízká proočkovanost seniorů.",
+  "datePublished": "2026-11-11T06:00:00+01:00",
+  "dateModified": "2026-11-09",
+  "inLanguage": "cs",
+  "articleSection": "Mortalita a zátěž nemocí",
+  "author": { "@type": "Organization", "name": "Redakce HSPA Monitoru" },
+  "publisher": { "@type": "Organization", "name": "HSPA Monitor · Skóre zdravotnictví", "url": "https://skorezdravotnictvi.cz" },
+  "mainEntityOfPage": "https://skorezdravotnictvi.cz/clanek-pneumonie-umrtnost-nad-eu-2026.html"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Mortalita a zátěž nemocí</span>
+        <span class="article-tag article-tag-muted">pneumonie · příčiny smrti · očkování seniorů · pneumokok · chřipka · Eurostat</span>
+      </div>
+      <h1 class="article-title">Na zápal plic umírá v Česku o polovinu víc lidí než v průměru EU. Za šest let se to nezměnilo</h1>
+      <p class="article-deck">
+        Na zápal plic zemřelo v Česku podle Eurostatu v roce 2023 39,02 lidí na 100 000 obyvatel, v průměru EU 24,97. Česko je o 56 % nad Evropou a jeho hodnota se od roku 2018 prakticky nezměnila. Rakousko má třetinu české úmrtnosti, Polsko a Slovensko naopak víc. Tak velké rozdíly vypovídají i o tom, jak se vyplňují úmrtní listy. Nový indikátor HSPA Monitoru ukazuje, co v tom čísle dělá stáří, kódování příčin smrti a nízká proočkovanost seniorů.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">11. listopadu 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">10 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Zápal plic působí jako nemoc minulého století, kterou dnes vyléčí antibiotika. Statistika příčin smrti říká něco jiného. V roce 2024 zemřelo v Česku na pneumonii jako základní příčinu smrti <strong>3 852 lidí</strong>, víc než v kterémkoli roce od roku 2018. Po přepočtu na stejnou věkovou strukturu obyvatel vychází Česku za rok 2023 <strong>39,02 úmrtí na 100 000 obyvatel</strong>, zatímco průměr Evropské unie je 24,97. Rozdíl 56 % je mnohem větší než u většiny jiných příčin smrti, které HSPA Monitor sleduje. Co z něj připadá na nemoc a co na to, jak se v Česku píší úmrtní listy, data přesně neřeknou. Obojí ale vede k otázkám, které má smysl položit.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCntH">
+        <figcaption class="av-figure-h" id="avCntH">Úmrtnost na zápal plic: čtyři čísla (Eurostat hlth_cd_asdr2 a hlth_cd_aro, ÚZIS, stav k 9. 11. 2026)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="39.02" data-decimals="2">39,02</span>
+            <span class="av-counter-label">úmrtí na 100 000 obyvatel v Česku, 2023 (věkově standardizováno, MKN-10 J12–J18)</span>
+            <span class="av-counter-foot">Průměr EU-27: 24,97</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-prefix="+" data-value="56" data-suffix=" %">+56 %</span>
+            <span class="av-counter-label">o tolik je Česko nad průměrem EU</span>
+            <span class="av-counter-foot">39,02 / 24,97 = 1,56 (výpočet redakce)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="3852">3 852</span>
+            <span class="av-counter-label">lidí zemřelo v Česku na zápal plic v roce 2024</span>
+            <span class="av-counter-foot">Eurostat hlth_cd_aro; v roce 2018 to bylo 3 420</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="24.6" data-decimals="1" data-suffix=" %">24,6 %</span>
+            <span class="av-counter-label">seniorů nad 65 let se očkovalo proti chřipce v sezóně 2025/26</span>
+            <span class="av-counter-foot">ÚZIS; průměr OECD 51 %, EU 41 %</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat, hlth_cd_asdr2 (standardizovaná míra, ESP 2013, J12–J18), referenční rok 2023, dataset aktualizován 8. 6. 2026; Eurostat, hlth_cd_aro (absolutní počty, J12–J18), dataset aktualizován 27. 10. 2026; obojí staženo z API 9. 11. 2026. Proočkovanost: indikátor vakcinace_chripka_65 (ÚZIS, stav k 1. 9. 2026). Poměr 1,56 je výpočet redakce.</p>
+      </figure>
+
+      <h3>Co indikátor měří</h3>
+      <p>
+        Nový indikátor <a href="indicator.html?id=mortalita_pneumonie">Standardizovaná úmrtnost na zápal plic</a> přebírá řadu Eurostatu <em>hlth_cd_asdr2</em>: věkově standardizovanou míru úmrtí, u nichž byla jako základní příčina smrti vybrána pneumonie, tedy kódy MKN-10 J12 až J18, na 100 000 obyvatel. Skupina zahrnuje virové pneumonie (J12), pneumokokovou pneumonii (J13), pneumonie vyvolané dalšími bakteriemi a organismy (J14–J16), pneumonie u nemocí zařazených jinde (J17) a pneumonii s neurčeným původcem (J18). Standardizace na evropskou standardní populaci (ESP 2013) odstraňuje vliv toho, že některé země mají starší obyvatelstvo než jiné. Hodnoty Česka, sousedů i průměru EU jsou tak spočítané stejně.
+      </p>
+      <p>
+        Prvotním zdrojem jsou v Česku Listy o prohlídce zemřelého. Lékař na ně zapíše řetězec nemocí, které vedly ke smrti, a Český statistický úřad z nich podle pravidel MKN-10 vybírá jedinou základní příčinu, a to automatizovaným systémem IRIS. To je pro tento indikátor podstatné: pneumonie je typická nemoc konce řetězce. Když umírá devadesátiletý člověk s demencí, který přestal polykat a dostal zápal plic, záleží na tom, co lékař zapíše na který řádek a jak pravidla s tím zápisem naloží. V datovém kontraktu má indikátor směr „nižší je lepší“ a signál <strong>bad</strong>: Česko je od průměru EU vzdáleno o 56,3 %, daleko za hranicí 15 %, kterou HSPA Monitor používá u standardizovaných měr úmrtnosti z této řady.
+      </p>
+
+      <h3>Stav v Česku: o polovinu nad Evropou, beze změny</h3>
+      <p>
+        V absolutních číslech zemřelo podle Eurostatu na zápal plic v Česku 3 420 lidí v roce 2018, 3 484 v roce 2019, 3 829 v roce 2020, 3 602 v roce 2021, 3 804 v roce 2022, 3 747 v roce 2023 a 3 852 v roce 2024. Proti roku 2018 je to nárůst o 13 % (výpočet redakce). Absolutní počty ale ovlivňuje i stárnutí obyvatel, proto je pro srovnání důležitější standardizovaná míra. Ta je za rok 2024 zatím nezveřejněná; Eurostat ji vydává s odstupem zhruba dva a půl roku.
+      </p>
+      <p>
+        Standardizovaná míra ukazuje pozoruhodnou stabilitu. V roce 2018 měla Česká republika 38,86 úmrtí na 100 000 obyvatel, v roce 2023 39,02. Evropský průměr se za stejnou dobu změnil z 24,76 na 24,97. Odstup tak na začátku i na konci období vychází na 1,56–1,57násobek. Mezi tím se ale rozevřel: v roce 2020 bylo Česko na 1,81násobku evropského průměru. Česká hodnota tehdy vzrostla na 41,29, zatímco evropská klesla na 22,85 a v roce 2021 dál na 21,45. Proč se Evropa a Česko v pandemii rozešly opačným směrem, zdroje nevysvětlují. Zúžení odstupu v roce 2023 přitom nepřineslo zlepšení v Česku, ale návrat evropského průměru na předpandemickou úroveň.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTblH">
+        <figcaption class="av-figure-h" id="avTblH">Úmrtnost na zápal plic, Česko a EU-27, na 100 000 obyvatel, standardizováno (Eurostat, 2018–2023)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr><th scope="col">Rok</th><th scope="col">Česko</th><th scope="col">EU-27</th><th scope="col">Česko proti EU</th><th scope="col">Zemřelí v ČR (počet)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>2018</td><td>38,86</td><td>24,76</td><td>1,57×</td><td>3 420</td></tr>
+              <tr><td>2019</td><td>38,58</td><td>23,54</td><td>1,64×</td><td>3 484</td></tr>
+              <tr><td>2020</td><td>41,29</td><td>22,85</td><td>1,81×</td><td>3 829</td></tr>
+              <tr><td>2021</td><td>37,84</td><td>21,45</td><td>1,76×</td><td>3 602</td></tr>
+              <tr><td>2022</td><td>40,45</td><td>23,36</td><td>1,73×</td><td>3 804</td></tr>
+              <tr><td>2023</td><td><strong>39,02</strong></td><td>24,97</td><td>1,56×</td><td>3 747</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat, hlth_cd_asdr2, sex=T, age=TOTAL, icd10=J12–J18, unit=RT; absolutní počty Eurostat hlth_cd_aro (unit=NR, úmrtí na území ČR); staženo z API 9. 11. 2026. Poměry jsou výpočet redakce (zaokrouhleno na dvě desetinná místa). Za rok 2024 je známý jen absolutní počet: 3 852.</p>
+      </figure>
+
+      <h3>Covidové roky: proč čísla 2020–2022 číst s výhradou</h3>
+      <p>
+        Pandemie covidu-19 tuto řadu komplikuje dvojím způsobem. Covid sám je virové onemocnění, které u těžce nemocných vyvolává právě virovou pneumonii. Světová zdravotnická organizace proto v dubnu 2020 vydala pokyny, podle kterých se úmrtí na covid-19 kódují samostatnými kódy U07.1 a U07.2, a pokud covid vedl ke smrti, má být zapsán jako základní příčina. Ve statistice úmrtí by tedy covidová pneumonie do skupiny J12–J18 patřit neměla. Hranice mezi „zemřel na covid“ a „zemřel na zápal plic“ ale v praxi záleží na testování a na lékaři, který list vyplňuje.
+      </p>
+      <p>
+        Jak silně se to může projevit, ukazuje Slovensko. Jeho standardizovaná úmrtnost na pneumonii byla v roce 2019 50,99, v roce 2020 70,95, v roce 2021 133,68 a v roce 2022 102,74. V roce 2023 klesla na 74,85, stále nad předpandemickou úrovní. Takový skok těžko vysvětlit jinak než tím, že část úmrtí, která souvisela s pandemií, skončila ve slovenské statistice jako pneumonie. Česká řada podobný výkyv nemá; nejvyšší hodnotu dosáhla v roce 2020 (41,29).
+      </p>
+      <p>
+        V nemocničních datech je covidový otisk naopak zřetelný. Podle otevřených dat Národního zdravotnického informačního portálu, ze kterých redakce sečetla hospitalizační případy akutní péče s hlavní diagnózou J12–J18, bylo takových hospitalizací 30 503 v roce 2019, 51 525 v roce 2020, 99 498 v roce 2021 a 43 404 v roce 2022. Nárůst nese kód J12.8, jiná virová pneumonie, pod kterým nemocnice vykazovaly covidovou pneumonii: 76 147 případů v roce 2021 proti 1 196 v roce 2025. V roce 2025 bylo hospitalizací pro pneumonii celkem 34 444. Pro hospitalizace tedy srovnání s předpandemickými roky začíná až v roce 2023.
+      </p>
+      <p>
+        Stejná data ukazují i to, jak těžká nemoc pneumonie zůstává. V roce 2025 prošlo intenzivní péčí 5 600 hospitalizačních případů s hlavní diagnózou pneumonie a 1 066 z nich skončilo úmrtím za hospitalizace, tedy 19,0 % (výpočet redakce). V roce 2019 to bylo 1 071 úmrtí z 5 191 případů (20,6 %). Kolik z celkových zhruba 3 800 úmrtí ročně připadá na nemocnice, LDN, domovy pro seniory a domácnosti, tato data neříkají.
+      </p>
+
+      <h3>Mezinárodní srovnání: šestinásobné rozpětí mezi sousedy</h3>
+
+      <figure class="av-figure" aria-labelledby="avBarH">
+        <figcaption class="av-figure-h" id="avBarH">Úmrtnost na zápal plic, na 100 000 obyvatel, věkově standardizováno (Eurostat, 2023)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-unit="" data-max="80">
+          <li class="av-bar-row" data-value="74.85" data-label="Slovensko" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="59.2" data-label="Polsko" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="39.02" data-label="Česko" data-accent="bad"></li>
+          <li class="av-bar-row" data-value="24.97" data-label="EU-27" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="19.57" data-label="Německo" data-accent="good"></li>
+          <li class="av-bar-row" data-value="12.82" data-label="Rakousko" data-accent="good"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat, hlth_cd_asdr2, sex=T, age=TOTAL, icd10=J12–J18, unit=RT; referenční rok 2023 (poslední dostupný), dataset aktualizován 8. 6. 2026, staženo 9. 11. 2026. Hodnoty Polska a Slovenska jsou ovlivněny kódovací praxí a u Slovenska dozvukem pandemie (viz rámeček), proto jsou označeny neutrálně.</p>
+      </figure>
+
+      <p>
+        Mezi sousedy je Česko uprostřed. Rakousko mělo v roce 2023 12,82 úmrtí na 100 000 obyvatel, tedy třetinu české hodnoty, Německo 19,57, zhruba polovinu. Na druhé straně stojí Polsko s 59,20 a Slovensko se 74,85. Polsko mělo hodnoty kolem 55–59 po celé sledované období, nejde tedy o covidový výkyv. Rozpětí mezi Rakouskem a Slovenskem je téměř šestinásobné. U sousedních zemí je to rozdíl, který nelze přičíst jen zdraví plic.
+      </p>
+      <p>
+        Nabízí se proto srovnání, které je spolehlivější: s průměrem EU, s Německem a s Rakouskem, jejichž řady v pandemii nevykazují podobné výkyvy jako slovenská. Proti nim je Česko jasně výš. Proti Polsku a Slovensku je níž, ale jejich čísla je třeba číst s ještě větší opatrností než česká.
+      </p>
+
+      <div class="article-callout-caveat" role="note">
+        <strong>Co lékař zapíše, to statistika započítá.</strong>
+        Zápal plic je u starých a polymorbidních lidí často terminální diagnózou: posledním článkem řetězce, který začal demencí, mozkovou mrtvicí, srdečním selháním nebo nádorem. Pravidla MKN-10 mají vybrat nemoc, která řetězec spustila, ale výsledek záleží na tom, co a v jakém pořadí lékař na úmrtní list zapíše. Studie úmrtních listů v New Yorku z let 2010–2014 (Falci et al. 2018, <em>American Journal of Epidemiology</em>) hodnotila 66,8 % listů s pneumonií jako základní příčinou jako listy omezené kvality; 45,9 % z nich obsahovalo jen tolik informací, že šlo přiřadit pouze kód pro neurčenou pneumonii. Klasická studie zemí Evropského společenství (Mackenbach et al. 1987, <em>Journal of Epidemiology and Community Health</em>) ukázala na stejných modelových případech plicní nemoci, že se národní statistiky v přiřazení základní příčiny výrazně lišily. K tomu přistupují rozdíly mezi zeměmi v tom, jak se vykazovala úmrtí v pandemii. Kolik z českého odstupu od EU připadá na kódování, HSPA Monitor neví a netvrdí. Indikátor proto měří, jak často je pneumonie vybrána jako základní příčina smrti, ne přesně kolik lidí na zápal plic zemřelo.
+      </div>
+
+      <h3>Co za číslem stojí: stáří, kódování a prevence</h3>
+      <p>
+        <strong>Stáří a nemoci, které pneumonii předcházejí.</strong> Pneumonie zabíjí především velmi staré lidi s několika chronickými nemocemi. Jednou z nich je chronická obstrukční plicní nemoc, na kterou Česko také umírá víc než Evropa: <a href="indicator.html?id=mortalita_chopn">úmrtnost na chronické nemoci dolních dýchacích cest</a> je 33,48 na 100 000 obyvatel proti 27,86 v EU (2023). Obě příčiny smrti spolu na úmrtních listech soupeří: tentýž člověk s CHOPN, který zemře na zápal plic, se může do statistiky zapsat jedním, nebo druhým kódem. I proto je dobré obě řady číst společně.
+      </p>
+      <p>
+        <strong>Kódování.</strong> Druhou složkou je způsob, jakým se v Česku vyplňují Listy o prohlídce zemřelého. Ten HSPA Monitor změřit neumí. Česko nepublikuje statistiku vícečetných příčin smrti, ze které by šlo vyčíst, u kolika zemřelých se pneumonie na listu objevila, ani u kolika z nich byla vybrána jako základní příčina místo demence nebo srdečního selhání. Dokud taková data nejsou, část rozdílu proti Evropě zůstane nevysvětlená.
+      </p>
+      <p>
+        <strong>Očkování seniorů.</strong> Třetí složka je prevence a tady data jasně ukazují, že Česko zaostává. Záznam o očkování proti pneumokokům, nejčastějším bakteriálním původcům komunitní pneumonie, má podle ÚZIS 28,6 % lidí nad 65 let (<a href="indicator.html?id=vakcinace_pneumokok_65">vakcinace pneumokoků 65+</a>, 2025) a podíl od roku 2019, kdy byl 31,8 %, klesá. Proti chřipce, která pneumonii často předchází, se v sezóně 2025/26 očkovalo 24,6 % seniorů (<a href="indicator.html?id=vakcinace_chripka_65">proočkovanost proti chřipce 65+</a>), zhruba polovina průměru OECD (51 %) a méně než průměr EU (41 %).
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-warn">
+          <span class="av-counter" data-value="28.6" data-decimals="1" data-suffix=" %">28,6 %</span>
+          <span class="av-counter-label">lidí nad 65 let má záznam o očkování proti pneumokokům (2025)</span>
+          <span class="av-counter-foot">ÚZIS, NZIS; v roce 2019 to bylo 31,8 %</span>
+        </div>
+      </aside>
+
+      <p>
+        Co od vyšší proočkovanosti čekat, je ale potřeba říct poctivě. Největší randomizovaná studie u seniorů, nizozemská CAPITA s 84 496 lidmi nad 65 let (Bonten et al. 2015, <em>New England Journal of Medicine</em>), ukázala, že třináctivalentní konjugovaná vakcína chrání před pneumokokovou pneumonií způsobenou sérotypy, které vakcína obsahuje (účinnost 45,6 %), a ještě silněji před invazivním pneumokokovým onemocněním (75,0 %). Před pneumonií z jakékoli příčiny ochrana statisticky prokázána nebyla (5,1 %, interval spolehlivosti −5,1 až 14,2 %) a počty úmrtí byly v obou skupinách podobné. Cochranův přehled polysacharidových vakcín (Moberley et al. 2013) došel ke shodnému obrazu: silná ochrana před invazivním onemocněním (OR 0,26), ale bez doloženého podstatného snížení celkové úmrtnosti (OR 0,90, interval spolehlivosti 0,74–1,09) a bez prokázané ochrany před pneumonií obecně ve vysokopříjmových zemích. Očkování tedy předchází konkrétní vážné nemoci, ale samo o sobě nesníží číslo z Eurostatu o polovinu.
+      </p>
+      <p>
+        <strong>Péče, než nemoc přeroste v hospitalizaci.</strong> Pneumonie patří mezi stavy, jejichž hospitalizace OECD počítá mezi odvratitelné dobrou ambulantní péčí. Česko má podle <a href="indicator.html?id=hospitalizace_acsc">indikátoru odvratitelných hospitalizací</a> 592 takových hospitalizací na 100 000 obyvatel proti 473 v průměru OECD (2023). Pneumonie je jen jednou ze složek tohoto ukazatele, takže z něj nelze vyčíst, jak si Česko vede právě u ní. Ukazuje ale, že prostor pro včasnější péči o chronicky nemocné existuje.
+      </p>
+
+      <h3>Politická páka: tři místa, kde se dá začít</h3>
+      <p>
+        První pákou je proočkovanost seniorů. Pokles podílu očkovaných proti pneumokokům znamená, že do věku nad 65 let vstupují neočkované ročníky rychleji, než přibývá očkovaných. Proočkovanost proti chřipce stagnuje kolem čtvrtiny. Kde leží hlavní bariéra, data neříkají; jednou z otázek je, kdo seniorovi očkování nabídne a kdy. Evidence slibuje méně případů pneumokokové pneumonie a invazivních infekcí, ne zázračný pokles celkové úmrtnosti.
+      </p>
+      <p>
+        Druhou pákou je kvalita dat o příčinách smrti. Pokud má Česko vědět, proč je na zápal plic o polovinu nad Evropou, potřebuje vidět celý řetězec, který lékař na úmrtní list zapsal, nejen jednu vybranou příčinu. Statistika vícečetných příčin smrti by ukázala, zda Česko častěji vybírá pneumonii tam, kde jiné země zapíšou demenci nebo srdeční selhání. Bez ní se o rozdílu proti Evropě dá jen spekulovat.
+      </p>
+      <p>
+        Třetí pákou je péče na konci života. Velká část úmrtí na pneumonii připadá na lidi, kteří umírají ve vysokém věku s mnoha nemocemi. V Česku zemře doma nebo v hospici 26,2 % lidí (<a href="indicator.html?id=umrti_doma_nebo_hospici_pct">podíl zemřelých doma nebo v hospici</a>, 2022) proti 31,5 % v EU. Jak se péče na konci života promítá do toho, co se zapíše na úmrtní list, data neukazují. Je to ale prostředí, ve kterém se o pneumonii jako o poslední diagnóze rozhoduje nejčastěji.
+      </p>
+
+      <h3>Co s tím</h3>
+      <p>
+        <strong>Praktičtí lékaři a pojišťovny: nabídnout očkování aktivně.</strong> Senior, který přijde na preventivní prohlídku nebo kvůli chronické nemoci, by měl odejít s nabídkou očkování proti chřipce a pneumokokům. Pojišťovny mají data, aby změřily, kolik jejich pojištěnců nad 65 let očkování nemá, a mohou je oslovit přímo.
+      </p>
+      <p>
+        <strong>ČSÚ a ÚZIS: zveřejnit vícečetné příčiny smrti.</strong> Statistika všech nemocí zapsaných na Listu o prohlídce zemřelého, nejen základní příčiny, by teprve umožnila říct, jak velký je český rozdíl proti Evropě doopravdy. Užitečné by bylo i srovnání, jak často se v Česku jako základní příčina objevuje neurčená pneumonie (J18.9).
+      </p>
+      <p>
+        <strong>Nemocnice a lékaři: vyplňovat úmrtní listy celým řetězcem.</strong> Pneumonie zapsaná jako jediná příčina u devadesátiletého člověka s demencí neříká nic o tom, čemu bylo možné předejít. Vzdělávání lékařů v certifikaci příčin smrti je levné a výsledkem jsou data, podle kterých se dá řídit prevence.
+      </p>
+
+      <h3>Co tenhle ukazatel nedokáže</h3>
+      <p>
+        <strong>Za prvé</strong> počítá jen úmrtí, u nichž byla pneumonie vybrána jako základní příčina; nezachytí lidi, u kterých byl zápal plic bezprostřední příčinou smrti, ale statistika vybrala jinou nemoc. <strong>Za druhé</strong> je silně citlivý na to, jak se v které zemi vyplňují a kódují úmrtní listy, a šestinásobné rozpětí mezi Rakouskem a Slovenskem to ukazuje zřetelně. <strong>Za třetí</strong> jsou roky 2020–2022 ovlivněny pandemií covidu-19, v některých zemích výrazně. <strong>Za čtvrté</strong> přichází s odstupem dva a půl roku: standardizovanou míru za rok 2024 zatím nemáme, jen absolutní počet zemřelých. <strong>Za páté</strong> hodnoty nejsou souměřitelné s údaji OECD, které standardizují na jinou populaci. Co ukazatel umí, je položit otázku: proč Česko vybírá zápal plic jako příčinu smrti o polovinu častěji než Evropa, a kolik z toho jde na nemoc, které šlo předejít.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=mortalita_pneumonie"><strong>Standardizovaná úmrtnost na zápal plic (pneumonii)</strong></a> — 39,02 na 100 000 ob. (2023, ČR) proti 24,97 v EU-27 · Výsledky · signál bad · nový indikátor (Eurostat hlth_cd_asdr2)</li>
+        <li><a href="indicator.html?id=vakcinace_pneumokok_65"><strong>Vakcinace pneumokoků (65+)</strong></a> — 28,6 % (2025) · signál neutral (bez benchmarku)</li>
+        <li><a href="indicator.html?id=vakcinace_chripka_65"><strong>Proočkovanost proti chřipce (65+)</strong></a> — 24,6 % (sezóna 2025/26) proti 51 % v OECD a 41 % v EU · signál bad</li>
+        <li><a href="indicator.html?id=hospitalizace_acsc"><strong>Odvratitelné hospitalizace (ACSC)</strong></a> — 592 na 100 000 obyvatel (2023) proti 473 v OECD · signál bad</li>
+        <li><a href="indicator.html?id=mortalita_chopn"><strong>Úmrtnost na chronické nemoci dolních dýchacích cest (CHOPN, astma)</strong></a> — 33,48 na 100 000 ob. (2023) proti 27,86 v EU-27 · signál bad</li>
+        <li><a href="indicator.html?id=umrti_doma_nebo_hospici_pct"><strong>Podíl zemřelých doma nebo v hospici</strong></a> — 26,2 % (2022) proti 31,5 % v EU a 32 % v OECD · signál bad</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární zdroje dat</h5>
+        <ul class="article-sources-list">
+          <li><strong>Eurostat — hlth_cd_asdr2, Causes of death: standardised death rate by NUTS 2 region of residence.</strong> Dimenze icd10 = J12-J18, sex = T, age = TOTAL, unit = RT; referenční roky 2018–2023, dataset aktualizován 8. 6. 2026. Hodnoty pro ČR, EU-27, Německo, Rakousko, Polsko a Slovensko. Staženo z API 9. 11. 2026. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_asdr2/default/table" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a></li>
+          <li><strong>Eurostat — hlth_cd_aro, Causes of death: deaths by country of residence and occurrence.</strong> Absolutní počty úmrtí na J12–J18 na území ČR: 3 420 (2018) až 3 852 (2024). Dataset aktualizován 27. 10. 2026, staženo 9. 11. 2026. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_aro/default/table" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a></li>
+          <li><strong>ÚZIS / NZIP — Hospitalizační případy akutní péče, čtyřznakové diagnózy (otevřená data).</strong> Počty hospitalizačních případů podle hlavní diagnózy; součet J12–J18 a rozpad podle kódu J12.8 je výpočet redakce ze souboru staženého 9. 11. 2026. <a href="https://www.nzip.cz/data/1952-hospitalizacni-pripady-akutni-pece-ctyrznakove-diagnozy-otevrena-data" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+          <li><strong>ÚZIS / NZIP — Hospitalizační případy akutní intenzivní péče (otevřená data).</strong> Hospitalizační případy s intenzivní péčí podle hlavní diagnózy a úmrtí za hospitalizace; součty J12–J18 a podíly úmrtí jsou výpočet redakce ze souboru staženého 9. 11. 2026. <a href="https://www.nzip.cz/data/2225-hospitalizacni-pripady-akutni-intezivni-pece-otevrena-data" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Metodika</h5>
+        <ul class="article-sources-list">
+          <li><strong>Eurostat — národní metadata Česko, Causes of death (SIMS-CD).</strong> Výběr základní příčiny smrti systémem IRIS, List o prohlídce zemřelého. <a href="https://ec.europa.eu/eurostat/cache/metadata/en/hlth_cdeath_simscd_cz.htm" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a></li>
+          <li><strong>WHO — International Guidelines for Certification and Classification (Coding) of COVID-19 as Cause of Death (duben 2020).</strong> Kódy U07.1 a U07.2 a pravidlo, že covid-19 se zapisuje jako základní příčina, pokud ke smrti vedl. <a href="https://www.who.int/publications/m/item/international-guidelines-for-certification-and-classification-(coding)-of-covid-19-as-cause-of-death" target="_blank" rel="noopener">who.int ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Evidence</h5>
+        <ul class="article-sources-list">
+          <li><strong>Bonten MJ, Huijts SM, Bolkenbaas M et al. Polysaccharide conjugate vaccine against pneumococcal pneumonia in adults.</strong> <em>New England Journal of Medicine</em> 2015;372(12):1114–1125. DOI 10.1056/NEJMoa1408544. PMID 25785969. Randomizovaná kontrolovaná studie. Ověřeno v PubMed 9. 11. 2026. <a href="https://doi.org/10.1056/NEJMoa1408544" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Moberley S, Holden J, Tatham DP, Andrews RM. Vaccines for preventing pneumococcal infection in adults.</strong> <em>Cochrane Database of Systematic Reviews</em> 2013;(1):CD000422. DOI 10.1002/14651858.CD000422.pub3. PMID 23440780. Systematický přehled a metaanalýza. Ověřeno v PubMed 9. 11. 2026. <a href="https://doi.org/10.1002/14651858.CD000422.pub3" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Falci L, Lee Argov EJ, Van Wye G et al. Examination of Cause-of-Death Data Quality Among New York City Deaths Due to Cancer, Pneumonia, or Diabetes From 2010 to 2014.</strong> <em>American Journal of Epidemiology</em> 2018;187(1):144–152. DOI 10.1093/aje/kwx207. PMID 28595293. Ověřeno v PubMed 9. 11. 2026. <a href="https://doi.org/10.1093/aje/kwx207" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Mackenbach JP, Van Duyne WM, Kelson MC. Certification and coding of two underlying causes of death in The Netherlands and other countries of the European Community.</strong> <em>Journal of Epidemiology and Community Health</em> 1987;41(2):156–160. DOI 10.1136/jech.41.2.156. PMID 3655636. Ověřeno v PubMed 12. 10. 2026. <a href="https://doi.org/10.1136/jech.41.2.156" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Standardizované míry pocházejí z jediné řady Eurostatu (hlth_cd_asdr2, ESP 2013), aby byly ČR, EU-27 i sousedé souměřitelní; absolutní počty nejsou standardizované. Poměry ČR/EU, odchylka +56,3 %, nárůst počtu zemřelých o 13 %, součty hospitalizací z otevřených dat NZIP a podíly úmrtí v intenzivní péči jsou výpočty redakce z uvedených hodnot. Hodnoty souvisejících indikátorů jsou převzaty z datového kontraktu HSPA Monitoru.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
