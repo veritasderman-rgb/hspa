@@ -15,6 +15,12 @@
     "fallback": {
       "type": "oecd",
       "code": "PATIENT_FALLS"
+    },
+    "verification": {
+      "date": "2026-11-12",
+      "result": "nedohledatelne",
+      "source_url": "https://www.nzip.cz/kategorie/279-hlaseni-nezadouci-udalosti-nshnu",
+      "note": "Shoduji se s předchozím agentem ve všech podstatných bodech. Hodnota 2,1 (2024) ani řada 2,8 až 2,1 (2020–2024) se v žádném dohledatelném zdroji nevyskytuje. Záznam v kontraktu má prázdné source.url a karta odkazuje na neexistující NRC/NIMS. Nezávisle jsem prošel NZIP kategorii SHNU: existují dvě vizualizace pádů (2504, 2505) s jednotkou na 1 000 pacientů, nikoli s poraněním na 1 000 hospitalizací, a čísla jsou jen v Power BI. Starý portál shnu-old.uzis.cz s PDF analýzami vrací z prostředí connection reset. Hlášení je podle výkazu L (MZ) 3-01 povinné, tvrzení karty o dobrovolnosti je chybné. Benchmark OECD PATIENT_FALLS v OECD neexistuje (předchozí agent prošel katalog SDMX, já jsem na nic opačného nenarazil), benchmark 1,8/2,0 je tedy bez zdroje. Doporučení: hodnoty, trend a benchmark ze seedu vyřadit, definici přepsat na SHNU (NU Pád na 1 000 pacientů) a vyžádat export od ÚZIS, nebo indikátor stáhnout."
     }
   },
   "benchmark_source": {
@@ -35,5 +41,6 @@
   "limitations": "Závisí na kultuře hlášení — větší hlášení může znamenat lepší safety kulturu, ne více pádů.",
   "patient_story": "Interní oddělení nemocnice, 84letý pacient ráno, pokus o samostatný odchod na toaletu, pád na bok, fraktura kyčle. Komplikace prodlouží hospitalizaci o 3 týdny, zvýší riziko úmrtí na 20 %. Tahle nepříznivá událost se v Česku stane statisticky cca 2,1× za 1 000 hospitalizovaných — nad průměrem OECD.\n\nPády hospitalizovaných pacientů v ČR jsou 2,1 na 1 000 hospitalizací (ÚZIS NRH, 2024). OECD průměr 1,8, EU 2,0 — Česko signal bad. Trend stabilní (2018: 2,3, 2024: 2,1). Vysoký podíl seniorních pacientů (multimorbidita, polypragmazie, kognitivní poruchy, sarkopenie) zvyšuje riziko pádů. Variabilita mezi nemocnicemi extrémní (1,0–3,5 na 1 000) — odráží kvalitu fall prevention programů.\n\nStrukturálně český systém má v každé větší nemocnici Risk Management Officer a fall prevention guidelines, ale implementace v rutinní praxi kolísá. Kvalitní fall prevention programy zahrnují: screening rizika při příjmu (Morse Fall Scale), revize medikace pro fall-risk drugs (benzodiazepiny, antihypertenziva), úprava prostředí (signalizace, sliding rails), trénink chůze a rovnováhy. Personální poddimenzování (sestra/lůžko) zvyšuje riziko (méně sledování pacienta).\n\nPády v nemocnici jsou „never events\" v kvalitativním slovníku — preventovatelné komplikace, které by se neměly stávat při kvalitní péči. Politické páky: povinný reporting per nemocnice (model UK NHS Improvement Patient Safety Incident Reports); audit a benchmarking; investice do personálního obsazení (sestra/lůžko jako quality indicator); rozšíření „bed alarms\" a senzorické vybavení; deprescribing programy pro fall-risk drugs. Indikátor v HSPA dashboardu sleduje pády jako klíčový ukazatel patient safety.",
   "framework": "hspa",
-  "dimension": "bezpecnost"
+  "dimension": "bezpecnost",
+  "verification_status": "illustrative"
 }

@@ -22,6 +22,12 @@
     "fallback": {
       "type": "eurostat_dataset",
       "url": "https://ec.europa.eu/eurostat/databrowser/view/demo_mlexpecedu/default/table"
+    },
+    "verification": {
+      "date": "2026-11-12",
+      "result": "definicni_nesoulad",
+      "source_url": "https://statistikaamy.csu.gov.cz/kdo-studuje-zije-dele",
+      "note": "Primární zdroj jsem otevřel a hodnotu 13.8 (2025) i obě složky 82.5 a 68.7 v textu ČSÚ potvrzuji. Karta však měří rozdíl e25 (ve věku 25 let), ČSÚ publikuje e0 (při narození); to je jiná definice, proto na rozdíl od předchozího agenta ('aktualizovat') volím definicni_nesoulad: hodnotu lze převzít jen po změně definice karty na e0. Kvalita: ČSÚ výslovně uvádí odhad; nezjištěné vzdělání zemřelých bylo 84 % v 2023 a necelých 7,5 % v 2025, nezjištěné bylo poměrově rozpuštěno, spolehlivě šlo hodnotit naposledy kolem přelomu století. Homogenita: seed trend 1999–2016 nemá primární oporu a přes změnu metodiky nejde prezentovat jako trend; seed 13 (věk 25) pochází ze sekundárního textu odkazujícího na starší data Eurostatu, který dnes CZ nemá. Benchmark: Eurostat pro CZ ani EU agregát nic nemá, seed 7 let nepodložen, null. Plauzibilita dobrá (SK 15.6 v e25, 2017). S agentem se shoduji v hodnotě, roce, zdroji i benchmarku, liším se jen v klasifikaci verdiktu."
     }
   },
   "benchmark_source": {
@@ -89,5 +95,6 @@
     }
   ],
   "framework": "hspa",
-  "dimension": "spravedlnost"
+  "dimension": "spravedlnost",
+  "verification_status": "illustrative"
 }

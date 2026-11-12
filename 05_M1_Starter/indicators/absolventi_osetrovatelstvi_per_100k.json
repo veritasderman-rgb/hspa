@@ -20,7 +20,13 @@
       },
       "note": "OECD Health Statistics — Health graduates (nurses, HEALTH_PROF=MINU = všechny sestry vč. praktických), per 100 000 obyvatel. SDMX 2.0 Data Explorer endpoint (datový dotaz vyžaduje verzi 1.1, legacy stats.oecd.org je 404). Ověřeno živě 2026-07-10: ČR 38,76 (2024), OECD ⌀ 44,4, EU27 ⌀ 39,1. Profesní sestry samostatně (HEALTH_PROF=MINUQUAL): ČR jen 16,1 vs OECD ⌀ 34,8."
     },
-    "fallback": "ÚZIS ČR — Absolventi zdravotnických oborů (NZIS) a MŠMT — statistika absolventů VŠ/VOŠ oboru Ošetřovatelství (SIMS). Slouží k rekonciliaci národní hodnoty a k rozpadu na všeobecné vs. praktické sestry."
+    "fallback": "ÚZIS ČR — Absolventi zdravotnických oborů (NZIS) a MŠMT — statistika absolventů VŠ/VOŠ oboru Ošetřovatelství (SIMS). Slouží k rekonciliaci národní hodnoty a k rozpadu na všeobecné vs. praktické sestry.",
+    "verification": {
+      "date": "2026-11-12",
+      "source_url": "https://sdmx.oecd.org/public/rest/data/OECD.ELS.HD,DSD_HEALTH_REAC_EMP@DF_GRAD,1.1/.HSG.10P5HB._Z._Z.MINU._Z._Z._Z?startPeriod=2019&format=jsondata&dimensionAtObservation=AllDimensions",
+      "quote": "{\"REF_AREA\":\"CZE\",\"MEASURE\":\"HSG\",\"UNIT_MEASURE\":\"10P5HB\",\"AGE\":\"_Z\",\"SEX\":\"_Z\",\"HEALTH_PROF\":\"MINU\",\"WORKER_STATUS\":\"_Z\",\"HEALTH_PROF_ACTIVITY_STATUS\":\"_Z\",\"PRICE_BASE\":\"_Z\",\"TIME_PERIOD\":\"2024\",\"value\":38.76}",
+      "note": "Název ≡ obsah: MINU (HEALTH_PROF) je součet MINUQUAL + MINUASSO (2017: 29,06 = 14,10 + 14,96), tj. všechny sestry včetně praktických, jak říká definice. Jednotka 10P5HB = na 100 000 obyvatel, sedí s kartou. Metodický zlom 2016→2017 (15,84 → 29,06): od roku 2017 se do sběru zahrnuje úroveň MINUASSO, takže řada před rokem 2017 není srovnatelná; série 2019–2024 je stabilní (28,7–38,8), proto trend začíná 2019 jako v kartě. Poslední uzavřený rok je 2024 (rok 2025 v dotazu chybí). Benchmark OECD 44,36 (35 členů, stejná definice) i EU 39,13 jsou souměřitelné a reprodukují se z téhož klíče. Plausibilita: ČR 38,8 mezi Slovenskem (28,2) a Německem (45,2) i Rakouskem (42,1), v rozumném pásmu. Reprodukovatelnost: URL a klíč výše; hodnota i trend se shodují s kontraktem na jedno desetinné místo. Poznámka k benchmarku: kontrakt uvádí OECD 44,4 (zaokrouhleno z 44,36, bez vlivu na signál)."
+    }
   },
   "benchmark_source": {
     "type": "oecd_sdmx2",
@@ -53,5 +59,6 @@
   "patient_story": "Fakultní nemocnice, interní oddělení, noční směna. Markéta má rok po státnicích z všeobecného ošetřovatelství a stará se sama o 14 pacientů — dvě kolegyně na oddělení chybí a služba se lepí z přesčasů. Přesně tahle scéna je důvod, proč Česko roky mluví o krizi sester. A přitom čísel absolventů není zdánlivě málo: ošetřovatelství v ČR ročně dokončí 38,76 na 100 000 obyvatel (2024).\n\nAbsolventi ošetřovatelství na 100 000 obyvatel: ČR 38,76, OECD ⌀ 44,4, EU27 ⌀ 39,1 (OECD Health Statistics, 2024) — signal warn, tedy pod průměrem OECD, zhruba na úrovni EU. Trend přitom roste: 28,7 (2019) → 35,9 (2023) → 38,76 (2024). Problém není v celkovém objemu, ale v jeho složení a v tom, co se s absolventy stane dál.\n\nStrukturálně český systém vychovává hodně praktických sester a zdravotnických asistentů, ale plně kvalifikovaných profesních (všeobecných) sester promuje jen kolem 16 na 100 000 — méně než polovinu průměru OECD (34,8) a nejméně ze všech sousedů. To je jádro deficitu: praktická sestra nemá stejné kompetence jako všeobecná a nemůže ji plně nahradit. K tomu se přidává slabá retence — část absolventek do lůžkové péče vůbec nenastoupí nebo brzy odejde kvůli mzdám, fyzické zátěži a přesčasům, v příhraničí navíc odcházejí do Německa a Rakouska.\n\nAbsolventi ošetřovatelství jsou indikátor budoucí kapacity a zároveň varování, že objem sám o sobě krizi neřeší. Politické páky: navýšit počty studentů všeobecné sestry (opakovaně navrhováno zdvojnásobení), zvýšit cenu práce a rozšířit kompetence sester (priorita MZČR i profesních organizací), stabilizovat absolventky v hrazené síti a zlepšit prostupnost mezi praktickou a všeobecnou sestrou. Indikátor v HSPA dashboardu sleduje ošetřovatelskou pipeline s důrazem na kvalifikační mix a retenci, ne jen na hrubý počet promocí.",
   "framework": "hspa",
   "dimension": "efektivita",
-  "verification_status": "review-pending"
+  "verification_status": "verified",
+  "verified_at": "2026-11-12"
 }

@@ -16,19 +16,31 @@
         "country": "CZ",
         "cohort": "new_and_relapse",
         "evaluation": "12_months",
-        "outcome": ["success", "died", "failed", "lost_to_follow_up", "not_evaluated"]
+        "outcome": [
+          "success",
+          "died",
+          "failed",
+          "lost_to_follow_up",
+          "not_evaluated"
+        ]
       }
     },
     "fallback": {
       "type": "uzis_registry_report",
       "url": "https://www.uzis.cz/index.php?pg=vystupy--vyznamna-temata--tuberkuloza"
+    },
+    "verification": {
+      "date": "2026-11-12",
+      "source_url": "https://extranet.who.int/tme/generateCSV.asp?ds=outcomes",
+      "quote": "CSV řádek iso2=CZ, year=2023: newrel_coh=418, newrel_succ=295, newrel_died=42, newrel_fail=2, newrel_lost=60 => 295/418 = 70,6 %",
+      "note": "Definice a jmenovatel sedí: nové a recidivující případy, výsledek po 12 měsících, jmenovatel celá kohorta (včetně nevyhodnocených). Rok = rok hlášení kohorty; 2023 je poslední uzavřená kohorta (2024 ještě není ve zdroji). Všech osm bodů trendu 2016 až 2023 přesně odpovídá CSV (68,5; 68,9; 66,8; 73,8; 69,5; 67,5; 62,5; 70,6). Homogenita řady OK, sloupce newrel_* jsou konzistentní. Plauzibilita: pokles 2022 (62,5) způsobil nárůst 'lost to follow-up' na 80 případů. Benchmark: vlastní přepočet EU/EEA ze stejného CSV dává pro 2023 64,2 % (18 209 / 28 375) a pro 2022 67,9 %, což odpovídá kartě (64) a publikaci ECDC. Reprodukovatelnost plná."
     }
   },
   "benchmark_source": {
     "type": "ecdc_who",
     "code": "TB_TSR_new_relapse",
     "dataset": "Tuberculosis surveillance and monitoring in Europe 2026 (2024 data), společná zpráva WHO Regional Office for Europe a ECDC (vydáno 23. 3. 2026): úspěšnost léčby kohorty hlášené v roce 2023 činila v EU/EEA 64 % proti cíli WHO End TB Strategy 90 %. Vlastní přepočet agregátu EU/EEA ze stejné datové sady WHO TME dává 64,2 % (18 209 z 28 375 případů) a pro kohortu 2022 reprodukuje publikovanou hodnotu ECDC 67,9 % na desetinu přesně — metodika přepočtu je tedy ověřená.",
-    "value": 64.0,
+    "value": 64,
     "url": "https://www.ecdc.europa.eu/en/publications-data/tuberculosis-surveillance-and-monitoring-europe-2026-2024-data"
   },
   "signal_thresholds": {
@@ -48,5 +60,7 @@
   "importance": "HSPA Monitor sledoval u tuberkulózy dosud jen incidenci — tedy kolik lidí onemocní. Úspěšnost léčby je ta druhá polovina otázky: co s nimi systém udělá. A právě tam je česká výkonnost slabší, než by se z nízké incidence čekalo. Indikátor je zároveň jedním z nejcitlivějších dostupných měřítek toho, jak systém zvládá péči o lidi na okraji: šestiměsíční léčba tuberkulózy vyžaduje kontinuitu, dohled a návaznost, tedy přesně ty vlastnosti, které se u běžných indikátorů dostupnosti neprojeví. Ukazatel má i tvrdý epidemiologický dopad — nedoléčený pacient zůstává potenciálně infekční a je hlavní cestou, jak vzniká multirezistentní TBC, jejíž léčba trvá dvakrát déle a stojí řádově víc. Politická páka je konkrétní a levná: zavedení a úhrada case managementu léčby, propojení RTBC s výkazy poskytovatelů a jasné pravidlo, kdo pacienta dohledá, když nepřijde. Indikátor patří do oblasti Procesy, kde má ČR podle dosavadního hodnocení nejvíc slabých míst, a měří dimenzi kvality péče v jejím nejzákladnějším smyslu: dotáhnout léčbu do konce.",
   "patient_story": "Pan Mykola, jednašedesát let, přijel z Zakarpatské oblasti za prací na stavbě v Brně. Kašel měl několik měsíců, než ho kolega dotlačil na pohotovost. Na plicním oddělení mu potvrdili tuberkulózu, dva měsíce ho léčili za hospitalizace a pak ho propustili s předepsanou čtyřkombinací a s termínem kontroly za měsíc. Přišel na dvě. Pak se stavba přesunula do Rakouska a on jel s ní — bez propouštěcí zprávy, bez kontaktu na ambulanci, s tabletami na tři týdny. Do Registru tuberkulózy se po roce zapsal jako „ztracen ze sledování“. Nikdo neví, jestli se doléčil, nebo jestli dnes někde kašle s rezistentním kmenem.\n\nČesko doléčilo z kohorty roku 2023 úspěšně 70,6 % pacientů — 295 z 418 nových a recidivujících případů. Je to nad průměrem EU/EEA (64 %), ale hluboko pod cílem WHO End TB Strategy, který zní 90 %, a pod sousedním Slovenskem s 89,9 % i Rakouskem se 76,2 %. Rozhodující je ale to, čím je zbytek. Léčba jako taková selhala jen u dvou pacientů z 418. Zemřelo 42 lidí (10,0 %). A šedesát pacientů — 14,4 % kohorty, nejvyšší vykázaný podíl v celé Evropské unii — se systému prostě ztratilo.\n\nStrukturálně za tím stojí složení kohorty a chybějící dohled. Téměř polovina hlášených onemocnění je u cizinců (v roce 2024 to bylo 220 ze 455, tedy 48,4 %), k nim se přidávají lidé bez domova a lidé se závislostí. Šestiměsíční léčba přitom předpokládá stabilní bydliště, registrujícího lékaře a schopnost přijít na kontrolu. Země, které stejnou kohortu zvládají lépe, mají pro to zavedený case management: konkrétního člověka, který léčbu sleduje a pacienta dohledá, když nepřijde. V Česku takový výkon nemá kdo vykázat, protože v úhradovém seznamu neexistuje.\n\nPolitická páka je proto nezvykle úzká a nezvykle levná. Zaprvé zavést a uhradit výkon dohledu nad dokončením léčby tuberkulózy — kompetenci má ministerstvo zdravotnictví (seznam výkonů) a zdravotní pojišťovny (úhradová vyhláška). Zadruhé propojit Registr tuberkulózy s výkazy poskytovatelů, aby se dalo odlišit, kdo se opravdu ztratil, a kdo se jen ztratil v papírech. Zatřetí zajistit navazující péči pro pacienty bez veřejného pojištění, u nichž je léčba samotná hrazená ze zákona, ale kontroly už ne. Každý nedoléčený pacient je přitom levný jen zdánlivě: léčba jednoho multirezistentního případu stojí systém řádově víc než dohled nad stovkou těch citlivých.",
   "framework": "hspa",
-  "dimension": "kvalita"
+  "dimension": "kvalita",
+  "verification_status": "verified",
+  "verified_at": "2026-11-12"
 }

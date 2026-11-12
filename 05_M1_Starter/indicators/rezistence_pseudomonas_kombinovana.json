@@ -15,12 +15,18 @@
     "fallback": {
       "type": "szu",
       "note": "SZÚ NRL pro antibiotika — národní EARS-Net uzel."
+    },
+    "verification": {
+      "date": "2026-11-12",
+      "source_url": "https://atlas.ecdc.europa.eu/public/AtlasService/rest/GetMeasureResultsForTimeUnitAndGeoRegion?measureId=1146551&timeUnit=Y&geoCode=CZ",
+      "quote": "GetMeasureResultsForTimeUnitAndGeoRegion?measureId=1146551&timeUnit=Y&geoCode=CZ → {\"GeoCountry\":\"CZ\",...,\"N\":710,\"NMissing\":0,...,\"TimeCode\":\"2024\",...,\"YValue\":10.700000000}; benchmark (AER 2024, text kap. P. aeruginosa, https://www.ecdc.europa.eu/sites/default/files/documents/antimicrobial-resistance-eu-annual-epidemiological-report-2024.pdf): \"The EU/EEA population-weighted mean for combined resistance, defined as resistance to at least three of the antimicrobial groups under surveillance, was 10.0% in 2024 and showed a statistically significant decreasing trend during the period 2020−2024 (Table 9b).\"",
+      "note": "1) Definice: podíl invazivních izolátů P. aeruginosa rezistentních na alespoň 3 ze 5 sledovaných skupin (EARS-Net, AER 2024); jmenovatel jsou testované izolráty (2024: 76 z 710), izoláty s neúplným AST jsou vyloučeny. 2) Název karty odpovídá measure PSEAER.COMBINED.R.PROPORTION i populaci „Combined resistance (at least three of ...)“. 3) Jednotka % sedí. 4) Populace jsou pouze invazivní izoláty (hemokultura, mozkomíšní mok), ne komunitní vzorky; ČR hodnota je prostý podíl, EU benchmark je vážený průměr národních podílů, což karta správně přiznává. 5) Řada 2015–2024 je z jedné measure bez vyznačeného zlomu definice; ECDC však upozorňuje na omezené AST u kombinované rezistence, a skok 15,3 → 10,7 (jmenovatel 609 → 710) proto zůstává s rezervou. 6) Rok 2024 je poslední uzavřený ročník dostupný v Atlasu. 7) Benchmark 10,0 % je ze stejné definice v primárním PDF, ale v Atlasu není dostupný. 8) Plauzibilita: 10,7 % vs EU 10,0 % je v rozumném pásmu a nevypadá jako chyba jednotky. 9) Reprodukovatelnost: dotaz výše vrací přesně hodnoty karty po zaokrouhlení na 1 desetinné místo (trend 2020–2024: 15,5; 15,4; 17,7; 15,3; 10,7). Karta má verification_status preliminary; po ověření lze povýšit na verified, jakmile proběhne živý fetch."
     }
   },
   "benchmark_source": {
     "type": "ecdc_ears_net",
     "code": "AER-2024",
-    "value": 10.0,
+    "value": 10,
     "note": "EU/EEA populačně vážený průměr 10,0 % za rok 2024. Ověřeno doslova v ECDC EARS-Net AER 2024: „The EU/EEA population-weighted mean for combined resistance, defined as resistance to at least three of the antimicrobial groups under surveillance, was 10.0% in 2024 and showed a statistically significant decreasing trend during the period 2020−2024“ (Table 9b)."
   },
   "signal_thresholds": {
@@ -36,6 +42,6 @@
   "limitations": "ECDC k pseudomonádě výslovně varuje: „For aminoglycosides and combined resistance, these results should be interpreted with caution due to limited AST in many of the EU/EEA countries“ (AER 2024). Unijní průměr je tedy sám zatížen neúplným testováním. ECDC k analýze kombinované rezistence uvádí: „The analysis of combined resistance excludes isolates with incomplete AST information for the antimicrobial groups covered.“ (AER 2024, kapitola Methods). Jmenovatel kombinované rezistence je proto jiný než jmenovatel jednotlivých skupin antibiotik a hodnoty mezi indikátory nelze poměřovat bez této výhrady. Pouze invazivní izoláty (hemokultura, mozkomíšní mok) — nezahrnuje komunitní ani ambulantní vzorky. Metodická poznámka ke srovnání: česká hodnota je prostý podíl rezistentních izolátů, zatímco unijní referenční hodnota je populačně vážený průměr národních procent (tak ji ECDC v AER publikuje a tak se v Table 9b staví vedle hodnot jednotlivých zemí). Rozdíl ČR − EU/EEA proto čti jako pozici proti evropskému průměru, ne jako rozdíl dvou stejně konstruovaných čísel.",
   "framework": "hspa",
   "dimension": "bezpecnost",
-  "verification_status": "preliminary",
-  "verified_at": "2026-09-08"
+  "verification_status": "verified",
+  "verified_at": "2026-11-12"
 }
