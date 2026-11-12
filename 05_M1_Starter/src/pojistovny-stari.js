@@ -42,10 +42,11 @@ export const ZP_DATASETY = {
   porodniAsistence: 'data/pojistovny-porodni-asistence.json',
   fondPravidla: 'data/pojistovny-fond-pravidla.json',
   fondBilance: 'data/pojistovny-fond-bilance.json',
+  prispevky: 'data/pojistovny-prispevky.json',
 };
 
 /** Datasety, které stránka načítá mimo orchestrátor (src/pojistovny.js) vlastním modulem. */
-export const STARI_DOPLNEK = { instituce: ['sit'], aplikace: ['stiznosti', 'opendata'], prevence: ['fondPravidla', 'fondBilance'] };
+export const STARI_DOPLNEK = { instituce: ['sit'], aplikace: ['stiznosti', 'opendata'], prevence: ['fondPravidla', 'fondBilance'], prispevky: ['prispevky'] };
 
 /** Pojmenování veličin pro varování (klíč `velicina` v registru). */
 export const STARI_VELICINY = {
@@ -209,6 +210,11 @@ export const STARI_REGISTR = [
     id: 'fondPravidla', dataset: 'fondPravidla', velicina: 'fondPravidla', stranky: ['prevence'],
     nazev: 'Pravidla čerpání fondu prevence a kontroly', zdroj: 'Weby pojišťoven (podmínky 2026), NKÚ, MZ ČR (Hodnocení kap. 4.4), zákony č. 551/1991 Sb. a č. 280/1992 Sb.',
     vyber: (d) => (d?.stav_k ? { kDatu: `weby k ${datumCz(d.stav_k)}`, kratce: `pravidla fondu k ${datumCz(d.stav_k)}`, roky: [], stav: 'podmínky platné v roce 2026, pojišťovny je během roku mění' } : null),
+  },
+  {
+    id: 'prispevky', dataset: 'prispevky', velicina: 'prispevky', stranky: ['prispevky'],
+    nazev: 'Katalog příspěvků z fondu prevence', zdroj: 'Weby pojišťoven (stránky příspěvků a podmínky čerpání)',
+    vyber: (d) => (d?.stav_k ? { kDatu: `weby k ${datumCz(d.stav_k)}`, kratce: `příspěvky k ${datumCz(d.stav_k)}`, roky: [], stav: `částky platné v roce ${d.rok}, pojišťovny je během roku mění` } : null),
   },
   {
     id: 'fondBilance', dataset: 'fondBilance', velicina: 'fondBilance', stranky: ['penize', 'prevence'],

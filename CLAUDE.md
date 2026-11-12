@@ -99,6 +99,7 @@ git push -u origin claude/<branch>
 ├── kalkulacka-pece-2035.html   ← Kdo se o nás postará v roce 2035? (interaktivní model dlouhodobé péče: lůžka × pečovatelé v terénu × přesměrování do terénu → kolik seniorů zůstane bez místa, úvazky rodin, náklad systému; src/ltc-engine.js + src/ltc-kalkulacka.js, data/ltc-scenare.json)
 ├── pojistovny-penize.html      ← Srovnávač pojišťoven (pod heslem): Peníze — relativní saldo přerozdělení, řady hospodaření MZ 2015–2024, státní pojištěnci, segmenty, fond prevence a provoz
 ├── pojistovny-instituce.html   ← Srovnávač pojišťoven (pod heslem): Instituce — zákon a orgány bez jmen, smluvní programy pro poskytovatele, dostupnost a § 16, síť odborností
+├── pojistovny-prispevky.html   ← Srovnávač pojišťoven (pod heslem): Příspěvky — na co má domácnost u pojišťovny nárok (věk, pohlaví, situace → tabulka příspěvků z fondu prevence s částkou, kdo ji může čerpat, podmínky, odkaz na web ZP; src/pojistovny-prispevky.js + src/prispevky-engine.js)
 ├── pojistovna.html             ← Srovnávač pojišťoven (pod heslem): profil jedné pojišťovny (`?zp=<kód>`), bez parametru rozcestník sedmi ZP
 ├── o-projektu.html             ← O projektu, metodika
 ├── newsletter.html             ← Newsletter: teaser, přihlášení k odběru (Brevo přes /api/subscribe), archiv minulých čísel z data/newsletter-log.json — src/newsletter-page.js
@@ -161,6 +162,7 @@ git push -u origin claude/<branch>
 │   ├── pojistovny-instituce.json ← Zákon, vznik, orgány bez jmen, aparát, dohled a limit provozu u 7 ZP (stránka Instituce)
 │   ├── pojistovny-smluvni-programy.json ← Inventář smluvních programů pro poskytovatele, každý s citací a datem ověření (Instituce)
 │   ├── pojistovny-dostupnost.json ← Co ZP publikují o dostupnosti a § 16 zák. 48/1997 Sb. (Instituce)
+│   ├── pojistovny-prispevky.json ← Katalog příspěvků z fondu prevence 7 ZP na rok 2026 (částka, komu, podmínky, společné stropy; každá částka s url a doslovnou citací z webu ZP; stránka Příspěvky)
 │   ├── explainers.json         ← Kontextové texty (politika, reformy, koncepty)
 │   ├── prevention.json         ← Vakcinace + screeningy
 │   ├── pohotovosti.json        ← 283 pohotovostí s ordinační dobou (VZP + NRPZS + 4 kraje) + 21 denních nemocničních ambulancí (ruční ověření + týdenní drift-check citátů), online pohotovosti, poplatek, dojezdová analýza (souhrn), rozcestník, poradní linky ZZS, EN/UK
@@ -249,6 +251,7 @@ npm run validate:all      # Validuje indicators + strategies + explainers + prev
 npm run pr:gate -- --base origin/main   # Třída PR (A/B/C) podle GOVERNANCE.md § 3 — co smí zmergovat editor a co čeká na vydavatele
 npm run ai:provoz -- check              # Kill switch: exit 1 = provoz pozastaveno, nic nepublikovat ani nemergovat
 npm run validate:pojistovny # Dataset Srovnávače pojišťoven (součást validate:all)
+node ingest/verify-pojistovny-prispevky.js # Znovu stáhne weby ZP a ověří, že citace u každé částky v data/pojistovny-prispevky.json na stránce pořád je (~3 min; drift = přeověřit příspěvek)
 npm run data:pojistovny-mz # Hodnocení MZ 2015–2024 + měsíční přerozdělení → data/pojistovny-{hospodareni-rady,prerozdeleni,segmenty}.json (stahuje z MZ; roční běh = workflow pojistovny-mz.yml)
 npm run validate:evidence # Registr evidence-auditu (studie k tvrzením článků a indikátorů)
 npm run evidence:queue    # Fronta evidence-auditu (--status | --batch --articles 12 --indicators 8 | --hash soubor)

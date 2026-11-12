@@ -14,7 +14,7 @@
 // klíč hspa-moje-zp).
 //
 // Záložky jsou ve dvou skupinách (ZP_SKUPINY): „pro pojištěnce“ (Přehled, Kmen, Peníze, Prevence,
-// Aplikace, Zdravotní gramotnost, Instituce) vlevo a „pro redakci a data“ (Metodika, Indikátory) vpravo,
+// Příspěvky, Aplikace, Zdravotní gramotnost, Instituce) vlevo a „pro redakci a data“ (Metodika, Indikátory) vpravo,
 // světlejším písmem a za svislým oddělovačem. Stáří dat pod nimi řeší src/pojistovny-stari.js.
 //
 // Čisté funkce (testované bez DOM): zpStrankaById, zpStrankyVSkupine, zpShellHtml,
@@ -59,6 +59,11 @@ export const ZP_STRANKY = [
     id: 'prevence', skupina: 'pojistenci', href: 'pojistovny-prevence.html', label: 'Prevence', kicker: 'Kolo 1 · weby a výroční zprávy',
     veta: 'Co pojišťovny z fondu prevence nabízejí, kam peníze jdou a co o výsledcích samy uvádějí.',
     co: 'Nabídka 7 × 9, onkologie a duševní zdraví, struktura fondu, odpovědi z VZ',
+  },
+  {
+    id: 'prispevky', skupina: 'pojistenci', href: 'pojistovny-prispevky.html', label: 'Příspěvky', kicker: 'Weby pojišťoven · 2026',
+    veta: 'Na co máte u pojišťovny nárok: příspěvky z fondu prevence podle věku, pohlaví a životní situace.',
+    co: 'Pohled domácnosti, tabulka příspěvků s částkou a podmínkami, společné stropy, témata',
   },
   {
     id: 'aplikace', skupina: 'pojistenci', href: 'pojistovny-aplikace.html', label: 'Aplikace a servis', kicker: 'První výstup PS',

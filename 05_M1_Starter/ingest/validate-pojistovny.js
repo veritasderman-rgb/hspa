@@ -30,6 +30,7 @@ import { validatePrerozdeleni } from './lib/validate-prerozdeleni.js';
 import { validateInstituce } from './lib/validate-instituce.js';
 import { validateSmluvniProgramy } from './lib/validate-smluvni-programy.js';
 import { validateDostupnost } from './lib/validate-dostupnost.js';
+import { validatePrispevky } from './lib/validate-prispevky.js';
 import { validateSegmenty } from './lib/validate-segmenty.js';
 import { validatePorodniAsistence } from './lib/validate-porodni-asistence.js';
 import { validateFondPravidla } from './lib/validate-fond-pravidla.js';
@@ -62,6 +63,7 @@ export const OPTIONAL_FILES = {
   fondPravidla: 'pojistovny-fond-pravidla.json', // pravidla čerpání fondu prevence a kontroly (A6.2)
   fondBilance: 'pojistovny-fond-bilance.json', // bilance fondu prevence z výročních zpráv a počty příspěvků (A7.1 c, A7.2)
   porodniAsistence: 'pojistovny-porodni-asistence.json', // výkon 06211 po pojišťovnách (PLAN-PORODNI-ASISTENCE-06211.md § 5.1 D)
+  prispevky: 'pojistovny-prispevky.json', // katalog příspěvků z fondu prevence podle webů ZP (stránka Příspěvky)
 };
 export const STD_STAVY = ['dolozeno', 'placeholder-bez-vah', 'index-prerozdeleni'];
 
@@ -584,6 +586,7 @@ export function validateAll(datasets) {
     ['porodniAsistence', (d) => validatePorodniAsistence(d)],
     ['fondPravidla', (d) => validateFondPravidla(d)],
     ['fondBilance', (d) => validateFondBilance(d, { hospodareniRady: datasets?.hospodareniRady })],
+    ['prispevky', (d) => validatePrispevky(d)],
   ];
   for (const [key, fn] of dalsi) {
     if (datasets?.[key] == null) continue;

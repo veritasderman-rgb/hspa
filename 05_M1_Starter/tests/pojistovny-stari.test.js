@@ -34,6 +34,7 @@ const DS_PENIZE = {
   prerozdeleni: json('pojistovny-prerozdeleni.json'),
   hospodareniRady: json('pojistovny-hospodareni-rady.json'),
   segmenty: json('pojistovny-segmenty.json'),
+  prispevky: json('pojistovny-prispevky.json'),
 };
 const copy = (o) => JSON.parse(JSON.stringify(o));
 const count = (s, re) => (s.match(re) || []).length;
@@ -118,6 +119,7 @@ test('věta „Data: …“ pod nadpisem: zkratka + rok z téhož registru', () 
   // každá podstránka má větu, kromě Indikátorů (inventář bez vlastních dat, A0.5)
   for (const s of ZP_STRANKY.filter((x) => x.id !== 'indikatory')) assert.match(stariVeta(stariRadky(DS_PENIZE, s.id)), /^Data: \S/, s.id);
   assert.equal(stariVeta(stariRadky(DS, 'indikatory')), '');
+  assert.equal(stariVeta(stariRadky(DS_PENIZE, 'prispevky')), 'Data: příspěvky k 12. 11. 2026');
 });
 
 test('varování: míchají se dva roky téže veličiny (náklady 2024 a 2025; VZ o prevenci 2020/2024/2025)', () => {
