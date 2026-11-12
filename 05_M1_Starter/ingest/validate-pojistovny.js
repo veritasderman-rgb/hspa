@@ -442,6 +442,10 @@ export function validateAll(datasets) {
             ok(Array.isArray(q?.moznosti), `${qtag}.vyber: dává smysl jen u otázky s moznosti[]`);
           }
           if (q?.napoveda != null) ok(isStr(q.napoveda), `${qtag}.napoveda: neprázdný string`);
+          if (q?.zobrazeni != null) {
+            ok(q.zobrazeni === 'skala', `${qtag}.zobrazeni: jen 'skala' (je '${q.zobrazeni}')`);
+            ok(q.vyber === 'jeden' && Array.isArray(q.moznosti), `${qtag}.zobrazeni: škála je otázka s jednou volbou z moznosti[]`);
+          }
           if (q?.max_delka != null) {
             ok(Number.isInteger(q.max_delka) && q.max_delka >= 1 && q.max_delka <= MAX_DELKA_TEXTU,
               `${qtag}.max_delka: celé číslo 1–${MAX_DELKA_TEXTU} (je '${q.max_delka}')`);
@@ -468,6 +472,7 @@ export function validateAll(datasets) {
               ok(!cIds.has(c?.id), `${ctag}: duplicitní id části '${c?.id}'`);
               cIds.add(c?.id);
               ok(isStr(c?.nazev), `${ctag}: chybí nazev`);
+              if (c?.popis != null) ok(isStr(c.popis), `${ctag}.popis: neprázdný string`);
               if (ok(Array.isArray(c?.otazky) && c.otazky.length > 0, `${ctag}: chybí otazky[]`)) {
                 c.otazky.forEach((q, i) => checkQ(q, `${ctag}.otazky[${i}]`, true));
               }

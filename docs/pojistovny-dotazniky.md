@@ -15,7 +15,7 @@
 | kolo 2 · Q2 2027 | `rizikovi-pojistenci` | zdravotní pojišťovny (všech 7, adresný odkaz s tokenem) | `web-token` | 14 |
 | od zveřejnění stránky (průběžně) | `pojistenci-anketa` | veřejnost, pojištěnci všech pojišťoven; bez tokenu a bez registrace | `web-verejnost` | 8 |
 
-Znění všech sad je v plném rozsahu i na webu: `pojistovny-gramotnost.html` → blok **Návrh dotazníků** (číslované 1–7 v pořadí fází, každá sada má kotvu `#dotaznik-<id>`; renderuje `otazkySadyHtml` v `src/pojistovny-prevence.js` přímo z JSON, takže web i tento dokument říkají totéž).
+Znění všech sad je v plném rozsahu i na webu: `pojistovny-gramotnost.html` → blok **Návrh dotazníků** (číslované v pořadí fází, každá sada má kotvu `#dotaznik-<id>`; renderuje `otazkySadyHtml` v `src/pojistovny-prevence.js` přímo z JSON, takže web i tento dokument říkají totéž).
 
 ## Zásady pro všechny sady
 
@@ -26,7 +26,7 @@ Znění všech sad je v plném rozsahu i na webu: `pojistovny-gramotnost.html` �
 - **Kanály** (`kanal`): `web-token` (osobní odkaz `pojistovny-gramotnost.html?dotaznik=<sada>&token=<token>`), `web-verejnost` (bez tokenu), `dopis+web` (dopis s nabídkou spolupráce; odpověď písemně nebo přes odkaz), `interni` (vyplňuje redakce, web ani API ji nepřijmou).
 - **Pole sady:** `id`, `nazev`, `verze`, `typ` (`otevrene` | `dotaznik`), `faze`, `respondent`, `kanal`, `uvod`, u pojišťoven `pravni_zaklad`, volitelně `povolene_respondenty`, a `vyhodnoceni` = `{oblasti[], vstup, pravidla[], vystup}`: jak se z odpovědí odvozuje stav semaforu (validuje `validate-pojistovny.js`; web ho ukazuje pod otázkami každé sady na stránce Metodika a semafor). **Pole otázky:** `id`, `text`, volitelně `moznosti` + `vyber` (`jeden` | `vice`), `napoveda`, `max_delka` (1–2 000; platí pro text odpovědi i upřesnění). V dotazníku musí otevřená otázka mít `max_delka`, aby šlo poznat záměr od chybějící nabídky.
 
-## 1. Prosinec 2026: aplikace (interní hodnoticí list)
+## 1. Prosinec 2026: aplikace (interní hodnoticí list a úkoly pro uživatele)
 
 První výstup pracovní skupiny je modul Aplikace. Kritéria přívětivosti (`data/pojistovny-aplikace.json` → `kriteria_privetivosti`, návrh podle podkladu M. Rybáře) schvaluje PS 12. 11. 2026; teprve pak IT expert hodnotí. Pojišťovny list nevyplňují, proto má sada `kanal: interni`: web ji nevybere (`?dotaznik=` ji ignoruje), API ji odmítne a token se k ní nevydá. Id otázek části K odpovídají id kritérií (pomlčka místo podtržítka).
 
@@ -113,6 +113,220 @@ _Vstup:_ Hodnoticí list IT experta: stupeň 0 / 1 / 2 u šesti kritérií K1–
 4. Prahy i kritéria schvaluje pracovní skupina 12. 11. 2026; do té doby se stupně nezveřejňují.
 
 _Výstup:_ Matice kritérií 7 × 6 a skóre na stránce Aplikace; po právu na odpověď (10 dní) návrh stavu v semaforu, oblast Klientský servis.
+
+### Aplikace vaší pojišťovny: zkuste osm úkolů (`aplikace-ukoly`)
+
+Veřejný dotazník bez tokenu na `pojistovny-gramotnost.html?dotaznik=aplikace-ukoly`. Vzorem je papírový dotazník Národního hodnocení spokojenosti pacientů (NHSP, hospitalizační péče): známky 1–5 jako ve škole a volné pole na závěr. Stratifikace je na začátku, protože bez pojišťovny, věku a zařízení nejde odpověď vyhodnotit. Odpovědi jdou přes `api/dotaznik.js` do Neonu (tabulka `dotaznik_odpoved`), stejně jako u ostatních webových sad.
+
+| Kdy | Komu | Kanál | Lhůta | Co se zveřejní |
+|---|---|---|---|---|
+| prosinec 2026 (spolu s hodnoticím listem aplikací) | veřejnost, uživatelé mobilní aplikace nebo webového portálu své pojišťovny; bez tokenu a bez registrace | `web-verejnost`: web bez tokenu | průběžně | medián známky a podíl nedokončených za úkol; po pojišťovnách až od 30 odpovědí na pojišťovnu, volný text nikdy |
+
+Sada `aplikace-ukoly` · typ `dotaznik` · verze 1 · 18 otázek · povolení respondenti: `verejnost`
+
+**Úvod pro respondenta:** Otevřete si aplikaci své zdravotní pojišťovny a zkuste v ní osm běžných úkolů. U každého nám řekněte, jak snadno to šlo. Zabere to asi patnáct minut. Dotazník je anonymní: neptáme se na jméno ani e-mail, neukládáme IP adresu a všechny otázky jsou nepovinné. Bez uvedené pojišťovny ale odpověď nemůžeme přiřadit k aplikaci. Nic v aplikaci neodesílejte, pokud to sami nechcete; u žádosti o příspěvek stačí dojít k poslednímu kroku.
+
+**S · O vás a vaší aplikaci**
+
+1. **Aplikaci které zdravotní pojišťovny budete zkoušet?** `pojistovna` · _jedna volba_
+
+   - VZP ČR – Moje VZP (111)
+   - VoZP – Zdraví na klik (201)
+   - ČPZP – Zdraví v mobilu (205)
+   - OZP – VITAKARTA (207)
+   - ZPŠ – Karta mého srdce (209)
+   - ZP MV ČR – ZP211 (211)
+   - RBP – my213 (213)
+
+2. **Kolik vám je let?** `vek` · _jedna volba_
+
+   - 18–29
+   - 30–44
+   - 45–64
+   - 65–74
+   - 75 a více
+   - nechci uvést
+
+3. **Jste** `pohlavi` · _jedna volba_
+
+   - žena
+   - muž
+   - nechci uvést pohlaví
+
+4. **Jaké je vaše nejvyšší dokončené vzdělání?** `vzdelani` · _jedna volba_
+
+   - základní
+   - vyučení bez maturity
+   - maturita
+   - vyšší odborné nebo vysokoškolské
+   - nechci uvést vzdělání
+
+5. **Na čem aplikaci zkoušíte?** `zarizeni` · _jedna volba_
+
+   - telefon s Androidem
+   - iPhone
+   - tablet
+   - webový portál v počítači
+
+6. **Jak často aplikaci své pojišťovny používáte?** `cetnost` · _jedna volba_
+
+   - dnes poprvé
+   - párkrát do roka
+   - zhruba jednou za měsíc
+   - každý týden nebo častěji
+
+7. **Používáte v telefonu mobilní bankovnictví?** `bankovnictvi` · _jedna volba_
+
+   - ano, běžně
+   - ano, občas
+   - ne
+
+   > Pomáhá nám odlišit potíže s aplikací pojišťovny od toho, jak moc jste na aplikace v telefonu zvyklí.
+
+**U · Osm úkolů v aplikaci**
+
+_Každý úkol v aplikaci opravdu zkuste a pak ho oznámkujte jako ve škole: 1 = šlo to hned a bez hledání, 5 = velmi obtížné. Když se úkol nepodařil nebo ho aplikace neumí, zvolte „nešlo to dokončit“._
+
+8. **Přihlaste se do aplikace.** `prihlaseni` · _jedna volba, známky v řádku_
+
+   - 1
+   - 2
+   - 3
+   - 4
+   - 5
+   - nešlo to dokončit
+   - nezkoušel(a) jsem
+
+   > Hodnoťte dnešní přihlášení; pokud účet teprve zakládáte, hodnoťte i registraci.
+
+9. **Zobrazte svůj průkaz pojištěnce.** `prukaz` · _jedna volba, známky v řádku_
+
+   - 1
+   - 2
+   - 3
+   - 4
+   - 5
+   - nešlo to dokončit
+   - nezkoušel(a) jsem
+
+10. **Najděte přehled vykázané péče: co za vás lékaři pojišťovně vykázali za poslední rok.** `vykazana-pece` · _jedna volba, známky v řádku_
+
+   - 1
+   - 2
+   - 3
+   - 4
+   - 5
+   - nešlo to dokončit
+   - nezkoušel(a) jsem
+
+11. **Zjistěte, kdy jste byl(a) naposledy na preventivní prohlídce u praktického lékaře.** `prevence` · _jedna volba, známky v řádku_
+
+   - 1
+   - 2
+   - 3
+   - 4
+   - 5
+   - nešlo to dokončit
+   - nezkoušel(a) jsem
+
+12. **Najděte příspěvek na dentální hygienu nebo na sport a dojděte v žádosti až k poslednímu kroku před odesláním.** `prispevek` · _jedna volba, známky v řádku_
+
+   - 1
+   - 2
+   - 3
+   - 4
+   - 5
+   - nešlo to dokončit
+   - nezkoušel(a) jsem
+
+   > Žádost neodesílejte, pokud o příspěvek žádat nechcete.
+
+13. **Najděte zubního lékaře ve svém okolí, který má s vaší pojišťovnou smlouvu.** `lekar` · _jedna volba, známky v řádku_
+
+   - 1
+   - 2
+   - 3
+   - 4
+   - 5
+   - nešlo to dokončit
+   - nezkoušel(a) jsem
+
+14. **Zjistěte, jestli nemáte dluh na pojistném, nebo najděte přehled svých plateb pojistného.** `platby` · _jedna volba, známky v řádku_
+
+   - 1
+   - 2
+   - 3
+   - 4
+   - 5
+   - nešlo to dokončit
+   - nezkoušel(a) jsem
+
+15. **Napište pojišťovně zprávu nebo najděte, jak ji z aplikace kontaktovat.** `kontakt` · _jedna volba, známky v řádku_
+
+   - 1
+   - 2
+   - 3
+   - 4
+   - 5
+   - nešlo to dokončit
+   - nezkoušel(a) jsem
+
+   > Zprávu neodesílejte, pokud nic nepotřebujete.
+
+**Z · Celkově**
+
+16. **Jakou známku byste aplikaci dal(a) celkově?** `celkove` · _jedna volba, známky v řádku_
+
+   - 1
+   - 2
+   - 3
+   - 4
+   - 5
+
+   > 1 = výborná, 5 = nedostatečná.
+
+17. **Doporučil(a) byste aplikaci rodině nebo známým pojištěným u stejné pojišťovny?** `doporuceni` · _jedna volba_
+
+   - určitě ano
+   - spíše ano
+   - spíše ne
+   - určitě ne
+   - nevím
+
+18. **Co by se v aplikaci mělo zlepšit a co vám naopak vyhovuje?** `namety` · _volný text do 1000 znaků_
+
+   > Nepište prosím jména, e-maily ani údaje o svém zdraví.
+
+**Vyhodnocení** (oblast semaforu: Klientský servis a informování)
+
+Odpovědi uživatelů aplikací: pojišťovna, věk, pohlaví, vzdělání, zařízení, jak často aplikaci používají a zda používají mobilní bankovnictví; známka 1–5 za snadnost osmi úkolů, celková známka, doporučení a volný text.
+
+1. Známkuje se jako ve škole: 1 = šlo to hned a bez hledání, 5 = velmi obtížné. „Nešlo to dokončit“ se počítá zvlášť jako podíl nedokončených pokusů, do průměru známek nevstupuje; „nezkoušel(a) jsem“ se z úkolu vyřazuje.
+2. Výsledek za úkol a pojišťovnu je medián známky a podíl „nešlo to dokončit“. Zveřejňuje se až od 30 odpovědí na pojišťovnu; pod prahem se ukazuje jen souhrn za všechny pojišťovny (od tří odpovědí).
+3. Dotazník není průzkum: respondenti se vybírají sami, takže výsledek říká, co zažili respondenti, ne všichni pojištěnci. Vždy se uvádí s počtem odpovědí a rozpadem podle věku a zařízení.
+4. Do semaforu výsledky samy nevstupují. Doplňují hodnoticí list IT experta (sada aplikace-privetivost): kde se zkušenost uživatelů s listem rozchází, redakce úkol na zařízení zopakuje.
+5. Volný text čte jen redakce jako podnět k ověření; nezveřejňuje se doslova a API v něm odmítne e-mail i rodné číslo.
+
+_Výstup:_ Tabulka úkol × pojišťovna (medián známky, podíl nedokončených, počet odpovědí) na stránce Aplikace, rozpad podle věku a zařízení a seznam podnětů pro pojišťovny.
+
+Vyhodnocení po pojišťovnách z Neonu (medián známky a podíl nedokončených za úkol; pustit na projektu s dotazníky):
+
+```sql
+select o.odpovedi->>'pojistovna'                                              as pojistovna,
+       u.key                                                                  as ukol,
+       count(*) filter (where u.value ~ '^[1-5]$')                            as znamek,
+       percentile_cont(0.5) within group (order by u.value::int)
+         filter (where u.value ~ '^[1-5]$')                                   as median,
+       round(100.0 * count(*) filter (where u.value = 'nešlo to dokončit')
+             / nullif(count(*) filter (where u.value <> 'nezkoušel(a) jsem'), 0)) as nedokonceno_pct
+  from dotaznik_odpoved o
+ cross join lateral jsonb_each_text(o.odpovedi) as u(key, value)
+ where o.sada_id = 'aplikace-ukoly'
+   and u.key in ('prihlaseni','prukaz','vykazana-pece','prevence','prispevek','lekar','platby','kontakt','celkove')
+ group by 1, 2
+having count(*) >= 30
+ order by 1, 2;
+```
 
 ## 2. Leden 2027: kolo 1 (fond prevence, pobočky, dostupnost a přestupy)
 

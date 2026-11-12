@@ -31,6 +31,11 @@
       "datum": "2026-11-03",
       "zmena": "Nová sada dostupnost-prechody (kolo 1, 4 otázky): žádosti podle § 16 zák. 48/1997 Sb., žádosti o zajištění péče podle § 40, zveřejňování čekacích dob a hrubé toky přestupů pojištěnců. Ostatní sady beze změny, verze sad zůstává 1 (nic nebylo rozesláno).",
       "zdroj": "PLAN-SROVNAVAC-ANALYTIK.md A3.1 a A3.3, data/pojistovny-dostupnost.json"
+    },
+    {
+      "datum": "2026-11-12",
+      "zmena": "Nová sada aplikace-ukoly (veřejný dotazník, 18 otázek): stratifikace respondenta, osm úkolů v aplikaci pojišťovny se známkou 1–5 za snadnost, celková známka a volné pole. Nové pole otázky zobrazeni: skala (známky v řádku) a pole části popis. Ostatní sady beze změny.",
+      "zdroj": "zadání vydavatele 12. 11. 2026, vzor dotazník NHSP (hospitalizační péče)"
     }
   ],
   "_doc": "Sady otázek srovnávače pojišťoven podle fází projektu (docs/pojistovny-dotazniky.md): kolo 1 fond prevence a pobočky, kolo 2 rizikoví pojištěnci a zdravotní gramotnost, interní hodnoticí list aplikací, dotazník NAPO pro pacientské organizace, veřejná anketa pro pojištěnce a právo na odpověď. kanal: web-token | web-verejnost | interni | dopis+web; interní sady se přes web nevyplňují.",
@@ -436,6 +441,291 @@
         ],
         "vystup": "Matice kritérií 7 × 6 a skóre na stránce Aplikace; po právu na odpověď (10 dní) návrh stavu v semaforu, oblast Klientský servis."
       }
+    },
+    {
+      "id": "aplikace-ukoly",
+      "nazev": "Aplikace vaší pojišťovny: zkuste osm úkolů",
+      "typ": "dotaznik",
+      "verze": "1",
+      "faze": "prosinec 2026 (spolu s hodnoticím listem aplikací)",
+      "respondent": "veřejnost, uživatelé mobilní aplikace nebo webového portálu své pojišťovny; bez tokenu a bez registrace",
+      "kanal": "web-verejnost",
+      "povolene_respondenty": [
+        "verejnost"
+      ],
+      "uvod": "Otevřete si aplikaci své zdravotní pojišťovny a zkuste v ní osm běžných úkolů. U každého nám řekněte, jak snadno to šlo. Zabere to asi patnáct minut. Dotazník je anonymní: neptáme se na jméno ani e-mail, neukládáme IP adresu a všechny otázky jsou nepovinné. Bez uvedené pojišťovny ale odpověď nemůžeme přiřadit k aplikaci. Nic v aplikaci neodesílejte, pokud to sami nechcete; u žádosti o příspěvek stačí dojít k poslednímu kroku.",
+      "vyhodnoceni": {
+        "oblasti": [
+          "servis"
+        ],
+        "vstup": "Odpovědi uživatelů aplikací: pojišťovna, věk, pohlaví, vzdělání, zařízení, jak často aplikaci používají a zda používají mobilní bankovnictví; známka 1–5 za snadnost osmi úkolů, celková známka, doporučení a volný text.",
+        "pravidla": [
+          "Známkuje se jako ve škole: 1 = šlo to hned a bez hledání, 5 = velmi obtížné. „Nešlo to dokončit“ se počítá zvlášť jako podíl nedokončených pokusů, do průměru známek nevstupuje; „nezkoušel(a) jsem“ se z úkolu vyřazuje.",
+          "Výsledek za úkol a pojišťovnu je medián známky a podíl „nešlo to dokončit“. Zveřejňuje se až od 30 odpovědí na pojišťovnu; pod prahem se ukazuje jen souhrn za všechny pojišťovny (od tří odpovědí).",
+          "Dotazník není průzkum: respondenti se vybírají sami, takže výsledek říká, co zažili respondenti, ne všichni pojištěnci. Vždy se uvádí s počtem odpovědí a rozpadem podle věku a zařízení.",
+          "Do semaforu výsledky samy nevstupují. Doplňují hodnoticí list IT experta (sada aplikace-privetivost): kde se zkušenost uživatelů s listem rozchází, redakce úkol na zařízení zopakuje.",
+          "Volný text čte jen redakce jako podnět k ověření; nezveřejňuje se doslova a API v něm odmítne e-mail i rodné číslo."
+        ],
+        "vystup": "Tabulka úkol × pojišťovna (medián známky, podíl nedokončených, počet odpovědí) na stránce Aplikace, rozpad podle věku a zařízení a seznam podnětů pro pojišťovny."
+      },
+      "casti": [
+        {
+          "id": "S",
+          "nazev": "O vás a vaší aplikaci",
+          "otazky": [
+            {
+              "id": "pojistovna",
+              "text": "Aplikaci které zdravotní pojišťovny budete zkoušet?",
+              "vyber": "jeden",
+              "moznosti": [
+                "VZP ČR – Moje VZP (111)",
+                "VoZP – Zdraví na klik (201)",
+                "ČPZP – Zdraví v mobilu (205)",
+                "OZP – VITAKARTA (207)",
+                "ZPŠ – Karta mého srdce (209)",
+                "ZP MV ČR – ZP211 (211)",
+                "RBP – my213 (213)"
+              ]
+            },
+            {
+              "id": "vek",
+              "text": "Kolik vám je let?",
+              "vyber": "jeden",
+              "moznosti": [
+                "18–29",
+                "30–44",
+                "45–64",
+                "65–74",
+                "75 a více",
+                "nechci uvést"
+              ]
+            },
+            {
+              "id": "pohlavi",
+              "text": "Jste",
+              "vyber": "jeden",
+              "moznosti": [
+                "žena",
+                "muž",
+                "nechci uvést pohlaví"
+              ]
+            },
+            {
+              "id": "vzdelani",
+              "text": "Jaké je vaše nejvyšší dokončené vzdělání?",
+              "vyber": "jeden",
+              "moznosti": [
+                "základní",
+                "vyučení bez maturity",
+                "maturita",
+                "vyšší odborné nebo vysokoškolské",
+                "nechci uvést vzdělání"
+              ]
+            },
+            {
+              "id": "zarizeni",
+              "text": "Na čem aplikaci zkoušíte?",
+              "vyber": "jeden",
+              "moznosti": [
+                "telefon s Androidem",
+                "iPhone",
+                "tablet",
+                "webový portál v počítači"
+              ]
+            },
+            {
+              "id": "cetnost",
+              "text": "Jak často aplikaci své pojišťovny používáte?",
+              "vyber": "jeden",
+              "moznosti": [
+                "dnes poprvé",
+                "párkrát do roka",
+                "zhruba jednou za měsíc",
+                "každý týden nebo častěji"
+              ]
+            },
+            {
+              "id": "bankovnictvi",
+              "text": "Používáte v telefonu mobilní bankovnictví?",
+              "vyber": "jeden",
+              "moznosti": [
+                "ano, běžně",
+                "ano, občas",
+                "ne"
+              ],
+              "napoveda": "Pomáhá nám odlišit potíže s aplikací pojišťovny od toho, jak moc jste na aplikace v telefonu zvyklí."
+            }
+          ]
+        },
+        {
+          "id": "U",
+          "nazev": "Osm úkolů v aplikaci",
+          "popis": "Každý úkol v aplikaci opravdu zkuste a pak ho oznámkujte jako ve škole: 1 = šlo to hned a bez hledání, 5 = velmi obtížné. Když se úkol nepodařil nebo ho aplikace neumí, zvolte „nešlo to dokončit“.",
+          "otazky": [
+            {
+              "id": "prihlaseni",
+              "text": "Přihlaste se do aplikace.",
+              "vyber": "jeden",
+              "zobrazeni": "skala",
+              "moznosti": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "nešlo to dokončit",
+                "nezkoušel(a) jsem"
+              ],
+              "napoveda": "Hodnoťte dnešní přihlášení; pokud účet teprve zakládáte, hodnoťte i registraci."
+            },
+            {
+              "id": "prukaz",
+              "text": "Zobrazte svůj průkaz pojištěnce.",
+              "vyber": "jeden",
+              "zobrazeni": "skala",
+              "moznosti": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "nešlo to dokončit",
+                "nezkoušel(a) jsem"
+              ]
+            },
+            {
+              "id": "vykazana-pece",
+              "text": "Najděte přehled vykázané péče: co za vás lékaři pojišťovně vykázali za poslední rok.",
+              "vyber": "jeden",
+              "zobrazeni": "skala",
+              "moznosti": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "nešlo to dokončit",
+                "nezkoušel(a) jsem"
+              ]
+            },
+            {
+              "id": "prevence",
+              "text": "Zjistěte, kdy jste byl(a) naposledy na preventivní prohlídce u praktického lékaře.",
+              "vyber": "jeden",
+              "zobrazeni": "skala",
+              "moznosti": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "nešlo to dokončit",
+                "nezkoušel(a) jsem"
+              ]
+            },
+            {
+              "id": "prispevek",
+              "text": "Najděte příspěvek na dentální hygienu nebo na sport a dojděte v žádosti až k poslednímu kroku před odesláním.",
+              "vyber": "jeden",
+              "zobrazeni": "skala",
+              "moznosti": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "nešlo to dokončit",
+                "nezkoušel(a) jsem"
+              ],
+              "napoveda": "Žádost neodesílejte, pokud o příspěvek žádat nechcete."
+            },
+            {
+              "id": "lekar",
+              "text": "Najděte zubního lékaře ve svém okolí, který má s vaší pojišťovnou smlouvu.",
+              "vyber": "jeden",
+              "zobrazeni": "skala",
+              "moznosti": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "nešlo to dokončit",
+                "nezkoušel(a) jsem"
+              ]
+            },
+            {
+              "id": "platby",
+              "text": "Zjistěte, jestli nemáte dluh na pojistném, nebo najděte přehled svých plateb pojistného.",
+              "vyber": "jeden",
+              "zobrazeni": "skala",
+              "moznosti": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "nešlo to dokončit",
+                "nezkoušel(a) jsem"
+              ]
+            },
+            {
+              "id": "kontakt",
+              "text": "Napište pojišťovně zprávu nebo najděte, jak ji z aplikace kontaktovat.",
+              "vyber": "jeden",
+              "zobrazeni": "skala",
+              "moznosti": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "nešlo to dokončit",
+                "nezkoušel(a) jsem"
+              ],
+              "napoveda": "Zprávu neodesílejte, pokud nic nepotřebujete."
+            }
+          ]
+        },
+        {
+          "id": "Z",
+          "nazev": "Celkově",
+          "otazky": [
+            {
+              "id": "celkove",
+              "text": "Jakou známku byste aplikaci dal(a) celkově?",
+              "vyber": "jeden",
+              "zobrazeni": "skala",
+              "moznosti": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5"
+              ],
+              "napoveda": "1 = výborná, 5 = nedostatečná."
+            },
+            {
+              "id": "doporuceni",
+              "text": "Doporučil(a) byste aplikaci rodině nebo známým pojištěným u stejné pojišťovny?",
+              "vyber": "jeden",
+              "moznosti": [
+                "určitě ano",
+                "spíše ano",
+                "spíše ne",
+                "určitě ne",
+                "nevím"
+              ]
+            },
+            {
+              "id": "namety",
+              "text": "Co by se v aplikaci mělo zlepšit a co vám naopak vyhovuje?",
+              "max_delka": 1000,
+              "napoveda": "Nepište prosím jména, e-maily ani údaje o svém zdraví."
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "napo-pacientske-organizace",

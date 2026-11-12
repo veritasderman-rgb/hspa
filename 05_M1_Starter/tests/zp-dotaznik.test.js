@@ -746,7 +746,7 @@ const WEB_DOTAZNIKY = OTAZKY.sady.filter((s) => s.typ === 'dotaznik' && s.kanal 
 
 test('sady: každá má unikátní id otázek, povolený kanal, fázi, respondenta a úvod', () => {
   assert.deepEqual(OTAZKY.sady.map((s) => s.id), [
-    'fond-prevence', 'rizikovi-pojistenci', 'aplikace-privetivost', 'napo-pacientske-organizace',
+    'fond-prevence', 'rizikovi-pojistenci', 'aplikace-privetivost', 'aplikace-ukoly', 'napo-pacientske-organizace',
     'pojistenci-anketa', 'pravo-na-odpoved', 'pobocky-definice', 'dostupnost-prechody',
   ]);
   for (const s of OTAZKY.sady) {
@@ -888,4 +888,68 @@ test('docs/pojistovny-dotazniky.md: každá sada a otázka doslova, průvodní d
   const plan = read('PLAN-SROVNAVAC-POJISTOVEN.md');
   const p27 = plan.slice(plan.indexOf('### 2.7'), plan.indexOf('### 2.8'));
   assert.match(p27, /docs\/pojistovny-dotazniky\.md/);
+});
+
+// --- úkoly v aplikaci (sada aplikace-ukoly): stratifikace, 8 úkolů se známkou, volné pole -------
+test('aplikace-ukoly: stratifikace → osm úkolů se stejnou škálou → celkově a volné pole', () => {
+  const s = sadaById('aplikace-ukoly');
+  assert.equal(s.kanal, 'web-verejnost');
+  assert.deepEqual(s.povolene_respondenty, ['verejnost']);
+  assert.deepEqual(s.casti.map((c) => c.id), ['S', 'U', 'Z']);
+  const [strat, ukoly, zaver] = s.casti;
+  assert.deepEqual(strat.otazky.map((q) => q.id), ['pojistovna', 'vek', 'pohlavi', 'vzdelani', 'zarizeni', 'cetnost', 'bankovnictvi']);
+  assert.equal(strat.otazky[0].moznosti.length, 7, 'sedm pojišťoven');
+  const app = JSON.parse(read('data', 'pojistovny-aplikace.json'));
+  for (const a of app.aplikace) {
+    assert.ok(strat.otazky[0].moznosti.some((m) => m.includes(a.nazev) && m.includes(`(${a.kod})`)), `název aplikace ${a.kod} ${a.nazev}`);
+  }
+  assert.equal(ukoly.otazky.length, 8);
+  assert.ok(typeof ukoly.popis === 'string' && /1 = /.test(ukoly.popis) && /5 = /.test(ukoly.popis), 'část s úkoly vysvětluje známky');
+  for (const q of ukoly.otazky) {
+    assert.equal(q.vyber, 'jeden');
+    assert.equal(q.zobrazeni, 'skala');
+    assert.deepEqual(q.moznosti, ['1', '2', '3', '4', '5', 'nešlo to dokončit', 'nezkoušel(a) jsem'], q.id);
+  }
+  assert.deepEqual(zaver.otazky.map((q) => q.id), ['celkove', 'doporuceni', 'namety']);
+  assert.equal(questionKind(zaver.otazky[2]), 'text');
+  assert.equal(maxDelka(zaver.otazky[2]), 1000);
+  assert.match(s.uvod, /IP adresu/);
+});
+
+test('aplikace-ukoly: API přijme vyplněný dotazník a odmítne známku mimo škálu i e-mail ve volném poli', () => {
+  const s = sadaById('aplikace-ukoly');
+  const body = (odp) => ({ sada_id: s.id, sada_verze: '1', respondent_typ: 'verejnost', odpovedi: odp });
+  const ok = validateOdpoved(s, body({ pojistovna: 'VZP ČR – Moje VZP (111)', vek: '45–64', zarizeni: 'iPhone', prihlaseni: '2', prispevek: 'nešlo to dokončit', kontakt: 'nezkoušel(a) jsem', celkove: '3', namety: 'Příspěvek jsem hledala dlouho.' }));
+  assert.equal(ok.ok, true, ok.errors.join('; '));
+  assert.equal(ok.clean.odpovedi.prispevek, 'nešlo to dokončit');
+  assert.equal(validateOdpoved(s, body({ prihlaseni: '6' })).ok, false);
+  assert.equal(validateOdpoved(s, body({ prihlaseni: ['1', '2'] })).ok, false, 'známka je jedna');
+  assert.equal(validateOdpoved(s, body({ namety: 'napište mi na jan@example.cz' })).ok, false);
+  assert.equal(validateOdpoved(s, body({ namety: 'x'.repeat(1001) })).ok, false);
+});
+
+test('aplikace-ukoly: formulář kreslí známky v řádku a popis části; odeslání nese známky', () => {
+  const s = sadaById('aplikace-ukoly');
+  const c = mkContainer();
+  const r = renderDotaznik(c, s);
+  assert.equal(c.find((n) => n.className === 'zpd-q zpd-q--skala').length, 9, 'osm úkolů + celková známka');
+  assert.equal(c.find((n) => n.className === 'zpd-note zpd-part-popis').length, 1);
+  const radia = c.find((n) => n.attrs?.name === 'prispevek');
+  assert.equal(radia.length, 7);
+  radia.find((n) => n.value === '4').checked = true;
+  assert.deepEqual(r.getPayload().odpovedi, { prispevek: '4' });
+  assert.equal(r.getPayload().respondent_typ, 'verejnost');
+});
+
+test('validate-pojistovny: zobrazeni jen skala u otázky s jednou volbou, popis části je text', () => {
+  const d = loadDatasets();
+  const fails = (mut, re) => {
+    const x = structuredClone(d);
+    mut(x.otazky.sady.find((s) => s.id === 'aplikace-ukoly'));
+    assert.ok(validateAll(x).errors.some((e) => re.test(e)), re);
+  };
+  fails((s) => { s.casti[1].otazky[0].zobrazeni = 'hvezdy'; }, /zobrazeni: jen 'skala'/);
+  fails((s) => { delete s.casti[1].otazky[0].vyber; }, /škála je otázka s jednou volbou/);
+  fails((s) => { s.casti[1].popis = 7; }, /popis/);
+  assert.equal(validateAll(d).errors.length, 0);
 });
