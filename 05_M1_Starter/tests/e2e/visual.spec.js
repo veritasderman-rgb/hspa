@@ -27,6 +27,7 @@ const PAGES = [
   { path: '/pojistovny-metodika.html',    name: 'insurers-metodika' },
   { path: '/pojistovny-indikatory.html',  name: 'insurers-indikatory' },
   { path: '/pojistovny-instituce.html',   name: 'insurers-instituce' },
+  { path: '/pojistovny-prispevky.html',   name: 'insurers-prispevky' },
   { path: '/pojistovna.html?zp=111',      name: 'insurers-profil' },
   // Pozn.: dlouhé články (clanek-*.html) se z vizuálních snapshotů vynechávají —
   // Article Visuals používají JS count-up animace (requestAnimationFrame), které

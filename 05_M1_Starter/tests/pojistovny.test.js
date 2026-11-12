@@ -60,6 +60,7 @@ const STRANKY = {
   'pojistovny-aplikace.html': ['zpAppMatrix', 'zpAppFunkce', 'zpAppKriteria', 'zpAppSummary', 'zpAppNotes', 'zpTablePrev', 'zpStiznosti', 'zpOpendata'],
   'pojistovny-gramotnost.html': ['zpRizikove', 'zpOtazky', 'zpDalsi', 'zpDotaznik', 'zpDotaznikAgregace'],
   'pojistovny-instituce.html': ['zpInstOrgany', 'zpInstAparat', 'zpInstProgramy', 'zpInstDostupnost', 'zpSit'],
+  'pojistovny-prispevky.html': ['zpMojeZp', 'zpPrispevky'],
   'pojistovny-metodika.html': ['zpSemafor', 'zpOtazky', 'zpZadosti', 'zpVerifikace'],
   'pojistovny-indikatory.html': ['zpIndStrucne', 'zpIndKdo', 'zpIndKontrakt', 'zpIndAuto', 'zpIndDatasety', 'zpIndNavrhy', 'zpIndMezery'],
 };
@@ -142,7 +143,7 @@ test('middleware.js: matcher pokrývá přehled, všech pět podstránek a data,
   const re = config.matcher.map((m) => new RegExp(`^${m.replace(/[.]/g, '\\.').replace(/:path\*/, '.*')}$`));
   const hit = (u) => re.some((r) => r.test(u));
   for (const u of ['/pojistovny', '/pojistovny.html', '/pojistovny-kmen.html', '/pojistovny-penize.html', '/pojistovny-prevence.html', '/pojistovny-aplikace.html',
-    '/pojistovny-gramotnost.html', '/pojistovny-metodika.html', '/pojistovny-indikatory.html', '/pojistovny-instituce.html', '/pojistovna.html', '/pojistovna', '/pojistovny-kmen', '/data/pojistovny.json', '/data/pojistovny-sit.json', '/data/pojistovny-indikatory.json']) {
+    '/pojistovny-gramotnost.html', '/pojistovny-metodika.html', '/pojistovny-indikatory.html', '/pojistovny-instituce.html', '/pojistovny-prispevky.html', '/data/pojistovny-prispevky.json', '/pojistovna.html', '/pojistovna', '/pojistovny-kmen', '/data/pojistovny.json', '/data/pojistovny-sit.json', '/data/pojistovny-indikatory.json']) {
     assert.ok(hit(u), `${u} musí být za heslem`);
   }
   for (const u of ['/pojistenci.html', '/index.html', '/data/pojistenci-d5-zp.json', '/src/pojistovny.js', '/clanek-pojistne-plany-2026.html']) {

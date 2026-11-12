@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Příspěvky pojišťoven — Srovnávač pojišťoven, pracovní verze · HSPA Monitor</title>
+<meta name="description" content="Na co máte u zdravotní pojišťovny nárok: příspěvky z fondu prevence 2026 podle věku, pohlaví a životní situace, s částkou, podmínkami a odkazem na web pojišťovny. Pracovní verze.">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Příspěvky pojišťoven — Srovnávač zdravotních pojišťoven">
+<meta property="og:locale" content="cs_CZ">
+<link rel="stylesheet" href="src/styles.min.css">
+<!--
+  audit:
+    status: draft
+    pristup: heslo (middleware.js, POJISTOVNY_HESLO, matcher /pojistovny-:path*) + noindex
+    trida: C (nová stránka, částky u pojmenovaných institucí)
+    stranka: prispevky (katalog příspěvků z fondu prevence 2026, pohled domácnosti)
+    zdroje: data/pojistovny-prispevky.json — každá částka má url a doslovnou citaci z webu pojišťovny
+    overeni: node ingest/verify-pojistovny-prispevky.js (znovu stáhne url a hledá citaci)
+    hranice: součty jsou nejvyšší možné částky, ne hodnocení pojišťoven (PS 7. 10. 2026); přehled 7 ZP v pořadí kódu
+-->
+</head>
+<body>
+<a class="skip-link" href="#content">Přeskočit na hlavní obsah</a>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Srovnávač pojišťoven</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+  <div id="zpShell" class="zpc-shell" data-aktivni="prispevky"></div>
+
+  <section class="zpc-mod zpc-mod--page" id="modul-prispevky" aria-labelledby="zpPrispHead">
+    <div class="zpc-mod-head"><h1 id="zpPrispHead">Na co máte u pojišťovny nárok</h1><span class="zpc-stav" id="zpPrispevkyStav">weby pojišťoven · 2026</span></div>
+    <p class="zpc-lead">Příspěvky z fondu prevence podle věku, pohlaví a životní situace: kolik nejvýš, kdo z vaší domácnosti a za jakých podmínek.</p>
+    <div class="zpc-moje-wrap">
+      <p class="zpc-moje-lbl" id="zpMojeLbl">Moje pojišťovna: vyberte ji a tabulka ukáže její příspěvky pro vaši domácnost.</p>
+      <div id="zpMojeZp" class="zpc-moje" aria-describedby="zpMojeLbl"></div>
+    </div>
+    <div id="zpPrispevky"></div>
+    <details class="zpc-acc">
+      <summary>Jak číst částky a jak se počítá součet</summary>
+      <div class="zpc-acc-body">
+        <p>Částky jsou nejvyšší možné příspěvky, jak je pojišťovny uvádějí na svých webech pro rok 2026. Každá má v tabulce odkaz na stránku, ze které pochází.</p>
+        <p>Součet za domácnost sčítá příspěvky, na které má člen nárok věkem, pohlavím a zaškrtnutou situací. Kde pojišťovna stanoví společný roční strop pro víc příspěvků, počítá se nejvýš tento strop. Příspěvky bez uvedené částky (bodové a kreditní programy) v součtu nejsou.</p>
+        <p>Příspěvky z fondu prevence nejsou nárokové. Pojišťovna je vyplácí do vyčerpání rozpočtu a po splnění podmínek, nejčastěji dokladu o zaplacení, lhůty pro podání žádosti a u dospělých preventivní prohlídky. Součet proto není částka, kterou dostanete, ale strop, ke kterému se dá přiblížit.</p>
+        <p>Výše příspěvků není hodnocení pojišťovny. O tom, zda program zlepšuje zdraví, neříká nic; tím se zabývá stránka <a href="pojistovny-prevence.html">Prevence</a>. Stránka není zdravotní doporučení.</p>
+      </div>
+    </details>
+  </section>
+
+  <div id="zpZdroje" class="zpc-zdroje-wrap"></div>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/pojistovny.js"></script>
+<script type="module" src="src/pojistovny-prispevky.js"></script>
+</body>
+</html>

@@ -23371,3 +23371,36 @@ main .zps .zpv-mark, main[data-moje-zp] .zps .zpv-mark, main[data-porovnat-zp] .
   .zps-cell.zpv-mark { background-image: none; }
   .zps-table tr, .zpz-table tr, .zpk-evo tr { break-inside: avoid; }
 }
+
+/* ── Srovnávač pojišťoven · stránka Příspěvky (.zpp-*, src/pojistovny-prispevky.js) ── */
+.zpp-ovl { margin: 14px 0 18px; }
+.zpp-ovl h4.zpp-h { margin-top: 16px; }
+.zpp-clenove { list-style: none; padding: 0; margin: 0 0 8px; }
+.zpp-ovl .zpp-clen { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: flex-end; padding: 8px 0; margin: 0; border-bottom: 1px solid var(--rule); }
+.zpp-f { display: flex; flex-direction: column; gap: 2px; font-family: var(--sans); font-size: 12px; color: var(--ink-mut); }
+.zpp-f select, .zpp-f input { font-family: var(--sans); font-size: 15px; color: var(--ink); background: var(--paper); border: 1px solid var(--rule2); border-radius: 4px; padding: 6px 8px; min-height: 36px; }
+.zpp-f input { width: 5.5em; }
+.zpp-f select:focus-visible, .zpp-f input:focus-visible, .zpp-x:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.zpp-sits { display: flex; flex-wrap: wrap; gap: 4px 16px; flex: 1 1 240px; align-self: center; font-family: var(--sans); font-size: 13.5px; }
+.zpp-sit { display: inline-flex; align-items: center; gap: 6px; min-height: 28px; }
+.zpp-x { font-family: var(--sans); font-size: 13px; color: var(--ink-mut); background: none; border: 0; padding: 6px 2px; min-height: 32px; text-decoration: underline; cursor: pointer; }
+.zpp-x:disabled { opacity: .45; cursor: default; text-decoration: none; }
+.zpp-add { display: flex; gap: 6px; margin: 0 0 4px; }
+.zpp-stats { margin: 14px 0 12px; }
+.zpp-vyber { margin: 14px 0; font-family: var(--sans); font-size: 15px; }
+.zpp-tbl table { min-width: 880px; }
+.zpp-tbl td > b { display: block; }
+.zpp-tbl td small, .zpp-tbl th small { font-weight: 400; margin-top: 2px; }
+.zpp-tbl tr.zpp-kat th { background: var(--paper2); text-align: left; font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-mut); }
+.zpp-tbl .zpc-pills { justify-content: flex-start; }
+.zpp-tbl .zpc-pills li { font-size: 12px; padding: 2px 8px; margin: 0; }
+.zpp-podm { margin: 0; padding-left: 1.1em; font-size: 12.5px; }
+.zpp-podm li { margin: 0 0 2px; }
+.zpp-tbl-clen table { min-width: 0; }
+@media (max-width: 520px) {
+  .zpp-sits { flex-basis: 100%; }
+}
+@media print {
+  .zpp-ovl .zpc-chips, .zpp-add, .zpp-x { display: none; }
+  .zpp-tbl table { min-width: 0; }
+}
