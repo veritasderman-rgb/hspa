@@ -91,6 +91,9 @@ test('stavNaroku: věk, pohlaví a situace', () => {
   assert.equal(stavNaroku(by('darci'), otec), 'situace');
   assert.equal(stavNaroku(by('darci'), parseClen('M42k')), 'ano');
   assert.equal(stavNaroku(by('novorozenec'), parseClen('Z0')), 'ano', 'dítě do 1 roku je novorozenec bez zaškrtávání');
+  assert.equal(stavNaroku(by('novorozenec'), otec), 'ne', 'novorozenecký příspěvek se dospělému nenabízí');
+  assert.equal(stavNaroku(by('novorozenec'), tehotna), 'situace', 'těhotné se nabídne jako budoucí');
+  assert.equal(stavNaroku(by('darci'), dcera), 'ne', 'dítě nemůže být dárce');
 });
 
 test('soucetClena: společný strop v Kč, strop na počet, jednorázové zvlášť, bez částky mimo součet', () => {
@@ -250,6 +253,7 @@ test('castkaVCitaci: částka zapsaná s mezerou, tečkou i bez oddělovače', (
 test('ověřovač citací: převod HTML na text, porovnání bez bílých znaků, seznam položek', () => {
   assert.equal(squash(htmlToText('<p>až <strong>1&nbsp;000 Kč</strong><br>ročně</p><script>x</script>')), 'až1000Kčročně');
   assert.equal(squash('až 1 000 Kč\n ročně'), 'až1000Kčročně');
+  assert.equal(htmlToText('p&rcaron;&iacute;sp&ecaron;vek &scaron;&uring;&Zcaron; &bdquo;a&ldquo;'), 'příspěvek šůŽ „a“');
   const items = polozkyKOvereni(D, '111');
   assert.ok(items.length > 0 && items.every((i) => i.kod === '111' && i.url && i.citace));
 });

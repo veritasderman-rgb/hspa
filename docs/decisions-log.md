@@ -6,6 +6,13 @@ Formát: každá položka má `Datum`, `PR`, `Co`, `Proč`, `Důsledek`.
 
 ---
 
+## 2026-11-12 — Srovnávač pojišťoven: stránka Příspěvky (katalog příspěvků a pohled domácnosti)
+
+- **PR**: „stránka Příspěvky“, třída C (nová stránka, částky u pojmenovaných institucí; merguje vydavatel)
+- **Co**: `pojistovny-prispevky.html` + `data/pojistovny-prispevky.json` (494 příspěvků 7 ZP na rok 2026 z jejich webů) + `src/prispevky-engine.js`. Čtenář složí domácnost a u vybrané pojišťovny vidí tabulku příspěvků, kdo z domácnosti je může čerpat a součet nejvyšších možných částek.
+- **Proč**: zadání vydavatele 12. 11. 2026 („kolik mohu čerpat já, otec tří dětí, když budeme všichni u této ZP“; pohledy těhotná, rodina, psychické potíže, stomatologie…).
+- **Důsledek**: (1) každá částka má `url` a doslovnou `citace`; bez ověření `node ingest/verify-pojistovny-prispevky.js` se dataset nemění. (2) Do součtu jdou **jen peníze vyplácené pojištěnci**: věcné dary a výkony, které pojišťovna hradí poskytovateli, mají `castka_kc: null` (redakční úpravy nesou `uprava_redakce: true`). (3) Součet je strop, ne očekávané čerpání; **není to hodnocení pojišťovny** a přehled sedmi ZP se **neřadí podle částky** (pořadí kódu), v souladu s rozhodnutím PS 7. 10. 2026. (4) Kreditní systém OZP nemá veřejný kurz kreditů na Kč, proto jsou jeho programy bez částky a nesčítají se.
+
 ## 2026-11-05 — Třída A merguje GitHub auto-merge, ne editor
 
 - **PR**: „brána: auto-merge třídy A“, třída C (merguje vydavatel; mění `GOVERNANCE.md` § 3 a `pr-gate.yml`)

@@ -519,7 +519,7 @@ test('validate-pojistovny: fond prevence — nesoulad součtu je WARN, ne FAIL',
   const s = realSets();
   delete s.verifikace; // WARN „nenalezeno ve VZ“ patří jinému testu (tests/pojistovny-vz.test.js)
   // analytické datasety (PLAN-SROVNAVAC-ANALYTIK.md) mají vlastní validátory i vlastní WARN (např. výběr 2024 vs. Tab. 1 MZ)
-  for (const k of ['hospodareniRady', 'prerozdeleni', 'instituce', 'smluvniProgramy', 'dostupnost', 'segmenty', 'fondPravidla', 'fondBilance']) delete s[k];
+  for (const k of ['hospodareniRady', 'prerozdeleni', 'instituce', 'smluvniProgramy', 'dostupnost', 'segmenty', 'fondPravidla', 'fondBilance', 'prispevky']) delete s[k];
   s.prevence.pojistovny[0].fond_prevence_struktura.celkem.skutecnost += 100000;
   const { errors, warnings } = validateAll(s);
   assert.deepEqual(errors, []);
@@ -528,7 +528,7 @@ test('validate-pojistovny: fond prevence — nesoulad součtu je WARN, ne FAIL',
   // v toleranci ±1 % bez varování
   const t = realSets();
   delete t.verifikace;
-  for (const k of ['hospodareniRady', 'prerozdeleni', 'instituce', 'smluvniProgramy', 'dostupnost', 'segmenty', 'fondPravidla', 'fondBilance']) delete t[k];
+  for (const k of ['hospodareniRady', 'prerozdeleni', 'instituce', 'smluvniProgramy', 'dostupnost', 'segmenty', 'fondPravidla', 'fondBilance', 'prispevky']) delete t[k];
   t.prevence.pojistovny[0].fond_prevence_struktura.celkem.skutecnost += 1000;
   assert.deepEqual(validateAll(t).warnings, []);
 });

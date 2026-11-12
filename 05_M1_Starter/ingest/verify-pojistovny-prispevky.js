@@ -24,7 +24,13 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const UA = 'ZdraveCesko-HSPA/1.0';
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-const ENT = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', ndash: '–', mdash: '—', hellip: '…', bdquo: '„', ldquo: '“', rdquo: '”', lsquo: '‘', rsquo: '’', sbquo: '‚', deg: '°', sect: '§', times: '×', euro: '€' };
+const ENT = {
+  amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', ensp: ' ', emsp: ' ', thinsp: ' ', shy: '', zwnj: '', zwj: '',
+  ndash: '–', mdash: '—', hellip: '…', bdquo: '„', ldquo: '“', rdquo: '”', lsquo: '‘', rsquo: '’', sbquo: '‚', laquo: '«', raquo: '»',
+  deg: '°', sect: '§', times: '×', euro: '€', copy: '©', reg: '®', middot: '·', bull: '•', frac12: '½', plusmn: '±', szlig: 'ß',
+};
+// &aacute; &ecaron; &uring; … = základní písmeno + kombinující znak (po NFC jeden znak)
+const DIA = { acute: '\u0301', caron: '\u030c', ring: '\u030a', uml: '\u0308', circ: '\u0302', grave: '\u0300', tilde: '\u0303', cedil: '\u0327' };
 
 export function htmlToText(html) {
   return String(html)
@@ -33,7 +39,8 @@ export function htmlToText(html) {
     .replace(/<[^>]+>/g, ' ')
     .replace(/&#x([0-9a-f]+);/gi, (_, h) => String.fromCodePoint(parseInt(h, 16)))
     .replace(/&#(\d+);/g, (_, d) => String.fromCodePoint(Number(d)))
-    .replace(/&([a-z]+);/gi, (m, n) => ENT[n.toLowerCase()] ?? m);
+    .replace(/&([A-Za-z])(acute|caron|ring|uml|circ|grave|tilde|cedil);/g, (_, ch, d) => (ch + DIA[d]).normalize('NFC'))
+    .replace(/&([a-z0-9]+);/gi, (m, n) => ENT[n.toLowerCase()] ?? m);
 }
 
 /** Text bez bílých znaků a neviditelných oddělovačů, NFC; pro porovnání citace se zdrojem. */

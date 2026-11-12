@@ -111,12 +111,18 @@ export function stavNaroku(prispevek, clen) {
   if ((kdo.pohlavi === 'M' || kdo.pohlavi === 'Z') && kdo.pohlavi !== clen.pohlavi) return 'ne';
   const req = Array.isArray(kdo.situace) ? kdo.situace : [];
   if (!req.length) return 'ano';
-  // těhotenství a porod se týká jen žen, i když to data u příspěvku výslovně neuvádějí
-  const jenZeny = req.every((s) => s === 'tehotna' || s === 'po_porodu');
-  if (jenZeny && clen.pohlavi !== 'Z') return 'ne';
-  if (jenZeny && clen.vek < 15) return 'ne';
   const ma = situaceClena(clen);
-  return req.some((s) => ma.has(s)) ? 'ano' : 'situace';
+  if (req.some((s) => ma.has(s))) return 'ano';
+  // situace, která u člena nastat nemůže (těhotný muž, dvaačtyřicetiletý novorozenec), se nenabízí ani podmíněně
+  return req.some((s) => muzeNastat(s, clen, ma)) ? 'situace' : 'ne';
+}
+
+/** Může daná situace u člena vůbec nastat? Příspěvky pro novorozence se podmíněně nabízejí jen těhotné nebo ženě po porodu. */
+export function muzeNastat(situace, clen, ma = situaceClena(clen)) {
+  if (situace === 'tehotna' || situace === 'po_porodu') return clen.pohlavi === 'Z' && clen.vek >= 15;
+  if (situace === 'novorozenec') return clen.vek === 0 || ma.has('tehotna') || ma.has('po_porodu');
+  if (situace === 'darce') return clen.vek >= 18;
+  return true;
 }
 
 const jeRocni = (perioda) => perioda === 'rok';
