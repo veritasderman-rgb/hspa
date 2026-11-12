@@ -201,11 +201,14 @@ export function soucetClena(zp, clen, { kategorie = null } = {}) {
     const sum = items.reduce((a, p) => a + p.castka_kc, 0);
     let uznano = sum;
     if (strop.typ === 'pocet' && isNum(strop.hodnota)) {
-      uznano = items.map((p) => p.castka_kc).sort((a, b) => b - a).slice(0, strop.hodnota).reduce((a, b) => a + b, 0);
-    } else if (isNum(strop.hodnota)) {
-      uznano = Math.min(sum, strop.hodnota);
+      // „jen N z nich“: vybrané příspěvky si drží vlastní periodu (roční zůstane roční, i když strop sdílí s jednorázovými)
+      const vybrane = [...items].sort((x, y) => y.castka_kc - x.castka_kc).slice(0, strop.hodnota);
+      uznano = vybrane.reduce((acc, p) => acc + p.castka_kc, 0);
+      for (const p of vybrane) { if (jeRocni(p.perioda)) rocne += p.castka_kc; else jednorazove += p.castka_kc; }
+    } else {
+      if (isNum(strop.hodnota)) uznano = Math.min(sum, strop.hodnota);
+      if (jeRocni(strop.perioda || 'rok')) rocne += uznano; else jednorazove += uznano;
     }
-    if (jeRocni(strop.perioda || 'rok')) rocne += uznano; else jednorazove += uznano;
     stropy.push({ id: strop.id, nazev: strop.nazev, soucet: sum, uznano, orezano: uznano < sum, pocet: items.length });
   }
   return { rocne, jednorazove, bezCastky, polozky, stropy };
