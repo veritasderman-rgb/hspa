@@ -185,6 +185,12 @@ const KNOWN_SEED_VERIFIED_EXCEPTIONS = new Set([
   'vakcinace_chripka_diabetes',
   'vakcinace_mmr_deti',
   'zdravotni_gramotnost_omezena',
+  // 2026-11-12: tři indikátory z prezentací ředitele ÚZIS prof. L. Duška. Hodnota ověřena
+  // proti veřejnému dokumentu se stejným údajem (odkaz v kartě v data_source.verification);
+  // strojový zdroj neexistuje, kontrakt nese origin: seed.
+  'osetrovaci_dny_na_uvazek_sestry',
+  'podil_senioru_na_internich_hospitalizacich',
+  'pldd_podil_65plus',
 ]);
 
 test('verification_status: verified v kartě ⇒ source.origin: live v kontraktu (kromě známých výjimek)', () => {
