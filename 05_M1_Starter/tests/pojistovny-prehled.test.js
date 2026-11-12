@@ -32,8 +32,8 @@ const KODY = ['111', '201', '205', '207', '209', '211', '213'];
 
 // ---------------------------------------------------------------- shell
 
-test('shell: devět stránek v pořadí záložek, soubory existují, podstránky mají větu a „co tam najdu“', () => {
-  assert.deepEqual(ZP_STRANKY.map((s) => s.id), ['prehled', 'kmen', 'penize', 'prevence', 'aplikace', 'gramotnost', 'instituce', 'metodika', 'indikatory']);
+test('shell: deset stránek v pořadí záložek, soubory existují, podstránky mají větu a „co tam najdu“', () => {
+  assert.deepEqual(ZP_STRANKY.map((s) => s.id), ['prehled', 'kmen', 'penize', 'prevence', 'prispevky', 'aplikace', 'gramotnost', 'instituce', 'metodika', 'indikatory']);
   for (const s of ZP_STRANKY) {
     assert.ok(fs.existsSync(path.join(ROOT, s.href)), s.href);
     if (s.id !== 'prehled') assert.ok(s.veta && s.co && s.kicker, s.id);
@@ -47,30 +47,30 @@ test('shell: devět stránek v pořadí záložek, soubory existují, podstránk
   assert.equal(zpStrankaById('nic'), null);
 });
 
-test('shell: dvě skupiny záložek — pro pojištěnce (7) a pro redakci a data (2), každá stránka v právě jedné', () => {
+test('shell: dvě skupiny záložek — pro pojištěnce (8) a pro redakci a data (2), každá stránka v právě jedné', () => {
   assert.deepEqual(ZP_SKUPINY.map((g) => g.id), ['pojistenci', 'redakce']);
   assert.equal(ZP_SKUPINY[1].label, 'Pro redakci a data');
-  assert.deepEqual(zpStrankyVSkupine('pojistenci').map((s) => s.id), ['prehled', 'kmen', 'penize', 'prevence', 'aplikace', 'gramotnost', 'instituce']);
+  assert.deepEqual(zpStrankyVSkupine('pojistenci').map((s) => s.id), ['prehled', 'kmen', 'penize', 'prevence', 'prispevky', 'aplikace', 'gramotnost', 'instituce']);
   assert.deepEqual(zpStrankyVSkupine('redakce').map((s) => s.id), ['metodika', 'indikatory']);
   assert.deepEqual(zpStrankyVSkupine('nic'), []);
   for (const s of ZP_STRANKY) assert.ok(ZP_SKUPINY.some((g) => g.id === s.skupina), `${s.id}: skupina`);
   // skupiny jdou za sebou: celé pojištěnecké pořadí předchází redakčnímu
-  assert.deepEqual(ZP_STRANKY.map((s) => s.skupina), ['pojistenci', 'pojistenci', 'pojistenci', 'pojistenci', 'pojistenci', 'pojistenci', 'pojistenci', 'redakce', 'redakce']);
+  assert.deepEqual(ZP_STRANKY.map((s) => s.skupina), ['pojistenci', 'pojistenci', 'pojistenci', 'pojistenci', 'pojistenci', 'pojistenci', 'pojistenci', 'pojistenci', 'redakce', 'redakce']);
 });
 
 test('shell: záložky — aktivní s aria-current="page", jinak žádná; pásek a kicker', () => {
   const html = zpTabsHtml('prevence');
-  assert.equal(count(html, /<a class="zpc-tab"/g), 9);
+  assert.equal(count(html, /<a class="zpc-tab"/g), 10);
   assert.equal(count(html, /aria-current="page"/g), 1);
   assert.match(html, /href="pojistovny-prevence\.html" aria-current="page">Prevence</);
   assert.match(html, /<nav class="zpc-tabs" aria-label="Témata srovnávače">/);
   assert.equal(count(zpTabsHtml('xx'), /aria-current/g), 0);
-  // dva seznamy: pojištěnci (7 záložek) a redakce (2), každý pojmenovaný skrytým popiskem skupiny
+  // dva seznamy: pojištěnci (8 záložek) a redakce (2), každý pojmenovaný skrytým popiskem skupiny
   assert.equal(count(html, /<ul class="zpc-tabs-grp /g), 2);
   const [grpP, grpR] = html.split(/<span class="zpc-tabs-lbl sr-only"/).slice(1);
   assert.match(grpP, /id="zpTabsLbl-pojistenci">Pro pojištěnce<\/span><ul class="zpc-tabs-grp zpc-tabs-grp--pojistenci" data-skupina="pojistenci" aria-labelledby="zpTabsLbl-pojistenci">/);
   assert.match(grpR, /id="zpTabsLbl-redakce">Pro redakci a data<\/span><ul class="zpc-tabs-grp zpc-tabs-grp--redakce" data-skupina="redakce" aria-labelledby="zpTabsLbl-redakce">/);
-  assert.equal(count(grpP, /<a class="zpc-tab"/g), 7);
+  assert.equal(count(grpP, /<a class="zpc-tab"/g), 8);
   assert.equal(count(grpR, /<a class="zpc-tab"/g), 2);
   assert.match(grpR, /pojistovny-metodika\.html/);
   assert.match(grpR, /pojistovny-indikatory\.html/);
@@ -196,8 +196,8 @@ test('přehled: buildPrehled — tři dlaždice KPI, čtyři grafy (podíl, sald
   assert.match(out.grafy, /Celé téma<span class="sr-only">: Kmen<\/span>/);
   assert.equal(count(out.grafy, /data-zp="111"/g) > 3, true, 'marky nesou data-zp');
   assert.match(out.semafor, /zatím nehodnoceno/);
-  // rozcestník: 6 velkých karet pro pojištěnce + 2 menší redakční v samostatném řádku
-  assert.equal(count(out.temata, /class="zpc-tema-card"/g), 6);
+  // rozcestník: 7 velkých karet pro pojištěnce + 2 menší redakční v samostatném řádku
+  assert.equal(count(out.temata, /class="zpc-tema-card"/g), 7);
   assert.equal(count(out.temataRedakce, /class="zpc-tema-card zpc-tema-card--mini"/g), 2);
   assert.doesNotMatch(out.temata, /pojistovny-(metodika|indikatory)\.html/);
   assert.match(out.temataRedakce, /pojistovny-metodika\.html/);
@@ -214,7 +214,7 @@ test('přehled: rozcestník — velké karty podstránek pro pojištěnce s kick
   for (const s of zpStrankyVSkupine('pojistenci').filter((x) => x.id !== 'prehled')) assert.match(html, new RegExp(`href="${s.href}"`));
   assert.doesNotMatch(html, /href="pojistovny\.html"/);
   assert.doesNotMatch(html, /pojistovny-(metodika|indikatory)\.html/, 'redakční stránky jdou do samostatného řádku');
-  for (const c of ['zpc-tema-kicker', 'zpc-tema-title', 'zpc-tema-veta', 'zpc-tema-co']) assert.equal(count(html, new RegExp(c, 'g')), 6, c);
+  for (const c of ['zpc-tema-kicker', 'zpc-tema-title', 'zpc-tema-veta', 'zpc-tema-co']) assert.equal(count(html, new RegExp(c, 'g')), 7, c);
 });
 
 test('přehled: rozcestník — redakční stránky jako menší karty bez věty, v HTML pod nadpisem „Pro redakci a data“', () => {
