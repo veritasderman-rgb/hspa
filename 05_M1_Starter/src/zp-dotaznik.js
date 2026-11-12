@@ -146,7 +146,8 @@ function questionNode(doc, q, uid, refs) {
     refs[q.id] = { kind, inputs: [ta] };
     return wrap;
   }
-  const fs = mk(doc, 'fieldset', 'zpd-q');
+  // zobrazeni: 'skala' = známky v jednom řádku (jako papírový dotazník NHSP); jinak možnosti pod sebou
+  const fs = mk(doc, 'fieldset', q.zobrazeni === 'skala' ? 'zpd-q zpd-q--skala' : 'zpd-q');
   fs.setAttribute('data-otazka', q.id);
   fs.appendChild(mk(doc, 'legend', 'zpd-q-text', q.text));
   if (q.napoveda) {
@@ -222,6 +223,7 @@ export function renderDotaznik(container, sada, opts = {}) {
     sada.casti.forEach((c) => {
       const part = mk(doc, 'fieldset', 'zpd-part');
       part.appendChild(mk(doc, 'legend', 'zpd-part-title', `${c.id} · ${c.nazev}`));
+      if (c.popis) part.appendChild(mk(doc, 'p', 'zpd-note zpd-part-popis', c.popis));
       (c.otazky || []).forEach((q) => part.appendChild(questionNode(doc, q, uid, refs)));
       form.appendChild(part);
     });
