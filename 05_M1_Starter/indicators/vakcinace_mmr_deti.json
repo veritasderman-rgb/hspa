@@ -4,23 +4,32 @@
   "area": "Procesy",
   "domain": "Preventivní péče",
   "subdomain": "Očkování dětí",
-  "definition": "Podíl dětí, které do dvou let věku obdržely alespoň první dávku vakcíny MMR (spalničky, příušnice, zarděnky). Druhá dávka se v ČR podle očkovacího kalendáře podává až v 5–6 letech, do tohoto indikátoru se nezapočítává.",
+  "definition": "Podíl dětí narozených v daném roce, které do dvou let věku obdržely alespoň první dávku vakcíny MMR (spalničky, příušnice, zarděnky). Jmenovatelem jsou děti narozené v roce (ČSÚ), čitatelem pojištěnci s očkováním ATC J07BD. Druhá dávka se v ČR podle očkovacího kalendáře podává až v 5–6 letech, do tohoto indikátoru se nezapočítává.",
   "unit": "%",
   "direction": "higher_is_better",
   "data_source": {
     "primary": {
       "type": "uzis_nzis",
-      "note": "NZIS — preventivní prohlídky a očkování."
+      "note": "Národní registr hrazených zdravotních služeb (NRHZS) a ISIN, přehled Proočkovanost dětí na NZIP (data aktualizována k 1. 9. 2026). Hodnota se přepisuje ročně z PDF."
     },
     "fallback": {
       "type": "oecd",
       "code": "MMR_VAX"
+    },
+    "verification": {
+      "date": "2026-11-12",
+      "source_url": "https://www.nzip.cz/data/ceo/analyticke-studie/ceo-vakcinace-prehled/ceo-vakcinace-prehled.pdf",
+      "quote": "Proočkovanost dětí: spalničky, zarděnky a příušnice v roce narození 2023 dle krajů; Zdroj: NRHZS 2010 – březen 2026, ISIN červenec 2023 - 2026; aktualizováno 1. 9. 2026; Podíl pojištěnců narozených v roce 2023 očkovaných ve věku do 2 let věku alespoň jednou dávkou očkovací látky ... Čr 84,6%. Snímek dle dávek: alespoň 1 dávka do 2 let 2018 84,6%, 2019 85,0%, 2020 81,3%. Graf Proočkovanost do 2 let: 2021 83%, 2022 84%, 2023 85%, 2024* 85% (predikce).",
+      "previous": {
+        "value": 83.7,
+        "year": 2022
+      },
+      "note": "Primární PDF jsem sám stáhl (verze z 14. 10. 2026, data k 1. 9. 2026) a hodnotu 84,6 % pro kohortu 2023 v něm vidím; definice (≥1 dávka MMR do 2 let, jmenovatel narození ČSÚ, čitatel pojištěnci s ATC J07BD) přesně odpovídá kartě. Seed 83,7 % (2022) je kompatibilní s grafem (2022 = 84 %), ale novější uzavřená kohorta je 2023; 2024 je jen predikce. Řada je homogenní, propad 2020 (81,3 %) je covidový. Se předchozím agentem se shoduji v hodnotě, roku i v trendu; upřesňuji, že desetinné hodnoty jsou ve zdroji jen pro 2018–2020 a 2023, roky 2021–2022 jen v celých % z grafu. Benchmark OECD 94,8/EU 95,2 v primárním zdroji není a OECD DF_IMMUN měří jinou veličinu (podle národního schématu), proto jej doporučuji odstranit a signál neodvozovat ze srovnání s 95 % (cíl WHO je pro dvě dávky). Text method_notes (kohorta 2022, aktualizace 1. 9. 2025) je třeba přepsat. Reprodukovatelnost: ruční roční přepis z PDF."
     }
   },
   "benchmark_source": {
-    "type": "oecd",
-    "code": "MMR_VAX",
-    "dataset": "HEALTH_HCQU"
+    "type": "none",
+    "note": "Ve stejném primárním zdroji benchmark není; OECD DF_IMMUN má jinou definici, nesouměřitelné."
   },
   "signal_thresholds": {
     "good": 1,
@@ -31,9 +40,9 @@
     "ÚZIS",
     "SZÚ"
   ],
-  "method_notes": "WHO cíl ≥ 95 % (dvě dávky) pro zajištění kolektivní imunity proti spalničkám. ČR pod prahem — riziko epidemie spalniček. Hodnota indikátoru pochází z ÚZIS — Aktuální data o proočkovanosti české populace (NZIS, aktualizace k 1. 9. 2025), proočkovanost do 2 let, kohorta narozených 2022. Tzv. proočkovanost bez omezení věku u stejné kohorty činí cca 93 %.",
-  "limitations": "ÚZIS hodnotí proočkovanost podle ukončených ročníků; nejnovější plně hodnotitelná kohorta zaostává za aktuálním rokem zhruba o dva roky. Prahová hodnota kolektivní imunity u spalniček se v recenzované literatuře uvádí jako rozmezí 93–95 % (Cherri et al., J Travel Med. 2024;31(6), PMID 38423523, DOI 10.1093/jtm/taae033) a cíl WHO ≥ 95 % se vztahuje k proočkovanosti dvěma dávkami, zatímco tento indikátor měří jen první dávku do dvou let — srovnání jeho hodnoty s hranicí 95 % je proto orientační. Opraveno 5. 10. 2026 (issue #1207): formulace „Ukrajina 2018 (115 úmrtí)“ byla s evidencí aritmeticky neslučitelná — Muscat et al. 2019 (PMID 30887090) uvádí za rok 2018 v celém evropském regionu WHO 82 596 případů ve 47 zemích, z toho 64 % z Ukrajiny, a 72 úmrtí v deseti zemích dohromady; Angelo et al. 2019 (PMID 31209161) uvádí za leden–červen 2018 v regionu 37 úmrtí. Počet úmrtí přímo na Ukrajině za rok 2018 se z recenzované literatury dohledat nedá (zdroje publikují jen regionální součty), proto text uvádí doložitelný podíl případů a regionální počet úmrtí místo národního čísla.",
-  "patient_story": "Pediatrická ordinace, 18měsíční dítě, druhá dávka MMR. „My ji raději ještě počkáme, slyšeli jsme, že jsou s tím problémy.\" Matku ujišťuje pediatrička, že vakcína je bezpečná a že posun znamená vyšší riziko spalniček v případě epidemie. Tahle situace se v Česku za poslední dekádu objevuje stále častěji — důvěra v povinné očkování klesá.\n\nProočkovanost MMR (spalničky-zarděnky-příušnice) v ČR u dětí 2 roky věku je 83,7 % (ÚZIS, 2022, druhá dávka). OECD průměr je 94,8 %, EU 95,2 %. WHO cílová hodnota pro herd immunity (kolektivní imunitu) proti spalničkám je 95 %. Česko zaostává o více než 11 procentních bodů a překračuje epidemiologickou prahovou hodnotu. Trend je dlouhodobě klesající: 2010 — 95 %; 2018 — 90 %; 2022 — 83,7 %. Vzestup vakcinační hesitancy začal po roce 2010 a urychlil se po pandemii COVID-19.\n\nStrukturálně český systém má vakcinace plošně dostupné, hrazené, povinné dle zákona 258/2000 Sb. — ale vymáhání chybí. Sankce za odmítnutí jsou marginální, výjimky se rozšiřují, soudní praxe v posledních pěti letech vesměs vyhovuje rodičům odmítajícím povinné očkování. Pediatři, kteří mají vakcinaci v gesci, nemají vždy čas ani komunikační podporu pro práci s vakcinačními hesitanty. Komunikační kampaň státu je marginální, zatímco anti-vakcinační kampaně na sociálních sítích jsou organizované a financované.\n\nSpalničky jsou jedna z nejnakažlivějších infekcí (R₀ = 12–18). Při proočkovanosti pod 95 % se vrací — Rumunsko 2017–2019 (přes 60 úmrtí), Ukrajina 2018 (64 % z 82 596 případů hlášených toho roku v evropském regionu WHO, kde spalničky způsobily 72 úmrtí v deseti zemích), Texas 2025 (2 dětské úmrtí). Česko mělo v 2024 vzestup hlášených případů. Politické páky: standardizovaná komunikační podpora pediatrů s vakcinačními hesitanty (model finského MetaMo); pravidelná populární kampaň státu („Spalničky se vracejí\"); reforma vymáhání povinného očkování s reálnými, ale proporcionálními sankcemi. Indikátor v HSPA dashboardu sleduje MMR proočkovanost jako klíčový ukazatel funkčnosti dětské preventivní péče a jeden z nejcitlivějších markerů důvěry v systém.",
+  "method_notes": "Cíl WHO ≥ 95 % se vztahuje k proočkovanosti dvěma dávkami, tento indikátor měří jen první dávku do 2 let, proto signál neodvozujeme ze srovnání s 95 %. Hodnota pochází z ÚZIS (NZIP, přehled Proočkovanost dětí, data k 1. 9. 2026): podíl pojištěnců narozených v roce 2023, kteří byli do 2 let věku očkováni alespoň jednou dávkou MMR, činí 84,6 %. Zdroj uvádí desetinné hodnoty jen pro roky 2018–2020 a 2023, hodnoty za 2021 a 2022 jsou z grafu v celých procentech. Údaj za rok 2024 je ve zdroji jen predikce (85 %) a v indikátoru se nepoužívá.",
+  "limitations": "ÚZIS hodnotí proočkovanost podle ukončených ročníků; nejnovější plně hodnotitelná kohorta (narozených 2023) zaostává za aktuálním rokem zhruba o dva roky. Roky 2021 a 2022 jsou ve zdroji jen v celých procentech z grafu. Pokles v roce 2020 (81,3 %) spadá do období pandemie COVID-19. Prahová hodnota kolektivní imunity u spalniček se v recenzované literatuře uvádí jako rozmezí 93–95 % (Cherri et al., J Travel Med. 2024;31(6), PMID 38423523, DOI 10.1093/jtm/taae033) a cíl WHO ≥ 95 % se vztahuje k proočkovanosti dvěma dávkami, zatímco tento indikátor měří jen první dávku do dvou let — srovnání jeho hodnoty s hranicí 95 % je proto orientační. Srovnání s OECD a EU se neuvádí: údaje OECD (DF_IMMUN) měří jinou veličinu podle národního očkovacího schématu. Opraveno 5. 10. 2026 (issue #1207): formulace „Ukrajina 2018 (115 úmrtí)“ byla s evidencí aritmeticky neslučitelná — Muscat et al. 2019 (PMID 30887090) uvádí za rok 2018 v celém evropském regionu WHO 82 596 případů ve 47 zemích, z toho 64 % z Ukrajiny, a 72 úmrtí v deseti zemích dohromady; Angelo et al. 2019 (PMID 31209161) uvádí za leden–červen 2018 v regionu 37 úmrtí. Počet úmrtí přímo na Ukrajině za rok 2018 se z recenzované literatury dohledat nedá (zdroje publikují jen regionální součty), proto text uvádí doložitelný podíl případů a regionální počet úmrtí místo národního čísla.",
+  "patient_story": "Pediatrická ordinace, 18měsíční dítě, první dávka MMR. „My ještě počkáme, slyšeli jsme, že jsou s tím problémy.\" Matku ujišťuje pediatrička, že vakcína je bezpečná a že odkládání znamená vyšší riziko spalniček v případě epidemie. Tahle situace není v českých ordinacích výjimečná — důvěra v očkování je jednou z podmínek proočkovanosti.\n\nProočkovanost MMR (spalničky-zarděnky-příušnice) u dětí do 2 let věku, tedy podíl očkovaných alespoň jednou dávkou, je v ČR 84,6 % u dětí narozených v roce 2023 (ÚZIS, NZIP, data k 1. 9. 2026). Vývoj za poslední roky: 2018 — 84,6 %, 2019 — 85,0 %, 2020 — 81,3 %, 2021 — 83 %, 2022 — 84 %. Propad v roce 2020 spadá do období pandemie COVID-19. WHO cílová hodnota pro kolektivní imunitu proti spalničkám je 95 %, ale týká se dvou dávek, takže srovnání s jednou dávkou do 2 let je jen orientační. Prahová hodnota kolektivní imunity se v literatuře uvádí jako rozmezí 93–95 %.\n\nStrukturálně český systém má vakcinace plošně dostupné, hrazené, povinné dle zákona 258/2000 Sb. — ale vymáhání chybí. Sankce za odmítnutí jsou marginální, výjimky se rozšiřují, soudní praxe v posledních pěti letech vesměs vyhovuje rodičům odmítajícím povinné očkování. Pediatři, kteří mají vakcinaci v gesci, nemají vždy čas ani komunikační podporu pro práci s vakcinačními hesitanty. Komunikační kampaň státu je marginální, zatímco anti-vakcinační kampaně na sociálních sítích jsou organizované a financované.\n\nSpalničky jsou jedna z nejnakažlivějších infekcí (R₀ = 12–18). Při nízké proočkovanosti se vrací — Rumunsko 2017–2019 (přes 60 úmrtí), Ukrajina 2018 (64 % z 82 596 případů hlášených toho roku v evropském regionu WHO, kde spalničky způsobily 72 úmrtí v deseti zemích), Texas 2025 (2 dětské úmrtí). Politické páky: standardizovaná komunikační podpora pediatrů s vakcinačními hesitanty (model finského MetaMo); pravidelná populární kampaň státu („Spalničky se vracejí\"); reforma vymáhání povinného očkování s reálnými, ale proporcionálními sankcemi. Indikátor v HSPA dashboardu sleduje MMR proočkovanost jako klíčový ukazatel funkčnosti dětské preventivní péče a jeden z nejcitlivějších markerů důvěry v systém.",
   "framework": "hspa",
   "dimension": "kvalita",
   "literature": [
@@ -87,5 +96,7 @@
       "note": "Kontext řádu velikosti a aktuálnosti tématu karty: v roce 2023 hlášeno v regionu WHO Euro 60 860 případů spalniček a 13 úmrtí ve 41 zemích, 95 % případů v šesti zemích (mj. Rumunsko).",
       "verified_at": "2026-09-13"
     }
-  ]
+  ],
+  "verification_status": "verified",
+  "verified_at": "2026-11-12"
 }

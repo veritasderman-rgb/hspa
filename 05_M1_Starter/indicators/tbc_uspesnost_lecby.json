@@ -33,7 +33,9 @@
       "date": "2026-11-12",
       "source_url": "https://extranet.who.int/tme/generateCSV.asp?ds=outcomes",
       "quote": "CSV řádek iso2=CZ, year=2023: newrel_coh=418, newrel_succ=295, newrel_died=42, newrel_fail=2, newrel_lost=60 => 295/418 = 70,6 %",
-      "note": "Definice a jmenovatel sedí: nové a recidivující případy, výsledek po 12 měsících, jmenovatel celá kohorta (včetně nevyhodnocených). Rok = rok hlášení kohorty; 2023 je poslední uzavřená kohorta (2024 ještě není ve zdroji). Všech osm bodů trendu 2016 až 2023 přesně odpovídá CSV (68,5; 68,9; 66,8; 73,8; 69,5; 67,5; 62,5; 70,6). Homogenita řady OK, sloupce newrel_* jsou konzistentní. Plauzibilita: pokles 2022 (62,5) způsobil nárůst 'lost to follow-up' na 80 případů. Benchmark: vlastní přepočet EU/EEA ze stejného CSV dává pro 2023 64,2 % (18 209 / 28 375) a pro 2022 67,9 %, což odpovídá kartě (64) a publikaci ECDC. Reprodukovatelnost plná."
+      "note": "Definice a jmenovatel sedí: nové a recidivující případy, výsledek po 12 měsících, jmenovatel celá kohorta (včetně nevyhodnocených). Rok = rok hlášení kohorty; 2023 je poslední uzavřená kohorta (2024 ještě není ve zdroji). Všech osm bodů trendu 2016 až 2023 přesně odpovídá CSV (68,5; 68,9; 66,8; 73,8; 69,5; 67,5; 62,5; 70,6). Homogenita řady OK, sloupce newrel_* jsou konzistentní. Plauzibilita: pokles 2022 (62,5) způsobil nárůst 'lost to follow-up' na 80 případů. Benchmark: vlastní přepočet EU/EEA ze stejného CSV dává pro 2023 64,2 % (18 209 / 28 375) a pro 2022 67,9 %, což odpovídá kartě (64) a publikaci ECDC. Reprodukovatelnost plná.",
+      "live_feasible": "who_api",
+      "mapping_spec": "GET https://extranet.who.int/tme/generateCSV.asp?ds=outcomes (CSV, 200 OK, ~950 kB, curl s UA ZdraveCesko-HSPA/1.0). Filtr iso2=='CZ', year=rok kohorty; hodnota = 100*newrel_succ/newrel_coh. EU/EEA benchmark: součet newrel_succ / součet newrel_coh přes 30 zemí EU/EEA (AT BE BG HR CY CZ DK EE FI FR DE GR HU IE IT LV LT LU MT NL PL PT RO SK SI ES SE IS LI NO) pro stejný rok."
     }
   },
   "benchmark_source": {

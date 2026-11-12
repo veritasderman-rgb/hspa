@@ -4,7 +4,7 @@
   "area": "Výsledky",
   "domain": "Bezpečnost",
   "subdomain": "Genderově podmíněné násilí",
-  "definition": "Podíl dospělých žen (18-75 let), které někdy v životě zažily znásilnění, pokus o znásilnění nebo nevyžádaný sexuální kontakt s donucením. Self-report dle metodiky CZECHSEX 2024.",
+  "definition": "Podíl dospělých žen (18-75 let), které byly někdy v životě hrozbami nebo násilím donuceny k sexuálním aktivitám. Self-report dle průzkumu CZECHSEX 2024. Nevyžádaný sexuální kontakt se sexuálním záměrem (například osahávání) je ve zdroji samostatná kategorie a do tohoto podílu se nepočítá.",
   "unit": "%",
   "direction": "lower_is_better",
   "data_source": {
@@ -22,19 +22,21 @@
     "fallback": {
       "type": "press_release",
       "url": "https://www.nudz.cz/media-pr/tiskove-zpravy/prvni-vysledky-pruzkumu-czechsex-frekvence-sexualnich-aktivit-cechu-klesa-seznamovani-se-vice-presouva-na-internet-vetsina-je-se-svym-sexualnim-zivotem-spokojena"
+    },
+    "verification": {
+      "date": "2026-11-12",
+      "source_url": "https://www.nudz.cz/media-pr/tiskove-zpravy/prvni-vysledky-pruzkumu-czechsex-frekvence-sexualnich-aktivit-cechu-klesa-seznamovani-se-vice-presouva-na-internet-vetsina-je-se-svym-sexualnim-zivotem-spokojena",
+      "quote": "Hrozbami nebo násilím bylo k sexuálním aktivitám někdy v životě donuceno 16.8 % žen a 4.9 % mužů. To je 896 720 žen a 254 141 mužů v přepočtu na počet obyvatel. Kromě toho má minimálně 29.9 % žen a 16.9 % mužů zkušenost s nevyžádaným kontaktem se sexuálním záměrem (např. osaháváním)",
+      "note": "Číslo 16,8 % jsem ověřil přímo ve zdroji, shoduji se s předchozím agentem. Zdroj měří „donucení hrozbami nebo násilím k sexuálním aktivitám“, kdežto method_notes karty to přepisují na „znásilnění nebo pokus“ (pokus o znásilnění zdroj nezmiňuje) a definice karty přidává „nevyžádaný sexuální kontakt s donucením“, což je ve zdroji oddělená kategorie (29,9 %) nezahrnutá v 16,8 %. Název indikátoru („celoživotní zkušenost se sexuálním násilím“) je přijatelný, definice ale neodpovídá obsahu, proto definicni_nesoulad. Benchmark eu=17 nemá oporu ve stejném zdroji a definici (EU-GBV je vlna 2021 s jinou operacionalizací), signál „warn“ proto neopodstatněný; benchmark null, signál neutral. Data předběžná, jediný bod 2024. Doporučení: definici přepsat na formulaci zdroje."
     }
   },
   "benchmark_source": {
-    "type": "fra_eu_survey",
-    "code": "fra_gbv_2024_sexual_violence_lifetime",
-    "dataset": "EU Gender-Based Violence Survey 2024 (FRA + Eurostat + EIGE)",
-    "value": 17.0,
-    "url": "https://ec.europa.eu/eurostat/web/products-eurostat-news/w/ddn-20241125-3",
-    "notes": "EU průměr: 17 % žen v EU někdy zažilo sexuální násilí; 4 % znásilnění non-partnerem. Pro ČR FRA samostatně publikuje 10 % non-partner physical/sexual violence — definice se metodicky liší od CZECHSEX (FRA: 18-74, kompozitní indikátor; CZECHSEX: 18-75, znásilnění/pokus jako jednotlivá kategorie)."
+    "type": "none",
+    "note": "Bez srovnání. Evropský průzkum EU-GBV (Eurostat/FRA/EIGE, sběr 2021, ženy 18–74) měří fyzické a/nebo sexuální násilí jinou operacionalizací a údaj o průměru EU pro stejnou definici nebyl doložen. Hodnoty nejsou souměřitelné, proto benchmark není uveden."
   },
   "signal_thresholds": {
-    "good": 2.0,
-    "warn": 5.0
+    "good": 2,
+    "warn": 5
   },
   "frequency": "decadal",
   "stewards": [
@@ -43,9 +45,11 @@
     "FRA — Agentura EU pro základní práva (benchmark)",
     "EIGE — European Institute for Gender Equality"
   ],
-  "method_notes": "CZECHSEX 2024 (n=6 669): 16,8 % žen zažilo znásilnění nebo pokus, 29,9 % nevyžádaný sexuální kontakt. V přepočtu na populaci ČR cca 896 720 (znásilnění/pokus) + 1 595 948 (nevyžádaný kontakt). U prvního zážitku do 15. roku: 19 % obětí. Reporting na policii: 6,9 % žen nahlásilo; 93,1 % nikoli. Důvody nenahlášení: nevyhodnocení jako znásilnění (42,4 %), stud (29,3 %). MEZINÁRODNÍ SROVNÁNÍ: FRA EU GBV Survey 2024 publikovala EU průměr 17 % sexuálního násilí lifetime; pro ČR samostatně 10 % non-partner physical/sexual violence — METODOLOGIE NENÍ 1:1 SROVNATELNÁ (různá definice, různý reference period).",
-  "limitations": "Self-report metoda s vysokou variabilitou definice. CZECHSEX i FRA EU GBV Survey měří různé operacionalizace „sexuálního násilí\". Reporting bias (vysoká míra nenahlášení i v rámci průzkumu — 42 % obětí samo nevyhodnotilo událost jako znásilnění). Indikátor sleduje incidenci, nikoli systémovou odpověď (krizová centra, soudní praxe).",
-  "patient_story": "16,8 procenta. To je číslo, které průzkum CZECHSEX v roce 2024 zjistil u českých žen mezi osmnácti a sedmdesáti pěti lety. Skoro každá šestá. V přepočtu na populaci ČR to jsou téměř 900 tisíc žen, které někdy v životě zažily znásilnění nebo jeho pokus. Dalších 1,6 milionu zažilo nevyžádaný sexuální kontakt.\n\nDevadesát tři procent z nich to nikdy nenahlásilo policii. Důvody jsou systémové: 42 % obětí samo nevyhodnotilo událost jako znásilnění (často proto, že útočníkem byl partner, ne cizinec; nebo proto, že chyběla fyzická síla). Třicet procent se stydělo. V institucionální vrstvě k tomu přistupuje skepse k odezvě systému — školení policistů, expert witness u soudu, kapacita krizových center.\n\nU mužů je situace ještě více schovaná: 4,9 % zažilo znásilnění nebo pokus, 7,5 % před patnáctým rokem. 98 % nenahlásilo.\n\nMezinárodní srovnání je metodologicky komplikované — FRA EU Gender-Based Violence Survey 2024 publikuje EU průměr 17 % sexuálního násilí celoživotně u žen, ale používá odlišnou operacionalizaci. Pro Česko FRA samostatně udává 10 % non-partner physical/sexual violence. Severské země reportují vyšší podíl nahlášených případů — ne proto, že je tam víc násilí, ale protože je tam víc důvěry v institucionální odezvu (Istanbul Convention je tam ratifikována a aktivně implementovaná). Česko Istanbulskou úmluvu podepsalo v roce 2016, ale dosud ji neratifikovalo — Parlamentní shromáždění Rady Evropy (PACE) ve výzvě z 23. března 2026 znovu apelovalo na členské státy včetně ČR, aby ratifikaci dokončily.",
+  "method_notes": "CZECHSEX 2024 (n=6 669): podle tiskové zprávy NUDZ z 13. 5. 2024 bylo hrozbami nebo násilím k sexuálním aktivitám někdy v životě donuceno 16,8 % žen a 4,9 % mužů, v přepočtu na populaci 896 720 žen a 254 141 mužů. Pokus o znásilnění zdroj jako samostatnou kategorii nezmiňuje. Zvlášť uvádí, že nejméně 29,9 % žen a 16,9 % mužů má zkušenost s nevyžádaným kontaktem se sexuálním záměrem, ten ale není zahrnut v 16,8 %. Veřejně nejsou dostupné tabulky ani mikrodata, hodnota je přepsána ručně. Evropský průzkum EU-GBV lze případně využít jako samostatný indikátor, ne jako benchmark.",
+  "limitations": "Self-report metoda s vysokou variabilitou definice: CZECHSEX a evropský průzkum EU-GBV měří různé operacionalizace sexuálního násilí, a nejsou proto srovnatelné. Data jsou předběžná (tisková zpráva), jediný bod z roku 2024, časovou řadu nelze sestavit. Je to celoživotní prevalence, ne výskyt v posledním roce. Možné je podhlášení kvůli stigmatu. Indikátor sleduje zkušenost, nikoli systémovou odpověď (krizová centra, soudní praxe).",
+  "patient_story": "16,8 procenta. To je podíl českých žen ve věku 18 až 75 let, které podle průzkumu CZECHSEX 2024 byly někdy v životě donuceny hrozbami nebo násilím k sexuálním aktivitám. Skoro každá šestá. V přepočtu na populaci ČR jde o 896 720 žen.\n\nDalších nejméně 29,9 % žen má zkušenost s nevyžádaným kontaktem se sexuálním záměrem, například s osaháváním. Tato skupina se do 16,8 % nepočítá.\n\nU mužů je podíl nižší, 4,9 % (254 141 mužů), a podle zdroje je také hůře viditelný. Nevyžádaný kontakt zažilo nejméně 16,9 % mužů.\n\nMezinárodní srovnání je metodologicky složité: evropský průzkum EU-GBV používá jinou definici i jiné období, a proto zde žádné srovnání neuvádíme. Důležité je číslo samotné a to, že jde o první takto zjištěný celostátní údaj, jehož opakování teprve umožní sledovat vývoj.",
   "framework": "monitoring",
-  "dimension": "spravedlnost"
+  "dimension": "spravedlnost",
+  "verification_status": "verified",
+  "verified_at": "2026-11-12"
 }

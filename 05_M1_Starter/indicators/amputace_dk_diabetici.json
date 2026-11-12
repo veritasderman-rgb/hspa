@@ -4,35 +4,45 @@
   "area": "Výstupy",
   "domain": "Kvalita péče",
   "subdomain": "Diabetické komplikace",
-  "definition": "Počet velkých amputací dolních končetin (transtibální, transfemorální, exartikulace kyčle — tedy amputace nad nebo v úrovni kotníku) provedených u hospitalizovaných pacientů s primární nebo sekundární diagnózou diabetes mellitus (E10–E14 dle MKN-10) za rok, vyjádřený na 100 000 obyvatel a věkově standardizovaný (definice OECD HCQI: hospitalizace osob ve věku 15+ na 100 000 obyvatel). Indikátor odráží kvalitu preventivní péče o diabetiky — zejména screening diabetické nohy, kompenzaci glykémie a dostupnost multidisciplinárních diabetologicko-chirurgických týmů.",
+  "definition": "Počet hospitalizací s velkou amputací dolní končetiny (nad nebo v úrovni kotníku) u osob ve věku 15 a více let s diagnózou diabetes mellitus za rok, vyjádřený na 100 000 obyvatel a věkově a pohlavně standardizovaný (definice OECD HCQI, měřítko „Diabetes major lower extremity amputation using unlinked data“, tedy počítají se hospitalizace, ne jednotliví pacienti). Jmenovatelem je celá populace 15+, ne počet diabetiků. Indikátor odráží kvalitu preventivní péče o diabetiky, zejména screening diabetické nohy, kompenzaci glykémie a dostupnost multidisciplinárních diabetologicko-chirurgických týmů.",
   "unit": "na 100 000 obyvatel",
   "direction": "lower_is_better",
   "data_source": {
     "primary": {
       "type": "uzis_nrh",
-      "endpoint": "https://www.uzis.cz/index.php?pg=registry-sber-dat--narodni-zdravotni-registry--narodni-registr-hospitalizovanych",
-      "dataset": "Národní registr hospitalizovaných (NRH) — výkony amputace DK (kódy 52-01 až 52-09 NRCH) + diagnózy E10–E14; jmenovatel je populace ČR (ČSÚ), ne počet diabetiků",
+      "endpoint": "https://sdmx.oecd.org/public/rest/data/OECD.ELS.HD,DSD_HCQO@DF_PC,2.1/CZE.A.ADMRDMAI..._T.OBS..?format=jsondata&startPeriod=2014",
+      "dataset": "OECD Health Care Quality and Outcomes (HCQO), dataflow DSD_HCQO@DF_PC verze 2.1, měřítko ADMRDMAI „Diabetes major lower extremity amputation using unlinked data“, ČR, věk 15+, obě pohlaví, věkově a pohlavně standardizováno, jednotka na 100 000 obyvatel. Řada 2014–2023. Údaje do OECD dodává ČR z hospitalizačních dat (ÚZIS, NRH).",
       "dimensions": [
         "year",
         "amputation_level",
         "diabetes_type",
         "sex",
         "age_group"
-      ]
+      ],
+      "note": "Starší odkaz na stránku ÚZIS a tabulku stats.oecd.org (HEALTH_HCQI) nahrazuje aktuální rozhraní OECD SDMX. Přímý údaj z NRH v kartě ověřen není, hodnoty pocházejí z publikace OECD. Poslední uzavřený rok je 2023. Malé amputace jsou samostatné měřítko OECD (ADMRDMAO) a do indikátoru nevstupují."
     },
     "fallback": {
       "type": "oecd_api",
       "endpoint": "https://stats.oecd.org/Index.aspx?DataSetCode=HEALTH_HCQI",
       "dataset": "OECD HCQI — Lower limb amputations in people with diabetes",
       "code": "DALOWER"
+    },
+    "verification": {
+      "date": "2026-11-12",
+      "source_url": "https://sdmx.oecd.org/public/rest/data/OECD.ELS.HD,DSD_HCQO@DF_PC,2.1/CZE.A.ADMRDMAI..._T.OBS..?format=jsondata&startPeriod=2014",
+      "quote": "OECD DSD_HCQO@DF_PC(2.1), REF_AREA=CZE, MEASURE=ADMRDMAI 'Diabetes major lower extremity amputation using unlinked data', UNIT_MEASURE=10P5HB 'Per 100 000 inhabitants', AGE=Y_GE15, SEX=_T, OBS, METHODOLOGY=AGE_SEX_STANDARD: TIME_PERIOD 2023 OBS_VALUE 16.4",
+      "previous": {
+        "value": 12.1,
+        "year": 2023
+      },
+      "note": "Nezávisle ověřeno stažením celého řezu ADMRDMAI (CSV s popisky): ČR 2023 = 16,4 na 100 000 obyvatel 15+, věkově a pohlavně standardizováno, řada 2014–2023 přesně odpovídá nálezu předchozího agenta. Definice OECD HCQI (jmenovatel celá populace 15+, ne diabetici) odpovídá definici i jednotce karty; název sedí. Seed 12,1 a klesající trend (15,8 → 12,1) primární zdroj nepotvrzuje, OECD řada je plochá kolem 16 bez zlomu. Poslední uzavřený rok ČR 2023. Benchmark karty 9,5/10,3 se v datasetu nereprodukuje; nevážený průměr 26 členů OECD za 2023 je 7,02 (dataset obsahuje i ROU a MLT, ty jsem vyřadil, výsledek se shoduje s agentem). ČR je druhá nejvyšší po Izraeli (16,6), signal bad zůstává. Shoduji se s předchozím agentem ve verdiktu, hodnotě, trendu i benchmarku; doplňuji jen, že tvrzení v patient_story o PL/SK nelze z OECD ověřit (země v řezu chybí).",
+      "live_feasible": "oecd_sdmx2",
+      "mapping_spec": "sdmx.oecd.org, agency OECD.ELS.HD, dataflow DSD_HCQO@DF_PC verze 2.1; klíč REF_AREA.FREQ.MEASURE.UNIT_MEASURE.AGE.SEX.STATISTICAL_OPERATION.INCOME_GROUP.HEALTH_PROF = CZE.A.ADMRDMAI..._T.OBS..; URL https://sdmx.oecd.org/public/rest/data/OECD.ELS.HD,DSD_HCQO@DF_PC,2.1/CZE.A.ADMRDMAI..._T.OBS..?format=jsondata&startPeriod=2014 s hlavičkou Accept: */* (alternativně format=csvfilewithlabels). Benchmark: klíč .A.ADMRDMAI..._T.OBS.., poslední rok CZ, průměr přes členy OECD (vyřadit ROU, MLT a další nečleny). Malé amputace = MEASURE ADMRDMAO."
     }
   },
   "benchmark_source": {
     "type": "oecd",
-    "code": "HEALTH_HCQI",
-    "dataset": "Lower limb amputations in people with diabetes (HCQI)",
-    "value": 9.5,
-    "url": "https://stats.oecd.org/Index.aspx?DataSetCode=HEALTH_HCQI"
+    "note": "Nevážený průměr 26 členských zemí OECD s daty za rok 2023, spočtený ze stejného datasetu a definice OECD (ADMRDMAI, věk 15+, obě pohlaví, standardizováno) = 7,0 (přesněji 7,02). Dataset obsahuje i Rumunsko a Maltu, které nejsou členy OECD a do průměru nevstupují. Nejde o oficiální „OECD average“ z publikace Health at a Glance. Agregát EU zdroj neobsahuje."
   },
   "signal_thresholds": {
     "good": 5,
@@ -44,9 +54,9 @@
     "MZČR — Diabetologická sekce",
     "OECD HCQI"
   ],
-  "method_notes": "Čitatel: počet hospitalizací s operačním výkonem odpovídajícím velké amputaci DK (nad kotníkem) a primární nebo sekundární diagnózou E10–E14. Zahrnují se pouze první amputace na daném místě (re-amputace pro komplikaci téhož místa ve stejném pobytu se nezapočítávají). Věkové standardizování na evropský standard populace WHO. Jmenovatel: počet obyvatel ČR (nikoli počet diabetiků) — indikátor sleduje definici OECD HCQI „major lower extremity amputation in adults with diabetes“ jako počet hospitalizací osob 15+ na 100 000 obyvatel, věkově standardizovaně, aby byl srovnatelný s publikovaným benchmarkem. Metodika odpovídá OECD HCQI Lower Limb Amputation Indicator Definition 2019.",
-  "limitations": "NRH zachycuje hospitalizační výkony; ambulantně provedené malé amputace (prsty) nejsou zahrnuty, a indikátor tak podhodnocuje celkovou zátěž amputací. Kvalita záznamu diagnózy DM v NRH závisí na kódovací praxi nemocnice. Jmenovatel z NRDIA nezachycuje nediagnostikované diabetiky (odhadem 20–30 % diabetické populace). Mezinárodní srovnatelnost je omezena různými definicemi velké vs. malé amputace v jednotlivých zemích. Opraveno 5. 10. 2026 (issue #1243, bod 2): karta i datový kontrakt uváděly jednotku „na 100 000 diabetiků“ a jmenovatel z NRDIA. To bylo chybné — OECD HCQI, z něhož pocházejí benchmarky (OECD 9,5; EU 10,3), definuje indikátor jako počet hospitalizací osob 15+ na 100 000 OBYVATEL, věkově standardizovaně (Health at a Glance, metodika HCQI; ověřeno 5. 10. 2026). Potvrzuje to i aritmetika: 12,1 na 100 000 diabetiků by při 930 tisících diabetiků znamenalo 113 amputací ročně, zatímco na 100 000 obyvatel vychází ≈ 1 320, což odpovídá řádu uváděnému v článku. Opravena tedy jednotka a jmenovatel, hodnota 12,1 zůstává. POZOR: hodnota má stále origin seed (ilustrativní) — proti ÚZIS NRH nebyla ověřena a zůstává k doložení.",
-  "importance": "Velká amputace dolní končetiny je nejzávažnější preventovatelnou komplikací diabetu — odráží kumulativní selhání v celém řetězci péče: nedostatečný screening diabetické nohy, pozdní záchyt neuropatie/ischémie, špatnou kompenzaci glykémie a nedostupnost cévní chirurgie v záchranném časovém okně. Je primárním OECD HCQI ukazatelem kvality chronické péče. V ČR je míra amputací trvale nad průměrem OECD, což odpovídá slabší koordinaci mezi praktickými lékaři, diabetology a cévními chirurgy.",
+  "method_notes": "Čitatel: počet hospitalizací s velkou amputací dolní končetiny (nad kotníkem) u osob s diagnózou diabetes mellitus, vykázaný ČR do OECD z hospitalizačních dat (měřítko ADMRDMAI, „unlinked data“, tj. bez propojení záznamů jednoho pacienta). Jmenovatel: počet obyvatel ČR ve věku 15+ (nikoli počet diabetiků). Hodnota je věkově a pohlavně standardizovaná podle metodiky OECD HCQI, aby byla srovnatelná s ostatními zeměmi. V roce 2023 činí 16,4 na 100 000 obyvatel. Řada 2014–2023 je téměř plochá, v rozmezí 15,2 (2021) až 17,0 (2017). Průměr zemí OECD za rok 2023 je 7,0, Česko je druhé nejvyšší za Izraelem (16,6).",
+  "limitations": "Hospitalizační data zachycují amputace provedené při pobytu v nemocnici; ambulantně provedené malé amputace (prsty) nejsou zahrnuty. Kvalita záznamu diagnózy diabetu závisí na kódovací praxi nemocnice. Jmenovatel je celá populace 15+, takže hodnota nevypovídá o riziku na jednoho diabetika. Mezinárodní srovnatelnost je omezena různými definicemi velké a malé amputace a způsoby vykazování v jednotlivých zemích. Údaj pochází z publikace OECD, přímé ověření proti ÚZIS NRH zatím chybí. Referenční hodnota 7,0 je nevážený průměr členských zemí OECD vlastního výpočtu, nikoli oficiální průměr OECD. Starší hodnoty uváděné před ověřením (např. 12,1 za rok 2023 a klesající trend) se v primárním zdroji nepotvrdily.",
+  "importance": "Velká amputace dolní končetiny je nejzávažnější preventabilní komplikací diabetu a odráží kumulativní selhání v celém řetězci péče: nedostatečný screening diabetické nohy, pozdní záchyt neuropatie nebo ischémie, špatnou kompenzaci glykémie a nedostupnost cévní chirurgie v záchranném časovém okně. Je to ukazatel OECD HCQI pro kvalitu chronické péče. V ČR je míra amputací výrazně nad průměrem zemí OECD, což odpovídá slabší koordinaci mezi praktickými lékaři, diabetology a cévními chirurgy.",
   "determinants": [
     "Kvalita kompenzace glykémie — podíl diabetiků s HbA1c < 53 mmol/mol",
     "Pravidelný screening diabetické nohy praktickým lékařem a diabetologem",
@@ -55,7 +65,9 @@
     "Edukace pacienta v péči o nohy a adherence k léčbě",
     "Socioekonomický status — adherence, dostupnost odlehčovacích pomůcek a ortopedické obuvi"
   ],
-  "patient_story": "Jana pracuje jako účetní v Brně. Diabetes 2. typu jí diagnostikovali v roce 2015, celkem bez komplikací. Zpočátku chodila na kontroly pravidelně — k praktickému lékaři jednou ročně, k diabetologovi dvakrát. Ale po covidových letech ji objednání čekalo osm týdnů a práce se zdála naléhavější. Nohy brnily, ale dávala to za vinu dlouhému sezení. Pak přišla dovolená v Chorvatsku — otevřená pata o kámen. Ranka se nehojila. Místní lékař předepsal antibiotika. Doma pak přišel infekt, poté ischemie, poté rozhovor s cévním chirurgem. V říjnu podstoupila amputaci v úrovni lýtka. Janin příběh není výjimka.\n\nV Česku proběhne každý rok přibližně 12 velkých amputací dolních končetin na 100 000 osob s diabetem — o více než třetinu více, než je průměr zemí OECD (9,5 na 100 000 diabetiků). Německo dosahuje 8,1, Rakousko 7,4. Slovensko je na 11,3, Polsko na 13,2. Trend v ČR je klesající — z 15,8 v roce 2019 na 12,1 v roce 2023 — ale stále zůstáváme výrazně nad průměrem vyspělých zdravotních systémů. Každá zabráněná amputace ušetří systému přibližně 300 000–500 000 Kč na akutní péči plus desetitisíce ročně na protetiku, rehabilitaci a dlouhodobou péči.\n\nMíra amputací nevypovídá jen o kvalitě nemocniční péče — je výslednicí celého řetězu rozhodnutí, která nastávají mnohem dřív. Záleží na tom, zda praktický lékař kontroluje nohy při preventivní prohlídce a zachytí neuropatii. Záleží na dostupnosti diabetologa — čekací doby přes šest týdnů prodlužují dobu od prvních příznaků k intervenci. Záleží na tom, zda pacient dostane odlehčovací obuv nebo ortézu, která zabrání ulceraci. A záleží na tom, jak rychle se dostane k cévnímu chirurgovi, protože časové okno pro zachraňující revaskularizaci je úzké. Systém, kde tato péče není koordinovaná, produkuje preventovatelné amputace.\n\nPolitická páka je konkrétní a leží na třech místech. Zaprvé, MZČR může do úhradové vyhlášky zavést bonifikaci pro diabetologické ambulance, jejichž pacienti dosahují cílových hodnot HbA1c a absolvují roční screening diabetické nohy — princip podobný anglickému NHS Quality and Outcomes Framework. Zadruhé, zdravotní pojišťovny mohou rozšířit preventivní programy o plnou úhradu odlehčovacích pomůcek pro riziková chodidla ještě před vznikem ulcerace. Zatřetí, praktičtí lékaři potřebují kapitační indikátor za screening diabetické nohy — dnes ho nemají, a výkon tak není systematicky prováděn. Kombinace těchto tří opatření dokázala v Dánsku snížit míru amputací pod 6 na 100 000 diabetiků za desetiletí.",
+  "patient_story": "Jana pracuje jako účetní v Brně. Diabetes 2. typu jí diagnostikovali v roce 2015, celkem bez komplikací. Zpočátku chodila na kontroly pravidelně — k praktickému lékaři jednou ročně, k diabetologovi dvakrát. Ale po covidových letech ji objednání čekalo osm týdnů a práce se zdála naléhavější. Nohy brnily, ale dávala to za vinu dlouhému sezení. Pak přišla dovolená v Chorvatsku — otevřená pata o kámen. Ranka se nehojila. Místní lékař předepsal antibiotika. Doma pak přišel infekt, poté ischemie, poté rozhovor s cévním chirurgem. V říjnu podstoupila amputaci v úrovni lýtka. Janin příběh není výjimka.\n\nV Česku připadá na 100 000 obyvatel starších 15 let přibližně 16 hospitalizací s velkou amputací dolní končetiny u diabetika (16,4 v roce 2023, věkově a pohlavně standardizováno). Průměr zemí OECD je zhruba 7,0, takže Česko je více než dvojnásobně nad ním a ze zemí v datech OECD je druhé nejvyšší za Izraelem (16,6). Trend se v posledních deseti letech téměř nemění, drží se mezi 15,2 a 17,0. Každá zabráněná amputace ušetří systému přibližně 300 000–500 000 Kč na akutní péči plus desetitisíce ročně na protetiku, rehabilitaci a dlouhodobou péči.\n\nMíra amputací nevypovídá jen o kvalitě nemocniční péče — je výslednicí celého řetězu rozhodnutí, která nastávají mnohem dřív. Záleží na tom, zda praktický lékař kontroluje nohy při preventivní prohlídce a zachytí neuropatii. Záleží na dostupnosti diabetologa — čekací doby přes šest týdnů prodlužují dobu od prvních příznaků k intervenci. Záleží na tom, zda pacient dostane odlehčovací obuv nebo ortézu, která zabrání ulceraci. A záleží na tom, jak rychle se dostane k cévnímu chirurgovi, protože časové okno pro zachraňující revaskularizaci je úzké. Systém, kde tato péče není koordinovaná, produkuje preventovatelné amputace.\n\nPolitická páka je konkrétní a leží na třech místech. Zaprvé, MZČR může do úhradové vyhlášky zavést bonifikaci pro diabetologické ambulance, jejichž pacienti dosahují cílových hodnot HbA1c a absolvují roční screening diabetické nohy — princip podobný anglickému NHS Quality and Outcomes Framework. Zadruhé, zdravotní pojišťovny mohou rozšířit preventivní programy o plnou úhradu odlehčovacích pomůcek pro riziková chodidla ještě před vznikem ulcerace. Zatřetí, praktičtí lékaři potřebují kapitační indikátor za screening diabetické nohy — dnes ho nemají, a výkon tak není systematicky prováděn. Žádné z těchto opatření není samo o sobě zárukou, ale společně míří na místa, kde se amputaci dá předejít.",
   "framework": "hspa",
-  "dimension": "kvalita"
+  "dimension": "kvalita",
+  "verification_status": "verified",
+  "verified_at": "2026-11-12"
 }

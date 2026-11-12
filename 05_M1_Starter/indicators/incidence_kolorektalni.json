@@ -10,22 +10,35 @@
   "data_source": {
     "primary": {
       "type": "uzis_nor",
-      "dataset": "nor_incidence",
+      "dataset": "ÚZIS ČR, Národní onkologický registr (NOR), otevřená data NR-07-01 „Novotvary: incidence a prevalence, regiony“. Jeden řádek odpovídá jednomu novotvaru, počty se sčítají podle roku diagnózy (rok_dg).",
       "mkn10_prefix": [
         "C18",
         "C19",
         "C20"
       ],
-      "note": "Národní onkologický registr ÚZIS. Filtrace MKN-10 C18 (tlusté střevo), C19 (rektosigmoideální spojení), C20 (konečník)."
+      "note": "Národní onkologický registr ÚZIS. Filtrace MKN-10 C18 (tlusté střevo), C19 (rektosigmoideální spojení), C20 (konečník), počet všech řádků bez filtru pořadí novotvaru. Jmenovatelem je průměrný stav obyvatel ČR podle Eurostatu (demo_gind, 2024 = 10 905 028). Počty případů 2015–2024: 7 999, 7 725, 7 419, 7 315, 7 258, 6 915, 7 191, 7 265, 7 350, 7 502.",
+      "endpoint": "https://datanzis.uzis.gov.cz/data/NR-07-NOR/NR-07-01/Otevrena-data-NR-07-01-novotvary-incidence-prevalence-regiony.csv.gz"
     },
     "fallback": {
       "type": "oecd",
       "code": "CRC_INCIDENCE"
+    },
+    "verification": {
+      "date": "2026-11-12",
+      "source_url": "https://datanzis.uzis.gov.cz/data/NR-07-NOR/NR-07-01/Otevrena-data-NR-07-01-novotvary-incidence-prevalence-regiony.csv.gz",
+      "quote": "COUNT(*) WHERE diagnoza_kod IN ('C18','C19','C20') GROUP BY rok_dg: 2015 7 999, 2016 7 725, 2017 7 419, 2018 7 315, 2019 7 258, 2020 6 915, 2021 7 191, 2022 7 265, 2023 7 350, 2024 7 502. Jmenovatel Eurostat demo_gind indic_de=AVG CZ 2024 = 10 905 028; 7 502/10 905 028 × 100 000 = 68,8.",
+      "previous": {
+        "value": 73.5,
+        "year": 2023
+      },
+      "note": "Soubor NOR NR-07-01 jsem stáhl a přepočítal sám; počty i míry se shodují s předchozím agentem (2024: 7 502 případů, 68,8; 2023: 7 350, 67,7). Seed karty (73,5 za 2023; 2019 76,8) se nereprodukuje: odpovídal by ~8 200 případům v 2019, zdroj má 7 258; varianta jen prvních zhoubných novotvarů (6 194 v 2024) dává ještě méně, takže seed je ilustrativní. Definice C18–C20, nové případy, hrubá míra odpovídá kartě. Homogenita: covidový propad 2020, jinak konzistentní kódování; 2021 jmenovatel ovlivněn censovou revizí a od 2022 uprchlíky z Ukrajiny. Rok 2024 je poslední v sadě, může být ještě doplňován (opožděná hlášení), 2023 je stabilnější. Benchmark ASR vs crude nesouměřitelný, signál neutral. Shoduji se s předchozím agentem ve verdiktu, hodnotě, trendu i mappingu.",
+      "live_feasible": "uzis_csv",
+      "mapping_spec": "CSV.GZ https://datanzis.uzis.gov.cz/data/NR-07-NOR/NR-07-01/Otevrena-data-NR-07-01-novotvary-incidence-prevalence-regiony.csv.gz (~28 MB, UTF-8 BOM; 1 řádek = 1 novotvar; sloupce id,pohlavi,kraj_kod,diagnoza_kod,diagnoza_skupina,...,rok_dg,...). Čitatel COUNT(*) WHERE diagnoza_kod IN ('C18','C19','C20') GROUP BY rok_dg (bez filtru pořadí novotvaru). Jmenovatel Eurostat demo_gind?geo=CZ&indic_de=AVG, stejný rok. Hodnota ×100 000, 1 des. místo. Řezy pohlavi (1/2), kraj_kod."
     }
   },
   "benchmark_source": {
-    "type": "oecd",
-    "code": "CRC_INCIDENCE"
+    "type": "none",
+    "note": "Srovnávací hodnota se nezobrazuje: OECD a EU uvádějí věkově standardizované míry (ASR), s nimiž hrubá míra ČR není souměřitelná."
   },
   "signal_thresholds": {
     "good": 5,
@@ -36,9 +49,9 @@
     "ÚZIS",
     "Národní onkologický program"
   ],
-  "method_notes": "POZOR na standardní populaci: hodnota 73,5/100 000 je hrubá (crude) míra ČR z NOR a NENÍ srovnatelná s věkově standardizovaným (ASR) průměrem OECD/EU (crude je kvůli stárnoucí populaci systematicky vyšší). Na srovnatelném ASR základě (EU Country Cancer Profile 2025, European Standard Population, 2022) je incidence kolorektálního karcinomu v ČR u mužů 94/100 000 (≈ EU27 93) a u žen 53/100 000 (EU27 58, tj. o 9 % níž) — tedy NA ÚROVNI / mírně POD evropským průměrem, NIKOLIV dvojnásobná. ČR měla historicky vysokou incidenci, dnes je díky screeningu blízko průměru EU.",
-  "limitations": "Záchyt závisí na účasti ve screeningu. Crude míra v dashboardu nemá srovnatelný mezinárodní benchmark (různá standardní populace) — proto signal neutral. Pro mezinárodní srovnání použít ASR (EU CCP 2025 / ECIS).",
-  "patient_story": "Gastrologie, kolonoskopie 58letého pacienta. Polyp v sigmatu, biopsie, histologie: adenokarcinom in situ. Pacient měl štěstí: zachyceno časně, kompletní endoskopická resekce, dlouhodobé sledování. Kolorektální karcinom je v Česku velmi častý a zároveň velmi screeningovatelný — paradox, který Česko zatím nezvládlo.\n\nHrubá (crude) incidence kolorektálního karcinomu v ČR je 73,5 případů na 100 000 obyvatel (ÚZIS NOR, 2023). Tu ale kvůli stárnoucí populaci NELZE srovnávat s věkově standardizovanými mezinárodními průměry. Na srovnatelném ASR základě (EU Country Cancer Profile 2025) je ČR u mužů na úrovni EU (94 vs 93) a u žen o 9 % pod EU (53 vs 58) — tedy přibližně na evropském průměru, ne dvojnásobně nad ním. Signál je proto neutral (context-dependent). Za vysokou crude mírou stojí kombinace rizikových faktorů (rizikové faktory: západní strava bohatá na červené maso a tuky, nízká spotřeba vlákniny, alkohol, obezita, kouření) a lepší detekce přes screening — viz indikátor screening_kolorektalni.\n\nStrukturálně český systém má rozsáhlou kolonoskopickou kapacitu, ale screeningová účast je nízká (28 % vs. cíl 65 %). Většina případů se proto stále diagnostikuje až v symptomatickém stadiu, kdy přežití je nižší. Pětileté přežití u stadia I je 90 %, u stadia IV jen 14 % — pravdový rozdíl rozhoduje o tom, jak časně se nálezník zachytí.\n\nKolorektální karcinom je v Česku druhá nejčastější onkologická příčina úmrtí. Politické páky: zvýšení screeningové účasti (Priority 1 — viz clanek-rakovina-tlusteho-streva); primární prevence (strava bohatá na vlákninu, snížení spotřeby červeného a zpracovaného masa, redukce alkoholu); investice do kolonoskopické kapacity (model „bez fronty pro pozitivního pacienta\"); spolupráce s NNO (Loono, klub onkologických pacientů). Indikátor v HSPA dashboardu sleduje incidenci jako klíčový ukazatel rizikových faktorů a screeningu.",
+  "method_notes": "Hodnota je hrubá (crude) míra z NOR: počet nově diagnostikovaných zhoubných novotvarů C18–C20 v daném roce dělený průměrným stavem obyvatel, × 100 000. V roce 2024 to bylo 7 502 případů, tedy 68,8 na 100 000 (v roce 2023 7 350 případů, 67,7). Řada od roku 2015 klesla z 75,8 na 68,8, s propadem v roce 2020 (64,6) v době covidu. Hrubá míra NENÍ srovnatelná s věkově standardizovaným (ASR) průměrem OECD/EU, protože kvůli stárnoucí populaci je systematicky vyšší, proto indikátor nemá srovnávací hodnotu a signál je neutrální. Pro mezinárodní srovnání je třeba použít ASR (EU Country Cancer Profile, ECIS). Do jmenovatele se v roce 2021 promítla revize podle sčítání lidu a od roku 2022 příchod uprchlíků z Ukrajiny.",
+  "limitations": "Záchyt závisí na účasti ve screeningu. Hrubá míra v dashboardu nemá srovnatelný mezinárodní benchmark (různá standardní populace), proto je signál neutrální. Rok 2024 je poslední v datové sadě a může být ještě doplňován o opožděná hlášení, rok 2023 je stabilnější. Pokles v roce 2020 odráží covidové období. Jmenovatel ovlivnily revize populace (sčítání lidu 2021, uprchlíci od roku 2022). Starší hodnoty zobrazené na kartě před ověřením (např. 73,5 za rok 2023) se ve zdrojových datech nereprodukují a byly nahrazeny hodnotami přepočtenými z registru.",
+  "patient_story": "Gastrologie, kolonoskopie 58letého pacienta. Polyp v sigmatu, biopsie, histologie: adenokarcinom in situ. Pacient měl štěstí: zachyceno časně, kompletní endoskopická resekce, dlouhodobé sledování. Kolorektální karcinom je v Česku velmi častý a zároveň velmi screeningovatelný — paradox, který Česko zatím nezvládlo.\n\nHrubá (crude) incidence kolorektálního karcinomu v ČR je 68,8 případů na 100 000 obyvatel (ÚZIS NOR, 2024; 7 502 nových případů). Od roku 2015 (75,8) pozvolna klesá, v roce 2020 s covidovým propadem na 64,6. Tu ale kvůli stárnoucí populaci NELZE srovnávat s věkově standardizovanými mezinárodními průměry, proto je signál neutrální (context-dependent). Za vysokou crude mírou stojí kombinace rizikových faktorů (rizikové faktory: západní strava bohatá na červené maso a tuky, nízká spotřeba vlákniny, alkohol, obezita, kouření) a lepší detekce přes screening — viz indikátor screening_kolorektalni.\n\nStrukturálně český systém má rozsáhlou kolonoskopickou kapacitu, ale screeningová účast je nízká (28 % vs. cíl 65 %). Většina případů se proto stále diagnostikuje až v symptomatickém stadiu, kdy přežití je nižší. Pětileté přežití u stadia I je 90 %, u stadia IV jen 14 % — pravdový rozdíl rozhoduje o tom, jak časně se nálezník zachytí.\n\nKolorektální karcinom je v Česku druhá nejčastější onkologická příčina úmrtí. Politické páky: zvýšení screeningové účasti (Priority 1 — viz clanek-rakovina-tlusteho-streva); primární prevence (strava bohatá na vlákninu, snížení spotřeby červeného a zpracovaného masa, redukce alkoholu); investice do kolonoskopické kapacity (model „bez fronty pro pozitivního pacienta\"); spolupráce s NNO (Loono, klub onkologických pacientů). Indikátor v HSPA dashboardu sleduje incidenci jako klíčový ukazatel rizikových faktorů a screeningu.",
   "framework": "hspa",
   "dimension": "kvalita",
   "literature": [
@@ -112,5 +125,7 @@
       "note": "SEER 2010–2020, n=73 427: stadium IV má pětileté přežití pod 15 %, naměřené nádorově specifické přežití 20,7 % — podpírá řád hodnoty 14 %, s jinou metrikou a americkou populací.",
       "verified_at": "2026-09-20"
     }
-  ]
+  ],
+  "verification_status": "verified",
+  "verified_at": "2026-11-12"
 }
