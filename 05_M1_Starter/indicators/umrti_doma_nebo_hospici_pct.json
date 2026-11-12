@@ -24,19 +24,19 @@
     },
     "verification": {
       "date": "2026-11-12",
-      "result": "definicni_nesoulad",
+      "source_name": "ÚZIS ČR — zemřelí podle místa úmrtí (LPZ, otevřená data NR-06-38) a zemřelí v lůžkovém hospici (datový souhrn NR-06-31)",
       "source_url": "https://datanzis.uzis.gov.cz/data/NR-06-LPZ/NR-06-38/Otevrena-data-NR-06-38-zemreli-vek-pohlavi-kraje-diagnozy-mista.csv",
-      "note": "Definice a název: LPZ má 8 míst úmrtí (doma, lůžkové ZZ, jiné ZZ, veřejné místo, převoz, sociální služby, jinde, nezjištěno). Hospic jako kategorie chybí, hospice jsou lůžková zařízení a spadají do kódu 2. Spočítat jde jen podíl zemřelých doma, 25,5 % v roce 2024, a název 'doma nebo v hospici' tomu neodpovídá. Jmenovatel tvoří všichni zemřelí podle kraje bydliště, nezjištěno je 1,7 %. Řada 2013–2024 je homogenní, roky 2020–2021 ovlivnil COVID. Seed (2019 23,4, 2021 24,7, 2022 26,2) ze zdroje reprodukovat nejde, rozdíl je 0,5–1,3 p. b. Benchmark 32 / 31,5 není souměřitelný. S předchozím agentem souhlasím ve verdiktu, hodnotě i řadě. Opravuji jeho poznámku o součtu, který je 'přesně 2× vyšší': nejde o chybu zdroje. CSV obsahuje národní souhrnný řádek kraj_bydliste='CZ0' (2024: 112 211 zemřelých) vedle krajských řádků. Mapping proto musí filtrovat CZ0 a s ním jsou i absolutní počty použitelné. Doporučení: přejmenovat na 'Podíl zemřelých doma' a benchmark vypustit.",
-      "live_feasible": "uzis_csv",
-      "mapping_spec": "GET https://datanzis.uzis.gov.cz/data/NR-06-LPZ/NR-06-38/Otevrena-data-NR-06-38-zemreli-vek-pohlavi-kraje-diagnozy-mista.csv (metadata: + '-metadata.json'). Sloupce: rok,kraj_bydliste,pohlavi,vek_kat,misto_umrti,kapitola_MKN,zemreli_pocet. Filtr kraj_bydliste=='CZ0' (národní souhrn; ostatní řádky jsou kraje CZ010…CZ080, proto součet přes všechny řádky dává dvojnásobek). value(Y) = 100 × sum(zemreli_pocet | rok=Y, kraj=CZ0, misto_umrti=1) / sum(zemreli_pocet | rok=Y, kraj=CZ0). Jmenovatel zahrnuje kód 8 'nezjištěno'; bez něj vychází 2024 25,91 %. Krajský řez: kraj_bydliste != 'CZ0'."
+      "quote": "NR-06-31, list Data: 'Počet zemřelých osob v lůžkovém hospici podle kraje bydliště pacienta … Česká republika 2011: 2323 … 2022: 4133, 2023: 4232, 2024: 4590, 2025: 4981' (Zdroj dat: Databáze zemřelých, NRHZS; zpracováno 1. 10. 2026). NR-06-38 (https://datanzis.uzis.gov.cz/data/NR-06-LPZ/NR-06-38/Otevrena-data-NR-06-38-zemreli-vek-pohlavi-kraje-diagnozy-mista.csv, 'misto_umrti – místo úmrtí podle kódování v Listu o prohlídce zemřelého'), kraj_bydliste=CZ0, rok 2024: misto_umrti=1 (doma) 28 588 z 112 211 zemřelých. Výpočet 2024: (28 588 + 4 590) / 112 211 = 29,57 %.",
+      "previous": {
+        "value": 26.2,
+        "year": 2022
+      },
+      "note": "Definici 'doma nebo v hospici' lze doložit ze dvou oficiálních sad ÚZIS, které první kolo nespojilo: úmrtí doma (LPZ kód 1, sada NR-06-38) plus úmrtí v lůžkovém hospici (souhrn NR-06-31). Vzorec: value(Y) = 100 × (doma_Y + hospic_Y) / všichni zemřelí_Y; jmenovatel je součet NR-06-38 za CZ0 včetně nezjištěného místa. Vstupy 2024: 28 588 + 4 590 / 112 211; 2022: 29 949 + 4 133 / 120 219 = 28,35 % (seed 26,2 nesedí). Složky 2024: doma 25,48 %, lůžkový hospic 4,09 %. Výhrady: součet ÚZIS sám jako jedno číslo nepublikuje; lůžkové hospice jsou určeny z dat zdravotních pojišťoven (bez samoplátců), kdežto místo úmrtí z LPZ, kde hospic spadá do kódu 2, takže se složky nepřekrývají. Úmrtí v péči mobilního hospice jsou už v kategorii doma. Roky 2020–2021 ovlivnil covid. Za 2025 je zatím jen počet v hospicích (4 981), NR-06-38 končí rokem 2024. Benchmark 32 / 31,5 vypustit."
     }
   },
   "benchmark_source": {
-    "type": "oecd",
-    "code": "HOSP_DEATH",
-    "dataset": "HEALTH_STAT",
-    "value": 32,
-    "url": "https://www.oecd-ilibrary.org/social-issues-migration-health/health-at-a-glance-2023_7a7afb35-en"
+    "type": "none",
+    "note": "Benchmark ve stejné definici neexistuje (OECD publikuje jen podíl úmrtí v nemocnici)."
   },
   "signal_thresholds": {
     "good": 3,
@@ -52,5 +52,6 @@
   "patient_story": "Hradec Králové, podzim 2024. Jana Nováková, 74 let, pokročilá rakovina plic. Onkolog jí sdělil, že kurativní léčba skončila. Co dál? V ideálním světě by dostala kontakt na mobilní paliativní tým — lékaře a zdravotní sestry, kteří by k ní chodili domů, řídili bolest, byli dostupní 24 hodin. Mohla by zemřít v posteli, ve svém domě, s rodinou kolem. Ve skutečnosti: v Hradeckém kraji jsou mobilní hospicové týmy, ale kapacita je omezená a pojišťovna péči od roku 2023 hradí jen v rámci pilotního projektu. Jana nakonec skončila v nemocnici — ne proto, že chtěla, ale proto, že jiná možnost nebyla dostupná.\n\nV Česku zemřelo v roce 2022 přibližně 26 % lidí doma nebo v hospici. Zbývajících 74 % zemřelo v nemocnicích, LDN nebo sociálních zařízeních. Průměr zemí OECD je přitom okolo 32 %. Skandinávské země a Nizozemsko dosahují 40–50 %. Trend v Česku je rostoucí — v roce 2018 to bylo jen 22 % — ale vzdálenost od OECD průměru přetrvává.\n\nProč je místo úmrtí politicky relevantní? Výzkumy konzistentně ukazují, že většina lidí si přeje zemřít doma, v komfortu a s blízkými. Hospitalizace na konci života je zároveň jedním z nejvyšších zdrojů nákladů zdravotního systému — poslední měsíc života je v průměru nejdražší měsíc v celém zdravotnickém příběhu pacienta. Investice do mobilní paliativní péče má proto dvojí návratnost: zlepšuje kvalitu umírání a snižuje neefektivní výdaje na akutní lůžkové kapacity.\n\nČesko má od roku 2023 historicky první úhradový kód pro mobilní hospicové týmy — pilotní projekt VZP a dalších pojišťoven. Je to zásadní strukturální změna. Ale piloty pokrývají jen část krajů a kapacity jsou nedostatečné. Cíl — dosáhnout OECD průměru 32 %, tedy o 6 procentních bodů víc než dnes — vyžaduje rozšíření mobilních týmů ze současných ~70 na odhadovaných 120–130 po celé republice, regionálně vyrovnané krytí a stabilní úhradu bez pilotního omezení.",
   "framework": "hspa",
   "dimension": "dostupnost",
-  "verification_status": "illustrative"
+  "verification_status": "verified",
+  "verified_at": "2026-11-12"
 }

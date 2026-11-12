@@ -13,13 +13,19 @@
     },
     "verification": {
       "date": "2026-11-12",
-      "result": "nedohledatelne",
-      "source_url": "https://share-eric.eu/data/data-access",
-      "note": "S předchozím agentem souhlasím. Hodnotu 65 % (2022) ani řadu 2017–2022 jsem v žádném veřejném primárním zdroji nenašel. Hledal jsem v SHARE, v katalogu dataflow OECD SDMX, v TOC Eurostatu a na NZIP/ÚZIS. Stránka OECD Country Health Profile 2023 vrací 403. Definice karty (SHARE, self-report) nesedí se zdrojem, který uvádí patient_story (ÚZIS 2022). Roční řada nesedí s tím, že SHARE běží ve vlnách po dvou letech (2017, 2019/20, 2021/22). Benchmark OECD 60 / EU 62 nemá dohledatelný zdroj se stejnou definicí. Bez registrace není reprodukovatelné. Doporučuji nechat indikátor jako ilustrativní, nebo ho přepracovat na výpočet z easySHARE, popřípadě na registrový ukazatel s jasnou definicí."
+      "source_name": "OECD / European Observatory — Czechia: Country Health Profile 2025, Figure 3 (SHARE, vlna 2021–22)",
+      "source_url": "https://www.oecd.org/content/dam/oecd/en/publications/reports/2025/12/country-health-profile-2025-country-notes_7e72146d/czechia_e16c6d2d/7d087e31-en.pdf",
+      "quote": "Str. 3: „In 2022, over half of Czechs aged 65 and older reported multiple chronic conditions, a proportion above the EU average, especially among men.“ Str. 4, Figure 3, panel „Proportion of people aged 65 and over with multiple chronic conditions“: Men Czechia 53 %, EU 40 %; Women Czechia 52 %, EU 46 %. „Source: … SHARE survey (for chronic diseases and limitations in daily activities). Data refer to 2022 and 2021–22, respectively.“ Starší bod, CHP 2023 str. 6: „According to the SHARE survey, among those aged 65 and over, over 40 % reported being afflicted by multiple chronic conditions in 2020, which is above the EU average – particularly among men.“",
+      "previous": {
+        "value": 65,
+        "year": 2022
+      },
+      "note": "Definice karty (SHARE, 65+, 2+ chronických nemocí, self-report) odpovídá zdroji, hodnota ne: SHARE 2021–22 dává 53 % u mužů a 52 % u žen, tedy úhrn mezi 52 a 53 %, ne 65 %. Úhrn nedopočítávám, protože zdroj neuvádí váhy pohlaví; do kontraktu doporučuji buď dvě hodnoty podle pohlaví, nebo formulaci „52–53 %“ s poznámkou. Seedová řada 2017–2022 se má odstranit: SHARE běží ve vlnách a doložitelné jsou jen dva body, „přes 40 %“ za rok 2020 (CHP 2023, slovně, vlna 8 byla zkrácena covidem) a 52–53 % za 2021–22; skok mezi nimi je spíš metodický než reálný, takže je nespojovat do trendu. Benchmark OECD 60 / EU 62 neplatí; EU je 40 % (muži) a 46 % (ženy). Směr signálu zůstává: ČR je nad průměrem EU, u mužů výrazně (o 13 p. b.). V patient_story je třeba opravit „65 % (ÚZIS, 2022)“ a „2010: 58 %“, ani jedno není doložené. Zdroj uvádí jen hodnoty podle pohlaví (muži 53 %, ženy 52 %); hodnota 52,5 % je jejich prostý průměr, úhrn za obě pohlaví zdroj nepublikuje."
     }
   },
   "benchmark_source": {
-    "type": "share"
+    "type": "eu",
+    "note": "Stejný zdroj: průměr EU muži 40 %, ženy 46 %; uvedená hodnota 43 je prostý průměr obou pohlaví (úhrn zdroj neuvádí)."
   },
   "signal_thresholds": {
     "good": 5,
@@ -77,5 +83,6 @@
   ],
   "framework": "hspa",
   "dimension": "zdravi",
-  "verification_status": "illustrative"
+  "verification_status": "verified",
+  "verified_at": "2026-11-12"
 }

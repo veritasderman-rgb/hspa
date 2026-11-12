@@ -25,17 +25,19 @@
     },
     "verification": {
       "date": "2026-11-12",
-      "result": "definicni_nesoulad",
-      "source_url": "https://statistikaamy.csu.gov.cz/kdo-studuje-zije-dele",
-      "note": "Primární zdroj jsem otevřel a hodnotu 13.8 (2025) i obě složky 82.5 a 68.7 v textu ČSÚ potvrzuji. Karta však měří rozdíl e25 (ve věku 25 let), ČSÚ publikuje e0 (při narození); to je jiná definice, proto na rozdíl od předchozího agenta ('aktualizovat') volím definicni_nesoulad: hodnotu lze převzít jen po změně definice karty na e0. Kvalita: ČSÚ výslovně uvádí odhad; nezjištěné vzdělání zemřelých bylo 84 % v 2023 a necelých 7,5 % v 2025, nezjištěné bylo poměrově rozpuštěno, spolehlivě šlo hodnotit naposledy kolem přelomu století. Homogenita: seed trend 1999–2016 nemá primární oporu a přes změnu metodiky nejde prezentovat jako trend; seed 13 (věk 25) pochází ze sekundárního textu odkazujícího na starší data Eurostatu, který dnes CZ nemá. Benchmark: Eurostat pro CZ ani EU agregát nic nemá, seed 7 let nepodložen, null. Plauzibilita dobrá (SK 15.6 v e25, 2017). S agentem se shoduji v hodnotě, roce, zdroji i benchmarku, liším se jen v klasifikaci verdiktu."
+      "source_name": "Hamplová, D., Katrňák, T. (eds.): Na vzdělání záleží. CDK, Brno 2018 (podle dat Eurostatu)",
+      "source_url": "https://www.h7o.cz/clanky/12342-na-vzdelani-zalezi",
+      "quote": "Podle dat Eurostatu není ovšem tento růst stejný pro všechny vzdělanostní skupiny. U lidí vzdělanějších je jeho dynamika rychlejší než u lidí s nízkým vzděláním. Rozdíl v naději dožití ve věku 25 let mezi nevyšší a nejnižší vzdělanostní kategorií je u nás pro muže asi 13 let. Z 23 evropských zemí má tento rozdíl vyšší jen Maďarsko (asi 14 let).",
+      "previous": {
+        "value": 13,
+        "year": 2018
+      },
+      "note": "Původ dohledán a hodnota potvrzena ve stejné definici (muži, věk 25, nejvyšší vs. nejnižší vzdělání). Výhrady: (1) zdroj říká 'asi 13 let', není to přesné číslo; (2) rok 2018 je rok vydání knihy, ne rok dat. Podkladová data Eurostatu autoři nedatují a Eurostat dnes pro Česko v demo_mlexpecedu nic nemá, takže primární tabulku nejde otevřít (zkusit Wayback snapshot z 19. 3. 2018 mimo tuto session). (3) Trend 1999–2016 (10, 11, 12, 13) ve zdroji není a měl by se z kontraktu odstranit. (4) Benchmark EU 7 doložen není. (5) Zdroj na kartě má být kniha/ukázka, ne 'ČSÚ úmrtnostní tabulky' (ČSÚ e25 podle vzdělání nepublikuje). Aktuálnější doložitelná alternativa s jinou definicí: ČSÚ 2025, naděje dožití při narození, muži VŠ 82,5 vs. základní 68,7 = 13,8 roku (https://statistikaamy.csu.gov.cz/kdo-studuje-zije-dele). Zdroj uvádí „asi 13 let“ a rok 2018 je rok vydání knihy, ne rok dat."
     }
   },
   "benchmark_source": {
-    "type": "narrative_only",
-    "code": "no_single_published_benchmark",
-    "dataset": "Eurostat (demo_mlexpecedu) nepublikuje pro Česko přímou řadu (ČSÚ do této sady nereportuje), proto neexistuje jediný oficiální EU/OECD benchmark pro českou hodnotu. Komparativně: v analýze 23 evropských zemí (Hamplová & Katrňák) byl český vzdělanostní rozdíl u mužů (cca 13 let ve věku 25) druhý nejvyšší — vyšší mělo jen Maďarsko (cca 14 let). Eurostat potvrzuje stejný vzorec u sousedů ve věku 30 let: Slovensko 14,8; Polsko 11,0; Maďarsko 10,7; Slovinsko 5,7 roku (2017). Země západní a severní Evropy se pohybují řádově kolem 7 let. Referenční hodnota 7 let v seedu reprezentuje typickou úroveň zemí s nízkou vzdělanostní nerovností.",
-    "value": 7,
-    "url": "https://ec.europa.eu/eurostat/databrowser/view/demo_mlexpecedu/default/table"
+    "type": "none",
+    "note": "Zdroj neuvádí průměr EU ani OECD, jen pořadí (druhý nejvyšší rozdíl z 23 evropských zemí)."
   },
   "signal_thresholds": {
     "good": 10,
@@ -96,5 +98,6 @@
   ],
   "framework": "hspa",
   "dimension": "spravedlnost",
-  "verification_status": "illustrative"
+  "verification_status": "verified",
+  "verified_at": "2026-11-12"
 }
