@@ -9,10 +9,11 @@ import { fileURLToPath } from 'node:url';
 import {
   PERSONY, parseClen, parseDomacnost, serializeDomacnost, normalizeClen, clenLabel,
   stavNaroku, soucetClena, soucetDomacnosti, radkyDomacnosti, kategorieZp, castkaText, kdoText,
+  seradPodminky, seradRadky, tridaPodminky,
 } from '../src/prispevky-engine.js';
 import {
   stavZUrl, urlZeStavu, popiskyClenu, personyHtml, temataHtml, domacnostHtml,
-  souhrnHtml, tabulkaHtml, situacniHtml, podminkyHtml, prehledHtml, renderPrispevky,
+  souhrnHtml, tabulkaHtml, situacniHtml, podminkyHtml, prehledHtml, renderPrispevky, PODMINEK_HNED,
 } from '../src/pojistovny-prispevky.js';
 import { validatePrispevky, castkaVCitaci, KATEGORIE, SITUACE, KODY_ZP } from '../ingest/lib/validate-prispevky.js';
 import { htmlToText, squash, polozkyKOvereni } from '../ingest/verify-pojistovny-prispevky.js';
@@ -94,6 +95,104 @@ test('stavNaroku: věk, pohlaví a situace', () => {
   assert.equal(stavNaroku(by('novorozenec'), otec), 'ne', 'novorozenecký příspěvek se dospělému nenabízí');
   assert.equal(stavNaroku(by('novorozenec'), tehotna), 'situace', 'těhotné se nabídne jako budoucí');
   assert.equal(stavNaroku(by('darci'), dcera), 'ne', 'dítě nemůže být dárce');
+});
+
+test('stavNaroku: víc situací = životní fáze stačí jedna, ostatní musí platit všechny', () => {
+  const dieta = P('dieta-student', 8000, { vek_od: 18, vek_do: 25, situace: ['diagnoza', 'student'] });
+  assert.equal(stavNaroku(dieta, parseClen('M20s')), 'situace', 'student bez diagnózy nárok nemá');
+  assert.equal(stavNaroku(dieta, parseClen('M20d')), 'situace', 'diagnóza bez statusu studenta nestačí');
+  assert.equal(stavNaroku(dieta, parseClen('M20sd')), 'ano');
+  const nedonosene = P('nedonosene', 3000, { vek_do: 0, situace: ['novorozenec', 'diagnoza'] });
+  assert.equal(stavNaroku(nedonosene, parseClen('M0')), 'situace', 'zdravé miminko příspěvek pro nedonošené nedostane');
+  assert.equal(stavNaroku(nedonosene, parseClen('M0d')), 'ano');
+  const sbory = P('sbory', 3500, { situace: ['profese', 'darce'] });
+  assert.equal(stavNaroku(sbory, parseClen('M40k')), 'situace', 'dárce, který není z vybrané profese');
+  const organ = P('organ', 10000, { situace: ['darce', 'jine'] });
+  assert.equal(stavNaroku(organ, parseClen('M40k')), 'situace', 'dárce krve není dárce orgánu');
+  assert.equal(stavNaroku(organ, parseClen('Z9')), 'ne', 'dítě dárcem být nemůže, nenabízí se ani podmíněně');
+  const nipt = P('nipt', 4000, { pohlavi: 'Z', situace: ['tehotna', 'diagnoza'] });
+  assert.equal(stavNaroku(nipt, parseClen('Z30t')), 'situace');
+  assert.equal(stavNaroku(nipt, parseClen('Z30td')), 'ano');
+  const obe = P('obe', 3000, { pohlavi: 'Z', situace: ['tehotna', 'po_porodu'] });
+  assert.equal(stavNaroku(obe, parseClen('Z30p')), 'ano', 'těhotná NEBO po porodu');
+});
+
+test('dataset: příspěvek vázaný na dvě podmínky se nepočítá tomu, kdo splní jen jednu', () => {
+  const soucet = (kod, clen) => soucetClena(D.pojistovny.find((z) => z.kod === kod), parseClen(clen));
+  const ma = (kod, clen, id) => soucet(kod, clen).polozky.some((p) => p.id === id);
+  assert.equal(ma('111', 'M20s', 'dieta-bezlepkova-studenti'), false, 'VZP: student bez celiakie');
+  assert.equal(ma('111', 'M0', 'nedonosene-miminko'), false, 'VZP: donošené miminko');
+  assert.equal(ma('211', 'M40k', 'prispevek-za-1-odber-v-roce'), false, 'ZP MV: dárce mimo bezpečnostní sbory');
+  assert.equal(ma('211', 'Z30p', 'podpora-vicercat'), false, 'ZP MV: žena po porodu jednoho dítěte');
+  assert.equal(ma('111', 'M40k', 'darce-organu'), false, 'VZP: dárce krve není dárce orgánu');
+  assert.equal(ma('211', 'M42', 'ockovani-rotaviry'), false, 'ZP MV: rotaviry jen kojencům');
+});
+
+test('dataset: vzájemně se vylučující příspěvky mají společný strop', () => {
+  const zp = (kod) => D.pojistovny.find((z) => z.kod === kod);
+  const strop = (kod, clen, id) => soucetClena(zp(kod), parseClen(clen)).stropy.find((s) => s.id === id);
+  assert.equal(strop('111', 'Z9d', 'dieta-bezlepkova-nebo-nizkobilkovinna').uznano, 12000, 'VZP: jen jedna z diet');
+  assert.equal(strop('111', 'M40k', 'darce-krve-aktivni-nebo-neaktivni').uznano, 3000, 'VZP: aktivní, nebo neaktivní dárce');
+  assert.equal(strop('213', 'M40k', 'darci-pasmo-podle-poctu-odberu').uznano, 3000, 'RBP: jedno pásmo podle počtu odběrů');
+  assert.equal(strop('201', 'M40k', 'darci-oceneni-jedno-v-roce').uznano, 4000, 'VoZP: jedno ocenění');
+  assert.equal(strop('205', 'M40k', 'darci-oceneni-jedno-v-roce').uznano, 3500, 'ČPZP: jedno ocenění');
+  assert.equal(strop('209', 'M20sd', 'celiakie-student-nebo-dospely').uznano, 8000, 'ZPŠ: studentská, nebo dospělá sazba');
+  assert.equal(strop('211', 'M40k', 'darci-krve-lazne-nebo-alternativa').uznano, 5000, 'ZP MV: lázně, alternativa, nebo prvodárce');
+  for (const z of D.pojistovny) for (const s of z.stropy.filter((x) => x.druh === 'navyseni')) {
+    assert.ok(!z.prispevky.some((p) => p.strop_id === s.id), `${z.kod} ${s.id}: navýšení není strop`);
+  }
+});
+
+test('seradPodminky: nárok a souběh nahoře, doklady a podání žádosti dole, uvnitř skupiny pořadí z dat', () => {
+  const vstup = [
+    'žádat lze pouze prostřednictvím aplikace Moje VZP',
+    'platební doklady s datem úhrady od 1. 1. 2026',
+    'permanentka minimálně v hodnotě 800 Kč',
+    'nelze kombinovat s variantou sport',
+    'doklad o diagnóze při prvním podání žádosti',
+    'absolvovaná preventivní prohlídka u praktického lékaře',
+    'jen sporty ze seznamu',
+  ];
+  assert.deepEqual(seradPodminky(vstup), [
+    'absolvovaná preventivní prohlídka u praktického lékaře',
+    'nelze kombinovat s variantou sport',
+    'doklad o diagnóze při prvním podání žádosti',
+    'permanentka minimálně v hodnotě 800 Kč',
+    'jen sporty ze seznamu',
+    'platební doklady s datem úhrady od 1. 1. 2026',
+    'žádat lze pouze prostřednictvím aplikace Moje VZP',
+  ]);
+  assert.equal(vstup[0], 'žádat lze pouze prostřednictvím aplikace Moje VZP', 'vstup se nemění');
+  assert.deepEqual(seradPodminky(null), []);
+  assert.equal(tridaPodminky('Žádost lze podat pouze elektronicky (eKomunikace)'), 5);
+  for (const z of D.pojistovny) for (const p of z.prispevky) {
+    assert.deepEqual([...seradPodminky(p.podminky)].sort(), [...p.podminky].sort(), `${z.kod} ${p.id}: řazení nic neztratí`);
+  }
+});
+
+test('seradRadky: uvnitř tématu od nejvyšší částky, bez částky nakonec, shoda drží pořadí z dat', () => {
+  const r = (id, castka) => ({ prispevek: { id, castka_kc: castka } });
+  assert.deepEqual(seradRadky([r('a', 500), r('b', null), r('c', 2000), r('d', 500)]).map((x) => x.prispevek.id), ['c', 'a', 'd', 'b']);
+});
+
+test('tabulka: žádná podmínka se neztratí, od čtvrté dál jsou po rozkliknutí', () => {
+  const podminky = ['žádost do 30. 11. 2026', 'doklad o úhradě', 'jen plavání', 'preventivní prohlídka u praktického lékaře', 'nelze kombinovat s X'];
+  const zp = { ...ZP_T, prispevky: [P('x', 100, {}, { podminky })] };
+  const html = tabulkaHtml(zp, parseDomacnost('M42'), { tema: null }, KATEGORIE.map((id) => ({ id, label: id })));
+  for (const t of podminky) assert.ok(html.includes(t), t);
+  assert.match(html, new RegExp(`další podmínky \\(${podminky.length - PODMINEK_HNED}\\)`));
+  assert.ok(html.indexOf('preventivní prohlídka') < html.indexOf('<details'), 'preventivní prohlídka je vidět hned');
+  assert.ok(html.indexOf('žádost do 30. 11. 2026') > html.indexOf('<details'), 'lhůta žádosti až po rozkliknutí');
+  const kratke = tabulkaHtml({ ...ZP_T, prispevky: [P('y', 100, {}, { podminky: ['a', 'b'] })] }, parseDomacnost('M42'), { tema: null }, KATEGORIE.map((id) => ({ id, label: id })));
+  assert.doesNotMatch(kratke, /další podmínky/);
+});
+
+test('podminkyHtml: navýšení limitu převodem není mezi společnými stropy', () => {
+  const zp = { ...ZP_T, stropy: [...ZP_T.stropy, { id: 'navyseni-x', druh: 'navyseni', nazev: 'Navýšení převodem', typ: 'castka', hodnota: 10000, perioda: 'rok', url: 'https://example.cz', citace: '10 000 Kč' }] };
+  const html = podminkyHtml(zp);
+  assert.match(html, /Navýšení limitu převodem od jiných pojištěnců/);
+  assert.ok(html.indexOf('Navýšení převodem') > html.indexOf('Navýšení limitu převodem od jiných pojištěnců'));
+  assert.match(html, /nejvýš 2 různé/);
 });
 
 test('soucetClena: společný strop v Kč, strop na počet, jednorázové zvlášť, bez částky mimo součet', () => {

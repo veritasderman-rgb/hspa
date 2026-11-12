@@ -2108,9 +2108,9 @@ Katalog finančních příspěvků a benefitů pro pojištěnce z fondu prevence
 |---|---|
 | `kategorie[]`, `situace[]` | číselníky `{id, label}` v pevném pořadí (enumy ve validátoru) |
 | `pojistovny[]` | 7 položek v pořadí kódu: `kod`, `zkratka`, `rozcestnik_url`, `overeno_at`, `obecne_podminky[]`, `stropy[]`, `prispevky[]`, `nenalezeno[]`, `poznamky[]` |
-| `stropy[]` | společný limit víc příspěvků: `id`, `nazev`, `typ` (`castka` = nejvýš tolik Kč, `pocet` = nejvýš tolik příspěvků), `hodnota`, `perioda`, `plati_pro`, `url`, `citace` |
+| `stropy[]` | společný limit víc příspěvků: `id`, `nazev`, `typ` (`castka` = nejvýš tolik Kč, `pocet` = nejvýš tolik příspěvků), `hodnota`, `perioda`, `plati_pro`, `url`, `citace`; volitelně `druh: "navyseni"` (limit, který lze navýšit převodem od jiných pojištěnců: není strop, žádný příspěvek se na něj neodkazuje a stránka ho vypisuje zvlášť) a `uprava_redakce: true` (pravidlo součtu doplněné redakcí, např. z ocenění dárců jen to nejvyšší). Vzájemně se vylučující příspěvky (buď A, nebo B) se zapisují jako strop `pocet` s hodnotou 1 |
 | `prispevky[]` | `id`, `nazev`, `popis`, `castka_kc` (nejvýš na osobu za `perioda`; `null` = web částku neuvádí, pak `castka_text`), `perioda` (`rok` \| `jednorazove` \| `tehotenstvi` \| `jine`), `kategorie`, `kdo`, `podminky[]`, `strop_id`, `url`, `citace`, `zdroj_typ`, `jistota` (`ano` \| `nejasne`), volitelně `poznamka` (pro čtenáře) a `poznamka_redakce` |
-| `prispevky[].kdo` | `vek_od`, `vek_do` (dokončené roky, včetně; `null` = bez omezení), `pohlavi` (`M` \| `Z` \| `null`), `situace[]` (prázdné = kdokoli dané skupiny; jinak stačí jedna z uvedených), `text` (vymezení z webu) |
+| `prispevky[].kdo` | `vek_od`, `vek_do` (dokončené roky, včetně; `null` = bez omezení), `pohlavi` (`M` \| `Z` \| `null`), `situace[]` (prázdné = kdokoli dané skupiny; z životních fází `tehotna` / `po_porodu` / `novorozenec` stačí jedna, každá další situace je podmínka navíc: `diagnoza` + `student` = student s diagnózou), `text` (vymezení z webu) |
 
 **Železné pravidlo:** každá částka, strop i obecná podmínka má `url` na webu pojišťovny a `citace` = doslovný úryvek
 té stránky. `node ingest/verify-pojistovny-prispevky.js` adresy znovu stáhne (HTML i PDF) a citaci hledá po odstranění

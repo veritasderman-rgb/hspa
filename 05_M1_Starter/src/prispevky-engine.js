@@ -98,11 +98,18 @@ export function situaceClena(clen) {
   return s;
 }
 
+/** Životní fáze: mezi sebou se berou jako „nebo“ (těhotná nebo po porodu). Ostatní situace musí platit všechny. */
+export const SITUACE_FAZE = ['tehotna', 'po_porodu', 'novorozenec'];
+
 /**
  * Stav nároku člena na příspěvek:
  *  'ano'     věk, pohlaví i situace sedí (nebo příspěvek situaci nevyžaduje),
  *  'situace' věk a pohlaví sedí, ale příspěvek vyžaduje situaci, kterou člen nemá,
  *  'ne'      věk nebo pohlaví nesedí.
+ *
+ * Víc situací u jednoho příspěvku: životní fáze (těhotná, po porodu, novorozenec) stačí jedna z nich,
+ * každá další situace je podmínka navíc. „student + diagnóza“ tedy znamená studenta s diagnózou,
+ * „novorozenec + diagnóza“ nedonošené nebo nemocné miminko, ne každého studenta a každé miminko.
  */
 export function stavNaroku(prispevek, clen) {
   const kdo = prispevek?.kdo || {};
@@ -112,9 +119,14 @@ export function stavNaroku(prispevek, clen) {
   const req = Array.isArray(kdo.situace) ? kdo.situace : [];
   if (!req.length) return 'ano';
   const ma = situaceClena(clen);
-  if (req.some((s) => ma.has(s))) return 'ano';
+  const faze = req.filter((s) => SITUACE_FAZE.includes(s));
+  const dalsi = req.filter((s) => !SITUACE_FAZE.includes(s));
+  const fazeOk = !faze.length || faze.some((s) => ma.has(s));
+  const chybi = dalsi.filter((s) => !ma.has(s));
+  if (fazeOk && !chybi.length) return 'ano';
   // situace, která u člena nastat nemůže (těhotný muž, dvaačtyřicetiletý novorozenec), se nenabízí ani podmíněně
-  return req.some((s) => muzeNastat(s, clen, ma)) ? 'situace' : 'ne';
+  const fazeMozna = fazeOk || faze.some((s) => muzeNastat(s, clen, ma));
+  return fazeMozna && chybi.every((s) => muzeNastat(s, clen, ma)) ? 'situace' : 'ne';
 }
 
 /** Může daná situace u člena vůbec nastat? Příspěvky pro novorozence se podmíněně nabízejí jen těhotné nebo ženě po porodu. */
@@ -123,6 +135,39 @@ export function muzeNastat(situace, clen, ma = situaceClena(clen)) {
   if (situace === 'novorozenec') return clen.vek === 0 || ma.has('tehotna') || ma.has('po_porodu');
   if (situace === 'darce') return clen.vek >= 18;
   return true;
+}
+
+/**
+ * Pořadí podmínek pro čtenáře: nejdřív to, co rozhoduje o nároku (preventivní prohlídka, souběh
+ * s jiným příspěvkem), pak ostatní věcné podmínky, potom doklady a nakonec jak a do kdy žádat.
+ * Uvnitř skupiny zůstává pořadí z datasetu.
+ */
+export function tridaPodminky(text) {
+  const t = String(text ?? '').toLowerCase();
+  if (/preventivn\S* prohl[íi]d/.test(t)) return 0;
+  if (/nelze[^.;]{0,60}(kombinovat|zároveň|současně|spolu s)|nekombinuj|společn\S* (limit|strop)|celkem nejvýše|jen jeden z|krátí/.test(t)) return 1;
+  if (/diagnóz|potvrzení[^,;.]{0,40}lékař|doporučení|indikac|těhotensk\S* průkaz/.test(t)) return 2;
+  if (/^(žád|termín|lhůt|podání)|žádat lze|žádost(i)? (lze|je třeba|je nutné|se podává|o příspěvek)|lze podat|podat (do|nejpozději)|elektronick|ekomunikac|aplikac\S* moje vzp|datov\S* schránk/.test(t)) return 5;
+  if (/doklad|účten|paragon|faktur/.test(t)) return 4;
+  return 3;
+}
+
+export function seradPodminky(podminky) {
+  return (Array.isArray(podminky) ? podminky : [])
+    .map((text, i) => ({ text, i, t: tridaPodminky(text) }))
+    .sort((a, b) => a.t - b.t || a.i - b.i)
+    .map((x) => x.text);
+}
+
+/**
+ * Pořadí řádků uvnitř tématu: nejdřív příspěvky s částkou od nejvyšší, bez částky nakonec;
+ * při shodě zůstává pořadí z datasetu (pořadí na webu pojišťovny).
+ */
+export function seradRadky(radky) {
+  return (radky || [])
+    .map((r, i) => ({ r, i, c: isNum(r?.prispevek?.castka_kc) ? r.prispevek.castka_kc : -1 }))
+    .sort((a, b) => b.c - a.c || a.i - b.i)
+    .map((x) => x.r);
 }
 
 const jeRocni = (perioda) => perioda === 'rok';

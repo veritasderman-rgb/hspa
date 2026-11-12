@@ -77,6 +77,7 @@ export function validatePrispevky(D) {
       ok(STROP_TYPY.includes(s?.typ), `${st}.typ: ${STROP_TYPY.join(' | ')}`);
       ok(Number.isFinite(s?.hodnota) && s.hodnota > 0 && s.hodnota <= MAX_CASTKA, `${st}.hodnota: kladné číslo`);
       ok(PERIODY.includes(s?.perioda), `${st}.perioda: ${PERIODY.join(' | ')}`);
+      ok(s?.druh === undefined || s.druh === 'navyseni', `${st}.druh: jen 'navyseni' (limit navýšený převodem od jiných pojištěnců), nebo pole vynechat`);
       ok(isHttps(s?.url), `${st}.url: https`);
       ok(isStr(s?.citace) && s.citace.length <= MAX_CITACE, `${st}.citace: neprázdný string do ${MAX_CITACE} znaků`);
     }
@@ -113,7 +114,9 @@ export function validatePrispevky(D) {
       }
       if (p?.jistota === 'nejasne') warnings.push(`${pt}: jistota nejasne`);
     }
-    for (const id of stropIds) if (!pouziteStropy.has(id)) warnings.push(`${tag}.stropy[${id}]: žádný příspěvek se na strop neodkazuje`);
+    const navyseni = new Set((z.stropy || []).filter((x) => x?.druh === 'navyseni').map((x) => x.id));
+    for (const id of navyseni) ok(!pouziteStropy.has(id), `${tag}.stropy[${id}]: navýšení není strop, příspěvek se na něj nesmí odkazovat`);
+    for (const id of stropIds) if (!pouziteStropy.has(id) && !navyseni.has(id)) warnings.push(`${tag}.stropy[${id}]: žádný příspěvek se na strop neodkazuje`);
   }
   return { errors, warnings, checks };
 }
