@@ -209,6 +209,17 @@ test('soucetClena: společný strop v Kč, strop na počet, jednorázové zvlá�
   assert.equal(soucetClena(ZP_T, parseClen('Z9'), { kategorie: 'stomatologie' }).rocne, 1000, 'filtr tématu');
 });
 
+test('soucetClena: strop na počet nechává vybranému příspěvku jeho periodu', () => {
+  const zp = { ...ZP_T, stropy: [{ id: 'jedno', nazev: 'jen jedno', typ: 'pocet', hodnota: 1, perioda: 'jednorazove', url: 'https://example.cz', citace: '1' }],
+    prispevky: [P('rocni', 500, {}, { strop_id: 'jedno' })] };
+  assert.deepEqual([soucetClena(zp, parseClen('M40')).rocne, soucetClena(zp, parseClen('M40')).jednorazove], [500, 0], 'roční příspěvek sám zůstane roční');
+  zp.prispevky.push(P('medaile', 1500, {}, { strop_id: 'jedno', perioda: 'jednorazove' }));
+  assert.deepEqual([soucetClena(zp, parseClen('M40')).rocne, soucetClena(zp, parseClen('M40')).jednorazove], [0, 1500], 'vyhraje vyšší jednorázový');
+  const kapka = D.pojistovny.find((z) => z.kod === '205').prispevky.find((p) => p.id === 'darci-program-kapka');
+  assert.equal(kapka.strop_id, 'darci-oceneni-jedno-v-roce');
+  assert.equal(kapka.perioda, 'rok');
+});
+
 test('soucetDomacnosti: otec 42 a tři děti', () => {
   const s = soucetDomacnosti(ZP_T, parseDomacnost('M42,M5,Z9,M14'));
   assert.equal(s.rocne, 1600 + 3 * 1500);
