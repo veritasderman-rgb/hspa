@@ -4,7 +4,7 @@
   "area": "Výsledky",
   "domain": "Zdravotní stav",
   "subdomain": "Sexuální a reprodukční zdraví",
-  "definition": "Podíl dospělých mužů (18-75 let), kteří v posledních 12 měsících vykazují nejméně jednu sexuální dysfunkci spojenou s klinicky významným osobním stresem (definice ICD-11). Zahrnuje sníženou sexuální touhu, erektilní dysfunkci, předčasnou či opožděnou ejakulaci.",
+  "definition": "Podíl dospělých mužů (18-75 let), u nichž se někdy v životě po dobu alespoň několika měsíců objevila sexuální dysfunkce spojená s klinicky významným osobním stresem (diagnostikovatelná porucha podle MKN-11). Jde o celoživotní, nikoli 12měsíční prevalenci. Jmenovatel (všichni muži, nebo jen sexuálně aktivní) zdroj neuvádí.",
   "unit": "%",
   "direction": "lower_is_better",
   "data_source": {
@@ -21,27 +21,32 @@
     "fallback": {
       "type": "press_release",
       "url": "https://www.nudz.cz/media-pr/tiskove-zpravy/prvni-vysledky-pruzkumu-czechsex-frekvence-sexualnich-aktivit-cechu-klesa-seznamovani-se-vice-presouva-na-internet-vetsina-je-se-svym-sexualnim-zivotem-spokojena"
+    },
+    "verification": {
+      "date": "2026-11-12",
+      "source_url": "https://www.nudz.cz/media-pr/tiskove-zpravy/prvni-vysledky-pruzkumu-czechsex-frekvence-sexualnich-aktivit-cechu-klesa-seznamovani-se-vice-presouva-na-internet-vetsina-je-se-svym-sexualnim-zivotem-spokojena",
+      "quote": "Z dat vyplývá, že nějaká ze sexuálních potíží se v průběhu života po dobu alespoň několika měsíců objevila u 61.19 % žen a 55.01 % mužů. Ne všem ale způsobovala stres. Přítomnost dysfunkce spolu s klinicky významným stresem (tzn. diagnostikovatelná porucha podle nové klasifikace MKN 11) se objevila u 21.41 % žen a 16.06 % mužů.",
+      "note": "Ověřil jsem přímo v tiskové zprávě NUDZ: 16,06 % stojí ve zdroji, kontrakt 16,1 je zaokrouhlení. Shoduji se s předchozím agentem v tom, že jde o celoživotní prevalenci: celý odstavec je rámován větou „v průběhu života po dobu alespoň několika měsíců“ a 12měsíční čísla zdroj uvádí odděleně jen pro erekci (14 %) a orgasmus u žen (21,3 %). Karta tvrdí „posledních 12 měsíců“, název ≡ obsah tedy neplatí, proto definicni_nesoulad. Jmenovatel (všichni muži 18–75 vs. sexuálně aktivní) není uveden. Benchmark GeSiD 13,3 % je 12m u sexuálně aktivních v Německu, nesouměřitelný; signál „bad“ nemá oporu, má být neutral a benchmark null. Data předběžná, jediný bod 2024; recenzovaná publikace CZECHSEX s touto hodnotou se v PubMed nenašla. Doporučení: přeformulovat definici na celoživotní, odstranit benchmark."
     }
   },
   "benchmark_source": {
-    "type": "academic_survey",
-    "code": "GeSiD_2019_men_marked_distress",
-    "dataset": "German Health and Sexuality Survey (GeSiD), Briken et al. Dtsch Arztebl Int 2020",
-    "value": 13.3,
-    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7829447/"
+    "type": "none",
+    "note": "Bez srovnání. Německý GeSiD (Briken et al. 2020) uvádí 13,3 % mužů, ale jde o 12měsíční prevalenci u sexuálně aktivních v Německu, tedy jinou referenční dobu, populaci i zemi. Hodnoty nejsou souměřitelné, proto benchmark není uveden."
   },
   "signal_thresholds": {
-    "good": 2.0,
-    "warn": 5.0
+    "good": 2,
+    "warn": 5
   },
   "frequency": "decadal",
   "stewards": [
     "NUDZ (Národní ústav duševního zdraví)",
     "Centrum pro sexuální zdraví a intervence"
   ],
-  "method_notes": "CZECHSEX byl realizován v období listopad 2023 – březen 2024 (n=6 669, věk 18-75), GA ČR 21-31490S. Pro mezinárodní srovnání slouží GeSiD 2018-2019 s ICD-11 operacionalizací „sexual dysfunction with marked distress\" (13,3 % muži). Erektilní dysfunkce v posledních 12 měsících v ČR: 14 % (proti DE GeSiD 6,6 % — pozor na věkové škálování). Předčasná ejakulace (lifetime): 24,6 % v ČR. Hodnoty se zvyšují s věkem (erektilní dysfunkce: 6,6 % v 18-25 → 26,3 % v 66-75).",
-  "limitations": "Self-report metoda — limitovaná recall biasem a sociální desirabilitou (zejména u mužů, kteří v ČR systematicky méně reportují well-being témata). První ICD-11 reprezentativní data v ČR; nelze sestavit časovou řadu. Klinický stres je hraničně subjektivní kategorie — operacionalizace mezi CZECHSEX a GeSiD se v detailech liší.",
-  "patient_story": "Brno, ordinace praktického lékaře, preventivní prohlídka 38letého IT konzultanta. Pacient se sám nikdy nezeptá, lékař se sám nikdy neptá. Šestnáct celá jedno procento (16,1 %) českých mužů má podle CZECHSEX 2024 v posledních dvanácti měsících klinicky významnou sexuální dysfunkci s osobním stresem. V přepočtu na populaci ČR jde přes 600 tisíc mužů — víc než obyvatel celé Ostravy.\n\nErektilní dysfunkce zasahuje 14 % všech dospělých mužů a podíl strmě roste s věkem: z 6,6 % v kategorii 18-25 let na 26,3 % u sedmdesátníků. Předčasná ejakulace bývá hlášena ve 24 % životů, opožděná ejakulace ve 23 %, snížená sexuální touha ve 24 %. Mladší muži častěji uvádějí psychogenní složku, starší kombinaci somatické (cévní, neurologické, endokrinní) a vztahové.\n\nA jen 4,6 % mužů s problémem jde k lékaři. To je vzorec, který se v různých zemích vrací: muži vyhledávají odbornou péči až ve chvíli, kdy problém začne ohrožovat partnerství nebo plodnost. Sexuální medicína v Česku je přitom velkou částí kryta soukromými ambulancemi se samoplatebním modelem — což z dostupnosti dělá vrstvu, kde finanční bariéra reálně rozhoduje, kdo péči získá. Hrazená síť sexuologických ambulancí je koncentrovaná v Praze a Brně.\n\nNěmecký GeSiD ukazuje 13,3 % mužů s klinicky významnou dysfunkcí. Česko se s 16,1 % drží nad evropským průměrem — ne dramaticky, ale konzistentně. Polské, italské a francouzské průzkumy mají obdobné rozpětí. Klinické vodítko: erektilní dysfunkce u muže pod 40 let je často prvním signálem kardiovaskulárního rizika (dříve se manifestuje endoteliální dysfunkce v penilních artériích, než v koronárních). Většina českých praktiků se na ni neptá — tady je politická páka pro reformu primární péče.",
+  "method_notes": "CZECHSEX byl realizován v období listopad 2023 – březen 2024 (n=6 669, věk 18-75), GA ČR 21-31490S. Hodnota 16,06 % (v kontraktu zaokrouhleno na 16,1 %) pochází z tiskové zprávy NUDZ z 13. 5. 2024: dysfunkce s klinicky významným stresem se někdy v životě objevila u 16,06 % mužů (u 55,01 % mužů se nějaká sexuální potíž objevila alespoň na několik měsíců, ne vždy se stresem). Veřejně nejsou dostupné tabulky ani mikrodata, hodnota je přepsána ručně. Erektilní potíže v posledních 12 měsících uvádí zdroj u 14 % mužů, jde ale o jiný ukazatel než tento indikátor.",
+  "limitations": "Hodnota je celoživotní prevalence, nikoli výskyt za posledních 12 měsíců, a nelze ji přímo srovnávat s 12měsíčními údaji z jiných zemí. Zdroj neuvádí jmenovatele. Data jsou předběžná (tisková zpráva), jediný bod z roku 2024, časovou řadu nelze sestavit. Recenzovaná publikace s touto hodnotou zatím nebyla dohledána. Self-report metoda je ovlivněna recall biasem a sociální desirabilitou. Klinicky významný stres je částečně subjektivní kategorie.",
+  "patient_story": "Brno, ordinace praktického lékaře, preventivní prohlídka 38letého IT konzultanta. Pacient se sám nikdy nezeptá, lékař se sám nikdy neptá. Podle průzkumu CZECHSEX 2024 se u 16,1 % českých mužů někdy v životě objevila sexuální dysfunkce spojená s klinicky významným stresem, tedy potíž, která by podle nové klasifikace MKN-11 byla diagnostikovatelnou poruchou. Nějaká sexuální potíž trvající alespoň několik měsíců se objevila u 55 % mužů, ale ne všem způsobovala stres.\n\nErektilní potíže v posledních 12 měsících uvádí 14 % mužů. Klinické vodítko: erektilní dysfunkce u mladšího muže bývá prvním signálem cévního rizika, protože se endoteliální dysfunkce projeví dříve v cévách penisu než ve věnčitých tepnách. Přesto se na ni praktičtí lékaři často neptají.\n\nSexuální medicína v Česku je zčásti kryta soukromými ambulancemi se samoplatebním modelem, takže o dostupnosti péče může rozhodovat cena. Zahraniční srovnání zde záměrně neuvádíme: německý průzkum GeSiD měří jinou referenční dobu i jinou skupinu, a čísla proto nejsou souměřitelná.",
   "framework": "monitoring",
-  "dimension": "zdravi"
+  "dimension": "zdravi",
+  "verification_status": "verified",
+  "verified_at": "2026-11-12"
 }

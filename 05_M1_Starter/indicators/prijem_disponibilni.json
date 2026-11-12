@@ -12,22 +12,34 @@
   "data_source": {
     "primary": {
       "type": "csu_datastat",
-      "endpoint": "https://data.csu.gov.cz/api/dotaz/v1",
-      "dataset": "REG-DISP-DUCHOD",
+      "endpoint": "https://data.csu.gov.cz/api/dotaz/v1/data/sady/WNUC04",
+      "dataset": "ČSÚ DataStat, sada WNUC04 Regionální účty, ukazatel 10033J01 Čistý disponibilní důchod domácností na 1 obyvatele (Kč, běžné ceny)",
       "dimensions": {
-        "uzemi": "KRAJ",
+        "uzemi": "CZ (ČR celkem; kraje jako NUTS 3 CZ010 až CZ080)",
         "ukazatel": "cisty_disponibilni_duchod_na_obyvatele"
       },
-      "note": "Endpoint je dotazovací POST API ČSÚ (JSON dotaz v těle požadavku) — GET na tuto URL vrací HTTP 404, což je očekávané chování, nikoli mrtvý odkaz (ověřeno 1. 9. 2026)."
+      "note": "Sada se čte přímým GET požadavkem na uvedenou adresu (JSON-stat 2.0). Původně uváděný POST dotaz na dataset REG-DISP-DUCHOD je zastaralý. Hodnota pro ČR za rok 2024 je 399 747 Kč na obyvatele, řada 2015–2024 je v běžných cenách."
     },
     "fallback": {
       "type": "csv",
       "url": "https://csu.gov.cz/regionalni-ucty"
+    },
+    "verification": {
+      "date": "2026-11-12",
+      "source_url": "https://data.csu.gov.cz/api/dotaz/v1/data/sady/WNUC04",
+      "quote": "ČSÚ DataStat WNUC04 'Regionální účty', IndicatorType 10033J01 'Čistý disponibilní důchod domácností na 1 obyvatele (Kč, běžné ceny)', Uz012=CZ: 2019 277786; 2020 289698; 2021 316625; 2022 351445; 2023 382816; 2024 399747",
+      "previous": {
+        "value": 295000,
+        "year": 2023
+      },
+      "note": "Nezávisle jsem stáhl sadu WNUC04 a potvrzuji hodnoty předchozího agenta do posledního Kč (2023 382 816, 2024 399 747; trend 2015–2024 sedí). Definice (S.14 čistý disponibilní důchod na obyvatele, regionální účty, běžné ceny) a jednotka Kč/obyv./rok odpovídají kartě; populace = obyvatelstvo ČR/kraje. Seed 295 000 Kč za 2023 je o ~23 % nižší a celá řada 2019–2023 nemá oporu ve zdroji. Pole source.name/url v kontraktu (EU-SILC) je nesprávné, karta správně uvádí regionální účty; endpoint v kartě (POST, dataset REG-DISP-DUCHOD) je zastaralý, funguje GET na WNUC04. Řada homogenní, poslední uzavřený rok 2024 (předběžný, může se revidovat). Benchmark neexistuje. Plausibilita: růst v běžných cenách odpovídá inflaci 2022–2023.",
+      "live_feasible": "csu_api",
+      "mapping_spec": "GET https://data.csu.gov.cz/api/dotaz/v1/data/sady/WNUC04 (JSON-stat 2.0, celá sada, GET funguje). id=[IndicatorType, Uz012, CasR], size=[8,23,30]. Filtr IndicatorType='10033J01', Uz012='CZ' (ČR) nebo NUTS3 CZ010..CZ080 pro kraje; CasR 1995–2024. Index = (iInd*23+iGeo)*30+iRok. Relativní varianta ČR=100: 10033J02."
     }
   },
   "benchmark_source": {
     "type": "none",
-    "note": "Kontextový determinant — nemá normativní benchmark; sleduje se mezikrajový rozptyl a trend."
+    "note": "Kontextový determinant bez benchmarku (karta); null."
   },
   "signal_thresholds": {
     "good": 2,
@@ -37,6 +49,9 @@
   "stewards": [
     "ČSÚ"
   ],
-  "method_notes": "Zdroj: ČSÚ, regionální účty — čistý disponibilní důchod domácností (sektor S.14) přepočtený na obyvatele. Údaj na úrovni NUTS-3 (kraje) je robustní, protože vychází z regionálních účtů, nikoli z výběrového šetření EU-SILC. Hodnoty jsou v běžných cenách; pro mezikrajové srovnání životní úrovně je vhodné zohlednit regionální cenovou hladinu (Praha je nadhodnocená vyššími náklady na bydlení). Signál je nastaven jako neutral — indikátor je kontextový determinant, nikoli cíl kvality systému.",
-  "determinants": "Mezikrajové rozdíly v disponibilním důchodu odrážejí strukturu zaměstnanosti (podíl průmyslu vs. služeb a veřejného sektoru), míru nezaměstnanosti, vzdělanostní strukturu a věkové složení populace. Strukturálně postižené regiony (Ústecký, Karlovarský, Moravskoslezský) dlouhodobě vykazují nižší příjmy spojené s útlumem těžby a těžkého průmyslu; tyto kraje současně vykazují nejvyšší preventabilní úmrtnost a nejnižší naději dožití — ilustrace sociálního gradientu zdraví podle Dahlgrenova–Whiteheadova modelu."
+  "method_notes": "Zdroj: ČSÚ, regionální účty (sada WNUC04), čistý disponibilní důchod domácností (sektor S.14) přepočtený na obyvatele. Hodnota pro ČR za rok 2024 je 399 747 Kč na obyvatele, o 4,4 % více než v roce 2023 (382 816 Kč). Údaj na úrovni NUTS 3 (kraje) vychází z regionálních účtů, nikoli z výběrového šetření EU-SILC. Hodnoty jsou v běžných cenách, takže růst zahrnuje i inflaci; pro mezikrajové srovnání životní úrovně je vhodné zohlednit regionální cenovou hladinu (Praha je nadhodnocená vyššími náklady na bydlení). Signál je nastaven jako neutral, protože indikátor je kontextový determinant, nikoli cíl kvality systému, a benchmark pro něj neexistuje.",
+  "determinants": "Mezikrajové rozdíly v disponibilním důchodu odrážejí strukturu zaměstnanosti (podíl průmyslu vs. služeb a veřejného sektoru), míru nezaměstnanosti, vzdělanostní strukturu a věkové složení populace. Strukturálně postižené regiony (Ústecký, Karlovarský, Moravskoslezský) dlouhodobě vykazují nižší příjmy spojené s útlumem těžby a těžkého průmyslu; tyto kraje současně vykazují nejvyšší preventabilní úmrtnost a nejnižší naději dožití — ilustrace sociálního gradientu zdraví podle Dahlgrenova–Whiteheadova modelu.",
+  "verification_status": "verified",
+  "verified_at": "2026-11-12",
+  "limitations": "Poslední rok 2024 je předběžný a může se při další revizi regionálních účtů změnit. Hodnoty jsou v běžných cenách, proto z nich nelze přímo číst růst reálné kupní síly. Údaj neříká nic o rozdělení příjmů uvnitř území, jde o průměr na obyvatele."
 }

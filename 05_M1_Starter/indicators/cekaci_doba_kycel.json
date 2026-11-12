@@ -15,6 +15,12 @@
     "fallback": {
       "type": "oecd",
       "code": "WAITING_HIP"
+    },
+    "verification": {
+      "date": "2026-11-12",
+      "result": "nedohledatelne",
+      "source_url": "https://sdmx.oecd.org/public/rest/data/OECD.ELS.HD,DSD_HEALTH_PROC@DF_WAITING,/all?startPeriod=2015&format=csvfilewithlabels",
+      "note": "S předchozím agentem souhlasím. Seed 118 dní (2024) ani řadu 2020–2024 jsem v primárním zdroji nenašel. Dataflow OECD Waiting times jsem stáhl přímo: Česko v něm není, takže benchmark OECD 85 / EU 95 ze stejného zdroje a definice odvodit nejde. Datový souhrn ÚZIS NRKN NR-19-03 obsahuje jen počty TEP, čekací doby ne. Údaj 'ÚZIS 65 týdnů za 2024', který uvádí předchozí agent, jsem v primárním zdroji neověřil; ve vyhledávání se objevuje jen limit 52 týdnů podle nařízení vlády a nemocniční seznamy (měsíce až roky). Zdroj 'ÚZIS NRH 2024' v patient_story neexistuje. Definice karty (od indikace k výkonu podle VZP/SZP) nemá veřejný podklad. Doporučuji označit jako ilustrativní, dokud nevyjde registr čekacích dob ÚZIS."
     }
   },
   "benchmark_source": {
@@ -36,5 +42,6 @@
   "limitations": "Definice „indikace\" se liší dle poskytovatele. Přeshraniční péče a soukromé výkony nejsou zahrnuty.",
   "patient_story": "Brno, ortopedie, 67letá pacientka přichází s diagnózou pokročilé koxartrózy, doporučení k totální endoprotéze kyčelního kloubu (TEP). „Operační termín za 118 dní.\" Skoro 4 měsíce čekání. Pacientka mezitím užívá analgetika, snižuje pohybovou aktivitu, sociálně se uzavírá. To je v Česku průměrná čekací doba — výrazně nad OECD.\n\nPrůměrná čekací doba na TEP kyčle v ČR je 118 dní (ÚZIS NRH, 2024). OECD průměr 85 dní, EU 95 dní — Česko signal bad. Trend zhoršující se (2015: 95 dní, 2024: 118 dní) — kombinace stárnoucí populace (rostoucí poptávka), pomalého rozšiřování operační kapacity, post-pandemického návratu odložených zákroků. Mezi nemocnicemi rozptyl 60–180 dní.\n\nStrukturálně český systém má ortopedickou síť dobře pokrytou, ale kapacita TEP je limitovaná (počet operačních sálů, anesteziologů, ortopedů, lůžek). Čekací doba je z velké části fixní problémem strana nabídky, ne diagnostiky. Privátní samoplatební zákroky v Brně, Praze a Liberci jsou dostupné do 14 dnů za 150–250 tisíc Kč — opět dvourychlostní péče.\n\nČekání na TEP kyčle není jen otázkou komfortu — má klinické a sociální důsledky (sarkopenie, deprese, zhoršení mobility, kardio-respirační dekondice). Politické páky: navýšení kapacity (orthopedický „elective surgery boost\" program — UK model 2024); transparentní reporting čekacích dob per nemocnice; investice do robotické chirurgie (zkrácení hospitalizace o 1–2 dny); rozšíření denní jednodenní chirurgie pro vhodné pacienty; národní cíl „TEP kyčle do 90 dnů u 90 % pacientů\". Indikátor v HSPA dashboardu sleduje čekání na TEP jako klíčový ukazatel přístupnosti elektivní chirurgie.",
   "framework": "hspa",
-  "dimension": "dostupnost"
+  "dimension": "dostupnost",
+  "verification_status": "illustrative"
 }

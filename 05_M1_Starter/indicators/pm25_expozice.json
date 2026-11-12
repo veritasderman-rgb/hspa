@@ -4,7 +4,7 @@
   "area": "Výsledky",
   "domain": "Zdravotní rizika",
   "subdomain": "Rizika životního prostředí",
-  "definition": "Roční průměrná koncentrace jemných prachových částic (PM2.5) v ambientním ovzduší, populačně vážená.",
+  "definition": "Roční průměrná koncentrace jemných prachových částic (PM2.5) v ambientním ovzduší, populačně vážená. Jde o mapové odhady ETC HE/EEA na mřížce 1 km, váhou je počet obyvatel v dané buňce.",
   "unit": "µg/m³",
   "direction": "lower_is_better",
   "data_source": {
@@ -16,12 +16,21 @@
       "type": "chmu_csv",
       "url": "https://www.chmi.cz/o-chmu/publikace-a-vzdelavani/zpravy-a-datove-prehledy/rocenky-kvality-ovzdusi",
       "note": "ČHMÚ — Ročenky kvality ovzduší (grafická ročenka „Znečištění ovzduší na území České republiky“ + datová ročenka „Souhrnný tabelární přehled“ z ISKO). Původní odkaz na starou stránku úseku ochrany čistoty ovzduší (files/portal/docs/uoco/oco_eng.html) po redesignu webu ČHMÚ vracel 24. 8. 2026 HTTP 404; náhrada ověřena 1. 9. 2026 (HTTP 200)."
+    },
+    "verification": {
+      "date": "2026-11-12",
+      "source_url": "https://www.eionet.europa.eu/etcs/etc-he/products/etc-he-products/etc-he-reports/etc-he-report-2025-5-air-quality-maps-of-eea-member-and-cooperating-countries-for-2023-pm10-pm2-5-o3-no2-nox-and-bap-spatial-estimates-and-their-uncertainties/@@download/file/etc-he-report-2025-5-horalek.pdf",
+      "quote": "ETC HE Report 2025/5, tabulka PM2.5 annual average 2023 (pdftotext -layout ř. 987): \"Czechia CZ 10 828 0.0 31.4 63.2 5.4 10.9 14.3 -3.3\" (populačně vážená koncentrace 2023 = 10.9; průměr 2018–2022 = 14.3). Text: \"The population-weighted concentration of the PM2.5 annual means has been estimated for 2023 at 10.4 µg/m3 for European population (excluding Türkiye) and 10.3 µg/m3 for the EU-27\". ETC HE Report 2024/4 (rok 2022), ř. 956: \"Czechia CZ 10 517 11.0 74.8 12.7 1.6 13.1 15.1 -2.0\"; EU-27 2022 = 11.5.",
+      "previous": {
+        "value": 14.1,
+        "year": 2024
+      },
+      "note": "Definice karty (populačně vážený roční průměr PM2.5) přesně odpovídá veličině ETC HE/EEA; název, jednotka i populace (celá populace ČR, vážení obyvateli na 1km mřížce) sedí. Sám jsem stáhl oba reporty a ověřil řádky Czechia: 2023 = 10.9, 2022 = 13.1, EU-27 2023 = 10.3 (2022 = 11.5). Seed (2023 14.5, 2024 14.1) zdroji neodpovídá, 14.5 se blíží pětiletému průměru 14.3, takže jde nejspíš o záměnu sloupců; hodnota pro 2024 na úrovni státu zatím publikována není, poslední uzavřený rok je 2023. Homogenita: mapovací metodika se mezi ročníky mírně upravuje a hodnoty jsou meziročně ovlivněné meteorologií, souměřitelné jsou hodnoty ze stejné řady reportů. Benchmark EU je ze stejné tabulky, OECD benchmark ze seedu (11.2) nemá oporu. Plauzibilita: 10.9 vs EU 10.3 posune signál z bad spíše na warn; text patient_story s 14.1 je nutné přepsat. S předchozím agentem se shoduji ve verdiktu, hodnotě, roce i benchmarku; doplňuji EU-27 2022 = 11.5 pro kontext."
     }
   },
   "benchmark_source": {
-    "type": "oecd",
-    "code": "PM25_EXPOSURE",
-    "dataset": "HEALTH_STAT"
+    "type": "eu",
+    "note": "ETC HE Report 2025/5, stejná tabulka, řádek EU-27 (2023: 10,3 µg/m³; pro rok 2022 je v reportu 2024/4 hodnota 11,5). OECD agregát v této metodice neexistuje, proto chybí."
   },
   "signal_thresholds": {
     "good": 2,
@@ -32,9 +41,11 @@
     "EEA",
     "ČHMÚ"
   ],
-  "method_notes": "Populačně vážená (population-weighted) koncentrace. WHO doporučuje < 5 µg/m³.",
-  "limitations": "Národní průměr maskuje regionální výkyvy (Moravskoslezský kraj výrazně nad průměrem).",
-  "patient_story": "Ústí nad Labem, listopad, prachové ráno. Měřící stanice ČHMÚ hlásí PM2.5 koncentraci 38 µg/m³ — třikrát víc, než doporučuje WHO (5 µg/m³ roční průměr). V chladnějších obdobích roku jsou hodnoty v Moravskoslezském, Ústeckém a Olomouckém kraji běžně nad 25 µg/m³. Pacienti s CHOPN, astmatem, KV onemocněním reportují zhoršení symptomů.\n\nRoční expozice PM2.5 v ČR (populačně vážený průměr) je 14,1 µg/m³ (ČHMÚ, 2024). OECD průměr 11,2, EU 12,1 — Česko signal bad. WHO Air Quality Guideline 2021 doporučuje ≤ 5 µg/m³ (3× pod českým průměrem). Pomalý trend pokles (2010: 19,5; 2024: 14,1), tempo nedostatečné. Mezi kraji extrémní rozptyl: Moravskoslezský 22, Ústecký 18, Karlovarský 11, Jihočeský 9, Praha 16.\n\nStrukturálně český problém s PM2.5 kombinuje vytápění tuhými palivy v lokálních topeništích (cca 600 000 domácností), průmyslové emise (ostravsko-karvinská aglomerace, severní Čechy), dopravní emise (Praha, Brno), vzdušnou turbulenci ze sousedního Polska. Kotlíkové dotace (od 2015) výrazně pomohly s lokálními topeništi, ale problém přetrvává v sociálně slabých regionech.\n\nZnečištění ovzduší je podle SZÚ a EEA 2. nejvýznamnější environmentální rizikový faktor předčasné úmrtí v Evropě. V ČR atribuovaných cca 7 500 úmrtí ročně. Politické páky: pokračování kotlíkových dotací a kontrola lokálních topenišť; zóny nízkých emisí v krajských městech; veřejná hromadná doprava; energetická efektivita budov (Green Deal); spolupráce s Polskem o přeshraniční emise. Indikátor v HSPA dashboardu sleduje PM2.5 jako klíčový environmentální determinant zdraví.",
+  "method_notes": "Populačně vážená (population-weighted) koncentrace podle reportů ETC HE pro EEA. Poslední uzavřený rok je 2023 (10,9 µg/m³), údaj za 2024 na úrovni státu zatím není zveřejněn. Průměr let 2018 až 2022 byl 14,3 µg/m³. WHO doporučuje < 5 µg/m³.",
+  "limitations": "Národní průměr maskuje regionální výkyvy (Moravskoslezský kraj bývá výrazně nad průměrem). Hodnoty jsou odhady z mapovacího modelu, jehož metodika se mezi ročníky reportů mírně upravuje, a jsou meziročně ovlivněné počasím. Souměřitelné jsou proto hodnoty ze stejné řady reportů. Pokles z 13,1 (2022) na 10,9 µg/m³ (2023) nelze bez dalších let číst jako trvalý trend.",
+  "patient_story": "Ústí nad Labem, listopad, prachové ráno. Měřicí stanice ČHMÚ hlásí vysokou koncentraci jemného prachu a v chladnějších obdobích roku bývají hodnoty v Moravskoslezském, Ústeckém a Olomouckém kraji zvýšené. Pacienti s CHOPN, astmatem nebo kardiovaskulárním onemocněním hlásí zhoršení potíží.\n\nRoční expozice PM2.5 v ČR (populačně vážený průměr) byla v roce 2023 podle ETC HE 10,9 µg/m³. Průměr EU-27 byl 10,3 µg/m³, Česko je tedy mírně nad ním (signál bad). O rok dříve, v roce 2022, to bylo 13,1 µg/m³ a průměr let 2018 až 2022 činil 14,3 µg/m³. Pokles mezi lety 2022 a 2023 je zčásti dán počasím, proto ho nelze číst jako jistý trend. WHO Air Quality Guideline 2021 doporučuje roční průměr do 5 µg/m³, takže česká hodnota je i tak víc než dvojnásobná.\n\nČeský problém s PM2.5 se skládá z vytápění tuhými palivy v lokálních topeništích, průmyslových emisí (ostravsko-karvinská aglomerace, severní Čechy), dopravy (Praha, Brno) a přeshraničního přenosu ze sousedního Polska. Kotlíkové dotace (od 2015) pomohly s lokálními topeništi, ale problém přetrvává zejména v sociálně slabých regionech.\n\nZnečištění ovzduší patří mezi významné environmentální rizikové faktory předčasných úmrtí v Evropě. Politické páky: pokračování kotlíkových dotací a kontrola lokálních topenišť, zóny nízkých emisí v krajských městech, veřejná hromadná doprava, energetická efektivita budov a spolupráce s Polskem o přeshraničních emisích. Indikátor v HSPA dashboardu sleduje PM2.5 jako klíčový environmentální determinant zdraví.",
   "framework": "hspa",
-  "dimension": "zdravi"
+  "dimension": "zdravi",
+  "verification_status": "verified",
+  "verified_at": "2026-11-12"
 }

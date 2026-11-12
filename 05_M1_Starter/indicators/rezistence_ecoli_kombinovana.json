@@ -15,6 +15,14 @@
     "fallback": {
       "type": "szu",
       "note": "SZÚ NRL pro antibiotika — národní EARS-Net uzel."
+    },
+    "verification": {
+      "date": "2026-11-12",
+      "source_url": "https://www.ecdc.europa.eu/sites/default/files/documents/antimicrobial-resistance-annual-epidemiological-report-country-summaries-2024-data.pdf",
+      "quote": "Escherichia coli | Combined resistance to third-generation cephalosporins, fluoroquinolones, and aminoglycosides | 2 995 5.4 | 2 934 5.6 | 3 564 4.9 | 3 889 4.9 | 4 268 4.8 | 5.5 (1.2–21.7) (ECDC EARS-Net 2024, Czechia)",
+      "note": "1) Metodika: EARS-Net, invazivní izoláty E. coli, rezistence současně na 3GC, fluorochinolony a aminoglykosidy; vylučují se izoláty s neúplným AST. 2) Název odpovídá obsahu (ECDC label „Combined resistance to third-generation cephalosporins, fluoroquinolones, and aminoglycosides“). 3) Jednotka % sedí. 4) Jmenovatel: testované izoláty s úplným AST (2024: 4268). 5) Homogenita: atlas má řadu 2001–2024; v roce 2019→2020 je skok 6,6 -> 5,4 a počty testovaných izolátů se mění (3554 -> 2995). Karta trend ukazuje jen 2020–2024, což je rozumné; pro dlouhou řadu 2015–2019 by bylo potřeba ověřit, zda se nezměnilo vykazování (v tomto běhu ověřeno nebylo). 6) Poslední uzavřený rok 2024. 7) Benchmark EU/EEA 5,5 je ze stejného zdroje a definice; srovnání je ČR prostý podíl vs. populačně vážený průměr národních podílů (karta to uvádí). Horní mez CI české hodnoty (cca 5,4 %) je u unijního průměru, rozdíl nečíst jako prokázaný. 8) Plauzibilita: 4,8 % odpovídá řádu evropských hodnot. 9) Reprodukovatelné: atlas i summary PDF (Czechia 2024: 204 z 4268 izolátů).",
+      "live_feasible": "ecdc_atlas",
+      "mapping_spec": "GET https://atlas.ecdc.europa.eu/public/AtlasService/rest/GetMeasureResultsForTimeUnitAndGeoRegion?measureId=1146444&timeUnit=Y&geoCode=CZ. Hodnota = YValue pro TimeCode=2024 zaokrouhlená na 1 desetinu (4,78 -> 4,8), N = 4268. Trend 2020–2024 podle karty, atlas má řadu od 2001. Measure ESCCOL.COMBINED.R.PROPORTION. Shodné s mapping ecdc_atlas_codes.json."
     }
   },
   "benchmark_source": {
@@ -36,6 +44,6 @@
   "limitations": "Signál „good“ je těsný: 95% interval spolehlivosti kolem 4,8 % (204/4 268 izolátů) je zhruba 4,1–5,4 %, jeho horní mez tedy sahá prakticky k unijnímu průměru 5,5 %. Rozdíl proti EU/EEA nečti jako prokázaný náskok. ECDC k analýze kombinované rezistence uvádí: „The analysis of combined resistance excludes isolates with incomplete AST information for the antimicrobial groups covered.“ (AER 2024, kapitola Methods). Jmenovatel kombinované rezistence je proto jiný než jmenovatel jednotlivých skupin antibiotik a hodnoty mezi indikátory nelze poměřovat bez této výhrady. Pouze invazivní izoláty (hemokultura, mozkomíšní mok) — nezahrnuje komunitní ani ambulantní vzorky. Metodická poznámka ke srovnání: česká hodnota je prostý podíl rezistentních izolátů, zatímco unijní referenční hodnota je populačně vážený průměr národních procent (tak ji ECDC v AER publikuje a tak se v Table 9b staví vedle hodnot jednotlivých zemí). Rozdíl ČR − EU/EEA proto čti jako pozici proti evropskému průměru, ne jako rozdíl dvou stejně konstruovaných čísel.",
   "framework": "hspa",
   "dimension": "bezpecnost",
-  "verification_status": "preliminary",
-  "verified_at": "2026-09-08"
+  "verification_status": "verified",
+  "verified_at": "2026-11-12"
 }

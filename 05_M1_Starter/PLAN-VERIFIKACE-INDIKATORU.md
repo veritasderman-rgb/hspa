@@ -67,6 +67,37 @@ po Dávce G (Eurostat mortalita/zubní/potraty + OECD kyčel): origin seed 99 | 
 > Dávky G (illustrative 87 → 82, verified 68 → 73) navazují na aktuální stav, ne
 > přímo na řádek Dávky F.
 
+**Velké ověření 2026-11-12 (252 indikátorů, 109 dosud neověřených prošlo agenty Haiku → Sonnet → Opus):**
+
+```
+po ověření 2026-11-12: origin seed 159 | live 93  ·  illustrative 16 | preliminary 11 | verified 225
+```
+
+- ✅ **Potvrzeno beze změny hodnoty (58):** `alkohol_adolescenti`, `konopi_adolescenti`, `problematicke_socialni_site_adolescenti`, `hazardni_hrani_adolescenti`, `ecigarety_adolescenti`, `prevalence_koureni_adolescenti`, `online_seznameni_pary`, `sex_dysfunkce_muzi`, `sex_dysfunkce_zeny`, `sex_nasili_zeny`, `sex_unmet_need_pece`, `podil_access_antibiotik`, `laparoskopicka_apendektomie_podil`, `omezeni_zdravim_prijmovy_gap`, `porodni_asistentky_per_100k`, `mortalita_chopn`, `mortalita_pneumonie`, `mri_vysetreni_per_1000`, `predcasna_umrti_pm25`, `zdravotni_info_online`, `lekari_vzdelani_v_zahranici`, `podil_peritonealni_dialyzy`, `docasna_pracovni_neschopnost_pct`, `transplantace_per_milion`, `vakcinace_chripka_diabetes`, `kyberneticke_incidenty_zdravotnictvi`, `screening_prostata`, `tbc_uspesnost_lecby`, `spotreba_hypolipidemik`, `nevydana_baleni_leku_pct`, `zdravotni_gramotnost_omezena`, `nadmerna_umrtnost_schizofrenie`, `rehospitalizace_schizofrenie_30d`, `demence_prevalence_lecena`, `darcovstvi_krve_plazma_per_1000`, `podfinancovani_oblastni_interna_cm`, `asistovana_reprodukce_cykly_mil`, `kojeni_pri_propusteni`, `koureni_v_tehotenstvi`, `fyzioterapeuti_per_100k`, `kapavka_incidence`, `preziti_1rok_po_upv_2d_pct`, `syfilis_incidence`, `ldl_cholesterol_dospeli`, `hospitalizace_pokus_o_sebevrazdu`, `pacienti_osetreni_zzs`, `invalidni_duchody_dusevni`, `centralizace_velmi_predcasnych_porodu`, `absolventi_osetrovatelstvi_per_100k`, `nadumrtnost`, `objednani_k_lekari_online`, `odmenovani_lekaru_nasobek_mzdy`, `odmenovani_sester_nasobek_mzdy`, `rezistence_acinetobacter_kombinovana`, `rezistence_ecoli_kombinovana`, `rezistence_klebsiella_kombinovana`, `rezistence_pseudomonas_kombinovana`, `usmrceni_dopravni_nehody_100k`. U pěti z nich (`zdravotni_info_online`, `sex_dysfunkce_muzi`, `sex_dysfunkce_zeny`, `sex_nasili_zeny`, `kapavka_incidence`) hodnota seděla, ale definice nebo benchmark v kartě ne; opraven text, nesouměřitelný benchmark odstraněn.
+- ✅ **Hodnota opravena podle primárního zdroje, ověřeno (24):** `substitucni_lecba_pokryti` (21.4 / 2024), `legioneloza_incidence` (5.9 / 2025), `farmaceuti_per_100k` (76 / 2024), `prijem_disponibilni` (399747 / 2024), `pm25_expozice` (10.9 / 2023), `katastroficke_vydaje_zdravi` (5.7 / 2023), `spotreba_antibiotik_veterina` (42.7 / 2024), `prevalence_diabetu` (8.8 / 2019), `pertuse_incidence` (33.9 / 2025), `klistova_encefalitida` (6.2 / 2024), `medikacni_pochybeni_hlasena` (0.46 / 2025), `incidence_kolorektalni` (68.8 / 2024), `amputace_dk_diabetici` (16.4 / 2023), `nevyuzite_osetrovaci_dny_ip` (804501 / 2024), `pci_koronarni_intervence_100k` (197.85 / 2023), `nahrada_kolenniho_kloubu_100k` (229.1 / 2025), `predcasne_porody_pct` (6.6 / 2024), `epiziotomie_pct` (20.98 / 2024), `deti_ambulantni_psychiatrie` (66954 / 2024), `hospitalizace_deti_psychiatrie_akutni` (5058 / 2024), `vakcinace_mmr_deti` (84.6 / 2023), `kazivost_chrupu_12let` (2.96 / 2003), `pacienti_domaci_pece_per_1000` (18.16 / 2025), `vydaje_sprava_systemu_pct` (1.85 / 2024).
+- 🟡 **Hodnota opravena, ale jen „předběžné“ (8) — zdroj doložen, zůstává výhrada (nejistý jmenovatel, neuzavřený rok, nevysvětlený skok):** `umrtnost_predavkovani_drogy` (7.5 / 2024), `poraneni_hraze_3_4_stupen` (2.17 / 2025), `centra_dusevniho_zdravi_per_100k` (0.36 / 2025), `hospicova_pece_luzka` (5.25 / 2025), `mobilni_paliativni_tymy_per_milion` (6.5 / 2024), `screening_plicni` (5.1 / 2025), `dojezd_zzs` (90.23 / 2025), `pedopsychiatri_per_100k_deti` (5.9 / 2022).
+- ⛔ **Neověřeno (19) — důvod je v kartě v `data_source.verification`:**
+  - `benzodiazepiny_seniori_65plus` — zdroj měří něco jiného, než tvrdí karta → illustrative
+  - `preziti_ohca_30d` — hodnota není v žádném veřejném primárním zdroji → illustrative
+  - `nadeje_doziti_vzdelani_gap_muzi` — zdroj měří něco jiného, než tvrdí karta → illustrative
+  - `ehealth_adoption` — zdroj měří něco jiného, než tvrdí karta → illustrative
+  - `vydaje_dusevni_zdravi_pct` — hodnota není v žádném veřejném primárním zdroji → illustrative
+  - `bezpecnost_padu_nemocnice` — hodnota není v žádném veřejném primárním zdroji → illustrative
+  - `dekubity_hospitalizace` — hodnota není v žádném veřejném primárním zdroji → illustrative
+  - `spokojenost_informovani` — hodnota není v žádném veřejném primárním zdroji → illustrative
+  - `multimorbidita_65plus` — hodnota není v žádném veřejném primárním zdroji → illustrative
+  - `cekaci_doba_kycel` — hodnota není v žádném veřejném primárním zdroji → illustrative
+  - `lpod_share_critical` — zdroj měří něco jiného, než tvrdí karta → illustrative
+  - `kontrola_hypertenze` — zdroj měří něco jiného, než tvrdí karta → illustrative
+  - `osetrovaci_dny_na_uvazek_sestry` — zdroj měří něco jiného, než tvrdí karta → preliminary
+  - `podil_senioru_na_internich_hospitalizacich` — hodnota není v žádném veřejném primárním zdroji → preliminary
+  - `pldd_podil_65plus` — hodnota není v žádném veřejném primárním zdroji → illustrative
+  - `cekaci_doby_specialist` — hodnota není v žádném veřejném primárním zdroji → illustrative
+  - `readmise_30d_ami` — hodnota není v žádném veřejném primárním zdroji → illustrative
+  - `umrti_doma_nebo_hospici_pct` — zdroj měří něco jiného, než tvrdí karta → illustrative
+  - `trombolyza_ischemicka_cmp` — zdroj měří něco jiného, než tvrdí karta → preliminary
+- 🔌 **Kandidáti na živé napojení (hodnota ověřena ručně, zdroj má strojové rozhraní; `mapping_spec` je v nálezech ověření):** ecdc_atlas (2): `legioneloza_incidence`, `klistova_encefalitida`; eurostat (11): `laparoskopicka_apendektomie_podil`, `omezeni_zdravim_prijmovy_gap`, `porodni_asistentky_per_100k`, `mortalita_chopn`, `mortalita_pneumonie`, `mri_vysetreni_per_1000`, `predcasna_umrti_pm25`, `zdravotni_info_online`, `prevalence_diabetu`, `pci_koronarni_intervence_100k`, `fyzioterapeuti_per_100k`; oecd_sdmx2 (5): `farmaceuti_per_100k`, `lekari_vzdelani_v_zahranici`, `spotreba_hypolipidemik`, `nadmerna_umrtnost_schizofrenie`, `amputace_dk_diabetici`; csu_api (2): `prijem_disponibilni`, `docasna_pracovni_neschopnost_pct`; who_api (1): `tbc_uspesnost_lecby`; sukl_csv (2): `lpod_share_critical`, `nevydana_baleni_leku_pct`; uzis_csv (21): `medikacni_pochybeni_hlasena`, `poraneni_hraze_3_4_stupen`, `rehospitalizace_schizofrenie_30d`, `demence_prevalence_lecena`, `incidence_kolorektalni`, `nevyuzite_osetrovaci_dny_ip`, `nahrada_kolenniho_kloubu_100k`, `kojeni_pri_propusteni`, `screening_plicni`, `epiziotomie_pct`, `dojezd_zzs`, `deti_ambulantni_psychiatrie`, `hospitalizace_deti_psychiatrie_akutni`, `kapavka_incidence`, `syfilis_incidence`, `ldl_cholesterol_dospeli`, `hospitalizace_pokus_o_sebevrazdu`, `pacienti_osetreni_zzs`, `umrti_doma_nebo_hospici_pct`, `centralizace_velmi_predcasnych_porodu`, `pacienti_domaci_pece_per_1000`.
+
 **Dávky D–E (2026-06-10, session „tender-edison"):**
 - ✅ **Dávka D — OECD SDMX 2.0 (+5 verified, 1 origin fix):** `pyll_potencialne_ztracene_roky`
   (4564,4 / <75), `pracovnici_ltc_per_100_65plus` (2,1; OECD ⌀ 5,7), `vydaje_prevence_pct`

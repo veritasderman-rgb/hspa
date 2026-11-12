@@ -15,6 +15,12 @@
     "fallback": {
       "type": "oecd",
       "code": "EHEALTH_INDEX"
+    },
+    "verification": {
+      "date": "2026-11-12",
+      "result": "definicni_nesoulad",
+      "source_url": "https://digital-decade-desi.digital-strategy.ec.europa.eu/api/v1/chart-groups/desi/facts/",
+      "note": "Karta tvrdí složený index adopce eHealth (EHR, ePrescription, telemedicína, interoperabilita) z dat MZ ČR; takový index jsem nenašel a seed 62 (2024) nemá zdroj. Nejbližší oficiální ukazatel EK 'Access to e-health records' měří užší věc: dostupnost a rozsah online přístupu občanů k vlastním zdravotním záznamům (12 dílčích prvků, pokrytí populace, eID), ne telemedicínu ani adopci u poskytovatelů, proto definicni_nesoulad. Hodnoty jsem ověřil přímo v DESI API: CZ 2022 46.6, 2023 51.1, 2024 77.4, 2025 77.4 (stagnace), EU 2025 86.5; studie 2026 uvádí CZ 77 % a EU 87 %. Homogenita: skok 2023→2024 odráží zavedení centrálního přístupu, ne plynulý trend; 2024–2025 stejná metodika. Poslední uzavřený rok 2025. Benchmark EU ze stejného zdroje a definice; seed OECD/EU bez opory. Se předchozím agentem se shoduji ve verdiktu a hodnotách; liším se v tom, že strojový kanál existuje (DESI API CSV), takže jde o kandidáta na živý fetcher, a EU benchmark uvádím přesně 86.5 místo zaokrouhlených 87."
     }
   },
   "benchmark_source": {
@@ -35,5 +41,6 @@
   "limitations": "Index je kompozitní — dílčí složky mají různou váhu. Mezinárodní srovnání ztěžováno rozdílnými metodikami.",
   "patient_story": "Praha, ordinace praktického lékaře, ranní vizita 67letého pacienta po hospitalizaci. „Doktore, propouštěcí zprávu z nemocnice jste dostal?\" — „Bohužel ne, oni mi to faxují s týdenním zpožděním.\" Tato scéna je v Česku 2025 stále realistická. eHealth systém v ČR má základní stavební prvky (eRecept, eŽádanka, NCEZ), ale plná interoperabilita nemocnic, ambulancí a pojišťoven dosud chybí.\n\neHealth Adoption Index ČR je 62/100 (vlastní složený index, NCEZ + MZ ČR 2024). OECD průměr je 70/100, EU 68/100. Česko je signal bad. Komponenty: eRecept funguje na 99 % (od 2018 povinný), eŽádanka spuštěna 2020 částečně, propouštěcí zpráva v digitální formě dostupná v cca 65 % nemocnic, sdílení obrazové dokumentace mezi nemocnicemi limitované, pacientský portál „Můj zdravotní záznam\" (NCEZ) má cca 800 000 uživatelů z 10 milionů.\n\nStrukturálně český eHealth má dvě hlavní mezery: (1) interoperabilita systémů poskytovatelů (nemocnice mají různé HIS, často nekompatibilní); (2) pacientský přístup k vlastním datům (formálně garantován GDPR, prakticky pomalu se rozjíždí). Národní strategie eHealth 2025–2035 byla schválena, implementační tempo ale váhá. Pojišťovny mají vlastní pacientské portály — duplikace, nikoli synergický systém. Estonsko, Dánsko a Finsko mají jednotnou pacientskou identitu a 100 % nemocnic v jednom systému už od 2005.\n\neHealth je infrastruktura, která umožňuje vše ostatní — telemedicínu, kvalitu, prevenci, výzkum, pacientskou angažovanost. Politické páky: závazný technický standard interoperability (model Finska); plošný rollout pacientského portálu (cíl 5 mil. aktivních uživatelů do 2028); finanční motivace nemocnic za interoperabilitu (úhradová bonifikace); osobní digitální identita pacienta (BankID model Švédsko/Norsko). Indikátor v HSPA dashboardu sleduje eHealth adoption jako klíčový ukazatel digitální zralosti systému.",
   "framework": "hspa",
-  "dimension": "efektivita"
+  "dimension": "efektivita",
+  "verification_status": "illustrative"
 }

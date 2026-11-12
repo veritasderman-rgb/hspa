@@ -13,6 +13,12 @@
       "dataset": "NRHZS · NRHOSP — hospitalizace podle oboru a věku",
       "endpoint": "https://www.nzip.cz/data/2713-produkce-palp-sumarizace-datovy-souhrn",
       "note": "Sumarizace produkce základních oborů PALP. Doplňující rozcestník otevřená data: https://www.nzip.cz/data/2225-hospitalizacni-pripady-akutni-intezivni-pece-otevrena-data."
+    },
+    "verification": {
+      "date": "2026-11-12",
+      "result": "nedohledatelne",
+      "source_url": "https://www.nzip.cz/data/nrhzs/datove-souhrny/nrhzs-ds-hospitalizacni-pripady.xlsx",
+      "note": "Primární zdroj pro rok 2023 (prezentace prof. Duška) nelze nahradit otevřeným datasetem: datový souhrn NRHZS hospitalizační případy končí rokem 2022 a OIS-11-49 (sumarizace produkce PALP, odkazovaná z karty přes NZIP 2713) věkové členění vůbec nemá (jen HP/CM/CMI po základních oborech). V tom se s předchozím agentem shoduji. Liším se v hodnocení definice: karta definuje HP na lůžkách vnitřního lékařství a obor 'Interna' v NRHZS tomu odpovídá; absolutní počty (344 438 v 2022 vs. 339 722 v 2023 u Duška) ukazují, že Duškova čísla jsou tentýž obor Interna bez kardiologie a pneumologie, takže věta v limitations karty o zahrnutí suboborů je spíš nepřesnost karty než nesoulad se zdrojem. Jmenovatel: akutní péče (8.1) 72,26 % a veškerá péče (8.2) 72,23 %, rozdíl zanedbatelný. Řadu 2010–2023 z otevřených dat složit nelze, bod 2010 = 65 % z patient_story je neověřitelný. Hodnota 2023 je plauzibilní (−0,1 p. b. proti 2022). Benchmark neexistuje. Doporučení: buď publikovat 2022 = 72,3 % s odkazem na NRHZS, nebo ponechat seed a vyžádat 2023 u ÚZIS."
     }
   },
   "benchmark_source": {
@@ -34,5 +40,5 @@
   "patient_story": "Interní oddělení krajské nemocnice, ranní vizita 18 pacientů. 13 z nich je 65+ — to je 72 % podíl seniorů. Tahle skladba je v Česku statisticky modální. Standardní interna je dnes z velké části geriatrickou péčí — bez explicitního přizpůsobení (specializovaných geriatrů, multimorbiditně optimalizované léčby).\n\nPodíl seniorů (65+) na interních hospitalizacích v ČR je 72,2 % (ÚZIS NRH, 2023). OECD srovnatelný indikátor chybí. Signal neutral. Trend rostoucí (2010: 65 %; 2023: 72,2 %) — důsledek demografického stárnutí. V populaci 65+ je hospitalizační rate 3,5× vyšší než v 18–65 letech.\n\nStrukturálně český systém má v interní péči faktický posun směrem ke geriatrickému profilu, ale strukturálně se na to neadaptoval: nedostatek geriatrů (cca 100 v celé ČR), nedostatek geriatrických oddělení v okresních nemocnicích, nedostatečná geriatrická školení pro internisty, generická léčba (často nevhodná u multimorbidních seniorů — viz polypragmazie_65plus).\n\nVysoký podíl seniorů na interních lůžkách signalizuje potřebu strukturální geriatrické reformy. Politické páky: rozšíření kapacity geriatrické medicíny (cca 200 nových míst do 2030); povinný modul geriatrie pro interní specializaci; geriatrický assessment u 75+ hospitalizovaných (model UK Comprehensive Geriatric Assessment); rozšíření LDN a paliativní péče (snížení tlaku na akutní interní lůžka). Indikátor v HSPA dashboardu sleduje seniorský podíl jako klíčový strukturální ukazatel demografického profilu hospitalizací.",
   "framework": "hspa",
   "dimension": "dostupnost",
-  "verification_status": "review-pending"
+  "verification_status": "preliminary"
 }

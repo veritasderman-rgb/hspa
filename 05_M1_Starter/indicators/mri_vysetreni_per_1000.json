@@ -22,6 +22,14 @@
     "fallback": {
       "type": "uzis_nzis",
       "note": "Národní zdroj — ÚZIS ČR / Národní zdravotnický informační systém (NZIS), roční výkazy o činnosti zobrazovacích pracovišť (počty MR vyšetření podle poskytovatelů). Z těchto administrativních dat je odvozena hodnota, kterou ČR reportuje do Eurostatu; národní a eurostatový součet se mohou mírně lišit vymezením vykazujících pracovišť."
+    },
+    "verification": {
+      "date": "2026-11-12",
+      "source_url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/hlth_co_exam?geo=CZ&facility=MRI&icha_hp=HP1_3&unit=P_HTHAB&format=JSON",
+      "quote": "hlth_co_exam, facility=MRI, icha_hp=HP1_3, unit=P_HTHAB, geo=CZ: 2019:6009.25 2020:5822.15 2021:6606.39 2022:7028.50 2023:7221.68 2024:7972.05 (dataset updated 2026-07-13); 7972.05/100 = 79.72",
+      "note": "Definice: dataset hlth_co_exam s facility=MRI a icha_hp=HP1_3 dává pro ČR 7972,05 na 100 000 pro rok 2024, tj. 79,72 na 1 000, shodně se seedem 79,7 a s celou řadou 2019–2024. Jednotka souhlasí po přepočtu /100. Jmenovatel je populace dle Eurostatu, čitatel vyšetření vykázaná ČR; Eurostat nerozlišuje, zda se počítají vyšetření nebo pacienti, takže srovnání mezi zeměmi je jen orientační. Řada je homogenní bez příznaků zlomu v API. Poslední rok je 2024 (aktualizace 13. 7. 2026). Benchmark EU 95,4 je souměřitelný, ale je to nevážený průměr počítaný z řádků zdroje, nikoli publikovaný agregát; to je třeba uvést v kartě (karta to již říká). Hodnotu OECD 83 z tohoto zdroje nelze potvrdit. Plauzibilita: dlouhodobý růst 16,5 na 79,7 od 2004 je konzistentní s rozšiřováním přístrojů. Reprodukovatelné jedním GET dotazem.",
+      "live_feasible": "eurostat",
+      "mapping_spec": "Eurostat JSON-stat dataset hlth_co_exam, filtry freq=A, facility=MRI, icha_hp=HP1_3, unit=P_HTHAB, geo=CZ; hodnotu dělit 100 (na 1 000 obyv.). Nejnovější rok 2024. Benchmark: stejný dotaz bez geo pro time=2023 a nevážený průměr členských států EU27."
     }
   },
   "benchmark_source": {
@@ -48,5 +56,6 @@
   "patient_story": "Ordinace neurologa, krajské město, únorové pondělí. Pan Jaroslav (58) přišel s několik týdnů trvajícími výpadky citlivosti v pravé ruce. Neurolog má podezření, které dokáže potvrdit nebo vyvrátit jediné vyšetření — magnetická rezonance mozku a krční páteře. Napíše žádanku a řekne větu, kterou pacienti v Česku slýchají často: „Termín vám dají, ale budete pár týdnů čekat. Nebo si to můžete zaplatit a jít dřív.\"\n\nČesko odbaví ročně 79,7 vyšetření magnetickou rezonancí na tisíc obyvatel (Eurostat, 2024). Ještě v roce 2019 to bylo 60,1 — objem soustavně roste, jak přibývají přístroje a uvolňují se úhradové limity. Přesto je české číslo pod průměrem Evropské unie (95,4 na tisíc) a hluboko pod zeměmi s výkonovou úhradou jako Německo (166) nebo Rakousko (168). Signál je neutral: vysoký objem sám o sobě není lepší — Německo a Francie vyšetření zčásti nadužívají, Nizozemsko (60) je naopak drží nízko silným gatekeepingem, aniž trpí kvalita. Českou hodnotu je proto nutné číst v kontextu.\n\nA ten kontext je strukturální. Nízký objem v Česku nevzniká úsporným gatekeepingem, ale kapacitním stropem. Úhradová vyhláška až do roku 2026 limitovala počet hrazených vyšetření; poskytovatel, který strop vyčerpal, další vyšetření prodělával. Výsledkem byly čekací listy — ve Středočeském kraji v průměru kolem čtyř týdnů — a tlak na samoplatbu: kdo zaplatí, jde na řadu dřív. K tomu se přidává řídká síť přístrojů (VZP jich mělo nasmlouvaných 115, tj. asi 12 na milion obyvatel, pod průměrem EU) a nedostatek radiologů, který kapacitu limituje i tam, kde jsou peníze.\n\nPolitická páka je konkrétní a čerstvá. V únoru 2026 VZP oznámila, že 81 z 115 nemocnic s MR přístrojem umožní překročit limity úhradové vyhlášky a vyčlenila na to 150 milionů korun navíc — s cílem zkrátit čekací doby. Argument je efektivitní: kdyby všechny zapojené nemocnice zvýšily produkci jen o desetinu, nahradilo by to instalaci 13 nových přístrojů. To je ta správná páka — lépe využít drahé stroje, které už stojí. Pro pana Jaroslava to znamená rozdíl mezi diagnózou za týden a za měsíc; pro systém rozdíl mezi rychlou léčbou a onkologickým nálezem, který mezitím poroste. Kompetenci drží plátci (úhradová vyhláška, smlouvy pojišťoven) a ministerstvo zdravotnictví, které rozhoduje o síti přístrojů a regulaci indikací.",
   "framework": "hspa",
   "dimension": "dostupnost",
-  "verification_status": "review-pending"
+  "verification_status": "verified",
+  "verified_at": "2026-11-12"
 }

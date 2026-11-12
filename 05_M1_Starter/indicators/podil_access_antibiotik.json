@@ -12,7 +12,12 @@
       "type": "esac_net",
       "endpoint": "https://www.ecdc.europa.eu/en/antimicrobial-consumption/surveillance-and-disease-data/database",
       "dataset": "ECDC · ESAC-Net (European Surveillance of Antimicrobial Consumption Network) — spotřeba antibiotik u lidí podle klasifikace WHO AWaRe (Access/Watch/Reserve), celková spotřeba (ambulantní + nemocniční sektor), po zemích a letech. Podíl skupiny Access je jedním z pěti cílů doporučení Rady EU 2023/C 220/01 (One Health přístup k antimikrobiální rezistenci): do roku 2030 má alespoň 65 % celkové spotřeby antibiotik připadat na skupinu Access. Vstupní data za ČR reportuje do ESAC-Net Státní zdravotní ústav (Národní referenční laboratoř pro antibiotika) ve spolupráci se SÚKL.",
-      "dimensions": ["AWaRe kategorie (Access / Watch / Reserve)", "sektor (ambulantní / nemocniční / celkem)", "rok", "země"],
+      "dimensions": [
+        "AWaRe kategorie (Access / Watch / Reserve)",
+        "sektor (ambulantní / nemocniční / celkem)",
+        "rok",
+        "země"
+      ],
       "note": "Kotevní body časové řady jsou ověřené z oficiálních country factsheets ECDC „Progress towards 2030 targets to combat antimicrobial resistance – 2025 update (2024 data)\", které vycházejí z ESAC-Net a měří cíl Rady EU 2023/C 220/01: podíl skupiny Access na CELKOVÉ spotřebě antibiotik v Česku byl 61,3 % v roce 2019 (baseline) a 59,4 % v roce 2024 — tedy pokles o 1,9 procentního bodu, kategorizovaný ECDC jako „regres\" (pohyb od cíle). Cíl EU 2030 je ≥ 65 %. Populačně vážený průměr EU/EEA byl 60,3 % v roce 2024 (4,7 p.b. pod cílem). Sousedé (2024): Německo 62,8 %, Rakousko 64,2 % (z 59,4 % v roce 2019 — „progres\"), Polsko 56,5 % (z 60,4 %), Slovensko 38,6 % (z 42,4 %).",
       "_dev_notes": [
         "Primární harmonizovaný zdroj: ECDC ESAC-Net (AWaRe podíly celkové spotřeby). Za ČR reportuje SZÚ NRL pro antibiotika + SÚKL. Metrika = cíl č. 2 doporučení Rady EU 2023/C 220/01.",
@@ -26,6 +31,12 @@
     "fallback": {
       "type": "who_aware",
       "url": "https://aware.essentialmeds.org/groups"
+    },
+    "verification": {
+      "date": "2026-11-12",
+      "source_url": "https://antibiotic.ecdc.europa.eu/sites/default/files/documents/Country%20Factsheet%20Czechia.pdf",
+      "quote": "ECDC Country Factsheet Czechia 'Progress towards 2030 targets to combat antimicrobial resistance - 2025 update (2024 data)': 'At least 65% of the total consumption of antibiotics in humans belongs to the 'Access' group of antibiotics' – 2019 baseline 61.3%; 2024 59.4% -1.9%*; 2030 TARGET 65%. EU: ESAC-Net AER 2024 page: 'The EU population-weighted mean percentage of consumption of World Health Organization (WHO) AWaRe Access group antimicrobials was 60.3% in 2024 (country range 38.6%-80.9%). This was 1.0 percentage points lower than 2019 (baseline year)'.",
+      "note": "Factsheet ČR (1 strana, vytvořen 5. 11. 2025) jsem otevřel sám a hodnoty 61,3 % (2019) a 59,4 % (2024) v něm stojí doslova; EU 60,3 % (2024) jsem ověřil na HTML stránce ESAC-Net AER 2024 (PDF AER vracelo 429). Shoduji se s předchozím agentem: definice (podíl Access na celkové spotřebě, oba sektory, cíl Rady EU 2023/C 220/01 ≥ 65 %), jednotka i rok sedí s kontraktem (59,4 / 2024, EU 60,3), verdikt 'potvrzeno'. Benchmark je souměřitelný (stejný zdroj ESAC-Net, stejná definice). Výhrady k homogenitě přebírám jako hypotézu bez vlastního ověření: poznámku o změně sběru dat ČR a revizi baseline 2019 (dříve 60,2 %) jsem v primárním textu neviděl, proto je jen zmiňuji – interpretaci 'regres' o 1,9 p.b. je vhodné číst opatrně. Mezilehlé roky 2020–2023 primární text nedává, trend správně obsahuje jen 2019 a 2024. Strojově pravidelně tahat nelze (PDF/dashboard), live_feasible = none."
     }
   },
   "benchmark_source": {
@@ -58,5 +69,7 @@
   "importance": "Podíl skupiny Access je moderní ukazatel kvality preskripce antibiotik podle klasifikace WHO AWaRe a zároveň jeden z pěti závazných cílů doporučení Rady EU pro boj s antimikrobiální rezistencí (2023/C 220/01, cíl ≥ 65 % do roku 2030). Dashboard dosud sledoval objem spotřeby antibiotik a řadu měr rezistence, ale chyběl mu právě spojovací článek mezi nimi: vhodnost neboli strukturu preskripce. Antimikrobiální rezistence je jednou z hlavních zdravotních hrozeb EU a struktura preskripce je páka, kterou lze ovlivnit rychle a levně — bez nových léků, jen změnou toho, které antibiotikum se předepíše. Česko u tohoto cíle nejen zaostává za hranicí 65 %, ale na rozdíl od Rakouska se od ní i vzdaluje, což z indikátoru dělá konkrétní a politicky uchopitelný cíl pro Národní antibiotický program, pojišťovny i odborné společnosti. Měřit podíl Access proto znamená měřit, zda systém dokáže přeměnit rozumný objem antibiotik i v rozumnou skladbu.",
   "patient_story": "Ordinace praktické lékařky v Ústí nad Labem, únor 2024. Přichází pan Dvořák (44) s bolestí v krku a rýmou, které trvají tři dny. Nemá horečku ani povlaky na mandlích — klinicky to vypadá na virózu. Přesto odchází s receptem na azithromycin, širokospektré antibiotikum ze skupiny „Watch\". Lékařka nemá po ruce rychlý CRP test ani výtěr na streptokoka, pacient spěchá do práce a chce „něco silného\". Kdyby infekce antibiotikum vůbec vyžadovala, stačil by úzkospektrý penicilin ze skupiny „Access\". Tahle drobná volba, opakovaná milionkrát ročně, rozhoduje o jednom z klíčových ukazatelů kvality preskripce.\n\nPodle klasifikace WHO AWaRe patřilo v roce 2024 jen 59,4 % spotřebovaných antibiotik v Česku do žádoucí skupiny Access — antibiotik první volby s nízkým rizikem rezistence. To je pod populačně váženým průměrem EU/EEA (60,3 %) i pod cílem Evropské unie, který požaduje alespoň 65 % do roku 2030 (doporučení Rady 2023/C 220/01). Horší je trend: v roce 2019 činil český podíl 61,3 % — Česko se tedy od cíle vzdaluje, ne přibližuje. ECDC to ve svém přehledu označuje přímo za „regres\" a signál je nastaven na warn.\n\nRakousko přitom začínalo na úplně stejné hodnotě jako dnešní Česko (59,4 % v roce 2019) a vyšplhalo se na 64,2 % — těsně pod cíl. Německo je na 62,8 %, zatímco Polsko (56,5 %) a Slovensko (38,6 %) jsou na tom hůř. Za českou stagnací stojí zakořeněné preskripční návyky, diagnostická nejistota bez rychlých testů, tlak pacientů na „silná\" antibiotika a chybějící zpětná vazba lékařům o jejich vlastní preskripci.\n\nPolitická páka je konkrétní a levná. Národní antibiotický program (SZÚ) a odborné společnosti mohou prosadit preskripční doporučení upřednostňující úzkospektré Access antibiotikum, úhradu rychlých CRP a streptokokových testů v ordinacích, systém „odložené preskripce\" a hlavně audit s adresnou zpětnou vazbou, který lékaři ukáže jeho podíl Access oproti kolegům. Kompetenci sdílejí Ministerstvo zdravotnictví, zdravotní pojišťovny (úhradové pobídky) a odborné společnosti. Pro pana Dvořáka by stačil rychlý test a jasné doporučení — a evropský cíl by byl na dosah.",
   "framework": "hspa",
-  "dimension": "kvalita"
+  "dimension": "kvalita",
+  "verification_status": "verified",
+  "verified_at": "2026-11-12"
 }

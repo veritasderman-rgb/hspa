@@ -13,19 +13,29 @@
       "dataset": "Statistická ročenka dialyzační léčby v ČR",
       "url": "https://www.nefrol.cz/odbornici/dialyzacni-statistika",
       "endpoint": "https://www.nefrol.cz/force-download/1788",
-      "dimensions": ["rok", "metoda (HD/PD)", "dialyzační středisko"],
+      "dimensions": [
+        "rok",
+        "metoda (HD/PD)",
+        "dialyzační středisko"
+      ],
       "note": "Česká nefrologická společnost ČLS JEP — Národní registr dialyzovaných pacientů (RDP), Statistická ročenka dialyzační léčby v ČR (roční, řada od roku 2002). Zdroj podílu: bod 6 „Celkový počet pacientů (prevalence)\" v Přehledu základních údajů — k 31. 12. 2023 léčeno v PD programu 250 pacientů, celkem v pravidelném dialyzačním programu 6 352 pacientů → 3,9 %. Řada podílu (PD / (HD+PD) prevalentních pacientů) rekonstruovaná z přehledu „Přehled RRT dle metody – data ČR\": 2010=7,9 %, 2015=7,0 %, 2019=5,0 %, 2022=4,2 %, 2023=3,9 %. Jmenovatel = počet pacientů v pravidelné dialyzační léčbě (PDL), nikoli celková RRT populace (ta zahrnuje i transplantované)."
     },
     "fallback": {
       "type": "era_registry",
       "note": "ERA Registry Annual Report (European Renal Association) publikuje evropská data o náhradě funkce ledvin z 53 registrů z 35 zemí. Slouží k mezinárodnímu srovnání a odvození referenční hodnoty. ERA Registry 2022: mezi prevalentními pacienty na náhradě funkce ledvin 56 % hemodialýza, 5 % peritoneální dialýza, 39 % funkční štěp → podíl PD z dialyzovaných (HD+PD) ≈ 5/(56+5) ≈ 8 %."
+    },
+    "verification": {
+      "date": "2026-11-12",
+      "source_url": "https://www.nefrol.cz/force-download/1788",
+      "quote": "Statistická ročenka dialyzační léčby v ČR v roce 2023, snímek 3: \"k 31.12.2023 v pravidelném dialyzačním léčení celkem 6 352 pacientů ... peritoneální dialýzou bylo léčeno 250 pac. (3,9%)\"; Přehled zákl. údajů 2023 (force-download/1778) bod 6: \"v HD programu 6102 pac. ... v PD programu 250 pac. (3,9 %)\"",
+      "note": "Definice: PD/(HD+PD) prevalentních pacientů v pravidelné dialyzační léčbě k 31. 12., jmenovatel 6 352 = HD 6 102 + PD 250, souhlasí s kartou. Název odpovídá obsahu, jednotka %. Řada z tabulky RRT (N) přepočtená mnou: 2014 6,73; 2015 6,97; 2016 6,37; 2017 5,84; 2018 5,14; 2019 5,05; 2020 5,08; 2021 4,53; 2022 4,23; 2023 3,94, tedy shodná s trendem v kontraktu (2010 7,9; 2015 7,0; 2019 5,0; 2022 4,2; 2023 3,9). Registr má 93% návratnost a 90% úplnost dat (113 středisek), pediatrické pacienty nezahrnuje. 2023 je poslední publikovaný rok (stránka 2024 neuvádí). Benchmark 8 % je odvozený z ERA, neověřen, v kontraktu je jako eu bez přímého zdroje. Hodnota je plauzibilní."
     }
   },
   "benchmark_source": {
     "type": "era_registry",
     "code": "ERA_REGISTRY_PD_SHARE_DIALYSIS",
     "dataset": "ERA Registry Annual Report 2022 — podíl peritoneální dialýzy z dialyzovaných pacientů (odvozeno)",
-    "value": 8.0,
+    "value": 8,
     "url": "https://www.era-online.org/en/registry/",
     "note": "Referenční hodnota 8 % = přibližný evropský průměr podílu peritoneální dialýzy z dialyzovaných pacientů (HD+PD), odvozený z ERA Registry 2022 (5 % PD a 56 % HD mezi všemi prevalentními pacienty na náhradě funkce ledvin → 5/(56+5) ≈ 8 %). Mezinárodní kontext (podíl PD z dialyzovaných, ERA Registry 2021 / studie „Proactively boosting home dialysis adoption in Europe\", NDT 2024): Švédsko 22,1 %; Dánsko 20,3 %; Nizozemsko 15,7 %; Finsko 15,6 %; Velká Británie 13,4 %. ČR se 3,9 % je hluboko pod evropským průměrem i pod všemi zeměmi, které domácí dialýzu systematicky podporují — a na rozdíl od nich podíl PD dlouhodobě klesá."
   },
@@ -45,5 +55,7 @@
   "importance": "Peritoneální dialýza je učebnicový příklad indikátoru na pomezí kvality, efektivity a spravedlnosti. Pro pacienta znamená domácí dialýza zásadně vyšší autonomii a kvalitu života: nemusí třikrát týdně dojíždět do střediska, zachovává si pracovní i rodinný režim a podle většiny studií má srovnatelné klinické výsledky jako centrová hemodialýza. Pro systém je PD zpravidla nákladově efektivnější a uvolňuje kapacitu drahých HD středisek.\n\n**Proč to měřit:** evropské nefrologické společnosti i odborné konsenzy (ERA, iniciativa „home dialysis first\") doporučují domácí dialýzu podporovat a její podíl zvyšovat. Česko jde opačným směrem — podíl PD dlouhodobě klesá a patří k nejnižším v Evropě. To je tichý strukturální problém, který se v žádném výsledkovém indikátoru přímo neprojeví, ale ovlivňuje kvalitu života tisíců pacientů.\n\n**Politický rámec:** páky mají jasné majitele — (1) úhradová vyhláška a nastavení úhrad, které dnes nezvýhodňují domácí modality (MZ ČR, plátci); (2) povinná strukturovaná predialyzační edukace a sdílené rozhodování o modalitě (odborná společnost, poskytovatelé); (3) rozvoj sítě PD center a domácího zásobování; (4) motivace poskytovatelů nabízet PD tam, kde je pacient vhodným kandidátem. Cílem není maximalizovat podíl PD za každou cenu, ale odstranit systémové překážky, které domácí dialýzu drží na evropském chvostu.",
   "patient_story": "Josefovi (68) z Jindřichova Hradce selhaly ledviny loni na podzim. Od té doby jezdí třikrát týdně čtyřicet minut do dialyzačního střediska, kde stráví na hemodialýze čtyři hodiny, a další čtyřicet minut zpátky. Celý týden se točí kolem tří dialyzačních dnů. Přitom existuje metoda, kterou by mohl dělat doma, v noci, ve spánku — peritoneální dialýza. Nikdo mu ji ale pořádně nenabídl. Josef není výjimka; je pravidlem.\n\nČíslo za jeho příběhem má dashboard poprvé jako samostatný ukazatel. K 31. prosinci 2023 bylo v Česku peritoneální dialýzou léčeno jen 3,9 % dialyzovaných pacientů — 250 lidí z více než šesti tisíc. A hlavně: podíl dlouhodobě klesá. V roce 2010 byl na 7,9 %, v roce 2015 na 7,0 %, dnes je na 3,9 %. Počet pacientů na domácí dialýze se za třináct let prakticky rozpůlil, zatímco počet těch na centrové hemodialýze zůstal stabilní.\n\nMezinárodní srovnání je nemilosrdné. Evropský průměr podílu peritoneální dialýzy z dialyzovaných je zhruba 8 % a země, které domácí dialýzu systematicky podporují, jsou úplně jinde: Švédsko 22 %, Dánsko 20 %, Nizozemsko a Finsko kolem 16 %, Velká Británie 13 %. Česko je s 3,9 % na chvostu — a jako jedna z mála zemí jde proti evropskému trendu, který domácí dialýzu naopak posiluje. Nejde přitom o metodu horší; jde o metodu, kterou český systém prostě nenabízí.\n\nPáka je organizační a úhradová, ne medicínská. Za prvé, nastavit úhradu tak, aby domácí modality nebyly pro poskytovatele nevýhodné (gesce ministerstva zdravotnictví a plátců). Za druhé, zavést povinnou strukturovanou predialyzační edukaci a sdílené rozhodování, aby každý pacient jako Josef dostal vyváženou nabídku všech metod (odborná společnost, poskytovatelé). Za třetí, dobudovat síť PD center a systém domácího zásobování. Cílem není hnát podíl PD k maximu — ne každý je vhodným kandidátem — ale odstranit překážky, které Česko drží hluboko pod evropským průměrem. Pro Josefa by to znamenalo dostat zpět většinu svého týdne.",
   "framework": "monitoring",
-  "dimension": "efektivita"
+  "dimension": "efektivita",
+  "verification_status": "verified",
+  "verified_at": "2026-11-12"
 }

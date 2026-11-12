@@ -15,6 +15,14 @@
     "fallback": {
       "type": "szu",
       "note": "SZÚ NRL pro antibiotika — národní EARS-Net uzel."
+    },
+    "verification": {
+      "date": "2026-11-12",
+      "source_url": "https://www.ecdc.europa.eu/sites/default/files/documents/antimicrobial-resistance-annual-epidemiological-report-country-summaries-2024-data.pdf",
+      "quote": "Klebsiella pneumoniae | Combined resistance to third-generation cephalosporins, fluoroquinolones, and aminoglycosides | 1 473 34.6 | 1 618 33.9 | 1 638 32.7 | 1 669 28.3 | 1 767 26.6 | 18.8 (0.0–71.5) ↓* (ECDC EARS-Net 2024, Czechia)",
+      "note": "1) Metodika: EARS-Net, invazivní izoláty K. pneumoniae, rezistence současně na 3GC, fluorochinolony a aminoglykosidy; izoláty s neúplným AST vyloučeny. 2) Název odpovídá obsahu (ECDC label shodný). 3) Jednotka % sedí. 4) Jmenovatel: testované izoláty s úplným AST (2024: 1767). 5) Homogenita: řada 2005–2024 v atlasu; 2019->2020 pokles 39,3 -> 34,6 je v souladu s ECDC (statisticky významný trend 2020–2024), ale změnu vykazování před 2020 v tomto běhu nebylo možné ověřit. Trend 2020–2024 je vhodnější. 6) Poslední uzavřený rok 2024. 7) Benchmark EU/EEA 18,8 je ze stejného zdroje, definice a roku; srovnání je prostý podíl ČR vs. populačně vážený průměr národních podílů (karta to uvádí). Signál zůstává „bad“, rozdíl proti EU je větší než šum (N = 1767). 8) Plauzibilita: 26,6 % je v rámci EU rozpětí (0,0–71,5). 9) Reprodukovatelné přes atlas i summary PDF (Czechia 2024: 470 z 1767).",
+      "live_feasible": "ecdc_atlas",
+      "mapping_spec": "GET https://atlas.ecdc.europa.eu/public/AtlasService/rest/GetMeasureResultsForTimeUnitAndGeoRegion?measureId=1146375&timeUnit=Y&geoCode=CZ. Hodnota = YValue pro TimeCode=2024 (26,599 -> 26,6), N = 1767. Trend 2020–2024 (karta) nebo 2015–2024 (atlas má řadu od 2005). Measure KLEPNE.COMBINED.R.PROPORTION. Shodné s mapping ecdc_atlas_codes.json."
     }
   },
   "benchmark_source": {
@@ -36,6 +44,6 @@
   "limitations": "ECDC k analýze kombinované rezistence uvádí: „The analysis of combined resistance excludes isolates with incomplete AST information for the antimicrobial groups covered.“ (AER 2024, kapitola Methods). Jmenovatel kombinované rezistence je proto jiný než jmenovatel jednotlivých skupin antibiotik a hodnoty mezi indikátory nelze poměřovat bez této výhrady. Pouze invazivní izoláty (hemokultura, mozkomíšní mok) — nezahrnuje komunitní ani ambulantní vzorky. Metodická poznámka ke srovnání: česká hodnota je prostý podíl rezistentních izolátů, zatímco unijní referenční hodnota je populačně vážený průměr národních procent (tak ji ECDC v AER publikuje a tak se v Table 9b staví vedle hodnot jednotlivých zemí). Rozdíl ČR − EU/EEA proto čti jako pozici proti evropskému průměru, ne jako rozdíl dvou stejně konstruovaných čísel.",
   "framework": "hspa",
   "dimension": "bezpecnost",
-  "verification_status": "preliminary",
-  "verified_at": "2026-09-08"
+  "verification_status": "verified",
+  "verified_at": "2026-11-12"
 }

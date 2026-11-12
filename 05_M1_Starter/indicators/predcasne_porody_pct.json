@@ -4,7 +4,7 @@
   "area": "Výsledky",
   "domain": "Zdravotní stav",
   "subdomain": "Perinatální zdraví",
-  "definition": "Podíl porodů s gestačním věkem novorozence pod 37 dokončených týdnů (< 37 t. g.) ze všech porodů v daném roce. Indikátor je metodicky odlišný od nízké porodní hmotnosti — měří délku těhotenství (zralost), nikoli hmotnost; obě skupiny se překrývají jen částečně.",
+  "definition": "Podíl porodů s gestačním věkem novorozence pod 37 dokončených týdnů (< 37 t. g.) ze všech porodů v daném roce (všechny porody v ČR, modul Rodička registru NRRZ; jmenovatelem je počet porodů, ne počet živě narozených). Indikátor je metodicky odlišný od nízké porodní hmotnosti, měří délku těhotenství (zralost), nikoli hmotnost; obě skupiny se překrývají jen částečně.",
   "unit": "%",
   "direction": "lower_is_better",
   "framework": "hspa",
@@ -14,19 +14,30 @@
       "type": "uzis_nrrz",
       "endpoint": "https://www.nzip.cz/clanek/1925-narodni-registr-reprodukcniho-zdravi-perinatalni-vysledky-2023",
       "dataset": "Národní registr reprodukčního zdraví — Modul rodiček (NRRZ/ROD), Perinatální výsledky",
-      "dimensions": { "metric": "predcasne_porody", "gestacni_vek": "<37 t. g.", "uzemi": "CZ" }
+      "dimensions": {
+        "metric": "predcasne_porody",
+        "gestacni_vek": "<37 t. g.",
+        "uzemi": "CZ"
+      }
     },
     "fallback": {
       "type": "euro_peristat",
       "url": "https://www.europeristat.com/"
+    },
+    "verification": {
+      "date": "2026-11-12",
+      "source_url": "https://www.nzip.cz/data/nrrz/nrrz-perinatalni-vysledky-2024/nrrz-perinatalni-vysledky-2024.pdf",
+      "quote": "'Frekvence předčasných porodů v České republice 2014–2024, Zdroj: ÚZIS ČR – NRRZ – Rodička': řádek '2024  270  1 383  5 464' (sloupce < 28 / < 34 / < 37); '2023  325  1 576  5 819'. 'Celkový počet porodů v České republice 2014–2024': '2024  82 479', '2023  89 462'. 5 464 / 82 479 = 6,62 % (v grafu 6,6 %).",
+      "previous": {
+        "value": 6.4,
+        "year": 2023
+      },
+      "note": "Primární PDF NRRZ 2024 jsem sám otevřel a čísla souhlasí s předchozím agentem do posledního řádku. Celou řadu 2015–2024 jsem přepočítal jako počet < 37 t. / počet porodů (2015: 7 857/107 618 = 7,3 %; 2021: 7 059/108 613 = 6,5 %; 2023: 5 819/89 462 = 6,5 %; 2024: 5 464/82 479 = 6,6 %). Definice (< 37 dokončených týdnů, všechny porody v ČR, modul Rodička) i jednotka (% z porodů, ne z živě narozených) odpovídají kartě, název ≡ obsah. Seed 6,4 % (2023) pochází z prvního vydání 2023, které vydání 2024 revidovalo. Seedová řada (2021 = 6,4) je proto nehomogenní a je nutné ji nahradit celou. Poslední uzavřený rok je 2024: vydání 2025 jsem hledal na nzip.cz i webovým vyhledáváním a nenašel. Benchmark 7,4 % je nesouměřitelný (jiný rok, jmenovatel z živě narozených), tady se s agentem shoduji, má být null. Plauzibilita je v pořádku (pozvolný pokles 7,3 → 6,5–6,7). Strojový zdroj chybí, jen PDF."
     }
   },
   "benchmark_source": {
-    "type": "euro_peristat",
-    "code": "preterm_birth_rate",
-    "dataset": "European Perinatal Health Report (Euro-Peristat). Evropský průměr míry předčasných porodů se pohybuje kolem 7,4 %; v roce 2019 sahalo rozpětí od méně než 6 % (Litva, Finsko, Lotyšsko, Estonsko, Dánsko) po 8 % a více (Portugalsko, Belgie, Skotsko, Kypr). OECD samostatný agregát pro předčasné porody nepublikuje, proto je referenční hodnota převzata z Euro-Peristat.",
-    "value": 7.4,
-    "url": "https://www.europeristat.com/"
+    "type": "none",
+    "note": "Mezinárodní benchmark se neuvádí. Euro-Peristat počítá podíl z živě narozených a jeho poslední vlna je za rok 2019, takže není srovnatelný s českou hodnotou (podíl ze všech porodů) za rok 2024."
   },
   "signal_thresholds": {
     "good": 5,
@@ -38,8 +49,8 @@
     "Česká neonatologická společnost ČLS JEP",
     "Česká gynekologicko-porodnická společnost ČLS JEP"
   ],
-  "method_notes": "Předčasný porod (preterm birth) je dle WHO definován jako porod před dokončeným 37. týdnem gestace. Podkategorie: extrémně předčasný (< 28 t. g.), velmi předčasný (28–31 t. g.) a mírně/pozdně předčasný (32–36 t. g.). Data pocházejí z NRRZ (modul rodiček), který pokrývá 100 % porodů v ČR; publikace „Perinatální výsledky“ vychází ročně. Euro-Peristat používá totožnou definici (< 37 t. g.), srovnání je proto přímé. ČR vykazuje dlouhodobě klesající trend: 7,7 % (2013) → 6,4 % (2023). Klíčovým strukturálním faktorem dobrých výsledků je koncentrace rizikových porodů do perinatologických center: v roce 2023 se 85,9 % velmi předčasných porodů (< 31 t. g.) odehrálo v perinatologických centrech intenzivní péče (PCIP).",
-  "limitations": "Míra předčasných porodů je ovlivněna mírou vícečetných těhotenství (vyšší po IVF), věkem rodičky, indikovanými předčasnými porody (preeklampsie, IUGR) i podílem císařských řezů. Indikátor nerozlišuje spontánní vs. indikované předčasné porody, které mají odlišné příčiny. Mezinárodní srovnatelnost mírně snižují rozdíly v registraci hraničně životaschopných plodů (22.–23. týden). Hodnota sama o sobě neměří kvalitu péče o předčasně narozené — tu lépe zachycuje přežití a koncentrace do center.",
+  "method_notes": "Předčasný porod (preterm birth) je dle WHO definován jako porod před dokončeným 37. týdnem gestace. Podkategorie: extrémně předčasný (< 28 t. g.), velmi předčasný (28–31 t. g.) a mírně/pozdně předčasný (32–36 t. g.). Data pocházejí z NRRZ (modul rodiček), který pokrývá všechny porody v ČR; publikace „Perinatální výsledky“ vychází ročně a zpětně reviduje předchozí roky. Hodnota za rok 2024 je 6,6 %: 5 464 porodů před 37. týdnem z 82 479 porodů. Řada 2015 až 2024 pozvolna klesá ze 7,3 % na 6,5 až 6,7 %, v posledních letech je spíše vyrovnaná (2021 = 6,5 %, 2022 = 6,7 %, 2023 = 6,5 %, 2024 = 6,6 %). Číselné řady jsou přepočítány z vydání 2024, které revidovalo dřívější vydání. Jmenovatelem je počet porodů, nikoli počet živě narozených, proto se hodnota nesrovnává s Euro-Peristat. Signal je neutral, protože chybí doložený benchmark. Strukturálním faktorem dobrých výsledků perinatální péče je koncentrace rizikových porodů do perinatologických center intenzivní péče.",
+  "limitations": "Míra předčasných porodů je ovlivněna mírou vícečetných těhotenství (vyšší po IVF), věkem rodičky, indikovanými předčasnými porody (preeklampsie, IUGR) i podílem císařských řezů. Indikátor nerozlišuje spontánní vs. indikované předčasné porody, které mají odlišné příčiny. Mezinárodní srovnatelnost snižují rozdíly v registraci hraničně životaschopných plodů (22.–23. týden) a v jmenovateli (porody vs. živě narození). Hodnota sama o sobě neměří kvalitu péče o předčasně narozené, tu lépe zachycuje přežití a koncentrace do center. Zdrojem je jen roční PDF publikace NRRZ bez strojově čitelného souboru a starší roky se v nových vydáních zpětně revidují, proto je nutné přebírat celou řadu z posledního vydání. Vydání za rok 2025 zatím není k dispozici.",
   "determinants": [
     "míra vícečetných těhotenství (IVF a přenos více embryí)",
     "věk rodičky a parita",
@@ -48,12 +59,12 @@
     "dostupnost a kvalita prenatální péče",
     "socioekonomický status a regionální nerovnosti"
   ],
-  "importance": "Předčasný porod je celosvětově hlavní příčinou novorozenecké úmrtnosti a dlouhodobé morbidity (respirační, neurologické a vývojové komplikace). Míra předčasných porodů je proto klíčovým ukazatelem perinatálního zdraví a — spolu s koncentrací rizikových porodů do specializovaných center — i výkonnosti perinatální péče. ČR patří díky systému perinatologických center k zemím s nejlepšími perinatálními výsledky v Evropě; sledování míry předčasných porodů doplňuje již existující indikátor nízké porodní hmotnosti o rozměr zralosti novorozence.",
-  "patient_story": "Tereza, 34 let, Liberec. Druhé těhotenství, ve 30. týdnu náhlý odtok plodové vody. Místní porodnice ji podle platného postupu okamžitě převezla in utero do perinatologického centra intenzivní péče v Ústí nad Labem — protože dítě narozené v 30. týdnu potřebuje neonatologickou JIP, surfaktant a tým, který tisíce takových dětí ročně provází. Chlapec se narodil s 1 480 gramy; po sedmi týdnech v inkubátoru odešel domů zdravý. Že se narodil v centru, a ne v okresní porodnici, statisticky výrazně zvýšilo jeho šanci přežít bez vážného postižení.\n\nV České republice se v roce 2023 narodilo předčasně (před 37. týdnem) 6,4 % dětí. Evropský průměr podle sítě Euro-Peristat je kolem 7,4 % a rozpětí sahá od méně než 6 % v severských a pobaltských zemích po 8 % a více v Portugalsku či Belgii. Česko tak leží v lepší třetině Evropy — signál v dashboardu je good. Trend navíc dlouhodobě klesá: z 7,7 % v roce 2013 na 6,4 % v roce 2023.\n\nZa tímto výsledkem stojí dvě strukturální vrstvy. První je koncentrace rizikových porodů: v roce 2023 se 85,9 % velmi předčasných porodů (pod 31. týdnem) odehrálo v perinatologických centrech intenzivní péče, ne v běžných porodnicích. To je klíčové pro přežití nejmenších novorozenců a je to výsledek vědomé politiky budování dvanácti center vysoce specializované perinatologické péče. Druhou vrstvou je reprodukční medicína: přechod k selektivnímu přenosu jednoho embrya (SET) při IVF snižuje počet vícečetných těhotenství, která jsou hlavním biologickým motorem prematurity.\n\nPolitická páka je proto jasná a levná: udržet a chránit statut a financování perinatologických center (kompetence MZČR přes Věstník a úhradovou vyhlášku), pokračovat v centralizaci nejrizikovějších porodů a posílit SET jako standard hrazené IVF léčby (nástroj zdravotních pojišťoven ve smluvních podmínkách). Tereza a její syn jsou důkazem, že systém, který funguje, stojí na rozhodnutí, kam se rizikový porod odehraje — a to rozhodnutí lze řídit.",
+  "importance": "Předčasný porod je celosvětově hlavní příčinou novorozenecké úmrtnosti a dlouhodobé morbidity (respirační, neurologické a vývojové komplikace). Míra předčasných porodů je proto klíčovým ukazatelem perinatálního zdraví a, spolu s koncentrací rizikových porodů do specializovaných center, i výkonnosti perinatální péče. Česko má dlouhodobě systém perinatologických center a sledování míry předčasných porodů doplňuje již existující indikátor nízké porodní hmotnosti o rozměr zralosti novorozence.",
+  "patient_story": "Tereza, 34 let, Liberec. Druhé těhotenství, ve 30. týdnu náhlý odtok plodové vody. Místní porodnice ji podle platného postupu okamžitě převezla in utero do perinatologického centra intenzivní péče v Ústí nad Labem — protože dítě narozené v 30. týdnu potřebuje neonatologickou JIP, surfaktant a tým, který tisíce takových dětí ročně provází. Chlapec se narodil s 1 480 gramy; po sedmi týdnech v inkubátoru odešel domů zdravý. Že se narodil v centru, a ne v okresní porodnici, statisticky výrazně zvýšilo jeho šanci přežít bez vážného postižení.\n\nV České republice se v roce 2024 narodilo před 37. týdnem 6,6 % dětí, tedy 5 464 z 82 479 porodů. Podíl od roku 2015, kdy činil 7,3 %, pozvolna klesl a posledních několik let se drží kolem 6,5 až 6,7 %. Pro tuto hodnotu nemáme srovnatelný evropský údaj, protože Euro-Peristat počítá z živě narozených a jeho poslední vlna je za rok 2019, proto signál v dashboardu zůstává neutrální.\n\nZa tímto výsledkem stojí dvě strukturální vrstvy. První je koncentrace rizikových porodů: velmi předčasné porody se mají odehrávat v perinatologických centrech intenzivní péče, ne v běžných porodnicích. To je klíčové pro přežití nejmenších novorozenců a je to výsledek vědomé politiky budování center vysoce specializované perinatologické péče. Druhou vrstvou je reprodukční medicína: přechod k selektivnímu přenosu jednoho embrya (SET) při IVF snižuje počet vícečetných těhotenství, která jsou hlavním biologickým motorem prematurity.\n\nPolitická páka je proto jasná a levná: udržet a chránit statut a financování perinatologických center (kompetence MZČR přes Věstník a úhradovou vyhlášku), pokračovat v centralizaci nejrizikovějších porodů a posílit SET jako standard hrazené IVF léčby (nástroj zdravotních pojišťoven ve smluvních podmínkách). Tereza a její syn jsou důkazem, že systém, který funguje, stojí na rozhodnutí, kam se rizikový porod odehraje — a to rozhodnutí lze řídit.",
   "patient_story_meta": {
     "scene": "Tereza, 34, Liberec — předčasný porod ve 30. týdnu, in utero převoz do perinatologického centra",
-    "data_context": "6,4 % předčasných porodů (2023), EU ~7,4 % (Euro-Peristat), trend klesající 7,7 % (2013) → 6,4 % (2023), signal good",
-    "structural_factors": "koncentrace 85,9 % velmi předčasných porodů do PCIP; míra vícečetných těhotenství po IVF",
+    "data_context": "6,6 % předčasných porodů (2024; 5 464 z 82 479 porodů), pozvolný pokles 7,3 % (2015) → 6,5 až 6,7 % (2021–2024), bez srovnatelného benchmarku, signal neutral",
+    "structural_factors": "koncentrace velmi předčasných porodů do perinatologických center (PCIP); míra vícečetných těhotenství po IVF",
     "policy_lever": "ochrana statutu a financování perinatologických center (MZČR, úhradová vyhláška); SET jako standard hrazené IVF (zdravotní pojišťovny)"
   },
   "literature": [
@@ -97,5 +108,7 @@
       "note": "Doklad k patient_story (SET). Metaanalýza individuálních dat z 8 RCT: vícečetný porod 2 % po SET vs 29 % po přenosu dvou embryí; živorození ve čerstvém cyklu 27 % vs 42 %, po dodatečném zmrazeném přenosu se kumulativně vyrovnává. Zahraniční data, dopad na míru předčasných porodů v ČR z nich nelze odvodit.",
       "verified_at": "2026-10-11"
     }
-  ]
+  ],
+  "verification_status": "verified",
+  "verified_at": "2026-11-12"
 }

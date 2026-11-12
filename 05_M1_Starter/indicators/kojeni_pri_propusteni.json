@@ -30,6 +30,14 @@
       "url": "https://www.nzip.cz/data/1934-novorozenci-vyziva-pzs-datovy-souhrn",
       "dataset": "Novorozenci podle výživy při propuštění a poskytovatele zdravotních služeb (NRRZ NR-10-12, 2016–2025) — XLSX souhrn po porodnicích, krajích, způsobu porodu a porodní hmotnosti",
       "note": "Datový souhrn NZIP (autoři Jírová, Szczuková, Jarkovský, Klimeš, Komenda, Dušek; MZ ČR / ÚZIS) rozšiřuje otevřenou sadu o poskytovatelský a krajský rozpad a o roky 2023–2025. Kategorie výživy: výlučné kojení, dokrm formulí, formule, parenterální, bez výživy. Národní hodnota indikátoru = výlučné kojení / všichni novorozenci v souhrnu daného roku. Poslední ročník souhrnu (2025) je při lednovém exportu neuzavřený a jeho hodnoty přebíráme jen jako předběžné — do datového kontraktu jde poslední úplný rok."
+    },
+    "verification": {
+      "date": "2026-11-12",
+      "source_url": "https://www.nzip.cz/data/nrrz/datove-souhrny/Datovy-souhrn-NR-10-12-novorozenci-vyziva-pzs-2026-02.xlsx",
+      "quote": "NZIP NR-10-12 (list Vyziva1, řádek ČR celkem, rok 2024): výlučné kojení 48 138 (vaginální porod) + 14 508 (císařský řez) = 62 646; celkem 60 597 + 22 805 = 83 402 (pozn. v xlsx pole Celkem); 62 646 / 83 402 = 75,11 %. Starší CSV https://datanzis.uzis.gov.cz/data/NR-10-NRRZ-NAR/NR-10-06/novorozenci-propusteni.csv.gz: rok 2022 propusteni_vyziva=1 73 576 z 100 182 = 73,44 %.",
+      "note": "Definice: kategorie „Výlučné kojení“ (NZIP souhrn) = kód 1 „plně kojeno“ (CSV); název karty „Plné kojení“ je tedy v souladu s obsahem, karta to výslovně rozlišuje od „jakéhokoli kojení“. Jmenovatel: všechny živě narozené s vykázanou výživou při propuštění (kategorie výlučné kojení, dokrm formulí, formule, parenterální, bez výživy), ČR celkem včetně samostatných porodních asistentek. Reprodukce: součet řádků ČR celkem v xlsx dává 2023 74,66 %, 2024 75,11 %, 2025 77,50 %; kontrolní součet přes jednotlivé PZS dává 75,10 %. Řada 2016–2022 z xlsx se shoduje se starším CSV 2000–2022 (2022: 73,40 vs 73,44 %), CSV je označeno „[Zastaralé]“ a nahrazeno souhrnem NR-10-12 a sadou „Novorozenci v Česku“. Homogenita: skok 79,08 % (2019) na 73,52 % (2020) je přímo ve zdroji (dokrm 17 943 -> 24 043), řada přes zlom se nemá prezentovat jako trend. Poslední uzavřený rok: 2025 (77,5 %) je neuzavřený (export 9. 7. 2026), proto 2024 jako headline je správně. Benchmark 72,4 % je z průřezového šetření 17 zemí (matky samy uváděly, 2020–2022), ne ze stejného registru, a z primárního zdroje není, proto null. Plauzibilita v pořádku.",
+      "live_feasible": "uzis_csv",
+      "mapping_spec": "Pro 2016–2025: stáhnout https://www.nzip.cz/data/nrrz/datove-souhrny/Datovy-souhrn-NR-10-12-novorozenci-vyziva-pzs-2026-02.xlsx (název obsahuje měsíc vydání, stránka https://www.nzip.cz/data/1934-novorozenci-vyziva-pzs-datovy-souhrn odkaz aktualizuje), list Vyziva1, řádky kde sloupec A = „ČR celkem“, podle Rok narození (sloupec E): čitatel = sloupec F (výlučné kojení, vaginální) + sloupec L (výlučné kojení, císařský řez); jmenovatel = sloupec K (celkem vaginální) + sloupec Q (celkem císařský řez); hodnota = čitatel/jmenovatel*100. Pro 2000–2022 CSV (gzip) https://datanzis.uzis.gov.cz/data/NR-10-NRRZ-NAR/NR-10-06/novorozenci-propusteni.csv.gz: sloupec propusteni_vyziva==1 / všechny řádky pro rok_narozeni (nezastaralý nástupce: https://www.nzip.cz/data/2515-novorozenci-cesko-otevrena-data). Poslední rok souhrnu vždy vynechat jako neuzavřený."
     }
   },
   "benchmark_source": {
@@ -109,5 +117,7 @@
       "note": "Doklad k determinants (iniciativa Baby-Friendly Hospital). Metaanalýza 30 studií: BFHI zvyšuje výlučné kojení ve 4 měsících (RR 1,18) a v 6 měsících (RR 1,56) při vysoké heterogenitě. Okamžik propuštění samostatně nehodnotí.",
       "verified_at": "2026-11-08"
     }
-  ]
+  ],
+  "verification_status": "verified",
+  "verified_at": "2026-11-12"
 }
