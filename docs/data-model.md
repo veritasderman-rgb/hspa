@@ -1742,6 +1742,7 @@ mimo uvedené podíly.
 | `pojistovny-instituce.json` | ruční | `ingest/lib/validate-instituce.js` | `src/pojistovny-instituce.js` (vzniká) |
 | `pojistovny-smluvni-programy.json` | ruční | `ingest/lib/validate-smluvni-programy.js` | `src/pojistovny-instituce.js` (vzniká) |
 | `pojistovny-dostupnost.json` | ruční | `ingest/lib/validate-dostupnost.js` | `src/pojistovny-instituce.js` (vzniká) |
+| `pojistovny-prispevky.json` | ruční (rešerše webů ZP) | `ingest/lib/validate-prispevky.js`; citace ověřuje `ingest/verify-pojistovny-prispevky.js` | `src/pojistovny-prispevky.js`, `src/prispevky-engine.js` |
 | `pojistovny-fond-bilance.json` | generovaný z ručně pořízených přepisů VZ | `ingest/lib/validate-fond-bilance.js` | `src/pojistovny-penize.js`, `src/pojistovny-prevence.js` (A7) |
 
 Validátory jsou čisté funkce. Pět z nich (hospodareni-rady, prerozdeleni, instituce, smluvni-programy,
@@ -2096,6 +2097,29 @@ cerpani_celkem ±1 tis. Kč tam, kde jsou všechny čtyři (jinak WARN „neúpl
 čerpání); ze_zf + pokuty_penale + ostatni = celkem; cerpani_programy ≤ cerpani_celkem; konečný zůstatek roku = počáteční
 zůstatek následujícího (WARN); čerpání programů proti `fond_prevence_mil` v `pojistovny-hospodareni-rady.json` ±2 % (WARN;
 VoZP 2023 a 2024 se liší o jiné zdroje, −10,6 % a −9,4 %); každé `null` má důvod v `poznamky`; bez jmen osob.
+
+### `data/pojistovny-prispevky.json` (stránka Příspěvky)
+
+Katalog finančních příspěvků a benefitů pro pojištěnce z fondu prevence a bonusových programů 7 ZP, platných v roce
+`rok` (2026), podle webů pojišťoven (`stav_k`). Ruční rešerše; nic se nedopočítává. Čte `src/pojistovny-prispevky.js`
+(vykreslení) a `src/prispevky-engine.js` (nárok, stropy, součet domácnosti).
+
+| Klíč | Popis |
+|---|---|
+| `kategorie[]`, `situace[]` | číselníky `{id, label}` v pevném pořadí (enumy ve validátoru) |
+| `pojistovny[]` | 7 položek v pořadí kódu: `kod`, `zkratka`, `rozcestnik_url`, `overeno_at`, `obecne_podminky[]`, `stropy[]`, `prispevky[]`, `nenalezeno[]`, `poznamky[]` |
+| `stropy[]` | společný limit víc příspěvků: `id`, `nazev`, `typ` (`castka` = nejvýš tolik Kč, `pocet` = nejvýš tolik příspěvků), `hodnota`, `perioda`, `plati_pro`, `url`, `citace` |
+| `prispevky[]` | `id`, `nazev`, `popis`, `castka_kc` (nejvýš na osobu za `perioda`; `null` = web částku neuvádí, pak `castka_text`), `perioda` (`rok` \| `jednorazove` \| `tehotenstvi` \| `jine`), `kategorie`, `kdo`, `podminky[]`, `strop_id`, `url`, `citace`, `zdroj_typ`, `jistota` (`ano` \| `nejasne`), volitelně `poznamka` (pro čtenáře) a `poznamka_redakce` |
+| `prispevky[].kdo` | `vek_od`, `vek_do` (dokončené roky, včetně; `null` = bez omezení), `pohlavi` (`M` \| `Z` \| `null`), `situace[]` (prázdné = kdokoli dané skupiny; jinak stačí jedna z uvedených), `text` (vymezení z webu) |
+
+**Železné pravidlo:** každá částka, strop i obecná podmínka má `url` na webu pojišťovny a `citace` = doslovný úryvek
+té stránky. `node ingest/verify-pojistovny-prispevky.js` adresy znovu stáhne (HTML i PDF) a citaci hledá po odstranění
+bílých znaků; `drift` = stránka se změnila a příspěvek je třeba přeověřit. Validátor (`validatePrispevky`) hlídá enumy,
+typy, https, délku citace, existenci `strop_id` a varuje, když částka není v citaci vidět.
+
+**Jak číst součet:** `soucetDomacnosti()` sčítá `castka_kc` příspěvků, na které má člen nárok věkem, pohlavím a
+zaškrtnutou situací, po oříznutí společnými stropy. Je to součet nejvyšších možných částek, ne očekávané čerpání a ne
+hodnocení pojišťovny (rozhodnutí PS 7. 10. 2026); příspěvky jsou nenárokové.
 
 ### Doplňky k existujícím souborům
 

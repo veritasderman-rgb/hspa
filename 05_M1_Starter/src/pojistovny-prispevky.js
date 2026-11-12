@@ -14,7 +14,7 @@
 // a součty jsou popsané jako nejvyšší možné částky, ne jako skóre.
 //
 // Čisté funkce (testované bez DOM): stavZUrl, urlZeStavu, popiskyClenu, personyHtml, temataHtml,
-// domacnostHtml, souhrnHtml, tabulkaHtml, situacniHtml, podminkyHtml, prehledHtml, renderPrispevky.
+// domacnostHtml, souhrnHtml, poTematechHtml, tabulkaHtml, situacniHtml, podminkyHtml, prehledHtml, renderPrispevky.
 
 import { esc, loadJson } from './pojistovny-shared.js';
 import { readMojeZp, MOJE_EVENT } from './zp-interact.js';
@@ -114,6 +114,22 @@ export function domacnostHtml(clenove) {
 
 // ---------------------------------------------------------------- výsledek pro jednu pojišťovnu
 
+/** Rozpad nejvyššího možného čerpání po tématech (jen témata, kde domácnost něco čerpat může). */
+export function poTematechHtml(zp, clenove, ciselnik) {
+  const rows = kategorieZp(zp, ciselnik).map((k) => {
+    const s = soucetDomacnosti(zp, clenove, { kategorie: k.id });
+    const n = radkyDomacnosti(zp, clenove, { kategorie: k.id }).hlavni.length;
+    if (!n) return '';
+    return `<tr><th scope="row">${esc(k.label)}</th><td>${s.rocne ? kc(s.rocne) : '—'}</td><td>${s.jednorazove ? kc(s.jednorazove) : '—'}</td><td>${n}</td></tr>`;
+  }).join('');
+  if (!rows) return '';
+  return `<details class="zpc-acc zpc-acc--tbl" open><summary>Rozpad po tématech</summary><div class="zpc-acc-body"><div class="zpc-tbl zpp-tbl-clen"><table>
+    <caption class="sr-only">Nejvyšší možné čerpání domácnosti po tématech, ${esc(zk(zp))}</caption>
+    <thead><tr><th scope="col">Téma</th><th scope="col">Ročně nejvýš</th><th scope="col">Jednorázově nejvýš</th><th scope="col">Příspěvků</th></tr></thead>
+    <tbody>${rows}</tbody></table></div>
+    <p class="zpc-note">Kde společný strop pokrývá příspěvky z více témat, je součet témat vyšší než celkový součet domácnosti.</p></div></details>`;
+}
+
 export function souhrnHtml(zp, clenove, stav) {
   const s = soucetDomacnosti(zp, clenove, { kategorie: stav.tema });
   const labels = popiskyClenu(clenove);
@@ -123,7 +139,7 @@ export function souhrnHtml(zp, clenove, stav) {
   const bez = s.bezCastky ? ` U ${s.bezCastky} příspěvků web částku neuvádí (bodový nebo kreditní systém), v součtu nejsou.` : '';
   return `<ul class="zpv zpv-stats zpp-stats">
       <li class="zpv-tile"><span class="zpv-tile-val"><b class="zpv-tile-num">${esc(kc(s.rocne).replace(' Kč', ''))}</b><span class="zpv-tile-unit">Kč ročně</span></span>
-        <span class="zpv-tile-label">nejvýš, pokud vyčerpáte všechny příspěvky, na které máte věkem a pohlavím nárok</span></li>
+        <span class="zpv-tile-label">součet všech příspěvků, na které máte věkem a pohlavím nárok; vyčerpat je všechny je krajní případ</span></li>
       <li class="zpv-tile"><span class="zpv-tile-val"><b class="zpv-tile-num">${esc(kc(s.jednorazove).replace(' Kč', ''))}</b><span class="zpv-tile-unit">Kč jednorázově</span></span>
         <span class="zpv-tile-label">navíc na věci, které se čerpají jednou (rovnátka, těhotenství, jednorázové programy)</span></li>
     </ul>
@@ -145,9 +161,9 @@ function radekHtml(r, labels, stropy) {
   const podm = (p.podminky || []).slice(0, 4).map((x) => `<li>${esc(x)}</li>`).join('');
   return `<tr>
     <th scope="row" class="zpc-txt"><b>${esc(p.nazev)}</b>${p.popis ? `<small>${esc(p.popis)}</small>` : ''}</th>
-    <td><b>${esc(castkaText(p))}</b>${per ? `<small>${esc(per)}</small>` : ''}${strop ? `<small>společný strop: ${esc(strop.nazev)}</small>` : ''}</td>
+    <td class="zpp-castka"><b>${esc(castkaText(p))}</b>${per ? `<small>${esc(per)}</small>` : ''}${strop ? `<small>společný strop: ${esc(strop.nazev)}</small>` : ''}</td>
     <td class="zpc-txt">${kdo ? `<ul class="zpc-pills">${kdo}</ul>` : ''}${mozna}<small>určeno pro: ${esc(kdoText(p))}</small></td>
-    <td class="zpc-txt">${podm ? `<ul class="zpp-podm">${podm}</ul>` : '<span class="zpc-na">bez zvláštních podmínek</span>'}${p.poznamka ? `<small>${esc(p.poznamka)}</small>` : ''}</td>
+    <td class="zpc-txt">${podm ? `<ul class="zpp-podm">${podm}</ul>` : '<span class="zpc-na">bez zvláštních podmínek</span>'}${p.poznamka ? `<small>${esc(p.poznamka)}</small>` : ''}${p.jistota === 'nejasne' ? '<small>Údaj na webu pojišťovny není jednoznačný.</small>' : ''}</td>
     <td><a href="${esc(p.url)}" rel="noopener" title="${esc(p.citace || '')}">web pojišťovny</a></td>
   </tr>`;
 }
@@ -226,6 +242,7 @@ export function renderPrispevky(D, stav) {
     ? `<section class="zpp-vysledek" aria-labelledby="zppVysH">
         <h2 class="section-title zpc-h3" id="zppVysH"><span>${esc(zk(zp))}: ${esc(labels)}</span></h2>
         ${souhrnHtml(zp, stav.clenove, stav)}
+        ${stav.tema ? '' : poTematechHtml(zp, stav.clenove, ciselnik)}
         ${tabulkaHtml(zp, stav.clenove, stav, ciselnik)}
         ${situacniHtml(zp, stav.clenove, stav)}
         ${podminkyHtml(zp)}
