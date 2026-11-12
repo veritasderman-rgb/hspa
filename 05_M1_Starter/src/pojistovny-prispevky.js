@@ -22,7 +22,7 @@ import { ZP_BY_KOD } from './zp-palette.js';
 import {
   PERSONY, SITUACE_VOLITELNE, MAX_CLENU, PERIODA_TEXT,
   parseDomacnost, serializeDomacnost, normalizeClen, clenLabel,
-  soucetDomacnosti, radkyDomacnosti, kategorieZp, castkaText, kdoText,
+  soucetDomacnosti, radkyDomacnosti, kategorieZp, castkaText, kdoText, seradPodminky, seradRadky,
 } from './prispevky-engine.js';
 
 export const DATA_URL = 'data/pojistovny-prispevky.json';
@@ -158,15 +158,24 @@ function radekHtml(r, labels, stropy) {
   const kdo = r.kdo.map((k) => `<li>${esc(labels[k.i])}</li>`).join('');
   const mozna = r.mozna.length
     ? `<small>při splnění situace i: ${esc(r.mozna.map((k) => labels[k.i]).join(', '))}</small>` : '';
-  const podm = (p.podminky || []).slice(0, 4).map((x) => `<li>${esc(x)}</li>`).join('');
+  // Všechny podmínky, seřazené podle důležitosti; první tři jsou vidět hned, zbytek po rozkliknutí.
+  const vsechny = seradPodminky(p.podminky);
+  const li = (a) => a.map((x) => `<li>${esc(x)}</li>`).join('');
+  const dalsi = vsechny.slice(PODMINEK_HNED);
+  const podm = vsechny.length
+    ? `<ul class="zpp-podm">${li(vsechny.slice(0, PODMINEK_HNED))}</ul>${dalsi.length ? `<details class="zpp-podm-dalsi"><summary>další podmínky (${dalsi.length})</summary><ul class="zpp-podm">${li(dalsi)}</ul></details>` : ''}`
+    : '';
   return `<tr>
     <th scope="row" class="zpc-txt"><b>${esc(p.nazev)}</b>${p.popis ? `<small>${esc(p.popis)}</small>` : ''}</th>
     <td class="zpp-castka"><b>${esc(castkaText(p))}</b>${per ? `<small>${esc(per)}</small>` : ''}${strop ? `<small>společný strop: ${esc(strop.nazev)}</small>` : ''}</td>
     <td class="zpc-txt">${kdo ? `<ul class="zpc-pills">${kdo}</ul>` : ''}${mozna}<small>určeno pro: ${esc(kdoText(p))}</small></td>
-    <td class="zpc-txt">${podm ? `<ul class="zpp-podm">${podm}</ul>` : '<span class="zpc-na">bez zvláštních podmínek</span>'}${p.poznamka ? `<small>${esc(p.poznamka)}</small>` : ''}${p.jistota === 'nejasne' ? '<small>Údaj na webu pojišťovny není jednoznačný.</small>' : ''}</td>
+    <td class="zpc-txt">${podm || '<span class="zpc-na">bez zvláštních podmínek</span>'}${p.poznamka ? `<small>${esc(p.poznamka)}</small>` : ''}${p.jistota === 'nejasne' ? '<small>Údaj na webu pojišťovny není jednoznačný.</small>' : ''}</td>
     <td><a href="${esc(p.url)}" rel="noopener" title="${esc(p.citace || '')}">web pojišťovny</a></td>
   </tr>`;
 }
+
+/** Kolik podmínek je u příspěvku vidět bez rozkliknutí. */
+export const PODMINEK_HNED = 3;
 
 const HLAVICKA = '<thead><tr><th scope="col">Příspěvek</th><th scope="col">Nejvýš</th><th scope="col">Kdo z vás může čerpat</th><th scope="col">Podmínky</th><th scope="col">Zdroj</th></tr></thead>';
 
@@ -177,7 +186,7 @@ export function tabulkaHtml(zp, clenove, stav, ciselnik) {
   const labels = popiskyClenu(clenove);
   const stropy = Object.fromEntries((zp.stropy || []).map((s) => [s.id, s]));
   const body = kategorieZp(zp, ciselnik).map((k) => {
-    const rows = hlavni.filter((r) => r.prispevek.kategorie === k.id);
+    const rows = seradRadky(hlavni.filter((r) => r.prispevek.kategorie === k.id));
     if (!rows.length) return '';
     return `<tr class="zpp-kat"><th scope="colgroup" colspan="5">${esc(k.label)}</th></tr>${rows.map((r) => radekHtml(r, labels, stropy)).join('')}`;
   }).join('');
@@ -193,18 +202,20 @@ export function situacniHtml(zp, clenove, stav) {
   const stropy = Object.fromEntries((zp.stropy || []).map((s) => [s.id, s]));
   return `<details class="zpc-acc zpc-acc--tbl"><summary>Další příspěvky při splnění situace<span class="zpc-n">${situacni.length}</span></summary>
     <div class="zpc-acc-body"><p class="zpc-note">Věkem a pohlavím na ně někdo z vás dosáhne, ale vyžadují situaci, kterou u něj nemáte zaškrtnutou (těhotenství, dárcovství, diagnóza, vybrané povolání, bonusový program). Do součtu se nepočítají.</p>
-    <div class="zpc-tbl zpp-tbl" role="region" tabindex="0" aria-label="Další příspěvky při splnění situace (tabulka, posuvná)"><table><caption class="sr-only">Další příspěvky ${esc(zk(zp))} při splnění situace</caption>${HLAVICKA}<tbody>${situacni.map((r) => radekHtml(r, labels, stropy)).join('')}</tbody></table></div></div></details>`;
+    <div class="zpc-tbl zpp-tbl" role="region" tabindex="0" aria-label="Další příspěvky při splnění situace (tabulka, posuvná)"><table><caption class="sr-only">Další příspěvky ${esc(zk(zp))} při splnění situace</caption>${HLAVICKA}<tbody>${seradRadky(situacni).map((r) => radekHtml(r, labels, stropy)).join('')}</tbody></table></div></div></details>`;
 }
 
 /** Společné stropy, obecné podmínky a co se nepodařilo dohledat. */
 export function podminkyHtml(zp) {
-  const cit = (x) => `<li>${esc(x.text || x.nazev)}${x.hodnota != null ? ` <b>${x.typ === 'pocet' ? `${x.hodnota}×` : kc(x.hodnota)}</b>` : ''}${x.plati_pro ? ` (${esc(x.plati_pro)})` : ''} <a href="${esc(x.url)}" rel="noopener" title="${esc(x.citace || '')}">zdroj</a></li>`;
-  const stropy = (zp.stropy || []).map(cit).join('');
+  const cit = (x) => `<li>${esc(x.text || x.nazev)}${x.hodnota != null ? ` <b>${x.typ === 'pocet' ? (x.hodnota === 1 ? 'jen jeden z nich' : `nejvýš ${x.hodnota} různé`) : kc(x.hodnota)}</b>` : ''}${x.plati_pro ? ` (${esc(x.plati_pro)})` : ''} <a href="${esc(x.url)}" rel="noopener" title="${esc(x.citace || '')}">zdroj</a></li>`;
+  const stropy = (zp.stropy || []).filter((s) => s.druh !== 'navyseni').map(cit).join('');
+  const navyseni = (zp.stropy || []).filter((s) => s.druh === 'navyseni').map(cit).join('');
   const obecne = (zp.obecne_podminky || []).map(cit).join('');
   const nen = (zp.nenalezeno || []).map((t) => `<li>${esc(t)}</li>`).join('');
   const pozn = (zp.poznamky || []).map((t) => `<li>${esc(t)}</li>`).join('');
   return `<details class="zpc-acc"><summary>Společné stropy a obecné podmínky ${esc(zk(zp))}</summary><div class="zpc-acc-body">
     ${stropy ? `<h4>Společné stropy</h4><ul>${stropy}</ul>` : ''}
+    ${navyseni ? `<h4>Navýšení limitu převodem od jiných pojištěnců</h4><p class="zpc-note">Do součtu se nepočítá: jde o limit, který vám může přepustit rodina nebo přátelé pojištění u téže pojišťovny.</p><ul>${navyseni}</ul>` : ''}
     ${obecne ? `<h4>Obecné podmínky čerpání</h4><ul>${obecne}</ul>` : ''}
     ${pozn ? `<h4>Poznámky k datům</h4><ul>${pozn}</ul>` : ''}
     ${nen ? `<h4>Co se nepodařilo dohledat</h4><ul>${nen}</ul>` : ''}

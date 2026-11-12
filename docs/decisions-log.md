@@ -6,6 +6,13 @@ Formát: každá položka má `Datum`, `PR`, `Co`, `Proč`, `Důsledek`.
 
 ---
 
+## 2026-11-12 — Příspěvky pojišťoven: audit nároku, stropů a pořadí podmínek
+
+- **PR**: „audit stránky Příspěvky“, třída B podle `npm run pr:gate` (data a kód stránky pod heslem; reviduje editor)
+- **Co**: (1) `stavNaroku` bral víc situací u jednoho příspěvku jako „stačí jedna“. Student bez diagnózy tak dostal do součtu dietu pro celiaky, každé miminko příspěvek pro nedonošené, každý dárce krve příspěvek pro dárce z bezpečnostních sborů. Nově: z životních fází (těhotná, po porodu, novorozenec) stačí jedna, každá další situace je podmínka navíc. (2) Doplněny stropy `pocet` = 1 tam, kde web říká „buď, nebo“ (VZP diety a aktivní/neaktivní dárce, RBP pásma podle počtu odběrů, ZPŠ celiakie student/dospělý, ZP MV prvodárce/dlouhodobý dárce) a redakční strop u ocenění dárců (VoZP, ČPZP). (3) Dárci kostní dřeně a orgánů mají navíc situaci `jine`, aby se nepočítali každému dárci krve. (4) Tabulka ukazuje všechny podmínky (dřív jen první čtyři), seřazené `seradPodminky`: preventivní prohlídka → souběh → diagnóza a potvrzení → ostatní → doklady → podání žádosti. Řádky v tématu jdou od nejvyšší částky.
+- **Proč**: zadání vydavatele 12. 11. 2026 („ověř, že jsou tam správně informace, nastavené limity na výše a správně seřazené podmínky“).
+- **Důsledek**: (a) nevracet `req.some(...)` v `stavNaroku`; (b) „buď A, nebo B“ patří do `stropy[]`, ne jen do textu podmínky, jinak se obojí sečte; (c) `druh: "navyseni"` u stropu = limit navýšený převodem od jiných pojištěnců, do součtu se nepočítá a nesmí na něj vést `strop_id`; (d) podmínky se v tabulce neořezávají.
+
 ## 2026-11-12 — Srovnávač pojišťoven: stránka Příspěvky (katalog příspěvků a pohled domácnosti)
 
 - **PR**: „stránka Příspěvky“, třída C (nová stránka, částky u pojmenovaných institucí; merguje vydavatel)
