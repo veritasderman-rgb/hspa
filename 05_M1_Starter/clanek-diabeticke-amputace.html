@@ -6,18 +6,18 @@
     last_reviewed: 2026-05-31
     reviewer: claude-code-agent
     status: draft
-    notes: "Nový indikátor amputace_dk_diabetici — draft verze. Hodnoty vycházejí z OECD HCQI veřejných dat a ÚZIS ročních zpráv NRH/NRDIA. Trend 2019–2023 vychází z OECD Health Statistics reportovaných Českem. Mezinárodní srovnání (DE, AT, DK, SK, PL) z OECD HCQI 2022. Před publikací ověřit aktuální čísla přímo v ÚZIS NRH/NRDIA a potvrdit kód DALOWER v HEALTH_HCQI."
+    notes: "Nový indikátor amputace_dk_diabetici — draft verze. Hodnoty vycházejí z OECD HCQI veřejných dat a ÚZIS ročních zpráv NRH/NRDIA. Trend 2019–2023 vychází z OECD Health Statistics reportovaných Českem. Mezinárodní srovnání (DE, AT, DK, SK, PL) z OECD HCQI 2022. Před publikací ověřit aktuální čísla přímo v ÚZIS NRH/NRDIA a potvrdit kód DALOWER v HEALTH_HCQI. OPRAVA 2026-11-12: hodnoty ověřeny proti OECD (DSD_HCQO@DF_PC, ADMRDMAI, unlinked data). Amputace DK u diabetiků ČR 2023: 12,1 → 16,4 na 100 000 obyvatel (amputace_dk_diabetici); trend 2019–2023: 15,8 → 12,9 → 13,4 → 12,8 → 12,1 nahrazen řadou 16,6 → 15,8 → 15,2 → 15,8 → 16,4 (bez trvalého poklesu, teze o poklesu o 23–24 % odstraněna); průměr OECD 9,5 → 7,0 (nevážený průměr 26 členů OECD 2023, vlastní výpočet z téhož datasetu, ne oficiální OECD average), srovnání +27 % → více než dvojnásobek (+134 %); benchmark EU 10,3 a hodnoty DE 8,1, AT 7,4, DK 5,9, PL 13,2, SK 11,3 z textu a grafu odstraněny (v ověřeném zdroji nedoloženy), doplněn Izrael 16,6; absolutní odhad počtu amputací (~1 300) odstraněn, ze standardizované míry jej nelze spočítat; odhad úspory ~240 amputací ročně nahrazen slovním vyjádřením (více než polovina); prevalence diabetu 9 % → 8,8 % osob 15+ (EHIS 2019, prevalence_diabetu; EU 7,4 %)."
     f1_2026-07-10: "Audit (F1): opraveny 2 přesunuté odkazy (Diabetologická spol. dokument → root, G-BA DMP → root, 200). Status → verified."
     oprava_2026-10-05: "OPRAVA JMENOVATELE (issue #1243, bod 2). Článek i datový kontrakt uváděly jednotku „na 100 000 diabetiků“. Chybné: OECD HCQI, odkud pocházejí benchmarky (OECD 9,5; EU 10,3), definuje „major lower extremity amputation in adults with diabetes“ jako počet hospitalizací osob 15+ na 100 000 OBYVATEL, věkově standardizovaně (metodika Health at a Glance; ověřeno 5. 10. 2026). Potvrzuje to vlastní aritmetika článku: uváděný absolutní odhad ~1 200 amputací ročně je s mírou 12,1 na 100 000 diabetiků neslučitelný (12,1 / 100 000 × 930 000 = 113), ale s mírou na 100 000 obyvatel vychází 12,1 / 100 000 × 10 915 839 = 1 321. Chybná byla tedy JEDNOTKA, ne hodnota. Jednotka přepsána 11× v textu, popiscích, meta description, og:description a JSON-LD; absolutní odhad opraven na ~1 300 s uvedeným výpočtem; counter 1200 → 1300; poznámka k údajům vysvětluje, co se změnilo a proč. Táž oprava v data/indicators.json, indicators/amputace_dk_diabetici.json (definition, method_notes, data_source, limitations) a v přegenerované indikator-amputace_dk_diabetici.html. NEOVĚŘENO a ponecháno: hodnota 12,1 má stále origin seed (ilustrativní), proti ÚZIS NRH ji ověřit nelze (ÚZIS z prostředí agenta nedosažitelný) — zůstává k doložení. audit-status verified → review-pending, protože se změnilo tvrzení v publikovaném článku."
 -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Diabetická noha amputovaná: proč Česko amputuje o třetinu více než průměr OECD · HSPA Monitor</title>
-<meta name="description" content="Česko amputuje dolní končetiny diabetikům 12,1× na 100 000 obyvatel — o třetinu více než OECD průměr 9,5. Tři systémová selhání v řetězci péče a konkrétní politická páka.">
+<title>Diabetická noha amputovaná: proč Česko amputuje více než dvojnásobek průměru OECD · HSPA Monitor</title>
+<meta name="description" content="Česko amputuje dolní končetiny diabetikům 16,4× na 100 000 obyvatel — více než dvojnásobek průměru OECD (7,0). Tři systémová selhání v řetězci péče a konkrétní politická páka.">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Diabetická noha amputovaná: proč Česko amputuje o třetinu více než průměr OECD">
-<meta property="og:description" content="12,1 amputací na 100 000 obyvatel vs. OECD průměr 9,5. Tři systémová selhání v řetězci preventivní péče a co s tím lze udělat.">
+<meta property="og:title" content="Diabetická noha amputovaná: proč Česko amputuje více než dvojnásobek průměru OECD">
+<meta property="og:description" content="16,4 amputací na 100 000 obyvatel vs. průměr OECD 7,0. Tři systémová selhání v řetězci preventivní péče a co s tím lze udělat.">
 <meta property="og:locale" content="cs_CZ">
 <meta property="article:published_time" content="2026-06-02">
 <meta property="article:section" content="Diabetologie · chronická péče">
@@ -29,7 +29,7 @@
   <meta property="og:image:width" content="1200" data-cover-injected="1">
   <meta property="og:image:height" content="630" data-cover-injected="1">
   <meta property="og:image:type" content="image/png" data-cover-injected="1">
-  <meta property="og:image:alt" content="Diabetická noha amputovaná: proč Česko amputuje o třetinu více než průměr OECD" data-cover-injected="1">
+  <meta property="og:image:alt" content="Diabetická noha amputovaná: proč Česko amputuje více než dvojnásobek průměru OECD" data-cover-injected="1">
   <meta name="twitter:card" content="summary_large_image" data-cover-injected="1">
   <meta name="twitter:image" content="https://skorezdravotnictvi.cz/assets/covers/clanek-diabeticke-amputace.png" data-cover-injected="1">
 
@@ -42,8 +42,8 @@
     {
       "@type": "NewsArticle",
       "@id": "https://skorezdravotnictvi.cz/clanek-diabeticke-amputace#article",
-      "headline": "Diabetická noha amputovaná: proč Česko amputuje o třetinu více než průměr OECD",
-      "description": "Česko amputuje dolní končetiny diabetikům 12,1× na 100 000 obyvatel — o 27 % více než OECD průměr 9,5. Německo dosahuje 8,1, Dánsko 5,9. Jde o preventovatelnou komplikaci, jejíž míra odráží kvalitu celého řetězu péče: screening diabetické nohy, kompenzaci glykémie, dostupnost multidisciplinárních center a cévní chirurgie. Tři systémová selhání a konkrétní politická páka, jak je opravit.",
+      "headline": "Diabetická noha amputovaná: proč Česko amputuje více než dvojnásobek průměru OECD",
+      "description": "Česko amputuje dolní končetiny diabetikům 16,4× na 100 000 obyvatel — více než dvojnásobek průměru OECD (7,0). Jde o preventovatelnou komplikaci, jejíž míra odráží kvalitu celého řetězu péče: screening diabetické nohy, kompenzaci glykémie, dostupnost multidisciplinárních center a cévní chirurgie. Tři systémová selhání a konkrétní politická páka, jak je opravit.",
       "inLanguage": "cs-CZ",
       "image": [
         "https://skorezdravotnictvi.cz/assets/covers/clanek-diabeticke-amputace.png"
@@ -92,7 +92,7 @@
         {
           "@type": "ListItem",
           "position": 3,
-          "name": "Diabetická noha amputovaná: proč Česko amputuje o třetinu více než průměr OECD",
+          "name": "Diabetická noha amputovaná: proč Česko amputuje více než dvojnásobek průměru OECD",
           "item": "https://skorezdravotnictvi.cz/clanek-diabeticke-amputace"
         }
       ]
@@ -130,9 +130,9 @@
         <span class="article-tag">Diabetologie · chronická péče</span>
         <span class="article-tag article-tag-muted">diabetes · amputace · diabetická noha · preventivní péče · OECD HCQI</span>
       </div>
-      <h1 class="article-title">Diabetická noha amputovaná: proč Česko amputuje o třetinu více než průměr OECD</h1>
+      <h1 class="article-title">Diabetická noha amputovaná: proč Česko amputuje více než dvojnásobek průměru OECD</h1>
       <p class="article-deck">
-        V České republice proběhne každý rok <strong>12,1 velkých amputací dolní končetiny na 100 000 obyvatel</strong> — o 27 % více, než je průměr zemí OECD (9,5). Německo amputuje 8,1, Rakousko 7,4, Dánsko 5,9. Přitom jde o komplikaci, které lze do velké míry předejít — správnou kompenzací glykémie, pravidelným screeningem diabetické nohy a dostupností cévní chirurgie v záchranném časovém okně. Za slovensko-polskými hodnotami, které jsou podobné nebo horší než české, i za nízkými hodnotami západních zemí stojí totéž: kolik energie systém věnuje péči <em>před</em> amputací.
+        V České republice proběhne každý rok <strong>16,4 velkých amputací dolní končetiny na 100 000 obyvatel</strong> — více než dvojnásobek průměru zemí OECD (7,0). Po Izraeli (16,6) je to druhá nejvyšší hodnota v srovnání. Přitom jde o komplikaci, které lze do velké míry předejít — správnou kompenzací glykémie, pravidelným screeningem diabetické nohy a dostupností cévní chirurgie v záchranném časovém okně. Rozdíl mezi zeměmi závisí na tom, kolik energie systém věnuje péči <em>před</em> amputací.
       </p>
       <div class="article-meta">
         <span class="article-meta-date">2. června 2026</span>
@@ -146,34 +146,29 @@
     <div class="article-body">
 
       <p class="article-lead">
-        Diabetes mellitus má v České republice přes 930 000 diagnostikovaných pacientů — asi 9 % dospělé populace — a dalších odhadem 200 000 nediagnostikovaných. Dlouhodobě špatně kompenzovaný cukr poškozuje nervy a cévy. Výsledkem je diabetická noha: kombinace neuropatie, ischémie a infekce, která vede k ulceracím, gangréně a v nejhorším případě k amputaci. Velká amputace dolní končetiny — transtibální nebo transfemorální — znamená trvalou invaliditu, razantní pokles kvality života, enormní náklady na akutní péči a zpravidla výrazné zkrácení délky dožití. V ČR jich každoročně proběhne u diabetiků přibližně <strong>1 100–1 300</strong> (absolutní počet, ÚZIS NRH). Ve srovnání s OECD průměrem — kdybychom se dostali na hodnotu Německa — by jich bylo o zhruba 400 ročně méně.
+        Diabetes mellitus má v České republice přes 930 000 diagnostikovaných pacientů — podle šetření EHIS šlo v roce 2019 o 8,8 % lidí starších 15 let (průměr EU 7,4 %) — a dalších odhadem 200 000 nediagnostikovaných. Dlouhodobě špatně kompenzovaný cukr poškozuje nervy a cévy. Výsledkem je diabetická noha: kombinace neuropatie, ischémie a infekce, která vede k ulceracím, gangréně a v nejhorším případě k amputaci. Velká amputace dolní končetiny — transtibální nebo transfemorální — znamená trvalou invaliditu, razantní pokles kvality života, enormní náklady na akutní péči a zpravidla výrazné zkrácení délky dožití. Kdybychom se dostali na průměr OECD, klesla by míra amputací na méně než polovinu.
       </p>
 
       <figure class="av-figure" aria-labelledby="avCntAmpH">
         <figcaption class="av-figure-h" id="avCntAmpH">Amputace DK u diabetiků — klíčová čísla (ČR 2023)</figcaption>
         <div class="av-counter-grid">
           <div class="av-counter-block av-counter-block-bad">
-            <span class="av-counter" data-value="12.1">12,1</span>
+            <span class="av-counter" data-value="16.4">16,4</span>
             <span class="av-counter-label">amputací na 100 000 obyvatel (ČR 2023)</span>
-            <span class="av-counter-foot">OECD průměr 9,5 · EU průměr 10,3</span>
+            <span class="av-counter-foot">průměr OECD 7,0</span>
           </div>
           <div class="av-counter-block av-counter-block-bad">
-            <span class="av-counter" data-value="27" data-suffix=" %">+27 %</span>
+            <span class="av-counter" data-value="134" data-suffix=" %">+134 %</span>
             <span class="av-counter-label">nad průměrem OECD</span>
-            <span class="av-counter-foot">vs. Německo 8,1 · Dánsko 5,9</span>
-          </div>
-          <div class="av-counter-block av-counter-block-warn">
-            <span class="av-counter" data-value="1300">~1 300</span>
-            <span class="av-counter-label">amputací DK ročně (absolutní počet)</span>
-            <span class="av-counter-foot">odhad z míry 12,1 na 100 000 obyvatel a populace 10,9 mil.</span>
+            <span class="av-counter-foot">vs. Izrael 16,6 (nejvyšší hodnota)</span>
           </div>
           <div class="av-counter-block">
-            <span class="av-counter" data-value="15.8">−24 %</span>
-            <span class="av-counter-label">pokles od roku 2019 (15,8 → 12,1)</span>
-            <span class="av-counter-foot">trend klesající, ale cíl stále vzdálený</span>
+            <span class="av-counter">−1 %</span>
+            <span class="av-counter-label">změna od roku 2019 (16,6 → 16,4)</span>
+            <span class="av-counter-foot">bez trvalého poklesu, hodnota se drží kolem 16</span>
           </div>
         </div>
-        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS — Národní registr hospitalizovaných (NRH) + Národní registr diabetiků (NRDIA) 2023; OECD HCQI Lower Limb Amputations in Diabetics 2022; výpočet redakce.</p>
+        <p class="av-figure-note"><strong>Zdroj:</strong> OECD Health Statistics — HCQI, Diabetes major lower extremity amputation (unlinked data), ČR 2023; průměr OECD = nevážený průměr 26 členských zemí, výpočet redakce.</p>
       </figure>
 
       <h3>Co je velká amputace dolní končetiny a proč ji diabetici podstupují</h3>
@@ -193,80 +188,54 @@
       <h3>Mezinárodní srovnání: kde Česko stojí</h3>
 
       <p>
-        OECD Health Statistics publikuje data o amputacích DK u diabetiků od roku 2003. Databáze HEALTH_HCQI obsahuje časové řady pro 35+ zemí. Česko reportuje od 2007. Nejnovější srovnatelná data jsou za rok 2021–2022; česká čísla vycházejí z NRH za rok 2023.
+        OECD Health Statistics publikuje data o amputacích DK u diabetiků od roku 2003. Databáze HEALTH_HCQI obsahuje časové řady pro 35+ zemí. Česko reportuje od 2007. Nejnovější srovnatelná data jsou za rok 2023.
       </p>
 
       <figure class="av-figure" aria-labelledby="avBarAmpH">
-        <figcaption class="av-figure-h" id="avBarAmpH">Velké amputace DK u diabetiků — mezinárodní srovnání (na 100 000 obyvatel, věkově standardizováno, ref. rok 2021–2022)</figcaption>
+        <figcaption class="av-figure-h" id="avBarAmpH">Velké amputace DK u diabetiků — mezinárodní srovnání (na 100 000 obyvatel, věkově a pohlavně standardizováno, 2023)</figcaption>
         <div class="av-bar-compare-list">
           <div class="av-bar-row av-bar-row-bad">
-            <span class="av-bar-row-label">Polsko</span>
+            <span class="av-bar-row-label">Izrael</span>
             <div class="av-bar-row-track"><div class="av-bar-row-fill" style="width:100%"></div></div>
-            <span class="av-bar-row-value">13,2</span>
+            <span class="av-bar-row-value">16,6</span>
           </div>
           <div class="av-bar-row av-bar-row-bad">
             <span class="av-bar-row-label">Česká republika</span>
-            <div class="av-bar-row-track"><div class="av-bar-row-fill" style="width:91.7%"></div></div>
-            <span class="av-bar-row-value">12,1</span>
-          </div>
-          <div class="av-bar-row av-bar-row-warn">
-            <span class="av-bar-row-label">Slovensko</span>
-            <div class="av-bar-row-track"><div class="av-bar-row-fill" style="width:85.6%"></div></div>
-            <span class="av-bar-row-value">11,3</span>
-          </div>
-          <div class="av-bar-row">
-            <span class="av-bar-row-label">EU průměr</span>
-            <div class="av-bar-row-track"><div class="av-bar-row-fill" style="width:78.0%"></div></div>
-            <span class="av-bar-row-value">10,3</span>
-            <span class="av-bar-row-note">orientační hodnota</span>
+            <div class="av-bar-row-track"><div class="av-bar-row-fill" style="width:98.8%"></div></div>
+            <span class="av-bar-row-value">16,4</span>
           </div>
           <div class="av-bar-row">
             <span class="av-bar-row-label">OECD průměr</span>
-            <div class="av-bar-row-track"><div class="av-bar-row-fill" style="width:71.9%"></div></div>
-            <span class="av-bar-row-value">9,5</span>
-            <span class="av-bar-row-note">referenční hodnota</span>
-          </div>
-          <div class="av-bar-row av-bar-row-good">
-            <span class="av-bar-row-label">Německo</span>
-            <div class="av-bar-row-track"><div class="av-bar-row-fill" style="width:61.4%"></div></div>
-            <span class="av-bar-row-value">8,1</span>
-          </div>
-          <div class="av-bar-row av-bar-row-good">
-            <span class="av-bar-row-label">Rakousko</span>
-            <div class="av-bar-row-track"><div class="av-bar-row-fill" style="width:56.1%"></div></div>
-            <span class="av-bar-row-value">7,4</span>
-          </div>
-          <div class="av-bar-row av-bar-row-good">
-            <span class="av-bar-row-label">Dánsko</span>
-            <div class="av-bar-row-track"><div class="av-bar-row-fill" style="width:44.7%"></div></div>
-            <span class="av-bar-row-value">5,9</span>
+            <div class="av-bar-row-track"><div class="av-bar-row-fill" style="width:42.2%"></div></div>
+            <span class="av-bar-row-value">7,0</span>
+            <span class="av-bar-row-note">nevážený průměr 26 zemí, výpočet z dat OECD</span>
           </div>
         </div>
-        <p class="av-figure-note"><strong>Zdroj:</strong> OECD Health Statistics — HEALTH_HCQI, indikátor DALOWER (Lower limb amputations in people with diabetes); věkově standardizováno na evropský standard WHO. ČR 2023 z ÚZIS NRH/NRDIA.</p>
+        <p class="av-figure-note"><strong>Zdroj:</strong> OECD Health Statistics — HCQI (Diabetes major lower extremity amputation, unlinked data), věkově a pohlavně standardizováno, 2023. Průměr OECD je nevážený průměr 26 členských zemí s daty za 2023, výpočet redakce; není to oficiální „OECD average“ z Health at a Glance.</p>
       </figure>
 
       <p>
-        Rozdíl mezi Českem (12,1) a Dánskem (5,9) je více než dvojnásobný. Není to náhoda ani genetika — je to výsledek rozdílných systémů preventivní péče. Dánsko v 90. letech a 2000. letech systematicky investovalo do multidisciplinárních diabetologických center (<em>diabetic foot clinics</em>), zavedlo povinný roční screening nohy pro všechny diabetiky v primární péči a nastavilo P4Q (pay for performance) systém pro praktické lékaře, který bonifikoval dosažení cílových glykemických hodnot. Efekt byl měřitelný: míra amputací klesla z 11,2 v roce 1996 na 5,9 v roce 2022 — o 47 %.
+        Česko (16,4) má více než dvojnásobek průměru OECD (7,0) a po Izraeli (16,6) druhou nejvyšší hodnotu v srovnání. Podle zkušeností zemí s nízkými amputacemi nejde o náhodu ani o genetiku — rozdíl odráží rozdílné systémy preventivní péče. Dánsko v 90. letech a 2000. letech systematicky investovalo do multidisciplinárních diabetologických center (<em>diabetic foot clinics</em>), zavedlo povinný roční screening nohy pro všechny diabetiky v primární péči a nastavilo P4Q (pay for performance) systém pro praktické lékaře, který bonifikoval dosažení cílových glykemických hodnot.
       </p>
 
       <p>
-        Německo prošlo podobným procesem přes „Disease Management Programs" (DMP), povinné strukturované programy pro chronické nemocné zavedené zákonem v roce 2002. Každý diabetik v DMP musí absolvovat pravidelný screening nohy, vzdělávání a kontrolu HbA1c. V roce 2022 bylo v DMP zapsáno přes 4,8 milionu diabetiků 2. typu — asi polovina všech diagnostikovaných. Výsledek: amputace DK klesly pod průměr OECD.
+        Německo prošlo podobným procesem přes „Disease Management Programs" (DMP), povinné strukturované programy pro chronické nemocné zavedené zákonem v roce 2002. Každý diabetik v DMP musí absolvovat pravidelný screening nohy, vzdělávání a kontrolu HbA1c. V roce 2022 bylo v DMP zapsáno přes 4,8 milionu diabetiků 2. typu — asi polovina všech diagnostikovaných.
       </p>
 
-      <h3>Trend v ČR: pokles je, ale nestačí</h3>
+      <h3>Trend v ČR: bez trvalého poklesu</h3>
 
       <p>
-        Česká data za posledních pět let ukazují klesající tendenci: z 15,8 amputací na 100 000 obyvatel v roce 2019 na 12,1 v roce 2023. Pokles o 23 % je reálný a výsledek mj. zlepšující se kompenzace diabetu (vyšší podíl pacientů na moderních antidiabetikách s kardiovaskulárním benefitem jako SGLT2 inhibitory a GLP-1 agonisté) a rozšiřující se sítě diabetologických ambulancí. COVID rok 2020 přinesl přechodný pokles amputací (odložené výkony), po němž následoval mírný bounce-back v 2021.
+        Česká data za posledních deset let (2014–2023) žádný trvalý pokles neukazují: míra se pohybuje kolem 16 amputací na 100 000 obyvatel — 16,6 v roce 2019 a 16,4 v roce 2023. V letech 2020 a 2021 mírně klesla (15,8 a 15,2), od roku 2022 opět roste (15,8 → 16,4). Změna oproti roku 2019 je v rámci běžných výkyvů řady.
       </p>
 
       <figure class="av-figure" aria-labelledby="avTblTrendH">
-        <figcaption class="av-figure-h" id="avTblTrendH">Vývoj amputací DK u diabetiků v ČR, 2019–2023</figcaption>
+        <figcaption class="av-figure-h" id="avTblTrendH">Vývoj amputací DK u diabetiků v ČR, 2019–2023 (na 100 000 obyvatel)</figcaption>
         <div class="av-data-table-wrap">
           <table class="av-data-table">
             <thead>
               <tr>
                 <th scope="col">Rok</th>
-                <th scope="col" class="av-col-num">Amputace / 100 000 DM</th>
+                <th scope="col" class="av-col-num">Amputace / 100 000 obyvatel</th>
                 <th scope="col" class="av-col-num">Meziroční změna</th>
                 <th scope="col">Kontext</th>
               </tr>
@@ -274,50 +243,50 @@
             <tbody>
               <tr>
                 <th scope="row">2019</th>
-                <td class="av-col-num av-cell-bad">15,8</td>
+                <td class="av-col-num av-cell-bad">16,6</td>
                 <td class="av-col-num">—</td>
                 <td>Výchozí rok srovnání</td>
               </tr>
               <tr>
                 <th scope="row">2020</th>
-                <td class="av-col-num av-cell-warn">12,9</td>
-                <td class="av-col-num">−18,4 %</td>
-                <td>COVID — odložené plánované výkony</td>
+                <td class="av-col-num av-cell-bad">15,8</td>
+                <td class="av-col-num">−4,8 %</td>
+                <td>Období covidu — mírný pokles</td>
               </tr>
               <tr>
                 <th scope="row">2021</th>
-                <td class="av-col-num av-cell-warn">13,4</td>
-                <td class="av-col-num">+3,9 %</td>
-                <td>Bounce-back po covidovém poklesu</td>
+                <td class="av-col-num av-cell-bad">15,2</td>
+                <td class="av-col-num">−3,8 %</td>
+                <td>Nejnižší hodnota řady 2019–2023</td>
               </tr>
               <tr>
                 <th scope="row">2022</th>
-                <td class="av-col-num av-cell-warn">12,8</td>
-                <td class="av-col-num">−4,5 %</td>
-                <td>Pokračující pokles</td>
+                <td class="av-col-num av-cell-bad">15,8</td>
+                <td class="av-col-num">+3,9 %</td>
+                <td>Opětovný nárůst</td>
               </tr>
               <tr>
                 <th scope="row">2023</th>
-                <td class="av-col-num av-cell-bad">12,1</td>
-                <td class="av-col-num">−5,5 %</td>
+                <td class="av-col-num av-cell-bad">16,4</td>
+                <td class="av-col-num">+3,8 %</td>
                 <td>Nejnovější dostupná data</td>
               </tr>
             </tbody>
             <tfoot>
               <tr>
                 <th scope="row">OECD průměr</th>
-                <td class="av-col-num">9,5</td>
+                <td class="av-col-num">7,0</td>
                 <td class="av-col-num">—</td>
-                <td>Referenční hodnota (2022)</td>
+                <td>Nevážený průměr 26 zemí OECD (2023), výpočet z dat OECD</td>
               </tr>
             </tfoot>
           </table>
         </div>
-        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS — NRH + NRDIA, výpočet na 100 000 obyvatel; OECD HCQI 2022.</p>
+        <p class="av-figure-note"><strong>Zdroj:</strong> OECD Health Statistics — HCQI (unlinked data), ČR 2014–2023; průměr OECD výpočet redakce.</p>
       </figure>
 
       <p>
-        Pokud by trend poklesu pokračoval lineárním tempem (přibližně −0,7 na 100 000 ročně), dosáhne ČR průměru OECD (9,5) někdy kolem roku 2033. Na hodnotu Německa (8,1) bychom čekali do roku 2041. To je příliš dlouho — a zbytečně, pokud systém nepodnikne cílenější strukturální kroky.
+        Protože míra neklesá, nepřibližuje se ČR průměru OECD (7,0) ani při současném vývoji; rozdíl činí 9,4 amputace na 100 000 obyvatel. Bez cílenějších strukturálních kroků není důvod čekat, že se zmenší sám.
       </p>
 
       <h3>Kde se rozbíjí řetězec preventivní péče</h3>
@@ -361,7 +330,7 @@
       </p>
 
       <p>
-        Každá amputace, které se předejde, ušetří zdravotnímu systému přibližně 300 000–500 000 Kč na akutní péči (operace, hospitalizace, pooperační léčba) a desetitisíce korun ročně na protetiku, rehabilitaci a domácí péči. Při snížení na OECD průměr (z 12,1 na 9,5 na 100 000 obyvatel) by ČR ušetřila přibližně 240 amputací ročně — to je úspora řádu stovek milionů korun, navíc bez vyčíslení hodnoty ušetřené invalidity a kvality života pacienta.
+        Každá amputace, které se předejde, ušetří zdravotnímu systému přibližně 300 000–500 000 Kč na akutní péči (operace, hospitalizace, pooperační léčba) a desetitisíce korun ročně na protetiku, rehabilitaci a domácí péči. Při snížení na OECD průměr (z 16,4 na 7,0 na 100 000 obyvatel) by v ČR ubyla více než polovina těchto amputací — to je úspora řádu stovek milionů korun, navíc bez vyčíslení hodnoty ušetřené invalidity a kvality života pacienta.
       </p>
 
     </div>
@@ -370,8 +339,8 @@
       <div class="ed-kicker">Data v tomto článku</div>
       <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
       <ul class="article-databox-list">
-        <li><a href="indikator-amputace_dk_diabetici.html"><strong>Amputace DK u diabetiků</strong></a> — 12,1 na 100 000 obyvatel vs. OECD 9,5 (signal bad; ÚZIS NRH/NRDIA 2023)</li>
-        <li><a href="indikator-prevalence_diabetu.html"><strong>Prevalence diabetu</strong></a> — podíl diabetiků v populaci ČR (ÚZIS NRDIA 2023)</li>
+        <li><a href="indikator-amputace_dk_diabetici.html"><strong>Amputace DK u diabetiků</strong></a> — 16,4 na 100 000 obyvatel vs. průměr OECD 7,0 (signal bad; OECD HCQI 2023)</li>
+        <li><a href="indikator-prevalence_diabetu.html"><strong>Prevalence diabetu</strong></a> — 8,8 % lidí starších 15 let v roce 2019, průměr EU 7,4 % (Eurostat, EHIS)</li>
         <li><a href="indikator-hospitalizace_acsc.html"><strong>Odvratitelné hospitalizace (ACSC)</strong></a> — indikátor kvality koordinace primární péče (ÚZIS NRH; OECD HCQI)</li>
         <li><a href="indikator-kontrola_hypertenze.html"><strong>Kontrola hypertenze</strong></a> — podíl hypertoniků s dobrou kompenzací (proxy kvalita managementu chronické nemoci)</li>
       </ul>
@@ -405,7 +374,7 @@
         </ul>
       </div>
       <p class="article-sources-disclaimer">
-        <strong>Pozn. k údajům:</strong> Hodnota 12,1 na 100 000 obyvatel vychází z ÚZIS NRH/NRDIA za rok 2023; trend 2019–2023 vychází z OECD HCQI reportovaných daty ČR. Mezinárodní srovnání (DE, AT, DK, SK, PL) z OECD HCQI 2022 — srovnatelnost je omezena různými definicemi velké vs. malé amputace a kvalitou záznamu diagnózy DM v hospitalizačních registrech. Absolutní počet ~1 300 amputací ročně je odhad z míry 12,1 na 100 000 obyvatel a populace ČR (10,9 mil. k 31. 12. 2025, ČSÚ): 12,1 / 100 000 × 10 915 839 = 1 321 (výpočet redakce). Do 5. 10. 2026 článek uváděl jednotku „na 100 000 diabetiků“ a odhad ~1 200 odvozoval z prevalence 930 000 diabetiků, což je aritmeticky neslučitelné (12,1 / 100 000 × 930 000 = 113); chybná byla jednotka, ne hodnota — OECD definuje tento indikátor jako počet hospitalizací osob 15+ na 100 000 obyvatel, věkově standardizovaně, takže česká hodnota i benchmarky leží na téže populační škále. Jmenovatel byl proto po celém článku opraven na obyvatele. Před citací v akademickém nebo politickém kontextu doporučujeme ověřit aktuální čísla přímo v ÚZIS NRH a OECD HCQI databázi.
+        <strong>Pozn. k údajům:</strong> Hodnota 16,4 na 100 000 obyvatel i trend 2014–2023 vycházejí z OECD HCQI (Diabetes major lower extremity amputation, nevázaná data hospitalizací, osoby 15+, standardizováno podle věku a pohlaví) za ČR 2023. Průměr OECD 7,0 je nevážený průměr 26 členských zemí s daty za 2023 spočtený z téhož datasetu, nikoli oficiální „OECD average“. Srovnatelnost mezi zeměmi je omezena různými definicemi velké vs. malé amputace a kvalitou záznamu diagnózy DM v hospitalizačních registrech. Absolutní počet amputací článek neuvádí: míra je věkově a pohlavně standardizovaná a z ní se počet případů přepočítat nedá. OECD definuje tento indikátor jako počet hospitalizací osob 15+ na 100 000 obyvatel, věkově a pohlavně standardizovaně, takže jmenovatelem jsou obyvatelé, nikoli diabetici. Před citací v akademickém nebo politickém kontextu doporučujeme ověřit aktuální čísla přímo v ÚZIS NRH a OECD HCQI databázi.
       </p>
     </section>
 
