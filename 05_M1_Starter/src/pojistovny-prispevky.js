@@ -123,7 +123,7 @@ export function poTematechHtml(zp, clenove, ciselnik) {
     return `<tr><th scope="row">${esc(k.label)}</th><td>${s.rocne ? kc(s.rocne) : '—'}</td><td>${s.jednorazove ? kc(s.jednorazove) : '—'}</td><td>${n}</td></tr>`;
   }).join('');
   if (!rows) return '';
-  return `<details class="zpc-acc zpc-acc--tbl" open><summary>Rozpad po tématech</summary><div class="zpc-acc-body"><div class="zpc-tbl zpp-tbl-clen"><table>
+  return `<details class="zpc-acc zpc-acc--tbl" open><summary>Rozpad po tématech</summary><div class="zpc-acc-body"><div class="zpc-tbl zpp-tbl-clen" role="region" tabindex="0" aria-label="Nejvyšší možné čerpání domácnosti po tématech (tabulka, posuvná)"><table>
     <caption class="sr-only">Nejvyšší možné čerpání domácnosti po tématech, ${esc(zk(zp))}</caption>
     <thead><tr><th scope="col">Téma</th><th scope="col">Ročně nejvýš</th><th scope="col">Jednorázově nejvýš</th><th scope="col">Příspěvků</th></tr></thead>
     <tbody>${rows}</tbody></table></div>
@@ -143,7 +143,7 @@ export function souhrnHtml(zp, clenove, stav) {
       <li class="zpv-tile"><span class="zpv-tile-val"><b class="zpv-tile-num">${esc(kc(s.jednorazove).replace(' Kč', ''))}</b><span class="zpv-tile-unit">Kč jednorázově</span></span>
         <span class="zpv-tile-label">navíc na věci, které se čerpají jednou (rovnátka, těhotenství, jednorázové programy)</span></li>
     </ul>
-    <div class="zpc-tbl zpp-tbl-clen"><table>
+    <div class="zpc-tbl zpp-tbl-clen" role="region" tabindex="0" aria-label="Nejvyšší možné čerpání po členech domácnosti (tabulka, posuvná)"><table>
       <caption class="sr-only">Nejvyšší možné čerpání po členech domácnosti, ${esc(zk(zp))}</caption>
       <thead><tr><th scope="col">Člen domácnosti</th><th scope="col">Ročně nejvýš</th><th scope="col">Jednorázově nejvýš</th><th scope="col">Příspěvků</th></tr></thead>
       <tbody>${rows}</tbody>
@@ -190,7 +190,7 @@ export function tabulkaHtml(zp, clenove, stav, ciselnik) {
     if (!rows.length) return '';
     return `<tr class="zpp-kat"><th scope="colgroup" colspan="5">${esc(k.label)}</th></tr>${rows.map((r) => radekHtml(r, labels, stropy)).join('')}`;
   }).join('');
-  return `<div class="zpc-tbl zpp-tbl"><table>
+  return `<div class="zpc-tbl zpp-tbl" role="region" tabindex="0" aria-label="Příspěvky pro vaši domácnost (tabulka, posuvná)"><table>
     <caption class="sr-only">Příspěvky ${esc(zk(zp))} pro vaši domácnost</caption>${HLAVICKA}<tbody>${body}</tbody></table></div>`;
 }
 
@@ -202,7 +202,7 @@ export function situacniHtml(zp, clenove, stav) {
   const stropy = Object.fromEntries((zp.stropy || []).map((s) => [s.id, s]));
   return `<details class="zpc-acc zpc-acc--tbl"><summary>Další příspěvky při splnění situace<span class="zpc-n">${situacni.length}</span></summary>
     <div class="zpc-acc-body"><p class="zpc-note">Věkem a pohlavím na ně někdo z vás dosáhne, ale vyžadují situaci, kterou u něj nemáte zaškrtnutou (těhotenství, dárcovství, diagnóza, vybrané povolání, bonusový program). Do součtu se nepočítají.</p>
-    <div class="zpc-tbl zpp-tbl"><table>${HLAVICKA}<tbody>${seradRadky(situacni).map((r) => radekHtml(r, labels, stropy)).join('')}</tbody></table></div></div></details>`;
+    <div class="zpc-tbl zpp-tbl" role="region" tabindex="0" aria-label="Další příspěvky při splnění situace (tabulka, posuvná)"><table><caption class="sr-only">Další příspěvky ${esc(zk(zp))} při splnění situace</caption>${HLAVICKA}<tbody>${seradRadky(situacni).map((r) => radekHtml(r, labels, stropy)).join('')}</tbody></table></div></div></details>`;
 }
 
 /** Společné stropy, obecné podmínky a co se nepodařilo dohledat. */
@@ -234,7 +234,7 @@ export function prehledHtml(D, clenove, stav) {
     const n = radkyDomacnosti(zp, clenove, { kategorie: stav.tema }).hlavni.length;
     return `<tr${stav.zp === kod ? ' aria-current="true"' : ''} data-zp="${kod}"><th scope="row">${esc(zk(zp))}</th><td>${kc(s.rocne)}</td><td>${s.jednorazove ? kc(s.jednorazove) : '—'}</td><td>${n}</td><td>${s.bezCastky || '—'}</td></tr>`;
   }).join('');
-  return `<div class="zpc-tbl"><table>
+  return `<div class="zpc-tbl" role="region" tabindex="0" aria-label="Tatáž domácnost u sedmi pojišťoven (tabulka, posuvná)"><table>
     <caption class="sr-only">Nejvyšší možné čerpání téže domácnosti u sedmi pojišťoven</caption>
     <thead><tr><th scope="col">Pojišťovna</th><th scope="col">Ročně nejvýš</th><th scope="col">Jednorázově nejvýš</th><th scope="col">Příspěvků pro vás</th><th scope="col">Bez uvedené částky</th></tr></thead>
     <tbody>${rows}</tbody></table></div>

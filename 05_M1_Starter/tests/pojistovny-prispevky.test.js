@@ -286,7 +286,12 @@ test('vykreslení: ovládání, souhrn, tabulka s tím, kdo může čerpat, a p�
   const bez = renderPrispevky(D7, { ...stav, zp: null });
   assert.match(bez, /Vyberte nahoře svou pojišťovnu/);
   assert.match(bez, /<details class="zpc-acc zpc-acc--tbl" open>/);
-  assert.match(renderPrispevky(D7, stav), /zppVysH/);
+  const cele = renderPrispevky(D7, stav);
+  assert.match(cele, /zppVysH/);
+  // každá posuvná tabulka je ovladatelná klávesnicí a pojmenovaná (axe: scrollable-region-focusable)
+  const obaly = cele.match(/<div class="zpc-tbl[^>]*>/g) || [];
+  assert.ok(obaly.length >= 4);
+  for (const o of obaly) assert.match(o, /role="region" tabindex="0" aria-label="[^"]+\(tabulka, posuvná\)"/, o);
 });
 
 test('vykreslení escapuje text z datasetu', () => {
