@@ -459,12 +459,12 @@ test('plan_items z reálného datasetu: stavy a typy mají UI labely, overdue od
   assert.ok(voda);
   assert.equal(voda.stav, 'parlament');
   assert.equal(isPlanItemOverdue(voda, now), false);
-  // EHDS: plán červen 2026; od 30. 9. 2026 je materiál ve VeKLEP „zařazen do evidence"
-  // (verze pro jednání vlády, OVA 748/26) → stav 'vlada' už není overdue-eligible,
-  // takže ani k červenci nevychází po termínu
+  // EHDS: plán červen 2026; vláda novelu schválila 9. 11. 2026 a od 11. 11. 2026 je
+  // materiál ve VeKLEP „B – signováno“ (pokračuje do PSP) → stav 'parlament' není
+  // overdue-eligible, takže ani k červenci nevychází po termínu
   const ehds = data.plan_items.find(p => p.id === 'plan-adaptace-ehds');
   assert.ok(ehds);
-  assert.equal(ehds.stav, 'vlada');
+  assert.equal(ehds.stav, 'parlament');
   assert.equal(isPlanItemOverdue(ehds, now), false);
   // Specifické zdravotní služby: plán září 2026; od 12. 10. 2026 je materiál ve VeKLEP
   // „zařazen do evidence" (VeKLEP KORNDVAHEWJL, stav 7) → stav 'vlada' už není
