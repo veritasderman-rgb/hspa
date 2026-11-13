@@ -1,31 +1,45 @@
 {
   "id": "ehealth_adoption",
-  "name": "Elektronické zdravotnictví — míra adopce (eHealth index)",
+  "name": "Online přístup občanů k elektronické zdravotní dokumentaci (ukazatel Digitální dekády EU)",
   "area": "Struktury",
   "domain": "Digitalizace zdravotnictví",
   "subdomain": "eHealth",
-  "definition": "Kompozitní index míry adopce digitálního zdravotnictví (EHR pokrytí, ePrescription, telemedicína, datová interoperabilita) na škále 0–100.",
-  "unit": "index (0–100)",
+  "definition": "Složené skóre 0–100, kterým Evropská komise v rámci Digitální dekády sleduje „Access to e-health records“ (kód desi_aehr). Z 12 dílčích ukazatelů měří dvě věci: zda mají občané celostátně online přístup ke svým elektronickým zdravotním záznamům (přes pacientský portál nebo mobilní aplikaci, včetně přístupu pro zástupce, například rodiče dětí, osoby se zdravotním postižením a seniory), a jaká část populace se ke své minimální sadě zdravotních údajů uložených v systémech poskytovatelů skutečně dostane. Cíl EU pro rok 2030 je 100.",
+  "unit": "skóre (0–100)",
   "direction": "higher_is_better",
   "data_source": {
     "primary": {
-      "type": "mzcr_ehealth",
-      "note": "Průzkum MZ ČR o adopci eHealth, kombinovaný s DESI health dimenzí."
-    },
-    "fallback": {
-      "type": "oecd",
-      "code": "EHEALTH_INDEX"
+      "type": "ec_desi",
+      "endpoint": "https://digital-decade-desi.digital-strategy.ec.europa.eu/api/v1/chart-groups/desi/facts/",
+      "dataset": "Evropská komise, Digital Decade / DESI API: ukazatel desi_aehr (Access to e-health records), zdroj dat cnect_ehealth, skóre 0–100, roční řada od 2022",
+      "dimensions": {
+        "country": "CZ",
+        "eu": "EU",
+        "indicator": "desi_aehr",
+        "breakdown": "total",
+        "unit": "egov_score (skóre 0–100)",
+        "year": "reference_period (referenční rok dat)"
+      },
+      "note": "Ověřeno stažením CSV z DESI API 13. 11. 2026: CZ 46,607143 (2022), 51,055195 (2023), 77,380952 (2024), 77,380952 (2025); EU 86,513342 (2025). Strojově čitelný kanál existuje, indikátor je kandidát na živý fetcher."
     },
     "verification": {
       "date": "2026-11-12",
-      "result": "definicni_nesoulad",
+      "result": "vymeneno_za_dolozitelny_ukazatel",
+      "source_name": "Evropská komise · Digital Decade / DESI (Access to e-health records, desi_aehr)",
       "source_url": "https://digital-decade-desi.digital-strategy.ec.europa.eu/api/v1/chart-groups/desi/facts/",
-      "note": "Karta tvrdí složený index adopce eHealth (EHR, ePrescription, telemedicína, interoperabilita) z dat MZ ČR; takový index jsem nenašel a seed 62 (2024) nemá zdroj. Nejbližší oficiální ukazatel EK 'Access to e-health records' měří užší věc: dostupnost a rozsah online přístupu občanů k vlastním zdravotním záznamům (12 dílčích prvků, pokrytí populace, eID), ne telemedicínu ani adopci u poskytovatelů, proto definicni_nesoulad. Hodnoty jsem ověřil přímo v DESI API: CZ 2022 46.6, 2023 51.1, 2024 77.4, 2025 77.4 (stagnace), EU 2025 86.5; studie 2026 uvádí CZ 77 % a EU 87 %. Homogenita: skok 2023→2024 odráží zavedení centrálního přístupu, ne plynulý trend; 2024–2025 stejná metodika. Poslední uzavřený rok 2025. Benchmark EU ze stejného zdroje a definice; seed OECD/EU bez opory. Se předchozím agentem se shoduji ve verdiktu a hodnotách; liším se v tom, že strojový kanál existuje (DESI API CSV), takže jde o kandidáta na živý fetcher, a EU benchmark uvádím přesně 86.5 místo zaokrouhlených 87."
+      "quote": "desi_2026,CZ,desi_aehr,total,egov_score,77.380952,\"\",2025,",
+      "previous": {
+        "name": "Elektronické zdravotnictví — míra adopce (eHealth index)",
+        "value": 62,
+        "unit": "index (0–100)",
+        "year": 2024
+      },
+      "note": "Staženo 13. 11. 2026 jako CSV z DESI API (facts/?indicator=desi_aehr&format=csv; soubor /tmp/claude-0/-home-user-hspa/6f3aa54e-fad1-5171-ab45-fa9eae28f3b1/scratchpad/swap/dl/desi_aehr.csv). Bez přepočtu, jen zaokrouhlení na 1 desetinné místo; rok = sloupec reference_period, ne ročník zprávy. Řádky CZ (breakdown=total, unit=egov_score): 2022 46.607143; 2023 51.055195; 2024 77.380952; 2025 77.380952. EU: 2022 71.541406; 2023 79.115005; 2024 82.704358; 2025 86.513342; cíl 2030 = 100 (řádek dd_target_2030). Benchmark EU je ze stejného zdroje, definice i roku (2025); OECD ukazatel nevede, proto null. Definice ověřena v /indicators/ (label 'Access to e-health records', 12 dílčích ukazatelů, time_coverage 2022-2025, zdroj cnect_ehealth). Signál při prazích good 3 / warn 10: (77,38 − 86,51) / 86,51 = −10,6 %, tedy těsně 'bad'. Skok 2023→2024 (51,1→77,4) není plynulý trend, 2025 stagnace. Další hodnoty 2025 ověřené ve stejném CSV a použité v článcích: Estonsko 100, Dánsko 97,916667, Finsko 91,369048; ČR je 22. z 27 zemí EU. V kartě jsem odstranil data_source.fallback (neexistující kód OECD EHEALTH_INDEX) a doplnil pole importance a determinants; stewards zůstali beze změny (MZ ČR, NÚDZ, UZIS)."
     }
   },
   "benchmark_source": {
-    "type": "eurostat",
-    "code": "isoc_ec_dii"
+    "type": "ec_desi",
+    "note": "Průměr EU ze stejného zdroje a stejné definice (DESI API, desi_aehr, country=EU): 86,5 za rok 2025 (2022: 71,5; 2023: 79,1; 2024: 82,7). OECD tento ukazatel nevede, benchmark OECD proto není."
   },
   "signal_thresholds": {
     "good": 3,
@@ -37,10 +51,13 @@
     "NÚDZ",
     "UZIS"
   ],
-  "method_notes": "Zahrnuje ePrescription (IZIP), eNeschopenka, NeSi/NZIP, elektronické žádanky. Legislativní rámec zlepšen zákonem o e-zdraví 2025–2035.",
-  "limitations": "Index je kompozitní — dílčí složky mají různou váhu. Mezinárodní srovnání ztěžováno rozdílnými metodikami.",
-  "patient_story": "Praha, ordinace praktického lékaře, ranní vizita 67letého pacienta po hospitalizaci. „Doktore, propouštěcí zprávu z nemocnice jste dostal?\" — „Bohužel ne, oni mi to faxují s týdenním zpožděním.\" Tato scéna je v Česku 2025 stále realistická. eHealth systém v ČR má základní stavební prvky (eRecept, eŽádanka, NCEZ), ale plná interoperabilita nemocnic, ambulancí a pojišťoven dosud chybí.\n\neHealth Adoption Index ČR je 62/100 (vlastní složený index, NCEZ + MZ ČR 2024). OECD průměr je 70/100, EU 68/100. Česko je signal bad. Komponenty: eRecept funguje na 99 % (od 2018 povinný), eŽádanka spuštěna 2020 částečně, propouštěcí zpráva v digitální formě dostupná v cca 65 % nemocnic, sdílení obrazové dokumentace mezi nemocnicemi limitované, pacientský portál „Můj zdravotní záznam\" (NCEZ) má cca 800 000 uživatelů z 10 milionů.\n\nStrukturálně český eHealth má dvě hlavní mezery: (1) interoperabilita systémů poskytovatelů (nemocnice mají různé HIS, často nekompatibilní); (2) pacientský přístup k vlastním datům (formálně garantován GDPR, prakticky pomalu se rozjíždí). Národní strategie eHealth 2025–2035 byla schválena, implementační tempo ale váhá. Pojišťovny mají vlastní pacientské portály — duplikace, nikoli synergický systém. Estonsko, Dánsko a Finsko mají jednotnou pacientskou identitu a 100 % nemocnic v jednom systému už od 2005.\n\neHealth je infrastruktura, která umožňuje vše ostatní — telemedicínu, kvalitu, prevenci, výzkum, pacientskou angažovanost. Politické páky: závazný technický standard interoperability (model Finska); plošný rollout pacientského portálu (cíl 5 mil. aktivních uživatelů do 2028); finanční motivace nemocnic za interoperabilitu (úhradová bonifikace); osobní digitální identita pacienta (BankID model Švédsko/Norsko). Indikátor v HSPA dashboardu sleduje eHealth adoption jako klíčový ukazatel digitální zralosti systému.",
+  "method_notes": "Hodnoty přebíráme z veřejného API Evropské komise (Digital Decade / DESI), řádky indicator=desi_aehr, breakdown=total, unit=egov_score. Rok indikátoru je referenční rok dat (sloupec reference_period), ne ročník zprávy: zpráva DESI 2026 nese data za rok 2025. Česko: 2022 46,6; 2023 51,1; 2024 77,4; 2025 77,4. Skóre se skládá z 12 dílčích ukazatelů, které pokrývají dostupnost služby online přístupu, kategorie údajů, které si občan může zobrazit, způsob přihlášení, přístup pro zástupce a podíl populace, na který služba dosáhne. Podklady sbírá pro Komisi každoroční studie o elektronickém zdravotnictví (zdroj dat cnect_ehealth).",
+  "limitations": "Ukazatel je užší, než napovídá technické id indikátoru: měří přístup občanů k vlastním zdravotním záznamům, ne telemedicínu, elektronický recept, sdílení dokumentace mezi poskytovateli ani vybavenost ordinací. Hodnotí, co je občanům nabídnuto, ne kolik lidí službu opravdu používá. Skok mezi lety 2023 a 2024 (51,1 → 77,4) odpovídá spuštění centrálního přístupu a není plynulým trendem; v roce 2025 skóre stagnuje. Řada začíná rokem 2022, delší srovnání neexistuje. Benchmark OECD chybí. Indikátor byl 12. 11. 2026 vyměněn za tento doložitelný ukazatel, protože hodnotu původního složeného indexu adopce eHealth nešlo doložit žádným zdrojem.",
+  "patient_story": "Praha, ordinace praktického lékaře, kontrola 67letého pacienta po hospitalizaci. „Pane doktore, propouštěcí zprávu z nemocnice jste dostal?“ „Zatím ne. Máte ji u sebe?“ Pacient nemá: papír zůstal doma na stole. Kdyby si zprávu uměl otevřít v telefonu, vyřešila by se věc za minutu. Právě tohle ukazatel sleduje: jestli se člověk dostane ke svým zdravotním záznamům online a jestli to za něj může udělat i někdo blízký.\n\nEvropská komise tuto schopnost hodnotí skórem 0–100 složeným z 12 dílčích ukazatelů. Česko mělo v roce 2025 skóre 77,4, průměr EU byl 86,5. V roce 2022 to bylo 46,6 a v roce 2023 51,1; velký skok přišel v roce 2024 (77,4), od té doby se hodnota nezměnila. Cíl Evropské unie pro rok 2030 je 100.\n\nSkóre neříká, kolik lidí si záznamy opravdu prohlíží, ani jak dobře si data mezi sebou předávají nemocnice a ordinace. Říká, co je občanům nabídnuto: jaké druhy údajů si mohou zobrazit, jak se přihlásí a zda mají přístup i rodiče dětí nebo opatrovníci. Body tedy ubírá hlavně to, co v nabídce ještě chybí.\n\nK cíli 100 zbývá Česku 22,6 bodu a do roku 2030 pět let. Jestli se mezera zavře, rozhodne to, kolik druhů dokumentace se do pacientského přístupu skutečně dostane a jak snadno se k ní dostanou i lidé, kteří si sami neporadí.",
   "framework": "hspa",
   "dimension": "efektivita",
-  "verification_status": "illustrative"
+  "verification_status": "verified",
+  "importance": "Přístup k vlastním zdravotním záznamům je základní služba digitálního zdravotnictví, kterou pacient pozná na vlastní kůži: výsledky vyšetření, propouštěcí zprávy a recepty na jednom místě, bez papírů a bez obvolávání ordinací. Evropská unie si přístup všech občanů k elektronické zdravotní dokumentaci stanovila jako jeden z cílů Digitální dekády do roku 2030 a nařízení o Evropském prostoru pro zdravotní data z něj dělá právní nárok. Skóre ukazuje, jak daleko je země od stavu, kdy se k údajům dostane každý včetně lidí, kteří potřebují zástupce.",
+  "determinants": "Skóre zvyšuje existence celostátního pacientského portálu nebo mobilní aplikace, počet kategorií údajů, které si v něm občan může zobrazit (například recepty, výsledky vyšetření, propouštěcí zprávy, obrazová dokumentace), bezpečné přihlášení elektronickou identitou, možnost přístupu pro zástupce a podíl obyvatel, jejichž údaje jsou do služby zapojeny. Snižuje ho, když jsou data roztříštěna v systémech jednotlivých poskytovatelů a do centrálního přístupu se nepropisují.",
+  "verified_at": "2026-11-12"
 }

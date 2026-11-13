@@ -1,32 +1,41 @@
 {
   "id": "readmise_30d_ami",
-  "name": "30denní readmise po AIM (akutní IM)",
+  "name": "Úmrtí nebo rehospitalizace do roka po hospitalizaci pro srdeční selhání",
   "area": "Procesy",
   "domain": "Bezpečnost péče",
   "subdomain": "Readmise",
-  "definition": "Podíl pacientů propuštěných po hospitalizaci pro akutní infarkt myokardu, kteří byli rehospitalizováni z jakékoli příčiny do 30 dnů.",
-  "unit": "%",
+  "definition": "Počet pacientů ve věku 45 a více let na 100 propuštěných po hospitalizaci pro městnavé srdeční selhání, kteří do 365 dnů od propuštění zemřeli z jakékoli příčiny nebo byli z jakékoli příčiny znovu hospitalizováni. Věkově a pohlavně standardizováno (OECD, kód ICCHFMACR).",
+  "unit": "na 100 pacientů",
   "direction": "lower_is_better",
   "data_source": {
     "primary": {
-      "type": "uzis_nzis",
-      "note": "NRH linkage — propojení záznamu hospitalizací dle rodného čísla."
-    },
-    "fallback": {
       "type": "oecd",
-      "code": "READM_AMI"
+      "endpoint": "https://sdmx.oecd.org/public/rest/data/OECD.ELS.HD,DSD_HCQO@DF_IC,/all?startPeriod=2015&format=csvfilewithlabels",
+      "dataset": "OECD Health Care Quality and Outcomes (HCQO), dataflow DSD_HCQO@DF_IC „Integrated care“, měřítko ICCHFMACR „Congestive heart failure - All-cause mortality or all-cause readmission within 365 days after discharge“, ČR, věk 45+, obě pohlaví, věkově a pohlavně standardizováno, jednotka na 100 pacientů. Řada 2015–2022.",
+      "dimensions": [
+        "year",
+        "sex"
+      ],
+      "note": "Údaje za ČR dodává do OECD ÚZIS z Národního registru hrazených zdravotních služeb; karta je přebírá z publikace OECD, přímý výpočet z registru ověřen není. Poslední zveřejněný rok za ČR je 2022. OECD vede i užší variantu ICCHFMDSR (úmrtí nebo rehospitalizace pro totéž onemocnění), která do indikátoru nevstupuje."
     },
     "verification": {
       "date": "2026-11-12",
-      "result": "nedohledatelne",
-      "source_url": "https://sdmx.oecd.org/public/rest/dataflow/OECD.ELS.HD/DSD_HCQO@DF_AC/latest?references=codelist",
-      "note": "Nezávisle jsem prošel codelist OECD DF_AC: readmisní měřítka jsou jen 365denní u ischemické mrtvice a srdečního selhání, AIM má jen mortalitu, takže fallback READM_AMI z karty neexistuje. Zkusil jsem i NKIS případové studie (NZIP) – rehospitalizace sledují jen u srdečního selhání (2 roky) – a webové hledání; česká publikace s 30denní readmisí po AIM se nenašla (existuje jen slovenský indikátor kvality dle vyhlášky 531/2023 Z.z., nesouměřitelný). Hodnota 11,5 %, trend 2020–2024 a benchmarky 13,2/13,5 nejsou v žádném dohledaném primárním zdroji a jsou pravděpodobně ilustrativní. Ověřovací protokol nelze provést, protože chybí zdroj. Shoduji se s agentem; doporučuji indikátor označit jako ilustrativní, nebo ho nahradit 30denní mortalitou po AIM z OECD."
+      "result": "vymeneno_za_dolozitelny_ukazatel",
+      "source_name": "OECD Health Care Quality and Outcomes – Integrated care (DSD_HCQO@DF_IC), ukazatel ICCHFMACR; data za ČR dodává ÚZIS",
+      "source_url": "https://sdmx.oecd.org/public/rest/data/OECD.ELS.HD,DSD_HCQO@DF_IC,/all?startPeriod=2015&format=csvfilewithlabels",
+      "quote": "Congestive heart failure - All-cause mortality or all-cause readmission within 365 days after discharge",
+      "previous": {
+        "name": "30denní readmise po AIM (akutní IM)",
+        "value": 11.5,
+        "unit": "%",
+        "year": 2024
+      },
+      "note": "Staženo CSV (HTTP 200, 3,0 MB, dataflow DF_IC verze 2.1) a přefiltrováno: REF_AREA=CZE, MEASURE=ICCHFMACR, UNIT_MEASURE=10P2PAT (Per 100 patients), AGE=Y_GE45, SEX=_T, STATISTICAL_OPERATION=OBS, METHODOLOGY=AGE_SEX_STANDARD. Řada ČR 2015–2022: 68,6; 68,6; 68,1; 69,3; 68,5; 67,9; 69; 69,4 – přesně podle nálezu, bez příznaků OBS_STATUS. Rok 2023 za ČR v datasetu není. Benchmark = vlastní nevážený průměr téhož řezu za rok 2022: OECD 15 zemí (CHE 52,7; CZE 69,4; DNK 68,0; ESP 58,2; EST 50,0; GBR 59,3; ISL 25,1; ISR 67,6; ITA 50,5; LTU 44,1; LVA 57,0; NLD 51,4; NOR 70,9; SVN 55,0; SWE 59,0) = 838,2/15 = 55,88 → 55,9; EU 10 zemí (CZE, DNK, ESP, EST, ITA, LTU, LVA, NLD, SVN, SWE) = 562,6/10 = 56,26 → 56,3. Singapur (66,7) vynechán jako nečlen. OECD sám průměr neuvádí. ČR je v roce 2022 druhá nejvyšší po Norsku; signál se oproti seedu otočí z good na bad. Užší varianta ICCHFMDSR (úmrtí nebo rehospitalizace pro totéž onemocnění) ČR 2022 = 41,8, do indikátoru nevstupuje. Nový ukazatel se od původního liší diagnózou (srdeční selhání místo AIM), horizontem (365 místo 30 dnů) a tím, že je složený (úmrtí nebo rehospitalizace)."
     }
   },
   "benchmark_source": {
     "type": "oecd",
-    "code": "READM_AMI",
-    "dataset": "HEALTH_HCQI"
+    "note": "Vlastní výpočet z téhož datasetu a téže definice (ICCHFMACR, rok 2022, obě pohlaví, věkově a pohlavně standardizováno): nevážený průměr zemí, které údaj vykázaly. OECD = 15 členských zemí (CHE, CZE, DNK, ESP, EST, GBR, ISL, ISR, ITA, LTU, LVA, NLD, NOR, SVN, SWE), EU = 10 z nich (CZE, DNK, ESP, EST, ITA, LTU, LVA, NLD, SVN, SWE). Singapur jako nečlen vynechán. OECD sám průměr v datasetu neuvádí."
   },
   "signal_thresholds": {
     "good": 5,
@@ -37,10 +46,13 @@
     "ÚZIS",
     "ČKS"
   ],
-  "method_notes": "Nižší readmise než OECD průměr — pozitivní signál kvality péče po IM.",
-  "limitations": "Nezahrnuje pacienty, kteří zemřeli do 30 dnů mimo nemocnici. Ovlivněno délkou hospitalizace při první příjmu.",
-  "patient_story": "Kardiocentrum, post-akutní rehabilitace 64letého pacienta měsíc po infarktu. „Vrátil jste se s recidivou anginy pectoris, opět dilatace.\" Toto je „30denní readmise\" — pacient se vrací do nemocnice s souvisejícím problémem do 30 dní od propuštění. Indikátor je proxy kvality nemocniční péče a koordinace s následnou ambulantní vrstvou.\n\n30denní readmise po AMI v ČR je 11,5 % (ÚZIS NRH, 2024). OECD průměr 13,2 %, EU 13,5 % — Česko signal good, pod oběma průměry. Hodnota se zlepšila (2015: 13,8 %, 2024: 11,5 %) díky rozvoji rehabilitační péče, lepší post-discharge edukaci a sítě kardiocenter (viz mortalita_inhosp_ami).\n\nStrukturálně český systém má dobrou kardiologickou síť (viz clanek-akutni-infarkt), s post-AMI péčí v centrech a navazující ambulantní kardiologií. Mezery: nesystematický transfer k praktikovi (komunikace mezi nemocnicí a primární péčí slabší), nízká účast v kardiorehabilitaci (cca 30 % indikovaných), nesoustavná adherence k sekundární prevenci (statiny, ACE inhibitory, antiagregace). Mezi kraji je rozptyl v readmissionech 8–14 %.\n\nReadmise je klíčový quality indicator nemocniční péče. Politické páky: pokračování centralizace AMI péče; rozšíření kardiorehabilitační kapacity (cíl 60 % indikovaných do programu); povinné předání kompletní propouštěcí zprávy do 24 hodin (elektronicky přes NCEZ); navýšení kapitační platby praktikovi za sledování post-AMI pacientů; pravidelný audit readmissionů per nemocnice. Indikátor v HSPA dashboardu sleduje readmise jako klíčový ukazatel kvality akutní a navazující péče.",
+  "method_notes": "Složený ukazatel: pacient se započítá, pokud do roka od propuštění zemřel, nebo se vrátil do nemocnice, a to z jakéhokoli důvodu. Sleduje se osoba napříč nemocnicemi, takže návrat do jiného zařízení se počítá také. Hodnoty jsou standardizované na věk a pohlaví, aby šly srovnat země s různě starými pacienty. Nižší hodnota znamená lepší návaznost péče po propuštění.",
+  "limitations": "Ukazatel spojuje úmrtí a návrat do nemocnice do jednoho čísla, samostatnou rehospitalizaci OECD nezveřejňuje. Počítají se návraty z jakékoli příčiny, tedy i ty, které se srdcem nesouvisejí. Údaj vykazuje jen asi patnáct zemí OECD a jejich registry a kódování diagnóz se liší, proto je mezinárodní srovnání orientační a průměr je nevážený vlastní výpočet. Řada za ČR končí rokem 2022. Indikátor byl 12. 11. 2026 vyměněn za doložitelný ukazatel, protože původní hodnotu (30denní readmise po akutním infarktu myokardu) nešlo doložit žádným veřejným zdrojem; nový ukazatel se týká jiné diagnózy (srdeční selhání), delšího období (365 místo 30 dnů) a zahrnuje i úmrtí.",
+  "importance": "Srdeční selhání je chronické onemocnění, u kterého o dalším osudu pacienta rozhoduje hlavně to, co se děje po propuštění: nastavení léků, včasná kontrola u kardiologa nebo praktika, edukace o režimu a váze. Ukazatel proto neměří jen nemocnici, ale celou návaznost péče mezi lůžkem, ambulancí a domovem. Vysoká hodnota znamená, že se většina pacientů do roka vrátí do nemocnice nebo zemře.",
+  "patient_story": "Paní Jarmile je 78 let a z interny ji propustili po týdnu, kdy jí lékaři odvodnili plíce a upravili léky na srdeční selhání. Domů dostala zprávu, recepty a doporučení objednat se ke kardiologovi. Termín sehnala až za dva měsíce. Mezitím jí otekly nohy, přibrala čtyři kila a v noci se začala dusit. Po šesti týdnech ji sanitka vezla zpět.\n\nPřesně takový návrat tento indikátor zachycuje. Podle dat OECD v Česku do roka od propuštění zemřelo nebo se znovu ocitlo v nemocnici 69,4 ze 100 pacientů hospitalizovaných pro srdeční selhání (rok 2022, věk 45 a více let, jakákoli příčina). Od roku 2015 se hodnota prakticky nemění, pohybuje se mezi 67,9 a 69,4.\n\nNevážený průměr patnácti zemí OECD, které údaj za rok 2022 vykázaly, je 55,9, průměr deseti zemí EU 56,3. Česko je tedy zřetelně nad oběma. Srovnání je orientační, protože země se liší v tom, koho do nemocnice přijímají a jak diagnózy kódují.\n\nCo s tím lze dělat, je známé: kontrola krátce po propuštění, jasně předaná propouštěcí zpráva praktikovi, sestra, která pacientovi zavolá a zeptá se na váhu a dušnost, a ambulance srdečního selhání dostupné i mimo velká města.",
+  "determinants": "Hodnotu ovlivňuje věk a přidružené nemoci pacientů (cukrovka, onemocnění ledvin, fibrilace síní), kvalita přípravy propuštění a nastavení léčby, rychlost první kontroly po propuštění, dostupnost ambulancí srdečního selhání a kardiologů v regionu, spolupráce nemocnice s praktickým lékařem, dodržování léčby a režimu pacientem a dostupnost domácí a následné péče. Roli hraje i to, jak snadno se v dané zemi pacient do nemocnice dostane: kde je lůžek hodně, bývá i opakovaných hospitalizací víc.",
   "framework": "hspa",
   "dimension": "kvalita",
-  "verification_status": "illustrative"
+  "verification_status": "verified",
+  "verified_at": "2026-11-12"
 }

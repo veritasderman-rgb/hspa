@@ -1,49 +1,61 @@
 {
   "id": "cekaci_doby_specialist",
-  "name": "Čekací doba na specialistu (medián)",
+  "name": "Odklad zdravotní péče kvůli čekací listině",
   "area": "Procesy",
   "domain": "Dostupnost péče",
   "subdomain": "Čekací doby",
-  "definition": "Medián počtu dní od žádanky k první konzultaci u ambulantního specialisty (kardiolog, ortoped, neurolog, gastroenterolog).",
-  "unit": "dní",
+  "definition": "Podíl osob ve věku 15 a více let, které v posledních 12 měsících potřebovaly zdravotní péči a uvedly, že se k ní dostaly se zpožděním kvůli dlouhé čekací listině. Údaj pochází z Evropského výběrového šetření o zdraví (EHIS); jmenovatelem jsou jen lidé, kteří péči v daném roce potřebovali.",
+  "unit": "%",
   "direction": "lower_is_better",
   "data_source": {
     "primary": {
-      "type": "uzis_nzis",
-      "note": "NZIS: čekací doby z výkaznictví zdravotních pojišťoven.",
-      "_dev_notes": [
-        "Endpoint dohledat v rámci NZIS Open Data"
-      ]
-    },
-    "fallback": {
-      "type": "oecd",
-      "code": "WAITING_TIMES_SPECIALIST"
+      "type": "eurostat_jsonstat",
+      "endpoint": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/hlth_ehis_un1e",
+      "dataset": "hlth_ehis_un1e",
+      "dimensions": {
+        "geo": "CZ",
+        "sex": "T",
+        "age": "TOTAL",
+        "isced11": "TOTAL",
+        "reason": "WLIST",
+        "unit": "PC"
+      },
+      "note": "Eurostat, Self-reported unmet needs for health care by sex, age, specific reasons and educational attainment level (EHIS), důvod „Waiting list“. Ověřeno živě 12. 11. 2026: Česko 11,2 % (2014) a 14,2 % (2019), EU27 19,2 % (2014) a 19,4 % (2019). Metadata: https://ec.europa.eu/eurostat/cache/metadata/en/hlth_det_esms.htm."
     },
     "verification": {
       "date": "2026-11-12",
-      "result": "nedohledatelne",
-      "source_url": "https://ct24.ceskatelevize.cz/clanek/domaci/objednaci-lhuty-u-lekare-nekdy-musi-pacienti-cekat-i-nekolik-mesicu-358599",
-      "note": "S agentem se shoduji. Zkusil jsem další cesty: vyhledávání v NZIP/ÚZIS (datové souhrny, roční výkazy ambulantní péče, prezentace NZIP ke specializované péči z 28. 5. 2026, kde jsou jen obecné zmínky o čekacích lhůtách bez čísel) a OECD. Nic z toho medián čekací doby na specialistu neobsahuje a MZ podle ČT24 čekací lhůty plošně nesleduje. Definice, jednotku, populaci ani řadu 24–28 dní tedy nelze ověřit; benchmark OECD/EU je neodůvodněný. Ankety SAS (nejde o medián ani o úřední statistiku) ukazují spíš delší čekání, takže seed 28 dní je navíc nejspíš podhodnocený. Doporučení: označit jako ilustrativní, nebo nahradit indikátorem s doloženým zdrojem."
+      "result": "vymeneno_za_dolozitelny_ukazatel",
+      "source_name": "Eurostat, hlth_ehis_un1e (EHIS) — Self-reported unmet needs for health care by sex, age, specific reasons and educational attainment level; reason=WLIST, sex=T, age=TOTAL, isced11=TOTAL",
+      "source_url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/hlth_ehis_un1e?format=JSON&geo=CZ&geo=EU27_2020&sex=T&age=TOTAL&isced11=TOTAL",
+      "quote": "Self-reported unmet needs for health care by sex, age, specific reasons and educational attainment level",
+      "previous": {
+        "name": "Čekací doba na specialistu (medián)",
+        "value": 28,
+        "unit": "dní",
+        "year": 2024
+      },
+      "note": "API Eurostat staženo 12. 11. 2026 (dataset aktualizován 9. 6. 2026). Bez přepočtu, přímé buňky: unit=PC, reason=WLIST ('Waiting list'), CZ 2014 = 11.2, CZ 2019 = 14.2; EU27_2020 2014 = 19.2, 2019 = 19.4. Jmenovatel ověřen v metadatech hlth_det_esms: 'the percentages from the EHIS are calculated over the population aged 15 and over that were in need of health care in the previous 12 months'; ukazatel = 'Proportion of people in need of health care reporting to have experienced delay in getting health care in the previous 12 months for reasons of ... long waiting lists'. Benchmark EU je ze stejného datasetu a roku; průměr OECD v datasetu není. Dataset má jen vlny 2014 a 2019. Stažený soubor: /tmp/claude-0/-home-user-hspa/6f3aa54e-fad1-5171-ab45-fa9eae28f3b1/scratchpad/swap/dl/ehis/un1e.json. Karta: frequency approx_5y, benchmark_source {type: eurostat}, signal_thresholds ponechány (14,2 vs. 19,4 vyjde good)."
     }
   },
   "benchmark_source": {
-    "type": "oecd",
-    "code": "WAITING_TIMES_SPECIALIST",
-    "dataset": "HEALTH_HCQI"
+    "type": "eurostat",
+    "note": "Eurostat hlth_ehis_un1e, EU27_2020, 2019, důvod WLIST: 19,4 % (stejný dataset a definice). Průměr OECD v datasetu není, proto chybí."
   },
   "signal_thresholds": {
     "good": 5,
     "warn": 15
   },
-  "frequency": "yearly",
+  "frequency": "approx_5y",
   "stewards": [
-    "VZP/SZP",
-    "ÚZIS"
+    "Eurostat",
+    "ÚZIS",
+    "ČSÚ"
   ],
-  "method_notes": "Medián, ne průměr — robustní vůči extrémním hodnotám. Vážený průměr přes 4 vybrané specializace.",
-  "limitations": "Nezahrnuje neformální čekání před žádankou. Regionální variabilita významná.",
-  "patient_story": "Plzeň, středa odpoledne, paní Krásná (62) volá k neurologovi pro suspektní polyneuropatii. „Nejdřívější volný termín je 2. listopadu.\" Je červen. Pět měsíců čekání na běžné neurologické vyšetření. Pacientka pravděpodobně mezitím přejde do soukromé ambulance, zaplatí samoplatebně 2 000 Kč, nebo nepůjde vůbec — a problém se prohloubí.\n\nPrůměrná čekací doba na první vyšetření specialistou v ČR je 28 dní (vlastní data ÚZIS / SZP, 2024, agregace přes 8 nejčastějších specializací). OECD průměr je 18 dní, EU 22 dní. Česko je v evropském srovnání nadprůměrně dlouhé. Rozptyl mezi specializacemi je dramatický: oftalmologie 7 dní, neurologie 42 dní, endokrinologie 56 dní, sexuologie 90+ dní. Mezi regiony rozdíl 3–4× (Praha → Karlovarský). Hodnota se zhoršuje (2018: 22 dní; 2024: 28).\n\nStrukturálně problém vzniká kombinací: nedostatečné kapacity v některých oborech (neurologie, endokrinologie, dětská psychiatrie), nerovnoměrné distribuce (koncentrace v metropolích), úhradové vyhlášky (limity počtu výkonů na pojištěnce), demografického tlaku (stárnutí populace zvyšuje poptávku). Systém má dva souběžné světy: hrazená péče (28 dní průměr, často s frontou), samoplatební ambulance (do tří dnů, ale za 1500–3500 Kč za vyšetření). To je defacto dvourychlostní péče bez explicitní legislativní úpravy.\n\nČekací doby ovlivňují klinické výsledky — pozdní záchyt diabetu, neurologického onemocnění, endokrinní poruchy se promítá do mortality a chronicity. Politické páky: pravidelný transparentní reporting čekacích dob per kraj a specializaci (UK NHS model — povinné publikování); navýšení kapitační platby praktikům za řešení v primární péči (aby méně případů končilo u specialisty); investice do navýšení kapacit v deficitních oborech (cca 200 nových míst neurologie do 2030); telemedicína pro triáž (kdo z 28 dnů opravdu potřebuje specialista). Indikátor v HSPA dashboardu sleduje čekací doby jako jeden z hlavních ukazatelů přístupnosti péče — a zároveň jeden z hlavních problémů, který občan na vlastní kůži cítí.",
+  "method_notes": "Výběrové šetření v domácnostech, odpovědi jsou sebehodnocení. Procento se počítá z osob 15+, které v posledních 12 měsících zdravotní péči potřebovaly, ne z celé populace. Otázka se ptá na zpoždění péče kvůli čekací listině (dlouhému čekání na termín) a týká se zdravotní péče obecně. Šetření EHIS proběhlo v letech 2014 a 2019, další vlna se sbírala v roce 2025; mezi vlnami roční hodnoty neexistují.",
+  "limitations": "Jde o sebehodnocení: výsledek závisí i na tom, jak dlouhé čekání lidé považují za normální. Ukazatel neměří počet dní a netýká se jen ambulantních specialistů, zahrnuje veškerou zdravotní péči. Poslední dostupná hodnota je z roku 2019, tedy z doby před pandemií covidu-19. S ročním šetřením EU-SILC (indikátor nesplněné potřeby péče) jej nelze přímo srovnávat, protože EU-SILC počítá podíl z celé populace 16+ a ptá se jen na hlavní důvod. Skutečný medián čekání na specialistu v Česku zatím nikdo neměří; změnit to mohou až data z elektronických žádanek. Indikátor byl 12. 11. 2026 vyměněn za doložitelný ukazatel, protože původní hodnotu (medián čekání na specialistu ve dnech) nešlo doložit žádným zdrojem.",
+  "patient_story": "Paní Krásná (62) z Plzně dostala od praktické lékařky žádanku na neurologii kvůli brnění nohou. V první ambulanci jí nabídli termín za několik měsíců, ve druhé nebrali nové pacienty. Na vyšetření se nakonec dostala, ale později, než potřebovala. Kdyby ji tazatel šetření EHIS navštívil, na otázku, zda se v posledním roce dostala k péči se zpožděním kvůli dlouhému čekání na termín, by odpověděla ano.\n\nPrávě takové odpovědi tento ukazatel sčítá. V roce 2019 uvedlo zpoždění péče kvůli čekací listině 14,2 % lidí ve věku 15 a více let, kteří zdravotní péči potřebovali. O pět let dříve to bylo 11,2 %. Průměr Evropské unie byl v roce 2019 vyšší, 19,4 %. Česko tedy vychází lépe než unijní průměr, ale směr je opačný, než bychom chtěli: podíl lidí, kteří čekali, mezi dvěma vlnami šetření vzrostl o tři procentní body.\n\nUkazatel neříká, jak dlouho se čeká. Nerozliší ani, zda šlo o specialistu, vyšetření magnetickou rezonancí nebo plánovanou operaci. Počet dní od žádanky k první návštěvě u specialisty v Česku žádná instituce systematicky neměří. Zdravotní pojišťovny datum vystavení žádanky neznají a stát ho začne získávat až z elektronických žádanek.\n\nProto je tento ukazatel zatím nejlepší úřední a mezinárodně srovnatelný údaj o čekání na péči, který pro Česko existuje. Až budou k dispozici skutečné čekací doby podle oborů a krajů, měl by je doplnit nebo nahradit údaj měřený ve dnech.",
   "framework": "hspa",
   "dimension": "dostupnost",
-  "verification_status": "illustrative"
+  "verification_status": "verified",
+  "verified_at": "2026-11-12"
 }

@@ -191,6 +191,33 @@ const KNOWN_SEED_VERIFIED_EXCEPTIONS = new Set([
   'osetrovaci_dny_na_uvazek_sestry',
   'podil_senioru_na_internich_hospitalizacich',
   'pldd_podil_65plus',
+  // 2026-11-12 (dokončení): hodnoty ručně ověřené proti primárnímu zdroji, který nemá
+  // napojený fetcher (nález v kartě v data_source.verification).
+  'centra_dusevniho_zdravi_per_100k',
+  'dojezd_zzs',
+  'hospicova_pece_luzka',
+  'mobilni_paliativni_tymy_per_milion',
+  'pedopsychiatri_per_100k_deti',
+  'poraneni_hraze_3_4_stupen',
+  'screening_plicni',
+  'umrtnost_predavkovani_drogy',
+  'umrti_doma_nebo_hospici_pct',
+  'lpod_share_critical',
+  'multimorbidita_65plus',
+  'nadeje_doziti_vzdelani_gap_muzi',
+  // 2026-11-12: indikátory vyměněné za doložitelný příbuzný ukazatel (původní hodnotu
+  // nešlo doložit); nová hodnota ručně ověřena proti primárnímu zdroji, fetcher zatím není.
+  'benzodiazepiny_seniori_65plus',
+  'bezpecnost_padu_nemocnice',
+  'cekaci_doby_specialist',
+  'dekubity_hospitalizace',
+  'ehealth_adoption',
+  'kontrola_hypertenze',
+  'preziti_ohca_30d',
+  'readmise_30d_ami',
+  'spokojenost_informovani',
+  'trombolyza_ischemicka_cmp',
+  'vydaje_dusevni_zdravi_pct',
 ]);
 
 test('verification_status: verified v kartě ⇒ source.origin: live v kontraktu (kromě známých výjimek)', () => {

@@ -1,32 +1,48 @@
 {
   "id": "bezpecnost_padu_nemocnice",
-  "name": "Pády pacientů v nemocnici (na 1 000 hospitalizací)",
+  "name": "Hlášené pády pacientů v nemocnicích akutní péče (na 1 000 hospitalizovaných)",
   "area": "Procesy",
   "domain": "Bezpečnost péče",
   "subdomain": "Ošetřovatelská bezpečnost",
-  "definition": "Počet hlášených pádů pacienta s poraněním na 1 000 hospitalizací v akutní lůžkové péči.",
-  "unit": "na 1 000 hosp.",
+  "definition": "Počet pádů hospitalizovaných pacientů, které nemocnice akutní péče vykázaly do Systému hlášení nežádoucích událostí (událost „NU Pád“), v přepočtu na 1 000 hospitalizovaných pacientů. Započítávají se fakultní a velké nemocnice akutní péče a ostatní nemocnice akutní péče. Jde o všechny hlášené pády, tedy i ty bez poranění.",
+  "unit": "na 1 000 hosp. pacientů",
   "direction": "lower_is_better",
   "data_source": {
     "primary": {
-      "type": "nrc",
-      "note": "Systém hlášení nežádoucích událostí NIMS (NRC)."
+      "type": "mzcr_opendata",
+      "endpoint": "https://datanzis.uzis.gov.cz/data/SSS-06-SHNU/SSS-06-01/Otevrena-data-SSS-06-01-nezadouci-udalosti-luzkova-pece.csv",
+      "dataset": "ÚZIS ČR, otevřená data „Přehled hlášených nežádoucích událostí v lůžkové péči“ (SSS-06-01), zdroj Systém hlášení nežádoucích událostí (SHNU). Roční agregáty podle kategorie poskytovatele a typu události: počet vykázaných událostí, počet hospitalizovaných pacientů (jmenovatel) a relativní počet na 1 000 pacientů. Časové pokrytí 2018–2025, roční aktualizace.",
+      "dimensions": {
+        "typ_NU": "R11S01 NU Pád",
+        "kategorie_PZS": "A (Fakultní a velké nemocnice akutní péče) + B (Ostatní nemocnice akutní péče)",
+        "metrika": "součet NU_absolutni_pocet / součet NU_pocet_pacientu × 1000",
+        "obdobi": "roční řada 2018–2025"
+      },
+      "note": "Hodnota se počítá jako vážený poměr přes obě kategorie, ne jako průměr sloupce NU_relativni_pocet. CSV je v UTF-8 s BOM a název jedné kategorie poskytovatele obsahuje čárku, proto je nutný skutečný CSV parser."
     },
     "fallback": {
-      "type": "oecd",
-      "code": "PATIENT_FALLS"
+      "type": "uzis_portal",
+      "url": "https://shnu.uzis.cz/",
+      "note": "Národní portál Systému hlášení nežádoucích událostí (ÚZIS): metodiky, definice událostí a pokyny k výkazu L (MZ) 3-01."
     },
     "verification": {
       "date": "2026-11-12",
-      "result": "nedohledatelne",
-      "source_url": "https://www.nzip.cz/kategorie/279-hlaseni-nezadouci-udalosti-nshnu",
-      "note": "Shoduji se s předchozím agentem ve všech podstatných bodech. Hodnota 2,1 (2024) ani řada 2,8 až 2,1 (2020–2024) se v žádném dohledatelném zdroji nevyskytuje. Záznam v kontraktu má prázdné source.url a karta odkazuje na neexistující NRC/NIMS. Nezávisle jsem prošel NZIP kategorii SHNU: existují dvě vizualizace pádů (2504, 2505) s jednotkou na 1 000 pacientů, nikoli s poraněním na 1 000 hospitalizací, a čísla jsou jen v Power BI. Starý portál shnu-old.uzis.cz s PDF analýzami vrací z prostředí connection reset. Hlášení je podle výkazu L (MZ) 3-01 povinné, tvrzení karty o dobrovolnosti je chybné. Benchmark OECD PATIENT_FALLS v OECD neexistuje (předchozí agent prošel katalog SDMX, já jsem na nic opačného nenarazil), benchmark 1,8/2,0 je tedy bez zdroje. Doporučení: hodnoty, trend a benchmark ze seedu vyřadit, definici přepsat na SHNU (NU Pád na 1 000 pacientů) a vyžádat export od ÚZIS, nebo indikátor stáhnout."
+      "result": "vymeneno_za_dolozitelny_ukazatel",
+      "source_name": "ÚZIS ČR, Systém hlášení nežádoucích událostí (SHNU), otevřená data SSS-06-01 „Přehled hlášených nežádoucích událostí v lůžkové péči“",
+      "source_url": "https://datanzis.uzis.gov.cz/data/SSS-06-SHNU/SSS-06-01/Otevrena-data-SSS-06-01-nezadouci-udalosti-luzkova-pece.csv",
+      "quote": "2025,\"A\",\"Fakultní a velké nemocnice akutní péče\",\"R11S01\",\"NU Pád\",6942,848879,\"8.18\"",
+      "previous": {
+        "name": "Pády pacientů v nemocnici (na 1 000 hospitalizací)",
+        "value": 2.1,
+        "unit": "na 1 000 hosp.",
+        "year": 2024
+      },
+      "note": "CSV jsem 12. 11. 2026 stáhl a přepočítal. Vzorec: součet NU_absolutni_pocet / součet NU_pocet_pacientu × 1000 pro NU_kod R11S01 a kategorie_PZS A + B. Vstupy: 2018 21185/2120557=9,99; 2019 21393/2238071=9,56; 2020 18604/1849654=10,06; 2021 18287/1877600=9,74; 2022 19722/2017921=9,77; 2023 21013/2024014=10,38; 2024 21359/2005161=10,65; 2025 21716/2027712=10,71 (A 6942/848879, B 14774/1178833; druhý řádek zdroje: 2025,\"B\",\"Ostatní nemocnice akutní péče\",\"R11S01\",\"NU Pád\",14774,1178833,\"12.53\"). Ověřené varianty 2025: všech 7 kategorií 13,85; A+B+S 10,51. Jde o všechny hlášené pády, ne jen s poraněním. Benchmark žádný (OECD ani Eurostat pády nezveřejňují), starý benchmark 1,8/2,0 odstranit, signál neutral. Směr ponechán lower_is_better, ale vyšší hodnota může znamenat lepší kulturu hlášení; zvážit context_dependent. Metadata CSV (csv-metadata.json) otevřena: NU_relativni_pocet je na 1 000 pacientů."
     }
   },
   "benchmark_source": {
-    "type": "oecd",
-    "code": "PATIENT_FALLS",
-    "dataset": "HEALTH_HCPS"
+    "type": "none",
+    "note": "Srovnatelný mezinárodní benchmark neexistuje. OECD ani Eurostat pády hospitalizovaných pacientů nezveřejňují a národní systémy hlášení se liší definicí i povinností hlásit."
   },
   "signal_thresholds": {
     "good": 5,
@@ -34,13 +50,22 @@
   },
   "frequency": "yearly",
   "stewards": [
-    "NRC",
     "ÚZIS"
   ],
-  "method_notes": "Hlášení nežádoucích událostí je v ČR dobrovolné a podléhá underreportingu, zejména u menších nemocnic.",
-  "limitations": "Závisí na kultuře hlášení — větší hlášení může znamenat lepší safety kulturu, ne více pádů.",
-  "patient_story": "Interní oddělení nemocnice, 84letý pacient ráno, pokus o samostatný odchod na toaletu, pád na bok, fraktura kyčle. Komplikace prodlouží hospitalizaci o 3 týdny, zvýší riziko úmrtí na 20 %. Tahle nepříznivá událost se v Česku stane statisticky cca 2,1× za 1 000 hospitalizovaných — nad průměrem OECD.\n\nPády hospitalizovaných pacientů v ČR jsou 2,1 na 1 000 hospitalizací (ÚZIS NRH, 2024). OECD průměr 1,8, EU 2,0 — Česko signal bad. Trend stabilní (2018: 2,3, 2024: 2,1). Vysoký podíl seniorních pacientů (multimorbidita, polypragmazie, kognitivní poruchy, sarkopenie) zvyšuje riziko pádů. Variabilita mezi nemocnicemi extrémní (1,0–3,5 na 1 000) — odráží kvalitu fall prevention programů.\n\nStrukturálně český systém má v každé větší nemocnici Risk Management Officer a fall prevention guidelines, ale implementace v rutinní praxi kolísá. Kvalitní fall prevention programy zahrnují: screening rizika při příjmu (Morse Fall Scale), revize medikace pro fall-risk drugs (benzodiazepiny, antihypertenziva), úprava prostředí (signalizace, sliding rails), trénink chůze a rovnováhy. Personální poddimenzování (sestra/lůžko) zvyšuje riziko (méně sledování pacienta).\n\nPády v nemocnici jsou „never events\" v kvalitativním slovníku — preventovatelné komplikace, které by se neměly stávat při kvalitní péči. Politické páky: povinný reporting per nemocnice (model UK NHS Improvement Patient Safety Incident Reports); audit a benchmarking; investice do personálního obsazení (sestra/lůžko jako quality indicator); rozšíření „bed alarms\" a senzorické vybavení; deprescribing programy pro fall-risk drugs. Indikátor v HSPA dashboardu sleduje pády jako klíčový ukazatel patient safety.",
+  "method_notes": "Výpočet: počet vykázaných pádů (NU Pád, kód R11S01) v kategoriích poskytovatelů A a B dělený počtem hospitalizovaných pacientů v těchto kategoriích, krát 1 000. Vstupy 2025: 6 942 + 14 774 = 21 716 pádů na 848 879 + 1 178 833 = 2 027 712 pacientů, tj. 10,71. Řada: 2018 9,99; 2019 9,56; 2020 10,06; 2021 9,74; 2022 9,77; 2023 10,38; 2024 10,65; 2025 10,71. Úroveň se mezi typy zařízení výrazně liší: fakultní a velké nemocnice 8,18, ostatní nemocnice akutní péče 12,53, nemocnice následné péče a LDN 120,21 na 1 000 pacientů (2025). Za celou lůžkovou péči (všech sedm kategorií) vychází 13,85. Pády patří v Systému hlášení nežádoucích událostí mezi povinně sledované události u všech poskytovatelů lůžkové péče.",
+  "limitations": "Ukazatel počítá všechny hlášené pády, ne jen pády s poraněním; podíl pádů s poraněním otevřená data neobsahují. Hodnota závisí na kultuře hlášení: víc hlášených pádů může znamenat poctivější evidenci, ne víc skutečných pádů, proto se směr „nižší je lepší“ musí číst opatrně a signál zůstává neutrální. Jmenovatelem jsou hospitalizovaní pacienti, ne ošetřovací dny, takže ukazatel nezohledňuje délku pobytu. Zařazení specializovaných nemocnic a center mezi akutní péči je věc rozhodnutí; s nimi vychází hodnota za rok 2025 na 10,51. Mezinárodní srovnání neexistuje. Indikátor byl 12. 11. 2026 vyměněn za doložitelný ukazatel, protože původní hodnotu (pády s poraněním na 1 000 hospitalizací) nešlo doložit žádným zdrojem.",
+  "patient_story": "Interní oddělení, časné ráno. Pan Josef (84) se po špatné noci pokusí dojít sám na toaletu. Signalizaci nepoužije, protože nechce sestru budit kvůli maličkosti. U postele se mu zamotá hlava a upadne na bok. Tentokrát to odnese jen modřinou, jindy takový pád končí zlomeninou krčku a týdny na lůžku navíc. Sestra událost zapíše a nemocnice ji vykáže do Systému hlášení nežádoucích událostí.\n\nPodobných pádů nahlásily nemocnice akutní péče za rok 2025 celkem 21 716 na 2 027 712 hospitalizovaných pacientů, tedy 10,71 na tisíc (ÚZIS, Systém hlášení nežádoucích událostí). Od roku 2018 se hodnota drží mezi 9,56 a 10,71. Počítají se všechny hlášené pády, s poraněním i bez něj. Ve fakultních a velkých nemocnicích je to 8,18 na tisíc pacientů, v ostatních nemocnicích akutní péče 12,53.\n\nČíslo je potřeba číst opatrně. Nemocnice, která pády poctivě eviduje a rozebírá, jich vykáže víc než nemocnice, kde se pád bez následků do systému nedostane. Vyšší hodnota proto může znamenat lepší kulturu hlášení, ne horší péči. Srovnání se zahraničím není k dispozici, protože mezinárodní statistiky pády hospitalizovaných nesledují.\n\nPrevence pádů stojí na několika známých krocích: zhodnotit riziko při příjmu a opakovat to při změně stavu, projít léky, které zvyšují riziko pádu, zajistit dosažitelnou signalizaci a pomůcky k chůzi a mít na oddělení dost personálu, aby rizikový pacient nezůstal bez dohledu. Užitečné by bylo zveřejňovat zvlášť pády s poraněním a údaje po jednotlivých nemocnicích; otevřená data dnes obsahují jen součty za kategorie poskytovatelů.",
   "framework": "hspa",
   "dimension": "bezpecnost",
-  "verification_status": "illustrative"
+  "verification_status": "verified",
+  "determinants": [
+    "Podíl starších, křehkých a zmatených pacientů mezi hospitalizovanými",
+    "Počet sester a ošetřovatelů na lůžko, zejména v noci",
+    "Hodnocení rizika pádu při příjmu a jeho pravidelné opakování",
+    "Léky zvyšující riziko pádu (sedativa, léky na tlak)",
+    "Vybavení a prostředí oddělení (signalizace, zábrany, osvětlení, pomůcky k chůzi)",
+    "Kultura hlášení nežádoucích událostí v nemocnici"
+  ],
+  "importance": "Pád je jednou z nejčastěji hlášených nežádoucích událostí v lůžkové péči. U starších pacientů může skončit zlomeninou, delší hospitalizací a ztrátou soběstačnosti. Velké části pádů lze předejít: zhodnocením rizika při příjmu, úpravou léků, dohledem a vhodným vybavením. Spolu s dekubity jde o základní ukazatel bezpečnosti ošetřovatelské péče.",
+  "verified_at": "2026-11-12"
 }

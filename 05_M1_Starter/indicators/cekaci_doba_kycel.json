@@ -1,32 +1,42 @@
 {
   "id": "cekaci_doba_kycel",
-  "name": "Čekací doba na náhradu kyčelního kloubu",
+  "name": "Čekací doba na náhradu kyčelního kloubu (průměr hlášený nemocnicemi)",
   "area": "Procesy",
   "domain": "Dostupnost péče",
   "subdomain": "Čekací doby",
-  "definition": "Medián počtu dní od indikace k provedení totální endoprotézy kyčelního kloubu (TEP kyčle).",
-  "unit": "dní",
+  "definition": "Průměrná skutečná čekací doba na plánovanou náhradu kyčelního kloubu v týdnech, jak ji nemocnice samy uvádějí v ročním výkazu ÚZIS L (MZ) 9-01 (oddíl 4, Čekací lhůty na vybrané plánované zdravotní služby). Hodnota je celostátní průměr přes nemocnice, které výkaz vyplnily.",
+  "unit": "týdnů",
   "direction": "lower_is_better",
   "data_source": {
     "primary": {
-      "type": "vzp",
-      "note": "VZP/SZP záznamy — datum indikace vs. datum výkonu."
-    },
-    "fallback": {
-      "type": "oecd",
-      "code": "WAITING_HIP"
+      "type": "uzis_publication",
+      "endpoint": "https://www.irozhlas.cz/zpravy-domov/zdravotnictvi-cekaci-doby-operace-zakroky-covid-vzp-brno-endoproteza-kycle_2604010600_jab",
+      "dataset": "ÚZIS ČR, roční výkaz L (MZ) 9-01 Provozní údaje o poskytovateli zdravotních služeb, oddíl 4 „Čekací lhůty na vybrané plánované zdravotní služby“, náhrada kyčelního kloubu. Celostátní průměry ÚZIS nezveřejňuje v otevřených datech; jsou známé z tisku, který je od ÚZIS a ministerstva získal.",
+      "dimensions": {
+        "uzemi": "Česko celkem",
+        "vykon": "náhrada kyčelního kloubu",
+        "jednotka": "průměr v týdnech"
+      },
+      "note": "Rok 2024 (65 týdnů): iROZHLAS, 1. 4. 2026, s odkazem na data ÚZIS. Roky 2019 (44,6 týdne) a 2020 (52,8 týdne): Medical Tribune, 8. 3. 2022, data ÚZIS prezentovaná náměstkyní ministra zdravotnictví (https://www.tribune.cz/zdravotnictvi/cekaci-doby-se-prodlouzily-na-tep-kycle-o-osm-tydnu/, ověřeno 12. 11. 2026). Pokyny k výkazu: https://www.uzis.cz/res/file/vykazy/2025/l901_help_25.pdf. Článek iROZHLAS se 12. 11. 2026 nepodařilo otevřít přímo (stránka blokuje automatické čtení), hodnota 65 týdnů je převzata z výtahu vyhledávače. Úplnou řadu je třeba vyžádat od ÚZIS."
     },
     "verification": {
       "date": "2026-11-12",
-      "result": "nedohledatelne",
-      "source_url": "https://sdmx.oecd.org/public/rest/data/OECD.ELS.HD,DSD_HEALTH_PROC@DF_WAITING,/all?startPeriod=2015&format=csvfilewithlabels",
-      "note": "S předchozím agentem souhlasím. Seed 118 dní (2024) ani řadu 2020–2024 jsem v primárním zdroji nenašel. Dataflow OECD Waiting times jsem stáhl přímo: Česko v něm není, takže benchmark OECD 85 / EU 95 ze stejného zdroje a definice odvodit nejde. Datový souhrn ÚZIS NRKN NR-19-03 obsahuje jen počty TEP, čekací doby ne. Údaj 'ÚZIS 65 týdnů za 2024', který uvádí předchozí agent, jsem v primárním zdroji neověřil; ve vyhledávání se objevuje jen limit 52 týdnů podle nařízení vlády a nemocniční seznamy (měsíce až roky). Zdroj 'ÚZIS NRH 2024' v patient_story neexistuje. Definice karty (od indikace k výkonu podle VZP/SZP) nemá veřejný podklad. Doporučuji označit jako ilustrativní, dokud nevyjde registr čekacích dob ÚZIS."
+      "result": "vymeneno_za_dolozitelny_ukazatel",
+      "source_name": "ÚZIS ČR, roční výkaz L (MZ) 9-01, oddíl 4 Čekací lhůty na vybrané plánované zdravotní služby (náhrada kyčelního kloubu); celostátní průměry zveřejněné v tisku: iROZHLAS 1. 4. 2026 (rok 2024), Medical Tribune 8. 3. 2022 (roky 2019 a 2020)",
+      "source_url": "https://www.irozhlas.cz/zpravy-domov/zdravotnictvi-cekaci-doby-operace-zakroky-covid-vzp-brno-endoproteza-kycle_2604010600_jab",
+      "quote": "Zatímco v roce 2019 pacienti čekali na výměnu kyčelního kloubu v průměru 44,6 týdne, v roce 2020 to bylo 52,8 týdne.",
+      "previous": {
+        "name": "Čekací doba na náhradu kyčelního kloubu",
+        "value": 118,
+        "unit": "dní",
+        "year": 2024
+      },
+      "note": "Hodnota 2024 = 65 týdnů NENÍ ověřena otevřením zdroje: iROZHLAS vrací HTTP 403 (bot-wall) pro curl i WebFetch, Wayback je blokován egress politikou. Dvě nezávislá vyhledávání (12. 11. 2026) vrátila z článku 'Místo 52 týdnů i 190. Čekací doby na velké ortopedické zákroky se od covidu nezkrátily, stále překračují limit' shodný výtah: 'u náhrady kolenního kloubu 68 týdnů, u náhrady kyčle 65 týdnů, limit je přitom u obou zákroků 52 týdnů'; řada 2021–2024 'mezi 65 a 72 týdny' (koleno a kyčel dohromady, proto do trendu nezařazeno). source_quote je doslovná věta z Medical Tribune (https://www.tribune.cz/zdravotnictvi/cekaci-doby-se-prodlouzily-na-tep-kycle-o-osm-tydnu/, otevřeno přímo, HTTP 200, 'Ukazují to data ÚZIS, jak je prezentovala náměstkyně ministra zdravotnictví Ing. Helena Rögnerová') a dokládá body 2019 a 2020. Definice ověřena v pokynech ÚZIS k výkazu (l901_help_25.pdf, otevřeno): 'průměrnou skutečnou čekací dobu v týdnech ... Čekací doba se vykazuje v průměru (nikoliv v intervalu!) na celá čísla. Vykazuje se zahájený týden'. Číslo řádku 1151 a podíl nevykazujících zařízení (asi 15 %) jsem neověřil. Primární tabulku ÚZIS nezveřejňuje. Benchmark žádný (OECD DF_WAITING Česko neobsahuje); referenční lhůta 52 týdnů podle NV 307/2012 Sb. není benchmark. Přepočet pro orientaci: 65 × 7 = 455 dní. Karta: benchmark_source {type: none}, data_source.primary.type uzis_publication."
     }
   },
   "benchmark_source": {
-    "type": "oecd",
-    "code": "WAITING_HIP",
-    "dataset": "HEALTH_HCQI"
+    "type": "none",
+    "note": "Souměřitelný mezinárodní benchmark neexistuje: databáze OECD o čekacích dobách Česko neobsahuje a měří medián od zařazení na čekací listinu. Jako vodítko slouží nejdelší přípustná lhůta 52 týdnů podle nařízení vlády č. 307/2012 Sb. o místní a časové dostupnosti zdravotních služeb."
   },
   "signal_thresholds": {
     "good": 5,
@@ -34,14 +44,13 @@
   },
   "frequency": "yearly",
   "stewards": [
-    "VZP",
-    "SZP",
-    "ČOS"
+    "ÚZIS",
+    "MZ ČR"
   ],
-  "method_notes": "Čekací doby vzrostly v průběhu COVID-19 (2021) a postupně klesají. Ortopedická kapacita zůstává omezující faktor.",
-  "limitations": "Definice „indikace\" se liší dle poskytovatele. Přeshraniční péče a soukromé výkony nejsou zahrnuty.",
-  "patient_story": "Brno, ortopedie, 67letá pacientka přichází s diagnózou pokročilé koxartrózy, doporučení k totální endoprotéze kyčelního kloubu (TEP). „Operační termín za 118 dní.\" Skoro 4 měsíce čekání. Pacientka mezitím užívá analgetika, snižuje pohybovou aktivitu, sociálně se uzavírá. To je v Česku průměrná čekací doba — výrazně nad OECD.\n\nPrůměrná čekací doba na TEP kyčle v ČR je 118 dní (ÚZIS NRH, 2024). OECD průměr 85 dní, EU 95 dní — Česko signal bad. Trend zhoršující se (2015: 95 dní, 2024: 118 dní) — kombinace stárnoucí populace (rostoucí poptávka), pomalého rozšiřování operační kapacity, post-pandemického návratu odložených zákroků. Mezi nemocnicemi rozptyl 60–180 dní.\n\nStrukturálně český systém má ortopedickou síť dobře pokrytou, ale kapacita TEP je limitovaná (počet operačních sálů, anesteziologů, ortopedů, lůžek). Čekací doba je z velké části fixní problémem strana nabídky, ne diagnostiky. Privátní samoplatební zákroky v Brně, Praze a Liberci jsou dostupné do 14 dnů za 150–250 tisíc Kč — opět dvourychlostní péče.\n\nČekání na TEP kyčle není jen otázkou komfortu — má klinické a sociální důsledky (sarkopenie, deprese, zhoršení mobility, kardio-respirační dekondice). Politické páky: navýšení kapacity (orthopedický „elective surgery boost\" program — UK model 2024); transparentní reporting čekacích dob per nemocnice; investice do robotické chirurgie (zkrácení hospitalizace o 1–2 dny); rozšíření denní jednodenní chirurgie pro vhodné pacienty; národní cíl „TEP kyčle do 90 dnů u 90 % pacientů\". Indikátor v HSPA dashboardu sleduje čekání na TEP jako klíčový ukazatel přístupnosti elektivní chirurgie.",
+  "method_notes": "Každá nemocnice, která výkon nabízí, uvede jedno číslo: průměrnou skutečnou čekací dobu v celých týdnech (započatý týden se zaokrouhluje nahoru). Celostátní hodnota je průměr těchto hlášení. Řada má mezery: známé jsou roky 2019, 2020 a 2024; pro roky 2021 až 2023 je z tisku známo jen rozmezí 65 až 72 týdnů společné pro náhradu kolena a kyčle. Pro orientaci: 65 týdnů je zhruba 455 dní (65 × 7).",
+  "limitations": "Nejde o medián ani o měření od indikace u jednotlivých pacientů, ale o průměr čísel, která nemocnice samy odhadují a hlásí. Malá i velká pracoviště mají v průměru stejnou váhu a část zařízení výkaz nevyplní (podle nálezu zhruba 15 %). ÚZIS tuto část výkazu nezveřejňuje v otevřených datech, hodnoty jsou převzaty z tisku a údaj za rok 2024 se nepodařilo ověřit přímo v primární tabulce. Mezi nemocnicemi jsou velké rozdíly, které celostátní průměr skrývá. Samoplátecké výkony a péče v zahraničí zahrnuty nejsou. Indikátor byl 12. 11. 2026 vyměněn za doložitelný ukazatel, protože původní hodnotu (medián ve dnech) nešlo doložit žádným zdrojem.",
+  "patient_story": "Brno, ortopedická ambulance. Sedmašedesátiletá pacientka s pokročilou artrózou kyčle odchází s doporučením k totální endoprotéze a s termínem, který je dál než za rok. Do té doby bude brát léky proti bolesti, méně chodit a víc zůstávat doma.\n\nJejí zkušenost odpovídá tomu, co nemocnice samy hlásí státu. Podle údajů ÚZIS se v roce 2024 na náhradu kyčelního kloubu čekalo v průměru 65 týdnů, tedy asi rok a čtvrt. Nařízení vlády přitom stanoví, že tento výkon má být dostupný nejpozději do 52 týdnů. V roce 2019 činil průměr 44,6 týdne a v roce 2020, kdy se kvůli covidu plánované operace odkládaly, 52,8 týdne. Čekání se tedy od doby před pandemií prodloužilo zhruba o dvacet týdnů a nad zákonnou lhůtou zůstalo.\n\nPrůměr přitom skrývá velké rozdíly mezi nemocnicemi. Pacient má právo vybrat si jiné smluvní pracoviště své pojišťovny a zdravotní pojišťovna mu má s hledáním kratšího pořadníku pomoci.\n\nČíslo je třeba číst opatrně. Nemocnice svou čekací dobu odhadují samy a hlásí ji jedním číslem za rok; nikdo neměří, kolik dní skutečně uplynulo mezi doporučením a operací u jednotlivých pacientů. Dokud takový registr nevznikne, je roční výkaz jediným celostátním údajem o tom, jak dlouho se v Česku na novou kyčel čeká.",
   "framework": "hspa",
   "dimension": "dostupnost",
-  "verification_status": "illustrative"
+  "verification_status": "preliminary"
 }
