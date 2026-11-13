@@ -31,10 +31,11 @@
       .viz-timeline-dot-3 { animation-delay: 1.0s; }
       .viz-timeline-dot-4 { animation-delay: 1.25s; }
       .viz-timeline-line { stroke-dasharray: 400; stroke-dashoffset: 400; animation: drawIn 1.2s ease-out 0.3s forwards; }
+      .viz-line { stroke-dasharray: 1400; stroke-dashoffset: 1400; animation: drawIn 1.4s ease-out 0.4s forwards; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .accent-bar, .title-underline, .pulse-dot, .viz-bar, .viz-donut-segment, .viz-timeline-dot, .viz-timeline-line { animation: none !important; }
-      .title-underline, .viz-timeline-line { stroke-dashoffset: 0; }
+      .accent-bar, .title-underline, .pulse-dot, .viz-bar, .viz-donut-segment, .viz-timeline-dot, .viz-timeline-line, .viz-line { animation: none !important; }
+      .title-underline, .viz-timeline-line, .viz-line { stroke-dashoffset: 0; }
       .viz-donut-segment { stroke-dashoffset: 0; }
     }
     @keyframes barGrow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
@@ -63,8 +64,8 @@
   <!-- Kicker row: tag + article number -->
   <g class="root">
     <text x="80" y="90" class="kicker">
-      <tspan>Diabetologie · chronická péče</tspan>
-      <tspan dx="14" fill="#5f574e" letter-spacing="0.12em" font-weight="500">#85</tspan>
+      <tspan>Chronická péče</tspan>
+      <tspan dx="14" fill="#5f574e" letter-spacing="0.12em" font-weight="500">#90</tspan>
     </text>
     <circle class="pulse-dot" cx="62" cy="84" r="5" fill="#6b6357"/>
   </g>
@@ -82,30 +83,22 @@
   </g>
 
   <!-- Data viz panel (volitelně) -->
-  <g><text x="670" y="144" class="viz-title">Amputace dolních končetin u diabetiků</text>
-      <text x="670" y="219.5" class="viz-label">ČR</text>
+  <g><text x="670" y="144" class="viz-title">Amputace dolních končetin u diabetiků (2023)</text>
+      <text x="670" y="247.5" class="viz-label">ČR</text>
       
       <rect class="viz-bar viz-bar-1"
-            x="850" y="214"
+            x="850" y="242"
             width="180" height="18"
             fill="#6b6357" rx="2" opacity="1"/>
-      <text x="1042" y="231" class="viz-value" fill="#6b6357">12,1 na 100 000 diabetiků</text>
+      <text x="1042" y="259" class="viz-value" fill="#6b6357">16,4 na 100 000 obyvatel</text>
     
-      <text x="670" y="305.5" class="viz-label">OECD</text>
+      <text x="670" y="333.5" class="viz-label">OECD</text>
       
       <rect class="viz-bar viz-bar-2"
-            x="850" y="300"
-            width="141" height="18"
+            x="850" y="328"
+            width="77" height="18"
             fill="#5f574e" rx="2" opacity="0.55"/>
-      <text x="1003" y="317" class="viz-value" fill="#1f1a14">9,5 na 100 000 diabetiků</text>
-    
-      <text x="670" y="391.5" class="viz-label">EU</text>
-      
-      <rect class="viz-bar viz-bar-3"
-            x="850" y="386"
-            width="153" height="18"
-            fill="#5f574e" rx="2" opacity="0.55"/>
-      <text x="1015" y="403" class="viz-value" fill="#1f1a14">10,3 na 100 000 diabetiků</text>
+      <text x="939" y="345" class="viz-value" fill="#1f1a14">7 na 100 000 obyvatel</text>
     </g>
 
   <!-- Bottom: branding + date -->

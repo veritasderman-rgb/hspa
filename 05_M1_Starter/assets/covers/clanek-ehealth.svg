@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="62 versus 70. Co index eHealth měří a proč v něm Česko zaostává">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="77 ze 100. Co evropské skóre eHealth měří a proč v něm Česko zaostává za průměrem EU">
   <defs>
     <style>
       .root { font-family: 'Source Serif 4', 'Source Serif Pro', Georgia, 'Times New Roman', serif; }
@@ -31,10 +31,11 @@
       .viz-timeline-dot-3 { animation-delay: 1.0s; }
       .viz-timeline-dot-4 { animation-delay: 1.25s; }
       .viz-timeline-line { stroke-dasharray: 400; stroke-dashoffset: 400; animation: drawIn 1.2s ease-out 0.3s forwards; }
+      .viz-line { stroke-dasharray: 1400; stroke-dashoffset: 1400; animation: drawIn 1.4s ease-out 0.4s forwards; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .accent-bar, .title-underline, .pulse-dot, .viz-bar, .viz-donut-segment, .viz-timeline-dot, .viz-timeline-line { animation: none !important; }
-      .title-underline, .viz-timeline-line { stroke-dashoffset: 0; }
+      .accent-bar, .title-underline, .pulse-dot, .viz-bar, .viz-donut-segment, .viz-timeline-dot, .viz-timeline-line, .viz-line { animation: none !important; }
+      .title-underline, .viz-timeline-line, .viz-line { stroke-dashoffset: 0; }
       .viz-donut-segment { stroke-dashoffset: 0; }
     }
     @keyframes barGrow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
@@ -71,24 +72,34 @@
 
   <!-- Headline -->
   <g class="root">
-    <text class="title" x="80" y="160" font-size="42">
-      <tspan x="80" dy="0">62 versus 70. Co</tspan><tspan x="80" dy="45">index eHealth měří</tspan><tspan x="80" dy="45">a proč v něm Česko</tspan><tspan x="80" dy="45">zaostává</tspan>
+    <text class="title" x="80" y="160" font-size="36">
+      <tspan x="80" dy="0">77 ze 100. Co</tspan><tspan x="80" dy="38">evropské skóre</tspan><tspan x="80" dy="38">eHealth měří a</tspan><tspan x="80" dy="38">proč v něm Česko</tspan><tspan x="80" dy="38">zaostává za</tspan><tspan x="80" dy="38">průměrem EU</tspan>
     </text>
     <line class="title-underline"
-          x1="80" y1="317"
-          x2="280" y2="317"
+          x1="80" y1="372"
+          x2="280" y2="372"
           stroke="#2c5a8a" stroke-width="4" stroke-linecap="round"/>
-    <text x="80" y="368" class="caption">Propojení nemocnic, lékáren a pacientů v jeden ekosystém</text>
+    
   </g>
 
   <!-- Data viz panel (volitelně) -->
-  <g>
+  <g><text x="670" y="144" class="viz-title">Online přístup ke zdravotní dokumentaci</text>
+      <text x="670" y="247.5" class="viz-label">ČR</text>
+      
+      <rect class="viz-bar viz-bar-1"
+            x="850" y="242"
+            width="139" height="18"
+            fill="#2c5a8a" rx="2" opacity="1"/>
+      <text x="1001" y="259" class="viz-value" fill="#2c5a8a">77,4 bodů ze 100</text>
     
-    <text x="890" y="300" text-anchor="middle" font-family="'Source Serif 4', Georgia, serif" font-size="120" font-weight="700" fill="#2c5a8a" letter-spacing="-3">undefined</text>
-    
-    
-    
-  </g>
+      <text x="670" y="333.5" class="viz-label">EU</text>
+      
+      <rect class="viz-bar viz-bar-2"
+            x="850" y="328"
+            width="156" height="18"
+            fill="#5f574e" rx="2" opacity="0.55"/>
+      <text x="1018" y="345" class="viz-value" fill="#1f1a14">86,5 bodů ze 100</text>
+    </g>
 
   <!-- Bottom: branding + date -->
   <g class="root">
