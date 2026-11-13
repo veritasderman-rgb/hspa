@@ -161,7 +161,7 @@ const PRIORITIES = [
     articles: [
       { href: '/clanek-narok-pojistence-1-co-to-je.html', title: 'Co dnes skutečně máte nárok? Anatomie ústavního práva na péči' },
       { href: '/clanek-narok-pojistence-3-co-s-tim.html', title: 'Co s tím. Pět reformních směrů, jak udržet nárok pojištěnce' },
-      { href: '/clanek-ezkarta-ehealth.html', title: 'Šedesát dva ze sta. Český eHealth má EZKartu v telefonu' },
+      { href: '/clanek-ezkarta-ehealth.html', title: '77 bodů ze sta. Český eHealth má EZKartu v telefonu' },
     ],
     strategies: ['oecd_hspa_cz', 'ehealth_2025_2035'],
     explainers: ['odpovednost_dostupnost', 'pacientske_organizace', 'nemocnicni_ombudsman'],
@@ -203,7 +203,7 @@ const PRIORITIES = [
     ],
     articles: [
       { href: '/clanek-data-leci-cesko-2026.html', title: 'Data léčí Česko: konference, na které se začalo měřit' },
-      { href: '/clanek-ehealth.html', title: '62 versus 70. Co index eHealth měří a proč v něm Česko zaostává' },
+      { href: '/clanek-ehealth.html', title: '77 ze 100. Co evropské skóre eHealth měří a proč v něm Česko zaostává za průměrem EU' },
       { href: '/clanek-financovani-sha.html', title: 'Odkud jdou peníze a kam mizí. Anatomie financování' },
     ],
     strategies: ['oecd_hspa_cz', 'nikez_zdravotnictvi', 'ehds'],
@@ -466,8 +466,8 @@ const PRIORITIES = [
       { time: 'Rok 5+', text: 'Anonymizovaná data otevřená denně' },
     ],
     articles: [
-      { href: '/clanek-ehealth.html', title: '62 versus 70. Co index eHealth měří a proč v něm Česko zaostává' },
-      { href: '/clanek-ezkarta-ehealth.html', title: 'Šedesát dva ze sta. Český eHealth má EZKartu v telefonu' },
+      { href: '/clanek-ehealth.html', title: '77 ze 100. Co evropské skóre eHealth měří a proč v něm Česko zaostává za průměrem EU' },
+      { href: '/clanek-ezkarta-ehealth.html', title: '77 bodů ze sta. Český eHealth má EZKartu v telefonu' },
       { href: '/clanek-ehds-evropsky-prostor-zdravotni-data.html', title: 'Evropský prostor zdravotních dat: jak nařízení EHDS změní péči' },
       { href: '/clanek-kyberneticka-bezpecnost-zdravotnictvi-2026.html', title: 'Když ransomware vyřadí nemocnici. Zákon 264/2025 Sb., NIS2' },
     ],
