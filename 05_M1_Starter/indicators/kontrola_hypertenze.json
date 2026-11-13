@@ -1,46 +1,59 @@
 {
   "id": "kontrola_hypertenze",
-  "name": "Kontrolovaná hypertenze (TK < 140/90 mmHg)",
+  "name": "Kontrola hypertenze u léčených (TK < 140/90 mmHg, 25–64 let)",
   "area": "Procesy",
   "domain": "Péče o chronicky nemocné",
   "subdomain": "KVN prevence",
-  "definition": "Podíl dospělých s diagnostikovanou hypertenzí, jejichž krevní tlak byl při posledním měření < 140/90 mmHg.",
+  "definition": "Podíl osob ve věku 25–64 let užívajících léky na vysoký krevní tlak, u nichž byl při standardizovaném měření ve studii Czech post-MONICA naměřen systolický tlak pod 140 mmHg a zároveň diastolický pod 90 mmHg. Jmenovatelem jsou všichni léčení hypertonici ve vzorku (muži a ženy dohromady).",
   "unit": "%",
   "direction": "higher_is_better",
   "data_source": {
     "primary": {
-      "type": "szu_ehes",
-      "note": "EHES (Euroepan Health Examination Survey) — naměřené hodnoty TK."
-    },
-    "fallback": {
-      "type": "oecd",
-      "code": "HBP_CNTRL"
+      "type": "academic_survey",
+      "endpoint": "https://doi.org/10.3389/fcvm.2022.1033606",
+      "dataset": "Cífková R. et al., Longitudinal trends in blood pressure, prevalence, awareness, treatment, and control of hypertension in the Czech population. Front Cardiovasc Med 2022;9:1033606 (PMID 36440040), Table 3 a Table 4",
+      "dimensions": {
+        "populace": "25–64 let, muži a ženy dohromady",
+        "uzemi": "6 okresů ČR (studie Czech MONICA a Czech post-MONICA)",
+        "jmenovatel": "osoby užívající antihypertenziva",
+        "kriterium": "systolický TK < 140 mmHg a zároveň diastolický TK < 90 mmHg"
+      },
+      "note": "Studie Czech post-MONICA: opakované průřezové šetření, 1% náhodný vzorek obyvatel 25–64 let v šesti okresech, tlak měřen rtuťovým tonometrem vsedě po nejméně 5 minutách klidu, počítá se průměr prvních dvou měření. Hodnota za obě pohlaví je dopočet redakce z publikovaných počtů: kontrolovaní léčení (Table 4) děleno léčenými (Table 3). Vlna 2016/17: (119 + 111) / (241 + 193) = 230 / 434 = 53,0 %; zvlášť muži 49,4 % a ženy 57,5 % jsou v článku doslova. Řada: 1997/98 (50 + 70) / (151 + 187) = 35,5 %; 2000/01 (60 + 77) / (191 + 205) = 34,6 %; 2007/08 (135 + 106) / (322 + 251) = 42,1 %. Vlna 2016/17 je v kontraktu vedena pod rokem 2017, starší vlny pod druhým rokem sběru."
     },
     "verification": {
       "date": "2026-11-12",
-      "result": "definicni_nesoulad",
-      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11045056/",
-      "note": "Plný text článku Berka et al. jsem ověřil přes PubMed Central: kontrola mezi léčenými 43,2 % (115 osob), EHES 2014, věk 25–64; shoduji se s agentem v hodnotě i verdiktu. Karta definuje jmenovatel jako diagnostikované hypertoniky 18+ s posledním měřením, zdroj měří léčené 25–64 se standardizovaným měřením, tedy jiný jmenovatel a populace. Hodnota 68 % (2024) i roční řada 2020–2024 nemají oporu v žádném primárním zdroji (EHES není roční), citaci post-MONICA 2024 jsem nedohledal. Údaje EHES 2019 s cílem <130/80 jsem neověřoval a nejsou souměřitelné. Benchmarky 72/70 nelze doložit. Doporučuji vrátit indikátor na ilustrativní, nebo přepsat definici na EHES (léčení 25–64, <140/90) s hodnotou 43,2 % (2014) bez benchmarku a signálu."
+      "result": "vymeneno_za_dolozitelny_ukazatel",
+      "source_name": "Cífková R. et al., Front Cardiovasc Med 2022;9:1033606 (PMID 36440040), Table 3 a 4 · studie Czech post-MONICA",
+      "source_url": "https://doi.org/10.3389/fcvm.2022.1033606",
+      "quote": "However, the final numbers for control of hypertension are still not sufficient (treated hypertensive patients: men 49.4%, women 57.5%).",
+      "previous": {
+        "name": "Kontrolovaná hypertenze (TK < 140/90 mmHg)",
+        "value": 68,
+        "unit": "%",
+        "year": 2024
+      },
+      "note": "Plný text jsem otevřel (PMC9686845 přes NCBI efetch XML; stránka Frontiers vrací 200) a Table 3 a 4 přečetl. Hodnota za obě pohlaví ve zdroji přímo není, je to dopočet: kontrolovaní léčení (Table 4, 'Control of hypertension (% of all drug-treated hypertensive patients)', Total 25–64 y) / léčení (Table 3, 'Medication for HT', Total 25–64 y). 2016/17: (119 + 111) / (241 + 193) = 230/434 = 53,0 % (muži 119 (49.4), ženy 111 (57.5) doslova). 1997/98: (50 + 70)/(151 + 187) = 120/338 = 35,5 %. 2000/01: (60 + 77)/(191 + 205) = 137/396 = 34,6 %. 2007/08: (135 + 106)/(322 + 251) = 241/573 = 42,1 %. Vlny vedeny pod druhým rokem sběru (2016/17 → 2017). Starší vlny 1985, 1988, 1992 ve zdroji jsou (13,2 / 19,5 / 14,9 % stejným vzorcem), do řady jsem je nezařadil. Kontrola ze všech hypertoniků 2016/17: 230/(399 + 300) = 32,9 % (muži 29,8, ženy 37,0). Bez benchmarku: stejný zdroj mezinárodní srovnání ve stejné definici nemá, signál neutral. Výhrady: jen 25–64 let, 6 okresů, response rate 2016/17 43,1 % muži / 48,6 % ženy, data 9 let stará, nepravidelné vlny. Confidence medium kvůli dopočtu a omezené reprezentativitě. Typ primárního zdroje v kartě: academic_survey; z karty odstraněn fallback OECD HBP_CNTRL (kód neexistuje)."
     }
   },
   "benchmark_source": {
-    "type": "oecd",
-    "code": "HBP_CNTRL",
-    "dataset": "HEALTH_HCQU"
+    "type": "none",
+    "note": "Benchmark není. OECD ani Eurostat nepublikují ukazatel kontroly krevního tlaku se stejnou definicí, věkem a způsobem měření, proto indikátor nemá mezinárodní srovnání ani signál."
   },
   "signal_thresholds": {
     "good": 3,
     "warn": 8
   },
-  "frequency": "5 let (EHES)",
+  "frequency": "Nepravidelná průřezová šetření (vlny 1997/98, 2000/01, 2007/08, 2016/17); další vlna není ohlášena",
   "stewards": [
     "SZÚ",
     "ČKS"
   ],
-  "method_notes": "Naměřená data z EHES jsou spolehlivější než self-reportovaná data z EHIS.",
-  "limitations": "EHES probíhá každých 5 let — mezivlnné hodnoty jsou odhadnuty interpolací. Malá velikost vzorku v krajích.",
-  "patient_story": "Praktický lékař, kontrola 56leté pacientky s léčenou hypertenzí. Krevní tlak 152/95 mmHg, 6 měsíců na monoterapii. Cílová hodnota dle guidelines: < 140/90, optimálně < 130/80. Léčba je neefektivní — pacientka by potřebovala uptitraci nebo kombinační terapii. Tahle situace je v ČR běžná: 32 % léčených hypertoniků nedosahuje cílových hodnot.\n\nKontrola hypertenze (% léčených s cílovou hodnotou) v ČR je 68 % (Czech post-MONICA, 2024). OECD průměr 72 %, EU 70 % — Česko signal warn. Trend pomalu rostoucí (2010: 60 %, 2024: 68 %). Z celkové populace dospělých s hypertenzí (cca 35 %) je léčeno 75 %, z léčených dobrá kontrola 68 % — efektivní léčba (z celkové diagnózy) jen u 51 % hypertoniků.\n\nStrukturálně český systém má dostupné moderní antihypertenziva (RAAS blokátory, kalciové blokátory, betablokátory, diuretika), kvalitní endokrinologické a kardiologické sítě. Mezery: nesystematické záchyt v primární péči (cca 25 % hypertoniků neví o své diagnóze); nedostatečná uptitrace léčby (lékaři ponechají monoterapii i u pacienta nad cílovou hodnotou); nízká adherence pacienta k léčbě (50–60 % dlouhodobá adherence po 1 roce).\n\nNekontrolovaná hypertenze je v ČR hlavním modifikovatelným rizikem KV mortality (viz mortalita_kardiovaskularni). Politické páky: kapitační indikátor pro praktika za kontrolu hypertenze (UK QOF jakýn na to dobrý vzor); HMA = home blood pressure monitoring jako rutina (rozšířená úhrada měřáků); kombinační preparáty (single-pill combination) v první linii; intervence k zlepšení adherence (text reminders, pill organizers). Indikátor v HSPA dashboardu sleduje kontrolu hypertenze jako klíčový ukazatel kvality chronické péče.",
+  "method_notes": "Jde o naměřené hodnoty, ne o údaje z dotazníku ani z výkazů pojišťoven: tlak měřil vyškolený personál stejným postupem ve všech vlnách. Za hypertenzi studie považuje průměrný tlak od 140/90 mmHg výše nebo užívání léků na tlak; indikátor sleduje jen tu část hypertoniků, která léky užívá. Vedle něj studie uvádí i kontrolu ze všech hypertoniků včetně neléčených a těch, kdo o nemoci nevědí: ve vlně 2016/17 to bylo 230 z 699, tedy 32,9 % (muži 29,8 %, ženy 37,0 %). Obě čísla se nesmějí zaměňovat. Léky ve vlně 2016/17 užívalo 60,9 % mužů a 64,8 % žen s hypertenzí.",
+  "limitations": "Studie pokrývá jen věk 25–64 let a šest okresů, nejde o celostátní vzorek; u lidí nad 65 let, kde je hypertenze nejčastější, indikátor nic neříká. Poslední vlna proběhla v letech 2016/17, údaj je tedy devět let starý a nezachycuje pozdější vývoj. Účast ve vlně 2016/17 klesla na 43,1 % u mužů a 48,6 % u žen; autoři upozorňují, že se tak mohli víc zapojit lidé, kteří o zdraví dbají, a výsledky mohou být o něco příznivější než ve skutečné populaci. Hodnota za obě pohlaví není ve zdroji uvedena přímo, je dopočtena z publikovaných počtů. Tlak se měřil při jedné návštěvě, ne opakovaně ani doma. Šetření nejsou pravidelná, řada má jen čtyři body a mezi nimi se nic neodhaduje. Indikátor byl 12. 11. 2026 vyměněn za doložitelný ukazatel, protože původní hodnotu nešlo doložit žádným zdrojem.",
+  "patient_story": "Praktický lékař, kontrola 56leté pacientky s léčenou hypertenzí. Krevní tlak 152/95 mmHg, půl roku užívá jeden lék. Cílová hodnota je pod 140/90 mmHg. Léčba tedy nestačí a pacientka by potřebovala vyšší dávku nebo kombinaci léků. Taková situace není v Česku výjimkou.\n\nPodle studie Czech post-MONICA mělo ve vlně 2016/17 tlak pod 140/90 mmHg jen 53,0 % léčených hypertoniků ve věku 25–64 let, mužů 49,4 % a žen 57,5 %. Skoro polovina lidí, kteří léky na tlak užívají, tedy cílové hodnoty nedosahuje. Trend je přitom příznivý: ve vlně 1997/98 to bylo 35,5 %, v roce 2000/01 34,6 % a v roce 2007/08 42,1 %. Autoři studie i tak hodnotí výsledek jako stále nedostatečný.\n\nCelkový obraz je ještě slabší, protože ne každý hypertonik se léčí. Léky ve vlně 2016/17 užívalo 60,9 % mužů a 64,8 % žen s vysokým tlakem a zhruba čtvrtina hypertoniků o své nemoci nevěděla. Ze všech lidí s hypertenzí tak mělo tlak pod kontrolou 32,9 %, tedy přibližně každý třetí.\n\nMezery jsou na třech místech: v záchytu (část lidí o vysokém tlaku neví), v úpravě léčby (pacient zůstává na jednom léku, i když cíle nedosahuje) a v tom, zda pacient léky dlouhodobě užívá. Nástroje, o kterých se v této souvislosti mluví, jsou odměna praktického lékaře za dosažení cílového tlaku, domácí měření tlaku jako běžná součást léčby a kombinace dvou léků v jedné tabletě. Nekontrolovaná hypertenze souvisí s vysokou kardiovaskulární úmrtností (viz indikátor mortalita_kardiovaskularni).",
   "framework": "hspa",
   "dimension": "kvalita",
-  "verification_status": "illustrative"
+  "verification_status": "verified",
+  "importance": "Vysoký krevní tlak je hlavní ovlivnitelnou příčinou mrtvice, infarktu, srdečního selhání a selhání ledvin. Samotné předepsání léku nestačí: riziko klesá až tehdy, když tlak skutečně klesne pod cílovou hodnotu. Indikátor proto ukazuje, u jaké části léčených lidí léčba opravdu funguje, a vypovídá o kvalitě dlouhodobé péče v ordinacích praktických lékařů a internistů.",
+  "verified_at": "2026-11-12"
 }

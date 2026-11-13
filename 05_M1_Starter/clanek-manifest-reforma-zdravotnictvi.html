@@ -19,7 +19,7 @@
     reviewer: claude-code-agent
     status: partial
     update_2026-07-09: "F1 dávkový audit — rekonciliace faktických čísel manifestu s datovým kontraktem (hodnotové a politické soudy dle pravidla neauditovány). Opraveno několik zastaralých seed hodnot proti aktuálnímu kontraktu: (1) hero counter mislabel — 22,6 % 'denních kuřáků, OECD 16 %' opraveno na 16,4 % denních (OECD 14,8 %), 22,6 % zaměňovalo kuřáky tabáku celkem (22,4 %) za denní; foot doplněn. (2) screening kolorekta 28 % → 31,1 % (kontrakt screening_kolorektalni, OECD 42 / EU 38, 2024) napříč hero counterem, data-cardem, prioritním seznamem i závěrečnou pasáží. (3) Databox indikátorů srovnán s kontraktem: kardiovaskulární mortalita 220/OECD 140 → 463,75 vs. EU-27 312,95 (Eurostat hlth_cd_asdr2); incidence kolorekta bez smyšleného benchmarku 'OECD 36,5' (kontrakt bez benchmarku); denní kuřáctví 22,6/16 → 16,4/14,8; sebevraždy 12,5/OECD 11 → 11,6 vs. EU 10,4 (kontrakt 11,59/10,37); platba z kapsy 14 → 13,6 %. (4) Data-cards platba (14 → 13,6 %) a sebevraždy (12,5 → 11,6, bench EU 10,4) srovnány; prioritní seznam 'sebevraždy ~13' → ~11,6. Hodnota kardiovaskulární mortality 463/313 v prioritním seznamu a cover_viz už byla správná. Zůstává partial — manifest je autorský politický text vyžadující per-claim ruční audit zbývajících věcných tvrzení (AWaRe 37,1 %, výpadky léčiv, mezinárodní programové odkazy); toto kolo srovnalo jen čísla přímo navázaná na indikátory dashboardu."
-    notes: "Manifest — politicky laděný autorský text (Pavlovic, Malíková, Resortní tým ČPS pro zdravotnictví). PER POKYNY: hodnotové soudy a politické postoje se neauditují (autorský názor). Faktická tvrzení uvnitř (čísla, právní normy, citace OECD/WHO) by měla být auditována stejně jako v redakčních článcích. DOPORUČENO pro ruční audit: projít 13 oblastí a verifikovat všechna konkrétní čísla/odkazy v kontextu primárních zdrojů. Tam, kde manifest odkazuje na jiné HSPA články jako referenci, čerpá z jejich auditního stavu. Status published → partial — vyžaduje per-claim audit s explicitním oddělením názor/fakt."
+    notes: "OPRAVA 2026-11-12: indikátor spokojenost_informovani vyměněn za doložitelný ukazatel — původní „Spokojenost pacientů s informováním“ 72 % (2024, OECD 78 / EU 76, seed bez zdroje) → „Péče zaměřená na člověka očima pacientů (PaRIS)“ 90 % (OECD PaRIS, sběr 2023–24; průměr zemí PaRIS 85 %); v článku upraven název, hodnota a navazující věty. Manifest — politicky laděný autorský text (Pavlovic, Malíková, Resortní tým ČPS pro zdravotnictví). PER POKYNY: hodnotové soudy a politické postoje se neauditují (autorský názor). Faktická tvrzení uvnitř (čísla, právní normy, citace OECD/WHO) by měla být auditována stejně jako v redakčních článcích. DOPORUČENO pro ruční audit: projít 13 oblastí a verifikovat všechna konkrétní čísla/odkazy v kontextu primárních zdrojů. Tam, kde manifest odkazuje na jiné HSPA články jako referenci, čerpá z jejich auditního stavu. Status published → partial — vyžaduje per-claim audit s explicitním oddělením názor/fakt."
     f1_2026-07-10: "F1 link-audit: 14 externích odkazů zkontrolováno, žádný mrtvý. OECD HSPA Framework CZ (oecd.org/en/publications/health-system-performance-assessment-framework-for-the-czech-republic_5d59b667-en.html) vrací HTTP 403 při skenu (anti-bot Cloudflare) — ověřeno webovým vyhledáním, že jde o platnou, aktuální OECD publikaci; ponecháno beze změny. Ostatní odkazy (e-estonia.com, ecrin.org, GitHub, NHS England, g-ba.de, has-sante.fr, kanta.fi, nice.org.uk, sundhed.dk, who.int) vrací HTTP 200. Ponecháno partial — otevřený bod z 2026-07-09 (per-claim ruční audit zbývajících věcných tvrzení manifestu, např. AWaRe 37,1 %, výpadky léčiv) trvá, odkazy s ním nesouvisí."
     reconcile_2026-07-12: "alkohol_spotreba 14,4/8,9 → recorded 11,2/8,5 (OECD H@G 2025, issue #690 varianta A). Současně sladěna zastaralá čísla v prioritě 8 a counteru s kontraktem: KV mortalita 220/140 → 463,75/EU-27 312,95 (Eurostat ESP 2013, 2023 — jiná standardizace než původní OECD pár), screening kolorektální 28/42 → 31,1/42, kuřáctví 22,6/16 → 16,4/14,8; incidence kolorektálního karcinomu 73,5 ponechána (kontrakt souhlasí), benchmark 36,5 vypuštěn (kontrakt benchmark nemá)."
     fix_2026-10-26: "Výpadky léčiv: ~2 200 vs ~580 (2019) nahrazeno řadou z opendata.sukl.cz (indikátor vypadky_leciv_aktivni): konec 2019 1 288, minimum 2021 1 077, konec 2025 1 552, říjen 2026 1 420 (issue #1309). Švédsko: bezplatná zubní péče do konce roku dovršení 19 let od 1. 1. 2025 (do 2024 23 let), zdroj Socialstyrelsen (issue #1314)."
@@ -335,9 +335,9 @@
         <div class="manifest-priority-data-grid">
           <a class="manifest-data-card" href="indikator-spokojenost_informovani.html">
             <div class="manifest-data-card-id">spokojenost_informovani</div>
-            <div class="manifest-data-card-value">72 %</div>
-            <div class="manifest-data-card-name">Spokojenost pacientů s informováním</div>
-            <div class="manifest-data-card-bench">OECD 78 · EU 76 — informovaná volba je slabší místo</div>
+            <div class="manifest-data-card-value">90 %</div>
+            <div class="manifest-data-card-name">Péče zaměřená na člověka očima pacientů (PaRIS)</div>
+            <div class="manifest-data-card-bench">průměr zemí PaRIS 85 % · chroničtí pacienti 45+ v primární péči</div>
           </a>
         </div>
       </details>
@@ -547,9 +547,9 @@
           </a>
           <a class="manifest-data-card" href="indikator-spokojenost_informovani.html">
             <div class="manifest-data-card-id">spokojenost_informovani</div>
-            <div class="manifest-data-card-value">72 %</div>
-            <div class="manifest-data-card-name">Pacientů spokojených s informováním</div>
-            <div class="manifest-data-card-bench">OECD 78 % · EU 76 %</div>
+            <div class="manifest-data-card-value">90 %</div>
+            <div class="manifest-data-card-name">Pacientů s pozitivní zkušeností s péčí zaměřenou na člověka (PaRIS)</div>
+            <div class="manifest-data-card-bench">průměr zemí PaRIS 85 %</div>
           </a>
         </div>
       </details>
@@ -657,7 +657,7 @@
         <li><a href="indikator-sebevrazdy_per_100k.html"><strong>Sebevraždy</strong></a> — 11,6 / 100 000 vs. EU 10,4 (Eurostat, 2023)</li>
         <li><a href="indikator-pouzivani_antidepresiv.html"><strong>Spotřeba antidepresiv</strong></a> — 77 DDD/1000/den vs. OECD 67</li>
         <li><a href="indikator-ehealth_adoption.html"><strong>eHealth adoption index</strong></a> — 62 vs. OECD 70</li>
-        <li><a href="indikator-spokojenost_informovani.html"><strong>Spokojenost s informováním</strong></a> — 72 % vs. OECD 78 %</li>
+        <li><a href="indikator-spokojenost_informovani.html"><strong>Péče zaměřená na člověka očima pacientů (PaRIS)</strong></a> — 90 % vs. průměr zemí PaRIS 85 %</li>
         <li><a href="indikator-platba_z_kapsy_pct.html"><strong>Platby z kapsy</strong></a> — 13,6 % vs. OECD 18 %</li>
       </ul>
     </aside>

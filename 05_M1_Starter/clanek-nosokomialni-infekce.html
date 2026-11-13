@@ -3,6 +3,7 @@
 <head>
 <!--
   audit:
+    OPRAVA 2026-11-12: "Výměna indikátoru bezpecnost_padu_nemocnice: původní „pády pacientů s poraněním 2,1 / 1 000 hospitalizací (2024) vs. OECD 1,8“ nešlo doložit žádným zdrojem (seed, benchmark OECD neexistuje). Nahrazeno ukazatelem „Hlášené pády pacientů v nemocnicích akutní péče“: 10,71 na 1 000 hospitalizovaných pacientů (2025; 21 716 / 2 027 712, kategorie PZS A + B, NU Pád R11S01), otevřená data ÚZIS SHNU SSS-06-01, bez benchmarku. Upraven perex, description, og:description, JSON-LD, odstavec o metodice, databox, obě poznámky a seznam zdrojů."
     OPRAVA 2026-11-02: "SEED-AUDIT dávka 2: infekce_nosokomialni seed 6,5 % (2023) a benchmarky OECD 5,5 % / EU 5,9 % bez zdroje (OECD prevalenci HAI nevede). Nahrazeno ECDC PPS 2022–2023, country factsheet Czechia: 6,7 % (39 nemocnic, 12 296 pacientů), medián zemí EU/EHP 6,8 % (rozpětí 3,0–13,8); PPS 2016–2017 (SZÚ, Hygiena 2023/2): 6,7 % (45 nemocnic, 15 117 pacientů). Perex, description, deck, counter, databox a závěr upraveny; counter „~33 000 úmrtí na HAI“ přeznačen na úmrtí na infekce rezistentními bakteriemi (ECDC, Cassini et al. 2019), „4× víc než dopravní nehody“ vypuštěno (bez zdroje)."
     last_reviewed: 2026-07-09
     reviewer: claude-code-agent
@@ -19,11 +20,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Každý patnáctý hospitalizovaný má infekci, kterou si donesl z nemocnice. Co s tím dělá moderní bezpečnostní kultura · HSPA Monitor</title>
-<meta name="description" content="Prevalence nemocničních infekcí je v Česku 6,7 procenta hospitalizovaných, na mediánu zemí EU a EHP. Pády pacientů 2,1 / 1000 hospitalizací oproti 1,8. Bezpečnost nemocniční péče není věc náhody — moderní systémy ji řídí surveillance, antibiotic stewardship a kulturou hlášení.">
+<meta name="description" content="Prevalence nemocničních infekcí je v Česku 6,7 procenta hospitalizovaných, na mediánu zemí EU a EHP. Nemocnice akutní péče hlásí 10,7 pádu na 1 000 hospitalizovaných pacientů (ÚZIS, 2025). Bezpečnost nemocniční péče není věc náhody — moderní systémy ji řídí surveillance, antibiotic stewardship a kulturou hlášení.">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Každý patnáctý hospitalizovaný má infekci, kterou si donesl z nemocnice">
-<meta property="og:description" content="Nemocniční infekce 6,7 % — na evropském mediánu, ale beze změny od roku 2017; pády 2,1 / 1000 vs. 1,8. Co s bezpečností dělá NHSN, ECDC, britský Matron program a skandinávská hand hygiene compliance.">
+<meta property="og:description" content="Nemocniční infekce 6,7 % — na evropském mediánu, ale beze změny od roku 2017; hlášených pádů 10,7 na 1 000 hospitalizovaných (2025). Co s bezpečností dělá NHSN, ECDC, britský Matron program a skandinávská hand hygiene compliance.">
 <meta property="og:locale" content="cs_CZ">
 <meta property="article:published_time" content="2026-05-07">
 <meta property="article:section" content="Bezpečnost péče">
@@ -49,7 +50,7 @@
       "@type": "NewsArticle",
       "@id": "https://skorezdravotnictvi.cz/clanek-nosokomialni-infekce#article",
       "headline": "Každý patnáctý hospitalizovaný má infekci, kterou si donesl z nemocnice",
-      "description": "HAI 6,7 % (ECDC PPS 2022–2023) — na mediánu EU/EHP 6,8 %, ale beze změny od roku 2017; pády 2,1 / 1000 vs. 1,8. Pět strukturálních faktorů (hand hygiene, antibiotic stewardship, sestra–pacient, kultura hlášení, prostředí). Modely: CDC NHSN (USA), ECDC HAI-Net, britský Matron program, Skandinávie.",
+      "description": "HAI 6,7 % (ECDC PPS 2022–2023) — na mediánu EU/EHP 6,8 %, ale beze změny od roku 2017; hlášených pádů 10,7 na 1 000 hospitalizovaných (ÚZIS, 2025). Pět strukturálních faktorů (hand hygiene, antibiotic stewardship, sestra–pacient, kultura hlášení, prostředí). Modely: CDC NHSN (USA), ECDC HAI-Net, britský Matron program, Skandinávie.",
       "inLanguage": "cs-CZ",
       "image": [
         "https://skorezdravotnictvi.cz/assets/covers/clanek-nosokomialni-infekce.png"
@@ -138,7 +139,7 @@
       </div>
       <h1 class="article-title">Každý patnáctý hospitalizovaný má infekci, kterou si donesl z nemocnice</h1>
       <p class="article-deck">
-        Prevalence nemocničních infekcí (Healthcare-Associated Infections, HAI) je v Česku podle bodové prevalenční studie ECDC 6,7 procenta hospitalizovaných — zhruba každý patnáctý pacient. Je to evropský medián, ne výjimka, jenže číslo se od předchozího kola v letech 2016–2017 nepohnulo. Pády pacientů s poraněním jsou 2,1 na tisíc hospitalizací oproti 1,8. Dva indikátory bezpečnosti péče, které mají v evropském srovnání ověřené nástroje, jak je dotáhnout dolů.
+        Prevalence nemocničních infekcí (Healthcare-Associated Infections, HAI) je v Česku podle bodové prevalenční studie ECDC 6,7 procenta hospitalizovaných — zhruba každý patnáctý pacient. Je to evropský medián, ne výjimka, jenže číslo se od předchozího kola v letech 2016–2017 nepohnulo. Nemocnice akutní péče k tomu v roce 2025 nahlásily 10,71 pádu na tisíc hospitalizovaných pacientů; mezinárodní srovnání pro pády neexistuje. Dva indikátory bezpečnosti péče, pro které mají moderní systémy ověřené nástroje prevence.
       </p>
       <div class="article-meta">
         <span class="article-meta-date">7. května 2026</span>
@@ -204,7 +205,7 @@
       </p>
 
       <p>
-        Indikátor `bezpecnost_padu_nemocnice` zachycuje pády pacienta s poraněním na 1 000 hospitalizací. Limitace metodické karty je opět důležitá: závisí na kultuře hlášení. Větší počet hlášených pádů může znamenat lepší <em>safety culture</em> — pracoviště, které nežádoucí události poctivě eviduje a rozebírá —, ne nutně víc reálných pádů. České pracoviště s nízkou kulturou hlášení může mít v dashboardu „lepší" číslo, aniž by skutečně bylo bezpečnější. Při čtení tohoto indikátoru je třeba mít tuto inverzi na paměti.
+        Indikátor `bezpecnost_padu_nemocnice` zachycuje pády hospitalizovaných pacientů, které nemocnice akutní péče vykázaly do Systému hlášení nežádoucích událostí (ÚZIS), v přepočtu na 1 000 hospitalizovaných pacientů. Jde o všechny hlášené pády, ne jen o pády s poraněním. V roce 2025 nemocnice akutní péče vykázaly 21 716 pádů na 2 027 712 pacientů, tedy 10,71 na tisíc; od roku 2018 se hodnota drží mezi 9,56 a 10,71. Mezinárodní srovnání chybí, OECD ani Eurostat pády hospitalizovaných nezveřejňují. Limitace metodické karty je opět důležitá: hodnota závisí na kultuře hlášení. Větší počet hlášených pádů může znamenat lepší <em>safety culture</em> — pracoviště, které nežádoucí události poctivě eviduje a rozebírá —, ne nutně víc reálných pádů. České pracoviště s nízkou kulturou hlášení může mít v dashboardu „lepší" číslo, aniž by skutečně bylo bezpečnější. Při čtení tohoto indikátoru je třeba mít tuto inverzi na paměti.
       </p>
 
       <h3>Kde se 6,7 % rodí</h3>
@@ -385,13 +386,13 @@
       <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
       <ul class="article-databox-list">
         <li><a href="indikator-infekce_nosokomialni.html"><strong>Prevalence nemocničních infekcí</strong></a> — 6,7 % (ECDC PPS 2022–2023), medián EU/EHP 6,8 %</li>
-        <li><a href="indikator-bezpecnost_padu_nemocnice.html"><strong>Pády pacientů s poraněním v nemocnici</strong></a> — 2,1 / 1 000 hospitalizací vs. OECD 1,8 (NRC NIMS / OECD HCQI)</li>
+        <li><a href="indikator-bezpecnost_padu_nemocnice.html"><strong>Hlášené pády pacientů v nemocnicích akutní péče</strong></a> — 10,71 na 1 000 hospitalizovaných pacientů (2025; ÚZIS, Systém hlášení nežádoucích událostí), bez mezinárodního benchmarku</li>
         <li><a href="indikator-spotreba_antibiotik.html"><strong>Spotřeba antibiotik (ambulantní sektor)</strong></a> — 15 DDD/1000/den vs. OECD 16 / EU 18,3 (ATC J01, ECDC ESAC-Net metodika)</li>
         <li><a href="indikator-rezistence_antibiotik_ecoli.html"><strong>Rezistence E. coli na fluorochinolony</strong></a> — 19,2 % vs. EU 22,5 % (invazivní izoláty, ciprofloxacin, EARS-Net, 2024)</li>
         <li><a href="indikator-hospitalizace_na_100k.html"><strong>Míra hospitalizací</strong></a> — 17 990 / 100 000 vs. OECD 14 600 (2024)</li>
       </ul>
       <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
-        <strong>Pozn. k indikátorům:</strong> HAI se měří jednodenním snapshotem (PPS dle ECDC), což je citlivé na intenzitu surveillance — pracoviště s aktivnějším dohledem mohou paradoxně hlásit vyšší podíl. Pády závisejí na kultuře hlášení; pracoviště s nízkou kulturou hlášení mohou v dashboardu vypadat „lépe", aniž by skutečně byla bezpečnější. Spotřeba antibiotik 15 DDD/1000/den je hodnota <strong>ambulantního</strong> sektoru (primární péče dle ATC J01) — nemocniční spotřeba je sledována samostatně. Indikátor rezistence E. coli mapuje <strong>fluorochinolony (ciprofloxacin)</strong>, nikoli třetí generaci cefalosporinů — pro klinickou interpretaci je rozdíl zásadní. Hodnota 6,7 % HAI je ověřená proti country factsheetu ECDC pro Česko (PPS 2022–2023). Hodnota 2,1 pádu / 1 000 má v <code>data/indicators.json</code> <code>origin: seed</code> a proti primárnímu zdroji zatím ověřena není.
+        <strong>Pozn. k indikátorům:</strong> HAI se měří jednodenním snapshotem (PPS dle ECDC), což je citlivé na intenzitu surveillance — pracoviště s aktivnějším dohledem mohou paradoxně hlásit vyšší podíl. Pády závisejí na kultuře hlášení; pracoviště s nízkou kulturou hlášení mohou v dashboardu vypadat „lépe", aniž by skutečně byla bezpečnější. Spotřeba antibiotik 15 DDD/1000/den je hodnota <strong>ambulantního</strong> sektoru (primární péče dle ATC J01) — nemocniční spotřeba je sledována samostatně. Indikátor rezistence E. coli mapuje <strong>fluorochinolony (ciprofloxacin)</strong>, nikoli třetí generaci cefalosporinů — pro klinickou interpretaci je rozdíl zásadní. Hodnota 6,7 % HAI je ověřená proti country factsheetu ECDC pro Česko (PPS 2022–2023). Hodnota 10,71 hlášeného pádu na 1 000 hospitalizovaných pacientů (2025, nemocnice akutní péče) je přepočtená z otevřených dat ÚZIS ze Systému hlášení nežádoucích událostí; zahrnuje všechny hlášené pády, ne jen pády s poraněním, a mezinárodní benchmark nemá.
       </p>
     </aside>
 
@@ -408,6 +409,7 @@
           <li><strong>CDC — NHSN About</strong> — National Healthcare Safety Network, americký surveillance system (založen 2005). <a href="https://www.cdc.gov/nhsn/about-nhsn/index.html" target="_blank" rel="noopener">cdc.gov/nhsn/about ↗</a></li>
           <li><strong>UKHSA — Annual epidemiological commentary: MRSA, MSSA, Gram-negative bacteraemia a C. difficile (do FY 2024/25)</strong> — kvantifikace britského poklesu MRSA bakteriémií a CDI. <a href="https://www.gov.uk/government/statistics/mrsa-mssa-and-e-coli-bacteraemia-and-c-difficile-infection-annual-epidemiological-commentary" target="_blank" rel="noopener">gov.uk/mrsa-cdi-commentary ↗</a></li>
           <li><strong>SZÚ — NRL pro antibiotika</strong> — domácí HAI a AMR surveillance koordinovaná Národní referenční laboratoří pro antibiotika. <a href="https://szu.gov.cz/odborna-centra-a-pracoviste/centrum-epidemiologie-a-mikrobiologie/oddeleni-bakterialni-rezistence-na-antibiotika-a-sbirka-kultur/nrl-pro-antibiotika/" target="_blank" rel="noopener">szu.gov.cz/NRL-antibiotika ↗</a></li>
+          <li><strong>ÚZIS — Přehled hlášených nežádoucích událostí v lůžkové péči</strong> — otevřená data Systému hlášení nežádoucích událostí (pády, dekubity a další události podle kategorie poskytovatele, 2018–2025). <a href="https://datanzis.uzis.gov.cz/data/SSS-06-SHNU/SSS-06-01/Otevrena-data-SSS-06-01-nezadouci-udalosti-luzkova-pece.csv" target="_blank" rel="noopener">datanzis.uzis.gov.cz (CSV) ↗</a></li>
           <li><strong>ÚZIS — Národní zdravotnický informační systém</strong> — domácí registr hospitalizací a výkonů. <a href="https://www.uzis.cz/index.php?pg=registry-sber-dat" target="_blank" rel="noopener">uzis.cz/registry ↗</a></li>
         </ul>
       </div>
@@ -434,7 +436,7 @@
         </ul>
       </div>
       <p class="article-sources-disclaimer">
-        <strong>Pozn. k údajům:</strong> Hodnoty z dashboardu HSPA Monitoru ke dni vydání článku; hodnota 6,7 % HAI je od 2. 11. 2026 ověřená proti country factsheetu ECDC pro Česko (PPS 2022–2023: 39 nemocnic, 12 296 pacientů; medián zemí EU/EHP 6,8 %) a proti výsledkům PPS 2016–2017 publikovaným SZÚ (45 nemocnic, 15 117 pacientů, 6,7 %); hodnota 2,1 pádu / 1 000 má <code>origin: seed</code> a ověřená zatím není. ECDC PPS reports jsou primární zdroj pro mezinárodní srovnání HAI v Evropě (PPS-1 2011/12, PPS-2 2016/17, PPS-3 2022/23). Pokles MRSA bakteriémií v britském NHS (z 8,6 na ~1,5 / 100 000 mezi FY 2007/08 a FY 2014/15) je kvantifikován proti UKHSA Annual epidemiological commentary; pokles C. difficile (peak ~57 247 případů v roce 2007) odpovídá témuž zdroji.
+        <strong>Pozn. k údajům:</strong> Hodnoty z dashboardu HSPA Monitoru ke dni vydání článku; hodnota 6,7 % HAI je od 2. 11. 2026 ověřená proti country factsheetu ECDC pro Česko (PPS 2022–2023: 39 nemocnic, 12 296 pacientů; medián zemí EU/EHP 6,8 %) a proti výsledkům PPS 2016–2017 publikovaným SZÚ (45 nemocnic, 15 117 pacientů, 6,7 %); hodnota 10,71 hlášeného pádu na 1 000 hospitalizovaných pacientů (2025, nemocnice akutní péče: 21 716 pádů na 2 027 712 pacientů) je od 12. 11. 2026 přepočtená z otevřených dat ÚZIS (Systém hlášení nežádoucích událostí, sada SSS-06-01). ECDC PPS reports jsou primární zdroj pro mezinárodní srovnání HAI v Evropě (PPS-1 2011/12, PPS-2 2016/17, PPS-3 2022/23). Pokles MRSA bakteriémií v britském NHS (z 8,6 na ~1,5 / 100 000 mezi FY 2007/08 a FY 2014/15) je kvantifikován proti UKHSA Annual epidemiological commentary; pokles C. difficile (peak ~57 247 případů v roce 2007) odpovídá témuž zdroji.
       </p>
     </section>
 

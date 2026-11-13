@@ -1,41 +1,48 @@
 {
   "id": "dekubity_hospitalizace",
-  "name": "Dekubity získané během hospitalizace",
+  "name": "Hospitalizovaní pacienti s dekubitem (hlášení SHNU)",
   "area": "Procesy",
   "domain": "Bezpečnost péče",
   "subdomain": "Ošetřovatelská bezpečnost",
-  "definition": "Prevalence dekubitů (proleženin) u hospitalizovaných pacientů zjištěná národním prevalenčním šetřením — podíl pacientů s alespoň jedním dekubitem v den šetření z celkového počtu hospitalizovaných. Dekubitus je lokální poškození kůže a podkoží nad kostním výběžkem vzniklé tlakem a střihem, typicky u imobilních pacientů; jeho vznik během hospitalizace je uznávaným ukazatelem kvality ošetřovatelské péče (nursing-sensitive indicator).",
+  "definition": "Podíl hospitalizovaných pacientů, u nichž poskytovatel lůžkové péče vykázal do Systému hlášení nežádoucích událostí dekubitus (proleženinu), ze všech hospitalizovaných pacientů v daném roce. Zahrnuje všechny kategorie poskytovatelů lůžkové péče a dekubity vzniklé v zařízení i ty, se kterými pacient už přišel. Dekubitus je místní poškození kůže a podkoží nad kostním výběžkem způsobené tlakem, typicky u pacientů, kteří se sami nepolohují.",
   "unit": "%",
   "direction": "lower_is_better",
   "data_source": {
     "primary": {
-      "type": "nrc",
-      "endpoint": "https://kancelarzp.cz/sledovani-dekubitu/",
-      "dataset": "Národní prevalenční šetření dekubitů (ČAS ve spolupráci s NRC, pokračuje pod Kanceláří zdravotního pojištění)",
+      "type": "mzcr_opendata",
+      "endpoint": "https://datanzis.uzis.gov.cz/data/SSS-06-SHNU/SSS-06-01/Otevrena-data-SSS-06-01-nezadouci-udalosti-luzkova-pece.csv",
+      "dataset": "ÚZIS ČR, otevřená data „Přehled hlášených nežádoucích událostí v lůžkové péči“ (SSS-06-01), zdroj Systém hlášení nežádoucích událostí (SHNU). Roční agregáty podle kategorie poskytovatele a typu události: počet vykázaných událostí, počet hospitalizovaných pacientů (jmenovatel) a relativní počet na 1 000 pacientů. Časové pokrytí 2018–2025, roční aktualizace.",
       "dimensions": {
-        "country": "CZ",
-        "setting": "luzkova_zdravotni_pece",
-        "unit_of_analysis": "hospitalizovany_pacient"
+        "typ_NU": "R19S01 NU Dekubitus",
+        "kategorie_PZS": "všech 7 kategorií poskytovatelů lůžkové péče (A, B, K, L, N, P, S)",
+        "metrika": "součet NU_absolutni_pocet / součet NU_pocet_pacientu × 100",
+        "obdobi": "roční řada 2018–2025"
       },
-      "note": "Prevalenční šetření = jednorázový sběr v definovaný den napříč zapojenými poskytovateli. Poskytovatelé dostávají report s referenčními hodnotami. Dekubity jsou paralelně evidovány v Systému hlášení nežádoucích událostí (SHNU) a v Národním registru hospitalizovaných (NRHOSP)."
+      "note": "Hodnota se počítá jako vážený poměr přes všechny kategorie, ne jako průměr sloupce NU_relativni_pocet (ten je na 1 000 pacientů). CSV je v UTF-8 s BOM a název jedné kategorie poskytovatele obsahuje čárku, proto je nutný skutečný CSV parser."
     },
     "fallback": {
-      "type": "nrhosp",
-      "note": "Národní registr hospitalizovaných (ÚZIS) — rutinní vykazování identifikuje jen ~1,2 % hospitalizovaných s dekubitem ročně, tj. výrazně méně než prevalenční šetření (podhlášení)."
+      "type": "uzis_portal",
+      "url": "https://shnu.uzis.cz/",
+      "note": "Národní portál Systému hlášení nežádoucích událostí (ÚZIS): metodiky, definice událostí a pokyny k výkazu L (MZ) 3-01."
     },
     "verification": {
       "date": "2026-11-12",
-      "result": "nedohledatelne",
-      "source_url": "https://mzd.gov.cz/?p=130360",
-      "note": "Shoduji se s předchozím agentem: 4,3 % (2023) ani řada 4,8/4,5/4,3 nejsou v žádném primárním zdroji a karta je sama označuje za orientační. Na rozdíl od něj jsem rozpětí 2,8–5,1 % ověřil přímo v plném textu stránky MZ (mzd.gov.cz/?p=130360), nejen ve výsledku vyhledávače. Zdroj ho ale označuje jako roční výskyt, ne bodovou prevalenci v den šetření, a sám upozorňuje na omezený počet nemocnic. Je to rozpětí, ne bodová hodnota, a rok je kolem 2015, takže pro seed nevyhovuje. Název („získané během hospitalizace“) nesedí na definici (celková prevalence včetně dekubitů přítomných při přijetí). SHNU přitom místo vzniku rozlišuje (nzip.cz/data/2503), takže lepší definice je dostupná, ale jen v Power BI. Článek s pilotní analýzou SHNU 2018 (Čes Slov Neurol) je za registrací odborníka a neotevřel jsem ho. Benchmark prázdný, to je správně. Doporučení: 4,3 % a trend vyřadit, indikátor předefinovat na NU Dekubitus vzniklý v zařízení na 1 000 pacientů (SHNU) a vyžádat export od ÚZIS."
+      "result": "vymeneno_za_dolozitelny_ukazatel",
+      "source_name": "ÚZIS ČR, Systém hlášení nežádoucích událostí (SHNU), otevřená data SSS-06-01 „Přehled hlášených nežádoucích událostí v lůžkové péči“",
+      "source_url": "https://datanzis.uzis.gov.cz/data/SSS-06-SHNU/SSS-06-01/Otevrena-data-SSS-06-01-nezadouci-udalosti-luzkova-pece.csv",
+      "quote": "2025,\"B\",\"Ostatní nemocnice akutní péče\",\"R19S01\",\"NU Dekubitus\",30630,1178833,\"25.98\"",
+      "previous": {
+        "name": "Dekubity získané během hospitalizace",
+        "value": 4.3,
+        "unit": "%",
+        "year": 2023
+      },
+      "note": "CSV jsem 12. 11. 2026 stáhl a přepočítal. Vzorec: součet NU_absolutni_pocet / součet NU_pocet_pacientu × 100 pro NU_kod R19S01, všech 7 kategorií PZS (A, B, K, L, N, P, S). Vstupy: 2018 48704/2706998=1,80; 2019 48779/2856355=1,71; 2020 47755/2320850=2,06; 2021 50795/2364538=2,15; 2022 51985/2545319=2,04; 2023 51558/2564694=2,01; 2024 54508/2526860=2,16; 2025 55101/2561535=2,15. Řádky 2025: A 14227/848879, B 30630/1178833, K 0/244, L 57/340098, N 9149/77072 (11,87 %), P 776/38833, S 262/77576; A+B 44857/2027712=2,21 %. Zahrnuje dekubity vzniklé v zařízení i přítomné při přijetí. Výklad čitatele jako „počet pacientů s dekubitem“ a povinnost položky přebírám z nálezu (pokyny k výkazu L (MZ) 3-01); samotné pokyny jsem neotevřel, metadata CSV popisují sloupec jen jako „Absolutní počet vykázaných nežádoucích událostí“. Benchmark žádný, signál neutral."
     }
   },
   "benchmark_source": {
-    "type": "narrative_only",
-    "code": "no_direct_benchmark",
-    "dataset": "Mezinárodní srovnání prevalence dekubitů není 1:1 — metodiky se liší (bodová vs. periodová prevalence, práh kategorie I–IV vs. II–IV, dekubity vzniklé v zařízení vs. přítomné při přijetí). Publikovaná evropská prevalence se pohybuje v širokém pásmu ~8,8–53,2 % podle metodiky. Nejblíže srovnatelné je Německo, kde národní prevalenční šetření (Charité) udává nemocniční prevalenci dekubitů kategorie II–IV kolem 5,5 % a nozokomiální (v zařízení vzniklou) prevalenci nad 3 %; ročně v německých nemocnicích vznikne odhadem ~65 000 dekubitů. Rakousko se účastní mezinárodního měření LPZ (Maastricht) se standardizovanou metodikou.",
-    "value": null,
-    "url": "https://www.thieme-connect.de/products/ejournals/pdf/10.1055/s-0043-122069.pdf"
+    "type": "none",
+    "note": "Srovnatelný mezinárodní benchmark neexistuje. Zahraniční údaje pocházejí z prevalenčních šetření s jinou metodikou (bodová prevalence, různé kategorie dekubitů) a s podílem pacientů vykázaných v národním systému hlášení je nelze srovnávat."
   },
   "signal_thresholds": {
     "good": 2,
@@ -43,12 +50,10 @@
   },
   "frequency": "yearly",
   "stewards": [
-    "NRC / Kancelář zdravotního pojištění",
-    "Česká asociace sester (ČAS)",
     "ÚZIS"
   ],
-  "method_notes": "Hodnota vychází z národního prevalenčního šetření dekubitů (ČAS/NRC, dnes Kancelář zdravotního pojištění), které ÚZIS uvádí v pásmu ~2,8–5,1 % hospitalizovaných pacientů ročně. Pro dashboard je nastavena reprezentativní hodnota 4,3 % v tomto pásmu (rok 2023). Časová řada je orientační (origin: seed), sestavená v mezích vykazovaného pásma — přesné meziroční hodnoty vyžadují report NRC/KZP. Paralelní rutinní zdroj (NRHOSP) eviduje jen ~1,2 % pacientů s dekubitem, což je typický projev podhlášení. Klíčovým metodickým problémem je, že v ČR chybí jednotný národní standard monitorování a klinický doporučený postup prevence dekubitů — proto je i vlastní benchmarkování v čase nespolehlivé.",
-  "limitations": "Vykazovaná čísla vyjadřují počet evidovaných / v šetření zachycených případů, ne skutečný výskyt — reálná prevalence je pravděpodobně vyšší (podhlášení). Šetření zachycuje pacienty jen v zapojených zařízeních a v jeden den (bodová prevalence), takže neodhaduje incidenci ani délku hojení. Nerozlišuje spolehlivě dekubity vzniklé v zařízení od přítomných při přijetí. Mezinárodní srovnání je omezené odlišnou metodikou. Signál je nastaven jako neutral — bez srovnatelného benchmarku nelze hodnotu spolehlivě klasifikovat.",
+  "method_notes": "Výpočet: počet pacientů s vykázaným dekubitem (NU Dekubitus, kód R19S01) ve všech kategoriích poskytovatelů dělený počtem hospitalizovaných pacientů, krát 100. Vstupy 2025: 55 101 pacientů s dekubitem z 2 561 535 hospitalizovaných, tj. 2,15 %. Řada: 2018 1,80 %; 2019 1,71 %; 2020 2,06 %; 2021 2,15 %; 2022 2,04 %; 2023 2,01 %; 2024 2,16 %; 2025 2,15 %. Úroveň se mezi typy zařízení řádově liší: nemocnice akutní péče (kategorie A + B) 2,21 %, nemocnice následné péče a LDN 11,9 % (9 149 z 77 072 pacientů, 2025). Podle pokynů ÚZIS k výkazu L (MZ) 3-01 je počet pacientů s dekubitem povinná položka výkazu a jmenovatelem jsou všichni hospitalizovaní pacienti za sledované období. Zvýšení mezi lety 2019 a 2020 způsobil hlavně pokles počtu hospitalizovaných (z 2,86 na 2,32 milionu), počet pacientů s dekubitem zůstal podobný.",
+  "limitations": "Ukazatel zahrnuje dekubity vzniklé v zařízení i přítomné už při přijetí, neměří tedy jen to, co nemocnice způsobila. Místo vzniku ÚZIS sleduje, ale zveřejňuje ho jen v interaktivním přehledu na portálu NZIP, ne v otevřených datech. Hodnota závisí na důslednosti hlášení: víc vykázaných dekubitů může znamenat poctivější evidenci, proto signál zůstává neutrální. Součet za celou lůžkovou péči míchá zařízení s velmi odlišnou skladbou pacientů. Otevřená data nerozlišují kategorii (hloubku) dekubitu ani jednotlivé nemocnice. Nejde o bodovou prevalenci z prevalenčního šetření, takže hodnotu nelze srovnávat se zahraničními šetřeními. Indikátor byl 12. 11. 2026 vyměněn za doložitelný ukazatel, protože původní hodnotu (prevalence dekubitů z prevalenčního šetření) nešlo doložit žádným zdrojem.",
   "determinants": [
     "Personální kapacita a zátěž ošetřovatelského personálu (počet ošetřovacích dní na úvazek sestry)",
     "Dostupnost a používání antidekubitních pomůcek (matrace, polohovací pomůcky)",
@@ -57,8 +62,9 @@
     "Existence a dodržování ošetřovatelského standardu prevence dekubitů"
   ],
   "importance": "Dekubity jsou z velké části preventabilní nežádoucí událost a citlivý ukazatel kvality ošetřovatelské péče. Znamenají bolest a utrpení pacienta, riziko infekce a sepse, prodloužení hospitalizace a významné náklady. Spolu s pády tvoří dvojici klíčových ošetřovatelských bezpečnostních indikátorů.",
-  "patient_story": "Fakultní nemocnice, interní oddělení, jedenáctý den hospitalizace. Paní Věra (81) leží po cévní mozkové příhodě, sama se nepolohuje a většinu dne tráví na zádech. Na kříži se jí udělal začervenalý plak, který ošetřovatelka v přeplněné noční směně stihla přehodnotit až s odstupem — a to už byla kůže porušená. Dekubitus druhého stupně. Není to nedbalost jednoho člověka; je to výsledek toho, že na oddělení chybí čas, jednotný standard polohování a někdy i antidekubitní matrace. Přesně takový případ zachytí národní prevalenční šetření dekubitů, které v Česku najde dekubitus přibližně u 4,3 % hospitalizovaných pacientů.\n\nHodnota 4,3 % (rok 2023, národní prevalenční šetření NRC/KZP) leží ve vykazovaném pásmu 2,8–5,1 %. Signál je neutral — a to samo o sobě je výpověď: Česko nemá jednotnou metodiku, která by umožnila hodnotu spolehlivě porovnat v čase i se zahraničím. Paralelní rutinní registr (NRHOSP) přitom eviduje dekubitus jen u ~1,2 % pacientů, tedy zlomek toho, co najde cílené šetření. Ta mezera mezi 4,3 % a 1,2 % není rozdíl v péči, ale v měření — velká část dekubitů se do rutinních dat vůbec nedostane.\n\nStrukturálně stojí prevence dekubitů na ošetřovatelském personálu: na čase sestry pravidelně polohovat imobilního pacienta, hodnotit riziko škálou a mít po ruce správnou pomůcku. Když roste zátěž na jeden úvazek sestry a zkracuje se personální rezerva, prevence je první, co pod tlakem provozu odpadne — dekubity jsou proto úzce svázané s indikátorem ošetřovacích dní na úvazek sestry i s nedostatkem sester. Chybějící národní standard a klinický doporučený postup navíc znamenají, že každé oddělení postupuje trochu jinak a data nejsou srovnatelná.\n\nPolitická páka je konkrétní a leží na Ministerstvu zdravotnictví, ÚZIS/NRC a poskytovatelích. Za prvé zavést jednotný národní standard monitorování a klinický doporučený postup prevence dekubitů, aby se měřilo stejně (navazuje na Věstník MZ a program „Pozor na červenou“). Za druhé propojit rutinní vykazování (NRHOSP/SHNU) s prevenčním šetřením a zveřejňovat srovnání po poskytovatelích — transparentnost sama motivuje ke zlepšení. Za třetí posílit ošetřovatelské kapacity a dostupnost antidekubitních pomůcek přes úhradové mechanismy. HSPA Monitor sleduje dekubity jako doplňkový bezpečnostní indikátor po boku pádů — obojí ukazuje, jak dobře systém chrání nejzranitelnější, imobilní pacienty.",
+  "patient_story": "Fakultní nemocnice, interní oddělení, jedenáctý den hospitalizace. Paní Věra (81) leží po cévní mozkové příhodě, sama se nepolohuje a většinu dne tráví na zádech. Na kříži se jí udělalo začervenalé místo, které ošetřovatelka v přeplněné noční směně stihla znovu zkontrolovat až s odstupem, a to už byla kůže porušená. Dekubitus druhého stupně. Není to nedbalost jednoho člověka. Je to výsledek toho, že na oddělení chybí čas, jednotný postup polohování a někdy i antidekubitní matrace.\n\nNemocnice takový případ vykáže do Systému hlášení nežádoucích událostí. Za rok 2025 poskytovatelé lůžkové péče vykázali dekubitus u 55 101 z 2 561 535 hospitalizovaných pacientů, tedy u 2,15 % (ÚZIS). Od roku 2020 se podíl drží mezi 2,0 a 2,2 %. V nemocnicích následné péče a léčebnách dlouhodobě nemocných, kde leží nejvíc imobilních pacientů, je to 11,9 %.\n\nČíslo má jednu podstatnou slabinu. Počítá dohromady proleženiny, které vznikly až v nemocnici, a ty, se kterými pacient přišel z domova nebo z jiného zařízení. Paní Věra tak ve zveřejněných datech splyne s pacientem, kterého přivezli s dekubitem už z domácí péče. Kolik proleženin jde na vrub nemocniční péče, z otevřených dat nezjistíme.\n\nPrevence stojí na ošetřovatelském personálu: na čase sestry pravidelně polohovat ležícího pacienta, zhodnotit riziko a mít po ruce správnou pomůcku. Když na jednu sestru připadá víc pacientů, prevence je první, co pod tlakem provozu odpadne. Stát může pomoci třemi kroky: zveřejňovat zvlášť dekubity vzniklé v zařízení, a to i po jednotlivých nemocnicích, vydat závazný doporučený postup prevence a zohlednit ošetřovatelské kapacity a antidekubitní pomůcky v úhradách.",
   "framework": "monitoring",
   "dimension": "bezpecnost",
-  "verification_status": "illustrative"
+  "verification_status": "verified",
+  "verified_at": "2026-11-12"
 }
