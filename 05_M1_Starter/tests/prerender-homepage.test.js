@@ -17,15 +17,21 @@ const arts = [
   { slug: 'clanek-manifest.html', number: '1', tag: 'M', date: '2026-06-09', title: 'M', perex: 'm', kind: 'manifest' },
 ];
 
-test('buildHomeArticlesHtml: 3 nejnovější, nejnovější první, manifest a budoucí ven', () => {
+test('buildHomeArticlesHtml: nejnovější první (nejvýš 6), manifest a budoucí ven', () => {
   const html = buildHomeArticlesHtml(arts, '2026-06-10');
   const cards = html.match(/home-article-card/g) || [];
-  assert.equal(cards.length, 3);
-  // pořadí podle data: b(09) > d(08) > c(05)
+  assert.equal(cards.length, 4);
+  // pořadí podle data: b(09) > d(08) > c(05) > a(01)
   const order = [...html.matchAll(/href="(clanek-[a-z]+\.html)"/g)].map(m => m[1]);
-  assert.deepEqual(order, ['clanek-b.html', 'clanek-d.html', 'clanek-c.html']);
+  assert.deepEqual(order, ['clanek-b.html', 'clanek-d.html', 'clanek-c.html', 'clanek-a.html']);
   assert.ok(!html.includes('clanek-future'), 'budoucí ven');
   assert.ok(!html.includes('clanek-manifest'), 'manifest ven');
+});
+
+test('buildHomeArticlesHtml: nejvýš 6 karet', () => {
+  const many = Array.from({ length: 9 }, (_, i) => ({ slug: `clanek-x${i}.html`, number: String(20 + i), tag: 'T', date: `2026-05-0${i + 1}`, title: `T${i}`, perex: 'p' }));
+  const html = buildHomeArticlesHtml(many, '2026-06-10');
+  assert.equal((html.match(/home-article-card/g) || []).length, 6);
 });
 
 test('buildHomeArticlesHtml: escapuje HTML v titulku/perexu', () => {

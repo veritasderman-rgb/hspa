@@ -53,6 +53,16 @@ let _modalChart = null;
 
 // ====== URL HASH STATE ======
 
+// Homepage: kurátorovaný výběr indikátorů (viz fillExtremes níže).
+const HOME_EXTREMES_GOOD = ['mortalita_kojenecka', 'unmet_need_medical', 'screening_cervix', 'nesplnena_potreba_zubni_pece', 'hiv_nove_diagnozy'];
+const HOME_EXTREMES_BAD = ['mortalita_kardiovaskularni', 'umrtnost_diabetes', 'amputace_dk_diabetici', 'vakcinace_chripka_65', 'pracovnici_ltc_per_100_65plus'];
+
+/** Úplný přehled indikátorů je na homepage sbalený (<details id="indicatorsFull">). */
+function openFullIndicators() {
+  const d = document.getElementById('indicatorsFull');
+  if (d && !d.open) d.open = true;
+}
+
 function readHash() {
   const hash = location.hash.slice(1);
   if (!hash) return {};
@@ -415,6 +425,30 @@ function renderEditorialHero() {
       enhanceArticleVisuals();
     }
 
+    // Kurátorovaný výběr „kde jsme na tom dobře / kde zaostáváme“. Hodnoty i
+    // benchmark jdou živě z kontraktu; položka se ukáže jen tehdy, když její
+    // signál pořád odpovídá sloupci (jinak by výběr mohl tiše zastarat).
+    const extremeRow = function (ind) {
+      const bench = ind.benchmark || {};
+      const benchVal = bench.oecd != null ? bench.oecd : bench.eu;
+      const benchLabel = bench.oecd != null ? 'OECD' : 'EU';
+      const url = 'indikator-' + encodeURIComponent(ind.id) + '.html';
+      return '<li><a class="home-extremes-item" href="' + url + '">'
+        + '<span class="home-extremes-name">' + escapeHtmlInner(ind.name) + '</span>'
+        + '<span class="home-extremes-val"><strong>' + escapeHtmlInner(fmt(ind.value)) + '</strong> ' + escapeHtmlInner(ind.unit || '')
+        + (benchVal != null ? ' <span class="home-extremes-bench">· ' + benchLabel + ' ' + escapeHtmlInner(fmt(benchVal)) + '</span>' : '')
+        + '</span></a></li>';
+    };
+    const fillExtremes = function (elId, ids, signal) {
+      const el = document.getElementById(elId);
+      if (!el) return;
+      const rows = ids.map(findInd).filter(function (i) { return i && i.signal === signal; });
+      el.innerHTML = rows.map(extremeRow).join('');
+      if (!rows.length && el.parentElement) el.parentElement.hidden = true;
+    };
+    fillExtremes('homeExtremesGood', HOME_EXTREMES_GOOD, 'good');
+    fillExtremes('homeExtremesBad', HOME_EXTREMES_BAD, 'bad');
+
     // ed-stories ("Tento týden v datech") a ed-areas (4 oblasti) byly přesunuty:
     // ed-stories odstraněno, ed-areas → hspa-prehled.html.
 
@@ -486,6 +520,7 @@ function renderDimensionsIndex() {
       activeDimension = dimId;
       const sel = document.getElementById('dimensionFilter');
       if (sel) sel.value = dimId;
+      openFullIndicators();
       renderGrid();
       writeHash();
       const section = document.getElementById('indicatorsSection');
@@ -1541,6 +1576,7 @@ function wireUp() {
   if (typeof window === 'undefined') return; // skip in node test environment
   const hashState = readHash();
   applyHash(hashState);
+  if (Object.keys(hashState).length) openFullIndicators();
   wireUp();
   renderMastheadDateLocal();
   renderFooter();
@@ -1725,7 +1761,7 @@ function renderFinanceDonut() {
 }
 
 /**
- * Načte data/articles.json a vyrenderuje 3 nejnovější (dle date desc, pak number desc)
+ * Načte data/articles.json a vyrenderuje 6 nejnovějších (dle date desc, pak number desc)
  * do bloku #homeArticlesGrid na hlavní stránce. Manifest vynechán — má své vlastní
  * vizuální zvýraznění v sekci /clanky.html a do "nejnovějších" nepatří jako řadový text.
  */
@@ -1743,7 +1779,7 @@ async function loadAndRenderHomeArticles() {
         if (db !== da) return db - da;
         return parseInt(b.number, 10) - parseInt(a.number, 10);
       })
-      .slice(0, 3);
+      .slice(0, 6);
 
     grid.innerHTML = articles.map(a => `
       <li class="home-article-card">

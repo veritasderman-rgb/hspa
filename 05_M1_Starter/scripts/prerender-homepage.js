@@ -2,7 +2,7 @@
 //
 // Proč: hlavní obsah homepage (seznam článků) plní app.js za běhu → ne-JS
 // crawlery a AI enginy viděly prázdnou kostru. Tady do index.html zapečeme
-// statický seznam 3 nejnovějších článků. app.js ho při načtení přepíše
+// statický seznam 6 nejnovějších článků. app.js ho při načtení přepíše
 // (`grid.innerHTML = …`), takže pro uživatele je výsledek stejný a nedochází
 // k duplicitě — jen crawler navíc dostane obsah bez JS (GEO).
 //
@@ -18,7 +18,7 @@ import { visibleArticles } from './generate-feed.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const DRY = process.argv.includes('--dry');
-const COUNT = 3;
+const COUNT = 6;
 const MONTHS = ['ledna', 'února', 'března', 'dubna', 'května', 'června',
   'července', 'srpna', 'září', 'října', 'listopadu', 'prosince'];
 

@@ -118,6 +118,7 @@ export const STATIC_PAGES = [
   { loc: '/redakce.html', priority: '0.4', changefreq: 'monthly' },
   { loc: '/cesta-pacienta.html', priority: '0.6', changefreq: 'monthly' },
   { loc: '/model-systemu.html', priority: '0.6', changefreq: 'monthly' },
+  { loc: '/nastroje.html', priority: '0.6', changefreq: 'monthly' },
   { loc: '/kolonoskopie.html', priority: '0.5', changefreq: 'monthly' },
   { loc: '/vestniky-mz.html', priority: '0.7', changefreq: 'weekly' },
   { loc: '/jak-se-rozhoduje.html', priority: '0.7', changefreq: 'monthly' },

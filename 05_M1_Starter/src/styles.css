@@ -23415,3 +23415,153 @@ main .zps .zpv-mark, main[data-moje-zp] .zps .zpv-mark, main[data-porovnat-zp] .
   .zpp-ovl .zpc-chips, .zpp-add, .zpp-x { display: none; }
   .zpp-tbl table { min-width: 0; }
 }
+
+/* =================================================================
+   Homepage — blok „Co se vás týká“ (.home-you), výběr indikátorů
+   (.home-extremes) a sbalený úplný přehled (.home-allind).
+   Jen tokeny → dark-safe.
+   ================================================================= */
+.home-you {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 28px var(--content-pad, 32px) 36px;
+}
+.home-you-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 18px;
+}
+@media (max-width: 1000px) { .home-you-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .home-you-grid { grid-template-columns: 1fr; } }
+.home-you-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-decoration: none;
+  color: inherit;
+  background: var(--paper2);
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--ink);
+  border-radius: 10px;
+  padding: 18px 20px;
+  transition: background 0.12s, transform 0.12s, box-shadow 0.12s;
+}
+.home-you-card:hover {
+  background: var(--paper);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+.home-you-card-tools { border-top-color: var(--ink-mut); }
+.home-you-q {
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--ink);
+}
+.home-you-a {
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-mut);
+  flex: 1;
+}
+.home-you-cta {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--red);
+}
+.home-you-nums-h {
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--ink-mut);
+  margin: 30px 0 4px;
+}
+
+/* Články na homepage: šest karet, perex zkrácený na tři řádky. */
+.home-articles-prominent .home-article-perex {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+}
+
+.home-extremes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin: 24px 0 8px;
+}
+@media (max-width: 720px) { .home-extremes { grid-template-columns: 1fr; } }
+.home-extremes-col {
+  background: var(--paper2);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 18px 20px 10px;
+}
+.home-extremes-good { border-top: 3px solid var(--good); }
+.home-extremes-bad { border-top: 3px solid var(--red); }
+.home-extremes-h {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+.home-extremes-list { list-style: none; margin: 0; padding: 0; }
+.home-extremes-list li + li { border-top: 1px solid var(--rule); }
+.home-extremes-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 10px 0;
+  text-decoration: none;
+  color: inherit;
+}
+.home-extremes-item:hover .home-extremes-name { color: var(--red); }
+.home-extremes-name {
+  font-family: var(--sans);
+  font-size: 14.5px;
+  line-height: 1.35;
+  color: var(--ink);
+}
+.home-extremes-val {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  color: var(--ink-mut);
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.home-extremes-val strong { color: var(--ink); font-size: 15px; }
+@media (max-width: 560px) {
+  .home-extremes-item { flex-direction: column; gap: 2px; }
+  .home-extremes-val { text-align: left; white-space: normal; }
+}
+.home-extremes-more {
+  font-family: var(--sans);
+  font-size: 14px;
+  margin: 10px 0 20px;
+}
+.home-extremes-more a { color: var(--red); font-weight: 600; text-decoration: none; }
+.home-allind { margin-top: 8px; }
+.home-allind-summary {
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  padding: 14px 18px;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--paper2);
+}
+.home-allind-summary:hover { background: var(--paper); }
+.home-allind[open] > .home-allind-summary { margin-bottom: 20px; }
