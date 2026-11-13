@@ -1,45 +1,60 @@
 {
   "id": "spokojenost_informovani",
-  "name": "Spokojenost pacientů s informováním",
+  "name": "Péče zaměřená na člověka očima pacientů (PaRIS)",
   "area": "Výstupy",
   "domain": "Zkušenost pacienta",
   "subdomain": "Komunikace",
-  "definition": "Podíl pacientů hodnotících komunikaci a informování ze strany zdravotnického personálu jako „dobré\" nebo „výborné\" v průzkumu spokojenosti.",
+  "definition": "Podíl pacientů praktických lékařů ve věku 45 a více let s alespoň jedním chronickým onemocněním, kteří uvádějí pozitivní zkušenost s péčí zaměřenou na člověka. Pozitivní zkušenost znamená aspoň 12 bodů z 24 v osmi otázkách dotazníku P3CEQ (rozhovor o tom, co je pro pacienta důležité, zapojení do rozhodování, zohlednění celého člověka, informace a podpora pro zvládání vlastní nemoci). Mezinárodní šetření OECD PaRIS, sběr 2023–24.",
   "unit": "%",
   "direction": "higher_is_better",
   "data_source": {
     "primary": {
-      "type": "nrc",
-      "note": "Průzkum spokojenosti NRC — hospitalizovaní pacienti."
-    },
-    "fallback": {
       "type": "oecd",
-      "code": "PAT_EXP"
+      "endpoint": "https://sdmx.oecd.org/public/rest/data/OECD.ELS.HD,DSD_PARIS@DF_PARIS,1.0/CZE+OECD+EU..........?format=csvfilewithlabels",
+      "dataset": "OECD.ELS.HD:DSD_PARIS@DF_PARIS(1.0) — Patient-Reported Indicator Surveys (PaRIS)",
+      "dimensions": {
+        "REF_AREA": "CZE",
+        "MEASURE": "PCCPOSOUT",
+        "PATIENT_STATUS": "CHRONIC",
+        "SEX": "_T",
+        "AGE": "_T",
+        "ATTAINMENT_LEV": "_T",
+        "UNIT_MEASURE": "PT_PAT",
+        "TIME_PERIOD": "2023-01-01/P2Y"
+      },
+      "note": "Řada „Person centred care - patients reporting positive experiences“, pacienti s chronickým onemocněním, celkem. Období sběru 2023–24, v kontraktu vedeno jako rok 2024. Stejnou hodnotu uvádí Národní zpráva o projektu PaRIS (MZ ČR, 2025), tabulka klíčových ukazatelů: Czechia 17,1 bodu (90 %)."
     },
     "verification": {
       "date": "2026-11-12",
-      "result": "nedohledatelne",
-      "source_url": "https://sdmx.oecd.org/public/rest/data/OECD.ELS.HD,DSD_HCQO@DF_PE,/CZE.........?format=csvfilewithlabels&startPeriod=2000",
-      "note": "Shoduji se s předchozím agentem: zdroj NRC nemá URL ani veřejný dataset, kontrakt je seed s prázdným source.url a řada 68→72 rostoucí přesně o 1 bod ročně vypadá synteticky. Narativ karty cituje Eurobarometer 2024, tedy jiný zdroj než NRC; takové číslo jsem nedohledal. Sám jsem prošel OECD DF_PE: pro ČR je jen rok 2010 (RHPEXCLA 96,3 %, běžný lékař, ambulantní péče, 16+), to je jiná populace i definice než hospitalizovaní a hodnocení „dobré/výborné“. Navíc jsem zkusil OECD PaRIS (DSD_PARIS@DF_PARIS), kde ČR je: person-centred care 90 % pozitivních zkušeností, ale u chronicky nemocných 45+ v primární péči a jde o složený index, ne o informování. Ani jedno nelze dosadit bez změny definice indikátoru. Benchmark 78/76 nemá souměřitelný zdroj, doporučuji ho neuvádět. Indikátor zůstává seed; pokud se má ožít, je potřeba předefinovat kartu na PaRIS nebo DF_PE a přijmout jinou veličinu."
+      "result": "vymeneno_za_dolozitelny_ukazatel",
+      "source_name": "OECD PaRIS 2024 Database (sběr 2023–24); Národní zpráva o projektu PaRIS, MZ ČR 2025",
+      "source_url": "https://sdmx.oecd.org/public/rest/data/OECD.ELS.HD,DSD_PARIS@DF_PARIS,1.0/CZE+OECD+EU..........?format=csvfilewithlabels",
+      "quote": "CZE,Czechia,PCCPOSOUT,Person centred care - patients reporting positive experiences,CHRONIC,Patients with chronic health conditions,_T,Total,_T,Total,_T,Total,PT_PAT,Percentage of patients,I,Irregular,2023-01-01/P2Y,,90",
+      "previous": {
+        "name": "Spokojenost pacientů s informováním",
+        "value": 72,
+        "unit": "%",
+        "year": 2024
+      },
+      "note": "Hodnota převzata bez přepočtu z OECD SDMX DF_PARIS (staženo 13. 11. 2026, HTTP 200): MEASURE=PCCPOSOUT, PATIENT_STATUS=CHRONIC, SEX/AGE/ATTAINMENT_LEV=_T, období 2023-01-01/P2Y (sběr 2023–24, v kontraktu rok 2024) = 90. Jednorázová vlna, řada má jediný bod. SDMX vrací jen řádky za ČR (246 řádků CZE, žádný OECD ani EU), benchmark OECD 85 je proto z Národní zprávy PaRIS 2025 (https://mzd.gov.cz/wp-content/uploads/2026/01/Narodni-zprava-PaRIS_2025.pdf, staženo a přečteno): tabulka klíčových ukazatelů, řádek Czechia 17.1 (90%), řádek OECD PaRIS 16.3 (85%); text: „Devět z deseti (90 %) lidí s chronickým onemocněním v Česku uvádí dobrou péči zaměřenou na člověka … což je nad průměrem OECD PaRIS (85 %)“. Průměr OECD PaRIS je prostý průměr zúčastněných členských zemí OECD (19, resp. 17 bez Itálie a USA), ne celé OECD. Průměr EU neexistuje. Práh pozitivní zkušenosti: skóre ≥ 12 z 24 v osmi otázkách P3CEQ. Populace: chronicky nemocní 45+ v primární péči. Signál se při prazích karty (good 3 %, warn 8 %) změní z warn na good (+5,9 % nad benchmarkem)."
     }
   },
   "benchmark_source": {
     "type": "oecd",
-    "code": "PAT_EXP",
-    "dataset": "HEALTH_HCQU"
+    "note": "Průměr OECD PaRIS 85 % z tabulky klíčových ukazatelů Národní zprávy o projektu PaRIS (MZ ČR, 2025; https://mzd.gov.cz/wp-content/uploads/2026/01/Narodni-zprava-PaRIS_2025.pdf). Jde o prostý průměr členských zemí OECD zapojených do šetření, ne celé OECD. Stejný sběr 2023–24 a stejná definice jako česká hodnota. Průměr EU pro tento ukazatel zveřejněn není; SDMX řada DF_PARIS obsahuje jen data za Česko."
   },
   "signal_thresholds": {
     "good": 3,
     "warn": 8
   },
-  "frequency": "yearly",
+  "frequency": "irregular",
   "stewards": [
-    "NRC",
+    "OECD",
     "MZ ČR"
   ],
-  "method_notes": "Výběrový průzkum (n ≈ 5 000 hospitalizovaných ročně), stratifikovaný dle typu péče a krajů.",
-  "limitations": "Odpovídají jen ochotní respondenti — selection bias. Definice „informování\" se liší napříč zeměmi.",
-  "patient_story": "Ambulance interny, dělá se ECHO, lékař dokončí vyšetření, podá pacientce papír s výsledkem: „Tady to máte, kontrola za rok, kontaktujte praktika.\" Pacientka odchází bez vysvětlení nálezu, bez vyjádření, co znamená pro běžný život. Tahle scéna je v ČR statisticky modální — informování pacienta je hodnoceno hůř než péče samotná.\n\nSpokojenost s informováním lékařem v ČR je 72 % (Eurobarometer 2024). OECD průměr 78 %, EU 76 % — Česko je signal warn, pod průměry. Rozdíl 3–6 procentních bodů je systémový. Mezi věkovými skupinami: 65+ uvádí spokojenost 78 % (často proto, že explicitních očekávání mají méně), mladí 18–35 cca 64 % (vyšší očekávání podloženého rozhovoru o léčbě, vedlejších účincích, alternativách).\n\nStrukturálně český systém má kapacitní problém ve vstupní vrstvě: praktik má průměrně 12 minut na pacienta, specialista 15–20 minut. To je málo na řádné informování o diagnóze, vysvětlení léčby, diskusi o vedlejších účincích a o alternativách. Komunikační dovednosti jsou součástí lékařských fakult, ale jejich procvičování v praxi je omezené. Pacientské materiály (letáky, brožury, online edukace) v češtině existují, ale jsou roztříštěné. Asociace pacientů jako STAN, AAA, MAMMA HELP suplují systém, ale s limitovanou kapacitou.\n\nInformování pacienta je klíčové pro adherenci ke léčbě, prevenci a sebepéči — bez něj selhává compliance, roste polypragmazie, snižuje se efektivita léčby. Politicky: prodloužení času na konzultaci v primární péči (model Norska — 20 min default); investice do shared decision making nástrojů (NICE Patient Decision Aids); zařazení komunikačních dovedností do CEUMS; národní pacientský portál se srozumitelnou edukací (UK NHS Choices model). Indikátor v HSPA dashboardu sleduje informování jako klíčový PREM parametr zkušenosti pacienta.",
+  "method_notes": "Dotazníkové šetření mezi pacienty ordinací praktických lékařů ve věku 45+, kteří ordinaci v posledních šesti měsících navštívili. Osm otázek nástroje P3CEQ, každá hodnocena 0–3 body, součet 0–24. Ukazatel je podíl pacientů se skóre 12 a více; počítá se jen u lidí s chronickým onemocněním. Průměrné skóre v Česku je 17,1 bodu, průměr OECD PaRIS 16,3. Hodnota se přebírá přímo z databáze OECD bez dalšího přepočtu.",
+  "limitations": "Nejde o všechny pacienty: ukazatel pokrývá chronicky nemocné ve věku 45+ v primární péči, o hospitalizovaných, mladších lidech ani o specialistech nic neříká. Je to složený index, informování je jen jedna z osmi otázek. Práh „pozitivní zkušenosti“ je nízký (polovina bodů), takže většina zemí vychází vysoko a rozdíly mezi nimi jsou malé. Šetření proběhlo zatím jednou (2023–24), časová řada neexistuje a další vlna není pevně stanovena. Odpovídají jen ochotní respondenti, průměr OECD PaRIS je průměr zúčastněných zemí, ne celé OECD. Indikátor byl 12. 11. 2026 vyměněn za tento doložitelný ukazatel, protože původní hodnotu (spokojenost hospitalizovaných pacientů s informováním) nešlo doložit žádným zdrojem.",
+  "patient_story": "Paní Marie je sedmašedesát, léčí se s cukrovkou a vysokým tlakem a ke svému praktickému lékaři chodí čtyřikrát do roka. Dotazník PaRIS se jí neptal, jestli je spokojená. Ptal se, jestli s ní lékař mluví o tom, co je pro ni důležité, jestli se podílí na rozhodování o léčbě, jestli nemusí všechno vyprávět pořád znovu a jestli dostala informace a podporu, aby si nemoc dokázala hlídat sama.\n\nV Česku na tyto otázky odpovědělo převážně kladně 90 % chronicky nemocných pacientů praktických lékařů ve věku 45 a více let (OECD PaRIS, sběr 2023–24). Průměr zemí zapojených do šetření je 85 %. Česko tedy v tomto ukazateli vychází nad průměrem.\n\nČíslo je potřeba číst s vědomím toho, co měří. Týká se ordinací praktických lékařů a lidí, kteří tam chodí pravidelně a svého lékaře znají. Neříká nic o tom, jak se s pacientem mluví v nemocnici, u specialisty nebo na pohotovosti. Hranice pozitivní zkušenosti je nastavená na polovinu možných bodů, takže i pacient, který na část otázek odpověděl záporně, se do 90 % počítá.\n\nKomunikace lékaře s pacientem přitom není jen otázka zdvořilosti. Studie opakovaně ukazují, že pacienti, se kterými lékař dobře komunikuje, častěji dodržují léčbu, a že dobrá zkušenost pacienta jde ruku v ruce s bezpečnější a účinnější péčí. Indikátor v HSPA Monitoru zastupuje hlas pacienta; pro lůžkovou péči zatím srovnatelný veřejný celostátní údaj chybí.",
   "framework": "hspa",
   "dimension": "spravedlnost",
   "literature": [
@@ -64,5 +79,15 @@
       "verified_at": "2026-11-01"
     }
   ],
-  "verification_status": "illustrative"
+  "verification_status": "verified",
+  "importance": "Ukazuje, jestli lékař s pacientem mluví o tom, co je pro něj důležité, zapojuje ho do rozhodování a dává mu informace, se kterými svou nemoc zvládne sám. U chronických onemocnění na tom stojí dodržování léčby i to, jak dobře člověk s nemocí žije. Je to jeden z mála ukazatelů, kde kvalitu péče hodnotí přímo pacienti a kde lze Česko srovnat se zahraničím stejnou metodou.",
+  "determinants": [
+    "Čas, který má praktický lékař na jednoho pacienta",
+    "Dlouhodobý vztah pacienta s jedním lékařem (kontinuita péče)",
+    "Komunikační dovednosti lékařů a sester",
+    "Společné rozhodování o léčbě a plán péče pro chronicky nemocné",
+    "Srozumitelné informace a podpora pro zvládání vlastní nemoci",
+    "Zdravotní gramotnost pacientů"
+  ],
+  "verified_at": "2026-11-12"
 }

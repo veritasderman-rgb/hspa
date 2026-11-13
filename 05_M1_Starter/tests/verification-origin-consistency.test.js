@@ -205,6 +205,19 @@ const KNOWN_SEED_VERIFIED_EXCEPTIONS = new Set([
   'lpod_share_critical',
   'multimorbidita_65plus',
   'nadeje_doziti_vzdelani_gap_muzi',
+  // 2026-11-12: indikátory vyměněné za doložitelný příbuzný ukazatel (původní hodnotu
+  // nešlo doložit); nová hodnota ručně ověřena proti primárnímu zdroji, fetcher zatím není.
+  'benzodiazepiny_seniori_65plus',
+  'bezpecnost_padu_nemocnice',
+  'cekaci_doby_specialist',
+  'dekubity_hospitalizace',
+  'ehealth_adoption',
+  'kontrola_hypertenze',
+  'preziti_ohca_30d',
+  'readmise_30d_ami',
+  'spokojenost_informovani',
+  'trombolyza_ischemicka_cmp',
+  'vydaje_dusevni_zdravi_pct',
 ]);
 
 test('verification_status: verified v kartě ⇒ source.origin: live v kontraktu (kromě známých výjimek)', () => {
