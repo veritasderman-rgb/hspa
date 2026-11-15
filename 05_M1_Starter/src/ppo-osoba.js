@@ -94,9 +94,11 @@ async function init() {
     const OS = await osRes.json();
     const p = OS.osoby.find(x => x.id === pid);
     if (!p) {
-      document.querySelector('main').innerHTML = renderErrorState(
-        `Osoba s id=${pid || '?'} v datech není. Vraťte se na přehled pracovních skupin.`,
-        new Error('not found'));
+      // Bez druhého argumentu: technický detail („not found") čtenáři nic neřekne.
+      const rawId = new URLSearchParams(location.search).get('id');
+      document.querySelector('main').innerHTML = renderErrorState(rawId
+        ? `Osoba s id „${rawId}“ v datech není. Vraťte se na přehled pracovních skupin.`
+        : `V adrese chybí parametr id. Vraťte se na přehled pracovních skupin.`);
       return;
     }
     const skupinyById = new Map(PPO.skupiny.map(x => [x.id, x]));

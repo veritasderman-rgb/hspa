@@ -345,7 +345,7 @@ main { padding: 28px 40px 60px; max-width: 1400px; margin: 0 auto; }
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
   gap: 0;
   border-top: 1px solid var(--rule);
 }
@@ -724,7 +724,7 @@ footer.bottom .disclaimer {
 .regions-select {
   padding: 6px 14px; border: 1px solid var(--rule2); border-radius: 999px;
   font-family: var(--sans); font-size: 12px; background: transparent; color: var(--ink); cursor: pointer;
-  min-width: 240px;
+  min-width: 240px; max-width: 100%;
 }
 .regions-select:focus { outline: none; border-color: var(--ink); }
 .regions-wrap { display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; }
@@ -1003,6 +1003,7 @@ a.finance-tile:focus {
 .ds-block h4 { font-family: var(--sans); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-mut2); margin-bottom: 6px; font-weight: 600; }
 .ds-table { width: 100%; font-family: var(--sans); font-size: 12px; border-collapse: collapse; }
 .ds-table th, .ds-table td { text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--rule); }
+.ds-table td { overflow-wrap: anywhere; }
 .ds-table th { color: var(--ink-mut2); font-weight: 500; width: 110px; }
 .ds-note { font-family: var(--serif); font-size: 13px; color: var(--ink-mut); margin-top: 8px; font-style: italic; }
 
@@ -1353,7 +1354,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 .level-nav button:hover, .cat-nav button:hover { border-color: var(--ink); }
 .level-nav button.active, .cat-nav button.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-.filters-actions { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.filters-actions { margin-left: auto; display: flex; align-items: center; gap: 12px; min-width: 0; }
+/* <select> se jinak roztáhne podle nejdelší položky (názvy skupin PPO mají přes 850 px). */
+.filters-actions select { min-width: 0; max-width: min(320px, 100%); text-overflow: ellipsis; }
 
 /* =================================================================
    Strategy / Explainer grid + cards (editorial newspaper-style)
@@ -2106,6 +2109,10 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
 .ind-narrative a:hover { color: var(--red); border-bottom-color: var(--red); }
 
 .ind-story-section { background: var(--paper2); margin: 0 -24px; padding: 28px 24px; border-top: 2px solid var(--ink); }
+/* Záporný okraj musí kopírovat boční padding <main> (16 px pod 768 px) — jinak sekce přeteče o 8 px na každé straně. */
+@media (max-width: 768px) {
+  .ind-story-section { margin-left: -16px; margin-right: -16px; padding-left: 16px; padding-right: 16px; }
+}
 .ind-story-section h3 { font-size: 13px; font-family: var(--sans); text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-mut); font-weight: 700; margin-bottom: 16px; }
 .ind-story {
   font-family: var(--serif); font-size: 17px; color: var(--ink); line-height: 1.7;
@@ -2152,7 +2159,7 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
   white-space: nowrap; z-index: 10;
 }
 .ind-map-legend {
-  display: flex; gap: 16px; align-items: center;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 16px; align-items: center; max-width: 100%;
   font-family: var(--sans); font-size: 10px; color: var(--ink-mut2);
   text-transform: uppercase; letter-spacing: 0.08em;
 }
@@ -2530,7 +2537,8 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
 @media (max-width: 880px) {
   .ind-hero { grid-template-columns: 1fr; }
   .ind-hero-num { font-size: 56px; letter-spacing: -1.5px; }
-  .ind-map-grid { grid-template-columns: 1fr; }
+  .ind-map-grid { grid-template-columns: minmax(0, 1fr); }
+  .ind-map-wrap { min-width: 0; max-width: 100%; }
   .ind-method-dl { grid-template-columns: 1fr; gap: 4px; }
   .ind-method-dl dt { padding-top: 8px; }
 }
@@ -6195,6 +6203,8 @@ a.series-toc-title:hover { color: var(--red); text-decoration: underline; }
   margin: 38px 0 18px;
 }
 .article-body strong { font-weight: 700; }
+/* Identifikátory indikátorů a URL v <code> nemají kde se zalomit — na mobilu roztáhnou stránku. */
+.article-page code { overflow-wrap: anywhere; }
 .article-body a {
   color: var(--ink);
   text-decoration: underline;
@@ -8910,6 +8920,10 @@ footer.bottom .kafe-strip {
   margin-bottom: 6px;
   white-space: nowrap;
 }
+/* Popisek cíle u pravého okraje (95 %) vycentrovaný na značku přeteče mimo obrazovku. */
+@media (max-width: 600px) {
+  .vakc-gauge-target-lbl { left: auto; right: -2px; transform: none; text-align: right; }
+}
 .vakc-gauge-row {
   display: flex;
   justify-content: space-between;
@@ -9300,7 +9314,11 @@ footer.bottom .kafe-strip {
   display: flex;
   align-items: center;
   gap: 10px;
+  min-width: 0;
+  max-width: 100%;
 }
+/* Popisek + <select> s min-width 240 px se na 375 px nevejdou vedle sebe. */
+.pojistenci-control-group .regions-select { min-width: 0; flex: 1 1 auto; }
 
 .pojistenci-time-controls {
   flex: 1;
@@ -12388,7 +12406,7 @@ body.site-search-open {
 .ind-deepdive-cta-arrow { font-size: 20px; color: var(--red); flex: 0 0 auto; }
 
 @media (max-width: 860px) {
-  .krk-geo { grid-template-columns: 1fr; gap: 24px; }
+  .krk-geo { grid-template-columns: minmax(0, 1fr); gap: 24px; }
   .krk-method-grid { grid-template-columns: 1fr; gap: 22px; }
   .krk-h { font-size: 22px; }
   .krk-chart-wrap { height: 300px; }
@@ -15773,7 +15791,8 @@ html {
 .indicator-static .ind-source-meta { font-family: var(--sans); font-size: 13px; color: var(--ink-mut); }
 .indicator-static .ind-interactive-cta { margin: 30px 0 8px; }
 @media (max-width: 600px) {
-  .indicator-static .ind-meta-row { grid-template-columns: 1fr; }
+  .indicator-static .ind-meta-row { grid-template-columns: minmax(0, 1fr); }
+  .indicator-static .ind-meta-row dd { overflow-wrap: anywhere; }
   .indicator-static .ind-hero-value { font-size: 38px; }
   .indicator-static .ind-detail-header h1 { font-size: 28px; }
 }
@@ -16291,7 +16310,8 @@ a.leg-tl-title { text-decoration: underline; text-underline-offset: 2px; }
 .leg-tl-key.leg-tl-overdue::before { background: var(--bad); }
 
 @media (max-width: 900px) {
-  .leg-radar-layout { grid-template-columns: 1fr; }
+  /* minmax(0, …): holé 1fr má min-content minimum, tabulka by stopu roztáhla na 720 px. */
+  .leg-radar-layout { grid-template-columns: minmax(0, 1fr); }
   .leg-timeline { position: static; max-height: none; }
 }
 
@@ -16481,7 +16501,9 @@ a.bar-metric-name:hover { color: var(--ink); text-decoration: underline; }
 .bar-chip {
   display: inline-block; font-family: var(--sans); font-size: 12px;
   padding: 3px 9px; border: 1px solid var(--rule2); color: var(--ink);
-  text-decoration: none; white-space: nowrap;
+  text-decoration: none;
+  /* Štítek zdroje nese celý název dokumentu — musí se zalomit, jinak roztáhne stránku na ~1 900 px. */
+  white-space: normal; max-width: 100%; overflow-wrap: anywhere;
 }
 a.bar-chip:hover { border-color: var(--red); color: var(--red); }
 .bar-chip-leg { border-style: dashed; }
@@ -19912,7 +19934,7 @@ a.bar-chip:hover { border-color: var(--red); color: var(--red); }
 }
 
 /* Blok „konkrétní situace": text vlevo celý, obrázek vpravo nahoře. */
-.vd-topic { display: grid; gap: 22px; }
+.vd-topic { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; }
 @media (min-width: 980px) {
   .vd-topic {
     grid-template-columns: minmax(0, 1.45fr) minmax(280px, 1fr);
@@ -20237,7 +20259,7 @@ a.ppo-spojka-name:hover { text-decoration: underline; }
 .ppo-uk-meta { margin: 0; font-size: 12.5px; color: var(--ink-mut); line-height: 1.6; }
 .ppo-uk-meta a { color: inherit; text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 2px; }
 .ppo-uk-meta a:hover { color: var(--ink); }
-.ppo-uk-t { display: inline-block; padding: 1px 8px; border: 1px solid var(--rule); border-radius: 999px; font-size: 11.5px; color: var(--ink); background: var(--bg); white-space: nowrap; }
+.ppo-uk-t { display: inline-block; padding: 1px 8px; border: 1px solid var(--rule); border-radius: 999px; font-size: 11.5px; color: var(--ink); background: var(--bg); white-space: normal; max-width: 100%; overflow-wrap: anywhere; }
 .ppo-uk-year { padding: 18px 0 4px; font-size: 12px; letter-spacing: 0.08em; color: var(--ink-mut); border-bottom: 1px solid var(--rule); }
 .ppo-uk-roky { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 4px; }
 .ppo-uk-rok { appearance: none; border: 1px solid var(--rule); background: var(--paper); color: var(--ink); border-radius: 999px; padding: 3px 10px; font-size: 12.5px; cursor: pointer; font-family: inherit; }

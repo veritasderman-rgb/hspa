@@ -329,7 +329,7 @@ function renderResults(query) {
     wrap.innerHTML = `
       <div class="site-search-empty">
         Nic nenalezeno pro „${escapeHtml(query)}".
-        <br><a href="https://www.google.com/search?q=site:hspa-cesko.cz+${encodeURIComponent(query)}" target="_blank" rel="noopener">Hledat na webu Google →</a>
+        <br><a href="https://www.google.com/search?q=site:skorezdravotnictvi.cz+${encodeURIComponent(query)}" target="_blank" rel="noopener">Hledat na webu Google →</a>
       </div>`;
     _currentResults = [];
     return;

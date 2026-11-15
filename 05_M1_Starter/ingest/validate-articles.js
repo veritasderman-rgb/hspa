@@ -145,6 +145,28 @@ export function findInternalProcessNotes(html) {
   return hits;
 }
 
+// Neuzavřený HTML komentář spolkne zbytek dokumentu: prohlížeč vykreslí
+// prázdnou stránku, a přitom žádný jiný check neselže (meta i <header> v textu
+// souboru pořád jsou). Takhle zmizel publikovaný clanek-pyll.html — blok
+// „audit:" před <body> neměl „-->". Vrací pozici prvního „<!--" bez konce, nebo null.
+export function findUnterminatedComment(html) {
+  // <script> a <style> jsou raw-text elementy, „<!--" v nich komentář neotevírá.
+  const blank = (m) => ' '.repeat(m.length);
+  const src = html
+    .replace(/<script\b[\s\S]*?<\/script>/gi, blank)
+    .replace(/<style\b[\s\S]*?<\/style>/gi, blank);
+  let i = 0;
+  for (;;) {
+    const open = src.indexOf('<!--', i);
+    if (open === -1) return null;
+    const close = src.indexOf('-->', open + 4);
+    if (close === -1) {
+      return { line: src.slice(0, open).split('\n').length };
+    }
+    i = close + 3;
+  }
+}
+
 function validate() {
   const articlesFile = path.join(ROOT, 'data', 'articles.json');
   if (!fs.existsSync(articlesFile)) {
@@ -256,6 +278,11 @@ function validate() {
       continue;
     }
     const html = fs.readFileSync(file, 'utf8');
+
+    const openComment = findUnterminatedComment(html);
+    if (openComment) {
+      errors.push(`${a.id} (${a.slug}): neuzavřený HTML komentář od řádku ${openComment.line} — chybí "-->", zbytek stránky se nevykreslí`);
+    }
 
     // Konzistence audit-status ↔ published
     const auditStatus = extractMeta(html);

@@ -408,9 +408,11 @@ async function init() {
     const OS = await osRes.json();
     const s = PPO.skupiny.find(x => x.id === gid);
     if (!s) {
-      document.querySelector('main').innerHTML = renderErrorState(
-        `Skupina s id=${gid || '?'} v datech není. Kompletní seznam je na přehledu.`,
-        new Error('not found'));
+      // Bez druhého argumentu: technický detail („not found") čtenáři nic neřekne.
+      const rawId = new URLSearchParams(location.search).get('id');
+      document.querySelector('main').innerHTML = renderErrorState(rawId
+        ? `Skupina s id „${rawId}“ v datech není. Kompletní seznam je na přehledu.`
+        : `V adrese chybí parametr id. Kompletní seznam je na přehledu.`);
       return;
     }
     render(PPO, OS, s);
