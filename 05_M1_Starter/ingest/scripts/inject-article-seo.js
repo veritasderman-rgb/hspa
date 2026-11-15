@@ -155,6 +155,20 @@ export function applyPublishDate(html, article) {
   return out;
 }
 
+/**
+ * Odstraní z `html` ručně psaný <link rel="canonical"> a <meta property="og:url">
+ * (cokoli bez značky data-seo-injected). Injektor pak vloží právě jeden vlastní.
+ * Bez toho měl článek s ručním tagem po injektáži dva kanonické odkazy — ruční
+ * s „.html" a injektovaný bez přípony (57 článků, 11/2026).
+ */
+export function stripHandwrittenCanonical(html) {
+  return String(html).replace(/[ \t]*<(?:link|meta)\b[^>]*>\n?/gi, (tag) => {
+    if (/data-seo-injected="1"/.test(tag)) return tag;
+    if (/rel=["']canonical["']/i.test(tag) || /property=["']og:url["']/i.test(tag)) return '';
+    return tag;
+  });
+}
+
 export function processArticle(article) {
   if (article.published === false) return { status: 'skip-draft' };
 
@@ -176,6 +190,9 @@ export function processArticle(article) {
   // Idempotence — odstraň předchozí injektáž (meta/link i JSON-LD blok).
   html = html.replace(/\n\s*<(?:link|meta)[^>]*data-seo-injected="1"[^>]*>/g, '');
   html = html.replace(/\n\s*<script type="application\/ld\+json" data-seo-injected="1">[\s\S]*?<\/script>/g, '');
+
+  // Ruční canonical / og:url pryč — jinak by vedle injektovaného zůstal druhý.
+  html = stripHandwrittenCanonical(html);
 
   const jsonLd = JSON.stringify(buildArticleJsonLd(article, existingDescription), null, 2);
   const block = `
