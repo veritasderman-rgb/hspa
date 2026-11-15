@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-11-08T00:00:00Z",
+  "generated_at": "2026-11-15T00:00:00Z",
   "_doc": "Registr evidence-auditu (PROMPT_EVIDENCE_AUDIT.md): pro každý ověřený článek / indikátor seznam tvrzení, které studie z PubMed/Consensus je řeší, a verdikt (supported / partial / contradicted / no-evidence / not-applicable / unclear). Zapisuje jen orchestrace (Sonnet hledá, Opus rozhoduje), mění se výhradně commitem. content_hash = sha1 souboru v době kontroly; scripts/evidence-audit-queue.js podle něj pozná, že se obsah změnil (stale). Consensus i PubMed jsou nástroje, ne zdroje — do registru patří jen ověřené studie s PMID/DOI, nikdy provozní texty nástrojů.",
   "items": [
     {
@@ -20349,6 +20349,2117 @@
       ],
       "followup": "(a) Mezinárodní systematický přehled vztahu hustoty lékařů a výsledků péče nebyl v rozpočtu volání dohledán, tvrzení 1 stojí jen na observační studii z USA (Basu 2019). (b) Věta o chronicky narůstajícím čekání v patient_story nemá zdroj, k posouzení redakcí. (c) Citace „UK NICE 2023“ a „ÚZIS analýza 2024“ v patient_story jsou bez odkazu a DOI, v PubMed nedohledatelné. (d) Formulace „finských peripherally tariffs“ a číselné údaje ÚZIS o věkové struktuře, doplňování absolventy a úvazcích jsou mimo rozsah evidence-auditu, ke kontrole zdrojů redakcí.",
       "notes": "Rešerše (Sonnet): PubMed 8 volání (3 hledání bez využitelného výsledku, 1 hledání Cochrane, 1 metadata 3 PMID, 1 neúspěšné lookup_article_by_citation kvůli formátu parametru, 2 hledání); Consensus nepoužit, protože strop PubMed nedovoloval ověřit kandidáty. Adjudikace (Opus): 2 volání PubMed — get_article_metadata ověřilo PMID 30776056 a 30011347, search_articles k mezinárodnímu přehledu hustoty lékařů a mortality nepřineslo použitelný výsledek. Tvrzení 1 rešerše vedla jako unclear, adjudikace jej na základě Basu 2019 povýšila na partial. Zápis (Opus): pole literature založeno se 2 studiemi, do limitations připojena jedna věta s citací; patient_story ani čísla beze změny."
+    },
+    {
+      "id": "clanek-skolni-obedy-2-zdravi-deti.html",
+      "type": "article",
+      "checked_at": "2026-11-15",
+      "run_id": "ea-2026-11-15-01",
+      "content_hash": "c63f0b9e338a2f40e2bacbbf0a6e8751a20c8542",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 4,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "text": "Souhrnná analýza 91 školních intervencí zjistila, že standardy pro školní jídlo zvyšují příjem ovoce o tři čtvrtě porce denně, snižují podíl tuků a příjem sodíku o 170 miligramů denně. Pravidla pro prodej ve školách snížila pití slazených nápojů.",
+          "location": "sekce „Co říkají studie: skladba stravy ano, hmotnost opatrněji“, 1. odstavec",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "29596440",
+              "doi": "10.1371/journal.pone.0194555",
+              "title": "Effectiveness of school food environment policies on children's dietary behaviors: A systematic review and meta-analysis.",
+              "year": 2018,
+              "journal": "PLoS One",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno z rešerše: abstrakt uvádí 91 intervencí; standardy školních jídel +0,76 porce ovoce/den (jen 2 odhady, CI 0,37–1,16), pokles celkového a nasyceného tuku a sodíku o 170 mg/d (CI −242 až −98); standardy pro konkurenční potraviny a nápoje snížily slazené nápoje o 0,18 porce/den. Čísla v článku odpovídají. Výhrada: odhad u ovoce stojí na 2 studiích, celkový energetický příjem se neměnil. Studie už je v article-sources."
+        },
+        {
+          "text": "Přehled 74 studií, který si objednala WHO, došel k závěru, že standardy mají „mírný příznivý účinek“.",
+          "location": "sekce „Co říkají studie: skladba stravy ano, hmotnost opatrněji“, 1. odstavec",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "37253393",
+              "doi": "10.1093/nutrit/nuad059",
+              "title": "Effects of policies or interventions that influence the school food environment on children's health and nonhealth outcomes: a systematic review.",
+              "year": 2024,
+              "journal": "Nutrition Reviews",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno: systematický přehled 74 studií zadaný WHO; intervence „may have modest beneficial effects“ (GRADE, nízká jistota). Uvozovky v článku jsou překlad, ne doslovná citace, a vypouštějí „may“. Směr i řád velikosti sedí, proto supported; confidence snížena na medium kvůli nízké jistotě evidence, kterou článek nezmiňuje. Studie už je v article-sources."
+        },
+        {
+          "text": "U tělesné hmotnosti jsou výsledky slabší a je fér to říct. Zmíněná analýza významný pokles obezity nenašla. Novější metaanalýza sta prací efekt našla, ale malý. Cochranův přehled 172 randomizovaných studií uvádí, že samotné výživové programy u dětí 5–11 let mění hmotnost málo nebo vůbec; hodnotil ovšem hlavně výukové programy, ne závazné normy pro jídelny.",
+          "location": "sekce „Co říkají studie“, 2. odstavec (o tělesné hmotnosti)",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "29596440",
+              "doi": "10.1371/journal.pone.0194555",
+              "title": "Effectiveness of school food environment policies on children's dietary behaviors: A systematic review and meta-analysis.",
+              "year": 2018,
+              "journal": "PLoS One",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "33462933",
+              "doi": "10.1111/obr.13176",
+              "title": "Improving the school food environment for the prevention of childhood obesity: What works and what doesn't.",
+              "year": 2021,
+              "journal": "Obesity Reviews",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "38763517",
+              "doi": "10.1002/14651858.CD015328.pub2",
+              "title": "Interventions to prevent obesity in children aged 5 to 11 years old.",
+              "year": 2024,
+              "journal": "Cochrane Database of Systematic Reviews",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace: abstrakt Spiga 2024 znovu přečten. 172 RCT (189 707 účastníků), 111 ve školách; zařazené intervence jsou „behavioural change strategies that promote healthy eating or activity“ a samotné dietní intervence „may have little to no effect“ / „probably have little to no effect“ na BMI i zBMI (nízká až střední jistota). Dovětek „hlavně výukové programy, ne závazné normy“ abstrakt doslova neuvádí, ale vyplývá z vymezení (RCT behaviorálních intervencí); jde o výhradu článku, ne o číslo. Micha: u adipozity „significant decreases were generally not identified“; Pineda: BMI z-skóre SMD −0,12 = malý efekt. Všechny tři studie už jsou v article-sources."
+        },
+        {
+          "text": "Ve Spojených státech zpřísnil školní obědy zákon z roku 2010. V celé dětské populaci se obezita potom nezměnila. U dětí žijících v chudobě ale byla v roce 2018 o 47 procent nižší, než kolik by odpovídalo dřívějšímu trendu.",
+          "location": "sekce „Co říkají studie“, 3. odstavec (chudé děti)",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "32634356",
+              "doi": "10.1377/hlthaff.2020.00133",
+              "title": "Impact Of The Healthy, Hunger-Free Kids Act On Obesity Trends.",
+              "year": 2020,
+              "journal": "Health Affairs",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno z rešerše: přerušená časová řada 2003–2018, 173 013 dětí; celkově bez významné souvislosti, u dětí v chudobě o 47 % nižší prevalence obezity v roce 2018 oproti očekávání. Observační design, kauzalita omezená; článek to v tabulce značí jako „nejisté, převážně observační“. Studie už je v article-sources."
+        },
+        {
+          "text": "Pozdější práce s měřenými daty 14 tisíc dětí potvrdila, že po reformě rostl index tělesné hmotnosti dětí pomaleji.",
+          "location": "sekce „Co říkají studie“, 3. odstavec (chudé děti)",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "36780186",
+              "doi": "10.1001/jamapediatrics.2022.5828",
+              "title": "Changes in Body Mass Index Among School-Aged Youths Following Implementation of the Healthy, Hunger-Free Kids Act of 2010.",
+              "year": 2023,
+              "journal": "JAMA Pediatrics",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace: abstrakt přečten znovu, plný text v PMC (PMC9926355) nástroj nevrátil, k dispozici jen abstrakt a Key Points. Velikost vzorku sedí (14 121 dětí 5–18 let, 26 205 měření BMI) a směr také: roční změna BMIz po zavedení HHFKA významně klesla oproti období předtím (−0,041; 95% CI −0,066 až −0,016), podobně u 12–18letých a u domácností s nižším příjmem. Ve dvou bodech je ale článek silnější než abstrakt. (1) „Měřená data“: abstrakt píše „reported height and weight measurements“ a nerozlišuje měřené a hlášené hodnoty. (2) „Potvrdila“: jde o asociaci v kohortové přerušené časové řadě („was associated with“), ne o kauzální potvrzení. Formulace „rostl pomaleji“ je přijatelné laické převyprávění poklesu roční změny BMIz. Rozsah tvrzení není očividně širší než evidence a článek observační povahu jinde přiznává (tabulka, výhrady), proto bez zásahu do textu, jen výhrada v registru."
+        },
+        {
+          "text": "V Anglii přechod na obědy zdarma pro všechny děti snížil obezitu u dětí ve věku 4–5 i 10–11 let a efekt se podle autorů s délkou stravování sčítal.",
+          "location": "sekce „Co říkají studie“, 3. odstavec (anglická studie)",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "39561608",
+              "doi": "10.1016/j.jhealeco.2024.102937",
+              "title": "Universal free school meals and children's bodyweight. Impacts by age and duration of exposure.",
+              "year": 2024,
+              "journal": "Journal of Health Economics",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace: abstrakt přečten znovu. Hlavní tvrzení abstrakt doslova dokládá: univerzální bezplatné obědy „reduces obesity prevalence and BMI among children aged 4-5 and 10-11“ (difference-in-differences, plošná data měřená školními sestrami; u starších dětí slabší efekt). Kumulativní účinek ale autoři uvádějí jen jako „tentative evidence that effects may be cumulative“. Článek ho podává jako zjištění („se podle autorů sčítal“) a výhradu vypouští. Podle železného pravidla proto partial (první část supported, druhá jen předběžná). Zásah do textu nenavrhuji, protože atribuce „podle autorů“ zjištění už oslabuje. Kvaziexperimentální ekonomická studie, ne RCT."
+        },
+        {
+          "text": "V Japonsku každých deset procentních bodů pokrytí školním obědem snižovalo podíl chlapců s nadváhou o 0,37 procentního bodu.",
+          "location": "sekce „Co říkají studie“, 3. odstavec (japonská studie)",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "29873776",
+              "doi": "10.1093/pubmed/fdy095",
+              "title": "Impact of the school lunch program on overweight and obesity among junior high school students: a nationwide study in Japan.",
+              "year": 2019,
+              "journal": "Journal of Public Health (Oxford)",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno z rešerše: zvýšení pokrytí o 10 p. b. na úrovni prefektur snížilo podíl nadváhy u chlapců o 0,37 (CI 0,18–0,56), u dívek bez efektu. Šlo o žáky 13–15 let a data 2006–2015. Článek správně uvádí jen chlapce. Prefekturní (ekologický) panelový design. Studie už je v article-sources."
+        },
+        {
+          "text": "Podle systematického přehledu patnácti dlouhodobých studií zůstává obézních asi 55 procent obézních dětí i v dospívání a zhruba 80 procent obézních dospívajících i v dospělosti. Tatáž práce ale připomíná, že 70 procent obézních dospělých v dětství obézních nebylo.",
+          "location": "sekce „Obezita: u malých dětí stojí, u dospívajících roste“",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "26696565",
+              "doi": "10.1111/obr.12334",
+              "title": "Predicting adult obesity from childhood obesity: a systematic review and meta-analysis.",
+              "year": 2015,
+              "journal": "Obesity Reviews",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno z rešerše: 15 prospektivních kohort, 200 777 účastníků; asi 55 % obézních dětí zůstává obézních v adolescenci, asi 80 % obézních adolescentů v dospělosti, 70 % obézních dospělých nebylo obézních v dětství. Odpovídá doslova. Tištěno 2016;17(2), online 2015. Studie už je v article-sources."
+        }
+      ],
+      "summary": {
+        "supported": 6,
+        "partial": 2,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "none",
+          "detail": "Žádný source-added: všech 9 studií z ověřených tvrzení (Micha 2018, Durão 2024, Pineda 2021, Spiga 2024, Kenney 2020, Chandran 2023, Holford a Rabe 2024, Miyawaki 2019, Simmonds 2016) už článek cituje v article-sources s DOI a PMID. Žádný claim-note: data/claims.json k článku nemá žádné záznamy. Žádné contradicted, takže ani flagged, ani issue. audit-status zůstává review-pending. Do hlavičky audit: a do articles.json audit.notes připojena registrová poznámka „evidence-audit 2026-11-15: 8 tvrzení, 6× supported, 2× partial; viz data/evidence-audit.json“."
+        }
+      ],
+      "followup": "Neověřeno kvůli stropu 8 tvrzení: Cohen et al. 2014 (PMID 24650841, vážení talířů, víc snědené zeleniny), Valizadeh a Ng 2020 (PMID 32992091, kompenzace doma), Thornley et al. 2017 (PMID 28073166, o 0,37 kazivého zubu méně; metadata ověřena v rešerši, tvrzení nezapsáno) a Lundborg et al. 2022 (+3 % celoživotního příjmu, není v PubMed). Dále ověřit tvrzení o zubním kazu (cukr a kaz) a o dopadu slazených nápojů, která článek nepodpírá přímou studií.",
+      "notes": "Ověřeno 8 tvrzení (6× supported, 2× partial). Všech 9 citovaných studií v záznamech existuje v PubMed, nejde o retrakce ani errata. Rešerše (Sonnet): PubMed 2× get_article_metadata, Consensus nepoužit (citované studie ověřeny přímo). Adjudikace (Opus): PubMed 2 volání (get_article_metadata pro 36780186, 38763517, 39561608; get_full_text_article pro PMC9926355, plný text Chandran nástroj nevrátil, k dispozici jen abstrakt a Key Points). Proti rešerši: Holford a Rabe 2024 přeřazen ze supported na partial (kumulativní efekt v abstraktu jen „tentative evidence“), Durão 2024 ponechán supported s confidence medium (GRADE nízká jistota, „may have“). Upřesňující věta nenavržena: rozsah tvrzení není očividně širší než evidence a článek observační povahu studií přiznává. Tvrzení o WHO COSI, HBSC, Eurostatu a nákladech (Landovská 2023) jsou administrativní statistika a nebyla ověřována. data/claims.json k článku nemá záznamy."
+    },
+    {
+      "id": "clanek-endokarditida-po-tavi-registr-2026.html",
+      "type": "article",
+      "checked_at": "2026-11-15",
+      "run_id": "ea-2026-11-15-01",
+      "content_hash": "29d355f180a5bac3aa977fafc33f84e2ea30641d",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 4,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "text": "Z 9 887 pacientů, kterým 14 českých center v letech 2010–2023 voperovalo aortální chlopeň katetrem (TAVI), mělo podle celostátní registrové studie 129 potvrzenou infekční endokarditidu. Kumulativní incidence tak dosáhla 1,3 %.",
+          "location": "perex",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42749087",
+              "doi": "10.1016/j.ijcard.2026.134928",
+              "title": "Infective endocarditis after transcatheter aortic valve implantation - data from national registry.",
+              "year": 2026,
+              "journal": "International Journal of Cardiology",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje: abstrakt doslova uvádí 9887 TAVI ve 14 centrech ČR 2010–2023, 129 potvrzených IE (27 možných, 102 jistých) a kumulativní incidenci 1,3 %. Délku sledování abstrakt neuvádí. Článek to přiznává a upozorňuje, že nejde o roční míru."
+        },
+        {
+          "text": "Během hospitalizace s endokarditidou zemřelo 27 % pacientů. Nejčastějším původcem byl Enterococcus faecalis (37 pacientů, 29 %), dále Staphylococcus aureus (28 pacientů, 21 %) a streptokoky (27 pacientů, 21 %). U jisté endokarditidy byla v 71 případech (70 %) zasažena TAVI chlopeň.",
+          "location": "Co přesně studie změřila",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42749087",
+              "doi": "10.1016/j.ijcard.2026.134928",
+              "title": "Infective endocarditis after transcatheter aortic valve implantation - data from national registry.",
+              "year": 2026,
+              "journal": "International Journal of Cardiology",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Všechna čísla souhlasí s abstraktem: nemocniční mortalita 27 %, E. faecalis 37 (29 %), S. aureus 28 (21 %), streptokoky 27 (21 %), TAVI protéza 71 (70 %), mitrální chlopeň 22, zařízení 7, místo neurčeno 2, čas do IE se mezi skupinami původců nelišil."
+        },
+        {
+          "text": "Dánský přehled Lauge Østergaarda a kolegů (Clinical Microbiology and Infection, 2020) shrnul 12 observačních studií a pět dlouhodobých výsledků randomizovaných studií. Incidence endokarditidy po TAVI se v nich pohybovala mezi 0,7 a 3,0 % na osobu a rok. Nemocniční úmrtnost činila kolem 25 %, mezi studiemi se ale lišila od 11 do 64 %.",
+          "location": "Jak je to jinde",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "32036048",
+              "doi": "10.1016/j.cmi.2020.01.028",
+              "title": "Infective endocarditis in patients who have undergone transcatheter aortic valve implantation: a review.",
+              "year": 2020,
+              "journal": "Clinical Microbiology and Infection",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "35604447",
+              "doi": "10.1097/CRD.0000000000000460",
+              "title": "Infective Endocarditis After Transcatheter Aortic Valve Implantation: A Systematic Review.",
+              "year": 2022,
+              "journal": "Cardiology in Review",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt Østergaarda (narativní přehled, ne systematický) přesně odpovídá: 12 observačních studií a 5 dlouhodobých výsledků RCT, 0,7–3,0 % na osobu a rok, nemocniční mortalita kolem 25 % (11–64 %). Systematický přehled Hassanin 2022 (0,87–1,7 na 100 osobo-let) je v souladu."
+        },
+        {
+          "text": "Švédský celostátní registr (Henrik Bjursten a kolegové, European Heart Journal, 2019) sledoval 4 336 pacientů po TAVI. Riziko endokarditidy činilo 1,4 % v prvním roce a 0,8 % za každý další rok. Rok po diagnóze žilo 58 % nemocných, po pěti letech 29 %.",
+          "location": "Jak je to jinde",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "31433472",
+              "doi": "10.1093/eurheartj/ehz588",
+              "title": "Infective endocarditis after transcatheter aortic valve implantation: a nationwide study.",
+              "year": 2019,
+              "journal": "European Heart Journal",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno z výstupu rešerše: 4336 pacientů, 1,4 % v 1. roce, dále 0,8 % ročně, roční přežití 58 %, pětileté 29 %. Studie je retrospektivní."
+        },
+        {
+          "text": "Švýcarský registr SwissTAVI (Stefan Stortecky a kolegové, JACC, 2020) zaznamenal mezi 7 203 pacienty 149 případů. Nejvíc jich přišlo v prvních 100 dnech: 2,59 případu na 100 let sledování, proti 0,40 po prvním roce. Mezi časnými endokarditidami byl rod Enterococcus nejčastější (30,1 %). U endokarditid do 100 dnů mělo 47,9 % pacientů původce necitlivého na profylaxi.",
+          "location": "Jak je to jinde / Proč enterokoky",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "32553254",
+              "doi": "10.1016/j.jacc.2020.04.044",
+              "title": "Infective Endocarditis After Transcatheter Aortic Valve Replacement.",
+              "year": 2020,
+              "journal": "Journal of the American College of Cardiology",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno: 7203 pacientů, 149 případů; periprocedurální 2,59, pozdní (po 1. roce) 0,40 na 100 osobo-let; enterokoky 30,1 % u časných IE; 47,9 % periprocedurálních IE s původcem necitlivým na profylaxi."
+        },
+        {
+          "text": "V anglických datech (Cahill, Heart, 2022) byla po chirurgické náhradě častější: 2,4 % za pět let proti 1,5 % po TAVI. Francouzská studie Fauchiera (2020) po spárování rozdíl v riziku nenašla, pacienti s endokarditidou po TAVI ale umírali častěji (43,0 % proti 32,8 %). Švýcarská kohorta Kutze (2025) po spárování zjistila vyšší výskyt po TAVI než po chirurgické biologické chlopni (HR 1,56). Jednoznačná odpověď zatím není.",
+          "location": "Jak je to jinde",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "35058295",
+              "doi": "10.1136/heartjnl-2021-320080",
+              "title": "Risk of infective endocarditis after surgical and transcatheter aortic valve replacement.",
+              "year": 2022,
+              "journal": "Heart",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "32036047",
+              "doi": "10.1016/j.cmi.2020.01.036",
+              "title": "Incidence and outcomes of infective endocarditis after transcatheter aortic valve implantation versus surgical aortic valve replacement.",
+              "year": 2020,
+              "journal": "Clinical Microbiology and Infection",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "40784589",
+              "doi": "10.1016/j.ijid.2025.108011",
+              "title": "Infective endocarditis and cardiac events after transcatheter vs surgical aortic valve replacement: A nationwide cohort study.",
+              "year": 2025,
+              "journal": "International Journal of Infectious Diseases",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "40709131",
+              "doi": "10.7759/cureus.86573",
+              "title": "Infective Endocarditis After Aortic Valve Replacement: A Systematic Review and Meta-Analysis of Risks and Realities in Transcatheter Versus Surgical Repair.",
+              "year": 2025,
+              "journal": "Cureus",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "38817491",
+              "doi": "10.7759/cureus.59398",
+              "title": "Clinical Profiles and Outcomes of Prosthesis-Specific Infective Endocarditis Subsequent to Transcatheter Versus Surgical Aortic Valve Replacement: A Systematic Review and Meta-Analysis.",
+              "year": 2024,
+              "journal": "Cureus",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Čísla tří kohort souhlasí s abstrakty. Metaanalýza Chaudhri 2025 (abstrakt ověřen v adjudikaci) nenašla rozdíl v riziku IE mezi TAVR a SAVR (log RR −0,006; I² = 96 %). Podporuje tedy závěr, že jednoznačná odpověď zatím není. Obě metaanalýzy vyšly v Cureus, proto slouží jen jako podpůrný kontext."
+        },
+        {
+          "text": "V anglické studii byly spojené s vyšším rizikem endokarditidy nižší věk, mužské pohlaví, fibrilace síní a dialýza. Švédský registr uvádí špatnou funkci ledvin, fibrilaci síní a přístup přes hrot srdce. Ve Švýcarsku vyšlo vyšší riziko u mladších, mužů, při výkonu bez predilatace a na katetrizačním sále. Všechny tyto vztahy pocházejí z observačních dat a příčinnou souvislost neprokazují.",
+          "location": "Kdo je ohrožen víc",
+          "kind": "mechanism",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "35058295",
+              "doi": "10.1136/heartjnl-2021-320080",
+              "title": "Risk of infective endocarditis after surgical and transcatheter aortic valve replacement.",
+              "year": 2022,
+              "journal": "Heart",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "31433472",
+              "doi": "10.1093/eurheartj/ehz588",
+              "title": "Infective endocarditis after transcatheter aortic valve implantation: a nationwide study.",
+              "year": 2019,
+              "journal": "European Heart Journal",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "32553254",
+              "doi": "10.1016/j.jacc.2020.04.044",
+              "title": "Infective Endocarditis After Transcatheter Aortic Valve Replacement.",
+              "year": 2020,
+              "journal": "Journal of the American College of Cardiology",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Rizikové faktory odpovídají abstraktům všech tří observačních studií. Opatrná formulace o kauzalitě je namístě."
+        },
+        {
+          "text": "U pacientů s TAVI [mezinárodní doporučení] doporučují antibiotickou profylaxi před zubními výkony, autoři ale dodávají, že důkazy pro ni jsou skrovné. Doporučení zdůrazňují hygienu, péči o kůži, ústní hygienu a péči o dialyzační katétry.",
+          "location": "Prevence: co doporučení říkají a na čem stojí",
+          "kind": "policy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "32036048",
+              "doi": "10.1016/j.cmi.2020.01.028",
+              "title": "Infective endocarditis in patients who have undergone transcatheter aortic valve implantation: a review.",
+              "year": 2020,
+              "journal": "Clinical Microbiology and Infection",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt Østergaarda (ověřen v adjudikaci) doslova: guidelines doporučují dobré hygienické podmínky, péči o kůži, ústní hygienu a péči o dialyzační katétry; profylaxe před zubními výkony u TAVI doporučena, ale „evidence is sparse“. Článek z ESC 2023 správně nic necituje."
+        },
+        {
+          "text": "Česká hodnota 27 % tak odpovídá tomu, co se ví odjinud. Česká čísla zapadají do rozmezí, které uvádějí zahraniční registry.",
+          "location": "Jak je to jinde",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "32036048",
+              "doi": "10.1016/j.cmi.2020.01.028",
+              "title": "Infective endocarditis in patients who have undergone transcatheter aortic valve implantation: a review.",
+              "year": 2020,
+              "journal": "Clinical Microbiology and Infection",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "40709131",
+              "doi": "10.7759/cureus.86573",
+              "title": "Infective Endocarditis After Aortic Valve Replacement: A Systematic Review and Meta-Analysis of Risks and Realities in Transcatheter Versus Surgical Repair.",
+              "year": 2025,
+              "journal": "Cureus",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Část o úmrtnosti je podložená: 27 % leží blízko „kolem 25 %“ a uvnitř rozmezí 11–64 % podle Østergaarda 2020. Metaanalýza Chaudhri 2025 (Cureus) uvádí nemocniční mortalitu TAVI-IE 34,4 %, česká hodnota tedy neleží mimo známé hodnoty. Část o incidenci literatura ověřit neumožňuje. Česká kumulativní incidence 1,3 % za proměnlivou a neuvedenou dobu sledování se nedá přímo zařadit do rozmezí 0,7–3,0 % na osobu a rok ani porovnat s 1,4 % v 1. roce (Švédsko). Při víceletém průměrném sledování by česká roční míra mohla být i pod tímto rozmezím. Článek omezení hned v další větě i v poznámce k tabulce přiznává („každá studie počítá jinak“, „nelze přímo seřadit“), takže upřesňující věta není nutná. Jde o formulační nepřesnost, ne o chybu."
+        }
+      ],
+      "summary": {
+        "supported": 8,
+        "partial": 1,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "none",
+          "detail": "Všech 7 studií, o které se tvrzení opírají (Toušek 2026, Østergaard 2020, Bjursten 2019, Stortecky 2020, Cahill 2022, Fauchier 2020, Kutz 2025), článek už cituje v article-sources s DOI i PMID, takže source-added není potřeba. Metaanalýzy v Cureus (Chaudhri 2025, Monaci 2024) a Hassanin 2022 zůstávají jen jako kontext v registru a do článku se nepřidávají. V data/claims.json pro článek žádné tvrzení není, proto ani claim-note. Žádné contradicted, takže žádný flagged ani issue. Do audit: komentáře článku a do audit.notes v data/articles.json připojena věta evidence-audit 2026-11-15 (9 tvrzení, 8 supported, 1 partial). audit-status zůstává review-pending.",
+          "ref": ""
+        }
+      ],
+      "notes": "Přečten článek, audit komentář i zdroje. V data/claims.json nebyl pro tento článek nalezen žádný záznam, proto claim_id chybí. Všech 5 studií z článku plus přehled Østergaard a Kutz ověřeno přes jedno dávkové volání get_article_metadata (PMID 42749087, 35058295, 31433472, 32553254, 32036047, 40784589, 32036048): všechny existují, žádná retrakce, údaje (čísla, autoři, časopisy, roky, DOI) souhlasí s textem článku. Druhé volání search_articles (systematic/meta-analysis, IE + TAVI) a třetí get_article_metadata pro 8 nalezených PMID; použity jen Chaudhri 2025 (40709131), Monaci 2024 (38817491) a Hassanin 2022 (35604447) jako kontext; ostatní (ML predikce, invazivní vs konzervativní léčba, TAVR k léčbě IE) pro tvrzení článku nerelevantní. Consensus nepoužit (PubMed dal dost). Plný text české studie není volně dostupný, ověřeno jen z abstraktu. Nevyhodnocována tvrzení: EARS-Net gentamicin 32,4 % (administrativní surveillance, mimo rozsah), kauzální věta o gentamicin+ceftriaxon (citována z jiného článku, není v tomto článku primárně). Žádný rozpor nenalezen. | Adjudikace (Opus) použila 1 volání PubMed (get_article_metadata pro 42749087, 32036048 a 40709131) a znovu přečetla abstrakty české studie, přehledu Østergaard a metaanalýzy Chaudhri. Studie existují a nejsou retrahované; čísla v článku odpovídají abstraktům. Výsledek: 8 tvrzení supported, 1 partial (věta „Česká čísla zapadají do rozmezí…“). Mortalita 27 % je s literaturou v souladu. Kumulativní incidenci 1,3 % bez udané délky sledování ale nelze zařadit do zahraničních ročních měr. Článek to sám hned poté přiznává, proto prose_change zůstává prázdný a status se nemění (článek už je review-pending). V metadatech PubMed jsou u spoluautorů české studie prohozená jména a příjmení. Článek proto správně cituje jen prvního autora, Touška. Mimo rozsah zůstalo tvrzení EARS-Net o gentamicinu 32,4 % (administrativní surveillance, převzato z jiného článku); followup není potřeba."
+    },
+    {
+      "id": "clanek-kardiovaskularni-mortalita.html",
+      "type": "article",
+      "checked_at": "2026-11-15",
+      "run_id": "ea-2026-11-15-01",
+      "content_hash": "7d8cd6c9118a5063f53ccf0eb54ab301729879c8",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 11,
+        "consensus": 1
+      },
+      "claims": [
+        {
+          "text": "V populačních studiích české dospělé populace 25–64 let (post-MONICA, Cífková et al.; Bruthans et al., Eur J Prev Cardiol 2019) mělo ve vlně 2016/17 krevní tlak pod 140/90 30 procent mužů a 37 procent žen s hypertenzí — dohromady zhruba třetina všech hypertoniků.",
+          "location": "sekce Tři vrstvy, druhá vrstva (primární a chronická péče)",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "36440040",
+              "doi": "10.3389/fcvm.2022.1033606",
+              "title": "Longitudinal trends in blood pressure, prevalence, awareness, treatment, and control of hypertension in the Czech population. Are there any sex differences?",
+              "year": 2022,
+              "journal": "Frontiers in cardiovascular medicine",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Ověřeno v open-access plném textu Cífková et al. 2022 (PMC9686845), tab. 4, vlna 2016/17, věk 25–64 let. Kontrola TK < 140/90 u všech hypertoniků: muži 119/399 (29,8 %), ženy 111/300 (37,0 %), dohromady 230/699 = 32,9 %, tedy „zhruba třetina“. Vada citace: odkaz „Bruthans et al., Eur J Prev Cardiol 2019“ vede na PMID 30739484, nesouvisející práci o bakteriálních proteinech. Kandidáti PMID 30739508 (EUROASPIRE V, koronární pacienti) a 30289272 (komentář k norským datům) české populační šetření nepopisují. Odkaz k opravě redakcí; čísla stojí v Cífková 2022."
+        },
+        {
+          "text": "mezi těmi, kdo léky na tlak užívají, to bylo 53 procent (Cífková et al., Front Cardiovasc Med 2022)",
+          "location": "sekce Tři vrstvy, druhá vrstva (primární a chronická péče)",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "36440040",
+              "doi": "10.3389/fcvm.2022.1033606",
+              "title": "Longitudinal trends in blood pressure, prevalence, awareness, treatment, and control of hypertension in the Czech population. Are there any sex differences?",
+              "year": 2022,
+              "journal": "Frontiers in cardiovascular medicine",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Plný text (PMC9686845), tab. 4 a diskuse: kontrola u léčených hypertoniků ve vlně 2016/17 je 49,4 % u mužů (119/241) a 57,5 % u žen (111/193). Těch 53 % je nevážené sloučení obou pohlaví z tabulky (230/434 = 53,0 %), studie ho sama neuvádí, proto confidence medium. Studie upozorňuje, že pokles response rate (2016/17: 43 % u mužů, 49 % u žen) může kontrolu nadhodnocovat. Databox článku („Kontrola TK u léčených hypertoniků 32–37 % / Bruthans 2019“) tomuto číslu odporuje, k opravě redakcí."
+        },
+        {
+          "text": "Epidemiologické analýzy WHO a Globální zprávy o břemenu nemocí (Global Burden of Disease, IHME) řadí kombinaci kouření, alkoholu, hypertenze, dyslipidémie a obezity mezi pět největších přispěvatelů kardiovaskulární mortality napříč zeměmi.",
+          "location": "sekce Tři vrstvy, první vrstva (životní styl)",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "37632466",
+              "doi": "10.1056/NEJMoa2206916",
+              "title": "Global Effect of Modifiable Risk Factors on Cardiovascular Disease and Mortality",
+              "year": 2023,
+              "journal": "The New England journal of medicine",
+              "study_type": "meta-analysis",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "31492503",
+              "doi": "10.1016/S0140-6736(19)32008-2",
+              "title": "Modifiable risk factors, cardiovascular disease, and mortality in 155 722 individuals from 21 high-income, middle-income, and low-income countries (PURE): a prospective cohort study",
+              "year": 2020,
+              "journal": "The Lancet",
+              "study_type": "cohort",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "27334606",
+              "doi": "10.1186/s12916-016-0630-6",
+              "title": "Modifiable causes of premature death in middle-age in Western Europe: results from the EPIC cohort study",
+              "year": 2016,
+              "journal": "BMC Medicine",
+              "study_type": "cohort",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt GCRC (NEJM 2023, 1 518 028 účastníků, 112 kohort, 34 zemí) ověřen v PubMed. Pět modifikovatelných faktorů (BMI, systolický TK, non-HDL cholesterol, kouření, diabetes) lze připsat 57,2 % (ženy) a 52,6 % (muži) desetileté incidence KV onemocnění; alkohol mezi nimi není. PURE a EPIC (shrnutí z rešerše) vedou jako hlavní faktory hypertenzi, metabolické faktory a tabák, alkohol jen jako malého přispěvatele. Kouření, hypertenzi, dyslipidémii a obezitu jako hlavní faktory evidence podporuje. Výčet pěti největších „včetně alkoholu“ nepodporuje, a naopak v něm chybí diabetes. Citace WHO/GBD v článku nejsou konkrétní, proto partial; za větu vložena jedna upřesňující věta s citací GCRC 2023."
+        },
+        {
+          "text": "čas od prvního kontaktu se zdravotnickým systémem do zavedení vodiče v cílové tepně (FMC-to-wire-crossing) ≤ 60 minut při přímé prezentaci v PCI centru, ≤ 90 minut při převozu z non-PCI nemocnice; nad 120 minut PCI-related delay přechází indikace na fibrinolýzu.",
+          "location": "sekce Síť, která funguje",
+          "kind": "policy",
+          "verdict": "unclear",
+          "confidence": "low",
+          "evidence": [
+            {
+              "pmid": "37622654",
+              "doi": "10.1093/eurheartj/ehad191",
+              "title": "2023 ESC Guidelines for the management of acute coronary syndromes.",
+              "year": 2023,
+              "journal": "European Heart Journal",
+              "study_type": "guideline",
+              "found_via": "article",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "K posouzení redakcí. Guideline ESC 2023 existuje a není retrahována (PMID 37622654), ale abstrakt v PubMed chybí a plný text nebyl k dispozici. Časové limity (60/90/120 min) ani výchozí bod měření (první kontakt, nebo stanovení diagnózy STEMI) proto nelze doložit. Uvnitř článku je navíc nesoulad: položka ESC 2023 v sekci Metodika uvádí „door-to-balloon ≤ 90 min a total ischaemic time ≤ 120 min“."
+        },
+        {
+          "text": "systematické používání kalkulace kardiovaskulárního rizika podle aktualizovaných evropských doporučení (SCORE2) v ambulanci",
+          "location": "sekce Reformní debaty, které mají smysl (první priorita)",
+          "kind": "policy",
+          "verdict": "not-applicable",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "34120177",
+              "doi": "10.1093/eurheartj/ehab309",
+              "title": "SCORE2 risk prediction algorithms: new models to estimate 10-year risk of cardiovascular disease in Europe.",
+              "year": 2021,
+              "journal": "European Heart Journal",
+              "study_type": "methodological",
+              "found_via": "article",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Věta je výčet reformních kroků, „o kterých se mluví roky“, ne tvrzení o účinku, proto se neověřuje. Existenci a validaci SCORE2 (10leté riziko KVO pro Evropu, věk 40–69 let) dokládá PMID 34120177, článek ho už cituje v sekci Metodika."
+        },
+        {
+          "text": "Český kardiovaskulární paradox je tedy v jádru paradoxem ischemické srdeční choroby, ne mozkové mrtvice: akutní léčba infarktu funguje, ale populační břemeno aterosklerotického onemocnění věnčitých tepen — důsledek desetiletí kouření, hypertenze, dyslipidémie, diabetu a nadváhy — stahuje statistiku zpět dolů.",
+          "location": "sekce Rozpad podle diagnóz",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "37632466",
+              "doi": "10.1056/NEJMoa2206916",
+              "title": "Global Effect of Modifiable Risk Factors on Cardiovascular Disease and Mortality",
+              "year": 2023,
+              "journal": "The New England journal of medicine",
+              "study_type": "meta-analysis",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "GCRC NEJM 2023 (abstrakt ověřen) dokládá právě uvedenou pětici (kouření, systolický TK, non-HDL cholesterol, diabetes, BMI) jako modifikovatelné faktory, kterým lze připsat přes polovinu incidence KV onemocnění. Jde o globální kohorty bez rozkladu českého převisu úmrtnosti na ischemickou chorobu srdeční, takže přenositelnost na ČR je jen nepřímá. Česká dekompoziční analýza se v rešerši nenašla. Číselná část (Eurostat) do auditu nepatří. Záznam kardiovaskularni-mortalita--06 v claims.json patří k číselné větě, ne k této kauzální větě, proto bez claim-note."
+        }
+      ],
+      "summary": {
+        "supported": 2,
+        "partial": 2,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 1,
+        "unclear": 1
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Do article-sources přidána nová skupina „Recenzovaná literatura“ s položkou Global Cardiovascular Risk Consortium; Magnussen C, Ojeda FM et al., N Engl J Med 2023;389(14):1273-1285 (DOI 10.1056/NEJMoa2206916, PMID 37632466) k větě o hlavních přispěvatelích KV mortality (Tři vrstvy, první vrstva) a k vysvětlení českého převisu ischemické choroby srdeční (Rozpad podle diagnóz).",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Upřesňující věta (Opus, partial) vložena hned za větu o WHO/GBD v první vrstvě sekce Tři vrstvy: GCRC 2023, pět modifikovatelných faktorů bez alkoholu, 57 % příhod u žen a 53 % u mužů. Článek už byl review-pending (articles.json audit-status, audit.status, meta article:audit-status), stav se nemění. Do audit: komentáře a articles.json audit.notes připojena věta evidence-audit 2026-11-15.",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Cífková et al. 2022 (PMID 36440040) se do article-sources nepřidává, článek ji už cituje v textu (DOI odkaz). SCORE2 (PMID 34120177) je už v sekci Metodika. claim-note se nezapisuje: žádné tvrzení nemá v data/claims.json záznam, jehož quote by odpovídal ověřované větě.",
+          "ref": ""
+        }
+      ],
+      "followup": "Časové cíle ESC 2023 (FMC-to-wire 60/90 min, 120 min pro fibrinolýzu) neověřeny, chybí abstrakt i plný text guideline (PMID 37622654). Správná citace Bruthans et al., Eur J Prev Cardiol 2019 neurčena (odkaz v článku vede na nesouvisející PMID 30739484). Tvrzení „desítky randomizovaných studií opakovaně potvrdily“ (závěrečná sekce) nebylo do auditu vybráno.",
+      "notes": "Administrativní tvrzení (Eurostat/ÚZIS/OECD: 463,75 vs 312,95; +48 %; IHD 193,59 vs 100,39; pokles o 17 %; nemocniční mortalita AMI a CMP; alkohol 11,2 l; kuřáctví 16,4 %; pohyb 25,1 %; diabetes 8,8 %; 23 PCI center) záměrně neověřována. Rešerše (Sonnet): PubMed 8 volání, Consensus 1 dotaz; adjudikace (Opus): PubMed 3 volání (plný text PMC9686845, metadata PMID 30739508, 30289272, 37632466). Čísla 30/37/53 % z Cífková 2022 jsou jen v plném textu (PMC9686845), ne v abstraktu. Nepoužito (bez PMID ověřeného v PubMed): GCRC lifetime NEJM 2025 (doi 10.1056/nejmoa2415879). PRO REDAKCI (audit nic nepřepisuje): (1) Chybný odkaz na zdroj: „Bruthans et al., Eur J Prev Cardiol 2019“ vede na pubmed.ncbi.nlm.nih.gov/30739484, nesouvisející práci (Kong, Zhang, SAR QSAR Environ Res 2019); kandidáti PMID 30739508 (EUROASPIRE V) a 30289272 (komentář k norským datům) českému populačnímu šetření neodpovídají; čísla věty doslovně stojí v Cífková 2022. (2) Rozpor v databoxu: řádek „Kontrola TK u léčených hypertoniků 32–37 % / Bruthans 2019“ nesedí s Cífková 2022, tab. 4 (u léčených 49,4 % muži, 57,5 % ženy, dohromady 53,0 %); rozmezí 32–37 % odpovídá zhruba všem hypertonikům. (3) Nesoulad ESC 2023: položka v sekci Metodika uvádí „door-to-balloon ≤ 90 / total ischaemic time ≤ 120 min“, což se neshoduje s časovými cíli v textu."
+    },
+    {
+      "id": "clanek-vedro-a-telo.html",
+      "type": "article",
+      "checked_at": "2026-11-15",
+      "run_id": "ea-2026-11-15-01",
+      "content_hash": "18d5888ca9198d97d8993efa9947d8c78f59b58a",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 11,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "vedro-a-telo--02",
+          "text": "Úpal je naopak akutní pohotovost: teplota jádra je 40,5 °C a výš, selhává regulace a přidává se porucha vědomí (zmatenost, dezorientace, kolaps).",
+          "location": "sekce Když obrana selže (+ databox „v číslech“, tabulka Spektrum nemocí z horka)",
+          "kind": "measurement",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "30990296",
+              "doi": "",
+              "title": "Heat-Related Illnesses.",
+              "year": 2019,
+              "journal": "American family physician",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno. Gauer & Meyers 2019 (přehledový článek, ne systematický přehled) v abstraktu definují úpal jako rektální teplotu jádra ≥ 105 °F (40,6 °C) s multiorgánovým poškozením a dysfunkcí CNS. Práh 40,5 °C v článku je přijatelné zaokrouhlení a článek ho sám označuje jako orientační. PubMed u tohoto článku DOI neuvádí."
+        },
+        {
+          "claim_id": "vedro-a-telo--06",
+          "text": "U vyčerpání z horka teplota jádra stoupá zhruba do 40 °C, oběh nestíhá (slabost, závrať, nevolnost, bušení srdce), ale mozek funguje.",
+          "location": "sekce Když obrana selže",
+          "kind": "measurement",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "30990296",
+              "doi": "",
+              "title": "Heat-Related Illnesses.",
+              "year": 2019,
+              "journal": "American family physician",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno. Abstrakt popisuje vyčerpání z horka jako kardiovaskulární hypoperfuzi s rektální teplotou do 104 °F (40 °C) bez dysfunkce CNS. Číslo i podstata tvrzení v abstraktu jsou. Výčet příznaků (slabost, závrať, nevolnost, bušení srdce) je kvalitativní doplněk a s abstraktem neodporuje."
+        },
+        {
+          "claim_id": "vedro-a-telo--07",
+          "text": "Pacienti zchlazení do 30 minut mají výrazně lepší vyhlídky.",
+          "location": "sekce Když obrana selže",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "30990296",
+              "doi": "",
+              "title": "Heat-Related Illnesses.",
+              "year": 2019,
+              "journal": "American family physician",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "33167534",
+              "doi": "10.3390/medicina56110589",
+              "title": "Exertional Heat Stroke, Modality Cooling Rate, and Survival Outcomes: A Systematic Review.",
+              "year": 2020,
+              "journal": "Medicina (Kaunas, Lithuania)",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno. Gauer & Meyers v abstraktu uvádějí, že pacienti adekvátně zchlazení do 30 minut mají výborné výsledky. Systematický přehled Filep 2020 je jen kontext: jde o kazuistiky námahového úpalu u sportovců a vojáků a měří rychlost chlazení (> 0,15 °C/min), ne 30minutové okno. Samotné 30minutové okno pochází z klinického přehledu, ne z kontrolované studie."
+        },
+        {
+          "claim_id": "vedro-a-telo--05",
+          "text": "Průtok krve kůží přitom může narůst z klidových zhruba tří desetin litru za minutu na šest až osm litrů za minutu — tedy mnohonásobně.",
+          "location": "sekce Jak se tělo brání — a proč ho to stojí síly",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "12744548",
+              "doi": "10.4065/78.5.603",
+              "title": "Skin blood flow in adult human thermoregulation: how it works, when it does not, and why.",
+              "year": 2003,
+              "journal": "Mayo Clinic proceedings",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Horní hodnota je v abstraktu: Charkoudian 2003 (narativní přehled) uvádí, že kožní průtok může při hypertermii dosáhnout 6–8 l/min. Klidová hodnota ~0,3 l/min v abstraktu chybí, takže podle pravidla „číslo mimo abstrakt“ je verdikt nejvýš partial. Směr a řád velikosti („mnohonásobně“) odpovídají. Rowell, kterého claims uvádí jako zdroj, je učebnice, ne záznam v PubMed. Text upřesňovat netřeba, stačí doplnit zdroj."
+        },
+        {
+          "claim_id": "vedro-a-telo--01",
+          "text": "61 700 úmrtí z horka v Evropě, léto 2022 (Ballester et al., Nature Medicine 2023)",
+          "location": "databox „Co horko dělá s tělem — v číslech“",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "37429922",
+              "doi": "10.1038/s41591-023-02419-z",
+              "title": "Heat-related mortality in Europe during the summer of 2022.",
+              "year": 2023,
+              "journal": "Nature medicine",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno. Abstrakt uvádí 61 672 úmrtí souvisejících s horkem (95% CI 37 643–86 807) za 30. 5.–4. 9. 2022 ve 35 evropských zemích; zaokrouhlení na 61 700 sedí. Jde o modelový odhad se širokým intervalem, claims ho tak správně popisuje („Odhad“). Článek studii už cituje odkazem na nature.com s DOI v URL, novou položku do zdrojů proto nepřidávám."
+        },
+        {
+          "claim_id": "vedro-a-telo--03",
+          "text": "1–2 l/hod kolik potu tělo v horku ztrácí — a s ním vodu i sůl",
+          "location": "databox + sekce Jak se tělo brání",
+          "kind": "mechanism",
+          "verdict": "no-evidence",
+          "confidence": "low",
+          "evidence": [],
+          "note": "Rešerše prošla PubMed (systematické přehledy, dotaz „sweat rate L/h heat“) a nenašla abstrakt, který by rozmezí 1–2 l/h u běžného člověka v horku doložil. Coyle & Montain 1992 zmiňují < 1 l/h při nižší zátěži. Cílený dotaz při adjudikaci (sweat rate review) nevrátil nic. Rozmezí odpovídá spíš fyzické zátěži v horku než klidu, ale v abstraktech ho ověřit nelze; tvrzení tím není vyvrácené. Článek ho sám v poznámce k datům označuje jako orientační fyziologickou hodnotu, v claims stojí jen „fyziologická literatura“. K posouzení redakcí: doplnit primární zdroj, případně upřesnit „při námaze“."
+        },
+        {
+          "text": "Podle systematického přehledu (Núñez-Rodríguez et al., Healthcare 2025) mají starší lidé oslabené obě hlavní obrany: méně se potí a hůř rozšiřují kožní cévy, takže teplo odvádějí pomaleji. ... Výsledkem je rychlejší vzestup teploty jádra a vyšší riziko dehydratace i úmrtí.",
+          "location": "sekce Proč horko ohrožuje nejvíc seniory a nemocné",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "41228151",
+              "doi": "10.3390/healthcare13212785",
+              "title": "Heat Tolerance in Older Adults: A Systematic Review of Thermoregulation, Vulnerability, Environmental Change, and Health Outcomes.",
+              "year": 2025,
+              "journal": "Healthcare (Basel, Switzerland)",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "38830263",
+              "doi": "10.1139/apnm-2024-0135",
+              "title": "Exploring the contribution of inter-individual factors to the development of physiological heat strain in older adults exposed to simulated indoor overheating.",
+              "year": 2024,
+              "journal": "Applied physiology, nutrition, and metabolism",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "39430197",
+              "doi": "10.1016/j.ekir.2024.07.015",
+              "title": "Elevated Ambient Temperature Associated With Increased Cardiovascular Disease-Risk Among Patients on Hemodialysis.",
+              "year": 2024,
+              "journal": "Kidney international reports",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Hlavní tvrzení je doložené. Núñez-Rodríguez 2025 (PRISMA, 24 studií) potvrzuje u starších lidí snížené pocení a kožní vazodilataci, oslabené kardiovaskulární a autonomní reakce, horší hydrataci, vyšší teplotu jádra i víc hospitalizací a úmrtí. Meade 2024 (n = 37, 61–80 let) je malá exploratorní studie: cukrovka 2. typu a ženské pohlaví zhoršily kardiovaskulární odpověď, teplotu jádra ne. Článek to správně formuluje jako kardiovaskulární zátěž. Xi 2024 (dialyzovaní) je retrospektivní case-crossover z USA s asociacemi RR 1,19 pro kardiovaskulární návštěvy urgentu a 1,07 pro celkovou úmrtnost. Slovo „prokazatelně“ je na observační asociaci silné, směr ale sedí. Všechny tři studie článek už cituje, u Xi 2024 jen DOI bez PMID."
+        },
+        {
+          "text": "V extrémním suchém horku (kolem 40 °C a výš) může foukání horkého vzduchu zátěž naopak zvýšit — v experimentu se seniory ventilátor zvýšil teplotu jádra i tep, zatímco mlžení vodou na kůži zátěž snížilo (McKenna et al., J Appl Physiol 2025). Při mírnějším horku a vyšší vlhkosti ventilátor pomáhá; v rozpálené suché výhni spíš škodí.",
+          "location": "sekce Co (ne)pomáhá",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "40531347",
+              "doi": "10.1152/japplphysiol.00390.2025",
+              "title": "Evaluating low-energy cooling strategies on thermal and cardiac strain in older adults exposed to very hot and dry heat with accompanying activities of daily living.",
+              "year": 2025,
+              "journal": "Journal of applied physiology (Bethesda, Md. : 1985)",
+              "study_type": "rct",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Experimentální část je doložená. McKenna 2025 je randomizovaná zkřížená studie: 23 starších dospělých, 3 h při 47 °C a 15 % RH. Ventilátor zvýšil teplotu jádra o 0,60 °C a tep o 15/min, vodní sprej je snížil o 0,24 °C a 5/min. Dvě části věty ale z této studie neplynou. Práh „kolem 40 °C“ je extrapolace z 47 °C. Že ventilátor při mírnějším a vlhčím horku pomáhá, studie netestovala. Proto partial. Upřesňující větu do textu nenavrhuji: přesné podmínky experimentu (47 °C / 15 %) už uvádí položka ve zdrojích, biofyzikální směr je správný a rozsah tvrzení není od evidence očividně vzdálený. Tvrzení o vlhkém horku čeká na followup s vlastním primárním zdrojem."
+        }
+      ],
+      "summary": {
+        "supported": 5,
+        "partial": 2,
+        "contradicted": 0,
+        "no_evidence": 1,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Charkoudian N, Mayo Clin Proc 2003;78(5):603–612 (DOI 10.4065/78.5.603, PMID 12744548) přidán do article-sources, skupina „Primární — recenzovaná literatura (PubMed)“, k údaji o kožním průtoku 6–8 l/min (sekce „Jak se tělo brání“).",
+          "ref": "vedro-a-telo--05"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u vedro-a-telo--01 doplněn o PMID:37429922 / DOI:10.1038/s41591-023-02419-z, ověřeno 2026-11-15",
+          "ref": "vedro-a-telo--01"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u vedro-a-telo--02 doplněn o PMID:30990296, ověřeno 2026-11-15",
+          "ref": "vedro-a-telo--02"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u vedro-a-telo--05 doplněn o horní hodnotu 6–8 l/min PMID:12744548 / DOI:10.4065/78.5.603, ověřeno 2026-11-15 (klidová hodnota ~0,3 l/min v abstraktu není)",
+          "ref": "vedro-a-telo--05"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u vedro-a-telo--06 doplněn o PMID:30990296, ověřeno 2026-11-15",
+          "ref": "vedro-a-telo--06"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u vedro-a-telo--07 doplněn o PMID:30990296, ověřeno 2026-11-15",
+          "ref": "vedro-a-telo--07"
+        },
+        {
+          "type": "none",
+          "detail": "Poznámka „evidence-audit 2026-11-15: 8 tvrzení, 5 supported, 2 partial, 1 no-evidence; viz data/evidence-audit.json“ připojena do audit: komentáře článku a do articles.json audit.notes. audit-status (verified), last_reviewed a prose beze změny.",
+          "ref": ""
+        }
+      ],
+      "followup": "(1) vedro-a-telo--03 (1–2 l/hod potu): bez recenzovaného zdroje v abstraktech; redakce posoudí doplnění primárního zdroje nebo upřesnění „při námaze“. (2) Věta „při mírnějším horku a vyšší vlhkosti ventilátor pomáhá“ a práh „kolem 40 °C“ nemají ověřený primární zdroj (kandidáti z adjudikace neověřeni kvůli stropu volání). (3) Neověřeno z rozpočtu: léky zhoršující termoregulaci (diuretika, betablokátory, anticholinergika); „do 2 dnů“ do vrcholu úmrtí a příjmů (v audit poznámce Circ Res 2024 bez DOI/PMID); klidový kožní průtok ~0,3 l/min (Rowell, učebnice, mimo PubMed).",
+      "notes": "Rešerše: PubMed 8 volání (lookup citací, 3× metadata, 4× search), Consensus nepoužit. Ověřena existence, typ publikace a absence retrakce u citovaných studií (Gauer, Núñez-Rodríguez, Meade, McKenna, Ballester) a u dialyzační studie Xi 2024 (PMID 39430197, v článku jen DOI). Gauer & Meyers nemá v PubMed DOI. vedro-a-telo--04 (37 °C) vyřazeno jako učebnicová konstanta. Adjudikace: 3 volání PubMed, strop dodržen; verdikty rešerše potvrzeny kromě vedro-a-telo--05 (supported → partial, klidová hodnota v abstraktu není). Nic contradicted, žádný flag ani issue; prose_change žádná, audit-status verified beze změny. Upozornění redakci: u dialyzovaných zní „prokazatelně“ na observační asociaci silně, směr ale sedí."
+    },
+    {
+      "id": "clanek-platit-za-vysledek-vbhc.html",
+      "type": "article",
+      "checked_at": "2026-11-15",
+      "run_id": "ea-2026-11-15-01",
+      "content_hash": "10c272dbd3c25b9f1bec2284f9cd1038f59a0836",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 10,
+        "consensus": 1
+      },
+      "claims": [
+        {
+          "claim_id": "platit-za-vysledek-vbhc--01",
+          "text": "V roce 2016/17 stál QOF přibližně 691 milionů liber ročně.",
+          "location": "sekce „Varování z Anglie: co QOF skutečně ukázal“",
+          "kind": "other",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "32660427",
+              "doi": "10.1186/s12875-020-01208-8",
+              "title": "A pay for performance scheme in primary care: Meta-synthesis of qualitative studies on the provider experiences of the quality and outcomes framework in the UK.",
+              "year": 2020,
+              "journal": "BMC Fam Pract",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt Khan et al. doslova uvádí „worth £691 million in 2016/17“. Studie je kvalitativní meta-syntéza; číslo je kontextový údaj z úvodu abstraktu, ne výsledek syntézy. PubMed ji vede jako BMC Fam Pract 2020;21:142, článek a source_note uvádějí BMC Primary Care. Redakce rozhodne, zda název časopisu sjednotit podle PubMed."
+        },
+        {
+          "claim_id": "platit-za-vysledek-vbhc--02",
+          "text": "přes dvacet sedm zavedených sad pro diagnózy pokrývající zhruba třetinu světové zátěže nemocí",
+          "location": "sekce „ICHOM: jak se výsledky standardizují“",
+          "kind": "other",
+          "verdict": "not-applicable",
+          "confidence": "high",
+          "evidence": [],
+          "note": "Provozní údaj organizace ICHOM (počet vydaných sad), recenzovaná literatura ho nerozhoduje. Hlídá ho registr claims (check: none)."
+        },
+        {
+          "claim_id": "",
+          "text": "Po více než deseti letech fungování si systematický přehled v British Journal of General Practice (Forbes et al., 2017) položil otázku, co za ty peníze Anglie koupila. ... QOF byl asociován s mírnými zlepšeními u sledovaných procesních ukazatelů, jako je podíl pacientů s diabetem, jimž byl zkontrolován HbA1c. Ale přehled nenašel žádný jasný dopad na mortalitu.",
+          "location": "sekce „Varování z Anglie: co QOF skutečně ukázal“",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "28947621",
+              "doi": "10.3399/bjgp17X693077",
+              "title": "The role of the Quality and Outcomes Framework in the care of long-term conditions: a systematic review.",
+              "year": 2017,
+              "journal": "Br J Gen Pract",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Ověřeno z abstraktu i z open-access plného textu (PMC5647921): mírná zlepšení v péči o diabetes (složený ukazatel ze 17 diabetických indikátorů QOF, o 14 % nad trend v 1. roce, o 7 až 8 % ve 3. roce), žádný jasný vliv na mortalitu, kauzalitu nelze potvrdit. HbA1c přehled výslovně nejmenuje, v článku je to příklad, ne citace. Článek neuvádí mírné zpomalení nárůstu akutních hospitalizací a nárůst konzultací u SMI, které přehled také uvádí. Formulaci to nezpochybňuje."
+        },
+        {
+          "claim_id": "",
+          "text": "Integrace a koordinace péče: Žádný efekt; Pacientská zkušenost: Žádný prokázaný efekt (Forbes et al. BJGP 2017)",
+          "location": "tabulka „QOF: mechanismus platby za výkon a dokumentované efekty“",
+          "kind": "efficacy",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "28947621",
+              "doi": "10.3399/bjgp17X693077",
+              "title": "The role of the Quality and Outcomes Framework in the care of long-term conditions: a systematic review.",
+              "year": 2017,
+              "journal": "Br J Gen Pract",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Plný text (PMC5647921): „None of the relevant studies ... examined the effect of the QOF on broader aspects of care or patient perspectives“ a „no evidence to suggest that the QOF influences, positively or negatively, ... integration or coordination of care“. Řádek „Pacientská zkušenost: Žádný prokázaný efekt“ odpovídá. Řádek „Integrace a koordinace péče: Žádný efekt“ ale z chybějících dat dělá doložený nulový účinek: přehled efekt neprokázal, protože ho žádná zahrnutá studie neměřila. Přesnější by bylo „Neprokázán (nezkoumáno)“. Text se nemění, k posouzení redakcí."
+        },
+        {
+          "claim_id": "",
+          "text": "Exception reporting (gaming): Potvrzeno — zvyšování zdánlivého výkonu bez zlepšení péče (Forbes et al. 2017; Khan et al. BMC Primary Care 2020); ... zvyšování prahu pro dosažení plného bodu QOF bylo asociováno s nárůstem exception reportingu, nikoliv s reálným zvyšováním péče.",
+          "location": "tabulka QOF a sekce „Anatomie gamingu“",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "28947621",
+              "doi": "10.3399/bjgp17X693077",
+              "title": "The role of the Quality and Outcomes Framework in the care of long-term conditions: a systematic review.",
+              "year": 2017,
+              "journal": "Br J Gen Pract",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "25811487",
+              "doi": "10.1371/journal.pone.0119185",
+              "title": "Impact of 'stretch' targets for cardiovascular disease management within a local pay-for-performance programme.",
+              "year": 2015,
+              "journal": "PLoS One",
+              "study_type": "cohort",
+              "found_via": "consensus",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "18635432",
+              "doi": "10.1056/NEJMsa0800310",
+              "title": "Exclusion of patients from pay-for-performance targets by English physicians.",
+              "year": 2008,
+              "journal": "N Engl J Med",
+              "study_type": "cross-sectional",
+              "found_via": "consensus",
+              "relation": "contradicts",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "32660427",
+              "doi": "10.1186/s12875-020-01208-8",
+              "title": "A pay for performance scheme in primary care: Meta-synthesis of qualitative studies on the provider experiences of the quality and outcomes framework in the UK.",
+              "year": 2020,
+              "journal": "BMC Fam Pract",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Věta o prazích v próze je doložena: plný text Forbes 2017 (PMC5647921, oddíl Implications) uvádí „Raising thresholds for achievement may be counterproductive — there is evidence that it leads to increased exception reporting, raising apparent achievement with no real increase in the desired activity“. Jde o diskusi s odkazem na jinou literaturu, ne o vlastní výsledek přehledu. Primární doklad je Pape 2015 (místní program QOF+ s náročnějšími cíli): vyšší plnění cílů bylo tažené nárůstem exception reportingu, bez zlepšení TK, cholesterolu a HbA1c. Proti tomu celostátní data za 8 105 praxí (Doran 2008, NEJM) ukazují nízkou míru vyřazování (medián 5,3 %) a „little evidence of widespread gaming“. Sám Forbes píše, že pro záměrné zkreslování vykazování je „little evidence that this is a significant problem“. Khan 2020 je kvalitativní syntéza zkušeností lékařů a gaming kvantitativně nedokládá. Mechanismus je tedy doložen lokálně, ale označení „Potvrzeno“ v tabulce a obecná věta, že se exception reporting „v praxi stal způsobem, jak udržet zdánlivou výkonnost“, jdou za evidenci u národního QOF. Citaci Khan 2020 u tohoto řádku tabulky redakce posoudí. Jedna studie proti ≠ contradicted, proto partial. Do odstavce „Exception reporting“ vložena jedna upřesňující věta s citací Doran 2008 a Pape 2015."
+        },
+        {
+          "claim_id": "",
+          "text": "Jak shrnula Sally Lewis v Future Healthcare Journal (2022): existuje jen málo důkazů, že platby vázané na výsledek jsou efektivní.",
+          "location": "sekce „I value-based healthcare má své kritiky“ (Slabá evidence o systémovém dopadu)",
+          "kind": "policy",
+          "verdict": "unclear",
+          "confidence": "low",
+          "evidence": [
+            {
+              "pmid": "36561818",
+              "doi": "10.7861/fhj.2022-0099",
+              "title": "Value-based healthcare: is it the way forward?",
+              "year": 2022,
+              "journal": "Future Healthc J",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Citace existuje (PMID 36561818, narativní článek, ne systematický přehled). Abstrakt tvrzení o platbách vázaných na výsledek neobsahuje, mluví jen obecně o silných stránkách a limitech VBHC ve Spojeném království. Plný text přes PMC (PMC9761467) nástroj nevrátil (prázdné full_text), takže doslovnou větu z auditní hlavičky článku („little evidence that outcomes-based payments are effective“) nelze strojově ověřit. Jde navíc o shrnutí autorky narativního článku, ne o vlastní syntézu evidence. K posouzení redakcí."
+        },
+        {
+          "claim_id": "",
+          "text": "Groenewoud a kol. (BMC Health Services Research, 2019) ukázali, že jednostranná soutěž o hodnotu v Porterově smyslu může narážet na medicínsko-etické principy ... Autoři navrhují přejít od „value-based“ k „values-driven“ přístupu.",
+          "location": "sekce „I value-based healthcare má své kritiky“ (Etické problémy)",
+          "kind": "other",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "31029136",
+              "doi": "10.1186/s12913-019-4081-6",
+              "title": "Value based competition in health care's ethical drawbacks and the need for a values-driven approach.",
+              "year": 2019,
+              "journal": "BMC Health Serv Res",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt potvrzuje obsah: zanedbání osobních hodnot pacienta, střet se čtyřmi medicínsko-etickými principy, návrh Values-Driven Health Care. Jde o konceptuální etickou analýzu, ne o empirickou studii. Sloveso „ukázali“ je proto silnější než přesnější „argumentují“, smysl tvrzení se tím nemění."
+        },
+        {
+          "claim_id": "",
+          "text": "Jeho definice z roku 2010 je jednoduchá: hodnota = zdravotní výsledky / náklady na jejich dosažení.",
+          "location": "sekce „Co je hodnota: Porterova rovnice“",
+          "kind": "other",
+          "verdict": "partial",
+          "confidence": "low",
+          "evidence": [
+            {
+              "pmid": "21142528",
+              "doi": "10.1056/NEJMp1011024",
+              "title": "What is value in health care?",
+              "year": 2010,
+              "journal": "N Engl J Med",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Bibliografické údaje ověřeny v PubMed (NEJM 2010;363:2477-81, perspective, tedy komentář, ne studie). Abstrakt PubMed nemá a open-access plný text není k dispozici, takže znění definice nelze strojově doložit doslovně. Jde o definiční, ne empirické tvrzení a jeho přesnost ověří redakce z textu NEJM. Bez návrhu zásahu."
+        }
+      ],
+      "summary": {
+        "supported": 3,
+        "partial": 3,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 1,
+        "unclear": 1
+      },
+      "actions": [
+        {
+          "type": "claim-note",
+          "detail": "source_note u platit-za-vysledek-vbhc--01: \"Khan et al., BMC Fam Pract 2020;21:142 (v článku uváděno jako BMC Primary Care); PMID:32660427 / DOI:10.1186/s12875-020-01208-8, ověřeno 2026-11-15\"",
+          "ref": "platit-za-vysledek-vbhc--01"
+        },
+        {
+          "type": "source-added",
+          "detail": "Pape UJ et al. PLoS One 2015;10(3):e0119185 (PMID 25811487) do article-sources, nová skupina Recenzovaná literatura — k tabulce QOF a odstavci o exception reportingu",
+          "ref": "https://pubmed.ncbi.nlm.nih.gov/25811487/"
+        },
+        {
+          "type": "source-added",
+          "detail": "Doran T et al. N Engl J Med 2008;359(3):274-84 (PMID 18635432) do article-sources, skupina Recenzovaná literatura — kontext k odstavci o exception reportingu",
+          "ref": "https://pubmed.ncbi.nlm.nih.gov/18635432/"
+        },
+        {
+          "type": "none",
+          "detail": "Jedna upřesňující věta (Opus, partial) připojena na konec odstavce „Exception reporting“ v sekci „Anatomie gamingu“: Doran 2008 (celostátně medián 5,3 % vyřazených, málo dokladů o rozšířeném gamingu) a Pape 2015 (místní QOF+). audit-status zůstává review-pending (articles.json audit-status + audit.status, meta article:audit-status).",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Žádné tvrzení contradicted, proto bez flagu a bez issue. Do hlavičky audit: a articles.json audit.notes připojena věta „evidence-audit 2026-11-15: 8 tvrzení, 3 supported, 3 partial, 1 unclear, 1 not-applicable; viz data/evidence-audit.json“.",
+          "ref": ""
+        }
+      ],
+      "followup": "Lewis 2022 (unclear): plný text PMC9761467 přes nástroj nedostupný, doslovnou citaci „little evidence that outcomes-based payments are effective“ musí ověřit redakce. Porter 2010 (partial, low): bez abstraktu i OA plného textu, znění definice neověřeno. Řádky tabulky QOF („Potvrzeno“ u exception reportingu, „Žádný efekt“ u integrace péče) a citace Khan 2020 u řádku gamingu k posouzení redakcí. Název časopisu u Khan 2020 (PubMed BMC Fam Pract vs. článek BMC Primary Care) k sjednocení. Obecný přehled P4P (systematic[sb], 206 záznamů) nevyhodnocen pro strop volání.",
+      "notes": "Rešerše Sonnet: Consensus 1 dotaz (QOF exception reporting gaming), bez rate-limitu; PubMed 7 volání. Kandidáti Pape 2015 a Doran 2008 ověřeni v PubMed přes lookup_article_by_citation. Vyřazeno jako administrativní/ne-evidenční: údaje o českém kontextu (úhradová vyhláška, DRG Restart, pilot VZP). Khan 2020 nalezen v PubMed až podle DOI. Adjudikace Opus (3 volání PubMed): get_full_text_article PMC9761467 (Lewis, plný text prázdný), get_full_text_article PMC5647921 (Forbes, plný text OK), get_article_metadata 25811487 + 18635432 (Pape, Doran: Journal Article, bez retrakce). Věta o prazích a exception reportingu je v plném textu Forbes 2017 jen v diskusi s odkazem na jinou literaturu; primární doklad je Pape 2015 (místní program), proti stojí celostátní Doran 2008, proto partial. Ostatní studie (Porter, Khan, Forbes, Lewis, Groenewoud) článek už cituje, nepřidány podruhé."
+    },
+    {
+      "id": "clanek-platba-za-vysledek-vzp.html",
+      "type": "article",
+      "checked_at": "2026-11-15",
+      "run_id": "ea-2026-11-15-01",
+      "content_hash": "60ac03ddf2fb861edb002dd0ab8a15f78a590d38",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 11,
+        "consensus": 1
+      },
+      "claims": [
+        {
+          "claim_id": "platba-za-vysledek-vzp--09",
+          "text": "Dopad: pokles 7letých revizí o 19 procent a snížení komplikací s úsporou cca 10 procent celkových nákladů na cyklus (Karolinska Institutet, Health Affairs 2020).",
+          "location": "sekce „Švédsko — value-based ortopedie a Swedish Hip Arthroplasty Register (SHAR)“",
+          "kind": "policy",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "35835527",
+              "doi": "10.1136/bmjopen-2022-061077",
+              "title": "Effects of competition and bundled payment on the performance of hip replacement surgery in Stockholm, Sweden: results from a quasi-experimental study.",
+              "year": 2022,
+              "journal": "BMJ Open",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "33902580",
+              "doi": "10.1186/s12913-021-06397-1",
+              "title": "The effects of competition and bundled payment on patient reported outcome measures after hip replacement surgery.",
+              "year": 2021,
+              "journal": "BMC Health Services Research",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "36574410",
+              "doi": "10.2106/JBJS.RVW.22.00082",
+              "title": "Bundled Care in Elective Total Joint Replacement: Payment Models in Sweden, Canada, and the United States: A Critical Analysis Review.",
+              "year": 2022,
+              "journal": "JBJS Reviews",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Směr (méně komplikací po stockholmské reformě z roku 2009) doložen: kvazi-experiment diff-in-diff na 85 275 primárních TEP kyčle 2005–2012 (Goude 2022) uvádí snížení výskytu nežádoucích událostí do 90 dní (v abstraktu „1.6 percentage reduction“, p<0,05), žádný vliv na spokojenost pacientů a výslovně „omezený dopad na spotřebu zdrojů“, protože platba je fixní na případ — to se s tvrzením o úspoře cca 10 % celkových nákladů nekryje. Druhá evaluace (Goude 2021, 36 627 pozorování) nenašla vliv na PROMs po 1 a 6 letech. Čísla 19 % (pokles 7letých revizí) a 10 % (úspora) ani sedmiletý horizont odpovědnosti za revize v žádném abstraktu nejsou. Citovanou práci „Karolinska Institutet, Health Affairs 2020“ se v PubMed nepodařilo dohledat (dotaz „bundled payment Stockholm hip replacement“ vrací jen 3 záznamy, žádný z Health Affairs). K závěru contradicted to nestačí (jedna studie s omezeným dopadem na zdroje, neexistence citace jen nepotvrzena, ne prokázána), proto partial. K posouzení redakcí: ověřit, zda citace Health Affairs 2020 existuje; pokud ne, nahradit ji evaluacemi Goude 2021/2022 a čísla 19 % / 10 % přeformulovat."
+        },
+        {
+          "claim_id": "",
+          "text": "Klíčový poznatek z britské evaluace (Roland a Campbell, NEJM 2014, Forbes a kol., BMJ 2017): P4P bonusy přinášejí měřitelné zlepšení v prvních letech, ale efekt postupně slábne, jak se na ně poskytovatelé adaptují.",
+          "location": "sekce „Anglie — NHS England, Best Practice Tariffs (BPT) a Quality Premium“; ve zdrojích (Mezinárodní reformní reference) položka Roland M., Campbell S. (NEJM 2014)",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "24827040",
+              "doi": "10.1056/NEJMhpr1316051",
+              "title": "Successes and failures of pay for performance in the United Kingdom.",
+              "year": 2014,
+              "journal": "New England Journal of Medicine",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "context",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "31276606",
+              "doi": "10.1002/14651858.CD011156.pub2",
+              "title": "Pay for performance for hospitals.",
+              "year": 2019,
+              "journal": "Cochrane Database of Systematic Reviews",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "32207083",
+              "doi": "10.1007/s40258-020-00572-x",
+              "title": "Effects of Monetary Incentives in Physician Groups: A Systematic Review of Reviews.",
+              "year": 2020,
+              "journal": "Applied Health Economics and Health Policy",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Citace Roland a Campbell (NEJM 2014) v PubMed existuje (Health Policy Report, bez abstraktu, není retrahovaná), její obsah o QOF a „teaching to the test“ tedy z abstraktu doložit nelze. Cochrane přehled P4P v nemocnicích (27 studií, 6 programů z USA, Anglie a Francie) uvádí, že dodatečnými platbami lze dosáhnout jen malých krátkodobých, neudržitelných efektů a účinek na výsledky pacientů byl nanejvýš malý (velmi nízká jistota) — to podporuje větu o slábnoucím efektu, ale jde o nemocniční P4P, ne o QOF v primární péči. Přehled přehledů (2020) nachází pozitivní, heterogenní efekt na procesní kvalitu. Citace Forbes a kol., BMJ 2017 v rešerši ověřena nebyla."
+        },
+        {
+          "claim_id": "platba-za-vysledek-vzp--07",
+          "text": "podle SHA analýz v ČR i OECD jdou kolem 60–70 procent všech výdajů na cca 20 procent populace s dvěma a více chronickými diagnózami",
+          "location": "sekce o VBC v péči o chronicky nemocné",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "low",
+          "evidence": [
+            {
+              "pmid": "35850686",
+              "doi": "10.1186/s12916-022-02427-9",
+              "title": "Costs of multimorbidity: a systematic review and meta-analyses.",
+              "year": 2022,
+              "journal": "BMC Medicine",
+              "study_type": "systematic review",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Systematický přehled (59 studií, převážně vysokopříjmové země, Evropa málo zastoupena) potvrzuje velkou ekonomickou zátěž multimorbidity, ale podíl na celkových výdajích (60–70 %) ani podíl populace (20 %) v abstraktu není a ČR nehodnotí; jen zahraniční evidence → partial s výhradou přenositelnosti. Tvrzení se odvolává na SHA analýzy ČR/OECD; SHA jako účetní rámec člení výdaje podle funkcí, poskytovatelů a zdrojů financování, nikoli podle počtu chronických diagnóz pacienta — k posouzení redakcí, zda je zdroj čísla přiřazen správně."
+        },
+        {
+          "claim_id": "platba-za-vysledek-vzp--08",
+          "text": "Aktuálně pokrývá BPT zhruba 14 procent objemu nemocničních úhrad",
+          "location": "sekce „Anglie — NHS England, Best Practice Tariffs (BPT) a Quality Premium“",
+          "kind": "policy",
+          "verdict": "not-applicable",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "34417002",
+              "doi": "10.1016/j.injury.2021.08.015",
+              "title": "Crossing quartiles: Improving time to theatre for patients with hip fractures in a large UK district general hospital; A quality improvement report.",
+              "year": 2021,
+              "journal": "Injury",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Podíl BPT na objemu nemocničních úhrad je administrativní údaj NHS England (tarifní dokumentace), ne odborné tvrzení, které soudí recenzovaná literatura; patří do drift-checku data/claims.json (source_note „NHS England BPT 2024“). PubMed dal jen kontext k BPT pro zlomeninu krčku femuru."
+        }
+      ],
+      "summary": {
+        "supported": 0,
+        "partial": 3,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 1,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Goude 2022 (BMJ Open, PMID 35835527) do article-sources, nová skupina Recenzovaná literatura",
+          "ref": "platba-za-vysledek-vzp--09"
+        },
+        {
+          "type": "source-added",
+          "detail": "Goude 2021 (BMC Health Serv Res, PMID 33902580) do article-sources (Recenzovaná literatura)",
+          "ref": "platba-za-vysledek-vzp--09"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u platba-za-vysledek-vzp--09 doplněn o PMID:35835527 / DOI:10.1136/bmjopen-2022-061077; PMID:33902580 / DOI:10.1186/s12913-021-06397-1, ověřeno 2026-11-15 (doložen jen směr; 19 % / 10 % a Health Affairs 2020 nedohledány)",
+          "ref": "platba-za-vysledek-vzp--09"
+        },
+        {
+          "type": "source-added",
+          "detail": "Mathes 2019 (Cochrane CD011156, PMID 31276606) do article-sources (Recenzovaná literatura) k větě o britské zkušenosti s P4P",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "Soley-Bori 2022 (BMC Med, PMID 35850686) do article-sources (Recenzovaná literatura) jako kontext ke koncentraci výdajů u multimorbidity",
+          "ref": "platba-za-vysledek-vzp--07"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u platba-za-vysledek-vzp--07 doplněn o PMID:35850686 / DOI:10.1186/s12916-022-02427-9, ověřeno 2026-11-15 (kontext; podíl 60–70 % / 20 % nedoložen)",
+          "ref": "platba-za-vysledek-vzp--07"
+        },
+        {
+          "type": "none",
+          "detail": "Žádný contradicted → žádný flag ani issue. Prose: jedna upřesňující věta za tvrzení o stockholmském bundled payment (Goude a kol., BMJ Open 2022; BMC Health Services Research 2021); audit-status partial → review-pending (articles.json audit-status + audit.status, meta article:audit-status, audit: komentář); evidence-audit poznámka do audit.notes a audit: komentáře",
+          "ref": "platba-za-vysledek-vzp--09"
+        }
+      ],
+      "followup": "(1) Citace „Karolinska Institutet, Health Affairs 2020“ (ve zdrojích jen odkaz na titulní stránku healthaffairs.org, bez DOI) v PubMed nedohledána; čísla 19 % (pokles 7letých revizí), 10 % (úspora) a sedmiletý horizont nedoložena — při nedoložení přeformulovat (redakce). (2) Citace Forbes a kol., BMJ 2017 neověřena (strop volání). (3) U --07 ověřit přiřazení čísla 60–70 % / 20 % k SHA analýzám; česká data o koncentraci výdajů nevyhledána (strop volání). (4) Dopad NHS BPT na výsledky nevyhledán (strop volání). Záznam 33933075 z dotazu „bundled payment Stockholm hip replacement“ kvůli stropu neprověřen.",
+      "notes": "PubMed dostupný, Consensus dostupný (1 dotaz, výsledek ověřen v PubMed). Rešerše 8 volání PubMed (strop vyčerpán), adjudikace 3 volání PubMed (metadata 35835527, 33902580, 31276606; vyhledávání Stockholm bundled payment/Health Affairs bez výsledku z Health Affairs). Z 10 tvrzení v claims.json vybrána 3 odborná (--07, --08, --09) + 1 bez claim_id (Roland a Campbell, NEJM 2014); --01 až --06 a --10 (údaje VZP, MZ, KARDIO, NRKN, ceny a cíle) vyřazeny jako administrativní, mezi auditovaná se nepočítají. Vložena jedna upřesňující věta za tvrzení o stockholmském bundled payment → audit-status review-pending (dříve partial). Skupina Recenzovaná literatura v článku založena. Roland a Campbell (NEJM 2014) už článek cituje, znovu nepřidáno."
+    },
+    {
+      "id": "indicator:kontrola_hypertenze",
+      "type": "indicator",
+      "checked_at": "2026-11-15",
+      "run_id": "ea-2026-11-15-01",
+      "content_hash": "d9f59ad38d3065400bc10cc7b7e12292c27c554d",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 6,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "text": "Samotné předepsání léku nestačí: riziko klesá až tehdy, když tlak skutečně klesne pod cílovou hodnotu. Indikátor proto ukazuje, u jaké části léčených lidí léčba opravdu funguje.",
+          "location": "importance (karta indikátoru)",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "33933205",
+              "doi": "10.1016/S0140-6736(21)00590-0",
+              "title": "Pharmacological blood pressure lowering for primary and secondary prevention of cardiovascular disease across different levels of blood pressure: an individual participant-level data meta-analysis.",
+              "year": 2021,
+              "journal": "Lancet",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "verified_in_pubmed": true,
+              "relation": "partial"
+            },
+            {
+              "pmid": "34461040",
+              "doi": "10.1016/S0140-6736(21)01921-8",
+              "title": "Age-stratified and blood-pressure-stratified effects of blood-pressure-lowering pharmacotherapy for the prevention of cardiovascular disease and death: an individual participant-level data meta-analysis.",
+              "year": 2021,
+              "journal": "Lancet",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt BPLTTC (48 RCT, 344 716 účastníků) potvrzuje jádro věty: přínos plyne ze skutečného snížení tlaku, relativní účinek je úměrný velikosti poklesu systolického TK (o 5 mmHg: HR 0,91 bez předchozího KVO, 0,89 s KVO, tj. riziko velkých KV příhod nižší asi o 10 %). Ve formulaci „až tehdy, když tlak klesne pod cílovou hodnotu“ ale stojí práh, který evidence nepodporuje: stejná metaanalýza nenašla heterogenitu účinku podle výchozího systolického tlaku a přínos doložila i u normálních a vysoce normálních hodnot. Riziko tedy klesá plynule s každým snížením, ne skokově po dosažení 140/90. Práh 140/90 je klinická konvence a konstrukční volba indikátoru; literatura nedokládá, že podíl léčených pod 140/90 je validní míra kvality péče. Proto partial, ne contradicted: směr věty sedí, přehnaný je jen práh. Navržena jedna věta do limitations s citací."
+        },
+        {
+          "text": "Podle studie Czech post-MONICA mělo ve vlně 2016/17 tlak pod 140/90 mmHg jen 53,0 % léčených hypertoniků ve věku 25–64 let, mužů 49,4 % a žen 57,5 %. [...] Trend je přitom příznivý: ve vlně 1997/98 to bylo 35,5 %, v roce 2000/01 34,6 % a v roce 2007/08 42,1 %. Autoři studie i tak hodnotí výsledek jako stále nedostatečný.",
+          "location": "patient_story (karta indikátoru)",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "36440040",
+              "doi": "10.3389/fcvm.2022.1033606",
+              "title": "Longitudinal trends in blood pressure, prevalence, awareness, treatment, and control of hypertension in the Czech population. Are there any sex differences?",
+              "year": 2022,
+              "journal": "Frontiers in cardiovascular medicine",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Ověřeno v open-access plném textu PMC9686845 (PubMed get_full_text_article). Table 4, „Control of hypertension (% of all drug-treated hypertensive patients)“, Total 25–64 y: 2016/17 muži 119 (49.4), ženy 111 (57.5); 1997/98 50/70; 2000/01 60/77; 2007/08 135/106. Table 3, „Medication for HT“, Total 25–64 y: 2016/17 241/193; 1997/98 151/187; 2000/01 191/205; 2007/08 322/251. Údaje za muže a ženy jsou v textu doslova, souhrnné hodnoty vycházejí přesně z publikovaných počtů: 230/434 = 53,0 %; 120/338 = 35,5 %; 137/396 = 34,6 %; 241/573 = 42,1 %. Karta uvádí, že jde o dopočet redakce. Diskuse doslova: „the final numbers for control of hypertension are still not sufficient (treated hypertensive patients: men 49.4%, women 57.5%)“. Trend kontroly u léčených roste u obou pohlaví (p < 0,0001); mírný pokles mezi 1997/98 a 2000/01 větě nevadí. Confidence medium jen proto, že souhrnná procenta jsou dopočet, ne doslovný údaj. Při kontrole ověřeny i další údaje z patient_story: 60,9 % / 64,8 % léčených, čtvrtina nevědoucích (awareness 74,6 / 77,7 %), 32,9 % = 230/699."
+        },
+        {
+          "text": "Nekontrolovaná hypertenze souvisí s vysokou kardiovaskulární úmrtností (viz indikátor mortalita_kardiovaskularni).",
+          "location": "patient_story (karta indikátoru)",
+          "kind": "mechanism",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "33933205",
+              "doi": "10.1016/S0140-6736(21)00590-0",
+              "title": "Pharmacological blood pressure lowering for primary and secondary prevention of cardiovascular disease across different levels of blood pressure: an individual participant-level data meta-analysis.",
+              "year": 2021,
+              "journal": "Lancet",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "verified_in_pubmed": true,
+              "relation": "supports"
+            },
+            {
+              "pmid": "39948181",
+              "doi": "10.1038/s41440-025-02131-0",
+              "title": "Effect of intensive versus standard blood pressure control on cardiovascular outcomes in adult patients with hypertension: a systematic review and meta-analysis.",
+              "year": 2025,
+              "journal": "Hypertension research",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Věta je obecná a slabá („souvisí“). Podle abstraktu BPLTTC snižuje farmakologické snížení tlaku riziko velkých KV příhod, do kterých patří i fatální CMP, IM a srdeční selhání (o 5 mmHg asi o 10 %). Meta-analýza 8 RCT (PMID 39948181) přidává kontext: intenzivní kontrola (SBP < 130) snížila KV smrt (RR 0,74), jde ale o jiný práh. Úvod Cífkové 2022 (PMC9686845) uvádí totéž: léčba hypertenze snižuje KV morbiditu a mortalitu. Kauzální podíl hypertenze přímo na české KV úmrtnosti tyto práce nekvantifikují, věta ho ale ani netvrdí. Supported."
+        }
+      ],
+      "summary": {
+        "supported": 2,
+        "partial": 1,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Cífková R. et al., Front Cardiovasc Med 2022 (PMID 36440040, DOI 10.3389/fcvm.2022.1033606) do nově založeného pole literature karty indicators/kontrola_hypertenze.json — primární zdroj hodnot, ověřeno v plném textu PMC9686845.",
+          "ref": "36440040"
+        },
+        {
+          "type": "source-added",
+          "detail": "Blood Pressure Lowering Treatment Trialists' Collaboration, Lancet 2021 (PMID 33933205, DOI 10.1016/S0140-6736(21)00590-0) do pole literature karty indicators/kontrola_hypertenze.json.",
+          "ref": "33933205"
+        },
+        {
+          "type": "card-note",
+          "detail": "Do limitations karty indicators/kontrola_hypertenze.json připojena jedna věta s citací (verdikt measurement = partial): práh 140/90 mmHg je klinická konvence, ne hranice účinku; riziko klesá úměrně každému snížení systolického tlaku i pod touto hodnotou (BPLTTC, Lancet 2021, PMID 33933205). Pole importance beze změny.",
+          "ref": "33933205"
+        }
+      ],
+      "notes": "PubMed dostupný, 4 volání v rešerši (metadata PMID 36440040; 2 vyhledávání; metadata 6 kandidátů v jednom volání) + 2 v adjudikaci (get_full_text_article PMC9686845; get_article_metadata 33933205 + 36440040). Consensus nepoužit, PubMed dal dost kandidátů. Karta citovala jedinou studii (PMID 36440040), ověřena, bez retrakce; žádná retrakce ani u dalších citovaných prací. Vyhledávání bylo zaměřené na metodiku a KV přínos léčby; žádná práce o validitě „kontroly léčených pod 140/90“ jako ukazatele kvality systému nebyla nalezena. Karta má framework hspa, mezinárodní benchmark nemá. Adjudikace (Opus): S 2 · P 1 · C 0 · N 0. Tvrzení 2 povýšeno z partial na supported, protože všechna čísla z patient_story byla ověřena v open-access plném textu (Table 3 a 4 a citát z diskuse); souhrnná procenta jsou přesný dopočet z publikovaných počtů a karta ho jako dopočet přiznává. Tvrzení 1 zůstává partial: směr sedí, ale formulace „riziko klesá až tehdy, když tlak klesne pod cílovou hodnotu“ naznačuje práh, který BPLTTC nepodporuje. claim_id prázdné: data/claims.json k indikátoru vede jen článkový záznam cmp-iktova-centra--11, který je mimo rozsah položky. Pole literature v kartě založeno se dvěma objekty, do limitations připojena jedna věta s citací."
+    },
+    {
+      "id": "indicator:mortalita_lecitelna",
+      "type": "indicator",
+      "checked_at": "2026-11-15",
+      "run_id": "ea-2026-11-15-01",
+      "content_hash": "9098503ac1b6bb90639f809c95a84d3d13a57f38",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 11,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "text": "léčitelná mortalita je proxy kvality a účinnosti samotného léčebného systému — měří, zda systém pacienta, který už onemocněl, dokáže včas a správně léčit.",
+          "location": "indicators/mortalita_lecitelna.json:definition; obdobně importance",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "28528753",
+              "doi": "10.1016/S0140-6736(17)30818-8",
+              "title": "Healthcare Access and Quality Index based on mortality from causes amenable to personal health care in 195 countries and territories, 1990-2015: a novel analysis from the Global Burden of Disease Study 2015.",
+              "year": 2017,
+              "journal": "Lancet",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "24986408",
+              "doi": "",
+              "title": "[Mortality amenable to health care services and health inequalities among Italian Regions].",
+              "year": 2014,
+              "journal": "Epidemiologia e prevenzione",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje partial. Abstrakt GBD HAQ (Lancet 2017) doslova říká, že úroveň přístupu k osobní zdravotní péči a její kvality lze aproximovat úmrtností na příčiny, které by při účinné péči neměly být fatální; souhrnný index měl konvergentní validitu s výdaji na zdravotnictví (r=0,88), indexem 11 intervencí UHC (r=0,83) a počtem zdravotníků (r=0,77). Proxy charakter je tedy doložen. Studie ale používá seznam Nolte–McKee a míry očištěné o vliv lokálních environmentálních a behaviorálních rizik (risk-standardised), kdežto karta používá surovou věkově standardizovanou míru Eurostat/OECD (TRT, hlth_cd_apr), která tento vliv obsahuje. Část „měří, zda systém dokáže včas a správně léčit“ jde nad evidenci: abstrakt validuje ukazatel jako souhrnnou míru přístupu a kvality, ne jako míru včasnosti či správnosti léčby (karta sama v limitations uvádí, že neměří, kde v řetězci selhání nastalo). Italská studie (kontext) ukazuje závislost absolutních měr na zvoleném seznamu příčin při zachování geografického vzorce. Do limitations doplněna jedna věta s citací."
+        },
+        {
+          "text": "Kdyby přijela o čtyři hodiny dřív, v okně pro trombolýzu, vypadal by konec jinak. Cévní mozková příhoda patří mezi diagnózy, kterým by včasná a účinná léčba dokázala zabránit smrti.",
+          "location": "indicators/mortalita_lecitelna.json:patient_story (odstavec 1)",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "25106063",
+              "doi": "10.1016/S0140-6736(14)60584-5",
+              "title": "Effect of treatment delay, age, and stroke severity on the effects of intravenous thrombolysis with alteplase for acute ischaemic stroke: a meta-analysis of individual patient data from randomised trials.",
+              "year": 2014,
+              "journal": "Lancet",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "42492020",
+              "doi": "10.1212/WNL.0000000000218294",
+              "title": "IV Thrombolysis in the Extended Time Window for Acute Ischemic Stroke: An Updated Systematic Review and Meta-Analysis.",
+              "year": 2026,
+              "journal": "Neurology",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "42475651",
+              "doi": "10.1212/WNL.0000000000218331",
+              "title": "Exploring Between-Study Heterogeneity in Extended-Window IV Thrombolysis for Acute Ischemic Stroke: A Meta-Analysis of 18 Randomised Controlled Trials.",
+              "year": 2026,
+              "journal": "Neurology",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje partial (abstrakt přečten znovu). IPD metaanalýza 9 RCT (6 756 pacientů): alteplasa do 4,5 h zvyšuje šanci na dobrý funkční výsledek (mRS 0–1), čím dřív, tím víc (do 3 h OR 1,75; 3–4,5 h OR 1,26); 90denní mortalita ale snížena nebyla (17,9 % vs 16,5 %, HR 1,11, 95% CI 0,99–1,25, p=0,07), přínos je v přežití bez disability (cca +10 % do 3 h, +5 % do 4,5 h) při ~2% absolutním excesu časných úmrtí z intrakraniálního krvácení. V příběhu pacientka zemře, takže věta „vypadal by konec jinak“ v kontextu naznačuje odvrácení smrti trombolýzou, což evidence nepodporuje; podporuje lepší funkční výsledek. Zařazení CMP mezi léčitelné příčiny je taxonomická konvence seznamu Eurostat/OECD (opřená o celý řetězec péče, ne jen o trombolýzu), ne tvrzení o účinku jedné intervence. Kontext: metaanalýzy 2026 ukazují přínos i v rozšířeném okně u vybraných pacientů. Úpravu formulace příběhu (např. „mohla odejít bez trvalých následků“ místo implikace přežití) audit nesmí provést sám — k posouzení redakcí."
+        },
+        {
+          "text": "Strukturálně za českou hodnotou stojí pokrok v akutní kardiologické a iktové péči (síť center táhne číslo dolů)",
+          "location": "indicators/mortalita_lecitelna.json:patient_story (odstavec 3); determinants (Včasnost a organizace akutní péče)",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "low",
+          "evidence": [
+            {
+              "pmid": "35793640",
+              "doi": "10.1159/000525880",
+              "title": "Trends in Stroke Burden in Central and Eastern Europe from 1990-2019.",
+              "year": 2022,
+              "journal": "Neuroepidemiology",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "29146830",
+              "doi": "10.1136/neurintsurg-2017-013534",
+              "title": "Mechanical thrombectomy performs similarly in real world practice: a 2016 nationwide study from the Czech Republic.",
+              "year": 2017,
+              "journal": "Journal of neurointerventional surgery",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "35104746",
+              "doi": "10.1016/j.jstrokecerebrovasdis.2022.106308",
+              "title": "Mechanical Thrombectomy Quality Indicators Study in Czech Stroke Centers: Results of the METRICS Study.",
+              "year": 2022,
+              "journal": "Journal of stroke and cerebrovascular diseases",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace mění unclear na partial s nízkou jistotou. Domácí a regionální evidence potvrzuje směr, ne kauzální přisouzení: GBD 2019 (Dokova & Feigin, Neuroepidemiology 2022) uvádí Česko mezi velmi úspěšnými zeměmi střední Evropy ve snižování zátěže CMP (věkově standardizované DALY, převážně YLL), ale pokles nepřipisuje síti iktových center. Celostátní česká data o mechanické trombektomii (SITS-TBY 2016) ukazují výsledky srovnatelné s metaanalýzou HERMES (mRS 0–2 za 3 měsíce 48 % vs 46 %), což dokládá funkčnost sítě; studie METRICS (2016 vs 2019) ale zjistila zkrácení časových intervalů bez zlepšení celkových klinických výsledků po trombektomii. Studii, která by kauzálně spojila síť kardiocenter (PCI) nebo iktových center s poklesem léčitelné mortality v ČR, adjudikace v rámci stropu nenašla; kardiologickou část tvrzení nepokrývá žádná ověřená studie. K posouzení redakcí: doplnit domácí zdroj (ÚZIS, NRKI, registr RES-Q/SITS) nebo formulaci zmírnit na „pravděpodobně přispívá“."
+        }
+      ],
+      "summary": {
+        "supported": 0,
+        "partial": 3,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "V kartě indicators/mortalita_lecitelna.json založeno pole \"literature\" (dosud chybělo, vloženo za patient_story před framework): GBD 2015 HAQ Collaborators, Lancet 2017 (PMID 28528753, DOI 10.1016/S0140-6736(17)30818-8) k větě definice o proxy kvality léčebného systému.",
+          "ref": "28528753"
+        },
+        {
+          "type": "source-added",
+          "detail": "Do pole literature karty: Emberson et al., Lancet 2014 (PMID 25106063, DOI 10.1016/S0140-6736(14)60584-5) k větě patient_story o okně pro trombolýzu (přínos ve funkčním výsledku, ne v 90denní mortalitě).",
+          "ref": "25106063"
+        },
+        {
+          "type": "source-added",
+          "detail": "Do pole literature karty: Dokova & Feigin, Neuroepidemiology 2022 (PMID 35793640, DOI 10.1159/000525880) k větě o pokroku v iktové péči (potvrzuje pokles zátěže CMP, ne kauzální přisouzení síti center).",
+          "ref": "35793640"
+        },
+        {
+          "type": "card-note",
+          "detail": "Na konec limitations karty indicators/mortalita_lecitelna.json připojena jedna věta (measurement verdikt, Opus, s citací): „Validita ukazatele jako proxy přístupu ke kvalitní péči je doložena hlavně pro seznam Nolte–McKee s rizikovou standardizací (GBD HAQ Index: korelace s výdaji na zdravotnictví r = 0,88; Lancet 2017, PMID 28528753), kterou věkově standardizovaná míra Eurostatu nemá, takže zahrnuje i vliv rizikových faktorů populace.“",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Patient_story (okno pro trombolýzu; síť center jako příčina poklesu): text karty beze změny, audit nesmí přepsat — výhrady v note tvrzení, k posouzení redakcí. Žádný contradicted, tedy žádný flag ani issue.",
+          "ref": ""
+        }
+      ],
+      "followup": "Kauzální role sítě kardiocenter a iktových center v poklesu léčitelné mortality ČR neověřena — chybí domácí studie (ÚZIS/NRKI/RES-Q/SITS), kardiologická část tvrzení 3 bez ověřené studie; strop PubMed volání vyčerpán. Citace PMID 24986408 (kontext k tvrzení 1) bez DOI. Formulace patient_story o trombolýze („vypadal by konec jinak“ při úmrtí pacientky) jde nad evidenci — k posouzení redakcí.",
+      "notes": "PubMed 8 volání v rešerši (strop vyčerpán), Consensus 0 (PubMed dal studie k tvrzením 1 a 2; třetí tvrzení zůstalo neověřeno kvůli stropu, ne kvůli Consensu). Karta žádnou literaturu necituje, takže found_via je vždy pubmed. Tvrzení o směru a prazích (signal_thresholds good 5 / warn 15) vynecháno: karta se na literaturu neodvolává. Metadata z PubMed obsahovala text vyžadující povinnou atribuci v odpovědi; nejde o pokyn zadání a do výstupu se nepřenáší. | Adjudikace (Opus), run ea-2026-11-15-01. PubMed 3 volání: metadata/abstrakty 28528753 + 25106063, jedno vyhledávání domácích studií (CZ + IM/CMP + síť/trombolýza/trombektomie; první pokus vrátil rate-limit a po 2 s byl zopakován, nezapočten), metadata 8 kandidátů. Consensus nepoužit. Finální verdikty: 3× partial (S 0 · P 3 · C 0 · N 0 · U 0). Tvrzení 3 povýšeno z unclear na partial s nízkou jistotou. | Zápis (Opus): do karty přibylo pole literature se 3 ověřenými položkami a jedna věta s citací na konec limitations; ostatní prose karty, čísla a verification_status beze změny. Poznámka do data/articles.json se u indikátoru nepíše; claim-note do data/claims.json není v akcích (záznamy s indicator_id patří článkům, ne kartě)."
+    },
+    {
+      "id": "indicator:alkohol_adolescenti",
+      "type": "indicator",
+      "checked_at": "2026-11-15",
+      "run_id": "ea-2026-11-15-01",
+      "content_hash": "bdefb2b45eec3757be23c37a010587eeb21d78bf",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 8,
+        "consensus": 2
+      },
+      "claims": [
+        {
+          "text": "Cenová bariéra, která u mládeže funguje nejsilněji, tak prakticky chybí.",
+          "location": "determinants, odstavec Cena a zdanění (obdobně patient_story: „Cenová páka, která u mladých funguje nejsilněji, tak chybí“)",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "20117579",
+              "doi": "10.1016/j.amepre.2009.11.005",
+              "title": "The effectiveness of tax policy interventions for reducing excessive alcohol consumption and related harms",
+              "year": 2010,
+              "journal": "American Journal of Preventive Medicine",
+              "study_type": "systematic review",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "35661298",
+              "doi": "10.1111/add.15966",
+              "title": "Prices, taxes and alcohol use: a systematic umbrella review",
+              "year": 2022,
+              "journal": "Addiction",
+              "study_type": "systematic review",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "19149811",
+              "doi": "10.1111/j.1360-0443.2008.02438.x",
+              "title": "Effects of beverage alcohol price and tax levels on drinking: a meta-analysis of 1003 estimates from 112 studies",
+              "year": 2009,
+              "journal": "Addiction",
+              "study_type": "meta-analysis",
+              "found_via": "consensus",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakty ověřeny přímo v PubMed. Že cena působí i u mládeže, doloženo je: Elder 2010 (72 prací, Community Guide) uvádí, že většina studií omezených na nezletilé našla souvislost vyšších daní s nižší spotřebou a škodami. Superlativ „nejsilněji“ ale doložen není: Guindon 2022 (umbrella review, 30 přehledů) hlásí podle věku smíšené a rozporuplné důkazy o cenové citlivosti. Wagenaar 2009 doplňuje kontext (elasticita pivo -0,46, víno -0,69, destiláty -0,80; slabší efekt na heavy drinking), věkově srovnání neuvádí. Jedna studie, která superlativ nepodpoří, nestačí na contradicted, proto partial. Česká cenová fakta (levné pivo, nulová spotřební daň na tiché víno) jsou mimo dosah PubMed a nehodnotím je. Evidence je převážně z USA a vysokopříjmových zemí, na ČR ji lze přenést jen orientačně."
+        },
+        {
+          "text": "Reklama na alkohol je v ČR povolena v širokém rozsahu (TV, sport, sociální sítě) a samoregulace je slabá; expozice mládeže reklamě je prokázaným rizikovým faktorem.",
+          "location": "determinants, odstavec Marketing a reklama",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "41162126",
+              "doi": "10.1016/S2468-2667(25)00219-1",
+              "title": "Association between exposure to digital alcohol marketing and alcohol use: a systematic review and meta-analysis",
+              "year": 2025,
+              "journal": "The Lancet. Public Health",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "38803126",
+              "doi": "10.1111/dar.13881",
+              "title": "The impacts of alcohol marketing and advertising, and the alcohol industry's views on marketing regulations: Systematic reviews of systematic reviews",
+              "year": 2024,
+              "journal": "Drug and Alcohol Review",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzuji verdikt rešerše. Riziková část stojí na dvou kvalitních syntézách. Donaldson 2025 (31 studií, 62 703 účastníků, 84 % ve věku 11–17 let): u exponovaných digitálnímu marketingu je šance na pití v posl. 30 dnech OR 1,75 (1,39–2,20), na binge OR 1,80 (1,22–2,67) a na náchylnost k pití u dosud nepijících OR 1,78. Heterogenita je vysoká (I² 88–95 %) a autoři píšou, že časové pořadí expozice a pití je ještě třeba objasnit. Giesbrecht 2024 (23 přehledů) shrnuje souvislost marketingu s úmyslem pít, spotřebou a škodlivým pitím mládeže. „Rizikový faktor“ odpovídá doložené asociaci, kauzalitu syntézy tvrdí opatrněji. Právní část (rozsah povolené reklamy v ČR, slabá samoregulace) je mimo dosah PubMed a nehodnotím ji. Přehled Health Place 2024 o geografické dostupnosti se tohoto tvrzení netýká, proto jsem ho z evidence vyřadil."
+        },
+        {
+          "text": "Zahájení pravidelného pití v adolescenci zvyšuje riziko pozdější závislosti, poškození vyvíjejícího se mozku a rizikového chování (úrazy, nechráněný sex).",
+          "location": "importance",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "16818840",
+              "doi": "10.1001/archpedi.160.7.739",
+              "title": "Age at drinking onset and alcohol dependence: age at onset, duration, and severity",
+              "year": 2006,
+              "journal": "Archives of Pediatrics & Adolescent Medicine",
+              "study_type": "cross-sectional",
+              "found_via": "consensus",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "10784467",
+              "doi": "10.1176/appi.ajp.157.5.745",
+              "title": "Age at first alcohol use: a risk factor for the development of alcohol disorders",
+              "year": 2000,
+              "journal": "American Journal of Psychiatry",
+              "study_type": "cross-sectional",
+              "found_via": "consensus",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakty ověřeny přímo v PubMed. Závislost: Hingson 2006 (n=43 093, průřezový celostátní průzkum v USA) uvádí u začátku pití před 14. rokem oproti začátku v 21 letech a později adj. HR 1,78 (1,51–2,11) pro celoživotní závislost a 1,69 pro závislost do 10 let od prvního pití, po kontrole demografie, kouření, drog, antisociálního chování, deprese a rodinné anamnézy. DeWit 2000 (n=5 856, Ontario Health Survey, retrospektivní analýza přežití nad průřezovým šetřením, proto study_type opraven z cohort na cross-sectional) ukazuje nelineární vztah s nejvyšším rizikem při prvním pití v 11–14 letech. Obě studie měří asociaci s retrospektivně udaným věkem prvního pití, ne „pravidelné pití“, a kauzální „zvyšuje“ jde nad jejich design. Poškození vyvíjejícího se mozku a rizikové chování (úrazy, nechráněný sex) zůstaly neověřené. Proto partial."
+        }
+      ],
+      "summary": {
+        "supported": 1,
+        "partial": 2,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "indicators/alkohol_adolescenti.json → literature (nové pole): Elder et al. 2010, Am J Prev Med (PMID 20117579, DOI 10.1016/j.amepre.2009.11.005, systematic review) — cenový/daňový efekt doložen i u nezletilých, superlativ „nejsilněji“ nedokládá; podklad pro odstavec Cena a zdanění.",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/alkohol_adolescenti.json → literature: Guindon et al. 2022, Addiction (PMID 35661298, DOI 10.1111/add.15966, systematic review) — umbrella review 30 přehledů; věkové rozdíly v cenové citlivosti smíšené, tvrzení „nejsilněji“ nepodporuje.",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/alkohol_adolescenti.json → literature: Donaldson et al. 2025, Lancet Public Health (PMID 41162126, DOI 10.1016/S2468-2667(25)00219-1, meta-analysis) — digitální marketing alkoholu a pití mládeže (OR 1,75 pro pití v posl. 30 dnech); podklad pro odstavec Marketing a reklama.",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/alkohol_adolescenti.json → literature: Giesbrecht et al. 2024, Drug Alcohol Rev (PMID 38803126, DOI 10.1111/dar.13881, systematic review) — přehled 23 přehledů o dopadech marketingu alkoholu na mládež; podklad pro odstavec Marketing a reklama.",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/alkohol_adolescenti.json → literature: Hingson et al. 2006, Arch Pediatr Adolesc Med (PMID 16818840, DOI 10.1001/archpedi.160.7.739, cross-sectional) — začátek pití před 14. rokem a celoživotní závislost (adj. HR 1,78); podklad pro větu o závislosti v importance.",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/alkohol_adolescenti.json → literature: DeWit et al. 2000, Am J Psychiatry (PMID 10784467, DOI 10.1176/appi.ajp.157.5.745, cross-sectional) — první pití v 11–14 letech a rozvoj poruch užívání alkoholu; podklad pro větu o závislosti v importance.",
+          "ref": ""
+        }
+      ],
+      "followup": "importance: neověřeno poškození vyvíjejícího se mozku ani rizikové chování (úrazy, nechráněný sex) u adolescentního pití; validita self-reportu ESPAD (measurement) nehodnocena — strop volání PubMed; česká právní a cenová fakta (rozsah reklamy, slabá samoregulace, nulová spotřební daň na tiché víno, levné pivo) jsou mimo dosah PubMed. K redakci: superlativ „nejsilněji“ v determinants a patient_story evidence nedokládá (Guindon 2022: věkové rozdíly smíšené); „zvyšuje riziko“ v importance stojí na asociačních studiích věku prvního pití.",
+      "notes": "Karta alkohol_adolescenti necituje žádnou literaturu (jen zdroje ESPAD/HBSC, EUDA), takže found_via article nepřichází v úvahu. Z 3 tvrzení jsem vybral kauzální věty z determinants/importance a nehodnotil jsem validitu ukazatele (measurement): PubMed dotaz na validitu self-reportu alkoholu u adolescentů vrátil jen seznam PMID bez zřejmého ESPAD/validačního přehledu a metadata jsem pro něj kvůli stropu 8 volání nestahoval, takže validita self-reportu zůstává nehodnocena (follow-up). PubMed 7 volání (4 search, 2 get_article_metadata, 1 lookup_article_by_citation); druhé metadata volání jsem zbytečně spotřeboval na nerelevantní PMID z prvního dotazu. Consensus 2 dotazy (cena/daň, věk začátku), bez 429. Studie z Consensu jsem v PubMed ověřil jen lookupem podle citace (existence, PMID shodné s DOI/časopisem); u nich nejsou ověřeny retrakce ani abstrakt přímo v PubMed, proto confidence nejvýš medium. Nepoužil jsem kohortu Fairman 2019 ani Paschall 2009 (PubMed neověřeny). Nic jsem needitoval, žádný git. | Adjudikace (Opus): jedno volání PubMed get_article_metadata na 7 PMID. Všechny abstrakty jsou teď ověřené přímo v PubMed, nejen podle lookupu citace, a žádná studie nemá v PubMed označení retrakce. Finální verdikty: 1 supported (marketing), 2 partial (cena „nejsilněji“, důsledky raného pití); contradicted není, takže flagged ani issue nejsou potřeba. Opravy proti rešerši: DeWit 2000 je retrospektivní analýza nad průřezovým šetřením, study_type změněn z cohort na cross-sectional; vztah Elder 2010 přeřazen ze supports na partial (dokládá cenový efekt u nezletilých, ale ne „nejsilněji“); Health Place 2024 vyřazen z evidence tvrzení o marketingu (týká se geografické dostupnosti). prose_change zůstává prázdný: oddíl „Co smí audit měnit“ u karty indikátoru povoluje jen pole literature a jednu větu v limitations u verdiktu measurement, determinants ani importance karty audit nepřepisuje. K posouzení redakcí: (a) superlativ „nejsilněji“ v determinants i v patient_story, možná formulace „Cenová bariéra, která podle přehledů snižuje pití i u nezletilých (Elder 2010, PMID 20117579), tak prakticky chybí.“; (b) „zvyšuje riziko“ v importance stojí na asociačních studiích věku prvního pití, ne pravidelného pití. | Zápis (Opus): v kartě založeno pole literature se 6 studiemi (supported/partial); Wagenaar 2009 (relation context) do literature nepřidán. Prose karty beze změny, audit-status ani audit.notes indikátor nemá."
+    },
+    {
+      "id": "indicator:ambulantni_kontakty_per_capita",
+      "type": "indicator",
+      "checked_at": "2026-11-15",
+      "run_id": "ea-2026-11-15-01",
+      "content_hash": "5f18de27034979604340866b895bd1af4459d134",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 10,
+        "consensus": 1
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Signál je neutrální: vysoká hodnota sama o sobě není dobrá ani špatná, záleží na tom, co se při návštěvách děje.",
+          "location": "patient_story, 2. odstavec (direction: context_dependent)",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "low",
+          "evidence": [
+            {
+              "pmid": "30910875",
+              "doi": "10.3399/bjgp19X702209",
+              "title": "Impact of GP gatekeeping on quality of care, and health outcomes, use, and expenditure: a systematic review.",
+              "year": 2019,
+              "journal": "Br J Gen Pract",
+              "study_type": "systematic review",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "33469932",
+              "doi": "10.1002/14651858.CD011865.pub2",
+              "title": "Payment methods for healthcare providers working in outpatient healthcare settings.",
+              "year": 2021,
+              "journal": "Cochrane Database Syst Rev",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Tvrzení je metodické rozhodnutí karty, abstrakty ho ale nepřímo podpírají. Sripa 2019 (25 studií): gatekeeping přes praktika souvisel s lepší kvalitou péče a nižším celkovým využitím a výdaji, a přitom s VÍCE návštěvami v primární péči. Vyšší počet kontaktů tak může provázet lépe koordinovanou péči. Jia 2021 (Cochrane, 27 studií): lékaři placení za výkon možná vidí víc zdravých pacientů (low certainty), což může znamenat zbytečné služby. Stejné číslo tedy může mít opačný význam. Indikátor jako validitu ukazatele výkonu to přímo netestuje, proto partial s nízkou jistotou."
+        },
+        {
+          "claim_id": "",
+          "text": "Strukturálně vysoké ambulantní kontakty kombinují české kulturní očekávání („chci slyšet od doktora\"), úhradový systém (výkon-based platby motivují k častějším návštěvám), a fragmentaci péče (4–6 specialistů u multimorbidního pacienta).",
+          "location": "patient_story, 3. odstavec",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "10908531",
+              "doi": "10.1002/14651858.CD002215",
+              "title": "Capitation, salary, fee-for-service and mixed systems of payment: effects on the behaviour of primary care physicians.",
+              "year": 2000,
+              "journal": "Cochrane Database Syst Rev",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "11219360",
+              "doi": "10.1258/1355819011927198",
+              "title": "Impact of payment method on behaviour of primary care physicians: a systematic review.",
+              "year": 2001,
+              "journal": "J Health Serv Res Policy",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "33469932",
+              "doi": "10.1002/14651858.CD011865.pub2",
+              "title": "Payment methods for healthcare providers working in outpatient healthcare settings.",
+              "year": 2021,
+              "journal": "Cochrane Database Syst Rev",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Partial potvrzen. Doložena je jen složka o úhradách: Gosden 2000 (Cochrane, 4 studie, 640 lékařů): platba za výkon (FFS) vedla k více návštěvám a kontaktům v primární péči a k více návštěvám u specialistů než kapitace. Gosden 2001 je časopisecká verze téhož přehledu (6 studií), nejde o nezávislé potvrzení. Jia 2021 (Cochrane): efekt čisté FFS na počet ambulantních návštěv je nejistý (very low certainty). Smíšená FFS může zvýšit objem služeb (RR 1,37; 95% CI 1,07–1,76; low certainty). Všechny přehledy upozorňují na nejasnou zobecnitelnost a evidence pochází ze zahraničí, přenositelnost na ČR je tedy nepřímá. Kulturní očekávání ani číslo „4–6 specialistů“ abstrakty neobsahují, proto nejvýš partial."
+        },
+        {
+          "claim_id": "",
+          "text": "Země se silnou primární péčí, jako Nizozemsko, mají kontaktů méně a výsledky srovnatelné nebo lepší — systém integruje péči přes praktického lékaře.",
+          "location": "patient_story, 4. odstavec",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "12822915",
+              "doi": "10.1111/1475-6773.00149",
+              "title": "The contribution of primary care systems to health outcomes within Organization for Economic Cooperation and Development (OECD) countries, 1970-1998.",
+              "year": 2003,
+              "journal": "Health Serv Res",
+              "study_type": "cross-sectional",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "30910875",
+              "doi": "10.3399/bjgp19X702209",
+              "title": "Impact of GP gatekeeping on quality of care, and health outcomes, use, and expenditure: a systematic review.",
+              "year": 2019,
+              "journal": "Br J Gen Pract",
+              "study_type": "systematic review",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakty jsou teď načtené přes PubMed, proto unclear měním na partial. Výsledková část sedí. Macinko 2003 (18 zemí OECD, 1970–1998, panelová regrese s fixními efekty): silnější primární péče souvisela s nižší celkovou i předčasnou úmrtností. Souvislost platila i po kontrole průměrného počtu ambulantních návštěv. Sripa 2019: gatekeeping souvisel s lepší kvalitou a nižším celkovým využitím péče. Část o počtu kontaktů evidence nepodpírá. Podle Sripy gatekeeping ubírá návštěvy u specialistů a hospitalizace, ale návštěv v primární péči přidává, takže „kontaktů méně“ obecně neplyne. Údaj, že Nizozemsko má méně konzultací na obyvatele než ČR, je datový údaj OECD Health Statistics. Abstrakty ho neobsahují a v tomto auditu ověřen nebyl, posouzení zůstává na redakci."
+        }
+      ],
+      "summary": {
+        "supported": 0,
+        "partial": 3,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "indicators/ambulantni_kontakty_per_capita.json → literature: Gosden et al. 2000, Cochrane Database Syst Rev (PMID 10908531, DOI 10.1002/14651858.CD002215); časopisecká verze Gosden 2001 (PMID 11219360) jen v poznámce",
+          "ref": "10908531"
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/ambulantni_kontakty_per_capita.json → literature: Jia et al. 2021, Cochrane Database Syst Rev (PMID 33469932, DOI 10.1002/14651858.CD011865.pub2)",
+          "ref": "33469932"
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/ambulantni_kontakty_per_capita.json → literature: Sripa et al. 2019, Br J Gen Pract (PMID 30910875, DOI 10.3399/bjgp19X702209)",
+          "ref": "30910875"
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/ambulantni_kontakty_per_capita.json → literature: Macinko et al. 2003, Health Serv Res (PMID 12822915, DOI 10.1111/1475-6773.00149)",
+          "ref": "12822915"
+        },
+        {
+          "type": "card-note",
+          "detail": "indicators/ambulantni_kontakty_per_capita.json → limitations: připojena jedna věta k measurement verdiktu partial (stejný počet kontaktů může znamenat koordinovanou primární péči i výkonově motivované návštěvy; Sripa et al., Br J Gen Pract 2019; PMID 30910875)",
+          "ref": "30910875"
+        }
+      ],
+      "followup": "Neověřeno: (1) údaj, že Nizozemsko má méně konzultací lékaře na obyvatele než ČR (datový údaj OECD Health Statistics, abstrakty ho neobsahují); (2) „kulturní očekávání“ a číslo „4–6 specialistů u multimorbidního pacienta“ v patient_story, 3. odstavec, bez opory v literatuře; (3) redakce by měla zvážit formulaci „kontaktů méně“ ve 4. odstavci, podle Sripa 2019 silná primární péče celkový počet kontaktů nutně nesnižuje; (4) vynecháno normativní tvrzení o politických pákách (kapitace podle UK modelu, telemedicína, e-konzultace); (5) strop PubMed v rešerši překročen, abstrakty dvou kandidátů z Consensu nebyly načteny.",
+      "notes": "Karta indikátoru neobsahuje odkaz na literaturu, takže nebylo co ověřovat přes found_via article. Dostupné byly PubMed i Consensus. Rešerše: PubMed 9 volání (strop 8 překročen o jedno při ověřování kandidátů z Consensu), Consensus 1 dotaz bez 429; dotazy na českou literaturu a na validitu ukazatele konzultací nic nevrátily. Prahy (good 10 %, warn 15 %) karta nepřipisuje literatuře, proto nejsou mezi tvrzeními. claim_id je prázdný, protože data/claims.json eviduje tvrzení článků, ne kartu indikátoru. Adjudikace: 1 volání PubMed (get_article_metadata pro 5 PMID), všech 5 studií existuje. Finální verdikty 3× partial (tvrzení 1 z no-evidence, tvrzení 3 z unclear, tvrzení 2 potvrzeno), contradicted 0, takže flagged ani issue nevznikají. Gosden 2001 je druhá publikace téhož přehledu jako Cochrane 2000, proto je v literature karty jen v poznámce. DOI u Macinko 2003 doplněno z PubMed. prose_change prázdné: u karty audit smí měnit jen pole literature a jednu větu do limitations u measurement verdiktu."
     }
   ]
 }
