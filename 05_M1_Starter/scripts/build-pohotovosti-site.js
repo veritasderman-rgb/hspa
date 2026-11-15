@@ -36,7 +36,10 @@ export const DEFAULT_OUT = resolve(ROOT, 'dist-pohotovosti');
 
 export const SRC_FILES = ['pohotovosti.js', 'pohotovosti-engine.js', 'pohotovost-okres.js', 'styles.min.css'];
 export const DATA_FILES = ['pohotovosti.json', 'pohotovosti-akutni.json', 'pohotovosti-okresy.json', 'obce-gps.json', 'dojezdy.json', 'cz-regions.geojson'];
-export const ASSET_FILES = ['assets/vendor/echarts.min.js', 'assets/brand/favicon.svg', 'assets/brand/favicon-32.png', 'assets/brand/apple-touch-icon.png', 'assets/brand/og-default.png', 'assets/brand/compass-mark.svg'];
+export const ASSET_FILES = ['assets/vendor/echarts.min.js', 'assets/brand/favicon.svg', 'assets/brand/favicon-32.png', 'assets/brand/apple-touch-icon.png', 'assets/brand/og-default.png', 'assets/brand/compass-mark.svg',
+  // Písma, na která odkazuje styles.min.css (@font-face → ../assets/fonts/).
+  'assets/fonts/inter-latin-wght-normal.woff2', 'assets/fonts/inter-latin-ext-wght-normal.woff2',
+  'assets/fonts/source-serif-4-latin-opsz-normal.woff2', 'assets/fonts/source-serif-4-latin-ext-opsz-normal.woff2'];
 
 export function loadConfig(root = ROOT) {
   return JSON.parse(readFileSync(resolve(root, 'data/pohotovosti-site.json'), 'utf8'));
@@ -274,7 +277,7 @@ export function build({ out = DEFAULT_OUT, root = ROOT, quiet = false } = {}) {
   const okresy = okresManifest.okresy ?? [];
 
   rmSync(out, { recursive: true, force: true });
-  for (const d of ['src', 'data', 'assets/vendor', 'assets/brand']) mkdirSync(join(out, d), { recursive: true });
+  for (const d of ['src', 'data', 'assets/vendor', 'assets/brand', 'assets/fonts']) mkdirSync(join(out, d), { recursive: true });
 
   const written = [];
   const put = (rel, content) => { writeFileSync(join(out, rel), content); written.push(rel); };

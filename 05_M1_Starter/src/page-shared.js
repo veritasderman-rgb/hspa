@@ -378,7 +378,7 @@ ${kafeStripHtml()}
     <div class="row">
       <div>
         <h4 class="footer-col-h">O projektu</h4>
-        <p>Občanská implementace OECD HSPA rámce pro ČR. Autor: Josef Pavlovic. Není oficálním portálem MZČR.</p>
+        <p>Občanská implementace OECD HSPA rámce pro ČR. Autor: Josef Pavlovic. Není oficiálním portálem MZČR.</p>
         <p><a href="o-projektu.html">Metodika, zdroje a disclaimer →</a></p>
       </div>
       <div>
@@ -405,8 +405,8 @@ ${kafeStripHtml()}
       </div>
     </div>
     <div class="disclaimer">
-      Josef Pavlovic · CC-BY 4.0 · Není oficálním portálem MZČR ani OECD ·
-      Citujte: Pavlovic, J. (2026). HSPA Monitor. hspa-cesko.cz
+      Josef Pavlovic · CC-BY 4.0 · Není oficiálním portálem MZČR ani OECD ·
+      Citujte: Pavlovic, J. (2026). HSPA Monitor. skorezdravotnictvi.cz
     </div>
   `;
   injectScrollToTop();
