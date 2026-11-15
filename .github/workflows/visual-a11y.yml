@@ -67,7 +67,11 @@ jobs:
   e2e:
     needs: zmeny
     if: needs.zmeny.outputs.frontend == 'true'
-    runs-on: ubuntu-latest
+    # Připnuto na 24.04: ubuntu-latest přešel na 26.04, pro který Playwright
+    # 1.60 neumí nainstalovat Chromium („does not support chromium on
+    # ubuntu26.04-x64“) a job padal na každém PR. Baseline snímky navíc vznikly
+    # na 24.04. Uvolnit až s verzí Playwrightu, která 26.04 podporuje.
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     permissions:
       contents: write
