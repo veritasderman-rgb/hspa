@@ -1,6 +1,6 @@
 // Vložitelná (embed) karta jednoho indikátoru — pro iframe na cizích webech
 // (novináři, úřady, partneři). Záměrně bez nav/footeru, jen samostatná karta:
-//   <iframe src="https://hspa-cesko.cz/embed.html?id=nadeje_doziti_total"
+//   <iframe src="https://skorezdravotnictvi.cz/embed.html?id=nadeje_doziti_total"
 //           width="340" height="220" style="border:0" loading="lazy"></iframe>
 //
 // Renderuje: název, hodnota+jednotka, rok, signal pill, benchmark, odznak
@@ -10,7 +10,7 @@
 import { escapeHtml, resolveVerificationStatus } from './page-shared.js';
 
 const DATA_URL = 'data/indicators.json';
-const SITE_BASE = 'https://hspa-cesko.cz';
+const SITE_BASE = 'https://skorezdravotnictvi.cz';
 
 const SIGNAL_LABELS = {
   good: 'Dobré', warn: 'Ke sledování', bad: 'Kritické', neutral: 'Bez benchmarku',
