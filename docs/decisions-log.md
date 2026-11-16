@@ -6,6 +6,13 @@ Formát: každá položka má `Datum`, `PR`, `Co`, `Proč`, `Důsledek`.
 
 ---
 
+## 2026-11-16 — Srovnávač pojišťoven zveřejněn, nová sekce Pojišťovny v navigaci (rozhodnutí vydavatele)
+
+- **PR**: „zveřejnění srovnávače pojišťoven“, třída C (odstranění `middleware.js`, `page-shared.js`, stránky do indexu); připravila AI na přímé zadání vydavatele, merguje vydavatel
+- **Co**: krok P5.1 z `PLAN-SROVNAVAC-POJISTOVEN.md`. (1) `middleware.js` s HTTP Basic Auth (`POJISTOVNY_HESLO`) smazán; stránky i `data/pojistovny*.json` jsou veřejné. (2) Jedenáct stránek (`pojistovny.html`, devět podstránek, `pojistovna.html`) má `robots: index, follow`, z titulků zmizelo „pracovní verze“. (3) Pásek v hlavičce srovnávače zní „První veřejná verze“ a dál říká, že čísla z výročních zpráv čekají na druhé ověření. (4) Stránky jsou v `STATIC_PAGES` a v `sitemap.xml`. (5) Hlavní navigace má desátou položku **Pojišťovny** s osmi odkazy; mezery mezi položkami jsou na šířkách 721–1480 px zúžené, aby se hlavička nezalomila. (6) Z přehledu odstraněna interní věta o hledání názvu projektu.
+- **Proč**: vydavatel 16. 11. 2026 rozhodl stránku zveřejnit. Plán původně vázal zveřejnění na rozhodnutí pracovní skupiny; vydavatel to rozhodnutí převzal.
+- **Důsledek**: heslo ani `noindex` na stránky srovnávače nevracet. Proměnná `POJISTOVNY_HESLO` ve Vercelu je nepoužitá a dá se smazat. Semafor zůstává prázdný („zatím nehodnoceno“) a `data/pojistovny-semafor.json` je dál třída C: verdikty o jmenovaných pojišťovnách vznikají až po právu na odpověď. Stav datasetu `pracovni-navrh` v `data/pojistovny.json` se zveřejněním nemění, mění ho až druhé ověření čísel. Přidání další položky do hlavní navigace už se na jeden řádek nevejde.
+
 ## 2026-11-12 — Příspěvky pojišťoven: audit nároku, stropů a pořadí podmínek
 
 - **PR**: „audit stránky Příspěvky“, třída B podle `npm run pr:gate` (data a kód stránky pod heslem; reviduje editor)

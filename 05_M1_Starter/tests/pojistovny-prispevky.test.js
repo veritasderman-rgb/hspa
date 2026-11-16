@@ -373,18 +373,18 @@ test('ověřovač citací: převod HTML na text, porovnání bez bílých znaků
   assert.ok(items.length > 0 && items.every((i) => i.kod === '111' && i.url && i.citace));
 });
 
-test('stránka a zapojení: kontejnery, záložka, noindex, sitemap, e2e seznamy', () => {
+test('stránka a zapojení: kontejnery, záložka, index, sitemap, e2e seznamy', () => {
   const html = read('pojistovny-prispevky.html');
   for (const id of ['zpShell', 'zpMojeZp', 'zpPrispevky', 'zpZdroje']) assert.match(html, new RegExp(`id="${id}"`));
   assert.match(html, /data-aktivni="prispevky"/);
-  assert.match(html, /<meta name="robots" content="noindex, nofollow, noarchive">/);
+  assert.match(html, /<meta name="robots" content="index, follow">/);
   assert.match(html, /src="src\/pojistovny-prispevky\.js"/);
   assert.match(html, /nejsou nárokové/);
   assert.match(html, /není hodnocení pojišťovny/);
   const s = ZP_STRANKY.find((x) => x.id === 'prispevky');
   assert.equal(s.href, 'pojistovny-prispevky.html');
   assert.equal(s.skupina, 'pojistenci');
-  assert.match(read('scripts/generate-sitemap.js'), /'\/pojistovny-prispevky\.html': \{ typ: 'noindex'/);
+  assert.match(read('scripts/generate-sitemap.js'), /\{ loc: '\/pojistovny-prispevky\.html',/);
   assert.match(read('tests/e2e/a11y.spec.js'), /pojistovny-prispevky\.html/);
   assert.match(read('tests/e2e/visual.spec.js'), /pojistovny-prispevky\.html/);
   assert.match(read('tests/a11y/axe-scan.mjs'), /'pojistovny-prispevky\.html'/);

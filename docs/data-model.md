@@ -1565,7 +1565,7 @@ dávku (default 12 článků + 8 indikátorů), `--hash <soubor>` spočítá has
 
 ## 25. Srovnávač pojišťoven — `data/pojistovny*.json` + `data/zadosti-106.json` (kurátorované)
 
-Stránka `pojistovny.html` (pracovní verze pod heslem) čte jen tyto soubory; každý je
+Stránka `pojistovny.html` (veřejná od 16. 11. 2026) čte jen tyto soubory; každý je
 nepovinný (chybí-li, modul vypíše „data zatím nejsou k dispozici“). Plán a balíčky:
 `05_M1_Starter/PLAN-SROVNAVAC-POJISTOVEN.md`, metodika `docs/metodika-srovnavac-pojistoven.md`,
 validátor `ingest/validate-pojistovny.js`. Číselné položky mají obálku
