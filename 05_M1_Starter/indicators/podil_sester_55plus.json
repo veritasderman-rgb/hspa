@@ -1,0 +1,64 @@
+{
+  "id": "podil_sester_55plus",
+  "name": "Podíl sester ve věku 55 a více let",
+  "area": "Struktury",
+  "domain": "Pracovní síla",
+  "subdomain": "Věková struktura",
+  "definition": "Podíl praktikujících sester ve věku 55 a více let na celkovém počtu praktikujících sester (v %, osoby, ne úvazky). Sestrami se tu rozumí kategorie Eurostatu „Nurses (EU recognised qualification)“, tedy sestry s kvalifikací uznávanou podle evropské směrnice o uznávání odborných kvalifikací; v Česku jde o všeobecné sestry podle § 5 zákona č. 96/2004 Sb. Praktické sestry (§ 21b) a porodní asistentky v ukazateli nejsou. Ukazatel měří, jak velká část sesterské pracovní síly se blíží důchodovému věku a bude v horizontu 5–15 let z profese odcházet. Je předstihový: vysoký a rostoucí podíl sester 55+ znamená, že bez dostatečného přílivu mladších sester hrozí propad počtu lidí u lůžka i v terénní péči. Věková hranice 55 let odpovídá metodice Eurostatu a OECD a podílu lékařů 55+ (podil_lekaru_55plus), se kterým se ukazatel čte vedle sebe. Liší se od hustoty sester (sestry_per_1000), která měří dnešní počet, i od počtu absolventů ošetřovatelství (absolventi_osetrovatelstvi_per_100k), který měří příliv.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "eurostat",
+      "endpoint": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/hlth_rs_nurse?format=JSON&lang=EN&geo=CZ&sex=T&unit=NR",
+      "dataset": "Eurostat hlth_rs_nurse — Nurses by age and sex (počet osob, praktikující sestry s kvalifikací uznávanou v EU). Aktualizace datasetu 13. 7. 2026. Národním zdrojem je ÚZIS ČR (Národní registr zdravotnických pracovníků), data se sbírají společným dotazníkem Eurostat/OECD/WHO podle nařízení Komise (EU) 2022/2294.",
+      "dimensions": {
+        "unit": "NR — počet osob",
+        "sex": "T — celkem",
+        "age": "TOTAL, Y_LT25, Y25-34, Y35-44, Y45-54, Y55-64, Y65-74, Y_GE75; podíl 55+ = (Y55-64 + Y65-74 + Y_GE75) / TOTAL",
+        "geo": "CZ (srovnání DE, AT, SK + průměr 14 zemí EU s úplným věkovým rozpadem)"
+      },
+      "note": "Česko věkový rozpad sester do Eurostatu vykazuje od roku 2022. Počty CZ (TOTAL / 55–64 / 65–74 / 75+): 2022 86 235 / 16 997 / 4 347 / 499 → 21 843 = 25,3 %; 2023 86 086 / 17 492 / 4 869 / 606 → 22 967 = 26,7 %; 2024 87 159 / 18 300 / 5 254 / 718 → 24 272 = 27,8 % (přesně 27,85). Součet věkových skupin se ve všech třech letech rovná celku. Celek 87 159 (2024) je shodný s hlth_rs_prs2 (med_spec Nurses EU recognised qualification, wstatus PRACT). Hodnota je zapsaná ručně, stávající eurostat fetcher podíl z věkových skupin nepočítá.",
+      "verification": {
+        "date": "2026-11-16",
+        "source_url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/hlth_rs_nurse?format=JSON&lang=EN&geo=CZ&sex=T&unit=NR",
+        "quote": "hlth_rs_nurse, geo=CZ, sex=T, unit=NR, 2024: TOTAL 87159, Y_LT25 2197, Y25-34 9522, Y35-44 20341, Y45-54 30827, Y55-64 18300, Y65-74 5254, Y_GE75 718; dataset updated 2026-07-13T11:00:00+0200",
+        "note": "Staženo přímo z API Eurostatu 16. 11. 2026 a přepočteno; české hodnoty nemají příznak (žádné e/b/d). Německo a Rakousko mají u všech věkových skupin příznak e (odhad), Slovensko d (odlišná definice) a nevykazuje skupinu 75+.",
+        "live_feasible": "eurostat",
+        "mapping_spec": "Dataset hlth_rs_nurse, geo=CZ, sex=T, unit=NR, freq=A; hodnota = (Y55-64 + Y65-74 + Y_GE75) / TOTAL × 100. Vyžaduje rozšíření eurostat fetcheru o výpočet podílu z více řad; benchmark = prostý průměr podílů zemí EU s úplným věkovým rozpadem (agregát EU27 se nepublikuje)."
+      }
+    },
+    "fallback": {
+      "type": "uzis_nrzp",
+      "url": "https://www.uzis.cz/res/f/008452/nzis-rep-2023-e04-personalni-kapacity-odmenovani-2023.pdf",
+      "dataset": "ÚZIS ČR — Národní registr zdravotnických pracovníků; roční report „Zdravotnictví ČR: Personální kapacity a odměňování“",
+      "note": "ÚZIS vykazuje sestry v přepočtených úvazcích: všeobecná sestra § 5 = 78 012 úvazků, dětská sestra § 5a = 5 955, praktická sestra § 21b = 7 857 (2023). Úvazky nejsou totéž co počet osob v Eurostatu a věkovou strukturu report neuvádí; slouží ke kontrole řádu velikosti."
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat",
+    "code": "hlth_rs_nurse",
+    "dataset": "Eurostat pro tento dataset nepublikuje agregát EU27. Benchmarkem je prostý (nevážený) průměr podílů 55+ za rok 2024 ve 14 členských státech EU s úplným věkovým rozpadem (CZ, DK, DE, EE, IE, HR, IT, LV, LT, HU, NL, AT, RO, SI): 25,4 % (přesně 25,43). Vážený průměr týchž zemí je 25,3 %, medián 25,9 %. Rozpětí: Litva 48,0, Lotyšsko 41,6, Dánsko 29,5, Estonsko 29,1, Česko 27,8 (5. nejvyšší), Maďarsko 26,5, Itálie 26,4, Německo 25,3, Nizozemsko 24,6, Rakousko 20,8, Irsko 15,9, Chorvatsko 13,9, Rumunsko 13,3, Slovinsko 13,2. Slovensko (28,4 %) a další země bez skupiny 75+ v průměru nejsou. Postup odpovídá precedentu u podil_lekaru_55plus. Řádově sedí s výrokem Evropské komise a OECD (Health at a Glance: Europe 2024), že čtvrtině sester v EU je 55 a více let.",
+    "value": 25.4,
+    "url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_rs_nurse/default/table"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 20
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS ČR (Národní registr zdravotnických pracovníků, vykazování do Eurostatu/OECD)",
+    "Ministerstvo zdravotnictví ČR (odbor ošetřovatelství a nelékařských povolání, kapacity vzdělávání)",
+    "Ministerstvo školství, mládeže a tělovýchovy (vyšší odborné a vysoké školy)",
+    "Česká asociace sester (profesní organizace)",
+    "Eurostat / OECD (mezinárodní harmonizace)"
+  ],
+  "method_notes": "Ověřeno 16. 11. 2026 přímo z API Eurostatu (hlth_rs_nurse, aktualizace 13. 7. 2026). Podíl 55+ = (55–64 + 65–74 + 75+) / všechny praktikující sestry, vlastní výpočet. ČR: 2022 25,3 % / 2023 26,7 % / 2024 27,8 %. Sousedé (týž dataset): Německo 24,9 / 25,3 / 25,3 %, Rakousko 21,0 / 22,7 / 20,8 %, Slovensko 27,3 / 27,8 / 28,4 % (bez skupiny 75+, mírné podhodnocení); Polsko věkový rozpad sester do Eurostatu nevykazuje. Benchmark EU = prostý průměr 14 členských států s úplným věkovým rozpadem za rok 2024, 25,4 %. Signál: (27,8 − 25,4) / 25,4 = +9,4 % nad benchmarkem při směru lower_is_better → podle prahů karty (good 5, warn 20) warn. Prahy jsou stejné jako u podil_lekaru_55plus, aby šly oba ukazatele číst vedle sebe. Kontext věkové struktury 2024: pod 35 let 11 719 sester (13,4 %), 45–54 let 30 827 (35,4 %), 65 a více let 5 972 (6,9 %).",
+  "limitations": "1. **Krátká řada** — Česko věkový rozpad sester vykazuje do Eurostatu až od roku 2022, k dispozici jsou tedy jen tři body (2022–2024). Dvouletý nárůst o 2,5 procentního bodu je zřetelný, ale nejde z něj spolehlivě odvodit dlouhodobý trend. 2. **Benchmark z podmnožiny zemí** — Eurostat nepublikuje agregát EU27; průměr 25,4 % je vlastní výpočet ze 14 členských států, které vykazují všechny věkové skupiny za rok 2024. Chybí mimo jiné Francie, Španělsko, Finsko, Slovensko (bez skupiny 75+) a Polsko. 3. **Definice „sestry“ podle národního vykazování** — kategorie Nurses (EU recognised qualification) zahrnuje v Česku všeobecné sestry, nikoli praktické sestry; OECD ve svém ukazateli sester celkem praktické sestry počítá, proto se celkové počty liší (sestry_per_1000). Německé a rakouské údaje Eurostat značí jako odhad, slovenské jako odlišnou definici. 4. **Osoby, ne úvazky** — podíl se počítá z počtu osob; starší sestry mohou pracovat na zkrácený úvazek, takže podíl na odpracované kapacitě může být jiný. 5. **Celostátní průměr zakrývá segmenty a kraje** — data Eurostatu nerozlišují nemocnice, ambulance, domácí péči ani sociální služby a nejsou po krajích.",
+  "determinants": "**Generační obměna.** Klíčové je, zda počet absolventek a absolventů, kteří do praxe skutečně nastoupí, stačí nahradit odcházející ročníky. Od roku 2022 do roku 2024 ubylo sester ve věku 25–34 let (10 398 → 9 522) i 35–44 let (21 787 → 20 341).\n\n**Velký ročník 45–54 let.** Nejpočetnější věková skupina (30 827 sester v roce 2024) přejde do skupiny 55+ během příštích deseti let; podíl starších sester tak poroste, i když se nic dalšího nezmění.\n\n**Délka profesní kariéry.** Sester ve věku 65 a více let přibývá (4 846 v roce 2022, 5 972 v roce 2024). Demografická studie Čábela, Patáková a Šídlo (Health Services Insights, 2026) ukazuje, že sestry po dosažení důchodového věku pracují méně často než lékaři, takže jejich odchod je pro systém rizikovější.\n\n**Atraktivita a udržení v profesi.** Pracovní podmínky, směnnost, odměňování a podpora na začátku kariéry ovlivňují, kolik studujících a čerstvých sester v profesi zůstane.\n\n**Vzdělávací cesta.** Odborná způsobilost všeobecné sestry vyžaduje nejméně tříleté bakalářské studium nebo tříleté studium diplomované všeobecné sestry na vyšší odborné škole (§ 5 zákona č. 96/2004 Sb.); kapacity těchto škol a míra dokončení studia určují příliv.",
+  "importance": "Sestry tvoří největší profesní skupinu zdravotnictví a bez nich nefungují lůžka, jednotky intenzivní péče, domácí péče ani dlouhodobá péče. Podíl sester ve věku 55 a více let je předstihový ukazatel: ukazuje riziko dřív, než se projeví zavřeným oddělením nebo odmítnutým pacientem. Když podíl roste a příliv mladších sester stagnuje, systém v horizontu deseti let přijde o velkou část zkušené pracovní síly právě v době, kdy kvůli stárnutí populace poptávka po ošetřovatelské péči poroste.\n\nZ pohledu HSPA jde o strukturální ukazatel pracovní síly, který se přímo dotýká dostupnosti (bude mít kdo pečovat?) a nepřímo kvality a bezpečnosti péče. Mezinárodní srovnatelnost metodiky Eurostatu umožňuje odlišit český vývoj od sdíleného evropského trendu.\n\nIndikátor se čte společně s hustotou sester (sestry_per_1000), počtem absolventů ošetřovatelství (absolventi_osetrovatelstvi_per_100k), platem sester (plat_sestry_platova_sfera) a podílem lékařů 55+ (podil_lekaru_55plus).",
+  "patient_story": "Představte si modelovou situaci, ne skutečný případ: interní oddělení okresní nemocnice, noční směna. Službu mají tři sestry. Staniční je 61 let, druhé sestře 57 a třetí, nejmladší, 29. Staniční za rok může do důchodu a vedení zatím neví, kdo ji nahradí, protože na inzerát na místo všeobecné sestry se od jara přihlásila jediná uchazečka. Pro pacienty na oddělení se nic nemění, dokud obě starší sestry chodí do práce. Celý provoz ale stojí na lidech, kteří budou během několika let odcházet.\n\nČesko mělo v roce 2024 podle Eurostatu 27,8 % praktikujících sester ve věku 55 a více let. Průměr 14 členských států EU s úplnými daty je 25,4 %, Česko je pátá nejvyšší hodnota z nich. Ještě v roce 2022 přitom bylo starších sester 25,3 % a v roce 2023 26,7 %. Za dva roky tedy podíl stoupl o 2,5 procentního bodu, zatímco celkový počet sester zůstal kolem 86 až 87 tisíc. Sester ve věku 65 a více let přibylo ze 4 846 na 5 972.\n\nZa nárůstem stojí věková struktura. Nejpočetnější skupinou jsou sestry ve věku 45 až 54 let, v roce 2024 jich bylo 30 827, a ty se do deseti let samy přesunou do skupiny 55+. Mladších ročníků naopak ubývá: sester ve věku 25 až 34 let bylo v roce 2022 celkem 10 398, v roce 2024 už 9 522. Česká demografická studie z roku 2026 navíc upozorňuje, že sestry po dosažení důchodového věku pracují méně často než lékaři, takže jejich odchod přichází rychleji.\n\nPáky jsou dvě a obě jsou v rukou státu, krajů a zaměstnavatelů. První je příliv: kapacity bakalářského a vyššího odborného studia, podpora studujících a hlavně udržení absolventů v profesi v prvních letech praxe. Druhá je udržení zkušených sester: zkrácené úvazky, méně nočních směn a práce, která starší sestru fyzicky nevyčerpá. Kompetenci má ministerstvo zdravotnictví a ministerstvo školství, kraje jako zřizovatelé nemocnic a škol a zdravotní pojišťovny přes úhrady ošetřovatelské péče. Pro oddělení z modelové situace je otázka jednoduchá: kdo bude sloužit noční směnu za pět let.",
+  "framework": "hspa",
+  "dimension": "dostupnost"
+}
