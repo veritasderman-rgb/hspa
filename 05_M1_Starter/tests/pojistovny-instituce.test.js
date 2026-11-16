@@ -209,10 +209,10 @@ test('shell: záložka Instituce za Zdravotní gramotností ve skupině pro poji
   assert.ok(s.veta && s.co && s.kicker);
 });
 
-test('stránka Instituce: noindex, jeden h1, audit komentář, kontejnery, shell, skripty, síť přesunutá z Kmene', () => {
-  assert.match(page, /<meta name="robots" content="noindex, nofollow, noarchive">/);
+test('stránka Instituce: index, jeden h1, audit komentář, kontejnery, shell, skripty, síť přesunutá z Kmene', () => {
+  assert.match(page, /<meta name="robots" content="index, follow">/);
   assert.equal(count(page, /<h1\b/g), 1);
-  assert.match(page, /<title>Instituce — Srovnávač pojišťoven, pracovní verze · HSPA Monitor<\/title>/);
+  assert.match(page, /<title>Instituce — Srovnávač pojišťoven · HSPA Monitor<\/title>/);
   assert.match(page, /<!--\s*\n\s*audit:/);
   assert.match(page, /<div id="zpShell" class="zpc-shell" data-aktivni="instituce"><\/div>/);
   for (const id of ['zpInstOrgany', 'zpInstAparat', 'zpInstProgramy', 'zpInstDostupnost', 'zpSit', 'zpMojeZp', 'zpZdroje']) assert.equal(count(page, new RegExp(`id="${id}"`, 'g')), 1, id);

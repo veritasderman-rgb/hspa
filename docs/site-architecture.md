@@ -117,9 +117,9 @@ zdrave-cesko.cz/
 | **JS moduly** | `src/pojistenci.js` → `page-shared` |
 | **CSS namespace** | `.pojistenci-*` (atlas, controls, story, tile) |
 
-### `pojistovny.html` + `pojistovny-*.html` — Srovnávač zdravotních pojišťoven (pracovní, pod heslem, mimo sitemapu)
+### `pojistovny.html` + `pojistovny-*.html` — Srovnávač zdravotních pojišťoven (veřejný od 16. 11. 2026, sekce Pojišťovny v navigaci, v sitemapě)
 
-Od balíčku P1.6 (`PLAN-SROVNAVAC-POJISTOVEN.md` § 2.8) a analytického rozšíření (`PLAN-SROVNAVAC-ANALYTIK.md` § 2, stav v § 8) má srovnávač **přehled, osm podstránek a profil jedné pojišťovny** (`pojistovna.html?zp=<kód>`, bez parametru rozcestník). Všech deset stránek je `noindex`, za heslem (`middleware.js`, matcher `/pojistovny`, `/pojistovny.html`, `/pojistovny-:path*`, `/pojistovna`, `/pojistovna.html`, `/data/pojistovny*`) a v `SITEMAP_EXCLUDED` (`scripts/generate-sitemap.js`).
+Od balíčku P1.6 (`PLAN-SROVNAVAC-POJISTOVEN.md` § 2.8) a analytického rozšíření (`PLAN-SROVNAVAC-ANALYTIK.md` § 2, stav v § 8) má srovnávač **přehled, osm podstránek a profil jedné pojišťovny** (`pojistovna.html?zp=<kód>`, bez parametru rozcestník). Od 16. 11. 2026 jsou všechny stránky veřejné (`robots: index, follow`), ochrana heslem (`middleware.js`) je odstraněna, stránky jsou v `STATIC_PAGES` (`scripts/generate-sitemap.js`) a v hlavní navigaci tvoří sekci Pojišťovny (`renderModuleNav` v `src/page-shared.js`).
 
 | Stránka | Obsah | Kontejnery | Script tagy |
 |---|---|---|---|

@@ -6,7 +6,7 @@
 //   <div id="zpShell" class="zpc-shell" data-aktivni="<tema>"></div>
 // a na konci <main> kontejner #zpZdroje. renderZpShell() do nich vykreslí:
 //   - globální navigaci webu, datum v mastheadu a patičku (page-shared.js),
-//   - pásek pracovní verze (.zpc-strip), kicker srovnávače a rozcestník témat
+//   - pásek první veřejné verze (.zpc-strip), kicker srovnávače a rozcestník témat
 //     jako záložky (.zpc-tabs, aktivní s aria-current="page"),
 //   - patičku sekce „Zdroje“ ze data/pojistovny.json.
 // Výběr „Moje pojišťovna“ (#zpMojeZp) je statický kontejner ve stránce; výběr
@@ -28,7 +28,7 @@ export { stariDatHtml } from './pojistovny-stari.js';
 const esc = escapeHtml;
 
 export const DATA_URL = 'data/pojistovny.json';
-export const KICKER = 'Srovnávač zdravotních pojišťoven · pracovní verze';
+export const KICKER = 'Srovnávač zdravotních pojišťoven';
 
 /**
  * Skupiny záložek v pořadí zleva doprava. `pojistenci` je obsah pro čtenáře (pojištěnce),
@@ -129,10 +129,11 @@ export function zpTabsHtml(aktivni) {
   return `<nav class="zpc-tabs" aria-label="Témata srovnávače">${groups}</nav>`;
 }
 
-/** Hlavička srovnávače: pásek pracovní verze, kicker, záložky. */
+/** Hlavička srovnávače: pásek první veřejné verze, kicker, záložky. */
 export function zpShellHtml(aktivni) {
-  return '<div class="zpc-strip" role="note"><b>Pracovní verze pod heslem, neindexovaná.</b> '
-    + 'Čísla z výročních zpráv jsou přepsána z PDF a čekají na druhé ověření.</div>'
+  return '<div class="zpc-strip" role="note"><b>První veřejná verze.</b> '
+    + 'Čísla z výročních zpráv jsou přepsána z PDF a čekají na druhé ověření; u každého je zdroj a rok. '
+    + 'Chybu nám prosím <a href="o-projektu.html">nahlaste</a>.</div>'
     + `<div class="zpc-shell-head"><p class="zpc-kicker">${esc(KICKER)}</p>${zpTabsHtml(aktivni)}</div>`;
 }
 

@@ -1,6 +1,6 @@
 # PLAN — Srovnávač zdravotních pojišťoven: rozvoj a vizuální update
 
-_Stav k 2. 11. 2026, po merge PR #1338 (pracovní verze `pojistovny.html` pod heslem).
+_Stav k 2. 11. 2026, po merge PR #1338 (pracovní verze `pojistovny.html` pod heslem). **Aktualizace 16. 11. 2026: krok P5.1 proveden rozhodnutím vydavatele, srovnávač je veřejný a má sekci Pojišťovny v navigaci (viz `docs/decisions-log.md`).**
 Navazuje na `09_Srovnavac_pojistoven_plan.md` (moduly, harmonogram pracovní skupiny)
 a `docs/metodika-srovnavac-pojistoven.md` (šest oblastí, semafor, pravidla férovosti).
 Tenhle dokument řeší, **co s tím udělat v repu**: jak stránku dostavět, jak jí dát

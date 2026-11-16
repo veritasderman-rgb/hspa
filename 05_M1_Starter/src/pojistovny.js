@@ -1,4 +1,4 @@
-// Srovnávač zdravotních pojišťoven — pracovní verze (pod heslem, noindex).
+// Srovnávač zdravotních pojišťoven — veřejný od 2026-11-16 (dříve pracovní verze pod heslem).
 //
 // Čte výhradně data/pojistovny*.json (frontend nezná zdroje):
 //   data/pojistovny.json            kmen (CRP 2025 + řada 2010–2025), hospodaření 2024 (MZ+MF, VZ), 2025 (VZ), ZPP 2026, servis

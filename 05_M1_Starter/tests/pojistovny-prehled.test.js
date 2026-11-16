@@ -80,7 +80,8 @@ test('shell: záložky — aktivní s aria-current="page", jinak žádná; páse
   assert.match(act, /href="pojistovny-indikatory\.html" aria-current="page"/);
   const shell = zpShellHtml('kmen');
   assert.match(shell, /class="zpc-strip" role="note"/);
-  assert.match(shell, /Srovnávač zdravotních pojišťoven · pracovní verze/);
+  assert.match(shell, /<p class="zpc-kicker">Srovnávač zdravotních pojišťoven<\/p>/);
+  assert.match(shell, /První veřejná verze/);
 });
 
 test('shell: zdroje z pojistovny.json jako sbalená patička, escapování, prázdné = nic', () => {
