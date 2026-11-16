@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-11-16
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-11-16
+    creation_phase: zadani-uzivatele
+    form: article
+    primary_sources_count: 6
+    evidence_sources_count: 2
+    visual_elements_count: 4
+    notes: "Vytvoreno 16. 11. 2026 na prime zadani vlastnika: napsat clanek z prispevku Matyase Fosuma na LinkedInu (publikovan 14. 11. 2026 18:15 UTC podle JSON-LD stranky; text prispevku stazen 16. 11. 2026). Prispevek je vychodisko, ne zdroj cisel: kazdy udaj je dohledan v primarnim zdroji, na ktery prispevek odkazuje nebo ktery cituje.
+      (1) WHO Disease Outbreak News 2026-DON620, Pneumonia of undetermined etiology - the Russian Federation, 10. 10. 2026 (HTML stazeno 16. 11. 2026): hospitalizace 29. 9., umrti 2. 10., WHO se dozvedela z medii 2. 10., dotazy 3., 5., 6. a 7. 10. podle cl. 9 a 10 IHR, odpoved NFP 6. 10., dalsi dotazy 7. a 8. 10., sledovani kontaktu 7 dni, ukonceno k 9. 10., vice nez 5 500 testu, mor ani jine vysoce nebezpecne patogeny neprokazany, diagnoza pneumonia of undetermined etiology, WHO: laboratorni expozici nelze plne vyloucit, duvera v hodnoceni omezena. Pocet kontaktu DON neuvadi; cca 200 je z UN News 7. 10. 2026.
+      (2) MZ CR, Tydenni monitoring zdravotnich hrozeb, 40. tyden (28. 9. - 4. 10. 2026): stranka publikovana 9. 10. 2026 (meta datePublished), PDF 21 stran vytvoreno 8. 10. 2026; tema 05 Suspektni pripad plicniho moru, Irkutska oblast, Rusko; tema 06 Mor - globalni prehled 2019-2025 (3 860 suspektnich, 2 646 potvrzenych, 423 umrti, 6 zemi, KDR + Madagaskar 97,7 % potvrzenych; zdroj WHO WER 101/38 z 25. 9. 2026). K 16. 11. 2026 na strance MZ osm cisel (38.-45. tyden).
+      (3) ECDC PHEPA Czech Republic 2026 (PDF, doi 10.2900/4912528; tistena strana = PDF - 6): 14 KHS s vlastnimi postupy, shluky napric kraji mohou uniknout, chybi nastroj pro event-based surveillance, software z covidu uz neni k dispozici, sluzba 24/7 s omezenym personalem (s. 12); hodnoceni rizik ad hoc, muze brzdit vcasne varovani (s. 7); doporuceni definovat kriteria toku informaci, chybi mechanismus posileni personalu (s. 8); NFP 24/7, mandat nedostatecne ukotven, nejvice v rane fazi; EOC velmi proaktivni (s. 16); 24 NRL v SZU (s. 10); BSL-4 Techonin 2027 (s. 9); pandemicky plan 2011 (s. 6-7). Zprava cil 7-1-7 nezminuje (0 vyskytu v textu) a zadne lhuty nemeri.
+      (4) Bochner AF et al. Lancet Glob Health 2023;11(6):e871-e879, DOI 10.1016/S2214-109X(23)00133-X, PMID 37060911, PMC10156425 (open access, plny text precten 16. 11. 2026): 41 udalosti, Brazilie, Etiopie, Liberie, Nigerie, Uganda, 2018-2022; detekce 22/41 (54 %, median 6 dni, rozpeti 0-157), hlaseni 29/41 (71 %, median 0), reakce 20/41 (49 %, median 8), vse 11/41 (27 %); prvni akce do 1 dne u 33/41 (80 %); prekazky detekce 25/41 (61 %) na urovni zarizeni/komunity, hlaseni 14/32 (44 %) a reakce 22/56 (39 %) na stredni urovni; Nigerie fond 6 -> 2 dny; limity: zamerny vyber, sebehodnoceni, nereprezentativni. Autori z Resolve to Save Lives, ktera cil navrhla - uvedeno v textu.
+      (5) Frieden TR et al. Lancet 2021;398(10300):638-640, DOI 10.1016/S0140-6736(21)01250-2, PMID 34242563 (navrh cile; bez abstraktu, citovano jen jako puvod cile).
+      (6) Seznam Zpravy, Lukas Marek, 14. 11. 2026: vyroky E. Holmese a N. Paxtona prevzaty PARAFRAZI s atribuci, ne doslovne.
+      SEBEOMEZENI: titulek ani text netvrdi, ze na Sibiri byl mor (WHO ho nepotvrdila); pro Irkutsk se 7-1-7 NEPOCITA (neni znam den vzniku); z pilotu v peti zemich se nevyvozuje nic o Cesku; tvrzeni prispevku o chystanych zmenach (novela zakona 258/2000 Sb., One Health platforma, pandemicky plan pro vsechny respiracni patogeny, jednotne rizeni hygieny) a seznam prijemcu bulletinu jsou oznaceny jako sdeleni zastupce hlavniho hygienika, v dokumentech neoverena; zprava ECDC z nich potvrzuje pripravu obecneho planu PPR a revizi analyzy rizik. Hodnoty indikatoru v databoxu: nadumrtnost (live, verified), spalnicky (live, verified), pertuse_incidence a vakcinace_chripka_65 (seed, verification_status verified)."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O úmrtí v Irkutsku se WHO dozvěděla z médií. Kolik je u nákazy „včas“ a kde se informace může zadrhnout v Česku · HSPA Monitor</title>
+<meta name="description" content="Podezření na plicní mor v Irkutsku se nepotvrdilo, příčinu úmrtí laboratorní pracovnice ale nezná ani WHO, která se o případu dozvěděla z médií. Zástupce hlavního hygienika Matyáš Fošum na něm ukazuje, že rychlost nestojí na laboratořích, ale na předávání informací. Cíl 7-1-7 (odhalit do 7 dnů, nahlásit do 1 dne, do 7 dnů rozběhnout reakci) splnilo v pilotu v pěti zemích jen 11 ze 41 událostí. Česko rychlost nezveřejňuje, zpráva ECDC ale popisuje místa, kde se informace může zdržet: 14 krajských hygien s vlastními postupy a žádný společný nástroj na hlášení událostí.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="O úmrtí v Irkutsku se WHO dozvěděla z médií. Kolik je u nákazy „včas“ a kde se informace může zadrhnout v Česku">
+<meta property="og:description" content="Mor se v Irkutsku nepotvrdil, příčina úmrtí taky ne. Cíl 7-1-7 říká, kolik je „včas“; v pilotu ho splnilo 27 % událostí. Zpráva ECDC ukazuje, kde se informace může zdržet v Česku.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-mor-sibir-rychlost-informaci-7-1-7">
+<meta property="article:published_time" content="2026-11-16">
+<meta property="article:section" content="Odolnost systému">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-mor-sibir-rychlost-informaci-7-1-7">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "O úmrtí v Irkutsku se WHO dozvěděla z médií. Kolik je u nákazy „včas“ a kde se informace může zadrhnout v Česku",
+  "description": "Podezření na plicní mor v Irkutsku se nepotvrdilo, příčinu úmrtí laboratorní pracovnice ale nezná ani WHO, která se o případu dozvěděla z médií. Zástupce hlavního hygienika Matyáš Fošum na něm ukazuje, že rychlost nestojí na laboratořích, ale na předávání informací. Cíl 7-1-7 (odhalit do 7 dnů, nahlásit do 1 dne, do 7 dnů rozběhnout reakci) splnilo v pilotu v pěti zemích jen 11 ze 41 událostí. Česko rychlost nezveřejňuje, zpráva ECDC ale popisuje místa, kde se informace může zdržet: 14 krajských hygien s vlastními postupy a žádný společný nástroj na hlášení událostí.",
+  "datePublished": "2026-11-16T06:00:00+01:00",
+  "dateModified": "2026-11-16",
+  "inLanguage": "cs",
+  "articleSection": "Odolnost systému",
+  "author": { "@type": "Organization", "name": "Redakce HSPA Monitoru" },
+  "publisher": { "@type": "Organization", "name": "HSPA Monitor · Skóre zdravotnictví", "url": "https://skorezdravotnictvi.cz" },
+  "mainEntityOfPage": "https://skorezdravotnictvi.cz/clanek-mor-sibir-rychlost-informaci-7-1-7.html"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Odolnost systému</span>
+        <span class="article-tag article-tag-muted">včasné varování · cíl 7-1-7 · WHO · ECDC · hygienická služba</span>
+      </div>
+      <h1 class="article-title">O úmrtí v Irkutsku se WHO dozvěděla z médií. Kolik je u nákazy „včas“ a kde se informace může zadrhnout v Česku</h1>
+      <p class="article-deck">
+        Podezření na plicní mor v Irkutsku se nepotvrdilo, příčinu úmrtí laboratorní pracovnice ale nezná ani WHO, která se o případu dozvěděla z médií. Zástupce hlavního hygienika Matyáš Fošum na něm ukazuje, že rychlost nestojí na laboratořích, ale na předávání informací. Cíl 7-1-7 (odhalit do 7 dnů, nahlásit do 1 dne, do 7 dnů rozběhnout reakci) splnilo v pilotu v pěti zemích jen 11 ze 41 událostí. Česko rychlost nezveřejňuje, zpráva ECDC ale popisuje místa, kde se informace může zdržet: 14 krajských hygien s vlastními postupy a žádný společný nástroj na hlášení událostí.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">16. listopadu 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">8 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        „Mor. Na Sibiři. Rok 2026. Zní to jako špatně napsaný středověký thriller.“ Tak začíná příspěvek, který 14. listopadu zveřejnil na LinkedInu zástupce hlavního hygienika Matyáš Fošum. Navazuje na <a href="https://www.seznamzpravy.cz/clanek/zahranicni-nova-pandemie-hrozi-vic-nez-se-zda-mor-v-rusku-jen-pripomnel-stary-problem-317942" target="_blank" rel="noopener">text Lukáše Marka v Seznam Zprávách</a> z téhož dne a dochází k závěru, který se netýká moru, ale rychlosti: věda umí neznámý patogen určit za den, zdržení vzniká při předávání informací. Prošli jsme zdroje, na které příspěvek odkazuje, a doplnili to, co v něm není: jak se o události dozvěděla Světová zdravotnická organizace (WHO), za jak dlouho o ní psal český stát a co o cestě informace v Česku říká zpráva evropského střediska ECDC.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCntH">
+        <figcaption class="av-figure-h" id="avCntH">Čtyři čísla o rychlosti: Irkutsk, pilot cíle 7-1-7 a Česko</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter">4 dny</span>
+            <span class="av-counter-label">čekala WHO na první odpověď ruských úřadů; o úmrtí se dozvěděla z médií</span>
+            <span class="av-counter-foot">2.–6. října 2026 (WHO, DON620)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="27" data-suffix=" %">27&nbsp;%</span>
+            <span class="av-counter-label">událostí splnilo všechny tři lhůty cíle 7-1-7 (11 ze 41)</span>
+            <span class="av-counter-foot">pilot v pěti zemích, 2018–2022 (Lancet Global Health)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="14">14</span>
+            <span class="av-counter-label">krajských hygien, každá s vlastními postupy pro záchyt událostí</span>
+            <span class="av-counter-foot">zpráva ECDC, s. 12</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter">7 dní</span>
+            <span class="av-counter-label">od úmrtí v Irkutsku po český týdenní bulletin, který případ popsal</span>
+            <span class="av-counter-foot">2.–9. října 2026 (MZ ČR, 40. týden)</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> WHO, Disease Outbreak News 2026-DON620 (10. 10. 2026); Bochner et al., Lancet Global Health 2023; ECDC, Public Health Emergency Preparedness Assessment for the Czech Republic, 2026; MZ ČR, Týdenní monitoring zdravotních hrozeb, 40. týden 2026.</p>
+      </figure>
+
+      <h3>Co se v Irkutsku stalo a co se neví</h3>
+      <p>
+        Nejdřív oprava zkratky, která se rychle ujala. Mor na Sibiři nikdo nepotvrdil. Podle <a href="https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON620" target="_blank" rel="noopener">zprávy WHO z 10. října 2026</a> byla zaměstnankyně Irkutského protimorového výzkumného ústavu 29. září hospitalizována s těžkým zápalem plic a 2. října zemřela. Média psala o podezření na plicní mor po nákaze v laboratoři. Ruské úřady WHO sdělily, že mor ani jiné vysoce nebezpečné patogeny testy neprokázaly, že provedly přes 5&nbsp;500 laboratorních vyšetření a že kontakty sledovaly sedm dní s denním testováním. Počet kontaktů zpráva WHO neuvádí, <a href="https://news.un.org/en/story/2026/10/1168547" target="_blank" rel="noopener">zpravodajství OSN</a> psalo zhruba o dvou stech lidech. Sledování skončilo k 9. říjnu. Úmrtí je vedeno jako zápal plic neurčeného původu.
+      </p>
+      <p>
+        Tím ale zpráva WHO nekončí. Organizace píše, že nedostala informaci, co nemoc způsobilo, a že proto nemůže sama posoudit, zda sedm dní sledování stačilo k vyloučení všech možných příčin. Nákazu při práci v laboratoři podle ní „v této fázi nelze plně vyloučit“. Důkazy o dalším šíření WHO nenašla a omezení cestování nedoporučuje.
+      </p>
+      <p>
+        Pro téma rychlosti je důležitá cesta informace. WHO se o úmrtí dozvěděla 2. října z médií, ne od Ruska. O ověření žádala 3., 5., 6. a 7. října s odkazem na Mezinárodní zdravotnické předpisy. První odpověď přišla 6. října, další údaje po urgencích ze 7. a 8. října. Souhrnnou zprávu vydala WHO 10. října, osm dní po úmrtí, a i v ní uvádí, že důvěra v její hodnocení je omezená, protože chybí potvrzená diagnóza.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTlH">
+        <figcaption class="av-figure-h" id="avTlH">Jedenáct dní jedné informace: od hospitalizace v Irkutsku po zprávu WHO a český bulletin</figcaption>
+        <ol class="av-timeline">
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">29. 9. 2026</time>
+            <h4 class="av-timeline-title">Hospitalizace</h4>
+            <p class="av-timeline-desc">Zaměstnankyně protimorového ústavu v Irkutsku přijata s těžkým zápalem plic.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">2. 10. 2026</time>
+            <h4 class="av-timeline-title">Úmrtí, WHO čte média</h4>
+            <p class="av-timeline-desc">WHO se o případu dozvídá z médií. Irkutská pobočka Rospotrebnadzoru vydává prohlášení.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">3.–7. 10. 2026</time>
+            <h4 class="av-timeline-title">Čtyři žádosti o ověření</h4>
+            <p class="av-timeline-desc">WHO se ptá 3., 5., 6. a 7. října. První odpověď Ruska přichází 6. října.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">9. 10. 2026</time>
+            <h4 class="av-timeline-title">Český bulletin</h4>
+            <p class="av-timeline-desc">Týdenní monitoring MZ za 40. týden popisuje případ a přidává přehled moru ve světě.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-now">
+            <time class="av-timeline-date">10. 10. 2026</time>
+            <h4 class="av-timeline-title">Zpráva WHO</h4>
+            <p class="av-timeline-desc">Mor nepotvrzen, příčina úmrtí neurčena, laboratorní nákazu nelze plně vyloučit.</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> WHO, Disease Outbreak News 2026-DON620 (10. 10. 2026); MZ ČR, Týdenní monitoring zdravotních hrozeb, 40. týden 2026 (stránka zveřejněna 9. 10. 2026).</p>
+      </figure>
+
+      <p>
+        Seznam Zprávy k tomu citují dva odborníky. Virolog Edward Holmes říká, že technicky lze jakýkoli patogen určit do 24 hodin a že brzdou je politika a vztahy mezi státy. Nathan Paxton z organizace Nuclear Threat Initiative přirovnává vznik pandemického patogenu k hodu kostkou: při dostatečném počtu hodů nepříznivé číslo jednou padne. Oba výroky přebíráme z článku Seznam Zpráv, ne z vlastního rozhovoru.
+      </p>
+
+      <h3>Kolik je „včas“: cíl 7-1-7</h3>
+      <p>
+        Příspěvek připomíná jednoduché měřítko, které v roce 2021 navrhl v časopise Lancet tým Toma Friedena z organizace Resolve to Save Lives (<a href="https://doi.org/10.1016/S0140-6736(21)01250-2" target="_blank" rel="noopener">Frieden et al., 2021</a>). Říká se mu 7-1-7. Každé podezřelé ohnisko má být odhaleno do sedmi dnů od vzniku, nahlášeno orgánům veřejného zdraví do jednoho dne od odhalení a do sedmi dnů od nahlášení má být hotových sedm úvodních kroků reakce.
+      </p>
+      <p>
+        Jak cíl obstál v praxi, ukázala studie <em>Bochner et al.</em> (2023) v <em>The Lancet Global Health</em> (<a href="https://doi.org/10.1016/S2214-109X(23)00133-X" target="_blank" rel="noopener">doi 10.1016/S2214-109X(23)00133-X</a>). Úřady v Brazílii, Etiopii, Libérii, Nigérii a Ugandě zpětně rozebraly 41 skutečných událostí z let 2018–2022, od horečky Lassa přes spalničky a choleru po covid. Mediány vypadají dobře: šest dní do odhalení, nula dní do nahlášení, osm dní do dokončení úvodních kroků. Všechny tři lhůty najednou ale splnilo jen 11 událostí ze 41, tedy 27&nbsp;%.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avBarH">
+        <figcaption class="av-figure-h" id="avBarH">Podíl událostí, které splnily jednotlivé lhůty cíle 7-1-7 (41 událostí v pěti zemích, 2018–2022)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="100" data-unit=" %">
+          <li class="av-bar-row" data-value="54" data-label="Odhalení do 7 dnů" data-note="22 ze 41 událostí; medián 6 dní, rozpětí 0–157"></li>
+          <li class="av-bar-row" data-value="71" data-label="Nahlášení do 1 dne" data-note="29 ze 41; medián 0 dní, rozpětí 0–24"></li>
+          <li class="av-bar-row" data-value="49" data-label="Reakce do 7 dnů" data-note="20 ze 41; medián 8 dní, rozpětí 0–72"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="27" data-label="Všechny tři lhůty" data-note="11 ze 41 událostí"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Bochner AF et al., Lancet Global Health 2023;11(6):e871–e879. Události vybraly země záměrně, nejde o náhodný vzorek.</p>
+      </figure>
+
+      <p>
+        Zajímavější než podíly je místo, kde se čas ztrácel. Překážky při odhalení ležely v 61&nbsp;% případů (25 ze 41) přímo ve zdravotnickém zařízení nebo v komunitě. Nejčastěji šlo o to, že zdravotníka nenapadlo na danou nemoc pomyslet. Překážky při hlášení (14 ze 32) a při reakci (22 z 56) se naopak nejčastěji objevily na střední úrovni systému, tedy v okresech, krajích nebo státech federace. První krok reakce přitom úřady zvládly do jednoho dne u 80&nbsp;% událostí. Rychlý začátek tedy nestačil. Zdržení vznikalo při dotahování všech sedmi kroků, hlavně kvůli chybějícím penězům na výjezd týmů a pozdnímu laboratornímu potvrzení. V Nigérii zkrátil pohotový fond na vyšetřování ohnisek medián doby do reakce ze šesti dnů na dva.
+      </p>
+
+      <div class="article-callout-caveat" role="note">
+        <strong>Co ta studie neříká.</strong>
+        Jde o jednu práci z pěti zemí Afriky a Latinské Ameriky. Události si země vybraly samy a data pocházejí ze sebehodnocení úřadů, což autoři uvádějí mezi limity a výslovně píšou, že výsledky nelze zobecnit. Většina autorů je z organizace Resolve to Save Lives, která cíl sama navrhla. O Česku studie neříká nic. Pro případ z Irkutsku cíl spočítat nejde, protože není znám den, kdy nemoc vznikla, ani její původce.
+      </div>
+
+      <h3>Jak je na tom Česko</h3>
+      <p>
+        Český systém v jednom ohledu obstál. Operační centrum pro mimořádné události ve veřejném zdraví na ministerstvu zdravotnictví vydává od září <a href="https://mzd.gov.cz/category/ochrana-verejneho-zdravi/monitoring-hrozeb-pro-verejne-zdravi/" target="_blank" rel="noopener">Týdenní monitoring zdravotních hrozeb</a>. K 16. listopadu vyšlo osm čísel. <a href="https://mzd.gov.cz/tydenni-monitoring-zdravotnich-hrozeb-40-tyden-2026/" target="_blank" rel="noopener">Číslo za 40. týden</a>, zveřejněné 9. října, má Irkutsk jako páté téma. Uvádí, že mor potvrzen nebyl, že WHO žádá doplňující informace a že událost nepředstavuje riziko pro obyvatele Česka. Přidává i přehled moru ve světě podle dat WHO: v letech 2019–2025 bylo hlášeno 3&nbsp;860 suspektních případů a 423 úmrtí, potvrzené případy pocházely ze šesti zemí a 97,7&nbsp;% z nich z Konžské demokratické republiky a Madagaskaru. Bulletin vychází z prohlášení WHO ze 7. října a ze sdělení ECDC z 6. října. Jeho adresáti tak měli věcný souhrn den předtím, než WHO vydala svou souhrnnou zprávu.
+      </p>
+      <p>
+        Podle Fošumova příspěvku ministerstvo bulletin rozesílá krajským hygienickým stanicím, oběma komorám Parlamentu, Kanceláři prezidenta republiky, ministerstvům vnitra a zahraničních věcí, České lékařské komoře a bezpečnostním složkám včetně Vojenského zpravodajství, Bezpečnostní informační služby a Národního bezpečnostního úřadu. Seznam adresátů ministerstvo na webu neuvádí, známe ho jen z příspěvku. První číslo bulletinu jsme rozebrali v článku <a href="clanek-monitoring-zdravotnich-hrozeb-mz.html">Stát začal týdně počítat hrozby</a>.
+      </p>
+      <p>
+        Bulletin ovšem zpracovává informace, které už někdo zjistil a zveřejnil. Cíl 7-1-7 měří něco jiného: jak dlouho trvá, než se vlastní domácí ohnisko dostane od lékaře na hygienu a z kraje do centra. K tomu máme <a href="https://www.ecdc.europa.eu/sites/default/files/documents/PHEPA-report-Czech-Republic-2026.pdf" target="_blank" rel="noopener">zprávu ECDC</a> z prvního hodnocení připravenosti Česka, na kterou příspěvek odkazuje. Podrobně jsme ji rozebrali v článku <a href="clanek-ecdc-pripravenost-cr-krize-2026.html">Pandemický plán z roku 2011</a>. Zpráva žádné lhůty neměří a cíl 7-1-7 nezmiňuje. Popisuje ale přesně ta místa, kde pilotní studie našla nejvíc zdržení.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTabH">
+        <figcaption class="av-figure-h" id="avTabH">Tři kroky cíle 7-1-7 a co k nim o Česku říká zpráva ECDC</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Krok</th>
+                <th scope="col">Lhůta</th>
+                <th scope="col">Co v Česku funguje</th>
+                <th scope="col">Kde se informace může zdržet</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Odhalit</th><td>do 7 dnů od vzniku</td><td>Zákonná povinnost hlášení, 24 národních referenčních laboratoří ve Státním zdravotním ústavu, zaváděný systém ISIN (s. 10–12)</td><td>Shluk, který vznikne až součtem případů z více krajů, může uniknout (s. 12)</td></tr>
+              <tr class="av-row-highlight"><th scope="row">Nahlásit</th><td>do 1 dne od odhalení</td><td>Kontaktní místo pro WHO dostupné nepřetržitě; komunikace kolem mezinárodních událostí podle ECDC funguje dobře (s. 16)</td><td>14 krajských hygien má vlastní postupy; chybí společný nástroj na hlášení a ověřování událostí, část informací jde telefonem (s. 12)</td></tr>
+              <tr><th scope="row">Rozběhnout reakci</th><td>do 7 dnů od nahlášení</td><td>Krizový zákon, tradice cvičení, nové operační centrum na ministerstvu (s. 7–8 a 16)</td><td>Nepřetržitá služba epidemiologů s omezeným počtem lidí; chybí mechanismus, jak v krizi přesunout personál z jiných oborů (s. 8 a 12)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ECDC, Public Health Emergency Preparedness Assessment for the Czech Republic, 2026 (čísla stran podle tištěného číslování). Přiřazení nálezů ke krokům cíle 7-1-7 je práce redakce; zpráva ECDC s tímto cílem nepracuje.</p>
+      </figure>
+
+      <p>
+        Střední úroveň, na které se v pilotní studii nejčastěji zdrželo hlášení i reakce, tvoří v Česku krajské hygienické stanice. ECDC o nich píše, že jsou autonomní a ohniska ve svém kraji vyšetřují samy. Ministerstvo koordinuje až tehdy, když se nákaza týká více krajů nebo zahraničí. Za covidu se k řízení událostí používal zakoupený software, který už k dispozici není (s. 12). Hodnocení rizik se dělá případ od případu a místně, bez národní metodiky, což podle zprávy může brzdit včasné varování ostatních, hlavně na začátku události (s. 7). ECDC proto doporučuje stanovit kritéria, kdy a komu se informace o probíhající hrozbě předává (s. 8), a zavést celostátní nástroj pro sledování událostí (s. 12).
+      </p>
+      <p>
+        Druhá věc, kterou příspěvek zmiňuje jen jednou větou, jsou lidé. Nedostatek personálu a peněz označuje ECDC za kritické omezení ve všech hodnocených oblastech, na národní i krajské úrovni (s. 6). Pilotní studie popisuje totéž z druhé strany: nejčastější překážkou reakce byly chybějící zdroje na její rychlé zahájení a mezi věcmi, které ji urychlily, byla pomoc pohotově uvolněná z centra.
+      </p>
+
+      <h3>Co ministerstvo slibuje</h3>
+      <p>
+        Fošum v příspěvku uvádí čtyři věci, na kterých se podle něj pracuje: zastřešující plán připravenosti postavený na nové analýze hrozeb, nový pandemický plán pro všechny respirační patogeny místo jen chřipky, novela zákona o ochraně veřejného zdraví, která má ukotvit plánování připravenosti a národní platformu One Health, a jednotné řízení se společnými postupy pro celou hygienickou službu. První bod potvrzuje i zpráva ECDC: obecný plán prevence, připravenosti a reakce se připravuje a celostátní analýza rizik z roku 2016 se reviduje. Ostatní tři body jsou sdělení představitele ministerstva. Návrh novely ani nový pandemický plán jsme ve veřejných dokumentech neviděli a termíny příspěvek neuvádí. Jednotné řízení hygien je součástí chystané <a href="clanek-institut-verejneho-zdravi.html">reformy hygienické služby</a>.
+      </p>
+
+      <h3>Co s tím</h3>
+      <p>
+        <strong>Pro ministerstvo:</strong> cíl 7-1-7 je levný způsob, jak slib „pracujeme na tom“ převést na číslo. Stačí u každého většího ohniska zaznamenat tři data: kdy vzniklo, kdy ho někdo odhalil a nahlásil a kdy byla hotová úvodní opatření. Autoři studie doporučují sbírat je průběžně v systému pro řízení událostí. Ten Česku podle ECDC chybí, takže by se obě doporučení dala splnit najednou. Zveřejněné měření rychlosti hlášení a reakce jsme pro Česko nenašli.
+      </p>
+      <p>
+        <strong>Pro čtenáře:</strong> titulek „mor na Sibiři“ je nepřesný. Potvrzený není mor ani žádná jiná příčina. Za sledování stojí spíš to, že se o úmrtí v laboratoři s nebezpečnými patogeny dozvěděla WHO z novin a příčinu nezná ani podle své zprávy z 10. října. Český bulletin je veřejný a vychází každý týden, kdokoli si v něm může ověřit, co stát o podobné události ví.
+      </p>
+      <p>
+        <strong>Pro HSPA Monitor:</strong> v našem datovém kontraktu žádný ukazatel rychlosti systému není. Odolnost sledujeme až podle následků, například <a href="indicator.html?id=nadumrtnost">nadúmrtností</a>. Pokud ministerstvo začne lhůty 7-1-7 zveřejňovat, půjde o první procesní ukazatel připravenosti, který by šel sledovat rok po roce. Do té doby budeme porovnávat sliby z příspěvku s akčním plánem, který má Česko předložit jako odpověď na zprávu ECDC.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, které s tématem souvisejí</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=nadumrtnost"><strong>Nadúmrtnost</strong></a> — 3,5 % (2025), průměr EU 3,6 %; souhrnný ukazatel toho, jak systém zvládl šok</li>
+        <li><a href="indicator.html?id=spalnicky"><strong>Incidence spalniček</strong></a> — 0,9 na 100 000 obyvatel (2023); nákaza, u které rychlost záchytu rozhoduje o velikosti ohniska</li>
+        <li><a href="indicator.html?id=pertuse_incidence"><strong>Incidence černého kašle</strong></a> — 33,9 na 100 000 obyvatel (2025)</li>
+        <li><a href="indicator.html?id=vakcinace_chripka_65"><strong>Proočkovanost proti chřipce (65+)</strong></a> — 24,6 % (2026), průměr EU 41 %</li>
+      </ul>
+      <p>Ukazatel rychlosti odhalení, hlášení a reakce portál nemá, protože ho v Česku nikdo nezveřejňuje.</p>
+      <p>Související články: <a href="clanek-ecdc-pripravenost-cr-krize-2026.html">Pandemický plán z roku 2011 a žádný akční plán proti rezistenci</a> · <a href="clanek-monitoring-zdravotnich-hrozeb-mz.html">Stát začal týdně počítat hrozby</a> · <a href="clanek-institut-verejneho-zdravi.html">Největší reforma hygienické služby za sto let</a> · <a href="clanek-nadumrtnost-cesko.html">Nadúmrtnost: Česko patřilo k nejhůře zasaženým zemím světa</a></p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární zdroje</h5>
+        <ul class="article-sources-list">
+          <li><strong>WHO — Disease Outbreak News 2026-DON620: Pneumonia of undetermined etiology – the Russian Federation</strong> (10. 10. 2026). Časová osa události, žádosti WHO, odpovědi ruských úřadů, hodnocení rizika. Staženo 16. 11. 2026. <a href="https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON620" target="_blank" rel="noopener">who.int ↗</a></li>
+          <li><strong>UN News — ‘No plague case’ in Siberia, Russia tells WHO as assessments continue</strong> (7. 10. 2026). Údaj o zhruba 200 sledovaných kontaktech. <a href="https://news.un.org/en/story/2026/10/1168547" target="_blank" rel="noopener">news.un.org ↗</a></li>
+          <li><strong>MZ ČR — Týdenní monitoring zdravotních hrozeb, 40. týden 2026</strong> (28. 9. – 4. 10. 2026; stránka zveřejněna 9. 10. 2026, PDF 21 stran). Témata 05 a 06: suspektní případ plicního moru v Irkutské oblasti a globální přehled moru 2019–2025. Staženo 16. 11. 2026. <a href="https://mzd.gov.cz/tydenni-monitoring-zdravotnich-hrozeb-40-tyden-2026/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+          <li><strong>MZ ČR — Monitoring hrozeb pro veřejné zdraví</strong>, přehled všech čísel bulletinu (k 16. 11. 2026 osm čísel, 38.–45. týden). <a href="https://mzd.gov.cz/category/ochrana-verejneho-zdravi/monitoring-hrozeb-pro-verejne-zdravi/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+          <li><strong>ECDC — Country report: ECDC Public Health Emergency Preparedness Assessment for the Czech Republic, 2026</strong> (PDF, Stockholm, září 2026, doi 10.2900/4912528). Řízení mimořádných událostí s. 7–8, laboratoře s. 9–10, surveillance s. 11–12, mezinárodní zdravotnické předpisy a operační centrum s. 16. <a href="https://www.ecdc.europa.eu/sites/default/files/documents/PHEPA-report-Czech-Republic-2026.pdf" target="_blank" rel="noopener">ecdc.europa.eu ↗</a></li>
+          <li><strong>Matyáš Fošum — příspěvek na LinkedInu</strong> (14. 11. 2026). Výchozí text článku; zdroj sdělení o adresátech bulletinu a o připravovaných změnách. <a href="https://www.linkedin.com/posts/maty%C3%A1%C5%A1-fo%C5%A1um-76229b337_mor-na-sibi%C5%99i-rok-2026-zn%C3%AD-to-jako-%C5%A1patn%C4%9B-activity-7527434005261217793-Srp2" target="_blank" rel="noopener">linkedin.com ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Recenzovaná literatura</h5>
+        <ul class="article-sources-list">
+          <li>Bochner AF, Makumbi I, Aderinola O et al. <strong>Implementation of the 7-1-7 target for detection, notification, and response to public health threats in five countries: a retrospective, observational study.</strong> The Lancet Global Health. 2023;11(6):e871–e879. DOI 10.1016/S2214-109X(23)00133-X. PMID 37060911. Retrospektivní observační studie, volně dostupný plný text; ověřeno v PubMed 16. 11. 2026. <a href="https://doi.org/10.1016/S2214-109X(23)00133-X" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li>Frieden TR, Lee CT, Bochner AF, Buissonnière M, McClelland A. <strong>7-1-7: an organising principle, target, and accountability metric to make the world safer from pandemics.</strong> The Lancet. 2021;398(10300):638–640. DOI 10.1016/S0140-6736(21)01250-2. PMID 34242563. Komentář s návrhem cíle; ověřeno v PubMed 16. 11. 2026. <a href="https://doi.org/10.1016/S0140-6736(21)01250-2" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Média</h5>
+        <ul class="article-sources-list">
+          <li><strong>Seznam Zprávy — Lukáš Marek: Pandemie hrozí víc, než se zdá. Mor jen připomněl, co vědci říkají roky</strong> (14. 11. 2026). Zdroj výroků Edwarda Holmese a Nathana Paxtona. <a href="https://www.seznamzpravy.cz/clanek/zahranicni-nova-pandemie-hrozi-vic-nez-se-zda-mor-v-rusku-jen-pripomnel-stary-problem-317942" target="_blank" rel="noopener">seznamzpravy.cz ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Data o události v Irkutsku pocházejí ze zprávy WHO, která vychází z informací ruských úřadů; WHO je nezávisle neověřila. Čísla stran u zprávy ECDC odpovídají tištěnému číslování (strana PDF = tištěná strana + 6), citace z ní a ze zprávy WHO jsou překlad redakce. Výroky odborníků ze Seznam Zpráv jsou parafráze. Údaje o adresátech bulletinu a o připravovaných změnách zákona a plánů pocházejí z příspěvku zástupce hlavního hygienika a v dokumentech jsme je neověřili. Hodnoty indikátorů v rámečku jsou z datového kontraktu HSPA Monitoru.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+</main>
+<footer class="bottom" id="siteFooter"></footer>
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
