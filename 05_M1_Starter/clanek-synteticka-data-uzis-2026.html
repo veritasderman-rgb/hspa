@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-11-17
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-11-17
+    creation_phase: rutina+article-write
+    form: article
+    primary_sources_count: 5
+    evidence_sources_count: 2
+    visual_elements_count: 5
+    notes: "Vytvořeno z discovery 2026-11-17: nová recenzovaná studie Komenda M et al. 2026, JMIR Med Inform 14:e80683, DOI 10.2196/80683, PMID 43018400, PMC13756756, typ Journal Article, ověřeno v PubMed 17. 11. 2026 (metadata + plný text PMC). KPI: 199 žádostí, 184 vyřízených, 173 s předáním dat, 170 registrovaných, 49 žadatelů s aspoň jednou žádostí, období 15. 5. 2025 až 23. 7. 2026 (Tabulky 2 a 3 plného textu). Sekundární z plného textu: 63 zdrojů dat NZIS; Tabulka 1 velikosti registrů (NRHZS 14 201 812 synt. / 16 200 834 967 primárních = 0,09 %; NRRZ 1 163 / 3 054 931 = 0,04 %; NOR 6 714 / 3 138 236 = 0,21 %; úmrtí 10 777 / 4 193 272 = 0,26 %); NRHZS synteticky cca 100 000 pacientů, 10 mil. dokladů, 20 mil. záznamů výkonů; 100 nejčastějších odborností, diagnóz, výkonů; 1000 poskytovatelů; potlačení buněk pod 10 pozorování; zrušeno 7 (3,5 %), zamítnuto 4 (2,0 %), rozpracováno 15 (7,5 %), doručeno 173 (86,9 %); sdílení SQL 41 (20,6 %); průměr 15,63 pracovního dne (SD 10,37); 0 incidentů; komerční sektor 69,8 %. POZOR: rozpad uživatelů v plném textu (119 + 44 + 9 = 172) nesedí na 170 a 119/170 = 70,0 %, ne 69,8 % — v textu proto jen podíl 69,8 % s atribucí autorům, absolutní rozpad vynechán. Podíly 86,9 %, 3,5 %, 2,0 %, 7,5 % jsou z N = 199 (Tabulka 3). Střet zájmů: 7 z 10 autorů s afiliací ÚZIS (vlastní hodnocení provozovatele), 1 autor AstraZeneca — v textu uvedeno. Metodická dokumentace ÚZIS (nzip.cz, verze 6 z 15. 10. 2026, staženo a čteno pdftotext 17. 11. 2026): jedna žádost najednou, lhůta typicky do 30 pracovních dní, oznámení vad do 5 pracovních dní, max. dvě vrácení, zveřejnění výstupů s odstupem 6 měsíců, SQL v NZIS Open Journal se souhlasem, výstupy agregované a nevratně anonymizované. Stránka NZIP 2230 (aktualizace 15. 5. 2025): obsah syntetických dat nelze použít k vytěžení smysluplného výsledku. ROZPOR zaznamenán v textu: studie popisuje i předání deidentifikované sady na úrovni pacienta (use case dialýza), metodika mluví o agregovaných výstupech. EHDS: nařízení (EU) 2025/327 z 11. 2. 2025, Úř. věst. L 5. 3. 2025, použitelnost 26. 3. 2027, kapitola IV (sekundární užití) od 26. 3. 2029, čl. 73 zabezpečené prostředí pro zpracování (EUR-Lex ELI, čteno 17. 11. 2026); slovo synthetic v nařízení nenalezeno. Česká adaptace: VeKLEP ALBSDVLDLD32 podle data/legislativa.json (ověřeno 12. 11. 2026): vláda schválila (TZ MZ 9. 11. 2026), od 11. 11. 2026 stav B – signováno, číslo sněmovního tisku zatím neevidováno. Evidence: Kaabachi B et al. 2025, NPJ Digit Med 8(1):60, DOI 10.1038/s41746-024-01359-3, PMID 39870798, ověřeno v PubMed 17. 11. 2026. Consensus nepoužit. PubMed dotazy: 3 (metadata, plný text, 1 vyhledávání). Bench: ehealth_adoption 77,4 (2025) vs EU 86,5 — měří primární užití (přístup občanů), ne sekundární; v textu caveat. Forma: článek, ne esej — chybí doložená úvodní scéna a obrat ve výzkumu (studie popisuje provoz, nic nepřevrací). Čeká na schválení redakce."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Syntetická data ÚZIS: 199 žádostí a 173 předaných výstupů za 14 měsíců. Umělé registry jsou cvičiště, ne náhrada skutečných dat · HSPA Monitor</title>
+<meta name="description" content="ÚZIS od května 2025 zpřístupňuje syntetická data NZIS: umělé kopie čtyř celostátních registrů, na kterých si analytici napíšou dotaz, a ÚZIS ho pak spustí nad skutečnými daty. Podle studie autorů z ÚZIS v časopise JMIR Medical Informatics se do 23. července 2026 registrovalo 170 uživatelů, podali 199 žádostí a 173 z nich skončilo předáním dat, bez jediného hlášeného incidentu ochrany soukromí. Syntetické sady mají 0,04 až 0,26 % velikosti registrů a samy o sobě nic neříkají. Co služba umí, kde má limity a jak souvisí s evropským prostorem pro zdravotní data.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Syntetická data ÚZIS: 199 žádostí a 173 předaných výstupů za 14 měsíců. Umělé registry jsou cvičiště, ne náhrada skutečných dat">
+<meta property="og:description" content="Umělé kopie registrů NZIS, nad kterými si analytici připraví dotaz a ÚZIS ho spustí na skutečných datech: 170 uživatelů, 199 žádostí, 173 předaných výstupů. Co služba umí a co ne.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-synteticka-data-uzis-2026">
+<meta property="article:published_time" content="2026-11-19">
+<meta property="article:section" content="Digitalizace">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-synteticka-data-uzis-2026">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "Syntetická data ÚZIS: 199 žádostí a 173 předaných výstupů za 14 měsíců. Umělé registry jsou cvičiště, ne náhrada skutečných dat",
+  "description": "ÚZIS od května 2025 zpřístupňuje syntetická data NZIS: umělé kopie čtyř celostátních registrů, na kterých si analytici napíšou dotaz, a ÚZIS ho pak spustí nad skutečnými daty. Podle studie autorů z ÚZIS v časopise JMIR Medical Informatics se do 23. července 2026 registrovalo 170 uživatelů, podali 199 žádostí a 173 z nich skončilo předáním dat, bez jediného hlášeného incidentu ochrany soukromí. Syntetické sady mají 0,04 až 0,26 % velikosti registrů a samy o sobě nic neříkají. Co služba umí, kde má limity a jak souvisí s evropským prostorem pro zdravotní data.",
+  "datePublished": "2026-11-19T06:00:00+01:00",
+  "dateModified": "2026-11-17",
+  "inLanguage": "cs",
+  "articleSection": "Digitalizace",
+  "author": { "@type": "Organization", "name": "Redakce HSPA Monitoru" },
+  "publisher": { "@type": "Organization", "name": "HSPA Monitor · Skóre zdravotnictví", "url": "https://skorezdravotnictvi.cz" },
+  "mainEntityOfPage": "https://skorezdravotnictvi.cz/clanek-synteticka-data-uzis-2026.html"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+  <article class="article-page">
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Digitalizace</span>
+        <span class="article-tag article-tag-muted">syntetická data · NZIS · ÚZIS · EHDS · sekundární využití dat</span>
+      </div>
+      <h1 class="article-title">Syntetická data ÚZIS: 199 žádostí a 173 předaných výstupů za 14 měsíců. Umělé registry jsou cvičiště, ne náhrada skutečných dat</h1>
+      <p class="article-deck">
+        ÚZIS od května 2025 zpřístupňuje syntetická data NZIS: umělé kopie čtyř celostátních registrů, na kterých si analytici napíšou dotaz, a ÚZIS ho pak spustí nad skutečnými daty. Podle studie autorů z ÚZIS v časopise JMIR Medical Informatics se do 23. července 2026 registrovalo 170 uživatelů, podali 199 žádostí a 173 z nich skončilo předáním dat, bez jediného hlášeného incidentu ochrany soukromí. Syntetické sady mají 0,04 až 0,26 % velikosti registrů a samy o sobě nic neříkají. Co služba umí, kde má limity a jak souvisí s evropským prostorem pro zdravotní data.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">19. listopadu 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">8 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+    <div class="article-body">
+      <p class="article-lead">
+        Hodnotit výkonnost zdravotnictví se dá jen s daty o tom, co se pacientům skutečně děje: kdo dostal jakou péči, kdy a s jakým výsledkem. Taková data v Česku existují. Národní zdravotnický informační systém (NZIS), který spravuje Ústav zdravotnických informací a statistiky (ÚZIS), propojuje podle nové studie 63 celostátních zdrojů, od registru úhrad přes onkologický registr po list o prohlídce zemřelého. Jenže jde o údaje o konkrétních lidech a ty nejde jen tak poslat každému, kdo o ně požádá. ÚZIS proto v květnu 2025 spustil službu, která tenhle rozpor obchází: výzkumník nedostane skutečná data, ale jejich umělou kopii, na které si připraví a odladí dotaz. Ten pak ÚZIS spustí nad skutečnými registry a výsledek po kontrole předá. Jak to za první rok fungovalo, popsali autoři z ÚZIS 10. listopadu 2026 v recenzovaném časopise <em>JMIR Medical Informatics</em>.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCntH">
+        <figcaption class="av-figure-h" id="avCntH">Syntetická data NZIS od spuštění 15. 5. 2025 do 23. 7. 2026: čtyři čísla provozu (Komenda et al., 2026)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="170" data-decimals="0">170</span>
+            <span class="av-counter-label">registrovaných uživatelů</span>
+            <span class="av-counter-foot">aspoň jednu žádost podalo 49 z nich</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="199" data-decimals="0">199</span>
+            <span class="av-counter-label">podaných žádostí o výstup</span>
+            <span class="av-counter-foot">184 vyřízených, 15 rozpracovaných</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="173" data-decimals="0">173</span>
+            <span class="av-counter-label">žádostí s předáním dat</span>
+            <span class="av-counter-foot">86,9 % všech podaných</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="0" data-decimals="0">0</span>
+            <span class="av-counter-label">hlášených incidentů ochrany soukromí</span>
+            <span class="av-counter-foot">podle autorů za celé sledované období</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Komenda M et al. <em>JMIR Med Inform</em> 2026;14:e80683, Tabulky 2 a 3 (DOI 10.2196/80683, PMID 43018400), ověřeno v PubMed 17. 11. 2026. Provozní data hodnotí sám provozovatel služby.</p>
+      </figure>
+
+      <h3>Co syntetická data NZIS jsou a co nejsou</h3>
+      <p>
+        Slovo „syntetická“ svádí k představě, že jde o umělá data, která se statisticky chovají jako skutečná a dají se rovnou analyzovat. Česká služba je postavená jinak a studie to říká výslovně. Syntetické sady nevznikaly strojovým učením ani generativní umělou inteligencí, ale podle pravidel napsaných v ÚZIS zvlášť pro každý registr. Zachovávají strukturu databáze, názvy a typy proměnných, vazby mezi tabulkami a vybraná logická pravidla. Identifikátory nahrazují náhodnými, kategorie vyplňují přípustnými hodnotami bez ohledu na to, jak často se ve skutečnosti vyskytují, a extrémní hodnoty ořezávají. Statistickou podobnost se skutečnými daty autoři vůbec neměřili, protože to nebylo cílem. Jediným testem bylo, jestli tentýž dotaz v SQL proběhne v umělém i skutečném prostředí.
+      </p>
+      <p>
+        Stránka služby na Národním zdravotnickém informačním portálu to shrnuje ještě stručněji: obsah syntetických dat je uměle vytvořený a „nelze z něj přímo vytěžit žádný smysluplný výsledek“. Syntetická databáze je tedy cvičiště. Výsledek, který dává klinický nebo epidemiologický smysl, vzniká vždy až nad skutečnými registry, a to rukama zaměstnanců ÚZIS, ne žadatele.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avFlowH">
+        <figcaption class="av-figure-h" id="avFlowH">Cesta žádosti: od umělé databáze ke skutečnému výsledku (metodická dokumentace ÚZIS, verze 6 z 15. 10. 2026; Komenda et al., 2026)</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step av-flow-step-neutral">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Registrace</h4>
+            <p class="av-flow-desc">Jednorázová, neveřejná. Uživatel dostane přístup do syntetické databáze.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-neutral">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Dotaz nad umělými daty</h4>
+            <p class="av-flow-desc">Žadatel napíše a odladí skript v SQL. Výsledky z této fáze nic neznamenají.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-neutral">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Žádost o výstup</h4>
+            <p class="av-flow-desc">Finální skript a metodický list. Každý žadatel smí mít najednou jen jednu žádost.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">ÚZIS spustí skript nad skutečnými daty</h4>
+            <p class="av-flow-desc">Kontrola technická, metodická, právní a ochrany údajů; skupiny pod 10 pozorování se potlačí nebo sloučí.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Předání a zveřejnění</h4>
+            <p class="av-flow-desc">Výstup dostane žadatel; veřejně vychází s odstupem 6 měsíců, skript jen se souhlasem autora.</p>
+            <span class="av-flow-tag">Lhůta typicky do 30 pracovních dní</span>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS, Syntetická data jako modalita zpřístupňování dat NZIS, metodická dokumentace, verze 6 (15. 10. 2026), nzip.cz, staženo 17. 11. 2026; prahová hodnota 10 pozorování podle Komenda et al., <em>JMIR Med Inform</em> 2026.</p>
+      </figure>
+
+      <h3>Jak malé jsou umělé registry</h3>
+      <p>
+        Synteticky jsou zatím zpracované čtyři registry: Národní registr hrazených zdravotních služeb, tedy data o péči vykázané pojišťovnám, dále Národní onkologický registr, Národní registr reprodukčního zdraví a databáze listů o prohlídce zemřelého. Umělé kopie mají podle studie 0,04 až 0,26 % rozsahu skutečných registrů. U registru úhrad stojí 14 201 812 syntetických záznamů proti 16 200 834 967 skutečným, tedy 0,09 %. Umělý registr úhrad obsahuje podle autorů zhruba 100 000 vymyšlených pacientů, 10 milionů dokladů a 20 milionů záznamů o výkonech. Pro ochranu soukromí v něm jsou jen nejčastější položky: 100 nejčastějších odborností, 100 nejčastějších skupin diagnóz, 100 nejčastějších výkonů a náhodné identifikátory 1 000 poskytovatelů.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avTabH">
+        <figcaption class="av-figure-h" id="avTabH">Velikost skutečných registrů NZIS a jejich syntetických kopií (Komenda et al., 2026, Tabulka 1)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Registr</th>
+                <th scope="col" class="av-num">Syntetické záznamy</th>
+                <th scope="col" class="av-num">Skutečné záznamy</th>
+                <th scope="col" class="av-num">Podíl</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Národní registr hrazených zdravotních služeb</th><td class="av-num">14 201 812</td><td class="av-num">16 200 834 967</td><td class="av-num">0,09 %</td></tr>
+              <tr><th scope="row">Národní registr reprodukčního zdraví</th><td class="av-num">1 163</td><td class="av-num">3 054 931</td><td class="av-num">0,04 %</td></tr>
+              <tr><th scope="row">Národní onkologický registr</th><td class="av-num">6 714</td><td class="av-num">3 138 236</td><td class="av-num">0,21 %</td></tr>
+              <tr><th scope="row">Databáze listů o prohlídce zemřelého</th><td class="av-num">10 777</td><td class="av-num">4 193 272</td><td class="av-num">0,26 %</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Komenda M et al. <em>JMIR Med Inform</em> 2026;14:e80683, Tabulka 1 (DOI 10.2196/80683), ověřeno v PubMed 17. 11. 2026. Skutečné registry pokrývají delší období než jejich syntetické kopie, u registru úhrad 2010–2024 proti 2015–2019.</p>
+      </figure>
+
+      <p>
+        Malá velikost tu není chyba. Kdo ladí dotaz, nepotřebuje šestnáct miliard řádků, potřebuje správné tabulky, správné sloupce a správné vazby. Plyne z toho ale, co služba nenabízí: nedá se na ní zkoumat vzácná diagnóza, která mezi stovkou nejčastějších není, ani si ověřit, jestli nápad vůbec stojí za žádost. Odpověď na otázku „kolik?“ dá vždy až ÚZIS nad skutečnými daty.
+      </p>
+
+      <h3>Kdo službu používá a jak rychle dostane data</h3>
+      <p>
+        Ze 199 žádostí podaných do 23. července 2026 skončilo 173 předáním dat (86,9 %). Sedm žádostí žadatelé zrušili (3,5 %), čtyři ÚZIS zamítl (2,0 %) a 15 bylo ještě rozpracovaných (7,5 %). Vyřízení trvalo v průměru 15,63 pracovního dne, s velkým rozptylem (směrodatná odchylka 10,37 dne). Metodika ÚZIS přitom počítá s orientační lhůtou typicky do 30 pracovních dní. Žádosti podalo 49 ze 170 registrovaných uživatelů. Podle autorů pochází 69,8 % registrovaných z komerčního sektoru. Ke zveřejnění svého skriptu dalo souhlas 41 žadatelů (20,6 %). Studie uvádí čtyři příklady využití: cestu pacientů s nově zjištěnou rakovinou plic, dráhu pacientů na dialýze, zátěž kardiovaskulárními nemocemi a očkování proti meningokoku B.
+      </p>
+
+      <aside class="article-callout-caveat">
+        <strong>Co z té studie vyčíst nejde.</strong> Jde o popis a provozní hodnocení služby, které napsal hlavně sám provozovatel: sedm z deseti autorů má afiliaci ÚZIS a jeden je z farmaceutické firmy AstraZeneca. Nulový počet incidentů znamená, že žádný nebyl nahlášen ani potvrzen, nikoli že ho někdo nezávisle testoval. Studie neměří, jestli předané výstupy byly analyticky správné; podle textu za to odpovídá výhradně žadatel. V popisu uživatelů je drobná nesrovnalost (dílčí počty dávají v součtu 172, ne 170), proto uvádíme jen podíl, který udávají autoři. Metodická dokumentace ÚZIS píše, že předávaná data jsou „agregovaná a nevratně anonymizovaná“. Studie přitom popisuje i předání deidentifikované datové sady na úrovni jednotlivých pacientů, s anonymním identifikátorem a měsícem ošetření (příklad dialýzy).
+      </aside>
+
+      <h3>Proč na tom záleží pro hodnocení zdravotnictví</h3>
+      <p>
+        Většina toho, co HSPA Monitor sleduje, stojí na agregátech, které někdo z individuálních dat jednou spočítal. Kolik pacientů s infarktem přežije, za jak dlouho se nemocná se zhoubným nádorem dostane k léčbě, kolik lidí opakovaně končí v nemocnici: na takové otázky odpovídá jen propojení registrů na úrovni pacienta. Dokud takové propočty dělají jen úřady, závisí hodnocení systému na tom, na co mají kapacitu. Služba, ve které si analytik z univerzity, odborné společnosti nebo neziskové organizace připraví dotaz sám a úřad ho jen zkontroluje a spustí, tohle úzké místo rozšiřuje. Zveřejňování výstupů s odstupem šesti měsíců a skriptů v časopise NZIS Open Journal navíc umožňuje, aby se k jednou spočítanému ukazateli mohl vrátit i někdo další.
+      </p>
+      <p>
+        Má to i druhou stránku. Studie sama uvádí, že každá žádost prochází ruční technickou, metodickou, právní a ochranářskou kontrolou, a s rostoucí poptávkou se to stává kapacitním omezením. Autoři zmiňují i riziko, že při zveřejňování mnoha výstupů roste možnost jejich kombinací, ze kterých by šlo usuzovat na jednotlivce.
+      </p>
+
+      <h3>Evropský rámec: EHDS a sekundární využití od roku 2029</h3>
+      <p>
+        Nařízení Evropského parlamentu a Rady (EU) 2025/327 o evropském prostoru pro zdravotní data (EHDS) bylo přijato 11. února 2025 a v Úředním věstníku vyšlo 5. března 2025. Obecně se použije od 26. března 2027. Jeho kapitola IV o sekundárním využití zdravotních údajů, tedy pro výzkum, politiku nebo statistiku, se ale použije až od 26. března 2029, některá ustanovení ještě později. Nařízení počítá se subjekty pro přístup ke zdravotním údajům, s povolením k datům a se zpracováním v zabezpečeném prostředí (článek 73). O syntetických datech v jeho textu výslovná zmínka není. Česká služba tak nařízení neprovádí. Autoři ji popisují jako národní řešení souladné s obecným nařízením o ochraně osobních údajů (GDPR) a s principy EHDS pro přechodné období.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-warn">
+          <span class="av-counter" data-value="26" data-suffix=". 3. 2029">26. 3. 2029</span>
+          <span class="av-counter-label">od kdy se použije kapitola IV EHDS o sekundárním využití</span>
+          <span class="av-counter-foot">nařízení (EU) 2025/327, čl. 105; obecná použitelnost od 26. 3. 2027</span>
+        </div>
+      </aside>
+
+      <p>
+        Český zákon, který má nařízení provést, je na cestě. Návrh novely zákona o elektronizaci zdravotnictví, který podle ministerstva zahrnuje i první fázi adaptace EHDS, vláda schválila (tisková zpráva MZ z 9. listopadu 2026). V systému VeKLEP je od 11. listopadu 2026 veden ve stavu „B – signováno“ a míří do Poslanecké sněmovny. Číslo sněmovního tisku registr k 12. listopadu 2026 nevedl. Dřívější novelu, která zavedla centrální registr preventivních vyšetření, jsme rozebrali <a href="clanek-novela-elektronizace-2026.html">v samostatném článku</a>, celkový rámec nařízení v článku <a href="clanek-ehds-evropsky-prostor-zdravotni-data.html">o evropském prostoru pro zdravotní data</a>.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avTlH">
+        <figcaption class="av-figure-h" id="avTlH">Syntetická data NZIS a EHDS: milníky (stav k 17. 11. 2026)</figcaption>
+        <ol class="av-timeline">
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">11. 2. 2025</time>
+            <h4 class="av-timeline-title">Přijato nařízení EHDS</h4>
+            <p class="av-timeline-desc">Nařízení (EU) 2025/327, v Úředním věstníku 5. 3. 2025.</p>
+            <span class="av-timeline-tag">EU</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">15. 5. 2025</time>
+            <h4 class="av-timeline-title">Veřejné spuštění syntetických dat NZIS</h4>
+            <p class="av-timeline-desc">Čtyři registry v syntetické podobě, žádosti o výstup přes ÚZIS.</p>
+            <span class="av-timeline-tag">ÚZIS</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">23. 7. 2026</time>
+            <h4 class="av-timeline-title">Konec sledovaného období studie</h4>
+            <p class="av-timeline-desc">170 uživatelů, 199 žádostí, 173 předání dat.</p>
+            <span class="av-timeline-tag">Data</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-now">
+            <time class="av-timeline-date">11. 11. 2026</time>
+            <h4 class="av-timeline-title">Česká novela s adaptací EHDS signována</h4>
+            <p class="av-timeline-desc">VeKLEP ALBSDVLDLD32, stav „B – signováno“; míří do Sněmovny.</p>
+            <span class="av-timeline-tag">Vláda</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-future">
+            <time class="av-timeline-date">26. 3. 2027</time>
+            <h4 class="av-timeline-title">Obecná použitelnost EHDS</h4>
+            <p class="av-timeline-desc">Většina ustanovení nařízení se začne používat.</p>
+            <span class="av-timeline-tag">EU</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-future">
+            <time class="av-timeline-date">26. 3. 2029</time>
+            <h4 class="av-timeline-title">Sekundární využití podle EHDS</h4>
+            <p class="av-timeline-desc">Použije se kapitola IV nařízení.</p>
+            <span class="av-timeline-tag">EU</span>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> EUR-Lex, nařízení (EU) 2025/327, čl. 105, čteno 17. 11. 2026; Komenda et al., <em>JMIR Med Inform</em> 2026 (DOI 10.2196/80683); VeKLEP ALBSDVLDLD32 podle registru legislativy HSPA Monitoru, ověřeno 12. 11. 2026.</p>
+      </figure>
+
+      <h3>Co říká širší evidence o syntetických datech</h3>
+      <p>
+        Mezinárodní literatura je k syntetickým datům opatrnější, než by naznačovala nadšená prohlášení. Přehledová studie <em>Kaabachi et al.</em> (2025) v časopise <em>npj Digital Medicine</em> (<a href="https://doi.org/10.1038/s41746-024-01359-3" target="_blank" rel="noopener">doi.org ↗</a>) prošla metody hodnocení užitečnosti a ochrany soukromí u syntetických zdravotních dat. Zjistila, že jednotná metoda chybí, většina studií ochranu soukromí vůbec nehodnotí a ty, které ji hodnotí, rizika často výrazně podceňují. Česká služba se tomuto problému z velké části vyhýbá právě tím, že umělá data nemají nést skutečnou informaci a výsledky ze skutečných dat procházejí kontrolou zveřejnění. Riziko se tak přesouvá z umělých dat na předávané výstupy a na jejich případné kombinování. Autoři české studie sami píší, že ochranu soukromí berou jako průběžný proces, ne jako jednorázové technické řešení.
+      </p>
+
+      <h3>Co s tím</h3>
+      <ul>
+        <li><strong>Zveřejňovat provozní ukazatele průběžně.</strong> Počet žádostí, dobu vyřízení, podíl zamítnutých a počet incidentů by ÚZIS mohl zveřejňovat třeba čtvrtletně, ne jednou za rok ve vědeckém článku. Pro hodnocení služby by pomohlo i nezávislé ověření ochrany soukromí, protože dnešní čísla jsou vlastním hodnocením provozovatele.</li>
+        <li><strong>Vyjasnit, v jaké podobě se data předávají.</strong> Metodika mluví o agregovaných a nevratně anonymizovaných výstupech, studie popisuje i sady na úrovni pacienta. Veřejné pravidlo, kdy je přípustné které, by posílilo důvěru, na které celý model stojí.</li>
+        <li><strong>Rozšířit nabídku registrů.</strong> Synteticky jsou dnes čtyři ze 63 zdrojů NZIS. Pro hodnocení výkonnosti systému by se hodily například registry, které popisují péči v nemocnicích a návaznou péči.</li>
+        <li><strong>Využít službu pro veřejné ukazatele.</strong> Skripty zveřejněné se souhlasem autorů a výstupy publikované po šesti měsících mohou sloužit jako stavebnice pro opakovatelné ukazatele kvality péče. HSPA Monitor by z nich mohl stavět indikátory s jasně popsaným výpočtem.</li>
+        <li><strong>Navázat na českou adaptaci EHDS.</strong> Až Sněmovna bude novelu projednávat, stojí za to sledovat, jak se do nového rámce pro sekundární využití promítne zkušenost, kterou ÚZIS se syntetickými daty už má, včetně kapacity na ruční kontrolu žádostí.</li>
+      </ul>
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=ehealth_adoption"><strong>Online přístup občanů k elektronické zdravotní dokumentaci</strong></a> — 77,4 bodu ze 100 (ČR, 2025) · průměr EU 86,5 · Evropská komise, Digital Decade. Měří primární využití dat (přístup pacientů), ne sekundární využití pro výzkum.</li>
+        <li><a href="indicator.html?id=kyberneticke_incidenty_zdravotnictvi"><strong>Kybernetické bezpečnostní incidenty ve zdravotnictví</strong></a> — 29 incidentů (ČR, 2022) · NÚKIB. Kontext k zabezpečení zdravotnických dat, nesouvisí přímo se službou syntetických dat.</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Recenzovaná literatura</h5>
+        <ul class="article-sources-list">
+          <li><strong>Komenda M, Klimeš D, Tichopad A, Jarkovský J, Májek O, Mužík J, Táborský M, Těšitelová V, Habětínek J, Dušek L.</strong> Implementation of a National Synthetic Data Infrastructure for Privacy-Preserving Analytical Workflows in the Czech National Health Information System: Development and Evaluation Study. JMIR Med Inform. 2026;14:e80683. DOI 10.2196/80683. PMID 43018400. Typ publikace: Journal Article (open access, plný text PMC13756756). Ověřeno v PubMed 17. 11. 2026. <a href="https://pubmed.ncbi.nlm.nih.gov/43018400/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+          <li><strong>Kaabachi B, Despraz J, Meurers T, Otte K, Halilovic M, Kulynych B, Prasser F, Raisaro JL.</strong> A scoping review of privacy and utility metrics in medical synthetic data. NPJ Digit Med. 2025;8(1):60. DOI 10.1038/s41746-024-01359-3. PMID 39870798. Ověřeno v PubMed 17. 11. 2026. <a href="https://pubmed.ncbi.nlm.nih.gov/39870798/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární zdroje</h5>
+        <ul class="article-sources-list">
+          <li><strong>ÚZIS ČR — Syntetická data jako modalita zpřístupňování dat NZIS, metodická dokumentace</strong>, verze 6 (15. 10. 2026). Postup registrace a žádosti, lhůty, pravidla zveřejnění. Staženo 17. 11. 2026. <a href="https://www.nzip.cz/data/nzis-open/synteticka-data-metodicka-dokumentace.pdf" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+          <li><strong>Národní zdravotnický informační portál — Syntetická data NZIS</strong>. Popis služby a podmínek. Čteno 17. 11. 2026. <a href="https://www.nzip.cz/clanek/2230-synteticka-data-nzis" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Legislativa</h5>
+        <ul class="article-sources-list">
+          <li><strong>Nařízení Evropského parlamentu a Rady (EU) 2025/327 ze dne 11. února 2025 o evropském prostoru pro zdravotní data</strong> (Úř. věst. L, 5. 3. 2025). Článek 73 (zabezpečené prostředí pro zpracování), článek 105 (použitelnost). Čteno 17. 11. 2026. <a href="https://eur-lex.europa.eu/eli/reg/2025/327/oj" target="_blank" rel="noopener">eur-lex.europa.eu ↗</a></li>
+          <li><strong>VeKLEP — Návrh zákona, kterým se mění zákon č. 325/2021 Sb., o elektronizaci zdravotnictví, a některé další zákony</strong> (ALBSDVLDLD32). Stav „B – signováno“ od 11. 11. 2026, ověřeno 12. 11. 2026. <a href="https://odok.cz/portal/veklep/material/ALBSDVLDLD32/" target="_blank" rel="noopener">odok.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Související čtení</h5>
+        <ul class="article-sources-list">
+          <li><strong>HSPA Monitor — Evropský prostor zdravotních dat: jak nařízení EHDS změní české zdravotnictví do roku 2035</strong>. <a href="clanek-ehds-evropsky-prostor-zdravotni-data.html">clanek-ehds-evropsky-prostor-zdravotni-data ↗</a></li>
+          <li><strong>HSPA Monitor — Kam to směřuje: strategie 2025–2035, EHDS a magický rok 2030</strong>. <a href="clanek-digi-5-strategie-ehds-2030.html">clanek-digi-5-strategie-ehds-2030 ↗</a></li>
+          <li><strong>HSPA Monitor — Elektronizace zdravotnictví míří dál</strong>. Novela zákona č. 236/2025 Sb. <a href="clanek-novela-elektronizace-2026.html">clanek-novela-elektronizace-2026 ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Všechna provozní čísla služby pocházejí ze studie, kterou napsali převážně zaměstnanci ÚZIS, tedy provozovatele služby; nezávislé hodnocení zatím neexistuje. Období 14 měsíců je od veřejného spuštění 15. 5. 2025 do 23. 7. 2026. Podíly zrušených, zamítnutých a rozpracovaných žádostí se vztahují ke všem 199 podaným žádostem.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
