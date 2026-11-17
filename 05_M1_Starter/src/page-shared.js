@@ -627,7 +627,7 @@ export function renderModuleNav(activeId, { popups = 'auto' } = {}) {
     // Sekce Pojišťovny: Srovnávač zdravotních pojišťoven, veřejný od 2026-11-16
     // (rozhodnutí vydavatele, PLAN-SROVNAVAC-POJISTOVEN.md P5.1). Stránky srovnávače
     // volají renderModuleNav('pojistovny').
-    { id: 'pojistovny',  label: 'Pojišťovny',              href: 'pojistovny.html',         match: ['pojistovny.html', 'pojistovna.html', 'pojistovny-prispevky.html', 'pojistovny-kmen.html', 'pojistovny-penize.html', 'pojistovny-prevence.html', 'pojistovny-aplikace.html', 'pojistovny-instituce.html', 'pojistovny-gramotnost.html', 'pojistovny-metodika.html', 'pojistovny-indikatory.html'],
+    { id: 'pojistovny',  label: 'Pojišťovny',              href: 'pojistovny.html',         match: ['pojistovny.html', 'pojistovna.html', 'pojistovny-prispevky.html', 'pojistovny-kmen.html', 'pojistovny-penize.html', 'pojistovny-prevence.html', 'pojistovny-aplikace.html', 'pojistovny-aplikace-dotaznik.html', 'pojistovny-instituce.html', 'pojistovny-gramotnost.html', 'pojistovny-metodika.html', 'pojistovny-indikatory.html'],
       children: [
         { id: 'pojistovny-prehled',   label: 'Srovnávač pojišťoven',   href: 'pojistovny.html',           match: ['pojistovny.html'] },
         { id: 'pojistovny-prispevky', label: 'Na co mám nárok',        href: 'pojistovny-prispevky.html', match: ['pojistovny-prispevky.html'] },
@@ -635,7 +635,7 @@ export function renderModuleNav(activeId, { popups = 'auto' } = {}) {
         { id: 'pojistovny-penize',    label: 'Peníze a přerozdělení',  href: 'pojistovny-penize.html',    match: ['pojistovny-penize.html'] },
         { id: 'pojistovny-kmen',      label: 'Kdo je u koho pojištěn', href: 'pojistovny-kmen.html',      match: ['pojistovny-kmen.html'] },
         { id: 'pojistovny-prevence',  label: 'Prevence a fond prevence', href: 'pojistovny-prevence.html', match: ['pojistovny-prevence.html'] },
-        { id: 'pojistovny-aplikace',  label: 'Aplikace a servis',      href: 'pojistovny-aplikace.html',  match: ['pojistovny-aplikace.html'] },
+        { id: 'pojistovny-aplikace',  label: 'Aplikace a servis',      href: 'pojistovny-aplikace.html',  match: ['pojistovny-aplikace.html', 'pojistovny-aplikace-dotaznik.html'] },
         { id: 'pojistovny-instituce', label: 'Kdo pojišťovny řídí',    href: 'pojistovny-instituce.html', match: ['pojistovny-instituce.html'] },
       ],
     },

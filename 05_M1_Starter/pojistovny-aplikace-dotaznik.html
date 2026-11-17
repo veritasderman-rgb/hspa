@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dotazník: aplikace vaší pojišťovny — Srovnávač pojišťoven · HSPA Monitor</title>
+<meta name="description" content="Anonymní dotazník: zkuste v aplikaci své zdravotní pojišťovny osm běžných úkolů a oznámkujte, jak snadno to šlo. Asi patnáct minut, bez registrace.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Aplikace vaší pojišťovny: zkuste osm úkolů — dotazník">
+<meta property="og:locale" content="cs_CZ">
+<link rel="stylesheet" href="src/styles.min.css">
+<!--
+  audit:
+    status: draft
+    trida: C (nová stránka)
+    stranka: samostatná stránka veřejného dotazníku aplikace-ukoly (docs/pojistovny-dotazniky.md § 1)
+    zdroje: znění otázek data/pojistovny-otazky.json (sada aplikace-ukoly); odpovědi přes api/dotaznik.js
+    dotaznik: starý odkaz pojistovny-gramotnost.html?dotaznik=aplikace-ukoly sem přesměruje (DOTAZNIK_STRANKY v src/pojistovny-shell.js)
+-->
+  <link rel="canonical" href="https://skorezdravotnictvi.cz/pojistovny-aplikace-dotaznik" data-seo-injected="1">
+  <meta property="og:url" content="https://skorezdravotnictvi.cz/pojistovny-aplikace-dotaznik" data-seo-injected="1">
+  <script type="application/ld+json" data-seo-injected="1">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://skorezdravotnictvi.cz/#organization",
+      "name": "HSPA Monitor",
+      "alternateName": "Skóre zdravotnictví",
+      "url": "https://skorezdravotnictvi.cz/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://skorezdravotnictvi.cz/assets/brand/og-default.png"
+      },
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61590403735200",
+        "https://x.com/SkoreZdravko",
+        "https://www.instagram.com/skorezdravotnictvi/"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://skorezdravotnictvi.cz/#website",
+      "name": "HSPA Monitor — Zdravé Česko",
+      "url": "https://skorezdravotnictvi.cz/",
+      "inLanguage": "cs-CZ",
+      "publisher": {
+        "@id": "https://skorezdravotnictvi.cz/#organization"
+      }
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+<a class="skip-link" href="#content">Přeskočit na hlavní obsah</a>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Srovnávač pojišťoven</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+  <div id="zpShell" class="zpc-shell" data-aktivni="aplikace"></div>
+
+  <section class="zpc-mod zpc-mod--page zpd-page" id="dotaznik-aplikace" aria-labelledby="zpDotHead">
+    <div class="zpc-mod-head"><h1 id="zpDotHead">Aplikace vaší pojišťovny: zkuste osm úkolů</h1><span class="zpc-stav">dotazník · anonymní · asi 15 minut</span></div>
+    <p class="zpc-lead">Jak snadno se v aplikaci vaší zdravotní pojišťovny dá najít průkaz, vykázaná péče nebo příspěvek na prevenci? Zkuste to a oznámkujte jako ve škole.</p>
+    <div id="zpDotaznik" data-sada="aplikace-ukoly"></div>
+    <details class="zpc-acc">
+      <summary>Jak se s odpověďmi nakládá</summary>
+      <div class="zpc-acc-body">
+        <p>Odpovědi se ukládají bez osobních údajů: bez jména, e-mailu i IP adresy. Volný text čte jen redakce jako podnět k ověření a doslova se nezveřejňuje.</p>
+        <p>Zveřejňujeme medián známky a podíl nedokončených pokusů za každý úkol. Po pojišťovnách až od 30 odpovědí na pojišťovnu; do té doby jen souhrn za všechny dohromady, a to od tří odpovědí.</p>
+        <p>Dotazník není reprezentativní průzkum. Respondenti se vybírají sami, takže výsledek říká, co zažili oni, ne všichni pojištěnci. Do hodnocení pojišťoven sám nevstupuje; doplňuje test aplikací, který dělá redakce na zařízení.</p>
+      </div>
+    </details>
+    <p class="zpd-back"><a href="pojistovny-aplikace.html">← Co umí aplikace pojišťoven</a> · <a href="pojistovny-gramotnost.html#dotaznik-aplikace-ukoly">Znění a vyhodnocení dotazníku</a></p>
+  </section>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/pojistovny.js"></script>
+</body>
+</html>
