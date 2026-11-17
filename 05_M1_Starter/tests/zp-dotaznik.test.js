@@ -705,6 +705,24 @@ test('pojistovny-gramotnost.html a pojistovny.js: kontejnery, věta o soukromí,
   assert.match(js, /renderDotaznik\(/);
 });
 
+test('pojistovny-aplikace-dotaznik.html: samostatná stránka sady aplikace-ukoly a přesměrování starého odkazu', async () => {
+  const html = read('pojistovny-aplikace-dotaznik.html');
+  assert.match(html, /<div id="zpDotaznik" data-sada="aplikace-ukoly"><\/div>/);
+  assert.match(html, /<meta name="robots" content="index, follow">/);
+  assert.match(html, /bez osobních údajů/);
+  assert.match(html, /src="src\/pojistovny\.js"/);
+  const { DOTAZNIK_STRANKY, legacyRedirect } = await import('../src/pojistovny-shell.js');
+  assert.equal(DOTAZNIK_STRANKY['aplikace-ukoly'], 'pojistovny-aplikace-dotaznik.html');
+  assert.equal(legacyRedirect('?dotaznik=aplikace-ukoly', ''), 'pojistovny-aplikace-dotaznik.html');
+  for (const [id, href] of Object.entries(DOTAZNIK_STRANKY)) {
+    const sada = sadaById(id);
+    assert.ok(sada && sada.kanal === 'web-verejnost', `${id}: vlastní stránku má jen veřejná sada bez tokenu`);
+    assert.match(read(href), new RegExp(`data-sada="${id}"`));
+  }
+  assert.match(read('src', 'pojistovny.js'), /DOTAZNIK_STRANKY\[params\.get\('dotaznik'\)\]/);
+  assert.match(read('scripts', 'generate-sitemap.js'), /\/pojistovny-aplikace-dotaznik\.html/);
+});
+
 test('styles.css: sekce .zpd- je poslední pod markerem a .zpd- jinde není', () => {
   const css = read('src', 'styles.css');
   const marker = '/* === Srovnávač pojišťoven: dotazníky src/zp-dotaznik.js (.zpd-) — balíček P2.4 === */';
@@ -936,6 +954,12 @@ test('aplikace-ukoly: formulář kreslí známky v řádku a popis části; odes
   assert.equal(c.find((n) => n.className === 'zpd-note zpd-part-popis').length, 1);
   const radia = c.find((n) => n.attrs?.name === 'prispevek');
   assert.equal(radia.length, 7);
+  // známky 1–5 drží pohromadě v .zpd-scale-nums, slovní možnosti zvlášť (dřív se jednička zalomila vedle nápovědy)
+  const ukol = c.find((n) => n.attrs?.['data-otazka'] === 'prispevek')[0];
+  const skala = ukol.children.filter((n) => n.className === 'zpd-scale');
+  assert.equal(skala.length, 1);
+  assert.deepEqual(skala[0].children.map((n) => [n.className, n.children.length]), [['zpd-scale-nums', 5], ['zpd-scale-alt', 2]]);
+  assert.equal(ukol.children.filter((n) => n.tag === 'label').length, 0, 'možnosti škály nejsou přímo ve fieldsetu');
   radia.find((n) => n.value === '4').checked = true;
   assert.deepEqual(r.getPayload().odpovedi, { prispevek: '4' });
   assert.equal(r.getPayload().respondent_typ, 'verejnost');

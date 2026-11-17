@@ -157,8 +157,13 @@ function questionNode(doc, q, uid, refs) {
     fs.appendChild(hint);
   }
   const inputs = [];
+  // škála: známky (číslice) drží pohromadě v jednom řádku, slovní možnosti („nešlo to dokončit“) ve druhé skupině
+  const skala = q.zobrazeni === 'skala' ? mk(doc, 'div', 'zpd-scale') : null;
+  const nums = skala ? mk(doc, 'div', 'zpd-scale-nums') : null;
+  const alt = skala ? mk(doc, 'div', 'zpd-scale-alt') : null;
   q.moznosti.forEach((opt) => {
-    const lab = mk(doc, 'label', 'zpd-opt');
+    const jeZnamka = /^\d+$/.test(String(opt));
+    const lab = mk(doc, 'label', skala && jeZnamka ? 'zpd-opt zpd-opt--num' : 'zpd-opt');
     const inp = mk(doc, 'input', 'zpd-input');
     inp.setAttribute('type', kind === 'jeden' ? 'radio' : 'checkbox');
     inp.setAttribute('name', q.id);
@@ -166,9 +171,14 @@ function questionNode(doc, q, uid, refs) {
     inp.checked = false;
     lab.appendChild(inp);
     lab.appendChild(mk(doc, 'span', 'zpd-opt-text', opt));
-    fs.appendChild(lab);
+    (skala ? (jeZnamka ? nums : alt) : fs).appendChild(lab);
     inputs.push(inp);
   });
+  if (skala) {
+    if (nums.children.length) skala.appendChild(nums);
+    if (alt.children.length) skala.appendChild(alt);
+    fs.appendChild(skala);
+  }
   const ref = { kind, inputs };
   if (hasUpresneni(q)) {
     const lab = mk(doc, 'label', 'zpd-more-label', 'Upřesnění (volitelně)');

@@ -100,6 +100,7 @@ git push -u origin claude/<branch>
 ├── pojistovny-penize.html      ← Srovnávač pojišťoven (veřejný od 16. 11. 2026, sekce Pojišťovny v hlavní navigaci): Peníze — relativní saldo přerozdělení, řady hospodaření MZ 2015–2024, státní pojištěnci, segmenty, fond prevence a provoz
 ├── pojistovny-instituce.html   ← Srovnávač pojišťoven (veřejný od 16. 11. 2026, sekce Pojišťovny v hlavní navigaci): Instituce — zákon a orgány bez jmen, smluvní programy pro poskytovatele, dostupnost a § 16, síť odborností
 ├── pojistovny-prispevky.html   ← Srovnávač pojišťoven (veřejný od 16. 11. 2026, sekce Pojišťovny v hlavní navigaci): Příspěvky — na co má domácnost u pojišťovny nárok (věk, pohlaví, situace → tabulka příspěvků z fondu prevence s částkou, kdo ji může čerpat, podmínky, odkaz na web ZP; src/pojistovny-prispevky.js + src/prispevky-engine.js)
+├── pojistovny-aplikace-dotaznik.html ← Srovnávač pojišťoven: veřejný dotazník „Aplikace vaší pojišťovny: zkuste osm úkolů“ (sada aplikace-ukoly z data/pojistovny-otazky.json, formulář src/zp-dotaznik.js, odpovědi přes api/dotaznik.js)
 ├── pojistovna.html             ← Srovnávač pojišťoven (veřejný od 16. 11. 2026, sekce Pojišťovny v hlavní navigaci): profil jedné pojišťovny (`?zp=<kód>`), bez parametru rozcestník sedmi ZP
 ├── o-projektu.html             ← O projektu, metodika
 ├── newsletter.html             ← Newsletter: teaser, přihlášení k odběru (Brevo přes /api/subscribe), archiv minulých čísel z data/newsletter-log.json — src/newsletter-page.js

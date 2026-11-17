@@ -23290,9 +23290,12 @@ main tr[data-zp][data-porovnat="true"] > :first-child { box-shadow: inset 3px 0 
 .zpd-opt{display:flex;align-items:flex-start;gap:8px;min-height:32px;padding:4px 0;font-size:14.5px;line-height:1.4;color:var(--ink);cursor:pointer}
 .zpd-opt-text{min-width:0;overflow-wrap:anywhere}
 .zpd-opt .zpd-input{flex:none;width:18px;height:18px;margin:2px 0 0;accent-color:var(--ink)}
-.zpd-q--skala{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;padding-bottom:10px;border-bottom:1px solid var(--rule2)}
-.zpd-q--skala .zpd-q-text,.zpd-q--skala>.zpd-note{flex:1 0 100%}
+.zpd-q--skala{padding-bottom:12px;border-bottom:1px solid var(--rule2)}
+.zpd-part>.zpd-q--skala:last-child{border-bottom:0}
+.zpd-scale{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px}
+.zpd-scale-nums,.zpd-scale-alt{display:flex;flex-wrap:wrap;gap:6px}
 .zpd-q--skala .zpd-opt{align-items:center;gap:6px;min-height:40px;padding:4px 12px 4px 8px;border:1px solid var(--rule2);border-radius:20px;font-size:14px}
+.zpd-q--skala .zpd-opt--num{min-width:56px;box-sizing:border-box;font-variant-numeric:tabular-nums}
 .zpd-q--skala .zpd-opt:has(.zpd-input:checked){border-color:var(--ink);background:var(--paper2);font-weight:600}
 .zpd-q--skala .zpd-opt .zpd-input{margin:0}
 .zpd-part-popis{font-size:14px;color:var(--ink)}
@@ -23309,6 +23312,8 @@ main tr[data-zp][data-porovnat="true"] > :first-child { box-shadow: inset 3px 0 
 .zpd-status.is-ok{color:var(--good);font-weight:600}
 .zpd-status.is-err{color:var(--bad);font-weight:600}
 .zpd-status.is-wait{color:var(--ink-mut)}
+.zpd-page{max-width:760px}
+.zpd-page .zpd-back{font-family:var(--sans);font-size:14px;margin:18px 0 0}
 .zpd-agg{font-family:var(--sans);margin-top:20px;padding-top:16px;border-top:1px solid var(--rule)}
 .zpd-agg-head{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-mut);margin:0 0 10px}
 .zpd-agg-q{margin:0 0 18px}
@@ -23325,6 +23330,10 @@ main tr[data-zp][data-porovnat="true"] > :first-child { box-shadow: inset 3px 0 
   .zpd-bar-val{grid-area:v}
   .zpd-bar-track{grid-area:t}
   .zpd-submit{justify-self:stretch}
+  .zpd-scale{display:grid;gap:6px}
+  .zpd-scale-nums{display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
+  .zpd-q--skala .zpd-opt--num{min-width:0;justify-content:center;padding:4px 6px}
+  .zpd-part{padding:12px 12px 4px}
 }
 @media print{
   .zpd-form{display:none}

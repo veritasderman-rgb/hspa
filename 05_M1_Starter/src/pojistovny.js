@@ -38,7 +38,7 @@ import { renderApps, renderPrevence, renderOtazky } from './pojistovny-prevence.
 import { renderDotaznik, renderDotaznikAgregace } from './zp-dotaznik.js';
 import { statTiles, rankedBars, segmentedBar, indexedLines, dumbbell, isNum, pct } from './zp-viz.js';
 import { initZpInteract, MOJE_EVENT } from './zp-interact.js';
-import { renderZpShell, legacyRedirect, refreshZdrojeJson } from './pojistovny-shell.js';
+import { renderZpShell, legacyRedirect, refreshZdrojeJson, DOTAZNIK_STRANKY } from './pojistovny-shell.js';
 import { renderPrehled } from './pojistovny-prehled.js';
 import { renderKmenMesicni } from './pojistovny-kmen-mesicni.js';
 import { renderStariDat } from './pojistovny-stari.js';
@@ -416,6 +416,9 @@ function renderDotazniky(otazky, agregaty) {
   const box = document.getElementById('zpDotaznik');
   if (!box || !otazky) return;
   const params = new URLSearchParams(location.search);
+  // sada s vlastní stránkou: starý odkaz ?dotaznik=<sada> na Zdravotní gramotnosti přesměruje tam
+  const vlastni = DOTAZNIK_STRANKY[params.get('dotaznik')];
+  if (vlastni && box.dataset.sada !== params.get('dotaznik')) { location.replace(vlastni); return; }
   const sady = otazky.sady || [];
   // interní hodnoticí list (kanal: interni) se přes web nevyplňuje, URL ho nevybere
   const urlSada = sady.find((s) => s.id === params.get('dotaznik') && s.kanal !== 'interni');

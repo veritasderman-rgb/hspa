@@ -159,13 +159,21 @@ export function zpZdrojeHtml(d, jsonUrls = []) {
 }
 
 /**
+ * Sady dotazníků s vlastní stránkou (veřejné, bez tokenu). Odkaz
+ * pojistovny-gramotnost.html?dotaznik=<sada> na ně přesměruje (src/pojistovny.js).
+ */
+export const DOTAZNIK_STRANKY = {
+  'aplikace-ukoly': 'pojistovny-aplikace-dotaznik.html',
+};
+
+/**
  * Kam přesměrovat starý odkaz na přehled: adresný odkaz na dotazník
  * (pojistovny.html?dotaznik=…&token=…) a kotvy #modul-… míří na podstránky.
  * @returns {string|null} cílová URL (relativní), nebo null
  */
 export function legacyRedirect(search = '', hash = '') {
   const params = new URLSearchParams(search || '');
-  if (params.get('dotaznik')) return `pojistovny-gramotnost.html${search}`;
+  if (params.get('dotaznik')) return DOTAZNIK_STRANKY[params.get('dotaznik')] || `pojistovny-gramotnost.html${search}`;
   const h = String(hash || '').replace(/^#/, '');
   if (h && LEGACY_HASH[h]) return LEGACY_HASH[h];
   return null;

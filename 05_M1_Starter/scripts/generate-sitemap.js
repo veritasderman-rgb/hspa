@@ -80,6 +80,7 @@ export const STATIC_PAGES = [
   { loc: '/pojistovny-penize.html', priority: '0.7', changefreq: 'monthly' },
   { loc: '/pojistovny-prevence.html', priority: '0.7', changefreq: 'monthly' },
   { loc: '/pojistovny-aplikace.html', priority: '0.7', changefreq: 'monthly' },
+  { loc: '/pojistovny-aplikace-dotaznik.html', priority: '0.6', changefreq: 'monthly' },
   { loc: '/pojistovny-instituce.html', priority: '0.7', changefreq: 'monthly' },
   { loc: '/pojistovny-gramotnost.html', priority: '0.6', changefreq: 'monthly' },
   { loc: '/pojistovny-metodika.html', priority: '0.5', changefreq: 'monthly' },

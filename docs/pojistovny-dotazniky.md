@@ -116,7 +116,7 @@ _Výstup:_ Matice kritérií 7 × 6 a skóre na stránce Aplikace; po právu na 
 
 ### Aplikace vaší pojišťovny: zkuste osm úkolů (`aplikace-ukoly`)
 
-Veřejný dotazník bez tokenu na `pojistovny-gramotnost.html?dotaznik=aplikace-ukoly`. Vzorem je papírový dotazník Národního hodnocení spokojenosti pacientů (NHSP, hospitalizační péče): známky 1–5 jako ve škole a volné pole na závěr. Stratifikace je na začátku, protože bez pojišťovny, věku a zařízení nejde odpověď vyhodnotit. Odpovědi jdou přes `api/dotaznik.js` do Neonu (tabulka `dotaznik_odpoved`), stejně jako u ostatních webových sad.
+Veřejný dotazník bez tokenu na vlastní stránce `pojistovny-aplikace-dotaznik.html`; starý odkaz `pojistovny-gramotnost.html?dotaznik=aplikace-ukoly` na ni přesměruje (`DOTAZNIK_STRANKY` v `src/pojistovny-shell.js`). Vzorem je papírový dotazník Národního hodnocení spokojenosti pacientů (NHSP, hospitalizační péče): známky 1–5 jako ve škole a volné pole na závěr. Stratifikace je na začátku, protože bez pojišťovny, věku a zařízení nejde odpověď vyhodnotit. Odpovědi jdou přes `api/dotaznik.js` do Neonu (tabulka `dotaznik_odpoved`), stejně jako u ostatních webových sad.
 
 | Kdy | Komu | Kanál | Lhůta | Co se zveřejní |
 |---|---|---|---|---|
