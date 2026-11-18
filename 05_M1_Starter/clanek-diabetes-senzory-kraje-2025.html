@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-11-18
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-11-18
+    creation_phase: rutina+article-write
+    form: article
+    primary_sources_count: 4
+    evidence_sources_count: 2
+    visual_elements_count: 5
+    notes: "Vytvořeno z discovery 2026-11-18: nová vlna otevřených dat ÚZIS/NZIP Epidemiologie diabetes mellitus (dataset 1768, NRHZS, časové pokrytí 1. 1. 2010 – 31. 12. 2025, CSV 16 027 845 záznamů = paciento-roků; staženo 18. 11. 2026 z datanzis.uzis.gov.cz/data/NR-18-NDR/NR-18-01/, vlastní agregace v Pythonu nad celým souborem). Háček: Světový den diabetu 14. 11. 2026 (SZÚ uvádí pro 2024 podle NZIP 1 133 860 lidí; v aktuální verzi datové sady má rok 2024 1 134 033 záznamů — revize dat, v textu uvádíme hodnoty z aktuální verze a rozdíl popisujeme v poznámce). KPI: 1 156 709 pacientů s DM v roce 2025 (2010: 846 767; 2024: 1 134 033; meziročně +22 676 = +2,0 %; od 2010 +36,6 %). Muži 591 273, ženy 565 436. Léčení inzulinem (ATC A10A v poli DM_antidiabetika_seznam) 214 353 = 18,5 % pacientů. Z nich se senzorem (DM_prostredky_CGM nebo DM_prostredky_FGM) 35 410 = 16,5 % (2020: 17 435 z 208 645 = 8,4 %; 2024: 32 732 z 212 542 = 15,4 %). Všichni se senzorem 35 722 (CGM 14 100, FGM 22 698). Inzulinová pumpa (DM_prostredky_IP) 11 419 (2020: 6 939). Kraje bydliště 2025, senzor mezi léčenými inzulinem: Praha 4 844 / 18 981 = 25,5 %; Středočeský 18,3; Jihomoravský 18,2; Liberecký 17,9; Královéhradecký 17,0; Pardubický 16,6; Karlovarský 16,4; Olomoucký 15,8; Vysočina 14,8; Plzeňský 14,5; Jihočeský 14,2; Zlínský 13,7; Moravskoslezský 13,4; Ústecký 2 382 / 18 387 = 13,0 %. GLP-1 RA (A10BJ) 2020 17 962 → 2025 68 565; SGLT2i (A10BK) 2020 36 625 → 2025 160 736 (pozor: dapagliflozin a empagliflozin samy nezařazují pacienta, ale u zařazených se počítají). Nově se objevivší pacienti 2025: 118 689 (první záznam v datové sadě; není to klinická incidence). Typ diabetu datová sada nerozlišuje — hlavní caveat regionálního srovnání. Bench z kontraktu: prevalence_diabetu 8,8 % (EHIS 2019) vs EU 7,4; spotreba_antidiabetik 113,1 DDD/1000/den (2025) vs OECD 94,2, EU 92,7; umrtnost_diabetes 49,37 (2023) vs EU 23,53; amputace_dk_diabetici 16,4 (2023) vs OECD 7. Evidence: Zhu J, Zhang L 2026, BMC Endocr Disord 26(1), DOI 10.1186/s12902-026-02167-4, PMID 41942969, systematic review + meta-analysis 13 RCT, n = 1 550, inzulinem léčený DM2, HbA1c −2,78 mmol/mol (95% CI −4,68 až −0,88), TBR −1,30 %, I² 89,66 %; Dicembrini I et al. 2019, Diabetes Obes Metab 21(12):2619-2625, DOI 10.1111/dom.13845, PMID 31368658, meta-analýza: CGM vs SMBG u DM2 −0,24 % (95% CI −0,49; 0,00), jen malé přínosy. Obě ověřeny v PubMed 18. 11. 2026 (metadata + abstrakt). PubMed dotazy: 2. Consensus nepoužit. Forma: článek, ne esej — chybí doložená úvodní scéna. Čeká na schválení redakce."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Senzor glykémie má v Praze každý čtvrtý diabetik na inzulinu, v Ústeckém kraji jen každý osmý · HSPA Monitor</title>
+<meta name="description" content="Nová otevřená data ÚZIS ukazují, že s diabetem se v Česku v roce 2025 léčilo 1 156 709 lidí, o 2 % víc než rok předtím a o 37 % víc než v roce 2010. Inzulin dostávalo 214 353 z nich a senzor, který měří glukózu bez píchání do prstu, mělo 16,5 % léčených inzulinem, dvakrát víc než v roce 2020. Mezi kraji je ale rozdíl skoro dvojnásobný: Praha 25,5 %, Ústecký kraj 13,0 %. Co data říkají, co neřeknou a proč na tom záleží.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Senzor glykémie má v Praze každý čtvrtý diabetik na inzulinu, v Ústeckém kraji jen každý osmý">
+<meta property="og:description" content="1 156 709 lidí s diabetem v roce 2025, 214 353 na inzulinu, 16,5 % z nich se senzorem. Praha 25,5 %, Ústecký kraj 13,0 %. Rozbor nových otevřených dat ÚZIS.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-diabetes-senzory-kraje-2025">
+<meta property="article:published_time" content="2026-11-20">
+<meta property="article:section" content="Chronická péče">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-diabetes-senzory-kraje-2025">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "Senzor glykémie má v Praze každý čtvrtý diabetik na inzulinu, v Ústeckém kraji jen každý osmý",
+  "description": "Nová otevřená data ÚZIS ukazují, že s diabetem se v Česku v roce 2025 léčilo 1 156 709 lidí, o 2 % víc než rok předtím a o 37 % víc než v roce 2010. Inzulin dostávalo 214 353 z nich a senzor, který měří glukózu bez píchání do prstu, mělo 16,5 % léčených inzulinem, dvakrát víc než v roce 2020. Mezi kraji je ale rozdíl skoro dvojnásobný: Praha 25,5 %, Ústecký kraj 13,0 %. Co data říkají, co neřeknou a proč na tom záleží.",
+  "datePublished": "2026-11-20T06:00:00+01:00",
+  "dateModified": "2026-11-18",
+  "inLanguage": "cs",
+  "articleSection": "Chronická péče",
+  "author": { "@type": "Organization", "name": "Redakce HSPA Monitoru" },
+  "publisher": { "@type": "Organization", "name": "HSPA Monitor · Skóre zdravotnictví", "url": "https://skorezdravotnictvi.cz" },
+  "mainEntityOfPage": "https://skorezdravotnictvi.cz/clanek-diabetes-senzory-kraje-2025.html"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+  <article class="article-page">
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Chronická péče</span>
+        <span class="article-tag article-tag-muted">diabetes · senzory glykémie · inzulinové pumpy · kraje · otevřená data ÚZIS</span>
+      </div>
+      <h1 class="article-title">Senzor glykémie má v Praze každý čtvrtý diabetik na inzulinu, v Ústeckém kraji jen každý osmý</h1>
+      <p class="article-deck">
+        Nová otevřená data ÚZIS ukazují, že s diabetem se v Česku v roce 2025 léčilo 1 156 709 lidí, o 2 % víc než rok předtím a o 37 % víc než v roce 2010. Inzulin dostávalo 214 353 z nich a senzor, který měří glukózu bez píchání do prstu, mělo 16,5 % léčených inzulinem, dvakrát víc než v roce 2020. Mezi kraji je ale rozdíl skoro dvojnásobný: Praha 25,5 %, Ústecký kraj 13,0 %. Co data říkají, co neřeknou a proč na tom záleží.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">20. listopadu 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">7 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+    <div class="article-body">
+      <p class="article-lead">
+        Ústav zdravotnických informací a statistiky (ÚZIS) zveřejnil na Národním zdravotnickém informačním portálu aktualizovanou otevřenou datovou sadu o diabetu. Poprvé obsahuje celý rok 2025. Data pocházejí z Národního registru hrazených zdravotních služeb, tedy z toho, co lékaři, lékárny a výdejny pomůcek vykázaly zdravotním pojišťovnám. Jeden řádek popisuje jeden rok jednoho pacienta, bez jména a rodného čísla, a obsahuje kraj bydliště, léky a zdravotnické prostředky, které dostal. Z 16 milionů takových řádků jsme spočítali, kolik lidí se s diabetem léčí, kolik jich je na inzulinu a kolik z nich používá senzor glykémie nebo inzulinovou pumpu. Nejzajímavější výsledek není celkový počet, ale to, jak nerovnoměrně jsou senzory rozložené mezi kraji.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCntH">
+        <figcaption class="av-figure-h" id="avCntH">Diabetes v Česku v roce 2025 ve čtyřech číslech (ÚZIS, NRHZS, otevřená data, vlastní výpočet)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="1156709" data-decimals="0">1 156 709</span>
+            <span class="av-counter-label">lidí s diabetem v péči hrazené pojišťovnami</span>
+            <span class="av-counter-foot">2010: 846 767</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="214353" data-decimals="0">214 353</span>
+            <span class="av-counter-label">z nich léčených inzulinem</span>
+            <span class="av-counter-foot">18,5 % všech pacientů</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="16.5" data-decimals="1" data-suffix=" %">16,5 %</span>
+            <span class="av-counter-label">léčených inzulinem má senzor glykémie</span>
+            <span class="av-counter-foot">2020: 8,4 %</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="11419" data-decimals="0">11 419</span>
+            <span class="av-counter-label">pacientů s inzulinovou pumpou</span>
+            <span class="av-counter-foot">2020: 6 939</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS ČR, Epidemiologie diabetes mellitus — otevřená data (NZIP, dataset 1768, pokrytí 2010–2025), staženo 18. 11. 2026; počty paciento-roků a podíly spočítala redakce HSPA Monitoru.</p>
+      </figure>
+
+      <h3>Jak data počítají diabetika</h3>
+      <p>
+        Datová sada nepočítá lidi podle dotazníku, ale podle stop v úhradách. Pacient se do ní v daném roce dostane, pokud mu lékař vykázal diagnózu diabetu nebo jeho komplikace, výkon typický pro diabetika (například péči praktického lékaře o stabilizovaného diabetika 2. typu nebo edukaci), lék ze skupiny léčiv na diabetes, nebo pomůcku pro diabetiky. Dva léky, dapagliflozin a empagliflozin, samy o sobě nestačí, protože se předepisují i na srdeční selhání a onemocnění ledvin. Kdo se léčí jen dietou a k lékaři se v daném roce nedostal, v datech chybí. Kdo o své nemoci neví, chybí také.
+      </p>
+      <p>
+        S touto definicí bylo v roce 2025 v Česku 1 156 709 lidí s diabetem, z toho 591 273 mužů a 565 436 žen. Proti roku 2024 jich přibylo 22 676, tedy 2,0 %. Od roku 2010, kdy jich bylo 846 767, počet vzrostl o 36,6 %. Státní zdravotní ústav k Světovému dni diabetu 14. listopadu připomněl údaj Národního diabetologického registru, že diabetem trpí přibližně 10 % obyvatel. Růst počtu pacientů přitom neznamená jen víc nemoci: populace stárne, nemoc se díky preventivním prohlídkám hledá aktivněji a lidé s diabetem žijí déle.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avTabH">
+        <figcaption class="av-figure-h" id="avTabH">Pacienti s diabetem, léčba inzulinem a technologie, 2010–2025 (ÚZIS, NRHZS, otevřená data, vlastní výpočet)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Ukazatel</th>
+                <th scope="col" class="av-num">2010</th>
+                <th scope="col" class="av-num">2020</th>
+                <th scope="col" class="av-num">2024</th>
+                <th scope="col" class="av-num">2025</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Pacienti s diabetem celkem</th><td class="av-num">846 767</td><td class="av-num">1 034 423</td><td class="av-num">1 134 033</td><td class="av-num">1 156 709</td></tr>
+              <tr><th scope="row">Léčení inzulinem</th><td class="av-num">—</td><td class="av-num">208 645</td><td class="av-num">212 542</td><td class="av-num">214 353</td></tr>
+              <tr><th scope="row">Léčení inzulinem se senzorem glykémie</th><td class="av-num">0</td><td class="av-num">17 435</td><td class="av-num">32 732</td><td class="av-num">35 410</td></tr>
+              <tr><th scope="row">Podíl se senzorem mezi léčenými inzulinem</th><td class="av-num">0 %</td><td class="av-num">8,4 %</td><td class="av-num">15,4 %</td><td class="av-num">16,5 %</td></tr>
+              <tr><th scope="row">Inzulinová pumpa</th><td class="av-num">5 066</td><td class="av-num">6 939</td><td class="av-num">10 099</td><td class="av-num">11 419</td></tr>
+              <tr><th scope="row">Léky ze skupiny GLP-1 (např. semaglutid)</th><td class="av-num">—</td><td class="av-num">17 962</td><td class="av-num">56 621</td><td class="av-num">68 565</td></tr>
+              <tr><th scope="row">Léky ze skupiny SGLT2 (glifloziny)</th><td class="av-num">—</td><td class="av-num">36 625</td><td class="av-num">128 954</td><td class="av-num">160 736</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS ČR, Epidemiologie diabetes mellitus — otevřená data (NZIP, dataset 1768), staženo 18. 11. 2026. Senzor = vykázaný prostředek pro kontinuální monitoraci (CGM) nebo pro okamžité skenování glukózy (FGM). Inzulin = lék ze skupiny ATC A10A. Pomlčka = rok jsme pro daný ukazatel nepočítali. Hodnoty za starší roky se mohou mezi verzemi datové sady mírně lišit.</p>
+      </figure>
+
+      <h3>Senzory: za pět let dvojnásobek</h3>
+      <p>
+        Senzor glykémie je malé čidlo nalepené na kůži, které měří hladinu glukózy v podkožní tkáni. Buď ji posílá průběžně do telefonu nebo čtečky (kontinuální monitorace, CGM), nebo ji pacient načte přiložením telefonu (okamžité skenování, FGM). Pro člověka, který si píchá inzulin několikrát denně, to znamená méně píchání do prstu a hlavně varování, když mu cukr padá příliš nízko. V roce 2025 mělo senzor vykázaný 35 722 pacientů, z toho 35 410 léčených inzulinem. Mezi všemi léčenými inzulinem je to 16,5 %, v roce 2020 to bylo 8,4 %. Častěji šlo o skenovací systémy (22 698 pacientů) než o kontinuální (14 100); někteří měli během roku oba typy.
+      </p>
+      <p>
+        Inzulinovou pumpu, která inzulin dávkuje nepřetržitě místo injekcí, mělo v roce 2025 vykázanou 11 419 pacientů, proti 6 939 v roce 2020. Rychle přibývá i lidí léčených novějšími léky. Léky ze skupiny GLP-1, kam patří semaglutid, dostávalo v rámci úhrad 68 565 diabetiků, čtyřikrát víc než v roce 2020. Glifloziny ze skupiny SGLT2 dostávalo 160 736 diabetiků. Na tyto léky jsme se podrobněji podívali v článku <a href="clanek-spotreba-antidiabetik.html">o spotřebě antidiabetik</a>; samotný údaj o léčbě obezity semaglutidem v těchto datech není, protože ji pojišťovny nehradí.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-good">
+          <span class="av-counter" data-value="35722" data-decimals="0">35 722</span>
+          <span class="av-counter-label">pacientů s vykázaným senzorem glykémie v roce 2025</span>
+          <span class="av-counter-foot">v roce 2015: 476; ÚZIS, NRHZS</span>
+        </div>
+      </aside>
+
+      <h3>Kraje: Praha 25,5 %, Ústecký kraj 13,0 %</h3>
+      <p>
+        Když stejný podíl spočítáme podle kraje bydliště, rozdíly jsou velké. V Praze měl v roce 2025 senzor 4 844 z 18 981 lidí léčených inzulinem, tedy 25,5 %. V Ústeckém kraji 2 382 z 18 387, tedy 13,0 %. Pod 14 % jsou i Moravskoslezský (13,4 %) a Zlínský kraj (13,7 %). Ústecký a Moravskoslezský kraj mají přitom nejnižší naději dožití mužů v zemi: podle úmrtnostních tabulek ČSÚ za roky 2024–2025 je to 75,4 a 75,8 roku, proti 79,2 roku v Praze (<a href="kraje.html">krajský dashboard</a>). Technologie, která pomáhá diabetes lépe zvládat, je tak nejméně rozšířená v krajích s nejhoršími zdravotními výsledky.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avBarH">
+        <figcaption class="av-figure-h" id="avBarH">Podíl pacientů léčených inzulinem, kteří mají senzor glykémie, podle kraje bydliště, 2025 (%) — ÚZIS, NRHZS, otevřená data, vlastní výpočet</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-unit=" %" data-max="30">
+          <li class="av-bar-row" data-value="25.5" data-label="Praha" data-accent="good"></li>
+          <li class="av-bar-row" data-value="18.3" data-label="Středočeský" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="18.2" data-label="Jihomoravský" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="17.9" data-label="Liberecký" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="17.0" data-label="Královéhradecký" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="16.6" data-label="Pardubický" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="16.5" data-label="Česko" data-accent="warn"></li>
+          <li class="av-bar-row" data-value="16.4" data-label="Karlovarský" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="15.8" data-label="Olomoucký" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="14.8" data-label="Vysočina" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="14.5" data-label="Plzeňský" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="14.2" data-label="Jihočeský" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="13.7" data-label="Zlínský" data-accent="bad"></li>
+          <li class="av-bar-row" data-value="13.4" data-label="Moravskoslezský" data-accent="bad"></li>
+          <li class="av-bar-row" data-value="13.0" data-label="Ústecký" data-accent="bad"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS ČR, Epidemiologie diabetes mellitus — otevřená data (NZIP, dataset 1768), staženo 18. 11. 2026. Čitatel: pacienti s lékem ATC A10A a vykázaným prostředkem CGM nebo FGM; jmenovatel: pacienti s lékem ATC A10A; kraj bydliště v roce 2025.</p>
+      </figure>
+
+      <aside class="article-callout-caveat">
+        <strong>Co z regionálního srovnání vyčíst nejde.</strong> Datová sada nerozlišuje diabetes 1. a 2. typu. Senzory se nejvíc používají u lidí s diabetem 1. typu, kteří jsou v průměru mladší. Pokud má Praha mezi lidmi na inzulinu vyšší podíl mladších pacientů s 1. typem, část rozdílu vysvětlí složení pacientů, ne dostupnost péče. Data také neřeknou, kolik pacientů senzor chtělo a nedostalo, ani jak dobře mají diabetes kompenzovaný. Počítají jen to, co pojišťovna uhradila; senzor koupený za vlastní peníze v nich není. Celkové počty se mezi verzemi datové sady mírně mění: Státní zdravotní ústav uvádí pro rok 2024 podle NZIP 1 133 860 lidí, v aktuální verzi dat má rok 2024 1 134 033 záznamů.
+      </aside>
+
+      <h3>Co o senzorech říká výzkum</h3>
+      <p>
+        U diabetu 1. typu jsou senzory standardem péče. U diabetu 2. typu léčeného inzulinem, což je velká část z 214 353 českých pacientů na inzulinu, je přínos menší, ale doložený. Systematický přehled a metaanalýza <em>Zhu a Zhang</em> (2026) v časopise <em>BMC Endocrine Disorders</em> (<a href="https://doi.org/10.1186/s12902-026-02167-4" target="_blank" rel="noopener">doi.org ↗</a>) spojila 13 randomizovaných studií s 1 550 pacienty s diabetem 2. typu na inzulinu. Kontinuální monitorace proti klasickému měření z prstu snížila glykovaný hemoglobin v průměru o 2,78 mmol/mol a zkrátila dobu strávenou v hypoglykémii. Výsledky jednotlivých studií se ale hodně lišily. Starší metaanalýza <em>Dicembrini et al.</em> (2019) v časopise <em>Diabetes, Obesity and Metabolism</em> (<a href="https://doi.org/10.1111/dom.13845" target="_blank" rel="noopener">doi.org ↗</a>) došla u diabetu 2. typu k rozdílu jen na hranici statistické významnosti a k závěru, že technologie přinášejí lidem s diabetem 2. typu na inzulinu jen malé zlepšení. Senzor tedy není zázrak, ale menší riziko nebezpečných poklesů cukru je pro člověka na inzulinu hmatatelný přínos.
+      </p>
+
+      <h3>Česko v mezinárodním srovnání</h3>
+      <p>
+        Na diabetu Česko v evropském srovnání nevychází dobře. Podle Evropského výběrového šetření o zdraví (EHIS) z roku 2019 uvedlo diabetes 8,8 % dospělých, proti 7,4 % v EU. Standardizovaná úmrtnost na diabetes byla v roce 2023 podle Eurostatu 49,37 na 100 000 obyvatel, víc než dvojnásobek průměru EU (23,53), jak jsme rozebrali v článku <a href="clanek-umrtnost-diabetes-dvojnasobek-eu-2026.html">o úmrtnosti na diabetes</a>. Amputací dolních končetin u diabetiků bylo v roce 2023 16,4 na 100 000 obyvatel, proti 7 v průměru OECD (více v článku <a href="clanek-diabeticke-amputace.html">o diabetických amputacích</a>). Antidiabetik Česko spotřebuje 113,1 definované denní dávky na 1 000 obyvatel a den (2025), víc než průměr OECD (94,2) i EU (92,7). Srovnatelný mezinárodní údaj o podílu pacientů se senzorem jsme v ověřitelném zdroji nenašli, proto ho neuvádíme.
+      </p>
+
+      <h3>Co s tím</h3>
+      <ul>
+        <li><strong>Doplnit do otevřených dat typ diabetu.</strong> Rozlišení 1. a 2. typu (podle diagnózy MKN-10) by umožnilo odpovědět, jestli regionální rozdíly v senzorech znamenají nerovný přístup, nebo jen jiné složení pacientů.</li>
+        <li><strong>Sledovat podíl senzorů jako ukazatel kvality.</strong> Podíl lidí léčených inzulinem se senzorem podle kraje a pojišťovny je jednoduše spočitatelný z veřejných dat a může sloužit pojišťovnám i krajům jako signál, kde péče zaostává.</li>
+        <li><strong>Hledat příčinu krajských rozdílů.</strong> Pokud se potvrdí, že rozdíl nevysvětluje složení pacientů, je na místě zjistit, zda jde o dostupnost diabetologů, zvyklosti předepisování, nebo o to, kolik se pacienti dozvědí o možnosti senzor dostat.</li>
+        <li><strong>Pro pacienty:</strong> kdo se léčí inzulinem, může se svého diabetologa zeptat, jestli pro něj senzor připadá v úvahu a za jakých podmínek ho pojišťovna hradí. Rozhodnutí patří lékaři a pacientovi, data jen ukazují, jak se tato rozhodnutí v různých krajích liší.</li>
+      </ul>
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=prevalence_diabetu"><strong>Prevalence diabetu (15+)</strong></a> — 8,8 % (ČR, 2019) · EU 7,4 % · EHIS, SZÚ. Dotazníkový údaj, jiná definice než počty z úhrad v textu.</li>
+        <li><a href="indicator.html?id=umrtnost_diabetes"><strong>Úmrtnost na diabetes mellitus (standardizovaná)</strong></a> — 49,37 na 100 000 (ČR, 2023) · EU 23,53 · Eurostat.</li>
+        <li><a href="indicator.html?id=amputace_dk_diabetici"><strong>Amputace dolních končetin u diabetiků</strong></a> — 16,4 na 100 000 obyvatel (ČR, 2023) · OECD 7 · ÚZIS.</li>
+        <li><a href="indicator.html?id=spotreba_antidiabetik"><strong>Spotřeba antidiabetik</strong></a> — 113,1 DDD/1 000 obyvatel/den (ČR, 2025) · OECD 94,2 · EU 92,7 · SÚKL.</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární zdroje</h5>
+        <ul class="article-sources-list">
+          <li><strong>ÚZIS ČR — Epidemiologie diabetes mellitus (otevřená data)</strong>. Benešová K, Jarkovský J, Klika P, Šanca O, Klimeš D, Mužík J, Komenda M, Dušek L. Národní zdravotnický informační portál, dataset 1768, časové pokrytí 1. 1. 2010 – 31. 12. 2025, 16 027 845 záznamů, licence CC BY 4.0. Staženo 18. 11. 2026; agregace redakce HSPA Monitoru. <a href="https://www.nzip.cz/data/1768-diabetes-mellitus-otevrena-data" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+          <li><strong>NZIP — Národní diabetologický registr</strong>. Přehled datových výstupů (otevřená data, datový souhrn, interaktivní vizualizace). Čteno 18. 11. 2026. <a href="https://www.nzip.cz/kategorie/283-narodni-diabetologicky-registr" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+          <li><strong>ČSÚ — Úmrtnostní tabulky za kraje (OBY04BK)</strong>. Naděje dožití mužů při narození, dvouletý průměr 2024–2025 (Praha 79,2; Ústecký kraj 75,4; Moravskoslezský kraj 75,8). Převzato z krajského dashboardu HSPA Monitoru. <a href="https://data.csu.gov.cz/vybery/OBY04BKT01" target="_blank" rel="noopener">data.csu.gov.cz ↗</a></li>
+          <li><strong>SZÚ — Světový den diabetu 2026: Jednejme včas proti diabetu</strong> (13. 11. 2026). Údaj o přibližně 10 % obyvatel s diabetem a 1 133 860 lidech v roce 2024. Čteno 18. 11. 2026. <a href="https://szu.gov.cz/aktuality/svetovy-den-diabetu-2026-jednejme-vcas-proti-diabetu/" target="_blank" rel="noopener">szu.gov.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Recenzovaná literatura</h5>
+        <ul class="article-sources-list">
+          <li><strong>Zhu J, Zhang L.</strong> Efficacy of continuous glucose monitoring in comparison to self-blood glucose monitoring in patients with type 2 diabetes mellitus under insulin treatment: a systematic review and meta-analysis. BMC Endocr Disord. 2026;26(1). DOI 10.1186/s12902-026-02167-4. PMID 41942969. Ověřeno v PubMed 18. 11. 2026. <a href="https://pubmed.ncbi.nlm.nih.gov/41942969/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+          <li><strong>Dicembrini I, Mannucci E, Monami M, Pala L.</strong> Impact of technology on glycaemic control in type 2 diabetes: A meta-analysis of randomized trials on continuous glucose monitoring and continuous subcutaneous insulin infusion. Diabetes Obes Metab. 2019;21(12):2619-2625. DOI 10.1111/dom.13845. PMID 31368658. Ověřeno v PubMed 18. 11. 2026. <a href="https://pubmed.ncbi.nlm.nih.gov/31368658/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Související čtení</h5>
+        <ul class="article-sources-list">
+          <li><strong>HSPA Monitor — Úmrtnost na diabetes</strong>. <a href="clanek-umrtnost-diabetes-dvojnasobek-eu-2026.html">clanek-umrtnost-diabetes-dvojnasobek-eu-2026 ↗</a></li>
+          <li><strong>HSPA Monitor — Spotřeba antidiabetik</strong>. <a href="clanek-spotreba-antidiabetik.html">clanek-spotreba-antidiabetik ↗</a></li>
+          <li><strong>HSPA Monitor — Diabetické amputace</strong>. <a href="clanek-diabeticke-amputace.html">clanek-diabeticke-amputace ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Všechny počty pacientů, léčby a pomůcek jsou vlastní agregací redakce nad otevřenou datovou sadou ÚZIS (jeden záznam = jeden pacient v jednom roce). Podíl se senzorem se vztahuje k pacientům léčeným inzulinem (ATC A10A), ne ke všem diabetikům. Kraj je kraj bydliště pacienta v daném roce.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
