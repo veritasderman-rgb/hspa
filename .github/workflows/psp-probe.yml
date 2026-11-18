@@ -1,0 +1,65 @@
+name: PSP probe (průzkum otevřených dat Sněmovny)
+
+# PRŮZKUM, nic necommituje a nesahá na datový kontrakt. Zjišťuje, co psp.cz
+# reálně publikuje o tiscích a písemných pozměňovacích návrzích, aby odchytávač
+# pozměňovacích návrhů mimo předmět zákona (PLAN-PRILEPKY.md) stál na ověřené
+# struktuře, ne na odhadu.
+#
+# Proč přes Actions: www.psp.cz je z prostředí agenta nedosažitelný (spojení
+# se resetuje při TLS, zjištěno 18. 11. 2026), stejně jako dřív ppo.mzcr.cz.
+#
+# Výstup: log kroku „Průzkumný běh“.
+
+on:
+  workflow_dispatch:
+    inputs:
+      tisk:
+        description: 'Číslo sněmovního tisku'
+        required: false
+        default: '235'
+      sd:
+        description: 'Čísla sněmovních dokumentů (PN) oddělená čárkou'
+        required: false
+        default: '1813,1796'
+  pull_request:
+    paths:
+      - '05_M1_Starter/ingest/probe/psp-probe.js'
+      - '.github/workflows/psp-probe.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: psp-probe-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: 05_M1_Starter
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: 05_M1_Starter/package-lock.json
+
+      - run: npm ci
+
+      - name: Průzkumný běh
+        # Vstupy jdou přes env, NIKOLI přes ${{ }} přímo do skriptu (viz ppo-probe.yml).
+        env:
+          PROBE_TISK: ${{ inputs.tisk }}
+          PROBE_SD: ${{ inputs.sd }}
+        run: |
+          set -uo pipefail
+          TISK="${PROBE_TISK:-235}"
+          SD="${PROBE_SD:-1813,1796}"
+          if ! printf '%s' "${TISK}" | grep -Eq '^[0-9]+$'; then echo "::error::Neplatný 'tisk'."; exit 2; fi
+          if ! printf '%s' "${SD}" | grep -Eq '^[0-9]+(,[0-9]+)*$'; then echo "::error::Neplatné 'sd'."; exit 2; fi
+          node ingest/probe/psp-probe.js --tisk "${TISK}" --sd "${SD}"
