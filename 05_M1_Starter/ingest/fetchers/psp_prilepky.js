@@ -44,8 +44,8 @@ export async function httpGet(url, { binary = false, fetchImpl = globalThis.fetc
   for (let attempt = 1; attempt <= 3; attempt++) {
     await sleep(delay * attempt);
     try {
-      const res = await fetchImpl(url, { headers: { 'User-Agent': UA }, redirect: 'follow', signal: AbortSignal.timeout(60_000) });
-      if (!res.ok) { last = new Error(`HTTP ${res.status} ${url}`); if (res.status < 500 && res.status !== 429) break; continue; }
+      const res = await fetchImpl(url, { headers: { 'User-Agent': UA }, redirect: 'follow', signal: AbortSignal.timeout(30_000) });
+      if (!res.ok) { last = new Error(`HTTP ${res.status} ${url}`); if (res.status < 500 && res.status !== 429 && res.status !== 408) break; continue; }
       const buf = Buffer.from(await res.arrayBuffer());
       if (binary) return buf;
       const m = /charset=([\w-]+)/i.exec(res.headers.get('content-type') || '');
