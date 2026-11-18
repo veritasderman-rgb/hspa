@@ -32,7 +32,7 @@ concurrency:
 jobs:
   prilepky:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 60
     defaults:
       run:
         working-directory: 05_M1_Starter
@@ -60,7 +60,8 @@ jobs:
           set -euo pipefail
           MAX="${PRILEPKY_MAX:-300}"
           if ! printf '%s' "${MAX}" | grep -Eq '^[0-9]+$'; then echo "::error::Neplatné 'max'."; exit 2; fi
-          node ingest/fetchers/psp_prilepky.js --max "${MAX}"
+          # Časový rozpočet drží běh bezpečně pod limitem jobu; nepřečtené dokumenty počkají na další běh.
+          node ingest/fetchers/psp_prilepky.js --max "${MAX}" --minutes 40
 
       - name: Validace
         run: node ingest/validate-prilepky.js

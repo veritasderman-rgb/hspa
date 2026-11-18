@@ -17,7 +17,8 @@
 // www.psp.cz není z prostředí agenta dosažitelný; běží v GitHub Actions
 // (.github/workflows/prilepky.yml).
 //
-// Použití: node ingest/fetchers/psp_prilepky.js [--obdobi 10] [--max 300] [--dry]
+// Použití: node ingest/fetchers/psp_prilepky.js [--obdobi 10] [--max 300] [--minutes 40] [--dry]
+// --minutes je časový rozpočet na čtení nových dokumentů; co se nestihne, počká na další běh.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -64,7 +65,8 @@ async function docxFromPage(pageUrl, get) {
  * Jeden běh. Síť jde přes `get`, takže se dá testovat bez ní.
  * @returns {{data: object, state: object, report: object}}
  */
-export async function run({ obdobi = 10, max = 300, state = null, get = httpGet, log = console.log, now = new Date() } = {}) {
+export async function run({ obdobi = 10, max = 300, budgetMs = Infinity, state = null, get = httpGet, log = console.log, now = new Date(), clock = Date.now } = {}) {
+  const deadline = clock() + budgetMs;
   state = state && state.obdobi === obdobi && state.verze_rozboru === VERZE_ROZBORU
     ? structuredClone(state) : { obdobi, verze_rozboru: VERZE_ROZBORU, navrhy: {}, tisky: {} };
   const healthLaws = loadHealthLaws();
@@ -90,6 +92,8 @@ export async function run({ obdobi = 10, max = 300, state = null, get = httpGet,
   const todo = pns.filter(p => !state.navrhy[p.id_dokument]).sort((a, b) => b.id_dokument - a.id_dokument);
   let fetched = 0;
   for (const pn of todo.slice(0, max)) {
+    if (clock() > deadline) { log(`Časový rozpočet vyčerpán po ${fetched} dokumentech, zbytek příště.`); break; }
+    if (fetched && fetched % 50 === 0) log(`  … přečteno ${fetched} z ${Math.min(todo.length, max)}`);
     const rec = { cd: pn.cd, ct: pn.ct, datum: pn.datum, url: pn.url, autor: null, zmeny: [], ucinnost: null };
     try {
       const { page, text } = await docxFromPage(pn.url, get);
@@ -115,6 +119,7 @@ export async function run({ obdobi = 10, max = 300, state = null, get = httpGet,
     if (!bill || state.tisky[ct] || !recs.some(r => r.zmeny.length)) continue;
     const zNazvu = extractLawRefs(bill.uplny_nazev);
     if (zNazvu.length && !scopeFromTitleIncomplete(bill.uplny_nazev)) continue;
+    if (clock() > deadline) break; // předmět se doplní příště; do té doby platí výčet z názvu
     try {
       const { text } = await docxFromPage(`${PSP}/sqw/text/tiskt.sqw?O=${obdobi}&CT=${ct}&CT1=0`, get);
       if (text) {
@@ -163,7 +168,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   const arg = (n, d) => { const i = process.argv.indexOf(`--${n}`); return i > -1 ? process.argv[i + 1] : d; };
   const dry = process.argv.includes('--dry');
   const state = fs.existsSync(STATE_FILE) ? JSON.parse(fs.readFileSync(STATE_FILE, 'utf8')) : null;
-  run({ obdobi: Number(arg('obdobi', '10')), max: Number(arg('max', '300')), state })
+  run({ obdobi: Number(arg('obdobi', '10')), max: Number(arg('max', '300')), budgetMs: Number(arg('minutes', '40')) * 60_000, state })
     .then(({ data, state: next, report }) => {
       console.log(`Přečteno nových PN: ${report.fetched} · čeká: ${report.zbyva} · bez .docx: ${report.bezTextu} · tisků s nálezem: ${report.nalezu}`);
       for (const t of data.tisky.filter(t => t.navrhy.length)) {

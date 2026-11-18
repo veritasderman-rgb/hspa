@@ -238,6 +238,13 @@ test('run: limit max odloží zbytek na příští běh', async () => {
   assert.equal(r.data.pokryti.pn_ceka, 1);
 });
 
+test('run: časový rozpočet zastaví čtení a zbytek nechá na příště', async () => {
+  let t = 0;
+  const r = await run({ get: fakeGet([]), budgetMs: 10, clock: () => (t += 6), log: () => {} });
+  assert.equal(r.report.fetched, 1);
+  assert.equal(r.data.pokryti.pn_ceka, 1);
+});
+
 test('writeIfChanged: časové značky samy o sobě soubor nepřepíšou', async () => {
   const dir = fs.mkdtempSync(path.join(process.env.TMPDIR || '/tmp', 'prilepky-'));
   const f = path.join(dir, 'p.json');
