@@ -16,6 +16,7 @@ import { readZip, docxText } from '../ingest/lib/zip.js';
 import { parseUnl, lawBills, writtenAmendments, parseDocPage, predkladatelTyp, organObdobi } from '../ingest/lib/psp-opendata.js';
 import { run, writeIfChanged } from '../ingest/fetchers/psp_prilepky.js';
 import { validatePrilepky } from '../ingest/validate-prilepky.js';
+import { renderSection, renderTisk, UROVEN_LABELS, formatDate } from '../src/prilepky.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const HL = loadHealthLaws();
@@ -258,6 +259,22 @@ test('validátor: odmítne verdikt, zákon v předmětu i citaci bez čísla zá
   assert.match(errs, /je v předmětu tisku/);
   assert.match(errs, /přílepek/);
   assert.ok(Object.keys(SIGNALY).every(k => !/přílep/i.test(SIGNALY[k])));
+});
+
+test('sekce na webu: citace, odkazy na psp.cz, escapování, žádný verdikt', async () => {
+  const { data } = await run({ get: fakeGet([]), log: () => {}, now: new Date('2026-11-18T03:23:00Z') });
+  const html = renderSection(data);
+  assert.match(html, /Sněmovní dokument 1813/);
+  assert.match(html, /href="https:\/\/www\.psp\.cz\/sqw\/sd\.sqw\?cd=1813&amp;o=10"/);
+  assert.match(html, /zákon č\.&nbsp;551\/1991&nbsp;Sb\., o Všeobecné zdravotní pojišťovně/);
+  assert.match(html, /<blockquote class="prl-citace">Zákon č\. 551\/1991 Sb\./);
+  assert.match(html, /stav k 18\. 11\. 2026/);
+  assert.ok(!/přílep/i.test(html), 'web nález neoznačuje slovem přílepek');
+  assert.ok(Object.values(UROVEN_LABELS).every(u => !/přílep/i.test(u.label)));
+  const zly = renderTisk({ ...data.tisky[0], nazev: '<script>x</script>', navrhy: [] });
+  assert.ok(!zly.includes('<script>'));
+  assert.equal(formatDate('2026-09-22'), '22. 9. 2026');
+  assert.match(renderSection({ ...data, tisky: [] }), /zatím žádný takový pozměňovací návrh nenašli/);
 });
 
 test('commitnutý dataset je validní', () => {
