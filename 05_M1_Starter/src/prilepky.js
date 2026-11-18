@@ -95,7 +95,9 @@ async function init() {
   if (!mount) return;
   try {
     const res = await fetch('data/prilepky.json');
-    if (!res.ok) return;
+    // Tělo neúspěšné odpovědi je potřeba zahodit, jinak požadavek zůstane otevřený
+    // (stránka pak nikdy nedosáhne síťového klidu a e2e testy vyprší).
+    if (!res.ok) { await res.body?.cancel(); return; }
     const data = await res.json();
     if (!Array.isArray(data.tisky)) return;
     mount.innerHTML = renderSection(data);
