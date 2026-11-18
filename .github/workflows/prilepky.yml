@@ -20,21 +20,14 @@ on:
         description: 'Nejvýš kolik nových pozměňovacích návrhů přečíst'
         required: false
         default: '300'
-  pull_request:             # zkušební běh nanečisto, jen když se mění odchytávač sám
-    paths:
-      - '05_M1_Starter/ingest/fetchers/psp_prilepky.js'
-      - '05_M1_Starter/ingest/lib/prilepky.js'
-      - '05_M1_Starter/ingest/lib/psp-opendata.js'
-      - '05_M1_Starter/ingest/lib/zip.js'
-      - '.github/workflows/prilepky.yml'
 
 permissions:
   contents: write
   pull-requests: write
 
 concurrency:
-  group: prilepky-${{ github.event_name }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  group: prilepky
+  cancel-in-progress: false
 
 jobs:
   prilepky:
@@ -53,7 +46,6 @@ jobs:
           cache-dependency-path: 05_M1_Starter/package-lock.json
 
       - name: Kill switch AI provozu
-        if: github.event_name != 'pull_request'
         run: |
           git fetch --no-tags --depth=1 origin main
           git show origin/main:05_M1_Starter/data/ai-provoz.json > "$RUNNER_TEMP/ai-provoz.json"
@@ -67,25 +59,13 @@ jobs:
         run: |
           set -euo pipefail
           MAX="${PRILEPKY_MAX:-300}"
-          if [ "${{ github.event_name }}" = "pull_request" ]; then MAX=1200; fi
           if ! printf '%s' "${MAX}" | grep -Eq '^[0-9]+$'; then echo "::error::Neplatné 'max'."; exit 2; fi
           node ingest/fetchers/psp_prilepky.js --max "${MAX}"
 
       - name: Validace
         run: node ingest/validate-prilepky.js
 
-      - name: Výstup zkušebního běhu
-        if: github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v4
-        with:
-          name: prilepky
-          path: |
-            05_M1_Starter/data/prilepky.json
-            05_M1_Starter/ingest/data/prilepky-stav.json
-          retention-days: 7
-
       - name: Otevřít PR
-        if: github.event_name != 'pull_request'
         uses: peter-evans/create-pull-request@v7
         with:
           branch: chore/prilepky
