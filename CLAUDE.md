@@ -164,6 +164,7 @@ git push -u origin claude/<branch>
 │   ├── pojistovny-smluvni-programy.json ← Inventář smluvních programů pro poskytovatele, každý s citací a datem ověření (Instituce)
 │   ├── pojistovny-dostupnost.json ← Co ZP publikují o dostupnosti a § 16 zák. 48/1997 Sb. (Instituce)
 │   ├── pojistovny-prispevky.json ← Katalog příspěvků z fondu prevence 7 ZP na rok 2026 (částka, komu, podmínky, společné stropy; každá částka s url a doslovnou citací z webu ZP; stránka Příspěvky)
+│   ├── prilepky.json           ← Pozměňovací návrhy mimo původní předmět zákona ve zdravotnictví (generuje ingest/fetchers/psp_prilepky.js z otevřených dat Sněmovny; sekce 3 na legislativa.html, src/prilepky.js; validate:prilepky)
 │   ├── explainers.json         ← Kontextové texty (politika, reformy, koncepty)
 │   ├── prevention.json         ← Vakcinace + screeningy
 │   ├── pohotovosti.json        ← 283 pohotovostí s ordinační dobou (VZP + NRPZS + 4 kraje) + 21 denních nemocničních ambulancí (ruční ověření + týdenní drift-check citátů), online pohotovosti, poplatek, dojezdová analýza (souhrn), rozcestník, poradní linky ZZS, EN/UK
@@ -252,6 +253,8 @@ npm run validate:all      # Validuje indicators + strategies + explainers + prev
 npm run pr:gate -- --base origin/main   # Třída PR (A/B/C) podle GOVERNANCE.md § 3 — co smí zmergovat editor a co čeká na vydavatele
 npm run ai:provoz -- check              # Kill switch: exit 1 = provoz pozastaveno, nic nepublikovat ani nemergovat
 npm run validate:pojistovny # Dataset Srovnávače pojišťoven (součást validate:all)
+npm run validate:prilepky # Dataset pozměňovacích návrhů mimo předmět zákona (součást validate:all)
+npm run data:prilepky    # Odchytávač: otevřená data Sněmovny → data/prilepky.json (psp.cz jde jen z GitHub Actions; denní běh = workflow prilepky.yml)
 node ingest/verify-pojistovny-prispevky.js # Znovu stáhne weby ZP a ověří, že citace u každé částky v data/pojistovny-prispevky.json na stránce pořád je (~3 min; drift = přeověřit příspěvek)
 npm run data:pojistovny-mz # Hodnocení MZ 2015–2024 + měsíční přerozdělení → data/pojistovny-{hospodareni-rady,prerozdeleni,segmenty}.json (stahuje z MZ; roční běh = workflow pojistovny-mz.yml)
 npm run validate:evidence # Registr evidence-auditu (studie k tvrzením článků a indikátorů)
@@ -550,6 +553,7 @@ přesné číslo ve fallbacku neprojde, a zaokrouhlení nesmí utéct od skuteč
 - [`docs/pojistovny-indikatory.md`](docs/pojistovny-indikatory.md) — inventář indikátorů a datasetů o zdravotních pojišťovnách: které údaje ukazují, kdo je u koho pojištěn (OIS 11-47, MZ Hodnocení v.z.p., VZ, ZPP, přerozdělení), co v repu je a chybí, návrh per-ZP indikátorů; vstup pro P5.5 srovnávače
 - [`05_M1_Starter/PLAN-ONKO.md`](05_M1_Starter/PLAN-ONKO.md) — návrh sekce „Rakovina: co teď" (`rakovina.html` + `data/onko-navigace.json`): systémová osa nad klinickou `cesta-pacienta.html` — kam patřím, nárok a § 16, na co se ptát, čemu věřit; **čeká na schválení vlastníkem**
 - [`05_M1_Starter/PLAN-PORODNI-ASISTENCE-06211.md`](05_M1_Starter/PLAN-PORODNI-ASISTENCE-06211.md) — analýza dat ÚZIS o poporodních návštěvách porodní asistentky (výkon 06211, 2025 Q1 – 2026 Q2, kraj × pojišťovna; data `ingest/manual/uzis-06211/`) a návrh prezentace: 2 indikátory + krajský dataset + per-ZP řez, série 4 článků „Šestinedělí v datech“, doplňující dotaz na ÚZIS; **čeká na schválení vlastníkem**
+- [`05_M1_Starter/PLAN-PRILEPKY.md`](05_M1_Starter/PLAN-PRILEPKY.md) — odchytávač pozměňovacích návrhů mimo předmět zákona (zdravotnický zákon vložený do cizího tisku a naopak): výsledky sondy psp.cz, metodika bez jazykového modelu, limity, workflow `prilepky.yml`; § 7 = návrh registru raných signálů, **čeká na rozhodnutí vydavatele**
 - [`BACKLOG.md`](BACKLOG.md) — backlog (historický; aktuální vstupní bod je PLAN-PRACE.md)
 - [`05_M1_Starter/PLAN-VERIFIKACE-INDIKATORU.md`](05_M1_Starter/PLAN-VERIFIKACE-INDIKATORU.md) — plán přepnutí indikátorů z „Ilustrativní" na „Ověřeno" (živé zdroje po dávkách); **samostatný vstupní bod pro tu práci**
 - [`05_M1_Starter/PLAN-DATA-NZIP-LIVE.md`](05_M1_Starter/PLAN-DATA-NZIP-LIVE.md) — NZIP/ÚZIS větev verifikace: živé indikátory z „Datového zpravodajství" + doplnění datasetů ke článkům, s **povinným ověřovacím protokolem dat** (kojení-proof); **samostatný vstupní bod pro tu práci**

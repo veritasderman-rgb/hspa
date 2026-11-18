@@ -736,6 +736,38 @@ v procesu / ve Sbírce / nezahájeno / po termínu, filtr podle stavu).
 
 ---
 
+
+### 16.2 `data/prilepky.json` — pozměňovací návrhy mimo předmět zákona
+
+Generuje `ingest/fetchers/psp_prilepky.js` (workflow `prilepky.yml`) z otevřených dat Poslanecké
+sněmovny; ručně se needituje. Metodika a limity: `05_M1_Starter/PLAN-PRILEPKY.md`.
+
+```json
+{
+  "version": "1.0", "generated_at": "…", "obdobi": 10,
+  "source": { "name": "…", "url": "https://www.psp.cz/sqw/hp.sqw?k=1300", "fetched_at": "…" },
+  "pokryti": { "navrhu_zakonu": 0, "pisemnych_pn": 0, "precteno_pn": 0, "pn_bez_textu": 0, "pn_ceka": 0 },
+  "signaly": { "<typ>": "popis signálu" },
+  "tisky": [{
+    "ct": 235, "nazev": "…", "uplny_nazev": "…", "url": "https://www.psp.cz/sqw/historie.sqw?o=10&t=235",
+    "predkladatel_typ": "vlada|poslanci|senat|kraj|jiny", "predkladatel": "…", "predlozeno": "RRRR-MM-DD", "stav": "…",
+    "zdravotnicky": true, "predmet": ["592/1992"], "predmet_neuplny": false,
+    "signaly": ["navrh_schvalit_v_prvnim_cteni"], "uroven": "vysoka|stredni|nizka", "pocet_pn": 2,
+    "navrhy": [{
+      "cd": 1813, "autor": "…", "datum": "RRRR-MM-DD", "url": "https://www.psp.cz/sqw/sd.sqw?cd=1813&o=10",
+      "meni_zakony": ["551/1991", "280/1992"],
+      "mimo_predmet": [{ "cislo": "551/1991", "nazev": "…", "zdravotnicky": true, "citace": "doslovně z textu návrhu" }],
+      "signaly": ["jiny_zdravotnicky_zakon"], "uroven": "stredni"
+    }]
+  }]
+}
+```
+
+Pravidla (`npm run validate:prilepky`): odkazy jen na psp.cz, zákon v `mimo_predmet` nesmí být
+v `predmet`, citace musí obsahovat číslo zákona, nález se neoznačuje slovem „přílepek“.
+Stav běhů (které dokumenty už byly přečteny) je v `ingest/data/prilepky-stav.json`.
+Konzument: `legislativa.html` přes `src/prilepky.js` (sekce 3; bez dat se skryje).
+
 ## 17. `data/system-model.json` — kauzální model systému
 
 Interaktivní kauzální mapa na `model-systemu.html` (PLAN-SYSTEM-MODEL.md).
