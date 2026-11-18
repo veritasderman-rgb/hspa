@@ -405,7 +405,7 @@ kapacit dlouhodobé péče do roku 2035).
 |---|---|
 | **Účel** | Zdravotnická legislativa v přípravě (VeKLEP): tabulka návrhů zákonů/vyhlášek s fází legislativního procesu, anotací a propojením na indikátory + články. Nad tabulkou samostatná sekce „Legislativní plán ministerstva" — plnění plánu legislativních prací vlády (co MZ slíbilo předložit a v jakém termínu vs. reálný stav). |
 | **Cílový uživatel** | Policy maker, novinář, odborná veřejnost sledující novely. |
-| **Fetchuje** | `data/legislativa.json` (items + plan_meta/plan_items), `data/articles.json` |
+| **Fetchuje** | `data/legislativa.json` (items + plan_meta/plan_items), `data/articles.json`, `data/prilepky.json` (sekce 3 „Co se do zákona dostalo až ve Sněmovně“, `src/prilepky.js`) |
 | **JS moduly** | `src/legislativa.js` → `page-shared` |
 | **CSS namespace** | `.leg-*` (tabulka, fáze pilly, zdrojová poznámka), `.leg-plan-*` (sekce plnění plánu — počitadla, badge stavu, tabulka); reuse `.filters-row`, `.level-nav`, `.chip`, `.ed-hero*`, `.ed-kicker` |
 

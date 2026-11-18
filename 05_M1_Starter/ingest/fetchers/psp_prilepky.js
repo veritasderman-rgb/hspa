@@ -32,6 +32,9 @@ export const DATA_FILE = path.join(ROOT, 'data', 'prilepky.json');
 export const STATE_FILE = path.join(ROOT, 'ingest', 'data', 'prilepky-stav.json');
 
 const UA = 'ZdraveCesko-HSPA/1.0 (+https://skorezdravotnictvi.cz; odchytavac pozmenovacich navrhu)';
+// Verze rozboru textu. Zvýšit při změně pravidel v lib/prilepky.js, která mění, co se z textu
+// vyčte — dokumenty se pak přečtou znovu. Stav totiž drží jen rozbor, ne text.
+export const VERZE_ROZBORU = 1;
 const DELAY_MS = 1000; // nejvýš 1 požadavek za sekundu
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
@@ -62,7 +65,8 @@ async function docxFromPage(pageUrl, get) {
  * @returns {{data: object, state: object, report: object}}
  */
 export async function run({ obdobi = 10, max = 300, state = null, get = httpGet, log = console.log, now = new Date() } = {}) {
-  state = state && state.obdobi === obdobi ? structuredClone(state) : { obdobi, navrhy: {}, tisky: {} };
+  state = state && state.obdobi === obdobi && state.verze_rozboru === VERZE_ROZBORU
+    ? structuredClone(state) : { obdobi, verze_rozboru: VERZE_ROZBORU, navrhy: {}, tisky: {} };
   const healthLaws = loadHealthLaws();
 
   const tiskyZip = readZip(await get(`${OPENDATA}/tisky.zip`, { binary: true }));

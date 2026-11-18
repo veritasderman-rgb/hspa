@@ -78,8 +78,9 @@ export function amendedLaws(text) {
 /** Mění text datum účinnosti? Vrací doslovný úryvek, nebo null. */
 export function effectivityChange(text) {
   const t = norm(text).replace(/\s+/g, ' ');
-  const m = /[^.]{0,160}nabývá\s+účinnosti[^.]{0,200}\./.exec(t);
-  return m ? m[0].trim() : null;
+  const m = /nabývá\s+účinnosti/.exec(t);
+  if (!m) return null;
+  return t.slice(Math.max(0, m.index - 80), m.index + 140).trim();
 }
 
 const KLICOVA_SLOVA = /zdravotn|léčiv|lékař|lékárn|nemocnic|pojišťov[en]\w* .{0,40}zdrav|hygien|návykov/i;
