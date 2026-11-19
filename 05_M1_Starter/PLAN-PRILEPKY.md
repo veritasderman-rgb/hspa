@@ -37,8 +37,13 @@ dokumenty 1796 a 1813.
   `/sqw/text/orig2.sqw?idd=…`, odkaz je na stránce dokumentu `/sqw/sd.sqw?cd=…&o=…`.
 - **`robots.txt` Sněmovny cestu `/sqw/text/orig2.sqw` robotům zakazuje.** Vydavatel 18. 11. 2026
   rozhodl stahovat cíleně: jen `.docx` pozměňovacích návrhů a tisků, které odchytávač potřebuje,
-  každý jednou, nejvýš jeden požadavek za sekundu, s podepsaným User-Agentem. Text se neukládá.
+  každý jednou, jeden požadavek za 3 sekundy, s podepsaným User-Agentem. Text se neukládá.
   Stejné soubory čte i cosepece.cz.
+- **psp.cz je z runnerů pomalý a nestálý.** Při tempu 1 požadavek/s začal po několika stech
+  požadavcích zahazovat nová spojení (connect timeout, HTTP 408); první průchod obdobím proto
+  vypršel. Fetcher teď čeká 3 s mezi požadavky, po odmítnutí 20 s, má časový rozpočet běhu
+  (`--minutes`) a nepřečtené dokumenty dočte příští běh. První průchod obdobím se pouští ručně
+  z pracovní větve (`minutes=200`), která si mezivýsledky ukládá sama.
 - **Testovací případ sedí.** Dokument 1813 k tisku 235 (novela zákona č. 592/1992 Sb.) vkládá nové
   části měnící zákony č. 551/1991 Sb. a č. 280/1992 Sb. Dokument 1796 mění jen částku v původním
   návrhu a nálezem není.

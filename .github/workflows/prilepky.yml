@@ -9,7 +9,7 @@ name: Přílepky — pozměňovací návrhy mimo předmět zákona
 # Deterministické, bez jazykového modelu. Metodika: 05_M1_Starter/PLAN-PRILEPKY.md.
 #
 # Zátěž Sněmovny: 2 archivy otevřených dat + 2 požadavky na každý NOVÝ
-# pozměňovací návrh, nejvýš 1 požadavek za sekundu. Běžný den jednotky až desítky.
+# pozměňovací návrh, jeden požadavek za 3 sekundy. Běžný den jednotky až desítky.
 
 on:
   schedule:
@@ -57,7 +57,7 @@ jobs:
 
       - run: npm ci
 
-      - name: Odchytávač (nejvýš 1 požadavek/s)
+      - name: Odchytávač (1 požadavek za 3 s)
         env:
           PRILEPKY_MAX: ${{ inputs.max }}
           PRILEPKY_MINUTES: ${{ inputs.minutes }}
