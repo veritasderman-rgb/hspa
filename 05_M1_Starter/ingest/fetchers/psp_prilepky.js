@@ -124,7 +124,7 @@ export async function run({ obdobi = 10, max = 300, budgetMs = Infinity, cooloff
     if (!bill || state.tisky[ct] || !recs.some(r => r.zmeny.length)) continue;
     const zNazvu = extractLawRefs(bill.uplny_nazev);
     if (zNazvu.length && !scopeFromTitleIncomplete(bill.uplny_nazev)) continue;
-    if (clock() > deadline) break; // předmět se doplní příště; do té doby platí výčet z názvu
+    // Bez časového rozpočtu: jde o jednotky tisků a bez předmětu by nález nešel vydat.
     try {
       const { text } = await docxFromPage(`${PSP}/sqw/text/tiskt.sqw?O=${obdobi}&CT=${ct}&CT1=0`, get);
       if (text) {

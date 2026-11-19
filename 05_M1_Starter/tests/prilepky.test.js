@@ -106,6 +106,14 @@ test('cizí zákon ve zdravotnickém tisku = vysoká úroveň', () => {
   assert.equal(r.uroven, 'vysoka');
 });
 
+test('neúplný předmět (název slibuje další zákony, text chybí): nález se nevydá', () => {
+  const t = { ct: 5, nazev: 'x', uplny_nazev: 'Vládní návrh zákona, kterým se mění zákon č. 325/2021 Sb., o elektronizaci zdravotnictví, a některé další zákony', predkladatel_typ: 'vlada' };
+  const pn = [{ cd: 1, zmeny: [{ cislo: '372/2011', citace: 'Zákon č. 372/2011 Sb., o zdravotních službách, se mění takto:' }], ucinnost: null }];
+  assert.equal(evaluateTisk(t, pn, HL), null);
+  assert.equal(evaluateTisk({ ...t, predmet_z_textu: ['372/2011'] }, pn, HL), null); // zákon byl v původním návrhu
+  assert.deepEqual(evaluateTisk({ ...t, predmet_z_textu: ['48/1997'] }, pn, HL).navrhy[0].mimo_predmet.map(z => z.cislo), ['372/2011']);
+});
+
 test('procesní signály: poslanecký návrh a § 90/2 jen u zdravotnických tisků', () => {
   const r = evaluateTisk({ ...TISK_235, predkladatel_typ: 'poslanci', navrzeno_90_2: true }, [], HL);
   assert.deepEqual(r.signaly, ['bez_pripominkoveho_rizeni', 'navrh_schvalit_v_prvnim_cteni']);

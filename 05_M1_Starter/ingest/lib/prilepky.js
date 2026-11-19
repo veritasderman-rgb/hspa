@@ -134,7 +134,9 @@ export function evaluateTisk(tisk, navrhy, healthLaws) {
   const inScope = new Set(scope.zakony);
 
   const outNavrhy = [];
-  for (const pn of navrhy ?? []) {
+  // Dokud neznáme celý předmět tisku (název slibuje „další zákony“ a text návrhu ještě nemáme),
+  // nález o pozměňovacím návrhu nevydáváme: mohl by označit zákon, který původní návrh měnil.
+  for (const pn of scope.neuplny ? [] : navrhy ?? []) {
     if (!pn.zmeny && !pn.text) continue;
     const rozbor = pn.zmeny ? pn : analyzeAmendment(pn.text);
     const amended = rozbor.zmeny;
