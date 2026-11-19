@@ -9,11 +9,11 @@ import path from 'node:path';
 import zlib from 'node:zlib';
 import { fileURLToPath } from 'node:url';
 import {
-  loadHealthLaws, extractLawRefs, amendedLaws, effectivityChange, tiskScope,
+  loadHealthLaws, extractLawRefs, amendedLaws, effectivityChange, tiskScope, citaceJeNovelizace,
   evaluateTisk, scopeFromTitleIncomplete, SIGNALY,
 } from '../ingest/lib/prilepky.js';
 import { readZip, docxText } from '../ingest/lib/zip.js';
-import { parseUnl, lawBills, writtenAmendments, parseDocPage, predkladatelTyp, organObdobi } from '../ingest/lib/psp-opendata.js';
+import { parseUnl, lawBills, writtenAmendments, parseDocPage, predkladatelTyp, predkladatelTypZNazvu, organObdobi } from '../ingest/lib/psp-opendata.js';
 import { run, writeIfChanged } from '../ingest/fetchers/psp_prilepky.js';
 import { validatePrilepky } from '../ingest/validate-prilepky.js';
 import { renderSection, renderTisk, UROVEN_LABELS, formatDate } from '../src/prilepky.js';
@@ -65,6 +65,21 @@ test('amendedLaws: citace je doslovný úryvek s číslem zákona', () => {
   }
 });
 
+test('zákon na konci vkládaného znění není novelizace (skutečný dokument 1474 k tisku 189)', () => {
+  const pn = 'zní: „42) Zákon č. 48/1997 Sb., o veřejném zdravotním pojištění.“.“ V části druhé, § 29, se dosavadní bod 16 označuje jako bod 18. V § 35d odst. 1 se text „písm. a)“ nahrazuje textem „písm. b)“.';
+  assert.deepEqual(amendedLaws(pn), []);
+  assert.equal(citaceJeNovelizace('Zákon č. 48/1997 Sb., o veřejném zdravotním pojištění.“.“ V části druhé, § 29, se dosavadní bod 16 označuje jako bod 18.'), false);
+  for (const z of amendedLaws(PN_1813)) assert.equal(citaceJeNovelizace(z.citace), true);
+});
+
+test('souhrnná novela, která se zdravotnického zákona jen dotkne, není zdravotnický tisk', () => {
+  const stav = { ct: 67, nazev: 'Novela z. - stavební zákon', uplny_nazev: 'Návrh poslanců na vydání zákona, kterým se mění zákon č. 283/2021 Sb., stavební zákon, ve znění pozdějších předpisů, zákon č. 258/2000 Sb., o ochraně veřejného zdraví, a další související zákony', predkladatel_typ: 'poslanci', predmet_z_textu: ['283/2021', '258/2000'] };
+  const dph = [{ cd: 1055, zmeny: [{ cislo: '235/2004', citace: 'Zákon č. 235/2004 Sb., o dani z přidané hodnoty, ve znění pozdějších předpisů, se mění takto: 1.' }], ucinnost: null }];
+  assert.equal(evaluateTisk(stav, dph, HL), null);
+  const zp = [{ cd: 1, zmeny: [{ cislo: '48/1997', citace: 'Zákon č. 48/1997 Sb., o veřejném zdravotním pojištění, se mění takto: 1.' }], ucinnost: null }];
+  assert.deepEqual(evaluateTisk(stav, zp, HL).navrhy[0].signaly, ['zdravotnicky_zakon_v_cizim_tisku']);
+});
+
 test('effectivityChange: jen když text mluví o účinnosti', () => {
   assert.equal(effectivityChange(PN_1796), null);
   assert.match(effectivityChange('Čl. III zní: Tento zákon nabývá účinnosti dnem 1. ledna 2028.'), /nabývá účinnosti dnem 1\. ledna 2028\./);
@@ -104,6 +119,14 @@ test('cizí zákon ve zdravotnickém tisku = vysoká úroveň', () => {
   const r = evaluateTisk(TISK_235, [{ cd: 5, text: pn }], HL);
   assert.deepEqual(r.navrhy[0].signaly, ['cizi_zakon_ve_zdravotnickem_tisku']);
   assert.equal(r.uroven, 'vysoka');
+});
+
+test('neúplný předmět (název slibuje další zákony, text chybí): nález se nevydá', () => {
+  const t = { ct: 5, nazev: 'x', uplny_nazev: 'Vládní návrh zákona, kterým se mění zákon č. 325/2021 Sb., o elektronizaci zdravotnictví, a některé další zákony', predkladatel_typ: 'vlada' };
+  const pn = [{ cd: 1, zmeny: [{ cislo: '372/2011', citace: 'Zákon č. 372/2011 Sb., o zdravotních službách, se mění takto:' }], ucinnost: null }];
+  assert.equal(evaluateTisk(t, pn, HL), null);
+  assert.equal(evaluateTisk({ ...t, predmet_z_textu: ['372/2011'] }, pn, HL), null); // zákon byl v původním návrhu
+  assert.deepEqual(evaluateTisk({ ...t, predmet_z_textu: ['48/1997'] }, pn, HL).navrhy[0].mimo_predmet.map(z => z.cislo), ['372/2011']);
 });
 
 test('procesní signály: poslanecký návrh a § 90/2 jen u zdravotnických tisků', () => {
@@ -157,6 +180,21 @@ test('lawBills: jen návrhy zákonů daného období, hlavní tisk', () => {
   assert.equal(organObdobi(10), 174);
   assert.equal(predkladatelTyp('UT - Moravskoslezský kraj'), 'kraj');
   assert.equal(predkladatelTyp('SE - senát'), 'senat');
+});
+
+test('typ předkladatele z názvu, když ho číselník neurčí', () => {
+  assert.equal(predkladatelTypZNazvu('Návrh poslanců Štěpána Slováka a dalších na vydání zákona'), 'poslanci');
+  assert.equal(predkladatelTypZNazvu('Senátní návrh zákona, kterým se mění'), 'senat');
+  assert.equal(predkladatelTypZNazvu('Návrh Zastupitelstva Zlínského kraje'), 'kraj');
+});
+
+test('zdravotnický tisk: „zdravotní postižení“ v názvu sociálního zákona nestačí', () => {
+  const soc = { ct: 125, nazev: 'x', uplny_nazev: 'Návrh poslanců na vydání zákona, kterým se mění zákon č. 108/2006 Sb., o sociálních službách, a zákon č. 329/2011 Sb., o poskytování dávek osobám se zdravotním postižením', predkladatel_typ: 'poslanci' };
+  assert.equal(evaluateTisk(soc, [], HL), null);
+  const rostl = { ct: 48, nazev: 'x', uplny_nazev: 'Návrh poslanců na vydání zákona, kterým se mění zákon č. 326/2004 Sb., o rostlinolékařské péči', predkladatel_typ: 'poslanci' };
+  assert.equal(evaluateTisk(rostl, [], HL), null);
+  const zs = { ct: 9, nazev: 'x', uplny_nazev: 'Návrh poslanců na vydání zákona o dostupnosti zdravotních služeb', predkladatel_typ: 'poslanci' };
+  assert.deepEqual(evaluateTisk(zs, [], HL).signaly, ['bez_pripominkoveho_rizeni']);
 });
 
 test('writtenAmendments: jen dokumenty k tisku v daném období', () => {
@@ -234,6 +272,13 @@ test('run: první běh stáhne oba návrhy, druhý už nic; výstup projde valid
 
 test('run: limit max odloží zbytek na příští běh', async () => {
   const r = await run({ get: fakeGet([]), max: 1, log: () => {} });
+  assert.equal(r.report.fetched, 1);
+  assert.equal(r.data.pokryti.pn_ceka, 1);
+});
+
+test('run: časový rozpočet zastaví čtení a zbytek nechá na příště', async () => {
+  let t = 0;
+  const r = await run({ get: fakeGet([]), budgetMs: 10, clock: () => (t += 6), log: () => {} });
   assert.equal(r.report.fetched, 1);
   assert.equal(r.data.pokryti.pn_ceka, 1);
 });

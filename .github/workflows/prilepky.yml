@@ -9,7 +9,7 @@ name: Přílepky — pozměňovací návrhy mimo předmět zákona
 # Deterministické, bez jazykového modelu. Metodika: 05_M1_Starter/PLAN-PRILEPKY.md.
 #
 # Zátěž Sněmovny: 2 archivy otevřených dat + 2 požadavky na každý NOVÝ
-# pozměňovací návrh, nejvýš 1 požadavek za sekundu. Běžný den jednotky až desítky.
+# pozměňovací návrh, jeden požadavek za 3 sekundy. Běžný den jednotky až desítky.
 
 on:
   schedule:
@@ -20,31 +20,30 @@ on:
         description: 'Nejvýš kolik nových pozměňovacích návrhů přečíst'
         required: false
         default: '300'
-  pull_request:             # zkušební běh nanečisto, jen když se mění odchytávač sám
-    paths:
-      - '05_M1_Starter/ingest/fetchers/psp_prilepky.js'
-      - '05_M1_Starter/ingest/lib/prilepky.js'
-      - '05_M1_Starter/ingest/lib/psp-opendata.js'
-      - '05_M1_Starter/ingest/lib/zip.js'
-      - '.github/workflows/prilepky.yml'
+      minutes:
+        description: 'Časový rozpočet na čtení nových dokumentů v minutách (první průchod obdobím: 200)'
+        required: false
+        default: '40'
 
 permissions:
   contents: write
   pull-requests: write
 
 concurrency:
-  group: prilepky-${{ github.event_name }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  group: prilepky
+  cancel-in-progress: false
 
 jobs:
   prilepky:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 240
     defaults:
       run:
         working-directory: 05_M1_Starter
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0   # kvůli rebase při ukládání do pracovní větve
 
       - uses: actions/setup-node@v5
         with:
@@ -53,7 +52,6 @@ jobs:
           cache-dependency-path: 05_M1_Starter/package-lock.json
 
       - name: Kill switch AI provozu
-        if: github.event_name != 'pull_request'
         run: |
           git fetch --no-tags --depth=1 origin main
           git show origin/main:05_M1_Starter/data/ai-provoz.json > "$RUNNER_TEMP/ai-provoz.json"
@@ -61,31 +59,40 @@ jobs:
 
       - run: npm ci
 
-      - name: Odchytávač (nejvýš 1 požadavek/s)
+      - name: Odchytávač (1 požadavek za 3 s)
         env:
           PRILEPKY_MAX: ${{ inputs.max }}
+          PRILEPKY_MINUTES: ${{ inputs.minutes }}
         run: |
           set -euo pipefail
           MAX="${PRILEPKY_MAX:-300}"
-          if [ "${{ github.event_name }}" = "pull_request" ]; then MAX=1200; fi
+          MINUTES="${PRILEPKY_MINUTES:-40}"
           if ! printf '%s' "${MAX}" | grep -Eq '^[0-9]+$'; then echo "::error::Neplatné 'max'."; exit 2; fi
-          node ingest/fetchers/psp_prilepky.js --max "${MAX}"
+          if ! printf '%s' "${MINUTES}" | grep -Eq '^[0-9]+$' || [ "${MINUTES}" -gt 210 ]; then echo "::error::Neplatné 'minutes' (nejvýš 210)."; exit 2; fi
+          # psp.cz odpovídá i několik sekund a občas vrátí 408; časový rozpočet drží běh
+          # pod limitem jobu a nepřečtené dokumenty počkají na další běh.
+          node ingest/fetchers/psp_prilepky.js --max "${MAX}" --minutes "${MINUTES}"
 
       - name: Validace
         run: node ingest/validate-prilepky.js
 
-      - name: Výstup zkušebního běhu
-        if: github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v4
-        with:
-          name: prilepky
-          path: |
-            05_M1_Starter/data/prilepky.json
-            05_M1_Starter/ingest/data/prilepky-stav.json
-          retention-days: 7
+      - name: Uložit do větve (ruční běh mimo main)
+        # Ruční běh z pracovní větve (první průchod obdobím) ukládá přímo do ní,
+        # aby na sebe opakované běhy navazovaly. Na main se nikdy necommituje přímo.
+        if: github.ref != 'refs/heads/main'
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/prilepky.json ingest/data/prilepky-stav.json
+          if git diff --cached --quiet; then echo "Beze změny."; exit 0; fi
+          git commit -m "data(prilepky): pozměňovací návrhy mimo předmět zákona — průchod obdobím"
+          # Větev se mezitím mohla posunout (opravy kódu); data na ně jen navážeme.
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
 
       - name: Otevřít PR
-        if: github.event_name != 'pull_request'
+        if: github.ref == 'refs/heads/main'
         uses: peter-evans/create-pull-request@v7
         with:
           branch: chore/prilepky

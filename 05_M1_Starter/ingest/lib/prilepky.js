@@ -52,6 +52,20 @@ const HEAD_RE = /(?:Zákon|V\s+zákoně|V\s+zákonu)\s+č\.\s*(\d{1,4})\s*\/\s*(
 const VERB_RE = /(?<!\p{L})se\s+(?:.{0,400}?\s)?(?:mění|doplňuje|doplňují|vkládá|vkládají|zrušuje|zrušují|nahrazuje|nahrazují)(?!\p{L})/su;
 const MAX_TAIL = 12000; // výčet novel u zákona č. 48/1997 Sb. má tisíce znaků
 
+// Mezi hlavičkou a slovesem nesmí skončit citovaný text (tečka + uzavírací uvozovka): pak nejde
+// o novelizaci, ale o zmínku zákona na konci vkládaného znění nebo poznámky pod čarou.
+const KONEC_CITACE_RE = /\.\s*[“”"]/;
+export const endsQuoteBeforeVerb = s => KONEC_CITACE_RE.test(s);
+
+/** Stejná pojistka nad uloženou citací (stav drží jen citaci, ne text). */
+export function citaceJeNovelizace(citace) {
+  const c = String(citace ?? '');
+  const elipsa = c.indexOf(' … ');
+  const verb = VERB_RE.exec(c);
+  const hlava = elipsa > -1 ? c.slice(0, elipsa) : verb ? c.slice(0, verb.index) : c;
+  return !endsQuoteBeforeVerb(hlava);
+}
+
 /**
  * Zákony, které text skutečně novelizuje (ne jen zmiňuje).
  * @returns {{cislo: string, citace: string}[]}
@@ -65,6 +79,7 @@ export function amendedLaws(text) {
     const end = Math.min(i + 1 < heads.length ? heads[i + 1].index : t.length, start + MAX_TAIL);
     const verb = VERB_RE.exec(t.slice(start, end));
     if (!verb) return;
+    if (endsQuoteBeforeVerb(t.slice(start, start + verb.index))) return;
     const c = cislo(m[1], m[2]);
     if (out.has(c)) return;
     // Citace: začátek hlavičky + okolí slovesa, doslovně z textu.
@@ -83,18 +98,26 @@ export function effectivityChange(text) {
   return t.slice(Math.max(0, m.index - 80), m.index + 140).trim();
 }
 
-const KLICOVA_SLOVA = /zdravotn|léčiv|lékař|lékárn|nemocnic|pojišťov[en]\w* .{0,40}zdrav|hygien|návykov/i;
+// Záměrně ne holé „zdravotn“: chytlo by i „osoby se zdravotním postižením“ (sociální zákony).
+// „lékař“ jen na začátku slova: jinak se chytí „rostlinolékařská péče“.
+const KLICOVA_SLOVA = /zdravotnictv|zdravotnick|zdravotní(?:ch|m|mi)?\s+(?:služ|pojišt|péč)|veřejné(?:ho)?\s+zdraví|(?<!\p{L})léčiv|(?<!\p{L})lékař|(?<!\p{L})lékárn|nemocnic|návykov/iu;
 
 /** Rozbor jednoho pozměňovacího návrhu; výsledek se ukládá, text ne. */
 export function analyzeAmendment(text) {
   return { zmeny: amendedLaws(text), ucinnost: effectivityChange(text) };
 }
 
-/** Je tisk zdravotnický? Podle zákonů v předmětu, předkladatele a názvu. */
+/**
+ * Je tisk zdravotnický? Rozhoduje HLAVNÍ předmět: první zákon v názvu, předkladatel, nebo název
+ * po první zákon. Souhrnná novela (stavební zákon), která mimo jiné sáhne i na zákon o ochraně
+ * veřejného zdraví, zdravotnický tisk není.
+ */
 export function isHealthTisk(tisk, scope, healthLaws) {
-  if (scope.some(c => healthLaws.has(c))) return true;
+  const zNazvu = extractLawRefs(tisk.uplny_nazev ?? '');
+  if (zNazvu.length ? healthLaws.has(zNazvu[0]) : scope.length > 0 && healthLaws.has(scope[0])) return true;
   if (/zdravotnictv/i.test(tisk.predkladatel ?? '')) return true;
-  return KLICOVA_SLOVA.test(tisk.uplny_nazev ?? tisk.nazev ?? '');
+  const hlavni = String(tisk.uplny_nazev ?? '').split(/,\s*ve\s+znění|\sa\s+o\s+změně|\sa\s+další|\sa\s+některé/)[0];
+  return KLICOVA_SLOVA.test(tisk.nazev ?? '') || KLICOVA_SLOVA.test(hlavni);
 }
 
 /** Název slibuje i změny zákonů, které nevyjmenovává („a další související zákony“, „o změně některých zákonů“). */
@@ -133,10 +156,12 @@ export function evaluateTisk(tisk, navrhy, healthLaws) {
   const inScope = new Set(scope.zakony);
 
   const outNavrhy = [];
-  for (const pn of navrhy ?? []) {
+  // Dokud neznáme celý předmět tisku (název slibuje „další zákony“ a text návrhu ještě nemáme),
+  // nález o pozměňovacím návrhu nevydáváme: mohl by označit zákon, který původní návrh měnil.
+  for (const pn of scope.neuplny ? [] : navrhy ?? []) {
     if (!pn.zmeny && !pn.text) continue;
     const rozbor = pn.zmeny ? pn : analyzeAmendment(pn.text);
-    const amended = rozbor.zmeny;
+    const amended = rozbor.zmeny.filter(z => citaceJeNovelizace(z.citace));
     const mimo = amended.filter(a => !inScope.has(a.cislo));
     const signaly = [];
     if (!zdravotnicky && mimo.some(a => healthLaws.has(a.cislo))) signaly.push('zdravotnicky_zakon_v_cizim_tisku');

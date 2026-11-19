@@ -1,6 +1,6 @@
 name: PSP probe (průzkum otevřených dat Sněmovny)
 
-# PRŮZKUM, nic necommituje a nesahá na datový kontrakt. Zjišťuje, co psp.cz
+# PRŮZKUM, spouští se jen ručně. Nic necommituje a nesahá na datový kontrakt. Zjišťuje, co psp.cz
 # reálně publikuje o tiscích a písemných pozměňovacích návrzích, aby odchytávač
 # pozměňovacích návrhů mimo předmět zákona (PLAN-PRILEPKY.md) stál na ověřené
 # struktuře, ne na odhadu.
@@ -21,10 +21,6 @@ on:
         description: 'Čísla sněmovních dokumentů (PN) oddělená čárkou'
         required: false
         default: '1813,1796'
-  pull_request:
-    paths:
-      - '05_M1_Starter/ingest/probe/psp-probe.js'
-      - '.github/workflows/psp-probe.yml'
 
 permissions:
   contents: read
