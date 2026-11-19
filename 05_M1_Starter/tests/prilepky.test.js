@@ -176,6 +176,8 @@ test('typ předkladatele z názvu, když ho číselník neurčí', () => {
 test('zdravotnický tisk: „zdravotní postižení“ v názvu sociálního zákona nestačí', () => {
   const soc = { ct: 125, nazev: 'x', uplny_nazev: 'Návrh poslanců na vydání zákona, kterým se mění zákon č. 108/2006 Sb., o sociálních službách, a zákon č. 329/2011 Sb., o poskytování dávek osobám se zdravotním postižením', predkladatel_typ: 'poslanci' };
   assert.equal(evaluateTisk(soc, [], HL), null);
+  const rostl = { ct: 48, nazev: 'x', uplny_nazev: 'Návrh poslanců na vydání zákona, kterým se mění zákon č. 326/2004 Sb., o rostlinolékařské péči', predkladatel_typ: 'poslanci' };
+  assert.equal(evaluateTisk(rostl, [], HL), null);
   const zs = { ct: 9, nazev: 'x', uplny_nazev: 'Návrh poslanců na vydání zákona o dostupnosti zdravotních služeb', predkladatel_typ: 'poslanci' };
   assert.deepEqual(evaluateTisk(zs, [], HL).signaly, ['bez_pripominkoveho_rizeni']);
 });

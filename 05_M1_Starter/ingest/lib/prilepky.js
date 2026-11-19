@@ -84,7 +84,8 @@ export function effectivityChange(text) {
 }
 
 // Záměrně ne holé „zdravotn“: chytlo by i „osoby se zdravotním postižením“ (sociální zákony).
-const KLICOVA_SLOVA = /zdravotnictv|zdravotnick|zdravotní(?:ch|m|mi)?\s+(?:služ|pojišt|péč)|veřejné(?:ho)?\s+zdraví|léčiv|lékař|lékárn|nemocnic|návykov/i;
+// „lékař“ jen na začátku slova: jinak se chytí „rostlinolékařská péče“.
+const KLICOVA_SLOVA = /zdravotnictv|zdravotnick|zdravotní(?:ch|m|mi)?\s+(?:služ|pojišt|péč)|veřejné(?:ho)?\s+zdraví|(?<!\p{L})léčiv|(?<!\p{L})lékař|(?<!\p{L})lékárn|nemocnic|návykov/iu;
 
 /** Rozbor jednoho pozměňovacího návrhu; výsledek se ukládá, text ne. */
 export function analyzeAmendment(text) {
