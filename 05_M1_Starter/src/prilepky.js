@@ -13,6 +13,18 @@ export const UROVEN_LABELS = {
 
 const PREDKLADATEL = { vlada: 'vládní návrh', poslanci: 'poslanecký návrh', senat: 'senátní návrh', kraj: 'návrh kraje', jiny: 'návrh' };
 
+// Štítek říká, o jakou situaci jde, ne jen jak je závažná.
+const SIGNAL_BADGE = {
+  zdravotnicky_zakon_v_cizim_tisku: { label: 'Zdravotnický zákon v cizím tisku', cls: 'leg-plan-badge-bad' },
+  cizi_zakon_ve_zdravotnickem_tisku: { label: 'Cizí zákon ve zdravotnickém tisku', cls: 'leg-plan-badge-bad' },
+  jiny_zdravotnicky_zakon: { label: 'Další zdravotnický zákon', cls: 'leg-plan-badge-warn' },
+};
+export function badgeFor(t) {
+  const signaly = (t.navrhy ?? []).flatMap(n => n.signaly ?? []);
+  const klic = Object.keys(SIGNAL_BADGE).find(k => signaly.includes(k));
+  return klic ? SIGNAL_BADGE[klic] : UROVEN_LABELS[t.uroven] ?? UROVEN_LABELS.nizka;
+}
+
 export function formatDate(iso) {
   const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso ?? '');
   return m ? `${Number(m[3])}. ${Number(m[2])}. ${m[1]}` : '';
@@ -41,7 +53,7 @@ export function renderNavrh(n) {
 }
 
 export function renderTisk(t, signaly = {}) {
-  const u = UROVEN_LABELS[t.uroven] ?? UROVEN_LABELS.nizka;
+  const u = badgeFor(t);
   const predmet = t.predmet.length ? `Původní návrh měnil: ${t.predmet.map(c => `č.&nbsp;${escapeHtml(c)}&nbsp;Sb.`).join(', ')}` : 'Původní návrh je nový zákon.';
   const proces = (t.signaly ?? []).map(s => `<li>${escapeHtml(signaly[s] ?? s)}</li>`).join('');
   return `

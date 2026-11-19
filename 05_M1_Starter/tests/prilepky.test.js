@@ -9,7 +9,7 @@ import path from 'node:path';
 import zlib from 'node:zlib';
 import { fileURLToPath } from 'node:url';
 import {
-  loadHealthLaws, extractLawRefs, amendedLaws, effectivityChange, tiskScope,
+  loadHealthLaws, extractLawRefs, amendedLaws, effectivityChange, tiskScope, citaceJeNovelizace,
   evaluateTisk, scopeFromTitleIncomplete, SIGNALY,
 } from '../ingest/lib/prilepky.js';
 import { readZip, docxText } from '../ingest/lib/zip.js';
@@ -63,6 +63,21 @@ test('amendedLaws: citace je doslovný úryvek s číslem zákona', () => {
     assert.ok(z.citace.includes(`č. ${z.cislo} Sb.`));
     for (const part of z.citace.split(' … ')) assert.ok(flat.includes(part), `není doslovně v textu: ${part}`);
   }
+});
+
+test('zákon na konci vkládaného znění není novelizace (skutečný dokument 1474 k tisku 189)', () => {
+  const pn = 'zní: „42) Zákon č. 48/1997 Sb., o veřejném zdravotním pojištění.“.“ V části druhé, § 29, se dosavadní bod 16 označuje jako bod 18. V § 35d odst. 1 se text „písm. a)“ nahrazuje textem „písm. b)“.';
+  assert.deepEqual(amendedLaws(pn), []);
+  assert.equal(citaceJeNovelizace('Zákon č. 48/1997 Sb., o veřejném zdravotním pojištění.“.“ V části druhé, § 29, se dosavadní bod 16 označuje jako bod 18.'), false);
+  for (const z of amendedLaws(PN_1813)) assert.equal(citaceJeNovelizace(z.citace), true);
+});
+
+test('souhrnná novela, která se zdravotnického zákona jen dotkne, není zdravotnický tisk', () => {
+  const stav = { ct: 67, nazev: 'Novela z. - stavební zákon', uplny_nazev: 'Návrh poslanců na vydání zákona, kterým se mění zákon č. 283/2021 Sb., stavební zákon, ve znění pozdějších předpisů, zákon č. 258/2000 Sb., o ochraně veřejného zdraví, a další související zákony', predkladatel_typ: 'poslanci', predmet_z_textu: ['283/2021', '258/2000'] };
+  const dph = [{ cd: 1055, zmeny: [{ cislo: '235/2004', citace: 'Zákon č. 235/2004 Sb., o dani z přidané hodnoty, ve znění pozdějších předpisů, se mění takto: 1.' }], ucinnost: null }];
+  assert.equal(evaluateTisk(stav, dph, HL), null);
+  const zp = [{ cd: 1, zmeny: [{ cislo: '48/1997', citace: 'Zákon č. 48/1997 Sb., o veřejném zdravotním pojištění, se mění takto: 1.' }], ucinnost: null }];
+  assert.deepEqual(evaluateTisk(stav, zp, HL).navrhy[0].signaly, ['zdravotnicky_zakon_v_cizim_tisku']);
 });
 
 test('effectivityChange: jen když text mluví o účinnosti', () => {
