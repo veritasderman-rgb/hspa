@@ -34,6 +34,15 @@ export function predkladatelTyp(label) {
   return 'jiny';
 }
 
+/** Když číselník typ neurčí (skupina poslanců mívá jiný kód), rozhodne začátek úplného názvu. */
+export function predkladatelTypZNazvu(nazev) {
+  if (/^Vládní\s+návrh/i.test(nazev ?? '')) return 'vlada';
+  if (/^Návrh\s+poslan/i.test(nazev ?? '')) return 'poslanci';
+  if (/^Senátní\s+návrh|^Návrh\s+Senátu/i.test(nazev ?? '')) return 'senat';
+  if (/^Návrh\s+[Zz]astupitelstva/i.test(nazev ?? '')) return 'kraj';
+  return 'jiny';
+}
+
 /**
  * Návrhy zákonů jednoho volebního období z tisky.unl.
  * Sloupce: 0 id_tisk · 1 id_druh · 2 id_stav · 3 ct · 4 cislo_za · 5 id_navrh (typ_zakon) ·
@@ -55,7 +64,7 @@ export function lawBills(tables, obdobi) {
       ct,
       nazev: r[10],
       uplny_nazev: r[15] || r[10],
-      predkladatel_typ: predkladatelTyp(typ.get(r[5])),
+      predkladatel_typ: (t => (t === 'jiny' ? predkladatelTypZNazvu(r[15] || r[10]) : t))(predkladatelTyp(typ.get(r[5]))),
       predkladatel: r[9] || null,
       predlozeno: isoDate(r[11]),
       stav: typStavu.get(stavy.get(r[2])) ?? null,

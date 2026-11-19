@@ -13,7 +13,7 @@ import {
   evaluateTisk, scopeFromTitleIncomplete, SIGNALY,
 } from '../ingest/lib/prilepky.js';
 import { readZip, docxText } from '../ingest/lib/zip.js';
-import { parseUnl, lawBills, writtenAmendments, parseDocPage, predkladatelTyp, organObdobi } from '../ingest/lib/psp-opendata.js';
+import { parseUnl, lawBills, writtenAmendments, parseDocPage, predkladatelTyp, predkladatelTypZNazvu, organObdobi } from '../ingest/lib/psp-opendata.js';
 import { run, writeIfChanged } from '../ingest/fetchers/psp_prilepky.js';
 import { validatePrilepky } from '../ingest/validate-prilepky.js';
 import { renderSection, renderTisk, UROVEN_LABELS, formatDate } from '../src/prilepky.js';
@@ -157,6 +157,19 @@ test('lawBills: jen návrhy zákonů daného období, hlavní tisk', () => {
   assert.equal(organObdobi(10), 174);
   assert.equal(predkladatelTyp('UT - Moravskoslezský kraj'), 'kraj');
   assert.equal(predkladatelTyp('SE - senát'), 'senat');
+});
+
+test('typ předkladatele z názvu, když ho číselník neurčí', () => {
+  assert.equal(predkladatelTypZNazvu('Návrh poslanců Štěpána Slováka a dalších na vydání zákona'), 'poslanci');
+  assert.equal(predkladatelTypZNazvu('Senátní návrh zákona, kterým se mění'), 'senat');
+  assert.equal(predkladatelTypZNazvu('Návrh Zastupitelstva Zlínského kraje'), 'kraj');
+});
+
+test('zdravotnický tisk: „zdravotní postižení“ v názvu sociálního zákona nestačí', () => {
+  const soc = { ct: 125, nazev: 'x', uplny_nazev: 'Návrh poslanců na vydání zákona, kterým se mění zákon č. 108/2006 Sb., o sociálních službách, a zákon č. 329/2011 Sb., o poskytování dávek osobám se zdravotním postižením', predkladatel_typ: 'poslanci' };
+  assert.equal(evaluateTisk(soc, [], HL), null);
+  const zs = { ct: 9, nazev: 'x', uplny_nazev: 'Návrh poslanců na vydání zákona o dostupnosti zdravotních služeb', predkladatel_typ: 'poslanci' };
+  assert.deepEqual(evaluateTisk(zs, [], HL).signaly, ['bez_pripominkoveho_rizeni']);
 });
 
 test('writtenAmendments: jen dokumenty k tisku v daném období', () => {

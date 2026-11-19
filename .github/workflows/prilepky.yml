@@ -42,6 +42,8 @@ jobs:
         working-directory: 05_M1_Starter
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0   # kvůli rebase při ukládání do pracovní větve
 
       - uses: actions/setup-node@v5
         with:
@@ -85,6 +87,8 @@ jobs:
           git add data/prilepky.json ingest/data/prilepky-stav.json
           if git diff --cached --quiet; then echo "Beze změny."; exit 0; fi
           git commit -m "data(prilepky): pozměňovací návrhy mimo předmět zákona — průchod obdobím"
+          # Větev se mezitím mohla posunout (opravy kódu); data na ně jen navážeme.
+          git pull --rebase origin "${GITHUB_REF_NAME}"
           git push origin "HEAD:${GITHUB_REF_NAME}"
 
       - name: Otevřít PR

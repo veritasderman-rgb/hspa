@@ -42,9 +42,9 @@ let DELAY_MS = 3000;
 export function setDelay(ms) { DELAY_MS = ms; }
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-export async function httpGet(url, { binary = false, fetchImpl = globalThis.fetch, delay = DELAY_MS } = {}) {
+export async function httpGet(url, { binary = false, fetchImpl = globalThis.fetch, delay = DELAY_MS, attempts = 2 } = {}) {
   let last;
-  for (let attempt = 1; attempt <= 2; attempt++) {
+  for (let attempt = 1; attempt <= attempts; attempt++) {
     await sleep(delay * attempt);
     try {
       const res = await fetchImpl(url, { headers: { 'User-Agent': UA }, redirect: 'follow', signal: AbortSignal.timeout(30_000) });
@@ -74,8 +74,9 @@ export async function run({ obdobi = 10, max = 300, budgetMs = Infinity, cooloff
     ? structuredClone(state) : { obdobi, verze_rozboru: VERZE_ROZBORU, navrhy: {}, tisky: {} };
   const healthLaws = loadHealthLaws();
 
-  const tiskyZip = readZip(await get(`${OPENDATA}/tisky.zip`, { binary: true }));
-  const sdZip = readZip(await get(`${OPENDATA}/sd.zip`, { binary: true }));
+  // Bez archivů běh nemá smysl, proto víc pokusů (prodleva roste: 3, 6, 9… s).
+  const tiskyZip = readZip(await get(`${OPENDATA}/tisky.zip`, { binary: true, attempts: 6 }));
+  const sdZip = readZip(await get(`${OPENDATA}/sd.zip`, { binary: true, attempts: 6 }));
   const tables = {};
   for (const t of ['tisky', 'druh_tisku', 'typ_zakon', 'typ_stavu', 'stavy']) {
     const f = tiskyZip.get(`${t}.unl`);

@@ -18,6 +18,9 @@ export function formatDate(iso) {
   return m ? `${Number(m[3])}. ${Number(m[2])}. ${m[1]}` : '';
 }
 
+// Číselník stavů Sněmovny má i technické hodnoty; čtenáři je přeložíme.
+export const stavLabel = stav => (stav === 'KONEC' ? 'projednávání ukončeno' : stav === 'START' ? null : stav ?? null);
+
 const zakon = z => `zákon č.&nbsp;${escapeHtml(z.cislo)}&nbsp;Sb.${z.nazev ? `, ${escapeHtml(z.nazev)}` : ''}`;
 
 export function renderNavrh(n) {
@@ -39,14 +42,14 @@ export function renderNavrh(n) {
 
 export function renderTisk(t, signaly = {}) {
   const u = UROVEN_LABELS[t.uroven] ?? UROVEN_LABELS.nizka;
-  const predmet = t.predmet.length ? `Původní návrh měnil: ${t.predmet.map(c => `č.&nbsp;${escapeHtml(c)}&nbsp;Sb.`).join(', ')}.` : 'Původní návrh je nový zákon.';
+  const predmet = t.predmet.length ? `Původní návrh měnil: ${t.predmet.map(c => `č.&nbsp;${escapeHtml(c)}&nbsp;Sb.`).join(', ')}` : 'Původní návrh je nový zákon.';
   const proces = (t.signaly ?? []).map(s => `<li>${escapeHtml(signaly[s] ?? s)}</li>`).join('');
   return `
     <article class="prl-tisk" id="tisk-${t.ct}">
       <header class="prl-tisk-head">
         <span class="leg-plan-badge ${u.cls}">${u.label}</span>
         <h3><a href="${escapeHtml(t.url)}" target="_blank" rel="noopener">Tisk ${t.ct}</a> · ${escapeHtml(t.nazev)}</h3>
-        <p class="prl-tisk-meta">${escapeHtml(PREDKLADATEL[t.predkladatel_typ] ?? 'návrh')}${t.predkladatel ? ` (${escapeHtml(t.predkladatel)})` : ''}${t.predlozeno ? `, předloženo ${formatDate(t.predlozeno)}` : ''}${t.stav ? ` · ${escapeHtml(t.stav)}` : ''}. ${predmet}</p>
+        <p class="prl-tisk-meta">${escapeHtml(PREDKLADATEL[t.predkladatel_typ] ?? 'návrh')}${t.predkladatel ? ` (${escapeHtml(t.predkladatel)})` : ''}${t.predlozeno ? `, předloženo ${formatDate(t.predlozeno)}` : ''}${stavLabel(t.stav) ? ` · ${escapeHtml(stavLabel(t.stav))}` : ''}. ${predmet}</p>
       </header>
       ${t.navrhy.length ? `<ul class="prl-pns">${t.navrhy.map(renderNavrh).join('')}</ul>` : ''}
       ${proces ? `<ul class="prl-proces">${proces}</ul>` : ''}
@@ -73,7 +76,7 @@ export function renderSection(data) {
         U každého je doslovná citace a odkaz na dokument Sněmovny.
       </p>
     </div>
-    ${sNavrhem.length ? sNavrhem.map(t => renderTisk(t, data.signaly)).join('') : '<p class="prl-empty">V tomto volebním období jsme zatím žádný takový pozměňovací návrh nenašli.</p>'}
+    ${sNavrhem.length ? sNavrhem.map(t => renderTisk(t, data.signaly)).join('') : `<p class="prl-empty">${p.pn_ceka ? 'V dosud přečtených pozměňovacích návrzích žádný takový není. Starší návrhy tohoto volebního období se teprve dočítají.' : 'V tomto volebním období jsme zatím žádný takový pozměňovací návrh nenašli.'}</p>`}
     ${jenProces.length ? `
       <details class="prl-more">
         <summary>Zdravotnické návrhy bez připomínkového řízení nebo se zrychleným postupem (${jenProces.length})</summary>

@@ -83,7 +83,8 @@ export function effectivityChange(text) {
   return t.slice(Math.max(0, m.index - 80), m.index + 140).trim();
 }
 
-const KLICOVA_SLOVA = /zdravotn|léčiv|lékař|lékárn|nemocnic|pojišťov[en]\w* .{0,40}zdrav|hygien|návykov/i;
+// Záměrně ne holé „zdravotn“: chytlo by i „osoby se zdravotním postižením“ (sociální zákony).
+const KLICOVA_SLOVA = /zdravotnictv|zdravotnick|zdravotní(?:ch|m|mi)?\s+(?:služ|pojišt|péč)|veřejné(?:ho)?\s+zdraví|léčiv|lékař|lékárn|nemocnic|návykov/i;
 
 /** Rozbor jednoho pozměňovacího návrhu; výsledek se ukládá, text ne. */
 export function analyzeAmendment(text) {
