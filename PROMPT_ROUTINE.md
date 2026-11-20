@@ -22,7 +22,7 @@ Rutina existuje proto, aby redakce ráno našla **jednu věc ke schválení**, n
 | **Soubory za běh** | **Žádné.** Discovery report, routing, datový rámec, auditní protokol, noční report — nic z toho se do repa nezapisuje. Report běhu je **tělo PR** (`<details>` sekce). Pracovní soubory drž v gitignorované `05_M1_Starter/reports/` (adresáře `discovery/` jsou zmrazené — historický archiv, nové běhy tam nepíší; jsou gitignorované). |
 | **Commity** | Jeden na blok, který něco změnil (max ~8 za běh), česky, prefix `feat/fix/content/data/chore` + scope. |
 | **Komentáře na GitHubu** | Žádné vlastní komentáře k vlastnímu PR, žádné labely, žádné pingování. |
-| **Obsahové stropy** | 1 nový článek · 1 nový indikátor (pondělí nebo reaktivně) · revize korpusu max 5 (jen v kvartálním okně) · 1 draft Týdne zdraví · evidence-audit 6 + 4 položek (neděle) · 1 nové video (blok V) · Buffer **jen video příspěvky**, do 10/kanál. Stropy se **nesčítají přes běhy** — co nestihneš, počká. |
+| **Obsahové stropy** | 1 nový článek · 1 nový indikátor (pondělí nebo reaktivně) · revize korpusu max 5 (jen v kvartálním okně) · 1 draft Týdne zdraví · evidence-audit 6 + 4 položek (neděle) · až 2 nová videa (blok V: mluvený dialog + sólo; ElevenLabs do 4 000 kreditů za běh) · Buffer **jen video příspěvky**, do 10/kanál. Stropy se **nesčítají přes běhy** — co nestihneš, počká. |
 | **Publikace** | Nikdy. Žádné `published: true`, žádné `audit-status: verified`, žádný merge, žádné `shareNow` v Bufferu, žádné okamžité odeslání newsletteru. Redakce má vždy poslední slovo. |
 
 Pořadí bloků je zároveň priorita. Když dochází čas nebo kontext, přeskakují se bloky
@@ -44,7 +44,8 @@ za pár dní vyprázdnila. Přeskočený blok se zapíše do těla PR.
 - **Před prvním krokem přečti** `CLAUDE.md`, `docs/quickref.md`, `docs/decisions-log.md`,
   `docs/traps.md`. Platí vše z nich (generované artefakty, JSON escaping, publikační hygiena).
 - **MCP konektory rutiny** (nastavuje vlastník v Routines; rutina nepoužívá API klíče):
-  GitHub (PR, issue), `PubMed`, `Consensus`, `hlidac_statu`, `Buffer`, `Brevo`.
+  GitHub (PR, issue), `PubMed`, `Consensus`, `hlidac_statu`, `Buffer`, `Brevo`, `ElevenLabs`
+  (hlasy, hudba a efekty videí; bez něj blok V vyrobí němé video).
   Chybí-li konektor, příslušný krok **přeskoč a nahlas** to v těle PR — nikdy ho
   nenahrazuj WebSearchem, domněnkou ani pamětí modelu.
 - **Dělba modelů** (orchestrátor = tato session; práci deleguj přes Agent tool, aby
@@ -56,7 +57,7 @@ za pár dní vyprázdnila. Přeskočený blok se zapíše do těla PR.
 | C Discovery | **tři paralelní subagenti Sonnet**: (1) powerlist 1–14, (2) Hlídač státu, (3) PubMed + Consensus; každý vrátí strukturovaný seznam nálezů s URL a datem |
 | D Legislativa, Barometr | Sonnet (datové změny), Opus (verdikt Ověřovny) |
 | E Článek | **Opus** píše, Sonnet dělá AV obohacení a kontrolu odkazů |
-| V Video | **Opus** píše scénář (fakta + dramaturgie), orchestrátor renderuje a prohlíží kontaktní arch |
+| V Video | **Opus** píše scénáře (fakta + dramaturgie + `spoken`), orchestrátor generuje hlasy v ElevenLabs, renderuje a prohlíží kontaktní archy |
 | F Indikátor | průzkum zdrojů Sonnet, karta + příběh Opus |
 | G Údržba korpusu | auto-fix Sonnet, obsahové revize Opus |
 | H Týdny zdraví | Opus |
@@ -148,7 +149,7 @@ kolem 03:00 místního času, viz § 18).
 | C Discovery | každý běh | |
 | D Legislativa + Barometr | každý běh | plan_items s prošlým termínem jen **pondělí**; indikátorová větev Barometru **2. den čtvrtletí** (den po `refresh.yml`) nebo když discovery najde novou vlnu dat |
 | E Obsah dne | každý běh | max 1 článek; **pondělí** = INDICATOR-ADD (blok F) |
-| V Video dne | každý běh | 1 video; styl se střídá (Kompík ↔ Florence) |
+| V Videa dne | každý běh | video A = mluvený dialog (Kompík a Florence / host); video B = sólo, styl se střídá (Kompík ↔ Florence); **pondělí** navíc nejvýš 1 nový hudební podkres |
 | F Indikátor | **pondělí** + reaktivně | reaktivně = discovery našel nový strukturovaný dataset |
 | G Údržba korpusu | auto-fix každý běh; **review jen 2.–8. den ledna, dubna, července, října** | kvartální okno navazuje na `refresh.yml` (1. den čtvrtletí) |
 | H Týdny zdraví | když nejbližší marquee den do **42 dní** nemá kompletní draft | typicky ~1× měsíčně |
@@ -203,8 +204,10 @@ npm run evidence:queue -- --status       # jen v neděli (blok I)
 ## 5. Blok B — Distribuce: fronta Bufferu (jen videa)
 
 **Účel**: udržet na každém připojeném kanálu frontu **video příspěvků** (reels) z hotových
-animací — `assets/social/reels/*.mp4` ve stylech „Kompík vysvětluje" a „Florence
-komentuje" (skill `animovane-prispevky`, blok V). **Statické karty, covery ani Story
+animací — `assets/social/reels/*.mp4` ve stylech „Kompík vysvětluje", „Florence
+komentuje" a mluvený dialog „Kompík a Florence" (skill `animovane-prispevky`, blok V).
+Blok V vyrábí dvě videa denně, takže fronta 10/kanál vydrží pět dní při dvou slotech
+denně — sloty v Bufferu nastavuje vydavatel. **Statické karty, covery ani Story
 grafiky se do fronty nezařazují** (rozhodnutí vydavatele 12. 10. 2026, `docs/decisions-log.md`).
 Cíl je 10 naplánovaných na kanál; když hotových videí není dost, fronta zůstane kratší
 — **nikdy ji nedoplňuj obrázky**, jen to nahlas („fronta N/10, čeká na videa z bloku V").
@@ -252,14 +255,17 @@ FB `Skóre zdravotnictví Česko` `6a26b01d8f1d11f9b263c41b`, IG `skorezdravotni
 1. **Kandidáti**: scénáře podle pravidla 6, video živé na produkci, minus `usedVideos`.
 2. **Priorita**: (1) news hook — článek s `topical_until` ≥ dnes (nejbližší expirace
    nejdřív) nebo čerstvá agenda; (2) nejnovější videa (podle data commitu MP4) dosud
-   nezařazená; (3) **střídej styly** — po Kompíkovi Florence a naopak, je-li z čeho;
+   nezařazená, mluvená před němými; (3) **střídej styly** — dialog, Kompík, Florence, je-li z čeho;
+   dvě videa k témuž článku nikdy ve dvou po sobě jdoucích slotech;
    (4) evergreen re-post podle pravidla 4.
 3. **Texty** — společné: CTA `https://skorezdravotnictvi.cz/<slug-článku>?utm_source=<facebook|x>&utm_medium=social&utm_campaign=reels`
    (slug článku = `article` bez `.html`); hák = pointa videa jinými slovy, 1–2 čísla
-   z `facts[]`; předposlední řádek vždy **„Animace a text: AI · data: {zdroj ze `source_line`}"**;
-   hashtagy 3–5 vč. `#zdravícesko` a `#kompikvysvetluje`, resp. `#florencekomentuje`;
+   z `facts[]`; předposlední řádek vždy **„Animace a text: AI · data: {zdroj ze `source_line`}"**,
+   u mluveného videa (scénář má `voice_credit`) **„Animace, text a hlasy: AI · data: {zdroj}"**;
+   hashtagy 3–5 vč. `#zdravícesko` a `#kompikvysvetluje`, resp. `#florencekomentuje`
+   (dialog: `#kompikaflorence`);
    emoji 1–3. Asset: `assets: [{ video: { url: "<URL videa na www.>",
-   metadata: { thumbnailOffset: <ms>, title: "Kompík vysvětluje: …" | "Florence komentuje: …" } } }]`,
+   metadata: { thumbnailOffset: <ms>, title: "Kompík vysvětluje: …" | "Florence komentuje: …" | "Kompík a Florence: …" } } }]`,
    kde `thumbnailOffset` = `node social/reels/render.js <slug> --poster-time` (plakát videa).
    **Instagram** `metadata.instagram = { type: "reel", shouldShareToFeed: true, isAiGenerated: true }`,
    caption bez URL, konec `🔗 Odkaz v biu`. **Facebook** `metadata.facebook = { type: "reel" }`,
@@ -600,38 +606,93 @@ Commit: `content(clanky): nový článek {slug}` / `content(clanky): revize {slu
 
 ---
 
-## 8b. Blok V — Video dne (1 animovaný příspěvek)
+## 8b. Blok V — Videa dne (mluvený dialog + sólo)
 
-**Účel**: vyrobit **jedno** nové video denně, aby fronta Bufferu (blok B, jen videa) měla
-z čeho brát. Řídí se skillem `.claude/skills/animovane-prispevky/` — **před prací přečti
-`SKILL.md`** a podle stylu `references/scenar.md` + `references/dramaturgie.md` (Kompík),
-resp. `references/florence.md` (Florence). Pravidla skillu (fakta jen z článku s doslovnou
-citací, poctivý počet postaviček, AI označení, žádné skutečné osoby, Florence půvabná,
-ne lascivní) platí beze zbytku.
+**Účel**: vyrobit denně **dvě** nová videa, aby fronta Bufferu (blok B, jen videa) měla
+z čeho brát dva sloty denně: **video A** je mluvený dialog (30–50 s), **video B** je
+sólo (20–35 s mluvené, nebo 10–20 s němé). Řídí se skillem
+`.claude/skills/animovane-prispevky/` — **před prací přečti `SKILL.md`** a
+`references/hlasy.md`, podle stylu `references/scenar.md` + `references/dramaturgie.md`
+(Kompík, dialog), resp. `references/florence.md` (Florence). Pravidla skillu (fakta jen
+z článku s doslovnou citací, poctivý počet postaviček, AI označení, žádné skutečné osoby,
+hlasy jen z `voices.json`, nikdy klon, Florence půvabná, ne lascivní) platí beze zbytku.
 
-1. **Styl**: jiný než poslední commitnuté video (nejnovější `.mp4` podle
-   `git log -1 --name-only -- 05_M1_Starter/assets/social/reels/` a `style` jeho scénáře).
-   Kompík = srovnání dvou čísel; Florence = paradox, mýtus, „prý…", komentář k debatě.
-2. **Kandidát**: viditelný článek (pravidlo 6 bloku B) **bez videa** ve zvoleném stylu
-   (žádný scénář s tímto `article` a `style`). Priorita: dnešní článek z bloku E, pokud už
-   je viditelný; jinak news hook (`topical_until`, čerstvá agenda) → `verified` články se
-   silným doloženým číslem (kostra: manifest `scripts/generate-ig-cards.js` — `stat`,
-   `claim`, `context`) → nejnovější. Článek, jehož číslo se nedá poctivě ukázat
-   (Kompík) nebo který nemá skutečný paradox (Florence), přeskoč na dalšího kandidáta.
+**Pořadí a stropy**: nejdřív video A, pak video B. Když po videu A zbývá málo času nebo
+kontextu, video B vynech a nahlas to — jedno dobré video je víc než dvě uspěchaná.
+ElevenLabs: **nejvýš 4 000 kreditů za běh** (dialog ≈ 1 150, sólo ≈ 700, kontrolní
+přepisy ≈ 500); sčítej `credit_costs` z odpovědí konektoru a po překročení stropu další
+generování nespouštěj. Chybí-li konektor `ElevenLabs` nebo vrací chybu, vyrob **jedno
+němé video** podle stylu B a nahlas „ElevenLabs nedostupný“.
+
+### Video A — dialog „Kompík a Florence“ / „Kompík se ptá“
+
+1. **Kandidát**: viditelný článek (pravidlo 6 bloku B) **bez mluveného dialogu** (žádný
+   scénář s tímto `article` a polem `speaker`). Priorita: dnešní článek z bloku E, pokud
+   už je viditelný → news hook (`topical_until`, čerstvá agenda) → `verified` články,
+   kde souhrnné číslo klame, mýtus stojí proti datům, nebo má téma lidskou stranu.
+   Článek bez skutečného sporu nebo obratu přeskoč — dialog bez obratu je jen delší výklad.
+2. **Formát a série** podle `dramaturgie.md` § Dialog: host `florence` (číslo, které
+   klame; „Prý…“) nebo role (`sestra`, `lekar`, `pacient`, `senior`, `urednik`,
+   `zachranar`), když článek dokládá její zkušenost. Dva dny po sobě ne stejný host.
+3. **Scénář** `social/reels/scripts/duo-<slug-článku-bez-clanek->.json` (s rolí
+   `host-<role>-<slug>`): 6–9 beatů, `facts[].quote` = **doslovná věta z článku**,
+   každý beat s replikou má `line` (bublina) i `spoken` (hlas, čísla slovy, 1–2 tagy),
+   `series`, `kicker`, `footnote`, `source_line`, `voice_credit`, `music` ze sdílené
+   knihovny `social/reels/audio/`, `"crf": 25`. Vzor: `duo-sestry-absolventi.json`.
+4. **Audit scénáře před hlasem** (blok K, body A a D): hlas se generuje až pro text,
+   který prošel — přepis repliky po nahrání stojí kredity.
+5. **Hlas** podle `hlasy.md` § Výroba hlasu: jeden flow, `eleven_v4`, `voice_id`
+   z `voices.json`, 2 záběry, všechny repliky jedním tahem; stáhni vybrané záběry do
+   `social/reels/voice/<slug>/NN.mp3`, doplň `voice`, spusť
+   `node social/reels/render.js <slug> --fit-voice`. **Volání nikdy neopakuj jako retry.**
+6. **Kontrola výslovnosti**: každou repliku, která nese číslo, zkratku nebo vlastní
+   jméno, ověř přepisem (speech-to-text). Nesedí-li, přepiš `spoken` a vygeneruj jen ten
+   beat znovu (nejvýš 2× na beat; pak číslo z repliky vypusť a nech ho jen v obraze).
+7. **Efekty**: nejvýš 2 `sfx` ze sdílené knihovny; nový efekt jen když ho scéna
+   potřebuje (zapiš ho do `audio/README.md`).
+8. **Kontrola obrazu**: `npm run reels:check` ✅ → `--sheet` → **prohlédni arch** (Read):
+   čitelnost, jmenovky na bublinách, host nepřekrývá čísla ani `footnote`, bezpečné zóny.
+   Při vadě uprav scénář a opakuj (max 3×).
+9. **Render** `npm run reels:render -- <slug>` (~2 min) → MP4 + plakát; `ffprobe`
+   (1080×1920, 30 fps, ≤ 60 s), velikost **≤ 6 MB** (jinak zvyš `crf` na 27).
+
+### Video B — sólo, styl se střídá
+
+1. **Styl**: jiný než poslední commitnuté sólo (nejnovější `.mp4` bez `speaker` ve
+   scénáři podle `git log --name-only -- 05_M1_Starter/assets/social/reels/`).
+   Kompík = srovnání dvou čísel; Florence = paradox, mýtus, „prý…“, komentář k debatě.
+2. **Kandidát**: viditelný článek **bez videa** ve zvoleném stylu a **jiný než článek
+   videa A**. Priorita: news hook → `verified` články se silným doloženým číslem
+   (kostra: manifest `scripts/generate-ig-cards.js` — `stat`, `claim`, `context`) →
+   nejnovější. Článek, jehož číslo se nedá poctivě ukázat (Kompík) nebo který nemá
+   skutečný paradox (Florence), přeskoč.
 3. **Scénář** `social/reels/scripts/<slug>.json` (Kompík: `<slug>` = slug článku;
-   Florence: `florence-<slug-článku-bez-clanek->`): `facts[].quote` = **doslovná věta
-   z článku**, `source_line`, `footnote`, 10–20 s.
-4. **Kontrola**: `npm run reels:check` ✅ → `npm run reels:render -- <slug> --sheet` →
-   **prohlédni arch** (Read): čitelnost, překryvy, bezpečné zóny, emoce sedí k obsahu.
-   Při vadě uprav scénář a opakuj (max 3×), jinak blok V dnes vynech a nahlas proč.
-5. **Render** `npm run reels:render -- <slug>` (~80 s) → MP4 + plakát; `ffprobe`
-   (1080×1920, 30 fps), velikost **≤ 3 MB**. `node --test tests/reels-engine.test.js` ✅.
-6. **Commit** `content(reels): {styl} — {slug}` (scénář + MP4 + plakát). Video jde do
-   Bufferu až po merge a nasazení (blok B v dalších bězích).
+   Florence: `florence-<slug-článku-bez-clanek->`). **Mluvené** (výchozí, když zbývají
+   kredity): 20–35 s, `spoken` + hlas postavy podle kroků 4–6 videa A. **Němé**
+   (záloha): 10–20 s, bez `voice`.
+4. Kontrola, arch a render jako u videa A (němé ≤ 3 MB).
 
-Strop: **1 video za běh**. Renderer, postavy ani skill blok V neupravuje — změny
-postav a stylů jsou samostatný PR mimo rutinu. Výstup do těla PR: řádek `Video: {styl} ·
-{slug} · {délka} s · {MB}` (kontaktní arch zůstává v gitignorované `social/reels/out/`).
+### Pondělí — hudební knihovna
+
+Když má `social/reels/audio/music/` méně než 6 podkresů, vyrob **jeden** nový
+(`eleven_music_v2_5`, 45 s, instrumentální; nejdřív `estimate_only: true`), ověř
+přepisem, že je bez zpěvu, ulož mono 96 kb/s a zapiš do `audio/README.md`. Střídej
+nálady: hravá (Kompík), noční (Florence), napjatá (obrat), smířlivá (dobrá zpráva).
+
+### Společné
+
+- `node --test tests/reels-engine.test.js` ✅ po obou videích.
+- **Commit** za každé video zvlášť: `content(reels): {dialog|Kompík|Florence} — {slug}`
+  (scénář + MP4 + plakát + `voice/<slug>/` včetně `timing.json` + případné nové soubory
+  v `audio/`). Videa jdou do Bufferu až po merge a nasazení (blok B v dalších bězích).
+- Renderer, postavy, `voices.json` ani skill blok V neupravuje — změny postav, hlasů
+  a stylů jsou samostatný PR mimo rutinu (třída C).
+- Navržené hlasy (Voice Design) rutina **neukládá ani nenavrhuje**; nový hlas schvaluje
+  vydavatel poslechem.
+
+Výstup do těla PR: řádek `Videa: A {host} · {slug} · {délka} s · {MB} · B {styl} ·
+{slug} · {délka} s · {MB} · ElevenLabs {kreditů}` (kontaktní archy zůstávají
+v gitignorované `social/reels/out/`).
 
 ---
 
@@ -852,7 +913,7 @@ evidence `data/newsletter-log.json`. Rutina ho **neduplikuje** — v pátek jen 
 ## 14. Blok K — Nezávislý audit (čerstvý pohled, jiná instance)
 
 Na **každý** nový nebo změněný článek, kartu indikátoru, draft Týdne zdraví a **scénář
-videa** (blok V — u videa jen body A a D: každé číslo a tvrzení v `line`/`text`/`label`
+videa** (blok V — u videa jen body A a D: každé číslo a tvrzení v `line`/`spoken`/`text`/`label`
 stojí v článku, srovnání je férové). Auditor dostane jen soubor a tento checklist, ne rámec autora.
 
 **A. Faktická tvrzení** — u každého čísla, instituce, zákona, data, citace: primární
@@ -909,7 +970,7 @@ git status --short                          # žádné generované artefakty, ž
 - Obsah dne: {ARTICLE-WRITE | EVERGREEN-WRITE | INDICATOR-ADD | ARTICLE-REVISE | FALLBACK-AUDIT | žádný} — {slug} (KPI: …) · dní od posledního nového článku: N · týdenní kvóta X/3
 - Indikátor: {id / —} · Legislativa: N posunů · Barometr: N změn stavů, N verdiktů
 - Údržba: N auto-fix, N revizí (kvartální okno: ano/ne) · Týdny zdraví: {id / —} · Evidence-audit: {run_id / —}
-- Video: {Kompík | Florence} · {slug} · {s} · {MB} / — · Buffer (videa): FB a→b, IG a→b, X a→b · LinkedIn Idea: {slug / — } · Newsletter: {ověřeno / fallback / —}
+- Videa: A {dialog | —} · {slug} · {s} · {MB} · B {Kompík | Florence} · {slug} · {s} · {MB} · ElevenLabs {kreditů} / — · Buffer (videa): FB a→b, IG a→b, X a→b · LinkedIn Idea: {slug / — } · Newsletter: {ověřeno / fallback / —}
 - Přeskočené bloky a proč: …
 
 ### K rozhodnutí redakce
@@ -917,7 +978,7 @@ git status --short                          # žádné generované artefakty, ž
 - {body, které stačí zvážit při schvalování}
 
 ### Verifikace
-- validate:all ✅ · npm test ✅ (N testů) · konektory: PubMed ✅ Consensus ✅ hlidac_statu ✅ Buffer ✅ Brevo —
+- validate:all ✅ · npm test ✅ (N testů) · konektory: PubMed ✅ Consensus ✅ hlidac_statu ✅ Buffer ✅ Brevo — ElevenLabs ✅
 - Literatura: N citací ověřeno v PubMed (PMID/DOI), N tvrzení prošlo Consensus kontrolou (souhlas N / rozpor N / nejasné N), N neověřeno pro chybějící konektor
 
 <details><summary>Discovery</summary>
@@ -945,7 +1006,8 @@ Závěrečná zpráva session = odkaz na PR (nebo „bez změn v repu") + tři �
 
 - 1 větev, ≤ 1 PR, ≤ 1 issue, 0 souborů-reportů v repu, 0 komentářů na GitHubu.
 - ≤ 1 nový článek; ≤ 1 nový indikátor; ≤ 5 obsahových revizí (jen kvartální okno);
-  ≤ 1 verdikt Ověřovny; evidence-audit ≤ 10 položek; ≤ 1 nové video; Buffer jen
+  ≤ 1 verdikt Ověřovny; evidence-audit ≤ 10 položek; ≤ 2 nová videa; ElevenLabs ≤ 4 000
+  kreditů za běh a ≤ 1 nový podkres týdně, hlasy jen z `social/reels/voices.json`; Buffer jen
   video příspěvky, ≤ 10/kanál (nikdy obrázkové karty);
   ≤ 1 LinkedIn Idea/týden (nikdy post).
 - Nikdy `published: true`, `audit-status: verified`, merge, `shareNow`, okamžité odeslání
@@ -980,9 +1042,9 @@ Jedna Routine v Claude Code on the web (zakládá vlastník; přesný postup v
 | Parametr | Hodnota |
 |---|---|
 | **Název** | `HSPA – rutina` |
-| **Prompt** | `Spusť dnešní běh podle PROMPT_ROUTINE.md v kořeni repozitáře hspa. Projdi bloky A–L včetně bloku V (video dne) přesně podle souboru, dodrž kalendář (§ 3) a pravidla šumu (§ 0) a na konci otevři nejvýš jeden PR podle bloku L. Zásadní je validace a ověření všech zdrojů.` |
+| **Prompt** | `Spusť dnešní běh podle PROMPT_ROUTINE.md v kořeni repozitáře hspa. Projdi bloky A–L včetně bloku V (videa dne) přesně podle souboru, dodrž kalendář (§ 3) a pravidla šumu (§ 0) a na konci otevři nejvýš jeden PR podle bloku L. Zásadní je validace a ověření všech zdrojů.` |
 | **Cron (UTC)** | `0 1 * * *` — 03:00 CEST / 02:00 CET: po půlnočních změnách, před `publish-articles.yml` (04:00 UTC), `awareness-weekly.yml` (po 04:00 UTC) i `newsletter-weekly.yml` (čt 07:33 UTC); 2. den čtvrtletí už vidí data z `refresh.yml` (1. den 06:00 UTC). |
-| **Konektory** | GitHub · `PubMed` · `Consensus` · `hlidac_statu` · `Buffer` · `Brevo` |
+| **Konektory** | GitHub · `PubMed` · `Consensus` · `hlidac_statu` · `Buffer` · `Brevo` · `ElevenLabs` |
 | **Repo / větev** | `veritasderman-rgb/hspa`, `main` (rutina si větev zakládá sama) |
 
 Vedle autorky běží od AI-first provozu (`GOVERNANCE.md` § 4) ještě tři rutiny
@@ -1005,5 +1067,5 @@ rutina na ně navazuje, nenahrazuje je.
 Každý den jeden běh, jeden PR, jedna věc ke schválení: korpus **roste** (1 kvalitní
 článek), zůstává **aktuální** (legislativa a barometr každý den, sweep kvartálně),
 **doložený** (každé číslo primární zdroj, studie ověřené v PubMed) a **viditelný**
-(denně nové video, Buffer plný videí, newsletter pod kontrolou, Týdny zdraví připravené dopředu). Lepší žádná
+(denně dvě nová videa, z toho jedno mluvené, Buffer plný videí, newsletter pod kontrolou, Týdny zdraví připravené dopředu). Lepší žádná
 změna než zbytečná.

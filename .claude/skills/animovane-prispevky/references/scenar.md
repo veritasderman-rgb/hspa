@@ -31,8 +31,9 @@ Styl **Florence komentuje** (`"style": "florence"`) má vlastní beaty — viz
 | Pole | Povinné | Význam |
 |---|---|---|
 | `slug` | ✅ | = název souboru, = slug článku |
-| `format` | — | `portrait` (výchozí, 9:16, ≤ 20 s) nebo `landscape` (16:9 1920×1080, ≤ 40 s — pro web) |
-| `voice_credit` | ✅ s hlasem | označení hlasu na koncové kartě, např. „ElevenLabs (syntetický hlas „Pavel“)“ |
+| `format` | — | `portrait` (výchozí, 9:16; němé ≤ 20 s, mluvené ≤ 60 s) nebo `landscape` (16:9 1920×1080; němé ≤ 40 s, mluvené ≤ 90 s — pro web) |
+| `music`, `music_gain` | — | podkres ze souboru `social/reels/audio/music/….mp3` místo syntetické smyčky (viz [`hlasy.md`](hlasy.md)) |
+| `voice_credit` | ✅ s hlasem | označení hlasu na koncové kartě: „ElevenLabs (syntetické hlasy)“ |
 | `voice_tempo` | — | zrychlení hlasu bez změny výšky (ffmpeg atempo), např. 1.08 |
 | `crf` | — | kvalita H.264 (výchozí 22) |
 | `article` | ✅ | HTML článku (relativně k `05_M1_Starter/`), proti němu se ověřují citace |
@@ -46,20 +47,25 @@ Styl **Florence komentuje** (`"style": "florence"`) má vlastní beaty — viz
 
 ## Beaty
 
-Beaty jdou za sebou, každý má `type` a `dur` (s). Celek **8–20 s**. Replika
+Beaty jdou za sebou, každý má `type` a `dur` (s). Celek **8–20 s** (mluvené video až 60 s). Replika
 (`line`) se musí vejít do beatu i s rezervou 0,35 s (validátor spočítá slabiky).
 Zvýraznění v replice: `*slovo*` nebo `*víc slov*` (vykreslí se tmavě jantarově,
 zelenou při `tone: good`).
 
-### Hlas u beatu (jen `format: landscape`)
+### Hlas, host a efekty u beatu
 Každý beat smí mít `"voice": "social/reels/voice/<slug>/NN.mp3"` — namluvenou repliku
-(ElevenLabs, hlas z knihovny). Žvatlání se pak vypne, podkres ztiší, bublina se srovná
+(ElevenLabs, hlas z `voices.json`) a k ní `"spoken"` (přesný text poslaný do hlasu,
+včetně tagů; na výšku povinné). Beat `say`, `group` a `punch` smí mít `"speaker"` —
+repliku pak říká host (Florence nebo role) s vlastní bublinou a jmenovkou. `"sfx"`
+přidá efekt ze souboru. Když video mluví, musí mít hlas každý beat s replikou.
+Podrobně v [`hlasy.md`](hlasy.md). Žvatlání se pak vypne, podkres ztiší, bublina se srovná
 s řečí (když hlas říká mnohem víc než bublina, text se jen posune) a pusa se hýbe
 podle hlasitosti. Validátor ověří, že řeč + nástup + 0,35 s se vejde do `dur`.
 
 Vedle mp3 leží `timing.json` (začátek/konec řeči, délka, hash souboru) — CI runner
 nemá ffmpeg a validace jede z něj. Zapisuje ho každý render; po výměně nahrávky
 `node social/reels/render.js <slug> --voice-timing` a commitnout s mp3.
+`--fit-voice` navíc přepíše `dur` hlasových beatů podle naměřené řeči.
 
 ### `intro` — háček (první beat)
 Kompík vyskočí zespodu (boing + pop), velký uprostřed, bublina nad ním.

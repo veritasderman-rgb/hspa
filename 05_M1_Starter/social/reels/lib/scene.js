@@ -7,6 +7,8 @@
 //           s velkým číslem pod sebou; Kompík na ni ukazuje
 //   punch   pointa: plácnutý nápis přes scénu + reakce (zvuk podle tónu)
 //   outro   koncová karta: logo, doména, výzva (CTA), zdroj, „animace: AI"
+// Dialog: beat `say` / `punch` s polem `speaker` říká host (role z obsazení nebo
+// Florence) — stojí vedle Kompíka, má vlastní bublinu se jmenovkou a vlastní hlas.
 // Formát a pravidla: .claude/skills/animovane-prispevky/references/scenar.md
 
 import { C } from './palette.js';
@@ -15,10 +17,11 @@ import { schedule, mouthOpen } from './speech.js';
 import { measure, wrapWords, balancedWrap, lineWidth } from './text.js';
 import { kompik, aimArm, KOMPIK_HEIGHT } from '../characters/kompik.js';
 import { person, ROLES } from '../characters/cast.js';
+import { florence } from '../characters/florence.js';
 import { track, sfx, babble, music } from './audio.js';
 import { parseValue, checkFacts, checkNumbers } from './facts.js';
-import { FORMATS, formatName } from './format.js';
-import { loadVoice, alignSchedule, voiceStart, mixVoice, duck, voiceMouth, voiceSpeaking } from './voice.js';
+import { FORMATS, formatName, maxDurOf } from './format.js';
+import { loadVoice, alignSchedule, voiceStart, mixVoice, duck, voiceMouth, voiceSpeaking, loadClip, mixMusic, mixBeatSfx, checkAudioFiles } from './voice.js';
 
 export { parseValue };
 
@@ -26,7 +29,9 @@ export const BEAT_TYPES = ['intro', 'say', 'group', 'punch', 'board', 'outro'];
 export const VERDICTS = ['ne', 'zalezi', 'ano'];
 export const EMOTIONS = ['curious', 'explain', 'worried', 'shocked', 'sad', 'happy', 'proud', 'skeptic'];
 export const GESTURES = ['none', 'point-left', 'point-right', 'point-up', 'shrug', 'hands-up', 'wave', 'think'];
-export const LIMITS = { minDur: 8, maxDur: 20, maxLine: 70, maxGroup: 40 };
+export const LIMITS = { minDur: 8, maxDur: 20, maxLine: 70, maxGroup: 40, maxSpoken: 260 };
+/** Hosté dialogu (pole `speaker` / `guest`): role z obsazení + Florence. Dítě nemluví (žádný dětský hlas). */
+export const GUESTS = { sestra: 'Sestra', lekar: 'Lékař', pacient: 'Pacient', senior: 'Senior', urednik: 'Úředník', zachranar: 'Záchranář', florence: 'Florence · AI' };
 
 // Rozvržení 9:16 s ohledem na UI Reels/Stories (horních ~220 px a spodních ~360 px
 // překrývá rozhraní aplikace; důležité věci drž mezi y 230 a 1560).
@@ -38,6 +43,10 @@ const PORTRAIT = {
   valueY: 1178, labelY: 1226,
   kompikStage: { x: 540, y: 1490, s: 0.62 },
   kompikHero: { x: 540, y: 1420, s: 0.9 },
+  kompikDuo: { x: 290, y: 1490, s: 0.72 },
+  guest: { x: 790, y: 1488, s: 2.0 }, floGuest: { x: 800, y: 1668, s: 0.74 },
+  // host vedle skupin postaviček: malý v pravém rohu, Kompík zůstává uprostřed
+  guestSmall: { x: 950, y: 1488, s: 1.1 }, floGuestSmall: { x: 972, y: 1490, s: 0.36 },
   floorY: 1478, ringR: 620,
   punchCX: 540, punchY: 700, punchMaxW: 820,
   outroCX: 540, logoY: 470, ctaY: 700,
@@ -112,6 +121,22 @@ export function compile(script) {
   }
   const duration = t;
 
+  // hosté dialogu: přijdou s první replikou (`speaker`) nebo o beat dřív (`guest`),
+  // zůstanou do tabule, outra nebo do příchodu jiného hosta. Jakmile jsou na scéně
+  // skupiny postaviček, host se zmenší do rohu a Kompík se vrátí doprostřed.
+  const guests = [];
+  let cur = null, crowded = false;
+  for (const b of beats) {
+    const role = b.speaker || b.guest;
+    const ends = b.type === 'board' || b.type === 'outro' || b.type === 'intro';
+    if (b.type === 'group') crowded = true;
+    if (cur && (ends || (role && role !== cur.role))) { cur.t1 = b.t0; cur = null; }
+    if (role && !ends && !cur) { cur = { role, t0: b.t0, t1: duration, seed: hash(`guest-${role}`), smallAt: null }; guests.push(cur); }
+    if (cur && crowded && cur.smallAt == null) cur.smallAt = b.t0;
+    b.duo = !!cur && !crowded;
+    b.crowded = crowded;
+  }
+
   // skupiny postaviček
   const groups = [];
   beats.filter(b => b.type === 'group').forEach((b, gi) => {
@@ -136,7 +161,7 @@ export function compile(script) {
     groups.push({ ...b, cx, figs, top: L.groupBase - (Math.ceil(n / cols) - 1) * L.groupRowGap - 80, countEnd: b.t0 + 0.3 + n * stagger + 0.2 });
   });
 
-  return { script, beats, groups, duration, W, H };
+  return { script, beats, groups, guests, duration, W, H };
 }
 
 function beatAt(tl, t) {
@@ -147,7 +172,7 @@ function beatAt(tl, t) {
 
 function emoOf(b) { return EMO[b?.emotion] || (b?.type === 'outro' ? EMO.happy : EMO.explain); }
 
-function stageOf(b) { return (b.type === 'intro' || b.type === 'outro') ? L.kompikHero : L.kompikStage; }
+function stageOf(b) { return (b.type === 'intro' || b.type === 'outro') ? L.kompikHero : b.duo && L.kompikDuo ? L.kompikDuo : L.kompikStage; }
 
 function kompikPose(tl, t) {
   const b = beatAt(tl, t);
@@ -182,9 +207,11 @@ function kompikPose(tl, t) {
   if (b.type === 'outro') needle = lerp(pe.needle, 35, ease.outElastic(prog(t, b.t0 + 0.45, b.t0 + 1.4)));
 
   // výraz + řeč
-  const open = b.v ? voiceMouth(b, t) : mouthOpen(b.sched, t);
-  const speaking = b.v ? voiceSpeaking(b, t) : b.sched && t >= b.sched.syl[0]?.t0 && t <= b.sched.end;
+  const mine = !b.speaker;   // repliku hosta Kompík jen poslouchá
+  const open = !mine ? 0 : b.v ? voiceMouth(b, t) : mouthOpen(b.sched, t);
+  const speaking = mine && (b.v ? voiceSpeaking(b, t) : b.sched && t >= b.sched.syl[0]?.t0 && t <= b.sched.end);
   const eyes = { ...e.eyes, blink: blink(t, 7) };
+  if (b.duo) { eyes.lookX = 0.8; if (!mine) eyes.lookY = -0.3; }
   if (e.shake && t < b.t0 + 0.6) squash *= squashAt(t, b.t0 + 0.05, 0.16, 0.4);
 
   // ruce: emoce, gesto, ukazování na skupinu
@@ -271,7 +298,7 @@ function miniCompass(color = C.ink, bg = C.paper) {
   </g>`;
 }
 
-function bubble(b, t, anchor, { top = L.bubbleTop, tone = 'warn', above = false } = {}) {
+function bubble(b, t, anchor, { top = L.bubbleTop, tone = 'warn', above = false, tag = null, tagFill = C.amber } = {}) {
   if (!b.sched) return '';
   const tIn = b.sched.syl[0].t0 - 0.12;
   if (t < tIn) return '';
@@ -303,13 +330,49 @@ function bubble(b, t, anchor, { top = L.bubbleTop, tone = 'warn', above = false 
   const tailOuter = hasTail ? `<path d="M${r1(tx - 30)},${r1(tailBaseY)} L${r1(tipX)},${r1(tipY)} L${r1(tx + 30)},${r1(tailBaseY)} Z" fill="${C.paper}" stroke="${C.ink}" stroke-width="7" stroke-linejoin="round"/>` : '';
   const tailCover = hasTail ? `<path d="M${r1(tx - 24)},${r1(tailBaseY - 6)} L${r1(lerp(tipX, tx, 0.12))},${r1(tipY - 14)} L${r1(tx + 24)},${r1(tailBaseY - 6)} Z" fill="${C.paper}"/>` : '';
   const cx = L.bubbleCX, cy = by + bh / 2;
+  // jmenovka mluvčího (v dialogu, ať je i bez zvuku jasné, kdo mluví)
+  const tagW = tag ? measure(tag.toUpperCase(), 26, 900) + tag.length * 2 + 44 : 0;
+  const tagSvg = tag ? `<rect x="${r1(bx + 34)}" y="${r1(by - 30)}" width="${r1(tagW)}" height="48" rx="24" fill="${tagFill}" stroke="${C.ink}" stroke-width="5"/>
+    <text x="${r1(bx + 34 + tagW / 2)}" y="${r1(by + 3)}" text-anchor="middle" font-family="Inter" font-weight="900" font-size="26" letter-spacing="2" fill="${C.ink}">${escapeXml(tag.toUpperCase())}</text>` : '';
   return `<g opacity="${r1(fadeOut * 100) / 100}" transform="translate(${cx} ${r1(cy)}) scale(${r1(pop * 1000) / 1000}) translate(${-cx} ${r1(-cy)})">
     <rect x="${r1(bx + 8)}" y="${r1(by + 10)}" width="${r1(bw)}" height="${r1(bh)}" rx="40" fill="${C.ink}" opacity="0.12"/>
     ${tailOuter}
     <rect x="${r1(bx)}" y="${r1(by)}" width="${r1(bw)}" height="${r1(bh)}" rx="40" fill="${C.paper}" stroke="${C.ink}" stroke-width="7"/>
     ${tailCover}
     ${texts}
+    ${tagSvg}
   </g>`;
+}
+
+/** Host dialogu v čase t: { svg, head } nebo null. Přihopsá zprava, při řeči otevírá pusu, pak odejde. */
+function guestLayer(tl, t) {
+  const g = (tl.guests || []).find(x => t >= x.t0 && t < x.t1 + 0.32);
+  if (!g) return null;
+  const b = beatAt(tl, t);
+  const enter = ease.outBack(prog(t, g.t0 + 0.05, g.t0 + 0.4));
+  const leave = ease.in(prog(t, g.t1, g.t1 + 0.3));
+  const mine = b.speaker === g.role && t < g.t1;
+  const talk = !mine ? 0 : b.v ? voiceMouth(b, t) : mouthOpen(b.sched, t);
+  const speaking = mine && (b.v ? voiceSpeaking(b, t) : b.sched && t >= b.sched.syl[0]?.t0 && t <= b.sched.end);
+  const dx = (1 - enter) * 520 + leave * 620;
+  const punch = tl.beats.find(x => x.type === 'punch' && t >= x.t0 + 0.12 && t < x.t1);
+  // přechod do rohu, když naskáčou skupiny
+  const ks = g.smallAt == null ? 0 : ease.inOut(prog(t, g.smallAt, g.smallAt + 0.4));
+  const mix = (A, B) => ({ x: lerp(A.x, B.x, ks), y: lerp(A.y, B.y, ks), s: lerp(A.s, B.s, ks) });
+  if (g.role === 'florence') {
+    const P = mix(L.floGuest, L.floGuestSmall);
+    const fl = florence({
+      x: P.x + dx, y: P.y, s: P.s, talk, blink: blink(t, 11), lookX: mine ? 0 : -0.6,
+      mood: b.guest_mood || (punch ? 'smirk' : mine ? 'smile' : 'neutral'), gesture: b.guest_gesture || 'idle',
+      bob: Math.sin(t * Math.PI * 2 * 0.9) * 5, tilt: speaking ? Math.sin(t * 6) * 2.2 : 0, wave: t * 10,
+    });
+    return { svg: fl.svg, head: [fl.head[0], fl.head[1] - 150 * P.s] };
+  }
+  const P = mix(L.guest, L.guestSmall);
+  const hop = (1 - enter) * 60 + (speaking ? Math.abs(Math.sin(t * 7)) * 10 : 0);
+  const mood = b.guest_mood || (punch ? (punch.tone === 'good' ? 'happy' : punch.tone === 'bad' ? 'sad' : 'wow') : 'happy');
+  const svg = person({ role: g.role, x: P.x + dx, y: P.y, s: P.s, seed: g.seed, hop, talk, mood, blink: blink(t, 23), lookX: -0.7, wave: mine && b.guest_gesture === 'wave' ? t * 10 : null });
+  return { svg, head: [P.x + dx, P.y - hop - 196 * P.s] };
 }
 
 function groupsLayer(tl, t, outroT0) {
@@ -483,8 +546,11 @@ export function frameSvg(tl, t) {
   const kp = kompik(pose);
   const tone = (tl.beats.find(x => x.type === 'punch') || {}).tone || 'warn';
   // ocásek bubliny míří nad hrot střelky, ne přes ni
-  const anchor = [kp.head[0], kp.head[1] - 150 * pose.s];
-  const speech = b.type === 'outro' ? '' : bubble(b, t, anchor, { tone, above: b.type === 'intro' || b.type === 'say' });
+  const guest = guestLayer(tl, t);
+  const duoTalk = (tl.guests || []).length > 0;
+  const anchor = b.speaker && guest ? guest.head : [kp.head[0], kp.head[1] - 150 * pose.s];
+  const tagOpts = !duoTalk ? {} : b.speaker ? { tag: b.speaker_label || GUESTS[b.speaker], tagFill: b.speaker === 'florence' ? C.plum : C.sky } : { tag: 'Kompík', tagFill: C.amber };
+  const speech = b.type === 'outro' ? '' : bubble(b, t, anchor, { tone, above: (b.type === 'intro' || b.type === 'say') && !b.crowded, ...tagOpts });
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
   <g transform="${cam}">
@@ -492,6 +558,7 @@ export function frameSvg(tl, t) {
     ${badge(script, t)}
     ${groupsLayer(tl, t, outro ? outro.t0 : null)}
     ${boardLayer(tl, t)}
+    ${guest ? guest.svg : ''}
     ${kp.svg}
     ${speech}
     ${punch ? punchLayer(punch, t) : ''}
@@ -507,8 +574,12 @@ export function audioTrack(tl) {
   const buf = track(tl.duration + 0.3);
   const bad = tl.beats.find(b => b.type === 'punch' && (b.tone || 'bad') === 'bad');
   const outro = tl.beats.find(b => b.type === 'outro');
-  music(buf, tl.duration, { mood: t => (bad && t >= bad.t0 && (!outro || t < outro.t0) ? 'down' : 'up') });
+  // podkres: hudba ze souboru (`script.music`, ElevenLabs Music), jinak syntetická smyčka
+  const bed = tl.script.music ? loadClip(tl.script.music) : null;
+  if (bed?.pcm) mixMusic(buf, tl.duration, bed, tl.script.music_gain ?? 0.2);
+  else music(buf, tl.duration, { mood: t => (bad && t >= bad.t0 && (!outro || t < outro.t0) ? 'down' : 'up') });
   tl.beats.forEach(b => { if (b.v) duck(buf, b.voiceAt + b.v.start, b.voiceAt + b.v.end); });
+  mixBeatSfx(buf, tl);
   tl.beats.forEach((b, i) => {
     if (b.type === 'intro' && i === 0) { sfx.boing(buf, 0.05); sfx.pop(buf, 0.34); }
     if (b.type === 'intro' && b.emotion === 'curious') sfx.spin(buf, b.t0 + 0.35);
@@ -523,7 +594,7 @@ export function audioTrack(tl) {
     }
     if (b.type === 'outro') sfx.ding(buf, b.t0 + 0.5);
     if (b.v) mixVoice(buf, b.voiceAt, b.v);
-    else if (b.sched) babble(buf, b.sched, { seed: 3 + i });
+    else if (b.sched) babble(buf, b.sched, { seed: 3 + i, base: b.speaker ? 390 : 560 });
   });
   tl.groups.forEach(g => g.figs.forEach(f => sfx.plop(buf, f.t, f.i)));
   tl.beats.filter(b => b.type === 'board').forEach(b => boardTimes(b).forEach((tm, k) => { sfx.plop(buf, tm.row, k); sfx.pop(buf, tm.stamp); }));
@@ -552,6 +623,16 @@ export function validate(script) {
     total += b.dur || 0;
     if (b.emotion && !EMOTIONS.includes(b.emotion)) err(`${at}: neznámá emoce „${b.emotion}" (povolené: ${EMOTIONS.join(', ')})`);
     if (b.gesture && !GESTURES.includes(b.gesture)) err(`${at}: neznámé gesto „${b.gesture}"`);
+    if (b.speaker || b.guest) {
+      const role = b.speaker || b.guest;
+      if (!GUESTS[role]) err(`${at}: neznámý host „${role}" (${Object.keys(GUESTS).join(', ')})`);
+      if (b.speaker && !['say', 'punch', 'group'].includes(b.type)) err(`${at}: \`speaker\` smí mít jen beat say, group nebo punch`);
+      if (b.guest && b.type !== 'say') err(`${at}: \`guest\` (příchod hosta bez repliky) smí mít jen beat say`);
+      if (script.format === 'landscape') err(`${at}: dialog s hostem je zatím jen na výšku`);
+      if (b.speaker && !b.line) err(`${at}: host musí mít repliku (\`line\`)`);
+    }
+    if (b.spoken && b.spoken.length > LIMITS.maxSpoken) err(`${at}: \`spoken\` má ${b.spoken.length} znaků (max ${LIMITS.maxSpoken}) — rozděl do dvou beatů`);
+    if (b.spoken && !b.voice) err(`${at}: \`spoken\` bez \`voice\` (text pro hlas bez nahrávky)`);
     if (b.line) {
       if (b.line.length > LIMITS.maxLine) err(`${at}: replika má ${b.line.length} znaků (max ${LIMITS.maxLine})`);
       const sc = schedule(b.line, 0);
@@ -605,9 +686,9 @@ export function validate(script) {
       if (b.tone && !['bad', 'good', 'warn'].includes(b.tone)) err(`${at}: tone musí být bad|good|warn`);
     }
   });
-  checkNumbers(beats.map(b => ({ ...b, boardText: (b.items || []).map(it => `${it.text} ${it.stamp || ''}`).join(' ') })), facts, err, ['line', 'text', 'label', 'cta', 'boardText']);
+  checkNumbers(beats.map(b => ({ ...b, boardText: (b.items || []).map(it => `${it.text} ${it.stamp || ''}`).join(' ') })), facts, err, ['line', 'spoken', 'text', 'label', 'cta', 'boardText']);
   if (script.format && !FORMATS[script.format]) err(`neznámý formát „${script.format}" (${Object.keys(FORMATS).join(', ')})`);
-  const maxDur = (FORMATS[script.format] || FORMATS.portrait).maxDur;
+  const maxDur = maxDurOf(script);
   if (beats.length && beats[beats.length - 1].type !== 'outro') err('poslední beat musí být outro (koncová karta s odkazem a zdrojem)');
   if (beats.length && beats[0].type !== 'intro') warn('první beat by měl být intro (háček do 1. sekundy)');
   if (beats.filter(b => b.type === 'group').length > 2) err('nejvýš 2 skupiny postaviček na video (jedna myšlenka, jedno srovnání)');
@@ -616,8 +697,20 @@ export function validate(script) {
   if (!script.source_line) err('chybí `source_line` (zdroj na koncové kartě)');
   if (beats.some(b => b.type === 'group') && !script.footnote) err('chybí `footnote` (co znamená jedna postavička, rok, zdroj)');
   if (beats.some(b => b.voice) && !script.voice_credit) err('beat s hlasem vyžaduje `voice_credit` (kdo/co mluví — označení na koncové kartě)');
-  if (beats.some(b => b.voice) && script.format !== 'landscape') err('hlas je povolený jen u videí na šířku pro web (`format: landscape`)');
+  checkVoiced(script, err, warn);
+  checkAudioFiles(script, err);
   return { errors, warnings, duration: total };
+}
+
+/** Společná pravidla mluvených videí (oba styly): celé video mluví, text hlasu je ve scénáři. */
+export function checkVoiced(script, err, warn) {
+  const beats = script.beats || [];
+  if (!beats.some(b => b.voice)) return;
+  beats.forEach((b, i) => {
+    if (b.line && !b.voice) err(`beat ${i + 1} (${b.type}): video mluví, ale tento beat s replikou nemá \`voice\` (nemíchej hlas a žvatlání)`);
+    if (b.voice && !/^social\/reels\/voice\/[a-z0-9-]+\/[a-z0-9-]+\.mp3$/.test(b.voice)) err(`beat ${i + 1} (${b.type}): \`voice\` musí být social/reels/voice/<slug>/NN.mp3`);
+    if (b.voice && !b.spoken && script.format !== 'landscape') err(`beat ${i + 1} (${b.type}): chybí \`spoken\` (přesný text poslaný do hlasu — kvůli kontrole čísel a opakovatelnosti)`);
+  });
 }
 
 export { KOMPIK_HEIGHT };

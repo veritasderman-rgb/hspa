@@ -84,3 +84,49 @@ pomáhá rozpoznatelnosti.
 
 Po týdnu porovnat v Bufferu (`get_aggregated_post_metrics`) dosah a interakce reels
 vs. statických Story karet stejného článku; o kadenci rozhoduje vydavatel na poradě.
+
+## Dialog (mluvená videa, 30–50 s)
+
+Dvě postavy jsou silnější než jedna: spor udrží pozornost déle než výklad a divák
+si vybere, komu fandí. Délka se tím neprodlužuje zadarmo — každá replika musí děj
+posunout, jinak ji škrtni.
+
+### Role v dialogu
+
+- **Kompík = divák.** Říká první dojem, ptá se, tipuje, plete se. Nikdy není hloupý;
+  jeho omyl je ten, který by udělal každý (souhrnné číslo, titulek, „říká se“).
+- **Florence = háček.** Jednou větou obrátí význam čísla („Jenže ty počítáš i…“).
+  Ironie míří na číslo a systém, nikdy na Kompíka jako postavu a nikdy na lidi.
+- **Host v roli** (sestra, pacient, senior…) = lidské měřítko. Řekne, co číslo
+  znamená v praxi, a jen to, co článek dokládá.
+
+### Oblouk (≈ 40 s)
+
+| Čas | Kdo | Co |
+|---|---|---|
+| 0–4 s | Kompík | **Háček se sporem uvnitř**: „Sester přibývá. Tak proč pořád chybí?“ |
+| 4–10 s | Kompík | první číslo, jeho optimistický výklad |
+| 10–18 s | host | **obrat** (efekt „skřípnutí desky“): proč číslo klame |
+| 18–22 s | Kompík | otázka, kterou si teď klade divák |
+| 22–32 s | host + Kompík | dvě skupiny postaviček, srovnání |
+| 32–39 s | host | pointa: plácnutý nápis + věta, kterou si divák odnese |
+| 39–43 s | Kompík | karta, výzva do bia |
+
+Pravidla: střídej mluvčí nejpozději po dvou replikách; nejdelší replika 8 s;
+obrat nejpozději ve třetině; poslední slovo před kartou má pointa, ne vysvětlení.
+Otázka na konci („A jak je to u vás v kraji?“) zvedá komentáře — použij ji,
+jen když na ni web opravdu odpovídá.
+
+### Série (aby se lidé vraceli)
+
+Opakující se rámec je levnější na výrobu a divák ho pozná v první vteřině:
+
+| Série | Rámec | Styl |
+|---|---|---|
+| **Číslo, které klame** | souhrn vypadá dobře, rozpad ne | Kompík a Florence |
+| **Prý…** | rozšířený mýtus proti datům | Florence sólo nebo duo |
+| **Kraj proti kraji** | dvě skupiny, dva kraje, proč se liší | Kompík, host senior nebo pacient |
+| **Co se změní** | nový zákon nebo vyhláška v jedné minutě | Kompík a úředník |
+| **Dobrá zpráva** | v čem je Česko nahoře | Kompík a lékař nebo sestra |
+
+Název série patří do `series` (odznak nahoře), téma do `kicker`.

@@ -8,6 +8,7 @@
 //   --all              s --check: validuje všechny scénáře v social/reels/scripts/
 //   --sheet            kontaktní arch 4×3 klíčových snímků → <out>/<slug>-arch.png (náhled pro kontrolu)
 //   --frame <s>        jeden snímek v čase s (sekundy) → <out>/<slug>-<s>s.png
+//   --fit-voice        nastaví `dur` hlasových beatů podle naměřené řeči (nástup + řeč + rezerva), přepíše scénář
 //   --voice-timing     jen zapíše voice/<slug>/timing.json (časy řeči pro validaci bez ffmpeg; dělá i každý render)
 //   --poster-time      vypíše čas plakátu v ms (= thumbnailOffset pro Buffer)
 //   --out <adresář>    výstupní adresář (video: assets/social/reels, náhledy: social/reels/out — gitignored)
@@ -25,7 +26,8 @@ import { Resvg } from '@resvg/resvg-js';
 import { compile, frameSvg, audioTrack, validate, dims } from './lib/styles.js';
 import { writeWav } from './lib/audio.js';
 import { RESVG_FONT } from './lib/text.js';
-import { writeVoiceTiming } from './lib/voice.js';
+import { writeVoiceTiming, loadVoice } from './lib/voice.js';
+import { LEAD as FLORENCE_LEAD } from './lib/florence-scene.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SCRIPTS = resolve(ROOT, 'social', 'reels', 'scripts');
@@ -121,6 +123,24 @@ async function main() {
   if (!ref) { console.error('použití: node social/reels/render.js <slug|scénář.json> [--check|--sheet|--frame s] [--out dir]'); process.exit(2); }
   const { path, script } = loadScript(ref);
   const slug = script.slug || basename(path, '.json');
+  if (has('--fit-voice')) {
+    // Délka beatu = nástup + skutečná řeč + rezerva na dech a střih. Tabule si časy
+    // položek (`at`) drží samy, tam jen hlídáme, že se řeč vejde.
+    // nástupy řeči musí být stejné jako v compile() příslušného stylu
+    const lead = b => (script.style === 'florence' ? (FLORENCE_LEAD[b.type] ?? 0.12) : b.type === 'intro' ? 0.45 : b.type === 'punch' ? 0.25 : b.type === 'outro' ? 0.55 : 0.2);
+    const tail = b => (b.type === 'outro' ? 1.6 : b.type === 'punch' ? 1.1 : b.type === 'group' || b.type === 'number' ? 0.9 : 0.5);
+    let n = 0;
+    for (const b of script.beats) {
+      if (!b.voice) continue;
+      const v = loadVoice(b.voice, script.voice_tempo || 1);
+      if (!v) { console.error(`✗ chybí ${b.voice}`); process.exit(1); }
+      const need = Math.ceil((lead(b) + (v.end - v.start) + tail(b)) * 10) / 10;
+      const dur = b.type === 'board' ? Math.max(b.dur, need) : need;
+      if (dur !== b.dur) { b.dur = dur; n++; }
+    }
+    writeFileSync(path, JSON.stringify(script, null, 2) + '\n');
+    console.log(`✓ --fit-voice: upraveno ${n} beatů, celkem ${script.beats.reduce((a, b) => a + b.dur, 0).toFixed(1)} s`);
+  }
   const { errors, warnings, duration } = validate(script);
   warnings.forEach(w => console.warn(`⚠ ${w}`));
   if (errors.length) { errors.forEach(e => console.error(`✗ ${e}`)); process.exit(1); }
@@ -128,7 +148,7 @@ async function main() {
   if (has('--check')) return;
   if (script.beats.some(b => b.voice)) {
     for (const p of writeVoiceTiming(script)) console.log(`✓ časování hlasu → ${p}`);
-    if (has('--voice-timing')) return;
+    if (has('--voice-timing') || has('--fit-voice')) return;
   }
 
   const preview = has('--sheet') || has('--frame');
