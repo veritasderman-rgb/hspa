@@ -25,6 +25,7 @@ export const ROLES = {
  * @param {object} p
  *   role, x, y, s, seed (pestrost pleti/vlasů), hop (výška poskoku px),
  *   mood: happy|neutral|sad|wow, blink 0..1, wave (fáze mávání, rad) | null,
+ *   talk 0..1 (otevření pusy mluvící postavy),
  *   tint: přebarvení oblečení (např. při „zešednutí" skupiny), opacity, lookX
  */
 export function person(p = {}) {
@@ -102,7 +103,9 @@ export function person(p = {}) {
   parts.push(`<ellipse cx="-22" cy="${hy + 14}" rx="7" ry="4" fill="${C.blush}" opacity="0.55"/>`);
   parts.push(`<ellipse cx="22" cy="${hy + 14}" rx="7" ry="4" fill="${C.blush}" opacity="0.55"/>`);
   const my = hy + 17;
-  if (mood === 'sad') parts.push(`<path d="M-9,${my + 5} Q0,${my - 3} 9,${my + 5}" fill="none" stroke="${C.ink}" stroke-width="4" stroke-linecap="round"/>`);
+  // mluvící postava (host v dialogu): pusa se otevírá podle hlasitosti hlasu
+  if (p.talk > 0.06) parts.push(`<ellipse cx="0" cy="${my + 3}" rx="${r1(5 + p.talk * 2)}" ry="${r1(2 + p.talk * 7)}" fill="${C.inkSoft}" stroke="${C.ink}" stroke-width="3"/>`);
+  else if (mood === 'sad') parts.push(`<path d="M-9,${my + 5} Q0,${my - 3} 9,${my + 5}" fill="none" stroke="${C.ink}" stroke-width="4" stroke-linecap="round"/>`);
   else if (mood === 'wow') parts.push(`<ellipse cx="0" cy="${my + 3}" rx="5" ry="7" fill="${C.inkSoft}" stroke="${C.ink}" stroke-width="3"/>`);
   else if (mood === 'neutral') parts.push(`<line x1="-7" y1="${my + 2}" x2="7" y2="${my + 2}" stroke="${C.ink}" stroke-width="4" stroke-linecap="round"/>`);
   else parts.push(`<path d="M-10,${my} Q0,${my + 10} 10,${my}" fill="none" stroke="${C.ink}" stroke-width="4" stroke-linecap="round"/>`);

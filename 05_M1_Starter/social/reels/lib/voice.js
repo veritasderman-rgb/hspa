@@ -149,3 +149,79 @@ export function voiceMouth(b, t) {
 
 /** Mluví postava v čase t (podle hlasu)? */
 export const voiceSpeaking = (b, t) => !!b?.v && t - b.voiceAt >= b.v.start && t - b.voiceAt <= b.v.end;
+
+// ───────────────── hudba a efekty ze souboru (ElevenLabs Music / Sound Effects) ─────────────────
+// Na rozdíl od hlasu neřídí časování, takže nepotřebují timing.json: bez ffmpeg
+// (CI runner) se jen ověří, že soubor existuje, a do zvuku se nepřimíchají.
+
+const clipCache = new Map();
+
+/** { pcm: Float32Array | null, dur } — nebo null, když soubor chybí. */
+export function loadClip(rel) {
+  if (clipCache.has(rel)) return clipCache.get(rel);
+  const path = voicePath(rel);
+  if (!existsSync(path)) return null;
+  let info = { pcm: null, dur: 0 };
+  if (hasFfmpeg()) {
+    const r = spawnSync('ffmpeg', ['-v', 'error', '-i', path, '-f', 'f32le', '-ac', '1', '-ar', String(SR), '-'], { maxBuffer: 256 * 1024 * 1024 });
+    if (r.status !== 0) throw new Error(`ffmpeg nedekódoval ${rel}: ${r.stderr}`);
+    const b = r.stdout;
+    const pcm = new Float32Array(b.buffer.slice(b.byteOffset, b.byteOffset + b.byteLength));
+    info = { pcm, dur: pcm.length / SR };
+  }
+  clipCache.set(rel, info);
+  return info;
+}
+
+/** Špička klipu (pro normalizaci hlasitosti nezávisle na tom, jak hlasitě byl vygenerován). */
+function clipPeak(c) {
+  if (c.peak == null) { let m = 0; for (const v of c.pcm) { const a = Math.abs(v); if (a > m) m = a; } c.peak = m || 1; }
+  return c.peak;
+}
+
+/** Jednorázový efekt v čase t0; `gain` je cílová špička (0..1). */
+export function mixClip(buf, t0, c, gain = 0.5) {
+  if (!c?.pcm) return;
+  const k = gain / clipPeak(c), i0 = Math.round(t0 * SR);
+  for (let i = 0; i < c.pcm.length; i++) {
+    const j = i0 + i;
+    if (j >= 0 && j < buf.length) buf[j] += c.pcm[i] * k;
+  }
+}
+
+/** Hudební podkres ze souboru: smyčka přes celou délku, náběh 0,3 s, doběh 0,8 s. */
+export function mixMusic(buf, seconds, c, gain = 0.2) {
+  if (!c?.pcm?.length) return;
+  const k = gain / clipPeak(c), n = Math.min(buf.length, Math.round(seconds * SR));
+  // přeskoč ticho na začátku nahrávky
+  let off = 0;
+  while (off < c.pcm.length - 1 && Math.abs(c.pcm[off]) < 0.01) off++;
+  const len = c.pcm.length - off;
+  for (let j = 0; j < n; j++) {
+    const t = j / SR;
+    const env = Math.min(1, t / 0.3) * Math.min(1, (seconds - t) / 0.8);
+    buf[j] += c.pcm[off + (j % len)] * k * Math.max(0, env);
+  }
+}
+
+/** Efekty u beatů: `"sfx": [{ "file": "social/reels/audio/sfx/x.mp3", "at": 0.4, "gain": 0.5 }]`. */
+export function mixBeatSfx(buf, tl) {
+  for (const b of tl.beats) for (const e of b.sfx || []) mixClip(buf, b.t0 + (e.at || 0), loadClip(e.file), e.gain ?? 0.5);
+}
+
+/** Validace hudby a efektů ze souboru (existence, cesta, časy). */
+export function checkAudioFiles(script, err) {
+  const ok = f => typeof f === 'string' && /^social\/reels\/audio\/[a-z0-9/_-]+\.mp3$/.test(f);
+  if (script.music != null) {
+    if (!ok(script.music)) err('`music` musí být cesta social/reels/audio/….mp3');
+    else if (!existsSync(voicePath(script.music))) err(`hudba ${script.music} neexistuje`);
+    if (script.music_gain != null && !(script.music_gain > 0 && script.music_gain <= 0.5)) err('`music_gain` musí být v rozsahu (0; 0,5]');
+  }
+  (script.beats || []).forEach((b, i) => (b.sfx || []).forEach((e, k) => {
+    const at = `beat ${i + 1} (${b.type}): sfx ${k + 1}`;
+    if (!ok(e.file)) err(`${at} — \`file\` musí být cesta social/reels/audio/….mp3`);
+    else if (!existsSync(voicePath(e.file))) err(`${at} — soubor ${e.file} neexistuje`);
+    if (e.at != null && !(e.at >= 0 && e.at < b.dur)) err(`${at} — \`at\` musí ležet v beatu`);
+    if (e.gain != null && !(e.gain > 0 && e.gain <= 1)) err(`${at} — \`gain\` musí být v rozsahu (0; 1]`);
+  }));
+}

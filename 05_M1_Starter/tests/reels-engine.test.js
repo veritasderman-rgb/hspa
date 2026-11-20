@@ -18,7 +18,8 @@ import { person, ROLES } from '../social/reels/characters/cast.js';
 import { C } from '../social/reels/lib/palette.js';
 import { RESVG_FONT } from '../social/reels/lib/text.js';
 import { SR } from '../social/reels/lib/audio.js';
-import { FORMATS } from '../social/reels/lib/format.js';
+import { FORMATS, maxDurOf } from '../social/reels/lib/format.js';
+import { GUESTS } from '../social/reels/lib/scene.js';
 import { dims } from '../social/reels/lib/styles.js';
 import { spawnSync } from 'node:child_process';
 import { loadVoice, hasFfmpeg, timingPath } from '../social/reels/lib/voice.js';
@@ -36,7 +37,7 @@ test('reels: aspoň jeden scénář existuje a všechny projdou validací', () =
   for (const { f, s } of scripts) {
     const { errors, duration } = validate(s);
     assert.deepEqual(errors, [], `${f}: ${errors.join('; ')}`);
-    const max = FORMATS[s.format || 'portrait'].maxDur;
+    const max = maxDurOf(s);
     assert.ok(duration >= 8 && duration <= max, `${f}: délka ${duration} (max ${max} pro ${s.format || 'portrait'})`);
     assert.equal(s.slug, f.replace(/\.json$/, ''), `${f}: slug musí odpovídat názvu souboru`);
   }
@@ -180,8 +181,11 @@ test('formát na šířku: 1920×1080, delší limit, tabule a kroky se vykresl�
   // portrait zůstává 1080×1920 a 20 s
   assert.deepEqual(dims(kompikScripts[0].s), { W: 1080, H: 1920 });
   const long = JSON.parse(JSON.stringify(land.find(x => !x.s.style).s));
-  long.beats[0].dur += 30;
-  assert.ok(validate(long).errors.some(e => e.includes('> 40')), 'landscape má strop 40 s');
+  long.beats[0].dur += 70;
+  assert.ok(validate(long).errors.some(e => e.includes('> 90')), 'mluvené video na šířku má strop 90 s');
+  const mute = JSON.parse(JSON.stringify(kompikScripts.find(x => !x.s.beats.some(b => b.voice)).s));
+  mute.beats[0].dur += 20;
+  assert.ok(validate(mute).errors.some(e => e.includes('> 20')), 'němé video na výšku má dál strop 20 s');
 });
 
 test('tabule (board): verdikty, překryv s razítkem a doložení čísel hlídá validátor', () => {
@@ -215,29 +219,100 @@ test('kroky (step) Florence: titulek, základ a čísla jen z faktů', () => {
   assert.ok(validate(many).errors.some(e => e.includes('kroků') || e.includes('překryly')));
 });
 
-test('hlas (ElevenLabs) jen na šířku, s označením a s řečí, která se vejde do beatu', () => {
+test('hlas (ElevenLabs): označení na kartě, řeč se vejde do beatu, celé video mluví', () => {
   const voiced = scripts.filter(x => x.s.beats.some(b => b.voice));
+  assert.ok(voiced.some(x => (x.s.format || 'portrait') === 'portrait'), 'aspoň jedno mluvené video na výšku');
   for (const { f, s } of voiced) {
-    assert.equal(s.format, 'landscape', `${f}: hlas jen u webových videí na šířku`);
     assert.ok(s.voice_credit && /ElevenLabs/.test(s.voice_credit), `${f}: chybí voice_credit`);
     for (const b of s.beats.filter(x => x.voice)) assert.ok(existsSync(resolve(ROOT, b.voice)), `${f}: chybí ${b.voice}`);
+    for (const b of s.beats.filter(x => x.line)) assert.ok(b.voice, `${f}: beat s replikou bez hlasu`);
+    if (s.format !== 'landscape') for (const b of s.beats.filter(x => x.voice)) assert.ok(b.spoken, `${f}: chybí spoken`);
     const tl = compile(s);
     const out = tl.beats.find(b => b.type === 'outro');
     assert.ok(frameSvg(tl, out.t0 + 1.2).includes('hlas: '), `${f}: koncová karta neoznačuje hlas`);
     const a = audioTrack(tl);
     assert.ok(Math.abs(a.length / SR - (tl.duration + 0.3)) < 0.05);
   }
-  if (voiced.length) {
-    const port = JSON.parse(JSON.stringify(voiced[0].s));
-    delete port.format;
-    assert.ok(validate(port).errors.some(e => e.includes('jen u videí na šířku')));
-    const nocredit = JSON.parse(JSON.stringify(voiced[0].s));
-    delete nocredit.voice_credit;
-    assert.ok(validate(nocredit).errors.some(e => e.includes('voice_credit')));
-    const short = JSON.parse(JSON.stringify(voiced[0].s));
-    short.beats.find(b => b.voice).dur = 0.8;
-    assert.ok(validate(short).errors.some(e => e.includes('hlas')));
+  const base = voiced.find(x => x.s.format !== 'landscape').s;
+  const clone = () => JSON.parse(JSON.stringify(base));
+  const nocredit = clone();
+  delete nocredit.voice_credit;
+  assert.ok(validate(nocredit).errors.some(e => e.includes('voice_credit')));
+  const short = clone();
+  short.beats.find(b => b.voice).dur = 0.8;
+  assert.ok(validate(short).errors.some(e => e.includes('hlas')));
+  const mixed = clone();
+  delete mixed.beats[1].voice; delete mixed.beats[1].spoken;
+  assert.ok(validate(mixed).errors.some(e => e.includes('nemíchej')), 'mluvené video nesmí míchat hlas a žvatlání');
+  const nospoken = clone();
+  delete nospoken.beats[0].spoken;
+  assert.ok(validate(nospoken).errors.some(e => e.includes('spoken')));
+  const num = clone();
+  num.beats[0].spoken += ' Je jich 999.';
+  assert.ok(validate(num).errors.some(e => e.includes('„999"')), 'číslo v mluveném textu musí mít fakt');
+  const long = clone();
+  long.beats[0].dur += 30;
+  assert.ok(validate(long).errors.some(e => e.includes('> 60')), 'mluvené video na výšku má strop 60 s');
+});
+
+test('dialog: host má jmenovku, mluví jen povolené role a obraz se nepřekrývá se skupinami', () => {
+  const duo = scripts.filter(x => x.s.beats.some(b => b.speaker));
+  assert.ok(duo.length >= 1, 'aspoň jeden scénář s hostem');
+  for (const { f, s } of duo) {
+    const tl = compile(s);
+    assert.ok(tl.guests.length >= 1, f);
+    for (const b of tl.beats.filter(x => x.speaker)) {
+      assert.ok(GUESTS[b.speaker], `${f}: neznámý host ${b.speaker}`);
+      const svg = frameSvg(tl, Math.min(b.t1 - 0.1, b.t0 + 1.2));
+      assert.ok(svg.includes(GUESTS[b.speaker].toUpperCase()), `${f}: bublina hosta nemá jmenovku`);
+      new Resvg(svg, { font: RESVG_FONT, fitTo: { mode: 'width', value: 270 } }).render();
+    }
+    // po první skupině je host v rohu a Kompík uprostřed (žádné duo rozestavení)
+    const firstGroup = tl.beats.find(b => b.type === 'group');
+    if (firstGroup) for (const b of tl.beats.filter(x => x.t0 >= firstGroup.t0)) assert.equal(b.duo, false, f);
   }
+  const base = duo[0].s;
+  const bad = JSON.parse(JSON.stringify(base));
+  bad.beats.find(b => b.speaker).speaker = 'ministr';
+  assert.ok(validate(bad).errors.some(e => e.includes('neznámý host')));
+  const kid = JSON.parse(JSON.stringify(base));
+  kid.beats.find(b => b.speaker).speaker = 'dite';
+  assert.ok(validate(kid).errors.some(e => e.includes('neznámý host')), 'dítě v dialogu nemluví');
+  const intro = JSON.parse(JSON.stringify(base));
+  intro.beats[0].speaker = 'florence';
+  assert.ok(validate(intro).errors.some(e => e.includes('speaker')));
+  assert.equal(person({ role: 'sestra', talk: 0.8 }).includes('<ellipse cx="0" cy="-130"'), true, 'mluvící postava má otevřenou pusu');
+});
+
+test('hudba a efekty ze souboru: cesta, existence a čas v beatu', () => {
+  const withAudio = scripts.filter(x => x.s.music || x.s.beats.some(b => b.sfx));
+  assert.ok(withAudio.length >= 1);
+  const base = withAudio[0].s;
+  const miss = JSON.parse(JSON.stringify(base));
+  miss.music = 'social/reels/audio/music/neexistuje.mp3';
+  assert.ok(validate(miss).errors.some(e => e.includes('neexistuje')));
+  const path = JSON.parse(JSON.stringify(base));
+  path.music = '../../etc/passwd';
+  assert.ok(validate(path).errors.some(e => e.includes('music')));
+  const late = JSON.parse(JSON.stringify(base));
+  const b = late.beats.find(x => x.sfx) || late.beats[1];
+  b.sfx = [{ file: (base.beats.find(x => x.sfx) || {}).sfx?.[0].file || 'social/reels/audio/sfx/record-scratch.mp3', at: 99 }];
+  assert.ok(validate(late).errors.some(e => e.includes('`at`')));
+});
+
+test('obsazení hlasů: každá mluvící postava má hlas z knihovny nebo navržený, nikdy klon', () => {
+  const reg = JSON.parse(readFileSync(resolve(ROOT, 'social/reels/voices.json'), 'utf8'));
+  assert.equal(reg.provider, 'ElevenLabs');
+  for (const role of ['kompik', ...Object.keys(GUESTS)]) {
+    const v = reg.cast[role];
+    assert.ok(v, `voices.json: chybí hlas pro „${role}"`);
+    assert.match(v.voice_id, /^[A-Za-z0-9]{20}$/, role);
+    assert.ok(['library', 'designed'].includes(v.origin), `${role}: origin musí být library nebo designed (žádný klon)`);
+    assert.ok(v.voice_name && v.direction, role);
+  }
+  const ids = Object.values(reg.cast).map(v => v.voice_id);
+  assert.equal(new Set(ids).size, ids.length, 'každá postava má vlastní hlas');
+  assert.ok(!reg.cast.dite, 'žádný dětský hlas');
 });
 
 test('hlas bez ffmpeg: validace a kompilace jedou z timing.json (CI runner ffmpeg nemá)', () => {

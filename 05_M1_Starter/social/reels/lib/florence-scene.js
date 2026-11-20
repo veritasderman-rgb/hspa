@@ -18,9 +18,9 @@ import { measure } from './text.js';
 import { florence, MOODS, GESTURES_F } from '../characters/florence.js';
 import { track, sfx, musicNight } from './audio.js';
 import { parseValue, checkFacts, checkNumbers } from './facts.js';
-import { LIMITS } from './scene.js';
-import { FORMATS, formatName } from './format.js';
-import { loadVoice, alignSchedule, voiceStart, mixVoice, duck, voiceMouth, voiceSpeaking } from './voice.js';
+import { LIMITS, checkVoiced } from './scene.js';
+import { FORMATS, formatName, maxDurOf } from './format.js';
+import { loadVoice, alignSchedule, voiceStart, mixVoice, duck, voiceMouth, voiceSpeaking, loadClip, mixMusic, mixBeatSfx, checkAudioFiles } from './voice.js';
 
 export const F_BEATS = ['hook', 'say', 'number', 'step', 'outro'];
 const RATE = 1.12;              // Florence mluví o kousek rychleji než Kompík
@@ -300,8 +300,11 @@ export function frameSvg(tl, t) {
 
 export function audioTrack(tl) {
   const buf = track(tl.duration + 0.3);
-  musicNight(buf, tl.duration);
+  const bed = tl.script.music ? loadClip(tl.script.music) : null;
+  if (bed?.pcm) mixMusic(buf, tl.duration, bed, tl.script.music_gain ?? 0.2);
+  else musicNight(buf, tl.duration);
   tl.beats.forEach(b => { if (b.v) duck(buf, b.voiceAt + b.v.start, b.voiceAt + b.v.end); });
+  mixBeatSfx(buf, tl);
   tl.beats.forEach((b, i) => {
     if (i > 0) sfx.whoosh(buf, b.t0);
     if (b.type === 'number') { sfx.riser(buf, b.t0, 0.8); sfx.boom(buf, b.t0 + 0.85); }
@@ -360,19 +363,20 @@ export function validate(script) {
       }
     }
   });
-  checkNumbers(beats.map(b => ({ ...b, compareLabel: b.compare?.label })), facts, err, ['line', 'label', 'cta', 'compareLabel', 'title']);
+  checkNumbers(beats.map(b => ({ ...b, compareLabel: b.compare?.label })), facts, err, ['line', 'spoken', 'label', 'cta', 'compareLabel', 'title']);
   const steps = beats.filter(b => b.type === 'step');
   if (steps.length > 6) err(`nejvýš 6 kroků (${steps.length})`);
   if (steps.length * L.steps.rowH + L.steps.y > (L === LANDSCAPE ? L.capStepY - 110 : L.capStepY - 120)) err('kroky by překryly titulky — zkrať seznam');
   if (script.format && !FORMATS[script.format]) err(`neznámý formát „${script.format}"`);
-  const maxDur = (FORMATS[script.format] || FORMATS.portrait).maxDur;
+  const maxDur = maxDurOf(script);
   if (beats.length && beats[0].type !== 'hook') err('první beat musí být hook (háček od prvního snímku)');
   if (beats.length && beats[beats.length - 1].type !== 'outro') err('poslední beat musí být outro (karta s odkazem a zdrojem)');
   if (total > maxDur) err(`délka ${total.toFixed(1)} s > ${maxDur} s`);
   if (total && total < LIMITS.minDur) err(`délka ${total.toFixed(1)} s < ${LIMITS.minDur} s`);
   if (!script.source_line) err('chybí `source_line` (zdroj na koncové kartě)');
   if (beats.some(b => b.voice) && !script.voice_credit) err('beat s hlasem vyžaduje `voice_credit` (označení hlasu na koncové kartě)');
-  if (beats.some(b => b.voice) && script.format !== 'landscape') err('hlas je povolený jen u videí na šířku pro web (`format: landscape`)');
+  checkVoiced(script, err, warn);
+  checkAudioFiles(script, err);
   if (beats.some(b => b.type === 'number') && !script.footnote) err('chybí `footnote` (co číslo měří, rok)');
   return { errors, warnings, duration: total };
 }

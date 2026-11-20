@@ -1,6 +1,6 @@
 ---
 name: animovane-prispevky
-description: Animované příspěvky ve dvou stylech — „Kompík vysvětluje" (maskot, postavičky, bublina) a „Florence komentuje" (AI autorka, velké titulky, lampa nasvítí číslo). Z článku HSPA Monitoru udělá 10–20s vertikální video (Reels, Stories, TikTok, Shorts) se syntetizovaným zvukem. Použij, když má vzniknout video, reel nebo animace k článku či indikátoru, když se píše scénář pro Kompíka nebo Florence, nebo když se mění postavy či renderer v 05_M1_Starter/social/reels/.
+description: Animované příspěvky — „Kompík vysvětluje" (maskot, postavičky, bublina), „Florence komentuje" (AI autorka, velké titulky, lampa nasvítí číslo) a mluvený dialog „Kompík a Florence" nebo Kompík s hostem (hlasy, hudba a efekty z ElevenLabs). Z článku HSPA Monitoru udělá vertikální video (Reels, Stories, TikTok, Shorts): němé 10–20 s, mluvené 30–60 s. Použij, když má vzniknout video, reel nebo animace k článku či indikátoru, když se píše scénář pro Kompíka nebo Florence, nebo když se mění postavy či renderer v 05_M1_Starter/social/reels/.
 ---
 
 # Animované příspěvky s Kompíkem
@@ -14,8 +14,9 @@ postavičky, emoce, rytmus. Jedno video = jedno číslo = jedna pointa.
 
 | | |
 |---|---|
-| Formát | 9:16, 1080×1920, 30 fps, H.264 + AAC, **10–20 s** (ideál 13–16 s), ≤ 3 MB |
-| Na šířku | `"format": "landscape"` → 16:9, 1920×1080, **≤ 35 s** — jen pro vložení do webu (sekce, průvodce), ne do Reels |
+| Formát | 9:16, 1080×1920, 30 fps, H.264 + AAC. Němé **10–20 s**, ≤ 3 MB. Mluvené **až 60 s** (ideál 30–45 s), ≤ 6 MB |
+| Na šířku | `"format": "landscape"` → 16:9, 1920×1080, němé ≤ 40 s, mluvené ≤ 90 s — jen pro vložení do webu (sekce, průvodce), ne do Reels |
+| Hlasy | `05_M1_Starter/social/reels/voices.json` (obsazení), nahrávky `social/reels/voice/<slug>/`, hudba a efekty `social/reels/audio/` |
 | Výstup | `05_M1_Starter/assets/social/reels/<slug>.mp4` + plakát `<slug>.png` |
 | Scénář | `05_M1_Starter/social/reels/scripts/<slug>.json` (verzovaný, testovaný) |
 | Renderer | `05_M1_Starter/social/reels/` — SVG → resvg → ffmpeg, offline, deterministický |
@@ -32,11 +33,31 @@ postavičky, emoce, rytmus. Jedno video = jedno číslo = jedna pointa.
 Střídej je: Kompík je „vysvětlující" série, Florence „komentářová". Ke stejnému
 článku může vzniknout obojí.
 
+## Mluvená videa a dialog (od 20. 11. 2026)
+
+Oba styly smí mluvit hlasem z ElevenLabs a ve stylu Kompík může vystoupit **host**:
+Florence nebo role z obsazení (sestra, lékař, pacient, senior, úředník, záchranář).
+Vlajkový formát je **„Kompík a Florence"**: Kompík řekne, co si myslí divák, Florence
+dodá háček, čísla ukážou postavičky. Vzor: `scripts/duo-sestry-absolventi.json`.
+
+| Formát | Kdy | Délka |
+|---|---|---|
+| **Kompík a Florence** (dialog) | číslo, které na první pohled klame; mýtus proti datům | 30–50 s |
+| **Kompík se ptá** (host = role) | téma má lidskou stranu, kterou článek dokládá (sestra, pacient, senior) | 30–45 s |
+| **Florence komentuje** (mluvená, sólo) | paradox, jedna ostrá myšlenka | 20–35 s |
+| **Kompík vysvětluje** (mluvený, sólo) | čisté srovnání dvou čísel | 20–30 s |
+
+Všechno o hlasech, dialogu, hudbě, efektech a kreditech je v
+[`references/hlasy.md`](references/hlasy.md) — **přečti ho před každým mluveným videem**.
+Němé video (žvatlání, titulky) je dál platný formát a záloha, když konektor
+ElevenLabs není k dispozici.
+
 Než začneš, přečti podle potřeby:
 - [`references/postavy.md`](references/postavy.md) — kdo je Kompík, jak mluví, emoce a střelka, obsazení
 - [`references/florence.md`](references/florence.md) — styl „Florence komentuje": postava, nálady, gesta, beaty, dramaturgie
 - [`references/scenar.md`](references/scenar.md) — formát JSON scénáře, typy beatů, všechny parametry
-- [`references/dramaturgie.md`](references/dramaturgie.md) — jak z čísla udělat virální skeč (háčky, rytmus, vzory)
+- [`references/dramaturgie.md`](references/dramaturgie.md) — jak z čísla udělat virální skeč (háčky, rytmus, vzory, dialog)
+- [`references/hlasy.md`](references/hlasy.md) — mluvená videa: obsazení, dialog s hostem, výroba hlasu v ElevenLabs, hudba, efekty, kredity
 
 ## Postup (jedno video)
 
@@ -79,16 +100,14 @@ délky je 35 s (portrait dál 20 s). Na šířku dávají smysl dva nové beaty:
 - **`step`** (Florence) — návod krok za krokem: `n`, `title` (≤ 40 znaků, čísla jen
   z faktů), `basis`; kroky se skládají do seznamu, hotové dostanou fajfku. Nejvýš 6.
 
-S hlasem (viz výjimka níže): repliky vygeneruj v ElevenLabs po beatech
-(`creative_generate_speech`, jeden take), ulož do `social/reels/voice/<slug>/NN.mp3`
-a délky beatů nastav podle naměřené řeči (`loadVoice()` v `lib/voice.js` vrací
-začátek a konec řeči). Bublina a titulky se na řeč srovnají samy, pusa jde podle
-hlasitosti, podkres se pod hlasem ztiší. U tabule sesynchronizuj řádky s výčtem
-(`items[].at`, `stamp_at`). Strop délky na šířku je 40 s.
+S hlasem: postup je v `references/hlasy.md` (repliky po beatech, `--fit-voice`
+nastaví délky beatů podle naměřené řeči). Bublina a titulky se na řeč srovnají samy,
+pusa jde podle hlasitosti, podkres se pod hlasem ztiší. U tabule sesynchronizuj řádky
+s výčtem (`items[].at`, `stamp_at`). Strop mluveného videa na šířku je 90 s.
 
 Fakta se dokládají stejně, `article` může být i sekční stránka (`poplatky.html`).
 Ověř obraz archem (`--sheet` je na šířku 3×4) a vlož video do stránky s plakátem,
-`preload="none"` a textovým přepisem titulků pod videem (video nemá hlas).
+`preload="none"` a textovým přepisem titulků pod videem.
 
 ## Fakta a poctivost (červené linie — GOVERNANCE § 2 a § 6)
 
@@ -113,13 +132,17 @@ Ověř obraz archem (`--sheet` je na šířku 3×4) a vlož video do stránky s 
   pojišťoven, nemocnic, stran.
 - **Žádné zdravotní rady jednotlivci.** Kompík vysvětluje systém a data, neříká
   „běžte na…", „berte…". Prevence jen jako systémový fakt („půlka lidí prohlídku vynechá").
-- **Kompík ani Florence nemluví lidským hlasem** a nepředstírají člověka — Kompík
-  žvatlá tóny, Florence má titulky a psací stroj. Žádné klonování hlasů skutečných lidí.
-  **Výjimka (vydavatel, 13. 10. 2026):** webová videa na šířku (`format: landscape`)
-  smí mít syntetický český hlas z knihovny ElevenLabs — beat `voice` (mp3 v
-  `social/reels/voice/<slug>/`), skript `voice_credit` (označení na koncové kartě,
-  povinné) a volitelně `voice_tempo`. Jen hlasy z knihovny, nikdy klon skutečné
-  osoby; mimo landscape validátor hlas odmítne. Na sociální sítě dál bez hlasu.
+- **Hlas je syntetický a přiznaný.** Postavy smí mluvit hlasem z ElevenLabs
+  (vydavatel: 13. 10. 2026 web na šířku, 20. 11. 2026 i sociální sítě). Jen hlasy
+  z knihovny nebo navržené z textového popisu, zapsané v `social/reels/voices.json`;
+  **nikdy klon ani imitace hlasu skutečné osoby**, žádný dětský hlas. Koncová karta
+  nese `voice_credit` (povinné), popisek příspěvku říká „Animace, text a hlasy: AI".
+  Postavy nepředstírají člověka: Florence je AI, host je role, ne osoba.
+- **Mluvené slovo je stejně doložené jako psané.** `spoken` (text poslaný do hlasu)
+  hlídá validátor na čísla stejně jako `line`. Čísla vyslovená slovy kontroluješ ty
+  proti `facts[]`; repliku s číslem ověř přepisem (hlasy.md, krok 8).
+- **Video musí dávat smysl i bez zvuku.** Hlas titulky nenahrazuje — bublina nebo
+  titulek nese pointu každé repliky.
 - **Florence je vždy označená jako AI** (odznak na klopě, štítek nahoře, koncová karta).
   Je krásná a sebevědomá — šarm, mrknutí, ironie — ale ne lascivní (žádný výstřih
   ani vyzývavé pózy; sítě to navíc tlumí v dosahu).
@@ -137,18 +160,21 @@ Ověř obraz archem (`--sheet` je na šířku 3×4) a vlož video do stránky s 
 
 - [ ] `npm run reels:check` ✅ a `node --test tests/reels-engine.test.js` ✅
 - [ ] Prohlédnutý kontaktní arch: bublina ≤ 3 řádky, nic důležitého pod y 1560 ani nad y 230
-- [ ] Háček do 1. sekundy, první číslo do 4. sekundy, celé ≤ 20 s
+- [ ] Háček do 1. sekundy, první číslo do 4. sekundy (mluvené do 8. s), celé ≤ 20 s (mluvené ≤ 60 s)
 - [ ] Každé číslo má `facts[]` s citací; počet postaviček sedí; `footnote` vysvětluje jednotku
 - [ ] Emoce Kompíka sedí k obsahu (dobrá zpráva ≠ smutek); tón pointy `good|warn|bad` odpovídá signálu článku
-- [ ] MP4 1080×1920, 30 fps, ≤ 3 MB; plakát vygenerovaný
-- [ ] Do PR jen scénář + MP4 + plakát (+ změny rendereru, pokud byly); **ne** `social/reels/out/`
+- [ ] MP4 1080×1920, 30 fps, ≤ 3 MB (mluvené ≤ 6 MB); plakát vygenerovaný
+- [ ] Mluvené: hlasy z `voices.json`, `spoken` u každé repliky, `voice_credit`, `timing.json` commitnutý, repliky s čísly ověřené přepisem, podkres bez zpěvu
+- [ ] Do PR jen scénář + MP4 + plakát + `voice/<slug>/` (+ nové soubory v `audio/`, + změny rendereru, pokud byly); **ne** `social/reels/out/`
 
 ## Hranice skillu
 
 - Skill **vyrábí** video a scénář. **Nepublikuje.** Denní rutina (`PROMPT_ROUTINE.md`)
-  vyrobí blokem V jedno video za běh (styl se střídá Kompík ↔ Florence) a blok B plní
+  vyrobí blokem V až dvě videa za běh (mluvený dialog + sólo) a blok B plní
   frontu Bufferu **výhradně video příspěvky** (reel na IG a FB, video na X) — až po
   merge a nasazení videa. Kadenci mění jen vydavatel.
-- Videa jsou v gitu: drž ≤ 3 MB, ať repo nebobtná (~1 video denně ≈ 0,8 GB ročně).
+- Videa jsou v gitu: němé ≤ 3 MB, mluvené ≤ 6 MB. Dvě videa denně jsou ~3 GB ročně —
+  to git dlouhodobě neunese; přesun MP4 mimo repo (Vercel Blob / R2) je otevřené
+  rozhodnutí vydavatele (`docs/decisions-log.md`, 20. 11. 2026).
 - `thumbnailOffset` pro Buffer = `node social/reels/render.js <slug> --poster-time` (ms plakátu).
 - Změna postavy, palety nebo pravidel = změna tohoto skillu + `references/` + testu.

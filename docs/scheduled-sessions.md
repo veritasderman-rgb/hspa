@@ -36,7 +36,7 @@
 | **Název** | `HSPA – rutina` |
 | **Prompt** | `Spusť dnešní běh podle PROMPT_ROUTINE.md v kořeni repozitáře hspa. Projdi bloky A–L včetně bloku V (video dne) přesně podle souboru, dodrž kalendář (§ 3) a pravidla šumu (§ 0) a na konci otevři nejvýš jeden PR podle bloku L. Zásadní je validace a ověření všech zdrojů.` |
 | **Cadence / cron (UTC)** | `0 1 * * *` — jednou denně, 03:00 CEST / 02:00 CET |
-| **Konektory** | GitHub · `PubMed` · `Consensus` · `hlidac_statu` · `Buffer` · `Brevo` (ostatní nejsou potřeba) |
+| **Konektory** | GitHub · `PubMed` · `Consensus` · `hlidac_statu` · `Buffer` · `Brevo` · `ElevenLabs` (hlasy, hudba a efekty videí v bloku V; bez něj vznikne němé video) |
 | **Model** | výchozí model účtu (rutina si sama deleguje bloky na Sonnet/Opus přes Agent tool, viz § 1 souboru) |
 | **Notifikace** | zapni push/e-mail po dokončení — ráno pak stačí otevřít PR |
 
