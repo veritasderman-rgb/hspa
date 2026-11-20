@@ -24,7 +24,7 @@ import { loadVoice, alignSchedule, voiceStart, mixVoice, duck, voiceMouth, voice
 
 export const F_BEATS = ['hook', 'say', 'number', 'step', 'outro'];
 const RATE = 1.12;              // Florence mluví o kousek rychleji než Kompík
-const LEAD = { hook: 0.05, say: 0.12, number: 0.1, step: 0.35, outro: 0.5 };
+export const LEAD = { hook: 0.05, say: 0.12, number: 0.1, step: 0.35, outro: 0.5 };
 
 const PORTRAIT = {
   W: 1080, H: 1920, cx: 540, cy: 960, tx: 540,
