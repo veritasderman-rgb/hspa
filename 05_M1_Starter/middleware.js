@@ -43,7 +43,8 @@ export default function middleware(request) {
   const auth = request.headers.get('authorization') || '';
   if (!auth.startsWith('Basic ')) return unauthorized();
   let decoded = '';
-  try { decoded = atob(auth.slice(6)); } catch { return unauthorized('Neplatná hlavička Authorization.'); }
+  // atob vrací bajty jako binární řetězec; výzva slibuje UTF-8, takže heslo s diakritikou je třeba dekódovat
+  try { decoded = new TextDecoder('utf-8', { fatal: true }).decode(Uint8Array.from(atob(auth.slice(6)), c => c.charCodeAt(0))); } catch { return unauthorized('Neplatná hlavička Authorization.'); }
   const sep = decoded.indexOf(':');
   const password = sep >= 0 ? decoded.slice(sep + 1) : decoded;
   if (password !== heslo) return unauthorized('Špatné heslo.');
