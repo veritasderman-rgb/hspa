@@ -45,7 +45,7 @@ export function zpZUrl(search) {
 /** Titulek stránky: „VZP ČR — profil pojišťovny · Srovnávač pojišťoven“. */
 export function profilTitle(kod) {
   const z = ZP_BY_KOD[kod];
-  return z ? `${z.zkratka} — profil pojišťovny · Srovnávač pojišťoven · HSPA Monitor` : 'Profil pojišťovny — Srovnávač pojišťoven · HSPA Monitor';
+  return z ? `${z.zkratka} — profil pojišťovny · Srovnávač pojišťoven, pracovní verze · HSPA Monitor` : 'Profil pojišťovny — Srovnávač pojišťoven, pracovní verze · HSPA Monitor';
 }
 
 // ---------------------------------------------------------------- klíčová čísla

@@ -67,11 +67,11 @@ const STRANKY = {
 const PODSTRANKY = Object.keys(STRANKY).filter((f) => f !== 'pojistovny.html');
 const readPage = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
 
-test('P1.6: každá stránka srovnávače — index, jeden h1, styles.min.css, shell, Moje pojišťovna, zdroje, footer', () => {
+test('P1.6: každá stránka srovnávače — noindex, jeden h1, styles.min.css, shell, Moje pojišťovna, zdroje, footer', () => {
   for (const f of Object.keys(STRANKY)) {
     const html = readPage(f);
     assert.match(html, /^<!DOCTYPE html>/, f);
-    assert.match(html, /<meta name="robots" content="index, follow">/, `${f}: index, follow`);
+    assert.match(html, /<meta name="robots" content="noindex, nofollow, noarchive">/, `${f}: noindex`);
     assert.equal((html.match(/<h1\b/g) || []).length, 1, `${f}: jeden h1`);
     assert.equal((html.match(/<title>/g) || []).length, 1, `${f}: title`);
     assert.match(html, /<!--\s*\n\s*audit:/, `${f}: audit komentář`);
@@ -127,26 +127,29 @@ test('P1.6: síť odborností — povinné věty o omezení metody a o pobočká
   assert.match(before, /„Počet poboček“ dnes není srovnatelné číslo/);
 });
 
-test('zveřejnění (P5.1): middleware s heslem je pryč a stránky srovnávače jsou indexovatelné', () => {
-  assert.ok(!fs.existsSync(path.join(ROOT, 'middleware.js')), 'middleware.js chránil pracovní verzi heslem; po zveřejnění nesmí existovat');
-  const stranky = ['pojistovny.html', 'pojistovny-kmen.html', 'pojistovny-penize.html', 'pojistovny-prevence.html', 'pojistovny-aplikace.html',
-    'pojistovny-gramotnost.html', 'pojistovny-metodika.html', 'pojistovny-indikatory.html', 'pojistovny-instituce.html', 'pojistovny-prispevky.html', 'pojistovna.html'];
-  for (const p of stranky) {
-    const html = fs.readFileSync(path.join(ROOT, p), 'utf8');
-    assert.match(html, /<meta name="robots" content="index, follow">/, `${p}: index, follow`);
-    assert.doesNotMatch(html, /noindex/, `${p}: bez noindex`);
-    assert.doesNotMatch(html, /pracovní verze|pod heslem/i, `${p}: bez označení pracovní verze`);
-  }
+test('middleware.js: chrání stránku i data heslem a posílá noindex', () => {
+  const mw = fs.readFileSync(path.join(ROOT, 'middleware.js'), 'utf8');
+  assert.match(mw, /POJISTOVNY_HESLO/);
+  assert.match(mw, /WWW-Authenticate/);
+  assert.match(mw, /X-Robots-Tag/);
+  assert.match(mw, /'\/pojistovny'/);
+  assert.match(mw, /\/data\/pojistovny-:path\*/);
+  assert.match(mw, /'\/pojistovny-:path\*'/, 'podstránky srovnávače (P1.6)');
 });
 
-test('zveřejnění (P5.1): sekce Pojišťovny je v hlavní navigaci a stránky v sitemapě', () => {
-  const nav = fs.readFileSync(path.join(ROOT, 'src', 'page-shared.js'), 'utf8');
-  assert.match(nav, /\{ id: 'pojistovny',\s+label: 'Pojišťovny',\s+href: 'pojistovny\.html'/);
-  const sm = fs.readFileSync(path.join(ROOT, 'scripts', 'generate-sitemap.js'), 'utf8');
-  for (const loc of ['/pojistovny.html', '/pojistovny-prispevky.html', '/pojistovny-penize.html', '/pojistovna.html']) {
-    assert.ok(sm.includes(`{ loc: '${loc}',`), `${loc} v STATIC_PAGES`);
-    assert.ok(!sm.includes(`'${loc}': { typ: 'noindex'`), `${loc} už není ve výjimkách`);
+test('middleware.js: matcher pokrývá přehled, všech pět podstránek a data, nic jiného', async () => {
+  const { config } = await import('../middleware.js');
+  // path-to-regexp v jednoduchosti, jak ho Vercel používá: ':path*' = zbytek cesty, ukotveno na obou koncích
+  const re = config.matcher.map((m) => new RegExp(`^${m.replace(/[.]/g, '\\.').replace(/:path\*/, '.*')}$`));
+  const hit = (u) => re.some((r) => r.test(u));
+  for (const u of ['/pojistovny', '/pojistovny.html', '/pojistovny-kmen.html', '/pojistovny-penize.html', '/pojistovny-prevence.html', '/pojistovny-aplikace.html',
+    '/pojistovny-gramotnost.html', '/pojistovny-metodika.html', '/pojistovny-indikatory.html', '/pojistovny-instituce.html', '/pojistovny-prispevky.html', '/data/pojistovny-prispevky.json', '/pojistovna.html', '/pojistovna', '/pojistovny-kmen', '/data/pojistovny.json', '/data/pojistovny-sit.json', '/data/pojistovny-indikatory.json']) {
+    assert.ok(hit(u), `${u} musí být za heslem`);
   }
+  for (const u of ['/pojistenci.html', '/index.html', '/data/pojistenci-d5-zp.json', '/src/pojistovny.js', '/clanek-pojistne-plany-2026.html']) {
+    assert.ok(!hit(u), `${u} nesmí být za heslem`);
+  }
+  assert.equal(new Set(config.matcher).size, config.matcher.length, 'bez duplicit');
 });
 
 test('pojistovny-aplikace.json a pojistovny-otazky.json: základní tvar', () => {
