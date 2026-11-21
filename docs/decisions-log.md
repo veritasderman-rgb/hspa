@@ -6,6 +6,13 @@ Formát: každá položka má `Datum`, `PR`, `Co`, `Proč`, `Důsledek`.
 
 ---
 
+## 2026-11-21 — Srovnávač pojišťoven zpět pod heslem (rozhodnutí vydavatele)
+
+- **PR**: `claude/serene-gauss-8nxppu`, třída C (`middleware.js`, `page-shared.js`)
+- **Co**: vydavatel 21. 11. 2026 nechal srovnávač znovu skrýt. Vrácen `middleware.js` (HTTP Basic Auth, heslo z proměnné `POJISTOVNY_HESLO` ve Vercelu; chrání `/pojistovny*`, `/pojistovna*` a `/data/pojistovny*.json`, bez proměnné vrací 503). Dvanáct stránek včetně dotazníku k aplikacím má `noindex`, pásek a titulky „pracovní verze“, stránky jsou pryč ze `STATIC_PAGES`, sitemapy a hlavní navigace. Oznamovací článek `clanek-srovnavac-pojistoven-zverejnen` má `published: false`.
+- **Proč**: rozhodnutí vydavatele; ruší zveřejnění z 16. 11. 2026 (záznam níže), včetně jeho věty „heslo ani `noindex` nevracet“.
+- **Důsledek**: heslo se **nikdy** nezapisuje do repa (repo je veřejné) — nastavuje ho vydavatel ve Vercelu pro Production i Preview. Dotazník k aplikacím je za heslem také; respondent bez hesla ho nevyplní. Znovuzveřejnění = krok P5.1 plánu, třída C.
+
 ## 2026-11-20 — Videa na sociální sítě smí mluvit: hlasy, dialog, hudba a efekty z ElevenLabs
 
 - **PR**: `claude/serene-gauss-8nxppu`

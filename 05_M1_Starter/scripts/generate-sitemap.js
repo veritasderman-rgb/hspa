@@ -58,6 +58,19 @@ export const SITEMAP_EXCLUDED = {
   '/konference.html': { typ: 'noindex', duvod: 'akce, ne evergreen obsah' },
   '/konference-prezentace.html': { typ: 'noindex', duvod: 'podklad k prezentaci' },
   '/tiskovazprava.html': { typ: 'noindex', duvod: 'jednorázový podklad pro média' },
+  // Srovnávač pojišťoven: pracovní verze pod heslem (middleware.js), do zveřejnění rozhodnutím PS mimo sitemapu.
+  '/pojistovny.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, pracovní verze pod heslem' },
+  '/pojistovny-kmen.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, podstránka pod heslem' },
+  '/pojistovny-penize.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, podstránka pod heslem' },
+  '/pojistovny-prevence.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, podstránka pod heslem' },
+  '/pojistovny-aplikace.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, podstránka pod heslem' },
+  '/pojistovny-gramotnost.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, podstránka pod heslem' },
+  '/pojistovny-metodika.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, podstránka pod heslem' },
+  '/pojistovny-indikatory.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, podstránka pod heslem' },
+  '/pojistovny-instituce.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, podstránka pod heslem' },
+  '/pojistovny-prispevky.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, podstránka pod heslem' },
+  // profil jedné pojišťovny (?zp=<kód>); stránka s parametrem se do sitemapy nezapisuje, sama stránka je noindex
+  '/pojistovna.html': { typ: 'noindex', duvod: 'srovnávač pojišťoven, profil pojišťovny pod heslem' },
 };
 
 // Kurátorovaný seznam statických (sekčních) stránek.
@@ -73,20 +86,6 @@ export const STATIC_PAGES = [
   { loc: '/pracovni-osoby.html', priority: '0.6', changefreq: 'weekly' },
   { loc: '/pracovni-ukoly.html', priority: '0.6', changefreq: 'weekly' },
   { loc: '/pojistenci.html', priority: '0.7', changefreq: 'weekly' },
-  // Srovnávač zdravotních pojišťoven — veřejný od 2026-11-16 (rozhodnutí vydavatele, třída C).
-  { loc: '/pojistovny.html', priority: '0.9', changefreq: 'weekly' },
-  { loc: '/pojistovny-prispevky.html', priority: '0.8', changefreq: 'monthly' },
-  { loc: '/pojistovny-kmen.html', priority: '0.7', changefreq: 'monthly' },
-  { loc: '/pojistovny-penize.html', priority: '0.7', changefreq: 'monthly' },
-  { loc: '/pojistovny-prevence.html', priority: '0.7', changefreq: 'monthly' },
-  { loc: '/pojistovny-aplikace.html', priority: '0.7', changefreq: 'monthly' },
-  { loc: '/pojistovny-aplikace-dotaznik.html', priority: '0.6', changefreq: 'monthly' },
-  { loc: '/pojistovny-instituce.html', priority: '0.7', changefreq: 'monthly' },
-  { loc: '/pojistovny-gramotnost.html', priority: '0.6', changefreq: 'monthly' },
-  { loc: '/pojistovny-metodika.html', priority: '0.5', changefreq: 'monthly' },
-  { loc: '/pojistovny-indikatory.html', priority: '0.5', changefreq: 'monthly' },
-  // bez parametru rozcestník sedmi pojišťoven; profily ?zp=<kód> se do sitemapy nezapisují
-  { loc: '/pojistovna.html', priority: '0.6', changefreq: 'monthly' },
   { loc: '/prevence.html', priority: '0.8', changefreq: 'weekly' },
   { loc: '/vedra.html', priority: '0.7', changefreq: 'weekly' },
   { loc: '/pohotovosti.html', priority: '0.9', changefreq: 'weekly' },

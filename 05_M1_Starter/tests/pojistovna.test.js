@@ -32,7 +32,7 @@ test('?zp=: platný kód, jinak null; titulek profilu', () => {
   assert.equal(zpZUrl('?zp=999'), null);
   assert.equal(zpZUrl(''), null);
   assert.equal(zpZUrl(undefined), null);
-  assert.equal(profilTitle('111'), 'VZP ČR — profil pojišťovny · Srovnávač pojišťoven · HSPA Monitor');
+  assert.equal(profilTitle('111'), 'VZP ČR — profil pojišťovny · Srovnávač pojišťoven, pracovní verze · HSPA Monitor');
   assert.match(profilTitle(null), /^Profil pojišťovny — Srovnávač pojišťoven/);
 });
 
@@ -164,9 +164,9 @@ test('odkazy na profil: karta vybrané ZP na přehledu a karty na Kmeni', () => 
   assert.match(src, /renderProfil\(\{ kod: zpZUrl\(location\.search\)/);
 });
 
-test('stránka profilu: index, jeden h1, audit, shell s data-aktivni="profil" (bez záložky), kontejnery, orchestrátor', () => {
+test('stránka profilu: noindex, jeden h1, audit, shell s data-aktivni="profil" (bez záložky), kontejnery, orchestrátor', () => {
   assert.match(page, /^<!DOCTYPE html>/);
-  assert.match(page, /<meta name="robots" content="index, follow">/);
+  assert.match(page, /<meta name="robots" content="noindex, nofollow, noarchive">/);
   assert.equal(count(page, /<h1\b/g), 1);
   assert.equal(count(page, /<title>/g), 1);
   assert.match(page, /<title>Profil pojišťovny — Srovnávač pojišťoven/);
@@ -181,9 +181,11 @@ test('stránka profilu: index, jeden h1, audit, shell s data-aktivni="profil" (b
   assert.ok(!ZP_STRANKY.some((x) => x.id === 'profil' || x.href === 'pojistovna.html'));
 });
 
-test('sitemap, e2e a axe: profil je veřejný, v sitemapě a v seznamech stránek', () => {
-  assert.match(read('scripts/generate-sitemap.js'), /\{ loc: '\/pojistovna\.html',/);
-  assert.match(read('scripts/generate-sitemap.js'), /\{ loc: '\/pojistovny-instituce\.html',/);
+test('sitemap, middleware, e2e a axe: profil je noindex, za heslem a v seznamech stránek', async () => {
+  assert.match(read('scripts/generate-sitemap.js'), /'\/pojistovna\.html': \{ typ: 'noindex'/);
+  assert.match(read('scripts/generate-sitemap.js'), /'\/pojistovny-instituce\.html': \{ typ: 'noindex'/);
+  const { config } = await import('../middleware.js');
+  assert.ok(config.matcher.includes('/pojistovna.html'));
   assert.match(read('tests/e2e/visual.spec.js'), /pojistovna\.html\?zp=111/);
   assert.match(read('tests/e2e/a11y.spec.js'), /pojistovna\.html\?zp=111/);
   assert.match(read('tests/e2e/visual.spec.js'), /pojistovny-instituce\.html/);

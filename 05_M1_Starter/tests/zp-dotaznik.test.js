@@ -708,7 +708,8 @@ test('pojistovny-gramotnost.html a pojistovny.js: kontejnery, věta o soukromí,
 test('pojistovny-aplikace-dotaznik.html: samostatná stránka sady aplikace-ukoly a přesměrování starého odkazu', async () => {
   const html = read('pojistovny-aplikace-dotaznik.html');
   assert.match(html, /<div id="zpDotaznik" data-sada="aplikace-ukoly"><\/div>/);
-  assert.match(html, /<meta name="robots" content="index, follow">/);
+  // srovnávač je od 21. 11. 2026 znovu pod heslem (middleware.js) → noindex a mimo sitemapu
+  assert.match(html, /<meta name="robots" content="noindex, nofollow, noarchive">/);
   assert.match(html, /bez osobních údajů/);
   assert.match(html, /src="src\/pojistovny\.js"/);
   const { DOTAZNIK_STRANKY, legacyRedirect } = await import('../src/pojistovny-shell.js');
@@ -720,7 +721,8 @@ test('pojistovny-aplikace-dotaznik.html: samostatná stránka sady aplikace-ukol
     assert.match(read(href), new RegExp(`data-sada="${id}"`));
   }
   assert.match(read('src', 'pojistovny.js'), /DOTAZNIK_STRANKY\[params\.get\('dotaznik'\)\]/);
-  assert.match(read('scripts', 'generate-sitemap.js'), /\/pojistovny-aplikace-dotaznik\.html/);
+  assert.doesNotMatch(read('scripts', 'generate-sitemap.js'), /\/pojistovny-aplikace-dotaznik\.html/);
+  assert.match(read('middleware.js'), /'\/pojistovny-:path\*'/);
 });
 
 test('styles.css: sekce .zpd- je poslední pod markerem a .zpd- jinde není', () => {

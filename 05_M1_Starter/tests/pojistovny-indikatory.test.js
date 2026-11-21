@@ -108,7 +108,7 @@ test('opendata: bez souboru věta, se souborem souhrn 7 řádků, detaily a cent
   assert.ok(!html.includes('undefined'));
 });
 
-test('stránka: HTML má kontejnery, shell data-aktivni, oba moduly; v sitemapě; e2e visual zahrnuje stránku', () => {
+test('stránka: HTML má kontejnery, shell data-aktivni, oba moduly; sitemap noindex; e2e visual zahrnuje stránku', () => {
   const html = fs.readFileSync(path.join(ROOT, 'pojistovny-indikatory.html'), 'utf8');
   for (const id of ['zpShell', 'zpMojeZp', 'zpIndStrucne', 'zpIndKdo', 'zpIndKontrakt', 'zpIndAuto', 'zpIndDatasety', 'zpIndNavrhy', 'zpIndMezery', 'zpZdroje']) assert.match(html, new RegExp(`id="${id}"`), id);
   assert.doesNotMatch(html, /id="zpStiznosti"|id="zpOpendata"/, 'stížnosti a open data jsou od A0.5 na stránce Aplikace a servis');
@@ -118,8 +118,8 @@ test('stránka: HTML má kontejnery, shell data-aktivni, oba moduly; v sitemapě
   assert.match(html, /data-aktivni="indikatory"/);
   assert.match(html, /src\/pojistovny\.js/);
   assert.match(html, /src\/pojistovny-indikatory\.js/);
-  assert.doesNotMatch(html, /noindex/);
-  assert.match(fs.readFileSync(path.join(ROOT, 'scripts', 'generate-sitemap.js'), 'utf8'), /\{ loc: '\/pojistovny-indikatory\.html',/);
+  assert.match(html, /noindex/);
+  assert.match(fs.readFileSync(path.join(ROOT, 'scripts', 'generate-sitemap.js'), 'utf8'), /'\/pojistovny-indikatory\.html': \{ typ: 'noindex'/);
   assert.match(fs.readFileSync(path.join(ROOT, 'tests', 'e2e', 'visual.spec.js'), 'utf8'), /pojistovny-indikatory\.html/);
 });
 

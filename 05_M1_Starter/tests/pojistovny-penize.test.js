@@ -321,9 +321,9 @@ test('provoz a obálka buildFondProvoz: limit 100 % jako čára, využití limit
   assert.equal(buildFondProvoz({}).provoz.items.length, 0);
 });
 
-test('stránka pojistovny-penize.html: index, h1, shell Peníze, kontejnery, Jak systém funguje, texty z _doc', () => {
-  assert.match(html, /<meta name="robots" content="index, follow">/);
-  assert.match(html, /<title>Peníze — Srovnávač pojišťoven · HSPA Monitor<\/title>/);
+test('stránka pojistovny-penize.html: noindex, h1, shell Peníze, kontejnery, Jak systém funguje, texty z _doc', () => {
+  assert.match(html, /<meta name="robots" content="noindex, nofollow, noarchive">/);
+  assert.match(html, /<title>Peníze — Srovnávač pojišťoven, pracovní verze · HSPA Monitor<\/title>/);
   assert.equal(count(html, /<h1/g), 1);
   assert.match(html, /<div id="zpShell" class="zpc-shell" data-aktivni="penize">/);
   assert.match(html, /href="src\/styles\.min\.css"/);
