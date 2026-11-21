@@ -24,6 +24,32 @@
 
 ---
 
+## INC-2026-004 · S2 · 2026-11-21 · Poznámka ECDC o datech za rok 2022 připsaná Česku místo Švédsku
+
+- **Co se stalo**: čtenář článku o podílu antibiotik skupiny Access četl, že ECDC u Česka
+  za roky 2023 a 2024 přebírá data odevzdaná za rok 2022, takže poslední dva body řady
+  „nejsou samostatná měření“. V primárním zdroji se tato věta týká Švédska.
+- **Kde**: `05_M1_Starter/clanek-antibiotika-access-aware.html` (meta description,
+  og:description, JSON-LD, perex, tělo, poznámka grafu, zdroje) a perex v
+  `data/articles.json` · **Od kdy do kdy**: publikováno 27. 8. 2026 → oprava čeká
+  (issue #1428, lhůta 48 h).
+- **Dopad**: jeden publikovaný článek, bez osob a bez zdravotního rizika. Hodnoty
+  indikátoru (59,4 % za 2024, EU 60,3 %) jsou správně; chybný je jeden ze tří důvodů,
+  proč článek odmítá číst trend. Závěr „směr z českých dat vyčíst nejde“ se tím oslabuje,
+  dvě zbylé výhrady (změna sběru dat ČR, přepočet řady podle AWaRe ze září 2025) platí.
+- **Příčina**: při přepisu 20. 8. 2026 byla věta z metodické části ESAC-Net AER 2024
+  („For Sweden … The latest available data, submitted for 2022 … were used for 2023 and
+  2024“) přiřazena Česku, o kterém mluví věty těsně před ní a za ní. Článek vyšel se
+  stavem `review-pending`, nezávislé ověření citace proti PDF neproběhlo (PDF tehdy
+  vracelo 429, karta indikátoru to v poznámce přiznává).
+- **Oprava**: issue #1428 pro autorku (odstranit tvrzení ze všech míst, viditelná Oprava).
+- **Prevence**: bez změny pravidel. Omyl zachytil audit K u nového článku (PR #1427),
+  jen se oprava nepropsala do staršího textu se stejným tvrzením. Doporučení pro
+  rutinu: když audit K opraví tvrzení převzaté z korpusu, prohledat korpus na totéž
+  tvrzení a nález dát do „K rozhodnutí redakce“.
+- **Zjistil**: editor při revizi PR #1427, ověřeno v PDF ECDC (ESAC-Net AER 2024, rev2,
+  oddíl Data sources and methods) 21. 11. 2026.
+
 ## INC-2026-003 · S2 · 2026-10-26 · Dávka věcných chyb z křížového ověření (issues 1304–1317)
 
 - **Co se stalo**: čtenáři viděli v publikovaných článcích, explainerech a kartách
