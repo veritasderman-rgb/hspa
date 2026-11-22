@@ -24,6 +24,31 @@
 
 ---
 
+## INC-2026-005 · S2 · 2026-11-22 · „Většina autorů“ pilotní studie 7-1-7 připsána organizaci Resolve to Save Lives
+
+- **Co se stalo**: čtenář článku o rychlosti hlášení nákaz četl, že většina autorů pilotní
+  studie cíle 7-1-7 je z organizace Resolve to Save Lives, která cíl sama navrhla. Podle
+  afiliací v PubMed je z ní 6 z 20 autorů; i se třemi autory z Vital Strategies (pod kterou
+  iniciativa patřila) je to nejvýš 9 z 20.
+- **Kde**: `05_M1_Starter/clanek-mor-sibir-rychlost-informaci-7-1-7.html`, sekce „Kolik je
+  ‚včas‘: cíl 7-1-7“, odstavec o limitech studie · **Od kdy do kdy**: publikováno
+  18. 11. 2026 → oprava čeká (issue #1433, lhůta 48 h).
+- **Dopad**: jeden publikovaný článek, jedna věta. Bez zdravotního rizika; týká se
+  organizace a autorů studie, ne soukromé osoby. Jádro výhrady platí: první i korespondenční
+  autor jsou z organizace, která cíl navrhla (Frieden et al., Lancet 2021, PMID 34242563).
+  Nadsazený je jen rozsah („většina“). Čísla studie v článku (11 ze 41 událostí atd.) sedí.
+- **Příčina**: poznámka v hlavičce článku říká jen „Autoři z Resolve to Save Lives“, do textu
+  se dostala jako „většina autorů“ bez přepočtu afiliací. Článek vznikl na zadání a vyšel se
+  stavem `review-pending`; kontrola autorských afiliací není součástí auditu K.
+- **Oprava**: issue #1433 pro autorku (návrh formulace „Šest z dvaceti autorů, včetně prvního
+  a korespondenčního…“, viditelná Oprava). Evidence-audit mezitím přepnul `audit-status` na
+  `partial` (PR #1434), text neměnil.
+- **Prevence**: bez změny pravidel. Chybu zachytil evidence-audit čtyři dny po publikaci,
+  tedy kontrola, která na to je. Doporučení pro audit K: kvantifikátory o autorech studie
+  („většina“, „všichni“) ověřit proti seznamu afiliací v PubMed stejně jako čísla.
+- **Zjistil**: evidence-audit `ea-2026-11-22-01` (issue #1433); editor ověřil afiliace
+  v PubMed (PMID 37060911) při revizi PR #1434 dne 22. 11. 2026.
+
 ## INC-2026-004 · S2 · 2026-11-21 · Poznámka ECDC o datech za rok 2022 připsaná Česku místo Švédsku
 
 - **Co se stalo**: čtenář článku o podílu antibiotik skupiny Access četl, že ECDC u Česka
