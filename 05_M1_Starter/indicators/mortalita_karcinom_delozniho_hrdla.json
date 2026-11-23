@@ -1,0 +1,108 @@
+{
+  "id": "mortalita_karcinom_delozniho_hrdla",
+  "name": "Úmrtnost na karcinom děložního hrdla (standardizovaná, ženy)",
+  "area": "Výsledky",
+  "domain": "Mortalita",
+  "subdomain": "Onkologie",
+  "definition": "Počet žen zemřelých na zhoubný novotvar děložního hrdla (MKN-10: C53) na 100 000 žen, věkově standardizováno na evropskou standardní populaci ESP 2013. Všechny věkové skupiny; doplňkově se sleduje rozpad na ženy do 65 let a 65 a více let.",
+  "unit": "na 100 000 žen",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "eurostat_jsonstat",
+      "endpoint": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/hlth_cd_asdr2?format=JSON&lang=en&icd10=C53&sex=F&unit=RT&geo=CZ&geo=EU27_2020",
+      "dataset": "Eurostat hlth_cd_asdr2 — Causes of death, standardised death rate by NUTS 2 region of residence (ESP 2013). Filtr icd10=C53, sex=F, age=TOTAL (rozpad Y_LT65 a Y_GE65), unit=RT. Primární data ČSÚ z Listu o prohlídce zemřelého, kódovaná podle MKN-10 a předávaná Eurostatu. Staženo přes API 23. 11. 2026 (dataset aktualizován 8. 6. 2026, poslední rok 2023).",
+      "dimensions": {
+        "country": "CZ (srovnání EU27_2020, DE, AT, PL, SK, HU)",
+        "sex": "F",
+        "age": "TOTAL; Y_LT65; Y_GE65",
+        "unit": "standardizovaná míra na 100 000 žen (ESP 2013)",
+        "region": "NUTS 2 (8 regionů soudržnosti ČR) ve stejném datasetu",
+        "year": "annual 2011–2023"
+      },
+      "note": "Absolutní počty zemřelých dává sousední dataset hlth_cd_aro (icd10=C53, sex=F, resid=TOT_IN): ČR 316 (2011), 277 (2022), 225 (2023), 227 (2024). Rok 2024 je v absolutních počtech k dispozici dřív než standardizovaná míra."
+    },
+    "fallback": {
+      "type": "csu_zemreli",
+      "url": "https://csu.gov.cz/zemreli-podle-pricin-smrti",
+      "note": "ČSÚ — Zemřelí podle příčin smrti (národní zdroj prvotních dat, publikuje dříve než Eurostat, ale bez standardizace na ESP 2013). Incidenci a stadia při diagnóze dává Národní onkologický registr (ÚZIS)."
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat",
+    "code": "EU27_2020",
+    "dataset": "hlth_cd_asdr2 (icd10=C53, sex=F, age=TOTAL, unit=RT) — EU27 ze stejného datasetu a stejné standardizace",
+    "value": 3.4,
+    "url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_asdr2/default/table",
+    "note": "EU27 2023: 3,40. Sousedé 2023: Rakousko 2,62, Německo 2,87, Polsko 6,75, Slovensko 7,29, Maďarsko 7,10. OECD tento ukazatel ve standardizaci ESP 2013 nepublikuje, proto se benchmark OECD neuvádí."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ČSÚ",
+    "ÚZIS",
+    "MZ ČR"
+  ],
+  "method_notes": "Standardizovaná míra úmrtnosti na ESP 2013 (Eurostat hlth_cd_asdr2), ženy, všechny věky. Jmenovatel tvoří všechny ženy bez ohledu na to, zda podstoupily hysterektomii, takže míra mírně podhodnocuje riziko u žen s dělohou. Prahy signálu jsou širší než u souhrnné onkologické mortality (good 5 %, warn 15 %), protože v ČR jde o přibližně 225–280 úmrtí ročně a meziroční výkyvy kolem 10 % jsou statistický šum. Doporučené čtení je proto trend a tříleté průměry: ČR 2021–2023 v průměru 4,49 proti EU27 3,51.",
+  "limitations": "Latence přibližně tři roky (standardizovaná míra za 2023 vyšla v červnu 2026). Malé absolutní počty: jednoletý pokles 2022 → 2023 (4,63 → 3,68) je nutné potvrdit dalšími roky; absolutní počet zemřelých za 2024 (227) zůstal na úrovni roku 2023. Úmrtnost odráží situaci s odstupem let až desetiletí (screening, léčba, dávné vystavení HPV) — očkování proti HPV od roku 2012 se v ní zatím projevit nemůže, protože očkované ročníky jsou mladší než věk, v němž se karcinom nejčastěji diagnostikuje. Kódování příčiny smrti z Listu o prohlídce zemřelého může u starších žen zaměnit C53 s nespecifikovaným nádorem dělohy (C55).",
+  "determinants": "**Účast ve screeningu a její věkový profil.** Česko má oportunistický screening navázaný na každoroční gynekologickou preventivní prohlídku s cytologií, od roku 2021 doplněný o HPV DNA test v 35 a 45 letech a od 1. 1. 2024 i v 55 letech (vyhláška č. 320/2023 Sb.). Podle MZ chodí ve věku 25–59 let za poslední tři roky asi 80 % žen, po 60. roce účast klesá a až 20 % žen screening zcela míjí. **Dosah k nepřicházejícím ženám.** Adresné zvaní od roku 2014 přivedlo po první pozvánce na cervikální screening 15,5 % pozvaných; u žen 50–65 let zaslání sady pro samoodběr na HPV zvýšilo účast na 13,4 % proti 5,0 % u standardní pozvánky. **Očkování proti HPV.** Hrazeno pro dívky i chlapce od 11. do 15. narozenin; proočkovanost dívek ve 13 letech je podle ÚZIS 68,3 % (2024), pod cílem WHO 90 %. **Léčba a stadium.** Úmrtnost závisí na stadiu při diagnóze a dostupnosti radioterapie a gynekologicko-onkologické chirurgie.",
+  "importance": "Karcinom děložního hrdla je jediný častý zhoubný nádor, u něhož WHO formuluje cíl eliminace (incidence pod 4 na 100 000 žen) — je téměř úplně způsoben infekcí HPV, existuje proti němu očkování a screening zachytí přednádorové změny. Úmrtnost je proto přímým testem, jestli prevence funguje. Česko je zajímavé dvojí výpovědí: úmrtnost od roku 2011 klesla o 36,9 % (5,83 → 3,68), víc než průměr EU (−14,6 %), a odstoupilo tak od Polska, Slovenska a Maďarska; stále je ale nad Rakouskem a Německem a u žen nad 65 let zůstává o 14,8 % nad průměrem EU. Indikátor propojuje dva procesní ukazatele dashboardu — screening_cervix a vakcinace_hpv — s výsledkem, k němuž mají vést.",
+  "patient_story": "Modelová situace: žena kolem šedesáti let přijde ke gynekologovi po letech, kdy na preventivní prohlídky nechodila. Děti jsou dospělé, poslední cytologii měla před porodem nejmladšího syna a pozvánku od pojišťovny odložila. Krvácení po menopauze ji přivede do ordinace pozdě a nález je pokročilý. Právě takové příběhy stojí za tím, že úmrtí na karcinom děložního hrdla se v Česku soustřeďují u starších žen, které z pravidelné prevence vypadly.\n\nStandardizovaná úmrtnost na karcinom děložního hrdla byla v roce 2023 v Česku 3,68 na 100 000 žen (Eurostat, ESP 2013). Průměr EU27 je 3,40, takže Česko je o 8 % výš. Trend je ale výrazně příznivý: 2019: 4,86 → 2021: 5,17 → 2022: 4,63 → 2023: 3,68. V roce 2011 to bylo 5,83. Absolutně zemřelo v roce 2023 na tuto diagnózu 225 žen a v roce 2024 227. U žen do 65 let je Česko prakticky na průměru EU (2,21 proti 2,17), u žen nad 65 let zůstává výš (9,75 proti 8,49).\n\nStrukturálně stojí česká prevence na každoroční gynekologické prohlídce s cytologií. Od roku 2021 se přidal HPV test v 35 a 45 letech, od roku 2024 i v 55 letech. Systém dobře zachytí ženy, které ke gynekologovi chodí; podle ministerstva zdravotnictví ale po šedesátce účast klesá a až pětina žen screening zcela míjí. Adresné pozvánky přivedou po prvním dopise jen malou část pozvaných, a proto se zkouší samoodběr na HPV zaslaný domů.\n\nPolitická páka je v rukou ministerstva a pojišťoven: zacílit pozvánky a samoodběrové sady na ženy, které několik let na prohlídce nebyly, prodloužit HPV testování do vyššího věku a dotáhnout proočkovanost proti HPV k cíli WHO 90 %. Indikátor v HSPA dashboardu ukazuje, zda se tyto procesy promítají do výsledku; doplňují ho indikátory screening_cervix a vakcinace_hpv.",
+  "literature": [
+    {
+      "pmid": "15262102",
+      "doi": "10.1016/S0140-6736(04)16674-9",
+      "title": "The cervical cancer epidemic that screening has prevented in the UK.",
+      "year": 2004,
+      "journal": "Lancet",
+      "study_type": "other",
+      "note": "Peto J, Gilham C, Fletcher O, Matthews FE. Lancet 2004;364(9430):249–256. Analýza trendů mortality v Anglii a Walesu: národní screening (od 1988) zvrátil rostoucí trend úmrtnosti u mladých žen; autoři odhadují, že bez screeningu by na karcinom děložního hrdla zemřela asi jedna z 65 Britek narozených po roce 1950, s výslovně uvedenou značnou nejistotou. Ověřeno v PubMed 2026-11-23.",
+      "verified_at": "2026-11-23"
+    },
+    {
+      "pmid": "24453946",
+      "doi": "10.1371/journal.pmed.1001585",
+      "title": "Cervical screening at age 50-64 years and the risk of cervical cancer at age 65 years and older: population-based case control study.",
+      "year": 2014,
+      "journal": "PLoS Med",
+      "study_type": "case-control",
+      "note": "Castañón A, Landy R et al. PLoS Med 2014;11(1):e1001585. 1 341 případů karcinomu ve věku 65–83 let v Anglii a Walesu: ženy s adekvátním negativním screeningem v 65 letech měly asi šestinové riziko proti nescreenovaným (OR 0,16); screening alespoň každých 5,5 roku ve věku 50–64 let byl spojen se 75% nižším rizikem karcinomu ve věku 65–79 let. K tvrzení o významu screeningu před šedesátkou pro úmrtnost starších žen. Ověřeno v PubMed (DOI → PMID) 2026-11-23.",
+      "verified_at": "2026-11-23"
+    },
+    {
+      "pmid": "31416323",
+      "doi": "",
+      "title": "Evaluation of the personalized invitation of Czech citizens to screening programs.",
+      "year": 2019,
+      "journal": "Cas Lek Cesk",
+      "study_type": "other",
+      "note": "Ngo O, Chloupková R, … Dušek L, Májek O. Cas Lek Cesk 2019;158(3-4):147–150. Adresné zvaní od 2014: za 4 roky přes 6 milionů pozvánek; účast po první pozvánce 15,5 % u cervikálního screeningu, účinek opakovaných pozvánek klesá. Bez DOI — ověřeno v PubMed podle PMID 2026-11-23.",
+      "verified_at": "2026-11-23"
+    },
+    {
+      "pmid": "38224266",
+      "doi": "10.1093/eurpub/ckad229",
+      "title": "Direct mailing of HPV self-sampling kits to women aged 50-65 non-participating in cervical screening in the Czech Republic.",
+      "year": 2024,
+      "journal": "Eur J Public Health",
+      "study_type": "comparative",
+      "note": "Ngo O, Chloupková R, Cibula D et al. Eur J Public Health 2024;34(2):361–367. 1 564 žen 50–65 let bez screeningu ≥ 3 roky: účast 13,4 % po zaslání samoodběrové sady na HPV proti 5,0 % po standardní pozvánce (rozdíl 7,6 p. b.); 22 % vrácených testů pozitivních. Ověřeno v PubMed 2026-11-23.",
+      "verified_at": "2026-11-23"
+    },
+    {
+      "pmid": "32997908",
+      "doi": "10.1056/NEJMoa1917338",
+      "title": "HPV Vaccination and the Risk of Invasive Cervical Cancer.",
+      "year": 2020,
+      "journal": "N Engl J Med",
+      "study_type": "cohort",
+      "note": "Lei J, Ploner A, Elfström KM et al. N Engl J Med 2020;383(14):1340–1348. Švédská kohorta 1 672 983 dívek a žen 10–30 let: plně adjustovaný poměr incidence 0,12 u očkovaných před 17. rokem a 0,47 u očkovaných v 17–30 letech. K tvrzení, že očkování snižuje incidenci invazivního karcinomu, ale v mortalitě se projeví až s odstupem desetiletí. Ověřeno v PubMed 2026-11-23.",
+      "verified_at": "2026-11-23"
+    }
+  ],
+  "framework": "hspa",
+  "dimension": "zdravi"
+}
