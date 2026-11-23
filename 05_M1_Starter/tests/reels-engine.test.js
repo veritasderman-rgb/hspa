@@ -251,7 +251,7 @@ test('hlas (ElevenLabs): označení na kartě, řeč se vejde do beatu, celé vi
   num.beats[0].spoken += ' Je jich 999.';
   assert.ok(validate(num).errors.some(e => e.includes('„999"')), 'číslo v mluveném textu musí mít fakt');
   const long = clone();
-  long.beats[0].dur += 30;
+  long.beats[0].dur += 61; // ať strop překročí každé mluvené video, i krátké sólo (≥ 8 s + 61 > 60)
   assert.ok(validate(long).errors.some(e => e.includes('> 60')), 'mluvené video na výšku má strop 60 s');
 });
 
