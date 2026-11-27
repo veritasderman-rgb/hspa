@@ -870,10 +870,20 @@ Newsletter odesílá **GitHub Actions `newsletter-weekly.yml`** (čtvrtek 07:33 
 `scripts/newsletter-run.js`): kampaň v Brevu naplánovaná na pátek 11:00 Europe/Prague,
 evidence `data/newsletter-log.json`. Rutina ho **neduplikuje** — v pátek jen ověří:
 
+**Pevný čas odeslání: pátek 11:00 Europe/Prague, vždy** (rozhodnutí vydavatele
+27. 11. 2026). Platí stejně pro workflow i pro kampaň založenou přes MCP. Přesný řetězec
+pro Brevo (s offsetem podle letního/zimního času) si nepočítej ručně, vezmi ho ze skriptu:
+`node scripts/newsletter-run.js --print-scheduled-at --friday=$(date +%F)` →
+např. `2026-11-27T11:00:00.000+01:00`. Čas mění jen konstanta `SEND_TIME` ve skriptu.
+Kampaň založená přes MCP se **naplánuje hned** — koncept, který čeká na ruční
+naplánování v Brevu, je chyba (11/2026 tak čtyři vydání za sebou neodešla včas).
+
 1. `data/newsletter-log.json` (na `origin/main`) má záznam se `scheduled_for` = dnešek
    a v Brevu (`mcp__Brevo__email_campaign_management_get_email_campaign`) je kampaň ve
-   stavu naplánováno, `recipients.lists = [2]`, `scheduledAt` sedí → nic nedělej, jen
-   řádek do PR.
+   stavu `queued`, `recipients.lists = [2]`, `scheduledAt` = dnešek 11:00 → nic nedělej,
+   jen řádek do PR. Kampaň je `queued`, ale na jiný čas → **neměň ho** (posunul ho
+   vydavatel), jen řádek do PR. Kampaň je ve stavu `draft` → naplánuj ji krokem
+   „naplánování“ z bodu 3 (`update` se `scheduledAt`, zpětný GET).
 2. Záznam chybí nebo kampaň neexistuje (workflow selhal) → **fallback A**: spusť znovu
    workflow `newsletter-weekly.yml` přes `mcp__github__actions_run_trigger` s inputem
    `friday` = dnešní datum (workflow má klíče v secrets a předá `--friday=`; bez data by
@@ -895,17 +905,26 @@ evidence `data/newsletter-log.json`. Rutina ho **neduplikuje** — v pátek jen 
    ≤ 65 znaků s hlavním sdělením v první polovině, preheader neopakuje subject. Spec JSON
    → `node scripts/newsletter-build.js spec.json > newsletter.html` → vizuální kontrola
    (headless screenshot, každý odkaz `curl -sIL` → 200, absolutní `skorezdravotnictvi.cz`,
-   `{{ unsubscribe }}` beze změny) → kampaň `mcp__Brevo__email_campaign_management_create_email_campaign`:
-   `name: HSPA newsletter — RRRR-MM-DD (pátek)`, `sender {"name":"HSPA Monitor · Skóre
-   zdravotnictví","email":"josef@josefpavlovic.cz"}`, `replyTo` tentýž, `recipients
-   {"listIds":[2]}`, subject + previewText ze specu, `scheduledAt` = dnes `11:00`
-   s aktuálním offsetem Europe/Prague, bez `tag` (Free plán) → zpětný GET: naplánováno,
-   `scheduledAt` sedí, `recipients.lists = [2]`, HTML obsahuje všechny články. Záznam do
+   `{{ unsubscribe }}` beze změny) → dva kroky přes MCP `Brevo`:
+   - **založení** `mcp__Brevo__email_campaign_management_create_email_campaign`:
+     `name: HSPA newsletter — RRRR-MM-DD (pátek)`, `sender {"name":"HSPA Monitor · Skóre
+     zdravotnictví","email":"josef@josefpavlovic.cz"}`, `replyTo` tentýž, `recipients
+     {"listIds":[2]}`, subject + previewText ze specu, bez `tag` (Free plán), **bez
+     `scheduledAt`** (nástroj pro založení zakládá jen koncept). Kampaň s tímhle `name`
+     už v Brevu je (`get_email_campaigns`) → nezakládej druhou, pokračuj naplánováním té.
+   - **naplánování** hned potom `mcp__Brevo__email_campaign_management_update_email_campaign`
+     s `campaignId` a `scheduledAt` = výstup `--print-scheduled-at` (dnes 11:00), nic
+     jiného neměň. Vydavatel tím trvale povolil, aby rutina newsletter přes MCP
+     naplánovala na pátek 11:00; okamžité odeslání (`sendNow`) dál nikdy.
+   → zpětný GET: `status` = `queued`, `scheduledAt` = dnes 11:00, `recipients.lists = [2]`,
+   HTML obsahuje všechny články. Když naplánování selže, kampaň zůstane konceptem —
+   přesná chyba do PR a do `note` v logu, žádné opakování naslepo. Záznam do
    `data/newsletter-log.json` → `campaigns[]` (`brevo_campaign_id, name, subject,
    scheduled_for, articles[], featured_indicator`) commitni **hned po naplánování**
    (duplicita je horší než vynechání — nejistota = ber článek jako už poslaný).
-4. Je-li už po 10:00 místního času, vydání přeskoč a zapiš to do PR (okno na lidskou
-   kontrolu by nezbylo). Nikdy neposílej hned.
+4. Je-li už po 10:00 místního času, vydání nezakládej ani nenaplánuj a zapiš to do PR
+   (okno na lidskou kontrolu by nezbylo). Na jiný čas než 11:00 nikdy neplánuj
+   a nikdy neposílej hned.
 5. Chyba Breva (IP autorizace, limit 300/den) → neopakuj naslepo, přesnou chybu do PR.
 
 ---
