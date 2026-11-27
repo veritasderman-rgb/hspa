@@ -7,8 +7,8 @@
 //   2. nechá Claude (Florence) napsat úvod, anotace, subject a preheader
 //      — včetně jazykových pravidel češtiny přímo v promptu
 //   3. složí HTML přes scripts/newsletter-build.js (deterministický design)
-//   4. založí kampaň v Brevu naplánovanou na nejbližší pátek 11:00
-//      Europe/Prague (list 2 = všichni odběratelé) a ověří ji zpětným čtením
+//   4. založí kampaň v Brevu naplánovanou na nejbližší pátek v SEND_TIME
+//      (11:00 Europe/Prague; list 2 = všichni odběratelé) a ověří ji zpětným čtením
 //   5. zapíše vydání do data/newsletter-log.json (workflow commitne do main)
 //
 // Env:
@@ -24,6 +24,10 @@
 //   --friday=YYYY-MM-DD  datum vydání místo „nejbližšího budoucího pátku" (fallback
 //               rutiny v pátek ráno: --friday=$(date +%F) naplánuje dnešních 11:00;
 //               jinak by nextFridayYmd() přeskočil na příští týden)
+//   --print-scheduled-at  jen vypíše přesný scheduledAt pro Brevo (s offsetem
+//               Europe/Prague podle letního/zimního času) a skončí — nic nečte ani
+//               neposílá. Pro fallback přes MCP Brevo (PROMPT_ROUTINE.md, blok J):
+//               node scripts/newsletter-run.js --print-scheduled-at --friday=$(date +%F)
 //
 // Pojistky: min. 2 nové články jinak přeskočí týden; idempotence na pátek
 // (druhé spuštění týž týden nic nezaloží); duplicita je horší než vynechání.
@@ -31,7 +35,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');           // 05_M1_Starter/
@@ -46,6 +50,10 @@ if (FRIDAY_OVERRIDE !== null && (!/^\d{4}-\d{2}-\d{2}$/.test(FRIDAY_OVERRIDE) ||
   console.error(`--friday musí být YYYY-MM-DD, dostal jsem: ${FRIDAY_OVERRIDE}`);
   process.exit(2);
 }
+
+// Pevný čas odeslání (Europe/Prague). Jediné místo, kde se mění — rozhodnutí
+// vydavatele 27. 11. 2026: každé vydání pátek 11:00, i když ho zakládá MCP.
+export const SEND_TIME = '11:00';
 
 const readJson = f => JSON.parse(fs.readFileSync(path.join(ROOT, f), 'utf8'));
 
@@ -64,6 +72,11 @@ export function pragueOffset(ymd) {
   const tzName = new Intl.DateTimeFormat('en-US', { timeZone: 'Europe/Prague', timeZoneName: 'longOffset' })
     .formatToParts(probe).find(p => p.type === 'timeZoneName')?.value ?? '';
   return tzName.match(/([+-]\d{2}:\d{2})/)?.[1] ?? '+01:00';
+}
+
+/** Přesný scheduledAt pro Brevo: „2026-11-27T11:00:00.000+01:00". */
+export function scheduledAtFor(ymd) {
+  return `${ymd}T${SEND_TIME}:00.000${pragueOffset(ymd)}`;
 }
 
 const CZ_MONTHS = ['ledna', 'února', 'března', 'dubna', 'května', 'června',
@@ -190,7 +203,7 @@ async function brevo(pathname, init = {}) {
 async function main() {
   const today = new Date().toISOString().slice(0, 10);
   const fridayYmd = FRIDAY_OVERRIDE ?? nextFridayYmd();
-  const scheduledAt = `${fridayYmd}T11:00:00.000${pragueOffset(fridayYmd)}`;
+  const scheduledAt = scheduledAtFor(fridayYmd);
 
   const articlesData = readJson('data/articles.json');
   const articles = Array.isArray(articlesData) ? articlesData : articlesData.articles;
@@ -299,7 +312,14 @@ async function main() {
     featured_indicator: indicator ? indicator.id : null,
   });
   fs.writeFileSync(path.join(ROOT, 'data', 'newsletter-log.json'), JSON.stringify(log, null, 2) + '\n');
-  console.log('newsletter-log.json aktualizován. Do pátku 11:00 lze kampaň v Brevu zrušit či upravit.');
+  console.log(`newsletter-log.json aktualizován. Do pátku ${SEND_TIME} lze kampaň v Brevu zrušit či upravit.`);
 }
 
-main().catch(err => { console.error('newsletter-run selhal:', err.message); process.exit(1); });
+// Spouští se jen jako CLI — import z testů nic neposílá.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  if (process.argv.includes('--print-scheduled-at')) {
+    console.log(scheduledAtFor(FRIDAY_OVERRIDE ?? nextFridayYmd()));
+  } else {
+    main().catch(err => { console.error('newsletter-run selhal:', err.message); process.exit(1); });
+  }
+}

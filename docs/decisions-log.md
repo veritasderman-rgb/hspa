@@ -6,6 +6,13 @@ Formát: každá položka má `Datum`, `PR`, `Co`, `Proč`, `Důsledek`.
 
 ---
 
+## 2026-11-27 — Newsletter: pevný čas pátek 11:00 i přes MCP, kampaň se plánuje hned (rozhodnutí vydavatele)
+
+- **PR**: `claude/cool-thompson-fapvnb`
+- **Co**: Každé vydání odchází v pátek v 11:00 Europe/Prague, ať ho zakládá workflow `newsletter-weekly.yml`, nebo rutina přes MCP Brevo (fallback B v bloku J `PROMPT_ROUTINE.md`). Čas je konstanta `SEND_TIME` ve `scripts/newsletter-run.js`. Přesný řetězec pro Brevo vypíše `node scripts/newsletter-run.js --print-scheduled-at --friday=RRRR-MM-DD`. Rutina kampaň založí nástrojem `create_email_campaign` (ten zakládá jen koncept) a hned ji naplánuje přes `update_email_campaign` se `scheduledAt`. Pak zpětným GET ověří stav `queued`.
+- **Proč**: Workflow od 5. 11. 2026 padá na chybějících secretech `ANTHROPIC_API_KEY`/`BREVO_API_KEY`. Fallback přes MCP nechával kampaně jako koncept, který měl vydavatel naplánovat ručně. Vydání 6. a 13. 11. tak neodešla vůbec, vydání 20. 11. odejde až 29. 11.
+- **Důsledek**: Koncept čekající na ruční naplánování **nevracet**. Rutina neplánuje na jiný čas než 11:00 a nikdy neposílá hned. Čas, který vydavatel u kampaně ručně posunul, nepřepisuje. Po 10:00 místního času vydání nezakládá.
+
 ## 2026-11-21 — Srovnávač pojišťoven zpět pod heslem (rozhodnutí vydavatele)
 
 - **PR**: `claude/serene-gauss-8nxppu`, třída C (`middleware.js`, `page-shared.js`)
